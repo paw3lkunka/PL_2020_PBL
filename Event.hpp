@@ -1,6 +1,9 @@
 #ifndef EVENT_HPP_
 #define EVENT_HPP_
 
+/**
+ * @brief Enum containing all possible event types * 
+ */
 enum class Event : unsigned int
 {
     UNKNOWN_EVENT = 0,
