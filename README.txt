@@ -1,6 +1,9 @@
 żeby sprawdzić, czy działa wam wszystko, 
 to weźcie helloworlda open gl i wklejcie w niego to:
 
+    
+    #define STB_IMAGE_IMPLEMENTATION
+
     int a = 0;
     glm::mat4 mat; // gml
     Assimp::Importer importer; // assimp
@@ -9,10 +12,18 @@ to weźcie helloworlda open gl i wklejcie w niego to:
 jak chcecie, żeby intelisence działał a codzie, i żeby nie podkreślał includów,
 to wklejce to do .vscode/settings.json:
     
+    
     "cmake.mingwSearchDirs": [
         "libs/glad/include",        
         "libs/glfw-3.3.2/include",
         "libs/glm",     
         "libs/glfw-5.0.1/include",
         "libs/stb",
+        "project",
+        "project/Audio/include",
+        "project/FileSystem/include",
+        "project/Input/include",
+        "project/MessageBus/include",
+        "project/Renderer/include",
+        "project/Terminal/include",
     ],
