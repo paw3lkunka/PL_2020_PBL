@@ -19,16 +19,39 @@ add_subdirectory(libs/glfw-3.3.2/)
 add_subdirectory(libs/glm/)
 add_subdirectory(libs/assimp-5.0.1/)
 
-aux_source_directory( sources SOURCE_FILES )
+aux_source_directory( project                   PROJECT_SRC)
+aux_source_directory( project/Audio/src         AUDIO_SRC)
+aux_source_directory( project/FileSystem/src    FILE_SYSTEM_SRC)
+aux_source_directory( project/Input/src         INPUT_SRC)
+aux_source_directory( project/MessageBus/src    MESSAGE_BUS_SRC)
+aux_source_directory( project/Renderer/src      RENDERER_SRC)
+aux_source_directory( project/Terminal/src      TERMIANL_SRC)
 
-add_library( lib ${SOURCE_FILES} )
+list( 
+    APPEND SOURCE_FILES
+        ${PROJECT_SRC}
+        ${AUDIO_SRC}
+        ${FILE_SYSTEM_SRC}
+        ${INPUT_SRC}
+        ${MESSAGE_BUS_SRC}
+        ${RENDERER_SRC}
+        ${TERMIANL_SRC}
+)
+
+add_library(lib ${SOURCE_FILES} )
 
 include_directories( 
-    include
+    project
+    project/Audio/include
+    project/FileSystem/include
+    project/Input/include
+    project/MessageBus/include
+    project/Renderer/include
+    project/Terminal/include
     libs/stb
 )
 
-add_executable( PBL main.cpp )
+add_executable( PBL project/main.cpp )
 
 target_link_libraries( 
     PBL

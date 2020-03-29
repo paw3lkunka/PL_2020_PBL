@@ -10,6 +10,7 @@ enum class Event : unsigned int
     KEY_PRESSED_W,
     KEY_PRESSED_S,
     KEY_PRESSED_A,
+    /*AAA*/
     KEY_PRESSED_D,
 };
 
