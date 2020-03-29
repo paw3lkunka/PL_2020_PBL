@@ -44,7 +44,7 @@ class MessageBus
         /**
          * @brief Store All received messanges before sending them to receivers
          */
-        std::vector<Message> messagesBuffer;
+		std::vector<Message> messagesBuffer;
 
         /**
          * @brief store pointers to receivers
