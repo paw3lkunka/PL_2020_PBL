@@ -1,10 +1,17 @@
 #ifndef INPUTMODULE_HPP_
 #define INPUTMODULE_HPP_
 
-#include <conio.h>
 #include "Message.inl"
-#include "Imodule.inl"
+#include "IModule.inl"
 #include "MessageBus.hpp"
+
+#ifdef __linux__ 
+    // it needs some compiler option to make getch() work
+    //#include <curses.h>
+    #include <iostream>
+#elif _WIN32
+    #include <conio.h>
+#endif
 
 /**
  * @brief Read input from keyboard and send events to message bus.

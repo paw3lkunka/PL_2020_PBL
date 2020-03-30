@@ -3,7 +3,12 @@
 #include "MessageBus.hpp"
 #include <iostream>
 #include <utility>
-#include <windows.h>
+
+#ifdef __linux__ 
+    #include <unistd.h>
+#elif _WIN32
+    #include <windows.h>
+#endif
 
 typedef std::pair<float,float> float2;
 
@@ -48,7 +53,12 @@ int main()
     {
         inputModule.MockConsoleInput();
         messageBus.Notify();
-        Sleep(16);
+
+        #ifdef __linux__ 
+            usleep(16);
+        #elif _WIN32
+            Sleep(16);
+        #endif
     }    
 
     return 0;

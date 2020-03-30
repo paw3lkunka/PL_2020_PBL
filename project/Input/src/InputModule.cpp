@@ -8,7 +8,14 @@ InputModule::InputModule(MessageBus* messageBus)
 void InputModule::MockConsoleInput()
 {
     Message msg;
-    switch (getch())
+
+    #ifdef __linux__ 
+        char input;
+        std::cin >> input;
+        switch (input)
+    #elif _WIN32
+        switch (getch())
+    #endif
     {
     case 'w':
     case 'W':
