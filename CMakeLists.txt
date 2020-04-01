@@ -44,7 +44,7 @@ add_library(lib ${SOURCE_FILES} )
 
 include_directories( 
     project
-    project/GAmeSystems/include
+    project/GameSystems/include
     project/Audio/include
     project/FileSystem/include
     project/Input/include
