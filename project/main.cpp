@@ -5,11 +5,54 @@
 #include <utility>
 #include <windows.h>
 
+#include "GameSystemsModule.hpp"
+#include "Entity.hpp"
+#include "Component.inl"
+#include "System.hpp"
+
 typedef std::pair<float,float> float2;
 
 int main()
 {
     std::cout << "Henlo!" << std::endl;
+
+    Entity e1(0,5), e2(1,5), e3(3,5);
+
+    class MockComponent : public Component
+    {
+        public:
+        int a; int b;
+        MockComponent(int x, int y) { a=x; b=y;}
+    } mockComponent(2,2), mockComponent2(21,37);
+
+    class MockInvalidComponent : public Component
+    {
+        bool aaa;
+    } otherComponent;
+
+    e1.addComponent(&mockComponent);
+    
+    e2.addComponent(&otherComponent);
+    e2.addComponent(&mockComponent2);
+
+    e3.addComponent(&otherComponent);
+
+    struct MockSystem : public System
+    {
+        MockComponent* ptr;
+        virtual bool AssertEntity(Entity* entity)
+        {
+            ptr = entity->getComponent<MockComponent>();
+            return ptr != nullptr;
+        }
+
+        virtual void Update()
+        {
+            int a = ptr->a, b = ptr->b;
+            std::cout << a << "+" << b << "=" << a+b << std::endl;
+        }
+    } mockSystem;
+
 
     //Some early test
     Message m1(Event::KEY_PRESSED_A);
@@ -28,6 +71,13 @@ int main()
 
     ConsoleModule consoleModule( &messageBus );
     messageBus.AddReceiver( &consoleModule );
+    
+    GameSystemsModule gameSystemsModule(&messageBus);
+    gameSystemsModule.AddEntity(&e1);
+    gameSystemsModule.AddEntity(&e2);
+    gameSystemsModule.AddEntity(&e3);
+    gameSystemsModule.AddSystem(&mockSystem);
+    messageBus.AddReceiver( &gameSystemsModule );
 
     //Anonymous class module
     class : public IModule
@@ -48,6 +98,7 @@ int main()
     {
         inputModule.MockConsoleInput();
         messageBus.Notify();
+        gameSystemsModule.Run();
         Sleep(16);
     }    
 

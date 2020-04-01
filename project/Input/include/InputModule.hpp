@@ -3,7 +3,7 @@
 
 #include <conio.h>
 #include "Message.inl"
-#include "Imodule.inl"
+#include "IModule.inl"
 #include "MessageBus.hpp"
 
 /**
