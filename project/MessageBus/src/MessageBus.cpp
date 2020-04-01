@@ -10,10 +10,6 @@
 MessageBus::MessageBus(int bufferSize)
 {
 	messagesBuffer.reserve(bufferSize);
-	for (size_t i = 0; i < bufferSize; i++)
-	{
-		messagesBuffer.push_back(Message());
-	}
 }
 
 void MessageBus::AddReceiver(IModule* modulePtr)
