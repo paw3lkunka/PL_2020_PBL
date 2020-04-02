@@ -8,25 +8,19 @@ ConsoleModule::ConsoleModule(MessageBus* messageBus)
     this->messageBus = messageBus;
 }       
 
-void ConsoleModule::ReceiveMessage(Message msg)
+void ConsoleModule::receiveMessage(Message msg)
 {
     switch (msg.getEvent())
     {
-    case Event::KEY_PRESSED_W:
-        std::cout << "console here: Go forwad" << std::endl;
+    case Event::KEY_PRESSED:
+        std::cout << "console here: KEY_PRESSED " << msg.getValue<int>() << std::endl;
         break;
         
-    case Event::KEY_PRESSED_S:
-        std::cout << "console here: Go backward" << std::endl;
+    case Event::KEY_RELEASED:
+        std::cout << "console here: KEY_RELEASED " << msg.getValue<int>() << std::endl;
         break;
-    case Event::KEY_PRESSED_A:
-        std::cout << "console here: Go left" << std::endl;
-        break;
-    case Event::KEY_PRESSED_D:
-        std::cout << "console here: Go right" << std::endl;
-        break;            
-    default:
-        std::cout << "console here: I don't care!" << std::endl;
+    case Event::KEY_REPEAT:
+        std::cout << "console here: KEY_REPEAT " << msg.getValue<int>() << std::endl;
         break;
     }
 }

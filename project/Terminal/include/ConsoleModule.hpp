@@ -21,7 +21,7 @@ class ConsoleModule : public IModule {
         /**
          * @brief MessageBus pointer, produce console output
          */
-        virtual void ReceiveMessage(Message msg);
+        virtual void receiveMessage(Message msg);
 
     private:        
         /**

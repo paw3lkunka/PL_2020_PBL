@@ -12,12 +12,12 @@ MessageBus::MessageBus(int bufferSize)
 	messagesBuffer.reserve(bufferSize);
 }
 
-void MessageBus::AddReceiver(IModule* modulePtr)
+void MessageBus::addReceiver(IModule* modulePtr)
 {
     modulesPointers.push_back(modulePtr);
 }
 
-void MessageBus::SendMessage(Message msg)
+void MessageBus::sendMessage(Message msg)
 {
 	if (messagesBuffer.size() < messagesBuffer.capacity())
 	{
@@ -28,17 +28,17 @@ void MessageBus::SendMessage(Message msg)
 #ifndef NDEBUG
 		std::cerr << "Message buffer overflow\n";
 #endif
-		Notify();
+		notify();
 	}
 }
 
-void MessageBus::Notify()
+void MessageBus::notify()
 {
     for(auto ptr : modulesPointers)
     {
         for (auto msg : messagesBuffer)
         {
-            ptr->ReceiveMessage(msg);
+            ptr->receiveMessage(msg);
         }
     }
     messagesBuffer.clear();

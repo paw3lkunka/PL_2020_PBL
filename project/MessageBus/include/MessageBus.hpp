@@ -24,7 +24,7 @@ class MessageBus
          * 
          * @param modulePtr - Pointer to recever object
          */
-        void AddReceiver(IModule* modulePtr);
+        void addReceiver(IModule* modulePtr);
 
         /**
          * @brief Send message to MessageBus buffer,
@@ -32,13 +32,13 @@ class MessageBus
          * 
          * @param msg - Messange object.
          */
-        void SendMessage(Message msg);
+        void sendMessage(Message msg);
 
         /**
          * @brief Send all buffered messages to receivers,
          * then clean buffer. 
          */
-        void Notify();
+        void notify();
 
     private:
         /**

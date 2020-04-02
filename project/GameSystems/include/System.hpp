@@ -15,7 +15,7 @@ class System
          * THIS FUNCTION SHOULDN'T BE OVERWRITTED IN ANY CASE!
          * @param entity 
          */
-        void Process(Entity* entity);
+        void process(Entity* entity);
 
     protected:
         /**
@@ -24,14 +24,14 @@ class System
          * @param entity pointer to asserted entity
          * @returns if entity has all required components
          */
-        virtual bool AssertEntity(Entity* entity) = 0;
+        virtual bool assertEntity(Entity* entity) = 0;
 
         /**
          * @brief Contain logic of the system
          * called in Process() only when AssertEntity() returned true
          * should use class variables to access components
          */
-        virtual void Update() = 0;
+        virtual void update() = 0;
         
         virtual ~System() = default;
     private:

@@ -10,6 +10,10 @@
     #include <windows.h>
 #endif
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include "Message.inl"
 #include "GameSystemsModule.hpp"
 #include "Entity.hpp"
 #include "Component.inl"
@@ -22,6 +26,35 @@ int main()
     std::cout << "Henlo!" << std::endl;
 
     Entity e1(0, 5), e2(1, 5), e3(3, 5);
+
+    //TODO: tak w ogóle to to będzie klasa Core
+
+
+    //TODO: GLFW Error callback
+    
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(800, 600, "PBL", NULL, NULL);
+    if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
+	}
+
+    glViewport(0,0,800,600);
+    
+	glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset){exit(0);});
 
     class MockComponent : public Component
     {
@@ -45,25 +78,24 @@ int main()
     struct MockSystem : public System
     {
         MockComponent* ptr;
-        virtual bool AssertEntity(Entity* entity)
+        virtual bool assertEntity(Entity* entity)
         {
             ptr = entity->getComponent<MockComponent>();
             return ptr != nullptr;
         }
 
-        virtual void Update()
+        virtual void update()
         {
             int a = ptr->a, b = ptr->b;
-            std::cout << a << "+" << b << "=" << a + b << std::endl;
+            //std::cout << a << "+" << b << "=" << a + b << std::endl;
         }
     } mockSystem;
 
-
     //Some early test
-    Message m1(Event::KEY_PRESSED_A);
-    Message m2(Event::KEY_PRESSED_A, 123);
-    Message m3(Event::KEY_PRESSED_A, 0.2);
-    Message m4(Event::KEY_PRESSED_A, float2(21.0f, 37.0f));
+    Message m1(Event::KEY_PRESSED);
+    Message m2(Event::KEY_PRESSED, 123);
+    Message m3(Event::KEY_PRESSED, 0.2);
+    Message m4(Event::KEY_PRESSED, float2(21.0f, 37.0f));
     std::cout << m2.getValue<int>() << ", " << m3.getValue<double>() << std::endl;
     std::cout << m4.getValue<float2>().first << ", " << m4.getValue<float2>().second << std::endl;
 
@@ -72,38 +104,45 @@ int main()
 
     //Initializing Modules, and adding connecting to MB
     InputModule inputModule( &messageBus );
-    messageBus.AddReceiver( &inputModule );
+    inputModule.initialize(window);
+    messageBus.addReceiver( &inputModule );
 
     ConsoleModule consoleModule( &messageBus );
-    messageBus.AddReceiver( &consoleModule );
+    messageBus.addReceiver( &consoleModule );
     
     GameSystemsModule gameSystemsModule(&messageBus);
-    gameSystemsModule.AddEntity(&e1);
-    gameSystemsModule.AddEntity(&e2);
-    gameSystemsModule.AddEntity(&e3);
-    gameSystemsModule.AddSystem(&mockSystem);
-    messageBus.AddReceiver( &gameSystemsModule );
+    gameSystemsModule.addEntity(&e1);
+    gameSystemsModule.addEntity(&e2);
+    gameSystemsModule.addEntity(&e3);
+    gameSystemsModule.addSystem(&mockSystem);
+    messageBus.addReceiver( &gameSystemsModule );
 
     //Anonymous class module
     class : public IModule
     {
-        virtual void ReceiveMessage(Message msg)
+        virtual void receiveMessage(Message msg)
         {
-            if(msg.getEvent() == Event::KEY_PRESSED_S)
+            if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
             {
                 exit(0);
             }
         }
     } tmpExit;
         
-    messageBus.AddReceiver( &tmpExit );
+    messageBus.addReceiver( &tmpExit );
+
+
 
     //Main loop
-    while (true)
+    while (!glfwWindowShouldClose(window))
     {
-        inputModule.MockConsoleInput();
-        messageBus.Notify();
-        gameSystemsModule.Run();
+		glClearColor(.2,.4,1,1);
+		glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+        messageBus.notify();
+        gameSystemsModule.run();
 
         #ifdef __linux__ 
             usleep(16);
@@ -112,5 +151,8 @@ int main()
         #endif
     }    
 
+    
+	glfwDestroyWindow(window);
+	glfwTerminate();
     return 0;
 }

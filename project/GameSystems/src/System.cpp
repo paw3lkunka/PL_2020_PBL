@@ -2,10 +2,10 @@
 
 #include "Entity.hpp"
 
-void System::Process(Entity* entity)
+void System::process(Entity* entity)
 {
-    if( AssertEntity(entity) )
+    if( assertEntity(entity) )
     {
-        Update();
+        update();
     }
 }

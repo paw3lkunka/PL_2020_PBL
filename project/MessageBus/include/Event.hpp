@@ -7,11 +7,13 @@
 enum class Event : unsigned int
 {
     UNKNOWN_EVENT = 0,
-    KEY_PRESSED_W,
-    KEY_PRESSED_S,
-    KEY_PRESSED_A,
-    /*AAA*/
-    KEY_PRESSED_D,
+    // int - GLFW keycode, The key or mouse button was released.
+    KEY_PRESSED,
+    // int - GLFW keycode, The key or mouse button was pressed.
+    KEY_RELEASED,
+    // int - GLFW keycode,The key was held down until it repeated.
+    KEY_REPEAT
+
 };
 
 #endif /* !EVENT_HPP_ */

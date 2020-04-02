@@ -9,7 +9,7 @@ class Message;
 class IModule 
 {
     public:
-        virtual void ReceiveMessage(Message msg) = 0;
+        virtual void receiveMessage(Message msg) = 0;
 };
 
 #endif /* !IMODULE_HPP_ */

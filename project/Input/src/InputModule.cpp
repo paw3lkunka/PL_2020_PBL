@@ -1,49 +1,45 @@
 #include "InputModule.hpp"
 
+#include "GLFW/glfw3.h"
+
+#include "Event.hpp"
+#include "Message.inl"
+#include "MessageBus.hpp"
+
+MessageBus* InputModule::messageBus;
+
 InputModule::InputModule(MessageBus* messageBus)
 {
     this->messageBus = messageBus;
 }
 
-void InputModule::MockConsoleInput()
+void InputModule::initialize(GLFWwindow* window)
 {
-    Message msg;
+    glfwSetKeyCallback(window, keyboardCallback);
+}
 
-    #ifdef __linux__ 
-        char input;
-        std::cin >> input;
-        switch (input)
-    #elif _WIN32
-        switch (getch())
-    #endif
-    {
-    case 'w':
-    case 'W':
-        msg = Message(Event::KEY_PRESSED_W);
-        break;
-        
-    case 's':
-    case 'S':
-        msg = Message(Event::KEY_PRESSED_S);
-        break;
-        
-    case 'a':
-    case 'A':
-        msg = Message(Event::KEY_PRESSED_A);
-        break;
-        
-    case 'd':
-    case 'D':
-        msg = Message(Event::KEY_PRESSED_D);
-        break;
-    }
-    if (msg.getEvent() != Event::UNKNOWN_EVENT)
-    {
-        messageBus->SendMessage(msg);
-    }
-}        
-
-void InputModule::ReceiveMessage(Message msg)
+void InputModule::receiveMessage(Message msg)
 {
     return;
+}
+
+void InputModule::keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    Event event;
+    switch(action)
+    {
+        case GLFW_PRESS:
+            event = Event::KEY_PRESSED;
+            break;
+        case GLFW_REPEAT:
+            event = Event::KEY_REPEAT;
+            break;
+        case GLFW_RELEASE:
+            event = Event::KEY_RELEASED;
+            break;
+        default:
+            //TODO: exception
+            return;
+    }
+    messageBus->sendMessage(Message(event, key));
 }
