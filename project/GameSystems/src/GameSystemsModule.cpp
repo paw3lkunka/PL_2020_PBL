@@ -10,28 +10,28 @@ GameSystemsModule::GameSystemsModule(MessageBus* messageBus)
     this->messageBus = messageBus;
 }
 
-void GameSystemsModule::ReceiveMessage(Message msg)
+void GameSystemsModule::receiveMessage(Message msg)
 {
 
 }
 
-void GameSystemsModule::AddEntity(Entity* entity)
+void GameSystemsModule::addEntity(Entity* entity)
 {
     entities.push_back(entity);
 }
 
-void GameSystemsModule::AddSystem(System* system)
+void GameSystemsModule::addSystem(System* system)
 {
     systems.push_back(system);
 }
 
-void GameSystemsModule::Run()
+void GameSystemsModule::run()
 {
     for( auto sys : systems )
     {
         for( auto ent : entities )
         {
-            sys->Process(ent);
+            sys->process(ent);
         }
     }
 }

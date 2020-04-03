@@ -27,27 +27,26 @@ class GameSystemsModule : public IModule
          * 
          * @param msg - Messange to handle
          */
-        virtual void ReceiveMessage(Message msg);
+        virtual void receiveMessage(Message msg);
 
         /**
          * @brief Assign ECS Entity to this object
          * 
          * @param entity pointer to Entity
          */
-        void AddEntity(Entity* entity);
+        void addEntity(Entity* entity);
 
         /**
          * @brief Assign ECS System to this object
          * 
          * @param system pointer to System
          */
-        void AddSystem(System* system);
+        void addSystem(System* system);
         
         /**
          * @brief Runs all systems
-         * TODO: this function should be private, and called in ReceiveMessage()
          */
-        void Run();
+        void run();
     protected:
     private:
         MessageBus* messageBus;
