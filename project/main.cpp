@@ -1,18 +1,22 @@
-#include "InputModule.hpp"
-#include "ConsoleModule.hpp"
-#include "MessageBus.hpp"
+// standard C++ library
 #include <iostream>
 #include <utility>
 
+// system-depended
 #ifdef __linux__ 
     #include <unistd.h>
 #elif _WIN32
     #include <windows.h>
 #endif
 
+// external libraries
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+// our code
+#include "InputModule.hpp"
+#include "ConsoleModule.hpp"
+#include "MessageBus.hpp"
 #include "Message.inl"
 #include "GameSystemsModule.hpp"
 #include "Entity.hpp"
@@ -143,6 +147,8 @@ int main()
 
         messageBus.notify();
         gameSystemsModule.run();
+
+        inputModule.clearFlags();
 
         #ifdef __linux__ 
             usleep(16);
