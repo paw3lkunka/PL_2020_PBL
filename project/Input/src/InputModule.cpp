@@ -38,9 +38,6 @@ void InputModule::receiveMessage(Message msg)
     return;
 }
 
-//TODO: wywal to
-#include <iostream>
-
 void InputModule::captureControllersInput()
 {
     GLFWgamepadstate oldState, currentState;
@@ -48,38 +45,32 @@ void InputModule::captureControllersInput()
     for( int joy = GLFW_JOYSTICK_1; joy <= GLFW_JOYSTICK_LAST; joy++ )
     {
         if( (gamepadsEnabled >> joy) & 1U )
-        {   
-            std::cout << glfwGetGamepadName(joy) << std::endl;;
-
+        {
             oldState = gamepads[joy];
             glfwGetGamepadState(joy, &currentState);
             
-            for(int button = 0; button >= GLFW_GAMEPAD_BUTTON_LAST; button++ )
+            for(int button = 0; button <= GLFW_GAMEPAD_BUTTON_LAST; button++ )
             {
-                GamepadButtonData value;
-                Message message;
-
                 if( oldState.buttons[button] == GLFW_RELEASE && currentState.buttons[button] == GLFW_PRESS )
                 {
-                    value = GamepadButtonData{joy,button};
-                    message = Message(Event::GAMEPAD_BUTTON_PRESSED,joy);
+                    auto value = GamepadButtonData{joy,button};
+                    auto message = Message(Event::GAMEPAD_BUTTON_PRESSED,value);
+                    messageBus->sendMessage(message);
                 }
                 else if( oldState.buttons[button] == GLFW_PRESS && currentState.buttons[button] == GLFW_RELEASE )
                 {
-                    value = GamepadButtonData{joy,button};
-                    message = Message(Event::GAMEPAD_BUTTON_RELEASED,joy);
+                    auto value = GamepadButtonData{joy,button};
+                    auto message = Message(Event::GAMEPAD_BUTTON_RELEASED,value);
+                    messageBus->sendMessage(message);
                 }
-
-                messageBus->sendMessage(message);
             }
 
-            for (int axis = 0; axis < GLFW_GAMEPAD_AXIS_LAST; axis++)
+            for (int axis = 0; axis <= GLFW_GAMEPAD_AXIS_LAST; axis++)
             {
                 if( oldState.axes[axis] != currentState.axes[axis] )
                 {
                     auto value = GamepadAxisData{joy,axis,currentState.axes[axis]};
-                    auto message = Message(Event::GAMEPAD_BUTTON_PRESSED,joy);
-
+                    auto message = Message(Event::GAMEPAD_AXIS_CHANGED,value);
                     messageBus->sendMessage(message);
                 }
             }            
@@ -125,9 +116,6 @@ void InputModule::keyboardCallback(GLFWwindow* window, int key, int scancode, in
         case GLFW_RELEASE:
             event = Event::KEY_RELEASED;
             break;
-        default:
-            //TODO: exception
-            return;
     }
     messageBus->sendMessage(Message(event, key));
 }
@@ -143,9 +131,6 @@ void InputModule::mouseButtonsCallback(GLFWwindow* window, int button, int actio
         case GLFW_RELEASE:
             event = Event::MOUSE_BUTTON_RELEASED;
             break;
-        default:
-            //TODO: exception
-            return;
     }
     messageBus->sendMessage(Message(event, button));
 }

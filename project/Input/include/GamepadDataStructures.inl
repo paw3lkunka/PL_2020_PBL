@@ -9,14 +9,10 @@
  */
 struct GamepadButtonData
 {
-    /**
-     * @brief GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
-     */
+    /// @brief GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
     int gamepadId;
 
-    /**
-     * @brief GLFW_GAMEPAD_BUTTON_[...]
-     */
+    /// @brief GLFW_GAMEPAD_BUTTON_[...]
     int buttonId;
 };
 
@@ -25,22 +21,14 @@ struct GamepadButtonData
  */
 struct GamepadAxisData
 {    
-    /**
-     * @brief GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
-     */
+    /// @brief GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
     int gamepadId;    
 
-    /**
-     * @brief GLFW_GAMEPAD_AXIS_[...]
-     */
+    /// @brief GLFW_GAMEPAD_AXIS_[...]
     int axisId;
 
-    //TODO udokumentuj to
-    /**
-     * 
-     * @brief 
-     */
-    int axisState;
+    /// @brief between -1 and 1
+    float axisState;
 };
 
 

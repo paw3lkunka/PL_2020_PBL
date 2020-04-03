@@ -59,8 +59,7 @@ class InputModule : public IModule
         static unsigned int lastCursorMove;
         
         /**
-         * @brief 
-         * 
+         * @brief enabled gamepads flags, n-th bit represents n-th gamepad
          */
         static int gamepadsEnabled;
 
@@ -111,10 +110,10 @@ class InputModule : public IModule
         static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 
         /**
-         * @brief Callback for GLFW game controller
+         * @brief Callback for GLFW game controller connection events
          * 
          * @param id controller id: GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
-         * @param glfwEvent GLFW_GAMEPAD_[...] || GLFW_HAT_[...]
+         * @param glfwEvent GLFW event
          */
         static void controllerConnectCallback(int id, int glfwEvent);
 };

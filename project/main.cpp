@@ -137,10 +137,12 @@ int main()
 
 
 
+    float b = 0;
+    float pulse = 0.01;
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
-		glClearColor(.2,.4,1,1);
+		glClearColor(.2,.4,b,1);
 		glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -156,8 +158,13 @@ int main()
         #elif _WIN32
             Sleep(16);
         #endif
-    }    
 
+        b += pulse;
+        if ( b > 1 || b < 0)
+        {
+            pulse = -pulse;
+        }
+    }    
     
 	glfwDestroyWindow(window);
 	glfwTerminate();
