@@ -93,7 +93,7 @@ void InputModule::controllersInitialDetection()
 {
     for( int joy = GLFW_JOYSTICK_1; joy <= GLFW_JOYSTICK_LAST; joy++ )
     {
-        if(glfwJoystickPresent(joy))
+        if( glfwJoystickPresent(joy) && glfwJoystickIsGamepad(joy) )
         {   
             gamepadsEnabled |= (1 << joy);
             auto message = Message(Event::GAMEPAD_CONNECTED,joy);
@@ -182,16 +182,23 @@ void InputModule::controllerConnectCallback(int id, int glfwEvent)
     Event event;
     switch (glfwEvent)
     {
-    case GLFW_CONNECTED:        
-        gamepads[id] = GLFWgamepadstate();
-        event = Event::GAMEPAD_CONNECTED;
-        gamepadsEnabled |= (1 << id);
+    case GLFW_CONNECTED:
+        if(glfwJoystickIsGamepad(id))
+        {
+            gamepads[id] = GLFWgamepadstate();
+            event = Event::GAMEPAD_CONNECTED;
+            gamepadsEnabled |= (1 << id);
+            messageBus->sendMessage(Message(event,id));
+        }        
         break;
 
-    case GLFW_DISCONNECTED:
-        event = Event::GAMEPAD_DISCONNECTED;
-        gamepadsEnabled &= ~(1 << id);        
+    case GLFW_DISCONNECTED:    
+        if( (gamepadsEnabled >> id) & 1U )
+        {
+            event = Event::GAMEPAD_DISCONNECTED;
+            gamepadsEnabled &= ~(1 << id);   
+            messageBus->sendMessage(Message(event,id));
+        }     
         break;
     }
-    messageBus->sendMessage(Message(event,id));
 }
