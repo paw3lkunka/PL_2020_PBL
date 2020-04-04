@@ -112,7 +112,7 @@ class Message
         /**
          * @brief Store additional data 
          */
-        char buffer[BUFFER_SIZE];
+        char buffer[BUFFER_SIZE] = {};
 };
 
 #endif /* !MESSAGE_HPP_ */

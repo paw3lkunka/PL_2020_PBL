@@ -6,6 +6,7 @@
 class Message;
 class MessageBus;
 class GLFWwindow;
+class GLFWgamepadstate;
 
 /**
  * @brief Read input from keyboard and send events to message bus.
@@ -38,10 +39,19 @@ class InputModule : public IModule
         virtual void receiveMessage(Message msg);
 
         /**
-         * @brief Clear internal flags, should be called in end of each frame .
+         * @brief Capture controllers input, and send messages to MessageBus. Should be called at the beggining of each frame.
+         */
+        void captureControllersInput();
+
+        /**
+         * @brief Clear internal flags, should be called in end of each frame.
          */
         void clearFlags();
     private:
+        /**
+         * @brief MessageBus pointer, unused as messages destination.
+         */
+        static MessageBus* messageBus;
 
         /**
          * @brief Number of frames from last cursor move, incremented by clearFlags(), resetted by cursorCallback().
@@ -49,9 +59,16 @@ class InputModule : public IModule
         static unsigned int lastCursorMove;
         
         /**
-         * @brief MessageBus pointer, unused as messages destination.
+         * @brief enabled gamepads flags, n-th bit represents n-th gamepad
          */
-        static MessageBus* messageBus;
+        static int gamepadsEnabled;
+
+        static GLFWgamepadstate gamepads[16];
+
+        /**
+         * @brief Detect already connected controllers, and send adequate messages. Called in initialize().
+         */
+        void controllersInitialDetection();
 
         /**
          * @brief Callback for GLFW keyboard input.
@@ -90,7 +107,15 @@ class InputModule : public IModule
          * @param xOffset offset of vertical scroll.
          * @param yOffset offset of horizontal scroll.
          */
-        static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);        
+        static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+
+        /**
+         * @brief Callback for GLFW game controller connection events
+         * 
+         * @param id controller id: GLFW_JOYSTICK_1 - GLFW_JOYSTICK_16
+         * @param glfwEvent GLFW event
+         */
+        static void controllerConnectCallback(int id, int glfwEvent);
 };
 
 #endif /* !INPUTMODULE_HPP_ */

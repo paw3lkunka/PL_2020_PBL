@@ -14,9 +14,9 @@ enum class Event : unsigned int
     KEY_RELEASED,
     // The key was held down until it repeated int - GLFW keycode.
     KEY_REPEAT,
-    // The mouse button  was pressed, DATA: int - GLFW mouse button.
+    // The mouse button was pressed, DATA: int - GLFW mouse button.
     MOUSE_BUTTON_PRESSED,
-    // The mouse button  was released, DATA: int - GLFW mouse button.
+    // The mouse button was released, DATA: int - GLFW mouse button.
     MOUSE_BUTTON_RELEASED,
     // The mouse cursor was moved, DATA: CursorData {double xPos, double yPos, double xDelta, double yDelta}
     MOUSE_CURSOR_MOVED,
@@ -24,6 +24,16 @@ enum class Event : unsigned int
     MOUSE_CURSOR_STOPPED,
     // The mouse scroll was moved, DATA: ScrollData {double offset, int axis VERTICAL_SCROLL || HORIZONTAL_SCROLL}
     MOUSE_SCROLL_MOVED,
+    // The gamepad was connected, DATA: int - controller id: GLFW joystick number.
+    GAMEPAD_CONNECTED,
+    // The gamepad was connected, DATA: int - controller id: GLFW joystick number.
+    GAMEPAD_DISCONNECTED,
+    // The gamepad button was pressed, DATA: GamepadButtonData {int gamepadId - GLFW joystick, int buttonId - GLFW gamepad button}.
+    GAMEPAD_BUTTON_PRESSED,
+    // The gamepad button was released, DATA: GamepadButtonData {int gamepadId - GLFW joystick, int buttonId - GLFW gamepad button}.
+    GAMEPAD_BUTTON_RELEASED,
+    // THE gamepad axis pressure amount was changed, DATA: GamepadAxisData {int gamepadId - GLFW joystick, int axisId - GLFW gamepad button, float amount}.
+    GAMEPAD_AXIS_CHANGED,
 
 };
 
