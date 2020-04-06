@@ -11,6 +11,9 @@
     #include <windows.h>
 #endif
 
+MessageBus* Core::messageBusPtr = nullptr;
+GLFWwindow* Core::window = nullptr;
+
 Core::Core()
 {
     messageBusPtr = &messageBus;
@@ -26,22 +29,22 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(800, 600, "PBL", NULL, NULL);
+    window = glfwCreateWindow(INIT_WINDOW_WIDTH, INIT_WINDOW_HIGHT, "PBL", NULL, NULL);
     if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
+		return 1;
 	}
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -2;
+		return 2;
 	}
 
-    glViewport(0,0,800,600);
+    glViewport(0,0,INIT_WINDOW_WIDTH,INIT_WINDOW_HIGHT);
     
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
@@ -50,7 +53,6 @@ int Core::init()
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &tmpExit );
-
 
     // Everything is ok.
     return 0;
@@ -74,6 +76,7 @@ int Core::mainLoop()
 
         inputModule.clearFlags();
 
+        //TODO sleep 16 minus frame render time
         #ifdef __linux__ 
             usleep(16);
         #elif _WIN32
@@ -86,9 +89,10 @@ int Core::mainLoop()
             pulse = -pulse;
         }
     }    
+
+    return 0;
 }
 
-MessageBus* Core::messageBusPtr;
 
 MessageBus* Core::getMessageBus()
 {
