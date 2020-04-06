@@ -64,9 +64,10 @@ set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(libs/glad/)
-add_subdirectory(libs/glfw-3.3.2/)
+add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
-add_subdirectory(libs/assimp-5.0.1/)
+add_subdirectory(libs/assimp/)
+add_subdirectory(libs/openal-soft)
 
 aux_source_directory( project                   PROJECT_SRC)
 aux_source_directory( project/GameSystems/src   GAME_SRC)
@@ -102,9 +103,10 @@ include_directories(
     project/Terminal/include
     libs/stb
     libs/glad/include
-    libs/glfw-3.3.2/include
-    libs/assimp-5.0.1/include
+    libs/glfw/include
+    libs/assimp/include
     libs/glm/
+    libs/openal-soft/include
 )
 
 add_executable( PBL project/main.cpp )
@@ -116,6 +118,7 @@ target_link_libraries(
         glfw
         glm
         assimp
+        openal
 ) 
 
 
