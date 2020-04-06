@@ -13,10 +13,8 @@ class ConsoleModule : public IModule {
     public:
         /**
          * @brief Construct a new Console Module object
-         * 
-         * @param messageBus - Pointer to message bus, used i future to sending events
          */
-        ConsoleModule(MessageBus* messageBus);
+        ConsoleModule();
         
         /**
          * @brief MessageBus pointer, produce console output
@@ -24,10 +22,6 @@ class ConsoleModule : public IModule {
         virtual void receiveMessage(Message msg);
 
     private:        
-        /**
-         * @brief MessageBus pointer, unused as messages destination - temporally unused
-         */
-        MessageBus* messageBus;
 };
 
 #endif /* !CONSOLEMODULE_HPP_ */

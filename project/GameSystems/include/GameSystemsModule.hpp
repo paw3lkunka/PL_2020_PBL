@@ -17,10 +17,8 @@ class GameSystemsModule : public IModule
     public:        
         /**
          * @brief Construct a new GAmeSystem Module object
-         * 
-         * @param messageBus - Pointer to message bus, used to sending events
-         */
-        GameSystemsModule(MessageBus* messageBus);
+         * */
+        GameSystemsModule();
 
         /**
          * @brief IModule implementation, temporally does nothing
@@ -49,7 +47,6 @@ class GameSystemsModule : public IModule
         void run();
     protected:
     private:
-        MessageBus* messageBus;
         std::vector<Entity*> entities;
         std::vector<System*> systems;
 };

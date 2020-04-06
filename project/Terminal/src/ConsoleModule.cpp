@@ -5,9 +5,8 @@
 #include "MouseDataStructures.inl"
 #include "GamepadDataStructures.inl"
 
-ConsoleModule::ConsoleModule(MessageBus* messageBus)
+ConsoleModule::ConsoleModule()
 {
-    this->messageBus = messageBus;
 }       
 
 void ConsoleModule::receiveMessage(Message msg)

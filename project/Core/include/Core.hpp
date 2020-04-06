@@ -23,12 +23,13 @@ class GLFWwindow;
 class Core
 {
     public:       
+
 #pragma region Modules
         MessageBus messageBus = (128);
         
-        InputModule inputModule = (&messageBus);
-        ConsoleModule consoleModule = (&messageBus);
-        GameSystemsModule gameSystemsModule = (&messageBus);
+        InputModule inputModule;
+        ConsoleModule consoleModule;
+        GameSystemsModule gameSystemsModule;
         
         // TMP exit on ESC key
         class : public IModule
@@ -43,12 +44,16 @@ class Core
         } tmpExit; 
 #pragma endregion
 
+#pragma region statics
+    static MessageBus* getMessageBus();
+#pragma endregion
+
 #pragma region GLFW
         GLFWwindow* window;
 #pragma endregion
 
 #pragma region Functions
-        Core(){}
+        Core();
         ~Core() = default;
 
         int init();
@@ -57,6 +62,7 @@ class Core
 #pragma endregion
     protected:
     private:
+        static MessageBus* messageBusPtr;
 };
 
 #endif /* !CORE_HPP_ */

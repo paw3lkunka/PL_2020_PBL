@@ -11,6 +11,11 @@
     #include <windows.h>
 #endif
 
+Core::Core()
+{
+    messageBusPtr = &messageBus;
+}
+
 int Core::init()
 {       
     std::cout << "Henlo!" << std::endl;
@@ -38,15 +43,6 @@ int Core::init()
 
     glViewport(0,0,800,600);
     
-    //Initializing MessageBus
-
-        messageBus = MessageBus(128);
-        
-        inputModule = InputModule( &messageBus );
-        consoleModule = ConsoleModule( &messageBus );
-        gameSystemsModule = GameSystemsModule(&messageBus);
-
-
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
@@ -90,6 +86,13 @@ int Core::mainLoop()
             pulse = -pulse;
         }
     }    
+}
+
+MessageBus* Core::messageBusPtr;
+
+MessageBus* Core::getMessageBus()
+{
+    return messageBusPtr;
 }
 
 void Core::cleanup()
