@@ -10,17 +10,24 @@
 #elif _WIN32
     #include <windows.h>
 #endif
+Core* Core::instance = nullptr;
 
-MessageBus* Core::messageBusPtr = nullptr;
-GLFWwindow* Core::window = nullptr;
 
-Core::Core()
+Core& GetCore()
 {
-    messageBusPtr = &messageBus;
+    return *(Core::instance);
 }
 
+
 int Core::init()
-{       
+{
+    if( instance != nullptr )
+    {
+		std::cerr << "Core already initialized" << std::endl;
+		return instance == this ? 3 : 4;
+    }
+    instance = this;
+    
     std::cout << "Henlo!" << std::endl;
     //TODO: GLFW Error callback
     
@@ -32,7 +39,7 @@ int Core::init()
     window = glfwCreateWindow(INIT_WINDOW_WIDTH, INIT_WINDOW_HIGHT, "PBL", NULL, NULL);
     if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return 1;
 	}
@@ -40,7 +47,7 @@ int Core::init()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		std::cerr << "Failed to initialize GLAD" << std::endl;
 		return 2;
 	}
 
@@ -94,13 +101,20 @@ int Core::mainLoop()
 }
 
 
-MessageBus* Core::getMessageBus()
+MessageBus& Core::getMessageBus()
 {
-    return messageBusPtr;
+    return messageBus;
 }
 
 void Core::cleanup()
 {
 	glfwDestroyWindow(window);
 	glfwTerminate();
+    
+    std::cout << "App freed resources properly." << std::endl;
+}
+
+void Core::close()
+{
+    glfwSetWindowShouldClose(window,true);
 }

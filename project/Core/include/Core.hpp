@@ -18,12 +18,79 @@
 class GLFWwindow;
 class Core;
 
+Core& GetCore();
+
 /**
  * @brief Main class of program, contain all modules, initialization, game loop, and finalization;
  */
 class Core
 {
+    /**
+     * @brief Global Getter to core instance
+     * 
+     * @return Core* instance of core
+     */
+    friend Core& GetCore();
+
     public:       
+#pragma region statics
+        /**
+         * @brief defines initial window width 
+         */
+        static constexpr int INIT_WINDOW_WIDTH = 800;
+        
+        /**
+         * @brief defines initial window hight 
+         */
+        static constexpr int INIT_WINDOW_HIGHT = 600;
+#pragma endregion
+
+#pragma region Functions
+        /**
+         * @brief Construct a new Core object, Only one Core object should exists in one time 
+         * 
+         */
+        Core() = default;
+        ~Core() = default;
+
+        /**
+         * @brief Initialize Core module, and make GetCore() working, application with all dependencies;
+         * 
+         * @return - int error code:
+         * 0 - No error
+         * 1 - Failed to create GLFW window
+         * 2 - Failed to initialize GLAD
+         * 3 - Core was already initialized
+         * 4 - Core was already initialized (other instance)
+         */
+        int init();
+        /**
+         * @brief Heart of application, loops while glfwWindowShouldClose() == false
+         * 
+         * @return int exit code, should be returned by main()
+         * 0 - returned properly
+         */
+        int mainLoop();
+        /**
+         * @brief Safely dispose all dependencies 
+         */
+        void cleanup();
+        /**
+         * @brief Breaks mainLoop() propery causing exit code 0 
+         */
+        void close();
+        /**
+         * @brief Get the Message Bus object reference
+         * @return MessageBus&
+         */
+        MessageBus& getMessageBus();
+        /**
+         * @brief Get the Window object pointer
+         * 
+         * @return GLFWwindow&*
+         */
+        GLFWwindow* getWindowPtr();
+#pragma endregion
 
 #pragma region Modules
         MessageBus messageBus = (128);
@@ -39,55 +106,16 @@ class Core
             {
                 if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
                 {
-                    glfwSetWindowShouldClose(window,true);
+                    instance->close();
                 }
             }
         } tmpExit; 
 #pragma endregion
 
-#pragma region statics
-        /**
-         * @brief Get the Message Bus object
-         * @return MessageBus* 
-         */
-        static MessageBus* getMessageBus();
-        /**
-         * @brief defines initial window width 
-         */
-        static constexpr int INIT_WINDOW_WIDTH = 800;
-        
-        /**
-         * @brief defines initial window hight 
-         */
-        static constexpr int INIT_WINDOW_HIGHT = 600;
-#pragma endregion
-
-#pragma region Functions
-        Core();
-        ~Core() = default;
-
-        /**
-         * @brief Initialize application with all dependencies;
-         * 
-         * @return - int error code:
-         * 0 - No error
-         * 1 - Failed to create GLFW window
-         * 2 - Failed to initialize GLAD
-         */
-        int init();
-        /**
-         * @brief Heart of application, loops while glfwWindowShouldClose() == false
-         * 
-         * @return int exit code, should be returned by main()
-         * 0 - returned properly
-         */
-        int mainLoop();
-        void cleanup();
-#pragma endregion
     protected:
     private:
-        static MessageBus* messageBusPtr;
-        static GLFWwindow* window;
+        static Core* instance;
+        GLFWwindow* window; 
 };
 
 #endif /* !CORE_HPP_ */
