@@ -3,12 +3,39 @@ cmake_minimum_required( VERSION 3.4 )
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_definitions(__STDC_NO_THREADS__)
+
+# Eventually clone submodules
+if(NOT EXISTS "libs/assimp/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/assimp/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT EXISTS "libs/glfw/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/glfw/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT EXISTS "libs/glm/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/glm/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT EXISTS "libs/stb/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/stb/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT EXISTS "libs/openal-soft/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/openal-soft/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
 # Enable GLFW unused eatures 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+# Enable GLFW unused eatures 
+set(ALSOFT_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(ALSOFT_TESTS OFF CACHE BOOL "" FORCE)
 
 # Enable Assimp modules
 set(ASSIMP_NO_EXPORT OFF CACHE BOOL "" FORCE)
@@ -64,6 +91,7 @@ set(ASSIMP_BUILD_X3D_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_3MF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_MMD_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_STEP_IMPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_M3D_IMPORTER OFF CACHE BOOL "" FORCE)
 
 set(ASSIMP_BUILD_3DS_EXPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSBIN_EXPORTER OFF CACHE BOOL "" FORCE)
@@ -79,6 +107,7 @@ set(ASSIMP_BUILD_X3D_EXPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_3MF_EXPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSJSON_EXPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_STEP_EXPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_M3D_EXPORTER OFF CACHE BOOL "" FORCE)
 
 set(BUILD_DOCS OFF CACHE BOOL "" FORCE) #Assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
@@ -132,14 +161,25 @@ include_directories(
 
 add_executable( PBL project/main.cpp )
 
-target_link_libraries( 
-    PBL
-        lib
-        glad
-        glfw
-        glm
-        assimp
-        openal
-) 
-
+if(NOT WIN32)
+    target_link_libraries( 
+        PBL
+            lib
+            glad
+            glfw
+            glm
+            assimp
+            openal
+    )    
+else()
+    target_link_libraries( 
+        PBL
+            lib
+            glad
+            glfw
+            glm
+            assimp
+            OpenAL32
+    )
+endif()
 
