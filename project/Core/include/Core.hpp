@@ -18,6 +18,11 @@
 class GLFWwindow;
 class Core;
 
+/**
+ * @brief Get reference to initialized instance of Core class.
+ * 
+ * @return Core& 
+ */
 Core& GetCore();
 
 /**
@@ -46,15 +51,12 @@ class Core
 #pragma endregion
 
 #pragma region Functions
-        /**
-         * @brief Construct a new Core object, Only one Core object should exists in one time 
-         * 
-         */
         Core() = default;
         ~Core() = default;
 
         /**
-         * @brief Initialize Core module, and make GetCore() working, application with all dependencies;
+         * @brief Initialize Core module, and make GetCore() working, also initialize all dependencies.
+         * It is impossible to initialize instane, if other instane was already initialized, and wasn't disposed by cleanup function().
          * 
          * @return - int error code:
          * 0 - No error
@@ -93,13 +95,17 @@ class Core
 #pragma endregion
 
 #pragma region Modules
+        /// @brief implements messages exchange petween modules
         MessageBus messageBus = (128);
         
+        /// @brief reads from input devices
         InputModule inputModule;
+        /// @brief print logs on terminal
         ConsoleModule consoleModule;
+        /// @brief game logic
         GameSystemsModule gameSystemsModule;
         
-        // TMP exit on ESC key
+        /// @brief safely close application, on ESC press
         class : public IModule
         {
             virtual void receiveMessage(Message msg)
