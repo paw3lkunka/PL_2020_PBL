@@ -1,21 +1,20 @@
 #include "InputModule.hpp"
 
-#include "GLFW/glfw3.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "Event.hpp"
 #include "Message.inl"
-#include "MessageBus.hpp"
+#include "Core.hpp"
 #include "MouseDataStructures.inl"
 #include "GamepadDataStructures.inl"
 
-MessageBus* InputModule::messageBus = nullptr;
 unsigned int InputModule::lastCursorMove = 1; // o means, that mouse was moved in this frame
 int InputModule::gamepadsEnabled = 0;
 GLFWgamepadstate InputModule::gamepads[16] = {};
 
-InputModule::InputModule(MessageBus* messageBus)
+InputModule::InputModule()
 {
-    this->messageBus = messageBus;
 }
 
 void InputModule::initialize(GLFWwindow* window)
@@ -55,13 +54,13 @@ void InputModule::captureControllersInput()
                 {
                     auto value = GamepadButtonData{joy,button};
                     auto message = Message(Event::GAMEPAD_BUTTON_PRESSED,value);
-                    messageBus->sendMessage(message);
+                    GetCore().getMessageBus().sendMessage(message);
                 }
                 else if( oldState.buttons[button] == GLFW_PRESS && currentState.buttons[button] == GLFW_RELEASE )
                 {
                     auto value = GamepadButtonData{joy,button};
                     auto message = Message(Event::GAMEPAD_BUTTON_RELEASED,value);
-                    messageBus->sendMessage(message);
+                    GetCore().getMessageBus().sendMessage(message);
                 }
             }
 
@@ -71,7 +70,7 @@ void InputModule::captureControllersInput()
                 {
                     auto value = GamepadAxisData{joy,axis,currentState.axes[axis]};
                     auto message = Message(Event::GAMEPAD_AXIS_CHANGED,value);
-                    messageBus->sendMessage(message);
+                    GetCore().getMessageBus().sendMessage(message);
                 }
             }            
 
@@ -84,7 +83,7 @@ void InputModule::clearFlags()
 {
     if(lastCursorMove++ == 1)
     {
-        messageBus->sendMessage(Message(Event::MOUSE_CURSOR_STOPPED));
+        GetCore().getMessageBus().sendMessage(Message(Event::MOUSE_CURSOR_STOPPED));
     }
 
 }
@@ -97,7 +96,7 @@ void InputModule::controllersInitialDetection()
         {   
             gamepadsEnabled |= (1 << joy);
             auto message = Message(Event::GAMEPAD_CONNECTED,joy);
-            messageBus->sendMessage(message);
+            GetCore().getMessageBus().sendMessage(message);
         }
     }
 }
@@ -117,7 +116,7 @@ void InputModule::keyboardCallback(GLFWwindow* window, int key, int scancode, in
             event = Event::KEY_RELEASED;
             break;
     }
-    messageBus->sendMessage(Message(event, key));
+    GetCore().getMessageBus().sendMessage(Message(event, key));
 }
 
 void InputModule::mouseButtonsCallback(GLFWwindow* window, int button, int action, int mods)
@@ -132,7 +131,7 @@ void InputModule::mouseButtonsCallback(GLFWwindow* window, int button, int actio
             event = Event::MOUSE_BUTTON_RELEASED;
             break;
     }
-    messageBus->sendMessage(Message(event, button));
+    GetCore().getMessageBus().sendMessage(Message(event, button));
 }
 
 void InputModule::cursorCallback(GLFWwindow* window, double xPos, double yPos)
@@ -155,7 +154,7 @@ void InputModule::cursorCallback(GLFWwindow* window, double xPos, double yPos)
         data.yDelta = 0;
     }
     
-    messageBus->sendMessage(Message(Event::MOUSE_CURSOR_MOVED, data));
+    GetCore().getMessageBus().sendMessage(Message(Event::MOUSE_CURSOR_MOVED, data));
 
     xOld = xPos;
     yOld = yPos;
@@ -167,13 +166,13 @@ void InputModule::scrollCallback(GLFWwindow* window, double xOffset, double yOff
     if(xOffset)
     {
         auto message = Message(Event::MOUSE_SCROLL_MOVED, ScrollData{xOffset, VERTICAL_SCROLL});
-        messageBus->sendMessage(message);
+        GetCore().getMessageBus().sendMessage(message);
     }
 
     if(yOffset)
     {
         auto message = Message(Event::MOUSE_SCROLL_MOVED, ScrollData{yOffset, HORIZONTAL_SCROLL});
-        messageBus->sendMessage(message);
+        GetCore().getMessageBus().sendMessage(message);
     }
 }
 
@@ -188,7 +187,7 @@ void InputModule::controllerConnectCallback(int id, int glfwEvent)
             gamepads[id] = GLFWgamepadstate();
             event = Event::GAMEPAD_CONNECTED;
             gamepadsEnabled |= (1 << id);
-            messageBus->sendMessage(Message(event,id));
+            GetCore().getMessageBus().sendMessage(Message(event,id));
         }        
         break;
 
@@ -197,7 +196,7 @@ void InputModule::controllerConnectCallback(int id, int glfwEvent)
         {
             event = Event::GAMEPAD_DISCONNECTED;
             gamepadsEnabled &= ~(1 << id);   
-            messageBus->sendMessage(Message(event,id));
+            GetCore().getMessageBus().sendMessage(Message(event,id));
         }     
         break;
     }

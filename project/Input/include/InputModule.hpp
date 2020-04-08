@@ -20,9 +20,8 @@ class InputModule : public IModule
          * To work properly require to call initialize() before use
          * and clearFlags() in the end of each frame.
          * MessageBus pointer is static, so it's highly recommended not to create more than one instance.
-         * @param messageBus - Pointer to message bus, used to sending events
          */
-        InputModule(MessageBus* messageBus);
+        InputModule();
 
         /**
          * @brief Initialize module by setting GLFW callbacks.

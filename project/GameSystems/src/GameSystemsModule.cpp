@@ -5,9 +5,8 @@
 #include "MessageBus.hpp"
 #include "Message.inl"
 
-GameSystemsModule::GameSystemsModule(MessageBus* messageBus)
+GameSystemsModule::GameSystemsModule()
 {
-    this->messageBus = messageBus;
 }
 
 void GameSystemsModule::receiveMessage(Message msg)

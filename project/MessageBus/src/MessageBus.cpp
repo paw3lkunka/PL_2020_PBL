@@ -24,7 +24,8 @@ void MessageBus::sendMessage(Message msg)
 		messagesBuffer.push_back(msg);
 	}
 	else
-	{
+	{		
+//TODO discuss
 #ifndef NDEBUG
 		std::cerr << "Message buffer overflow\n";
 #endif
