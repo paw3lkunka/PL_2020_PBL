@@ -66,6 +66,7 @@ class Core
          * 4 - Core was already initialized (other instance)
          */
         int init();
+
         /**
          * @brief Heart of application, loops while glfwWindowShouldClose() == false
          * 
@@ -73,19 +74,23 @@ class Core
          * 0 - returned properly
          */
         int mainLoop();
+
         /**
          * @brief Safely dispose all dependencies 
          */
         void cleanup();
+
         /**
          * @brief Breaks mainLoop() propery causing exit code 0 
          */
         void close();
+
         /**
          * @brief Get the Message Bus object reference
          * @return MessageBus&
          */
         MessageBus& getMessageBus();
+
         /**
          * @brief Get the Window object pointer
          * 
@@ -100,8 +105,10 @@ class Core
         
         /// @brief reads from input devices
         InputModule inputModule;
+
         /// @brief print logs on terminal
         ConsoleModule consoleModule;
+        
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
         
