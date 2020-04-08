@@ -120,7 +120,7 @@ add_subdirectory(libs/assimp/)
 add_subdirectory(libs/openal-soft)
 
 aux_source_directory( project                   PROJECT_SRC)
-aux_source_directory( project/core/src          CORE_SRC)
+aux_source_directory( project/Core/src          CORE_SRC)
 aux_source_directory( project/GameSystems/src   GAME_SRC)
 aux_source_directory( project/Audio/src         AUDIO_SRC)
 aux_source_directory( project/FileSystem/src    FILE_SYSTEM_SRC)
