@@ -164,25 +164,14 @@ include_directories(
 
 add_executable( PBL project/main.cpp )
 
-if(NOT WIN32)
-    target_link_libraries( 
-        PBL
-            lib
-            glad
-            glfw
-            glm
-            assimp
-            openal
-    )    
-else()
-    target_link_libraries( 
-        PBL
-            lib
-            glad
-            glfw
-            glm
-            assimp
-            OpenAL32
-    )
-endif()
+target_link_libraries( 
+    PBL
+        lib
+        glad
+        glfw
+        glm
+        assimp
+        OpenAL
+)    
+
 
