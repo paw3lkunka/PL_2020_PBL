@@ -119,20 +119,24 @@ add_subdirectory(libs/glm/)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/openal-soft)
 
-aux_source_directory( project                   PROJECT_SRC)
-aux_source_directory( project/Core/src          CORE_SRC)
-aux_source_directory( project/GameSystems/src   GAME_SRC)
-aux_source_directory( project/Audio/src         AUDIO_SRC)
-aux_source_directory( project/FileSystem/src    FILE_SYSTEM_SRC)
-aux_source_directory( project/Input/src         INPUT_SRC)
-aux_source_directory( project/MessageBus/src    MESSAGE_BUS_SRC)
-aux_source_directory( project/Renderer/src      RENDERER_SRC)
-aux_source_directory( project/Terminal/src      TERMIANL_SRC)
+aux_source_directory( project                               PROJECT_SRC)
+aux_source_directory( project/Core/src                      CORE_SRC)
+aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
+aux_source_directory( project/GameSystems/Components/src    COMPONENTS_SRC)
+aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
+aux_source_directory( project/Audio/src                     AUDIO_SRC)
+aux_source_directory( project/FileSystem/src                FILE_SYSTEM_SRC)
+aux_source_directory( project/Input/src                     INPUT_SRC)
+aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
+aux_source_directory( project/Renderer/src                  RENDERER_SRC)
+aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
 
 list( 
     APPEND SOURCE_FILES
         ${CORE_SRC}
         ${GAME_SRC}
+        ${COMPONENTS_SRC}
+        ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
         ${FILE_SYSTEM_SRC}
@@ -147,7 +151,9 @@ add_library(lib ${SOURCE_FILES} )
 include_directories( 
     project
     project/Core/include
-    project/GameSystems/include
+    project/GameSystems/Base/include
+    project/GameSystems/Components/include
+    project/GameSystems/Systems/include
     project/Audio/include
     project/FileSystem/include
     project/Input/include
