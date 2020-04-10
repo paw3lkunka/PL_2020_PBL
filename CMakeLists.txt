@@ -180,4 +180,5 @@ target_link_libraries(
         OpenAL
 )    
 
-
+file(GLOB resources "project/Resources/*")
+file(COPY ${resources} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Resources")
