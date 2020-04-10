@@ -29,7 +29,7 @@ enum class Event : unsigned int
     // Debug log, warning priority, DATA: Pointer to const char* log
     DEBUG_WARNING_LOG,
     // Debug log, error priority, DATA: Pointer to const char* log
-    DEBUG_ERROR_LOG
+    DEBUG_ERROR_LOG,
     // The gamepad was connected, DATA: int - controller id: GLFW joystick number.
     GAMEPAD_CONNECTED,
     // The gamepad was connected, DATA: int - controller id: GLFW joystick number.
