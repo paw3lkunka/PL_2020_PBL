@@ -4,18 +4,15 @@
 class Entity;
 
 /**
- * @brief Base class for all ECS data structures, should not contain any logic
+ * @brief Base struct for all ECS data structures, should not contain any logic
  */
-class Component
+struct Component
 {
-    public:
-        virtual ~Component() = default;
-        /**
-         * @brief points on this components Entity - shouldn't be assinging manually
-         */
-        Entity* entityPtr;
-    protected:
-    private:
+    virtual ~Component() = default;
+    /**
+     * @brief points on this components Entity - shouldn't be assinging manually
+     */
+    Entity* entityPtr;
 };
 
 #endif /* !COMPONENT_HPP_ */
