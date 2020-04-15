@@ -12,6 +12,10 @@
 #include "Message.inl"
 #include "Event.hpp"
 
+#include "Entity.hpp"
+#include "Component.inl"
+#include "System.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -123,6 +127,40 @@ class Core
                 }
             }
         } tmpExit; 
+#pragma endregion
+//TODO Es, Cs and Ss should be stored in containers/allocators, not in single variables
+#pragma region mock ECS
+
+    Entity e1 = (0, 5), e2 = (1, 5), e3 = (3, 5);
+
+    class MockComponent : public Component
+    {
+        public:
+        int a; int b;
+        MockComponent(int x, int y) { a = x; b = y;}
+    } mockComponent = {2, 2}, mockComponent2 = {21, 37};
+
+    class MockInvalidComponent : public Component
+    {
+        bool aaa;
+    } otherComponent;
+
+    
+    struct MockSystem : public System
+    {
+        MockComponent* ptr;
+        virtual bool assertEntity(Entity* entity)
+        {
+            ptr = entity->getComponentPtr<MockComponent>();
+            return ptr != nullptr;
+        }
+
+        virtual void update()
+        {
+            int a = ptr->a, b = ptr->b;
+            std::cout << a << "+" << b << "=" << a + b << std::endl;
+        }
+    } mockSystem;
 #pragma endregion
 
     protected:
