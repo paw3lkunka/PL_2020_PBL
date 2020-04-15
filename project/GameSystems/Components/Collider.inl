@@ -4,11 +4,10 @@
 #include "Component.inl"
 
 /**
- * @brief Colliders base class
+ * @brief Colliders base struct
  */
-class Collider : public Component
+struct Collider : public Component
 {
-public:
     virtual ~Collider() = default;
 
     /**
@@ -17,7 +16,6 @@ public:
      * false = solid collider, impassable
      */
     bool isTrigger;
-
 };
 
 #endif /* !COLLIDER_HPP_ */

@@ -8,9 +8,8 @@
 /**
  * @brief Box-shaped collider (cuboid)
  */
-class BoxCollider : public Collider
+struct BoxCollider : public Collider
 {
-public:
     virtual ~BoxCollider() = default;
 
     /**

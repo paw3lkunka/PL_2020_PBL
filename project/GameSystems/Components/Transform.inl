@@ -7,15 +7,16 @@
 #include <glm/gtx/quaternion.hpp>
 
 /**
- * @brief Class that defines local transform of the object and its model matrix
+ * @brief Struct that defines local transform of the object and its model matrix
  */
-class Transform : public Component
+struct Transform : public Component
 {
-public:
     virtual ~Transform() = default;
+
     glm::vec3 localPosition;
     glm::quat localRotation;
     glm::vec3 localScale;
+    
     /**
      * @brief Model matrix (local to world transform)
      */

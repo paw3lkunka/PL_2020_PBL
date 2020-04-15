@@ -4,11 +4,10 @@
 #include "Component.inl"
 #include <glm/glm.hpp>
 /**
- * @brief Rigidbody class with all of its data and forces
+ * @brief Rigidbody struct with all of its data and forces
  */
-class Rigidbody : public Component
+struct Rigidbody : public Component
 {
-public:
     virtual ~Rigidbody() = default;
 
     /**

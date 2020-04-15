@@ -8,9 +8,8 @@
 /**
  * @brief Sphere-shaped collider
  */
-class SphereCollider : public Collider
+struct SphereCollider : public Collider
 {
-public:
     virtual ~SphereCollider() = default;
 
     /**
