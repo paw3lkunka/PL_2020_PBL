@@ -61,6 +61,20 @@ int Core::init()
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &tmpExit );
 
+#pragma region mock ECS
+    e1.addComponent(&mockComponent);
+    
+    e2.addComponent(&otherComponent);
+    e2.addComponent(&mockComponent2);
+    //nie powinniśmy współdzielić komponentu między dwoma encjami, ale ćiiiii..., to tylko mock xD
+    e3.addComponent(&otherComponent);
+    
+    gameSystemsModule.addEntity(&e1);
+    gameSystemsModule.addEntity(&e2);
+    gameSystemsModule.addEntity(&e3);
+    gameSystemsModule.addSystem(&mockSystem);
+#pragma endregion
+
     // Everything is ok.
     return 0;
 }

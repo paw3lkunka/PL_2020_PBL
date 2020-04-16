@@ -19,7 +19,7 @@ const int Entity::getId() const
     return id;
 }
 
-const std::vector<Component*>* Entity::getComponents() const
+const std::vector<Component*>* Entity::getComponentsPtr() const
 {
     return &components;
 }

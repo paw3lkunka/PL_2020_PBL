@@ -122,7 +122,6 @@ add_subdirectory(libs/openal-soft)
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
-aux_source_directory( project/GameSystems/Components/src    COMPONENTS_SRC)
 aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
 aux_source_directory( project/Audio/src                     AUDIO_SRC)
 aux_source_directory( project/FileSystem/src                FILE_SYSTEM_SRC)
@@ -135,7 +134,6 @@ list(
     APPEND SOURCE_FILES
         ${CORE_SRC}
         ${GAME_SRC}
-        ${COMPONENTS_SRC}
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
@@ -152,7 +150,7 @@ include_directories(
     project
     project/Core/include
     project/GameSystems/Base/include
-    project/GameSystems/Components/include
+    project/GameSystems/Components
     project/GameSystems/Systems/include
     project/Audio/include
     project/FileSystem/include

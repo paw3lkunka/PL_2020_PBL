@@ -38,7 +38,7 @@ class Entity
          * 
          * @return const std::vector<Component*>* 
          */
-        const std::vector<Component*>* getComponents() const;
+        const std::vector<Component*>* getComponentsPtr() const;
 
         /**
          * @brief Get the n-th Component of given type
@@ -48,7 +48,7 @@ class Entity
          * @return const T* pointer to component (nullptr if wasn't found)
          */
         template<typename T>
-        T* getComponent(int n = 0) const;
+        T* getComponentPtr(int n = 0) const;
         
         virtual ~Entity() = default;
     protected:
