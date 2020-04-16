@@ -8,6 +8,8 @@
 
 #include <unordered_map>
 
+#include <assimp/scene.h>
+
 class ResourceModule : public IModule
 {
 public:
@@ -26,11 +28,8 @@ private:
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadShader(std::string path);
-    bool loadMesh(std::string path);
-
-    bool unloadAudioClip(std::string path);
-    bool unloadTexture(std::string path);
-    bool unloadShader(std::string path);
+    bool loadMesh(std::string path, bool withTextures = false);
+    bool processMeshNode(aiNode* node, const aiScene* scene);
 };
 
 #endif // _RESOURCEMODULE_HPP

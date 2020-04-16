@@ -120,8 +120,8 @@ set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 add_subdirectory(libs/glad/)
 add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
-add_subdirectory(libs/assimp/)
 add_subdirectory(libs/openal-soft)
+add_subdirectory(libs/assimp/)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -169,6 +169,7 @@ include_directories(
     libs/glm/
     libs/openal-soft/include
     libs/AudioFile
+    build/libs/assimp/include
 )
 
 add_executable( PBL project/main.cpp )
@@ -179,8 +180,8 @@ target_link_libraries(
         glad
         glfw
         glm
-        assimp
         OpenAL
+        assimp
 )    
 
 file(GLOB resources "project/Resources/*")
