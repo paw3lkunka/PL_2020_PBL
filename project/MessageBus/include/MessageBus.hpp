@@ -33,6 +33,7 @@ class MessageBus
          * @param msg - Messange object.
          */
         void sendMessage(Message msg);
+    
 
         /**
          * @brief Send all buffered messages to receivers,

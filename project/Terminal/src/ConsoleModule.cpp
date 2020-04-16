@@ -17,6 +17,18 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "console here: Unknown event was raised." << std::endl;
         break;
 
+    case Event::DEBUG_INFO_LOG:
+        std::cout << "INFO: " << msg.getValue<char*>() << std::endl;
+        break;
+
+    case Event::DEBUG_WARNING_LOG:
+        std::cout << "WARNING: " << msg.getValue<char*>() << std::endl;
+        break;
+
+    case Event::DEBUG_ERROR_LOG:
+        std::cerr << "ERROR: " << msg.getValue<char*>() << std::endl;
+        break;
+
     case Event::KEY_PRESSED:
         std::cout << "console here: KEY_PRESSED. code: " << msg.getValue<int>() << std::endl;
         break;
@@ -81,9 +93,12 @@ void ConsoleModule::receiveMessage(Message msg)
     {
         auto gData = msg.getValue<GamepadAxisData>();
         std::cout << "console here: GAMEPAD_AXIS_CHANGED. gamepad: " << gData.gamepadId << ", axis: " << gData.axisId << ", value: " << gData.axisState << std::endl;
-        
     }
+        break;  
+
+    default:
+        std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
+        std::cout << "WARNING: Specific console response not implemented:" << std::endl;
         break;
-        
     }
 }

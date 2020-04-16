@@ -12,12 +12,27 @@
 #endif
 Core* Core::instance = nullptr;
 
+#include <sstream>
 
 Core& GetCore()
 {
     return *(Core::instance);
 }
 
+void InfoLog(const char* log) 
+{ 
+    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_INFO_LOG, log));
+}
+
+void WarningLog(const char* log)
+{
+    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_WARNING_LOG, log));
+}
+
+void ErrorLog(const char* log)
+{   
+    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_ERROR_LOG, log));
+}
 
 int Core::init()
 {
@@ -81,34 +96,50 @@ int Core::init()
 
 int Core::mainLoop()
 {
+    //TODO
+#pragma region for MOCK screen animation
     float b = 0;
     float pulse = 0.01;
+#pragma endregion
+
+    double previousFrameStart = glfwGetTime();
+    double lag = 0;
+
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
-		glClearColor(.2,.4,b,1);
-		glClear(GL_COLOR_BUFFER_BIT);
+        double currentFrameStart = glfwGetTime();
+        double lastFrameTime = currentFrameStart - previousFrameStart;
+
+        lag += lastFrameTime;
+        previousFrameStart = currentFrameStart;
+                
         glfwSwapBuffers(window);
         glfwPollEvents();
         inputModule.captureControllersInput();
-
-        messageBus.notify();
-        gameSystemsModule.run();
+        
+        while(lag >= FIXED_TIME_STEP)
+        {
+            InfoLog("UPDATE");
+            messageBus.notify();
+            gameSystemsModule.run();
+            lag -= FIXED_TIME_STEP;
+        }
 
         inputModule.clearFlags();
 
-        //TODO sleep 16 minus frame render time
-        #ifdef __linux__ 
-            usleep(16);
-        #elif _WIN32
-            Sleep(16);
-        #endif
-
+        //TODO RENDER FRAME
+#pragma region MOCK screen animation
+		glClearColor(.2,.4,b,1);
+		glClear(GL_COLOR_BUFFER_BIT);
         b += pulse;
         if ( b > 1 || b < 0)
         {
             pulse = -pulse;
         }
+#pragma endregion
+
+        InfoLog("FRAME");
     }    
 
     return 0;
