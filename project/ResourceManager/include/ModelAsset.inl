@@ -1,14 +1,13 @@
 #ifndef _MODELASSET_INL
 #define _MODELASSET_INL
 
-#include "Mesh.h"
-#include ""
+#include "Mesh.hpp"
+#include "TextureAsset.inl"
 
 struct ModelAsset
 {
-    const char* path;
     // Model data
-    std::vector<MeshAsset> meshes;
+    std::vector< Mesh<Vertex_base> >  meshes;
     std::vector<TextureAsset> textures;
 };
 

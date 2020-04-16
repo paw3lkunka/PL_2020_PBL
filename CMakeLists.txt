@@ -18,12 +18,16 @@ if(NOT EXISTS "libs/glm/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/glm/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-if(NOT EXISTS "libs/stb/CMakeLists.txt")
+if(NOT EXISTS "libs/stb/README.md")
     execute_process(COMMAND git submodule update --init "libs/stb/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 if(NOT EXISTS "libs/openal-soft/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/openal-soft/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT EXISTS "libs/AudioFile/AudioFile.h")
+    execute_process(COMMAND git submodule update --init "libs/AudioFile/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 project( PBL )
@@ -124,7 +128,7 @@ aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
 aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
 aux_source_directory( project/Audio/src                     AUDIO_SRC)
-aux_source_directory( project/FileSystem/src                FILE_SYSTEM_SRC)
+aux_source_directory( project/ResourceManager/src           FILE_SYSTEM_SRC)
 aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
@@ -153,7 +157,7 @@ include_directories(
     project/GameSystems/Components
     project/GameSystems/Systems/include
     project/Audio/include
-    project/FileSystem/include
+    project/ResourceManager/include
     project/Input/include
     project/MessageBus/include
     project/Renderer/include
