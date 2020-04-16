@@ -40,7 +40,29 @@ enum class Event : unsigned int
     GAMEPAD_BUTTON_RELEASED,
     // THE gamepad axis pressure amount was changed, DATA: GamepadAxisData {int gamepadId - GLFW joystick, int axisId - GLFW gamepad button, float amount}.
     GAMEPAD_AXIS_CHANGED,
+    //Resource module load file event. DATA: FileSystemData {const char* filepath, FileType typeOfFile}
+    LOAD_FILE,
 
+    // Query FROM Renderer to Resource Module. DATA: cont char* filepath;
+    QUERY_SHADER_DATA,
+    // Shader data to send to Renderer module. DATA: const char* shaderData;
+    RECEIVE_SHADER_DATA,
+
+    // Query FROM Renderer to Resource Module. DATA: const char* filepath;
+    QUERY_TEXTURE_DATA,
+    // Texture data to send to renderer module. DATA: TextureData {int width, height, nrComponents, unsigned char* data}
+    RECEIVE_TEXTURE_DATA,
+
+    // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
+    QUERY_AUDIO_DATA,
+    // Audio data to send to Audio module. DATA: AudioFile<float>* data;
+    RECEIVE_AUDIO_DATA,
+
+    // Query FROM Renderer to Resource Module. DATA: const char* filepath/mesh;
+    QUERY_MESH_DATA,
+    // Mesh data to send to Renderer module. DATA: Mesh* data;
+    RECEIVE_MESH_DATA,
+   
 };
 
 #endif /* !EVENT_HPP_ */
