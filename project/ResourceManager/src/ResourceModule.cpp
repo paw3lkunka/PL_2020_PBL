@@ -39,19 +39,31 @@ void ResourceModule::receiveMessage(Message msg)
     }
     else if(msg.getEvent() == Event::QUERY_MESH_DATA)
     {
-
+        if(!sendMesh(msg.getValue<const char*>()))
+        {
+            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+        }
     }
     else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
     {
-
+        if(!sendTexture(msg.getValue<const char*>()))
+        {
+            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+        }
     }
     else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
     {
-
+        if(!sendAudioClip(msg.getValue<const char*>()))
+        {
+            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+        }
     }
     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
     {
-        
+        if(!sendShader(msg.getValue<const char*>()))
+        {
+            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+        }
     }
     else
     {
@@ -119,5 +131,63 @@ bool ResourceModule::loadMesh(std::string path, bool withTextures)
 
 bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene)
 {
+    for(int i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
+    }
+
+    for(int i = 0; i < node->mNumChildren; i++)
+    {
+        processMeshNode(node->mChildren[i], scene);
+    }
+    return false;
+}
+
+bool ResourceModule::sendAudioClip(std::string path)
+{
+    std::unordered_map<std::string, AudioFile<float>>::iterator iter = audioClips.find(path);
+
+    if(iter != audioClips.end())
+    {
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_AUDIO_DATA, iter->second) );
+        return true;
+    }
+    return false;
+}
+
+bool ResourceModule::sendTexture(std::string path)
+{
+    std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
+
+    if(iter != textures.end())
+    {
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_TEXTURE_DATA, iter->second) );
+        return true;
+    }
+    return false;
+}
+
+bool ResourceModule::sendMesh(std::string path)
+{
+    std::unordered_map<std::string, Mesh<Vertex_base>>::iterator iter = meshes.find(path);
+
+    if(iter != meshes.end())
+    {
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_MESH_DATA, iter->second) );
+        return true;
+    }
+    return false;
+}
+
+bool ResourceModule::sendShader(std::string path)
+{
+    std::unordered_map<std::string, std::string>::iterator iter = shaders.find(path);
+
+    if(iter != shaders.end())
+    {
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_SHADER_DATA, iter->second) );
+        return true;
+    }
+    return false;
 }

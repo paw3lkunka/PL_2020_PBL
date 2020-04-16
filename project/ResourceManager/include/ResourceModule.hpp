@@ -21,8 +21,10 @@ private:
     std::unordered_map<std::string, Mesh<Vertex_base>> meshes;
     std::unordered_map<std::string, std::string> shaders;
 
-    void sendAudioClip(std::string path);
-    void sendTexture(std::string path);
+    bool sendAudioClip(std::string path);
+    bool sendTexture(std::string path);
+    bool sendMesh(std::string path);
+    bool sendShader(std::string path);
 
 
     bool loadAudioClip(std::string path);
