@@ -1,4 +1,5 @@
 #include "Material.hpp"
+#include "Core.hpp"
 
 #include <iostream>
 
@@ -13,27 +14,24 @@ Material::Material(Shader* shader) : shader(shader)
     std::unordered_map<std::string, GLenum> uniforms = shader->getUniforms();
     for(auto var : uniforms)
     {
-        std::cout << "Found uniform: " << var.first << '\n';
         switch (var.second)
         {
+        case GL_SAMPLER_2D:
+            textures[var.first] = Texture();
+            break;
         case GL_INT:
-            std::cout << "Type: int\n";
             ints[var.first] = 0;
             break;
         case GL_FLOAT:
-            std::cout << "Type: float\n";
             floats[var.first] = 0.0f;
             break;
         case GL_FLOAT_VEC3:
-            std::cout << "Type: vec3\n";
             vec3s[var.first] = glm::vec3(0);
             break;
         case GL_FLOAT_VEC4:
-            std::cout << "Type: vec4\n";
             vec4s[var.first] = glm::vec4(0);
             break;
         case GL_FLOAT_MAT4:
-            std::cout << "Type: mat4\n";
             mat4s[var.first] = glm::mat4(0);
             break;
         default:
@@ -41,6 +39,66 @@ Material::Material(Shader* shader) : shader(shader)
             // TODO: Throw exception here
             break;
         }
+    }
+}
+
+void Material::use()
+{
+    shader->use();
+
+    // TODO: Handle view and projection by UBO
+    
+    // * ===== Texture samplers =====
+    int i = 0;
+    for(auto texture : textures)
+    {
+        texture.second.bind(i, texture.first.c_str());
+        shader->setInt(texture.first, i);
+        ++i;
+    }
+
+    // * ===== Ints =====
+    for(auto var : ints)
+    {
+        shader->setInt(var.first, var.second);
+    }
+
+    // * ===== Floats =====
+    for(auto var : floats)
+    {
+        shader->setFloat(var.first, var.second);
+    }
+    
+    // * ===== Vec3s =====
+    for(auto var : vec3s)
+    {
+        shader->setVec3(var.first, var.second);
+    }
+
+    // * ===== Vec4s =====
+    for(auto var : vec4s)
+    {
+        shader->setVec4(var.first, var.second);
+    }
+
+    // * ===== Mat4s =====
+    for(auto var : mat4s)
+    {
+        shader->setMat4(var.first, var.second);
+    }
+}
+
+void Material::setTexture(std::string name, Texture value)
+{
+    std::unordered_map<std::string, Texture>::iterator texturesIter = textures.find(name);
+    if (texturesIter != textures.end())
+    {
+        texturesIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
     }
 }
 
@@ -71,3 +129,60 @@ void Material::setFloat(std::string name, float value)
         // TODO: Insert appropriate debug log
     }
 }
+
+void Material::setVec3(std::string name, glm::vec3 value)
+{
+    std::unordered_map<std::string, glm::vec3>::iterator vec3sIter = vec3s.find(name);
+    if (vec3sIter != vec3s.end())
+    {
+        vec3sIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
+    }
+}
+
+void Material::setVec4(std::string name, glm::vec4 value)
+{
+    std::unordered_map<std::string, glm::vec4>::iterator vec4sIter = vec4s.find(name);
+    if (vec4sIter != vec4s.end())
+    {
+        vec4sIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
+    }
+}
+
+void Material::setMat4(std::string name, glm::mat4 value)
+{
+    std::unordered_map<std::string, glm::mat4>::iterator mat4sIter = mat4s.find(name);
+    if (mat4sIter != mat4s.end())
+    {
+        mat4sIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
+    }
+}
+
+int Material::getInt(std::string name)
+{
+    std::unordered_map<std::string, int>::iterator intsIter = ints.find(name);
+    if (intsIter != ints.end())
+    {
+        return intsIter->second;
+    }
+    else
+    {
+        // TODO: Debug log
+        return 0;
+    }
+}
+

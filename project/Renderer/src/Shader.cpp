@@ -1,5 +1,38 @@
 #include "Shader.hpp"
 
+void Shader::setBool(const std::string& name, bool value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+}
+void Shader::setInt(const std::string& name, int value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+void Shader::setFloat(const std::string& name, float value) const
+{
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+void Shader::setVec3(const std::string& name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+void Shader::setVec3(const std::string& name, const glm::vec3& vec) const
+{
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z);
+}
+void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const
+{
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+}
+void Shader::setVec4(const std::string& name, const glm::vec4& vec) const
+{
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z, vec.w);
+}
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
 std::string readTextFile(const char* filePath)
 {
     std::string buffer = "";
@@ -100,7 +133,7 @@ void Shader::use()
     glUseProgram(ID);
 }
 
-void Shader::retrieveShaderInfo(GLenum shaderInfoType, std::unordered_map<std::string, GLenum> &buffer)
+void Shader::retrieveShaderInfo(GLenum shaderInfoType, std::unordered_map<std::string, GLenum>& buffer)
 {
     if (shaderInfoType == GL_ACTIVE_ATTRIBUTES || shaderInfoType == GL_ACTIVE_UNIFORMS)
     {

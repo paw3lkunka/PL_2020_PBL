@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "MeshDataStructures.inl"
+#include "Texture.hpp"
 #include "Shader.hpp"
 
 class Material
@@ -23,7 +25,13 @@ public:
     Material(Shader* shader);
     ~Material() = default;
 
+    /**
+     * @brief Sets all uniforms and binds appropriate shader program
+     */
+    void use();
+
     // Member functions for handling uniforms and textures
+    void setTexture(std::string name, Texture value);
     void setInt(std::string name, int value);
     void setFloat(std::string name, float value);
     void setVec3(std::string name, glm::vec3 value);
@@ -31,10 +39,10 @@ public:
     void setMat4(std::string name, glm::mat4 value);
 
     int getInt(std::string name);
-    float getFloat(std::string name);
-    glm::vec3 getVec3(std::string name);
-    glm::vec4 getVec4(std::string name);
-    glm::mat4 getMat4(std::string name);
+    float& getFloat(std::string name);
+    glm::vec3& getVec3(std::string name);
+    glm::vec4& getVec4(std::string name);
+    glm::mat4& getMat4(std::string name);
 
 private:
     static int idCount;
@@ -42,6 +50,7 @@ private:
     int ID;
     Shader* shader;
 
+    std::unordered_map<std::string, Texture> textures;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
     std::unordered_map<std::string, glm::vec3> vec3s;
