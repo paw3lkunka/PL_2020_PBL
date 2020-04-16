@@ -14,6 +14,9 @@ Core* Core::instance = nullptr;
 
 #include <sstream>
 
+// ! For material testing only
+#include "Material.hpp"
+
 Core& GetCore()
 {
     return *(Core::instance);
@@ -75,6 +78,18 @@ int Core::init()
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &tmpExit );
+
+#pragma region mock Material
+
+    std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
+    std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+
+    Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
+    Material testMaterial(&testShader);
+
+    testMaterial.use();
+
+#pragma endregion
 
 #pragma region mock ECS
     e1.addComponent(&mockComponent);
