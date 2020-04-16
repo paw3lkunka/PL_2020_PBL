@@ -15,7 +15,7 @@ struct Vertex_base
 };
 
 /**
- * @brief Base vertex data with additional color sttribute
+ * @brief Base vertex data with additional color attribute
  * 
  */
 struct Vertex_color : Vertex_base
@@ -29,7 +29,7 @@ struct Vertex_color : Vertex_base
  */
 struct Vertex_uv2 : Vertex_base
 {
-    glm::vec2 uv2;
+    glm::vec2 texcoord2;
 };
 
 #endif // _MESHDATASTRUCTURES_INL

@@ -54,7 +54,8 @@ Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, con
     if (!success)
     {
         glGetProgramInfoLog(ID, 512, nullptr, infoLog);
-        // TODO: Add message bus debug error log 
+        // TODO: Add message bus debug error log
+        
         std::cerr << "Shader program linking error\n" << infoLog << '\n';
     }
 

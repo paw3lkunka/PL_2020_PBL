@@ -166,6 +166,7 @@ include_directories(
     libs/assimp/include
     libs/glm/
     libs/openal-soft/include
+    libs/AudioFile
 )
 
 add_executable( PBL project/main.cpp )
