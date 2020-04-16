@@ -30,28 +30,44 @@ class Core;
 Core& GetCore();
 
 /**
+ * @brief Send info log
+ * 
+ * @param log text to send
+ */
+void InfoLog(const char* log);
+/**
+ * @brief Send warning log
+ * 
+ * @param log text to send
+ */
+void WarningLog(const char* log);
+/**
+ * @brief Send error log
+ * 
+ * @param log text to send
+ */
+void ErrorLog(const char* log);   
+
+/**
  * @brief Main class of program, contain all modules, initialization, game loop, and finalization;
  */
 class Core
 {
-    /**
-     * @brief Global Getter to core instance
-     * 
-     * @return Core* instance of core
-     */
     friend Core& GetCore();
+    friend void InfoLog(const char* log);
+    friend void WarningLog(const char* log);
+    friend void ErrorLog(const char* log);   
 
     public:       
 #pragma region statics
-        /**
-         * @brief defines initial window width 
-         */
+        /// @brief defines initial window width.
         static constexpr int INIT_WINDOW_WIDTH = 800;
         
-        /**
-         * @brief defines initial window hight 
-         */
+        /// @brief defines initial window hight.
         static constexpr int INIT_WINDOW_HIGHT = 600;
+
+        /// @brief frame-independent time between updates in seconds.
+        static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
 #pragma endregion
 
 #pragma region Functions
@@ -158,7 +174,7 @@ class Core
         virtual void update()
         {
             int a = ptr->a, b = ptr->b;
-            std::cout << a << "+" << b << "=" << a + b << std::endl;
+            //std::cout << a << "+" << b << "=" << a + b << std::endl;
         }
     } mockSystem;
 #pragma endregion
