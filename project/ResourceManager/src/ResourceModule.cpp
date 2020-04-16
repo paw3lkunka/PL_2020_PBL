@@ -9,6 +9,7 @@
 
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
+#include <glm/glm.hpp>
 
 void ResourceModule::receiveMessage(Message msg)
 {
@@ -126,22 +127,75 @@ bool ResourceModule::loadMesh(std::string path, bool withTextures)
         GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Assimp Error: %s", importer.GetErrorString())) );
         return false;
     }
-    return processMeshNode(scene->mRootNode, scene);
+    return processMeshNode(scene->mRootNode, scene, path);
 }
 
-bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene)
+bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
+    bool returnFlag = true;
+    std::unordered_map<std::string, Mesh>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        std::vector<Vertex> vertices;
+        std::vector<unsigned int> indices;
 
+        Vertex tempVertex;
+        glm::vec3 tempVector;
+        for(int i = 0; i < mesh->mNumVertices; ++i)
+        {
+            //position
+            tempVector.x = mesh->mVertices[i].x;
+            tempVector.y = mesh->mVertices[i].y;
+            tempVector.z = mesh->mVertices[i].z;
+            tempVertex.position = tempVector;
+
+            //normals
+            tempVector.x = mesh->mNormals[i].x;
+            tempVector.y = mesh->mNormals[i].y;
+            tempVector.z = mesh->mNormals[i].z;
+            tempVertex.normal = tempVector;
+
+            //tangent
+            tempVector.x = mesh->mTangents[i].x;
+            tempVector.y = mesh->mTangents[i].y;
+            tempVector.z = mesh->mTangents[i].z;
+            tempVertex.tangent = tempVector;
+
+            if(mesh->mTextureCoords[0])
+            {
+                tempVertex.texcoord = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+            }
+            else
+            {
+                tempVertex.texcoord = glm::vec2(0.0f, 0.0f);
+            }
+
+            vertices.push_back(tempVertex);
+
+        }
+
+        for(int i = 0; i < mesh->mNumFaces; ++i){
+            aiFace face = mesh->mFaces[i];
+
+            for(int j = 0; j < face.mNumIndices; ++j)
+            {
+                indices.push_back(face.mIndices[j]);
+            }
+        }
+
+        meshes.insert(std::pair(path, Mesh(vertices, indices)));
+        iter = meshes.find(path);
+
+        returnFlag = returnFlag & (iter != meshes.end());
     }
 
-    for(int i = 0; i < node->mNumChildren; i++)
+    for(int i = 0; i < node->mNumChildren; ++i)
     {
-        processMeshNode(node->mChildren[i], scene);
+        processMeshNode(node->mChildren[i], scene, path);
     }
-    return false;
+
+    return returnFlag;
 }
 
 bool ResourceModule::sendAudioClip(std::string path)
@@ -170,7 +224,7 @@ bool ResourceModule::sendTexture(std::string path)
 
 bool ResourceModule::sendMesh(std::string path)
 {
-    std::unordered_map<std::string, Mesh<Vertex_base>>::iterator iter = meshes.find(path);
+    std::unordered_map<std::string, Mesh>::iterator iter = meshes.find(path);
 
     if(iter != meshes.end())
     {
