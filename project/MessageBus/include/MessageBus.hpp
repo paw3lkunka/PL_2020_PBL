@@ -43,14 +43,30 @@ class MessageBus
 
     private:
         /**
-         * @brief Store All received messanges before sending them to receivers
+         * @brief Store received messanges before sending them to receivers
          */
-		std::vector<Message> messagesBuffer;
+		std::vector<Message> messagesBuffer0;
+        
+        /**
+         * @brief Store received messanges before sending them to receivers
+         */
+		std::vector<Message> messagesBuffer1;
 
         /**
          * @brief store pointers to receivers
          */
         std::vector<IModule*> modulesPointers;
+
+        /**
+         * @brief pointer to active buffer
+         */
+        std::vector<Message>* activeBuffer = &messagesBuffer0;
+        
+        /**
+         * @brief pointer to inactive buffer
+         */
+        std::vector<Message>* inactiveBuffer = &messagesBuffer1;
+        
 };
 
 
