@@ -135,7 +135,7 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::RECEIVE_TEXTURE_DATA:
     {
         TextureData* texData = msg.getValue<TextureData*>();
-        std::cout << "console here: RECEIVE_SHADER_DATA. width: " << texData->width << ", height: " << texData->height
+        std::cout << "console here: RECEIVE_TEXTURE_DATA. width: " << texData->width << ", height: " << texData->height
                 << ", nrComponents: " << texData->nrComponents << std::endl;
     }
         break;
