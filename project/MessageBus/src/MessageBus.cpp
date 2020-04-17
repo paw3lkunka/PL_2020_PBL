@@ -20,9 +20,9 @@ void MessageBus::addReceiver(IModule* modulePtr)
 
 void MessageBus::sendMessage(Message msg)
 {
-	if (activeBuffer.size() < activeBuffer.capacity())
+	if (activeBuffer->size() < activeBuffer->capacity())
 	{
-		activeBuffer.push_back(msg);
+		activeBuffer->push_back(msg);
 	}
 	else
 	{		
