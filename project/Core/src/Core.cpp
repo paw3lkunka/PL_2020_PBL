@@ -92,17 +92,33 @@ int Core::init()
 #pragma endregion
 
 #pragma region mock ECS
+    e1.addComponent(&t1);
     e1.addComponent(&mockComponent);
     
+    e2.addComponent(&t2);
     e2.addComponent(&otherComponent);
     e2.addComponent(&mockComponent2);
+
+    e3.addComponent(&t3);
     //nie powinniśmy współdzielić komponentu między dwoma encjami, ale ćiiiii..., to tylko mock xD
     e3.addComponent(&otherComponent);
+
+    sceneModule.rootNode.children.push_back(&t1);
+    sceneModule.rootNode.children.push_back(&t2);
+    t2.children.push_back(&t3);
+
+    t1.parent = &(sceneModule.rootNode);
+    t2.parent = &(sceneModule.rootNode);
+    t3.parent = &t2;
+
+    t3.localPosition = {1,0,0};
     
     gameSystemsModule.addEntity(&e1);
     gameSystemsModule.addEntity(&e2);
     gameSystemsModule.addEntity(&e3);
+
     gameSystemsModule.addSystem(&mockSystem);
+    gameSystemsModule.addSystem(&mockReporter);
 #pragma endregion
 
     // Everything is ok.
@@ -137,6 +153,15 @@ int Core::mainLoop()
         {
             InfoLog("UPDATE");
             messageBus.notify();
+#pragma region MOCK scene update
+            mockReporter.counter = 1;
+            t1.localPosition += glm::vec3(0.1,0.1,0.1);
+            t1.dirty = true;
+            t2.localRotation = glm::quat({0,glm::pi<double>()/2.0,0}) * t2.localRotation;
+            t2.dirty = true;
+#pragma endregion
+            sceneModule.updateTransforms();
+
             gameSystemsModule.run();
             lag -= FIXED_TIME_STEP;
         }
