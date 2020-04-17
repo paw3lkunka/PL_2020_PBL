@@ -7,6 +7,7 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "Mesh.hpp"
+#include "AudioFile.h"
 
 ConsoleModule::ConsoleModule()
 {
@@ -146,7 +147,9 @@ void ConsoleModule::receiveMessage(Message msg)
     
     case Event::RECEIVE_AUDIO_DATA:
     {
-        std::cout << "console here: RECEIVE_AUDIO_DATA" << std::endl;
+        AudioFile<unsigned char>* aData = msg.getValue<AudioFile<unsigned char>*>();
+        std::cout << "console here: RECEIVE_AUDIO_DATA. Sample rate: " << aData->getSampleRate() << " Channels: " << aData->getNumChannels() 
+                << " Bit depth: " << aData->getBitDepth() << " Length: " << aData->getLengthInSeconds() << std::endl;
     }
         break;
 

@@ -71,7 +71,7 @@ enum class Event : unsigned int
 
     // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
     QUERY_AUDIO_DATA,
-    // Audio data to send to Audio module. DATA: AudioFile<float>* data;
+    // Audio data to send to Audio module. DATA: AudioFile<unsigned char>* audioData;
     RECEIVE_AUDIO_DATA,
 
     // Query FROM Renderer to Resource Module. DATA: const char* filepath/mesh;

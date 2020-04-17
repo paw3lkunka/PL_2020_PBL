@@ -26,7 +26,7 @@ public:
 
 private:
     //Storages
-    std::unordered_map<std::string, AudioFile<float>> audioClips;
+    std::unordered_map<std::string, AudioFile<unsigned char> > audioClips;
     std::unordered_map<std::string, TextureData> textures;
     std::unordered_map<std::string, Mesh> meshes;
     std::unordered_map<std::string, std::string> shaders;

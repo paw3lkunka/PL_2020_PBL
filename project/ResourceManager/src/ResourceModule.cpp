@@ -14,7 +14,7 @@
 #include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
 
-//TODO:Fix this couts, cerrs, because it's not proffesional
+//TODO:Fix this couts, cerrs, because it's not proffesionals
 
 void ResourceModule::receiveMessage(Message msg)
 {
@@ -24,6 +24,15 @@ void ResourceModule::receiveMessage(Message msg)
         switch(fsData.typeOfFile)
         {
             case FileType::AUDIO:
+                if(loadAudioClip(fsData.path))
+                {
+                    std::cout << "Audio loaded from file " << fsData.path << std::endl;
+                }
+                else
+                {
+                    std::cerr << "Can't load audio from file " << fsData.path << std::endl;
+                }
+                
             break;
             case FileType::MESH:
                 if(loadMesh(fsData.path))
@@ -94,6 +103,15 @@ void ResourceModule::receiveMessage(Message msg)
 
 bool ResourceModule::loadAudioClip(std::string path)
 {
+    AudioFile<unsigned char> audioData;
+    if(audioData.load(path))
+    {
+        audioClips.insert( std::pair(path, audioData) );
+        
+        std::unordered_map<std::string, AudioFile<unsigned char> >::iterator iter = audioClips.find(path);
+
+        return iter != audioClips.end();
+    }
     return false;
 }
 
@@ -222,7 +240,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 
 bool ResourceModule::sendAudioClip(std::string path)
 {
-    std::unordered_map<std::string, AudioFile<float>>::iterator iter = audioClips.find(path);
+    std::unordered_map<std::string, AudioFile<unsigned char> >::iterator iter = audioClips.find(path);
 
     if(iter != audioClips.end())
     {

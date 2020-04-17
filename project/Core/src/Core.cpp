@@ -84,12 +84,12 @@ int Core::init()
 #pragma region mock Material and Loading
 
     FileSystemData fsData;
-    fsData.path = "Resources/Models/test.fbx";
-    fsData.typeOfFile = FileType::MESH;
+    fsData.path = "Resources/Audios/sample.wav";
+    fsData.typeOfFile = FileType::AUDIO;
 
     GetCore().getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     GetCore().getMessageBus().notify();
-    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_MESH_DATA, "Resources/Models/test.fbx/Sphere"));
+    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_AUDIO_DATA, "Resources/Audios/sample.wav"));
     GetCore().getMessageBus().notify();
 
     //std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
