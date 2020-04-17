@@ -2,5 +2,5 @@
 mkdir build
 cd build 
 rm -r *
-rm .cmake
+rm -r .cmake
 cmake -G "MinGW Makefiles" ..

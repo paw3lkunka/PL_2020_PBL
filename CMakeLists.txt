@@ -133,6 +133,7 @@ aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
 aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
+aux_source_directory( project/Scene/src                     SCENE_SRC)
 
 list( 
     APPEND SOURCE_FILES
@@ -146,6 +147,7 @@ list(
         ${MESSAGE_BUS_SRC}
         ${RENDERER_SRC}
         ${TERMIANL_SRC}
+        ${SCENE_SRC}
 )
 
 add_library(lib ${SOURCE_FILES} )
@@ -162,7 +164,8 @@ include_directories(
     project/MessageBus/include
     project/Renderer/include
     project/Terminal/include
-    libs/stb/
+    project/Scene/include
+    libs/stb
     libs/glad/include
     libs/glfw/include
     libs/assimp/include

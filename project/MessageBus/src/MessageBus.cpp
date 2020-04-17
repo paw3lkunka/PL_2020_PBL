@@ -9,7 +9,8 @@
 
 MessageBus::MessageBus(int bufferSize)
 {
-	messagesBuffer.reserve(bufferSize);
+	messagesBuffer0.reserve(bufferSize);
+	messagesBuffer1.reserve(bufferSize);
 }
 
 void MessageBus::addReceiver(IModule* modulePtr)
@@ -19,9 +20,9 @@ void MessageBus::addReceiver(IModule* modulePtr)
 
 void MessageBus::sendMessage(Message msg)
 {
-	if (messagesBuffer.size() < messagesBuffer.capacity())
+	if (activeBuffer.size() < activeBuffer.capacity())
 	{
-		messagesBuffer.push_back(msg);
+		activeBuffer.push_back(msg);
 	}
 	else
 	{		
@@ -35,12 +36,16 @@ void MessageBus::sendMessage(Message msg)
 
 void MessageBus::notify()
 {
+	auto tmp = activeBuffer;
+	activeBuffer = inactiveBuffer;
+	inactiveBuffer = tmp;	
+
     for(auto ptr : modulesPointers)
     {
-        for (auto msg : messagesBuffer)
+        for (auto msg : *inactiveBuffer)
         {
             ptr->receiveMessage(msg);
         }
     }
-    messagesBuffer.clear();
+    inactiveBuffer->clear();
 }
