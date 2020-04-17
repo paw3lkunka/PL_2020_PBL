@@ -11,11 +11,21 @@ class System
 {
     public:
         /**
+         * @brief identifiers for types of update. 
+         */
+        enum UpdateType
+        {
+            FIXED,
+            FRAME
+        };
+
+        /**
          * @brief Updates state of entity
          * THIS FUNCTION SHOULDN'T BE OVERWRITTED IN ANY CASE!
-         * @param entity 
+         * @param entity - entity to process
+         * @param entity - type of update
          */
-        void process(Entity* entity);
+        void process(Entity* entity, UpdateType updateType);
 
     protected:
         /**
@@ -27,11 +37,18 @@ class System
         virtual bool assertEntity(Entity* entity) = 0;
 
         /**
-         * @brief Contain logic of the system
+         * @brief Contain logic of the system called in fixed time steps
          * called in Process() only when AssertEntity() returned true
          * should use class variables to access components
          */
-        virtual void update() = 0;
+        virtual void fixedUpdate() {};
+
+        /**
+         * @brief Contain logic of the system runned once per frame
+         * called in Process() only when AssertEntity() returned true
+         * should use class variables to access components
+         */
+        virtual void frameUpdate() {};
         
         virtual ~System() = default;
     private:

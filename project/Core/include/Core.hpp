@@ -20,6 +20,10 @@
 #include "Component.inl"
 #include "System.hpp"
 
+#include "Entity.hpp"
+#include "Component.inl"
+#include "System.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -135,11 +139,11 @@ class Core
         
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
-
+        
         /// @brief resource loader and container
         ResourceModule resourceModule;
         
-        /// @brief game logic
+        /// @brief scene graph
         SceneModule sceneModule;
         
         /// @brief safely close application, on ESC press
@@ -182,10 +186,10 @@ class Core
             return ptr != nullptr;
         }
 
-        virtual void update()
+        virtual void frameUpdate()
         {
             int a = ptr->a, b = ptr->b;
-            //std::cout << a << "+" << b << "=" << a + b << std::endl;
+            std::cout << a << "+" << b << "=" << a + b << std::endl;
         }
     } mockSystem;
 
@@ -199,7 +203,7 @@ class Core
             return t != nullptr;
         }
 
-        virtual void update()
+        virtual void fixedUpdate()
         {
             std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
                 << t->localToWorldMatrix[3][0] <<  ", " 
@@ -207,6 +211,33 @@ class Core
                 << t->localToWorldMatrix[3][2] << std::endl;
         }
     } mockReporter;
+
+    struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
+    {
+        Transform* t;
+        bool pressed = false;
+        virtual bool assertEntity(Entity* entity)
+        {
+            t = entity->getComponentPtr<Transform>();
+            return t != nullptr;
+        }
+
+        virtual void fixedUpdate()
+        {
+            if(pressed)
+            {
+                t->localPosition += glm::vec3(0,1,0);
+            }
+        }
+
+        virtual void receiveMessage(Message msg)
+        {
+            if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
+            {
+                pressed = true;
+            }
+        }
+    } mockReceiverSystem;
 #pragma endregion
 
 

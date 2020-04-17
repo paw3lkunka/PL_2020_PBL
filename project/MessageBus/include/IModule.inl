@@ -1,15 +1,13 @@
-#ifndef IMODULE_HPP_
-#define IMODULE_HPP_
+#ifndef IMODULE_INL_
+#define IMODULE_INL_
 
-class Message;
+#include "IMsgReceiver.inl"
 
 /**
  * @brief Module interface, allowing communication via MessageBus 
  */
-class IModule 
+class IModule : public IMsgReceiver
 {
-    public:
-        virtual void receiveMessage(Message msg) = 0;
 };
 
-#endif /* !IMODULE_HPP_ */
+#endif /* !IMODULE_INL_ */
