@@ -81,7 +81,7 @@ int Core::init()
     messageBus.addReceiver( &resourceModule );
     messageBus.addReceiver( &tmpExit );
 
-#pragma region mock Material
+#pragma region mock Material and Loading
 
     FileSystemData fsData;
     fsData.path = "Resources/Models/test.fbx";
