@@ -7,11 +7,8 @@
 #include "ConsoleModule.hpp"
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
-<<<<<<< HEAD
 #include "ResourceModule.hpp"
-=======
 #include "SceneModule.hpp"
->>>>>>> 77a1f5db3f195b15f1f009fe4e37120d93ce2f86
 
 //TODO tmp includes
 #include "Message.inl"
