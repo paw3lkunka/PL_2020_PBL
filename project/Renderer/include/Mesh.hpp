@@ -14,6 +14,10 @@ class Mesh
 {
 public:
     /**
+     * @brief Construct a new Mesh object by default (we need this for MessageBus for some reason)
+     */
+    Mesh() = default;
+    /**
      * @brief Construct a new Mesh object
      * 
      * @param vertices Vector of vertices which the mesh contains
@@ -24,7 +28,7 @@ public:
      * @brief Destroy the Mesh object
      * 
      */
-    ~Mesh();
+    ~Mesh() = default;
 
     void Setup();
 

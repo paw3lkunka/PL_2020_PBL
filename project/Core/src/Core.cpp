@@ -16,15 +16,16 @@ Core* Core::instance = nullptr;
 
 // ! For material testing only
 #include "Material.hpp"
+#include "FileStructures.inl"
 
 Core& GetCore()
 {
     return *(Core::instance);
 }
 
-void InfoLog(const char* log) 
+void InfoLog(std::string log)
 { 
-    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_INFO_LOG, log));
+    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_INFO_LOG, log.c_str()));
 }
 
 void WarningLog(const char* log)
@@ -77,17 +78,27 @@ int Core::init()
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
+    messageBus.addReceiver( &resourceModule );
     messageBus.addReceiver( &tmpExit );
 
-#pragma region mock Material
+#pragma region mock Material and Loading
 
-    std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
-    std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+    FileSystemData fsData;
+    fsData.path = "Resources/Audios/sample.wav";
+    fsData.typeOfFile = FileType::AUDIO;
 
-    Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
-    Material testMaterial(&testShader);
+    GetCore().getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    GetCore().getMessageBus().notify();
+    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_AUDIO_DATA, "Resources/Audios/sample.wav"));
+    GetCore().getMessageBus().notify();
 
-    testMaterial.use();
+    //std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
+    //std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+
+    //Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
+    //Material testMaterial(&testShader);
+
+    //testMaterial.use();
 
 #pragma endregion
 
@@ -117,8 +128,8 @@ int Core::init()
     gameSystemsModule.addEntity(&e2);
     gameSystemsModule.addEntity(&e3);
 
-    gameSystemsModule.addSystem(&mockSystem);
-    gameSystemsModule.addSystem(&mockReporter);
+    // gameSystemsModule.addSystem(&mockSystem);
+    // gameSystemsModule.addSystem(&mockReporter);
 #pragma endregion
 
     // Everything is ok.
