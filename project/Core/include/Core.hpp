@@ -7,6 +7,7 @@
 #include "ConsoleModule.hpp"
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
+#include "ResourceModule.hpp"
 #include "SceneModule.hpp"
 
 //TODO tmp includes
@@ -37,7 +38,7 @@ Core& GetCore();
  * 
  * @param log text to send
  */
-void InfoLog(const char* log);
+void InfoLog(std::string log);
 /**
  * @brief Send warning log
  * 
@@ -57,7 +58,7 @@ void ErrorLog(const char* log);
 class Core
 {
     friend Core& GetCore();
-    friend void InfoLog(const char* log);
+    friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
     friend void ErrorLog(const char* log);   
 
@@ -135,6 +136,9 @@ class Core
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
 
+        /// @brief resource loader and container
+        ResourceModule resourceModule;
+        
         /// @brief game logic
         SceneModule sceneModule;
         

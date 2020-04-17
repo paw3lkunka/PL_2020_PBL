@@ -55,6 +55,31 @@ enum class Event : unsigned int
     INPUT_LAST = GAMEPAD_AXIS_CHANGED,
 #pragma endregion
 
+#pragma region RESOURCES
+    //Resource module load file event. DATA: FileSystemData {const char* filepath, FileType typeOfFile}
+    LOAD_FILE,
+
+    // Query FROM Renderer to Resource Module. DATA: cont char* filepath;
+    QUERY_SHADER_DATA,
+    // Shader data to send to Renderer module. DATA: const char* shaderData;
+    RECEIVE_SHADER_DATA,
+
+    // Query FROM Renderer to Resource Module. DATA: const char* filepath;
+    QUERY_TEXTURE_DATA,
+    // Texture data to send to renderer module. DATA: TextureData* {int width, height, nrComponents, unsigned char* data}
+    RECEIVE_TEXTURE_DATA,
+
+    // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
+    QUERY_AUDIO_DATA,
+    // Audio data to send to Audio module. DATA: AudioFile<unsigned char>* audioData;
+    RECEIVE_AUDIO_DATA,
+
+    // Query FROM Renderer to Resource Module. DATA: const char* filepath/mesh;
+    QUERY_MESH_DATA,
+    // Mesh data to send to Renderer module. DATA: Mesh* data;
+    RECEIVE_MESH_DATA,
+#pragma endregion
+
 };
 
 #endif /* !EVENT_HPP_ */
