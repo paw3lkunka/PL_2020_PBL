@@ -41,7 +41,17 @@ private:
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadShader(std::string path);
-    bool loadMesh(std::string path, bool withTextures = false);
+    bool loadMesh(std::string path);
+
+    /**
+     * @brief 
+     * 
+     * @param node of imported model
+     * @param scene assimp structure containing nodes
+     * @param path path to file to load (for saving to map purposes)
+     * @return true meshes processed and saved to map
+     * @return false something went wrong during processing meshes
+     */
     bool processMeshNode(aiNode* node, const aiScene* scene, std::string path);
 };
 

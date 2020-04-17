@@ -14,6 +14,8 @@
 #include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
 
+//TODO:Fix this couts, cerrs, because it's not proffesional
+
 void ResourceModule::receiveMessage(Message msg)
 {
     if(msg.getEvent() == Event::LOAD_FILE)
@@ -135,12 +137,12 @@ bool ResourceModule::loadShader(std::string path)
     return iter != shaders.end();
 }
 
-bool ResourceModule::loadMesh(std::string path, bool withTextures)
+bool ResourceModule::loadMesh(std::string path)
 {
     Assimp::Importer importer;
 
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr << "Assimp Error: " << importer.GetErrorString();
         return false;
@@ -203,7 +205,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
         }
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
-        std::cout << "Mesh Path: " << meshPath << std::endl;
+        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
         meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
         iter = meshes.find(meshPath);
 
