@@ -23,9 +23,9 @@ Core& GetCore()
     return *(Core::instance);
 }
 
-void InfoLog(const char* log) 
+void InfoLog(std::string log)
 { 
-    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_INFO_LOG, log));
+    Core::instance->messageBus.sendMessage(Message(Event::DEBUG_INFO_LOG, log.c_str()));
 }
 
 void WarningLog(const char* log)
@@ -84,12 +84,12 @@ int Core::init()
 #pragma region mock Material
 
     FileSystemData fsData;
-    fsData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
-    fsData.typeOfFile = FileType::SHADER;
+    fsData.path = "Resources/Models/test.fbx";
+    fsData.typeOfFile = FileType::MESH;
 
     GetCore().getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     GetCore().getMessageBus().notify();
-    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_SHADER_DATA, "Resources/Shaders/UnlitColor/UnlitColor.frag"));
+    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_MESH_DATA, "Resources/Models/test.fbx/Sphere"));
     GetCore().getMessageBus().notify();
 
     //std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
@@ -128,13 +128,10 @@ int Core::init()
     gameSystemsModule.addEntity(&e2);
     gameSystemsModule.addEntity(&e3);
 
-    gameSystemsModule.addSystem(&mockSystem);
-    gameSystemsModule.addSystem(&mockReporter);
+    // gameSystemsModule.addSystem(&mockSystem);
+    // gameSystemsModule.addSystem(&mockReporter);
 #pragma endregion
 
-    
-
-    GetCore().getMessageBus().notify();
     // Everything is ok.
     return 0;
 }

@@ -8,7 +8,6 @@ enum class FileType : unsigned int
 {
     AUDIO,
     SHADER,
-    MESH_WITH_TEXTURES,
     MESH,
     TEXTURE,
 };

@@ -1,6 +1,8 @@
 #include "ResourceModule.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
+#include "Mesh.hpp"
+#include "Message.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -30,8 +32,6 @@ void ResourceModule::receiveMessage(Message msg)
                 {
                     std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
                 }
-            break;
-            case FileType::MESH_WITH_TEXTURES:
             break;
             case FileType::SHADER:
                 if(loadShader(fsData.path))
@@ -79,18 +79,10 @@ void ResourceModule::receiveMessage(Message msg)
     }
     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
     {
-        std::cout << "Chcemy wyslac shader" << std::endl;
-        std::unordered_map<std::string, std::string>::iterator iter = shaders.find( std::string(msg.getValue<const char*>()) );
-        if(iter != shaders.end())
-        {  
-            std::cout << "Dej mie to wyslac" << std::endl;
-            auto msgToSend = Message(Event::RECEIVE_SHADER_DATA, iter->second.c_str());
-            GetCore().getMessageBus().sendMessage( msgToSend );
-        }
-        else
+        if(!sendShader(msg.getValue<const char*>()))
+        {
             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-
-        std::cout << "-----------------Zakladamy, ze sie wyslalo" << std::endl;
+        }
     }
     else
     {
@@ -150,7 +142,7 @@ bool ResourceModule::loadMesh(std::string path, bool withTextures)
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        ErrorLog( ("Assimp Error: %s", importer.GetErrorString()));
+        std::cerr << "Assimp Error: " << importer.GetErrorString();
         return false;
     }
     return processMeshNode(scene->mRootNode, scene, path);
@@ -210,7 +202,8 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
             }
         }
 
-        std::string meshPath = path + " " + mesh->mName.C_Str();
+        std::string meshPath = path + "/" + mesh->mName.C_Str();
+        std::cout << "Mesh Path: " << meshPath << std::endl;
         meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
         iter = meshes.find(meshPath);
 
@@ -231,7 +224,7 @@ bool ResourceModule::sendAudioClip(std::string path)
 
     if(iter != audioClips.end())
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_AUDIO_DATA, iter->second) );
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_AUDIO_DATA, &iter->second) );
         return true;
     }
     return false;
@@ -255,7 +248,7 @@ bool ResourceModule::sendMesh(std::string path)
 
     if(iter != meshes.end())
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_MESH_DATA, iter->second) );
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_MESH_DATA, &iter->second) );
         return true;
     }
     return false;

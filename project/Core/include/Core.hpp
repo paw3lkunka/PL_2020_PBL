@@ -38,7 +38,7 @@ Core& GetCore();
  * 
  * @param log text to send
  */
-void InfoLog(const char* log);
+void InfoLog(std::string log);
 /**
  * @brief Send warning log
  * 
@@ -58,7 +58,7 @@ void ErrorLog(const char* log);
 class Core
 {
     friend Core& GetCore();
-    friend void InfoLog(const char* log);
+    friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
     friend void ErrorLog(const char* log);   
 

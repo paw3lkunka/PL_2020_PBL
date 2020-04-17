@@ -124,7 +124,7 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::RECEIVE_SHADER_DATA:
     {
         std::string shaderData = msg.getValue<const char*>();
-        std::cout << "console here: RECEIVE_SHADER_DATA. Data to Enter: " << shaderData << std::endl;
+        std::cout << "console here: RECEIVE_SHADER_DATA. First 10 chars of data: " << shaderData.substr(0, 10) << std::endl;
     }
         break;
 

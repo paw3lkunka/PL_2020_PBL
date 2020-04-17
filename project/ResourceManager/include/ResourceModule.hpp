@@ -5,11 +5,11 @@
 #include "AudioFile.h"
 #include "AssetStructers.inl"
 #include "Mesh.hpp"
-#include "Message.inl"
 
 #include <unordered_map>
-
 #include <assimp/scene.h>
+
+class Message;
 
 /**
  * @brief Resource Module class for reading and storage assets data
