@@ -7,10 +7,13 @@
 #include "ConsoleModule.hpp"
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
+#include "SceneModule.hpp"
 
 //TODO tmp includes
 #include "Message.inl"
 #include "Event.hpp"
+#include "Transform.inl"
+#include <glm/gtx/matrix_decompose.hpp> 
 
 #include "Entity.hpp"
 #include "Component.inl"
@@ -131,6 +134,9 @@ class Core
         
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
+
+        /// @brief game logic
+        SceneModule sceneModule;
         
         /// @brief safely close application, on ESC press
         class : public IModule
@@ -148,6 +154,7 @@ class Core
 #pragma region mock ECS
 
     Entity e1 = (0, 5), e2 = (1, 5), e3 = (3, 5);
+    Transform t1, t2, t3;
 
     class MockComponent : public Component
     {
@@ -177,7 +184,27 @@ class Core
             //std::cout << a << "+" << b << "=" << a + b << std::endl;
         }
     } mockSystem;
+
+    struct MockPositionReportSystem : public System
+    {
+        int counter = 1;
+        Transform* t;
+        virtual bool assertEntity(Entity* entity)
+        {
+            t = entity->getComponentPtr<Transform>();
+            return t != nullptr;
+        }
+
+        virtual void update()
+        {
+            std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
+                << t->localToWorldMatrix[3][0] <<  ", " 
+                << t->localToWorldMatrix[3][1] <<  ", " 
+                << t->localToWorldMatrix[3][2] << std::endl;
+        }
+    } mockReporter;
 #pragma endregion
+
 
     protected:
     private:
