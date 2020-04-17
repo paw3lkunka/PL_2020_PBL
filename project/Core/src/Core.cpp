@@ -128,8 +128,9 @@ int Core::init()
     gameSystemsModule.addEntity(&e2);
     gameSystemsModule.addEntity(&e3);
 
-    // gameSystemsModule.addSystem(&mockSystem);
-    // gameSystemsModule.addSystem(&mockReporter);
+    gameSystemsModule.addSystem(&mockSystem);
+    gameSystemsModule.addSystem(&mockReporter);
+    gameSystemsModule.addSystem(&mockReceiverSystem);
 #pragma endregion
 
     // Everything is ok.
@@ -165,17 +166,23 @@ int Core::mainLoop()
             InfoLog("UPDATE");
             messageBus.notify();
 #pragma region MOCK scene update
-            mockReporter.counter = 1;
             t1.localPosition += glm::vec3(0.1,0.1,0.1);
             t1.dirty = true;
             t2.localRotation = glm::quat({0,glm::pi<double>()/2.0,0}) * t2.localRotation;
             t2.dirty = true;
 #pragma endregion
             sceneModule.updateTransforms();
+            gameSystemsModule.run(System::FIXED);
 
-            gameSystemsModule.run();
+            //TODO: maybe systems should have som kind of clean() method?
+            mockReporter.counter = 1;
+            mockReceiverSystem.pressed = false;
+
             lag -= FIXED_TIME_STEP;
         }
+
+        gameSystemsModule.run(System::FRAME);
+        messageBus.notify();
 
         inputModule.clearFlags();
 

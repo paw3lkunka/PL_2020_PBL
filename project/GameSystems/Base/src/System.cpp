@@ -2,10 +2,18 @@
 
 #include "Entity.hpp"
 
-void System::process(Entity* entity)
+void System::process(Entity* entity, UpdateType updateType)
 {
     if( assertEntity(entity) )
     {
-        update();
+        switch(updateType)
+        {
+            case FIXED:
+                return fixedUpdate();
+
+            case FRAME:
+                return frameUpdate();
+        }
+
     }
 }
