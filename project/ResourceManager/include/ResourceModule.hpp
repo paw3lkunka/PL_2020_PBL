@@ -5,6 +5,7 @@
 #include "AudioFile.h"
 #include "AssetStructers.inl"
 #include "Mesh.hpp"
+#include "Message.inl"
 
 #include <unordered_map>
 

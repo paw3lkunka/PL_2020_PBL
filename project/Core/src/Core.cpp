@@ -16,6 +16,7 @@ Core* Core::instance = nullptr;
 
 // ! For material testing only
 #include "Material.hpp"
+#include "FileStructures.inl"
 
 Core& GetCore()
 {
@@ -77,17 +78,27 @@ int Core::init()
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
+    messageBus.addReceiver( &resourceModule );
     messageBus.addReceiver( &tmpExit );
 
 #pragma region mock Material
 
-    std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
-    std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+    FileSystemData fsData;
+    fsData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
+    fsData.typeOfFile = FileType::SHADER;
 
-    Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
-    Material testMaterial(&testShader);
+    GetCore().getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    GetCore().getMessageBus().notify();
+    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_SHADER_DATA, "Resources/Shaders/UnlitColor/UnlitColor.frag"));
+    GetCore().getMessageBus().notify();
 
-    testMaterial.use();
+    //std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
+    //std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+
+    //Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
+    //Material testMaterial(&testShader);
+
+    //testMaterial.use();
 
 #pragma endregion
 
@@ -105,6 +116,9 @@ int Core::init()
     gameSystemsModule.addSystem(&mockSystem);
 #pragma endregion
 
+    
+
+    GetCore().getMessageBus().notify();
     // Everything is ok.
     return 0;
 }

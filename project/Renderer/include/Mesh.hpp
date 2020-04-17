@@ -28,7 +28,7 @@ public:
      * @brief Destroy the Mesh object
      * 
      */
-    ~Mesh();
+    ~Mesh() = default;
 
     void Setup();
 

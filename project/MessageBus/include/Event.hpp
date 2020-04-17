@@ -66,7 +66,7 @@ enum class Event : unsigned int
 
     // Query FROM Renderer to Resource Module. DATA: const char* filepath;
     QUERY_TEXTURE_DATA,
-    // Texture data to send to renderer module. DATA: TextureData {int width, height, nrComponents, unsigned char* data}
+    // Texture data to send to renderer module. DATA: TextureData* {int width, height, nrComponents, unsigned char* data}
     RECEIVE_TEXTURE_DATA,
 
     // Query FROM Audio Module to Resource Module. DATA: const char* filepath;

@@ -1,9 +1,10 @@
 #include "ResourceModule.hpp"
 #include "FileStructures.inl"
-#include "Message.inl"
 #include "Core.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+
 #include <fstream>
 #include <sstream>
 
@@ -21,20 +22,37 @@ void ResourceModule::receiveMessage(Message msg)
             case FileType::AUDIO:
             break;
             case FileType::MESH:
+                if(loadMesh(fsData.path))
+                {
+                    std::cout << "Meshes loaded from file " << fsData.path << std::endl;
+                }
+                else
+                {
+                    std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
+                }
             break;
             case FileType::MESH_WITH_TEXTURES:
             break;
             case FileType::SHADER:
-                if(!loadShader(fsData.path))
+                if(loadShader(fsData.path))
                 {
-                    GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Shader %s could not be read.\n", fsData.path)) );
+                    std::cout << "Shader loaded from file " << fsData.path << std::endl;
+                }
+                else
+                {
+                    std::cerr << "Shader from file " << fsData.path << " could not be read." << std::endl;
                 }
             break;
             case FileType::TEXTURE:
-                if(!loadTexture(fsData.path))
+                if(loadTexture(fsData.path))
                 {
-                    GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't load texture from file %s\n", fsData.path)) );
+                    std::cout << "Texture loaded from file " << fsData.path << std::endl;
                 }
+                else
+                {
+                    std::cerr << "Can't load texture from file " << fsData.path << std::endl;
+                }
+                
             break;
         }
     }
@@ -42,29 +60,37 @@ void ResourceModule::receiveMessage(Message msg)
     {
         if(!sendMesh(msg.getValue<const char*>()))
         {
-            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
         }
     }
     else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
     {
         if(!sendTexture(msg.getValue<const char*>()))
         {
-            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
         }
     }
     else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
     {
         if(!sendAudioClip(msg.getValue<const char*>()))
         {
-            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
         }
     }
     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
     {
-        if(!sendShader(msg.getValue<const char*>()))
-        {
-            GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Can't find file %s\n", msg.getValue<const char*>() )) );
+        std::cout << "Chcemy wyslac shader" << std::endl;
+        std::unordered_map<std::string, std::string>::iterator iter = shaders.find( std::string(msg.getValue<const char*>()) );
+        if(iter != shaders.end())
+        {  
+            std::cout << "Dej mie to wyslac" << std::endl;
+            auto msgToSend = Message(Event::RECEIVE_SHADER_DATA, iter->second.c_str());
+            GetCore().getMessageBus().sendMessage( msgToSend );
         }
+        else
+            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
+
+        std::cout << "-----------------Zakladamy, ze sie wyslalo" << std::endl;
     }
     else
     {
@@ -124,7 +150,7 @@ bool ResourceModule::loadMesh(std::string path, bool withTextures)
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::DEBUG_ERROR_LOG, ("Assimp Error: %s", importer.GetErrorString())) );
+        ErrorLog( ("Assimp Error: %s", importer.GetErrorString()));
         return false;
     }
     return processMeshNode(scene->mRootNode, scene, path);
@@ -184,8 +210,9 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
             }
         }
 
-        meshes.insert(std::pair(path, Mesh(vertices, indices)));
-        iter = meshes.find(path);
+        std::string meshPath = path + " " + mesh->mName.C_Str();
+        meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
+        iter = meshes.find(meshPath);
 
         returnFlag = returnFlag & (iter != meshes.end());
     }
@@ -216,7 +243,7 @@ bool ResourceModule::sendTexture(std::string path)
 
     if(iter != textures.end())
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_TEXTURE_DATA, iter->second) );
+        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_TEXTURE_DATA, &iter->second) );
         return true;
     }
     return false;
@@ -237,10 +264,11 @@ bool ResourceModule::sendMesh(std::string path)
 bool ResourceModule::sendShader(std::string path)
 {
     std::unordered_map<std::string, std::string>::iterator iter = shaders.find(path);
-
+    Message msgToSend;
     if(iter != shaders.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_SHADER_DATA, iter->second) );
+    {  
+        msgToSend = Message(Event::RECEIVE_SHADER_DATA, iter->second.c_str());
+        GetCore().getMessageBus().sendMessage( msgToSend );
         return true;
     }
     return false;

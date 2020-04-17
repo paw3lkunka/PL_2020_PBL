@@ -4,6 +4,9 @@
 #include "Message.inl"
 #include "MouseDataStructures.inl"
 #include "GamepadDataStructures.inl"
+#include "FileStructures.inl"
+#include "AssetStructers.inl"
+#include "Mesh.hpp"
 
 ConsoleModule::ConsoleModule()
 {
@@ -95,6 +98,57 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "console here: GAMEPAD_AXIS_CHANGED. gamepad: " << gData.gamepadId << ", axis: " << gData.axisId << ", value: " << gData.axisState << std::endl;
     }
         break;  
+
+    case Event::LOAD_FILE:
+    {
+        auto fsData = msg.getValue<FileSystemData>();
+        std::cout << "console here: LOAD_FILE. path: " << fsData.path << ", type:" << (int)fsData.typeOfFile << std::endl;
+    }
+        break;
+    
+    case Event::QUERY_MESH_DATA:
+        std::cout << "console here: QUERY_MESH_DATA. Path: " << msg.getValue<const char*>() << std::endl;
+        break;
+    
+    case Event::RECEIVE_MESH_DATA:
+    {
+        Mesh* meshData = msg.getValue<Mesh*>();
+        std::cout << "console here: RECEIVE_MESH_DATA. Data address: " << &meshData << std::endl;
+    }
+        break;
+    
+    case Event::QUERY_SHADER_DATA:
+        std::cout << "console here: QUERY_SHADER_DATA. Path: " << msg.getValue<const char*>() << std::endl;
+        break;
+    
+    case Event::RECEIVE_SHADER_DATA:
+    {
+        std::string shaderData = msg.getValue<const char*>();
+        std::cout << "console here: RECEIVE_SHADER_DATA. Data to Enter: " << shaderData << std::endl;
+    }
+        break;
+
+    case Event::QUERY_TEXTURE_DATA:
+        std::cout << "console here: QUERY_TEXTURE_DATA. Path: " << msg.getValue<const char*>() << std::endl;
+        break;
+    
+    case Event::RECEIVE_TEXTURE_DATA:
+    {
+        TextureData* texData = msg.getValue<TextureData*>();
+        std::cout << "console here: RECEIVE_SHADER_DATA. width: " << texData->width << ", height: " << texData->height
+                << ", nrComponents: " << texData->nrComponents << std::endl;
+    }
+        break;
+
+    case Event::QUERY_AUDIO_DATA:
+        std::cout << "console here: QUERY_AUDIO_DATA. Path: " << msg.getValue<const char*>() << std::endl;
+        break;
+    
+    case Event::RECEIVE_AUDIO_DATA:
+    {
+        std::cout << "console here: RECEIVE_AUDIO_DATA" << std::endl;
+    }
+        break;
 
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;

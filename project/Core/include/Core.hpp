@@ -7,6 +7,7 @@
 #include "ConsoleModule.hpp"
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
+#include "ResourceModule.hpp"
 
 //TODO tmp includes
 #include "Message.inl"
@@ -131,6 +132,9 @@ class Core
         
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
+
+        /// @brief resource loader and container
+        ResourceModule resourceModule;
         
         /// @brief safely close application, on ESC press
         class : public IModule

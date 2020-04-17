@@ -162,13 +162,13 @@ include_directories(
     project/MessageBus/include
     project/Renderer/include
     project/Terminal/include
-    libs/stb
+    libs/stb/
     libs/glad/include
     libs/glfw/include
     libs/assimp/include
     libs/glm/
     libs/openal-soft/include
-    libs/AudioFile
+    libs/AudioFile/
     build/libs/assimp/include
 )
 
