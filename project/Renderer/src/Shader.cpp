@@ -33,28 +33,6 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-std::string readTextFile(const char* filePath)
-{
-    std::string buffer = "";
-    std::ifstream file;
-    file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-    try
-    {
-        file.open(filePath);
-        std::stringstream stream;
-        stream << file.rdbuf();
-        file.close();
-        buffer = stream.str();
-    }
-    catch(std::ifstream::failure e)
-    {
-        std::cerr << "File " << filePath << " could not be read." << '\n';
-    }
-
-    return buffer;
-}
-
 Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode)
 {
     // * Shader compilation ==============================================

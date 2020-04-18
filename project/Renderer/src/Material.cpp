@@ -172,6 +172,11 @@ void Material::setMat4(std::string name, glm::mat4 value)
     }
 }
 
+Shader* Material::getShaderPtr()
+{
+    return shader;
+}
+
 int Material::getInt(std::string name)
 {
     std::unordered_map<std::string, int>::iterator intsIter = ints.find(name);

@@ -8,6 +8,9 @@ void System::process(Entity* entity, UpdateType updateType)
     {
         switch(updateType)
         {
+            case START:
+                return start();
+
             case FIXED:
                 return fixedUpdate();
 

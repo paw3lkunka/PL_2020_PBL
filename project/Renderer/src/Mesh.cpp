@@ -1,6 +1,16 @@
 #include "Mesh.hpp"
 
-void Mesh::Setup()
+#include <iostream>
+
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+{
+    this->vertices = vertices;
+    this->indices = indices;
+    std::cout << "Vertices size: " << vertices.size() << '\n';
+    setup();
+}
+
+void Mesh::setup()
 {
     // ===== Generate new buffers =====
     glGenVertexArrays(1, &vao);
@@ -12,8 +22,9 @@ void Mesh::Setup()
 
     // Vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    std::cout << "Vertices size: " << vertices.size() << '\n';
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW); // TODO: Add support for other draw types
-
+    
     // Indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW); // TODO: Add support for other draw types
@@ -32,5 +43,12 @@ void Mesh::Setup()
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
 
     // ===== Reset bound vao =====
+    glBindVertexArray(0);
+}
+
+void Mesh::render()
+{
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

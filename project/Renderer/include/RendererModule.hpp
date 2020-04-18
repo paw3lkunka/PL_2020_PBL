@@ -2,21 +2,38 @@
 #define _RENDERERMODULE_HPP
 
 #include "IModule.inl"
-#include "Shader.hpp"
-#include "Mesh.hpp"
+#include "MeshRenderer.inl"
 
-class GLFWWindow;
+#include <queue>
+#include <GLFW/glfw3.h>
 
-class RendererModule : IModule
+struct RendererModuleCreateInfo
+{
+    glm::vec3 clearColor;
+    bool cullFace, depthTest, wireframeMode;
+    GLenum cullFaceMode, cullFrontFace;
+    GLbitfield clearFlags;
+};
+
+class GLFWwindow;
+
+class RendererModule : public IModule
 {
 public:
-    RendererModule();
-    ~RendererModule();
-    void init(GLFWWindow* window);
+    RendererModule() = default;
+    virtual ~RendererModule() = default;
+    virtual void receiveMessage(Message msg);
+
+    void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
     void render();
 
 private:
-    GLFWWindow* window;
+    GLFWwindow* window;
+    RendererModuleCreateInfo createInfo;
+    unsigned int viewProjectionBuffer;
+    bool projectionChanged = false, viewChanged = false;
+    glm::mat4* projectionMatrix, * viewMatrix;
+    std::queue<MeshRenderer*> renderQueue;
 };
 
 #endif // _RENDERERMODULE_HPP

@@ -15,25 +15,11 @@
 #include <glad/glad.h>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 #include "ShaderExceptions.hpp"
 
 constexpr GLsizei NAME_BUF_SIZE = 32;
-
-// TODO: Includes necessary for readTextFile function - should be moved in the future
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
-
-/**
- * @brief Function for reading standard text files
- * 
- * @param filePath Path to the file
- * @param buffer Buffer to be filled with the contents of file
- */
-// TODO: Move this function to appropriate file handling class
-std::string readTextFile(const char* filePath);
 
 /**
  * @brief Shader class, responsible for compiling shaders and creating shader programs
@@ -50,6 +36,7 @@ public:
      * @param geometryShader String with code contents of geometry shader
      */
     Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr);
+    Shader() = default;
     /**
      * @brief Destroy the Shader object
      * 

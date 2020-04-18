@@ -15,6 +15,7 @@ class System
          */
         enum UpdateType
         {
+            START,
             FIXED,
             FRAME
         };
@@ -35,6 +36,11 @@ class System
          * @returns if entity has all required components
          */
         virtual bool assertEntity(Entity* entity) = 0;
+
+        /**
+         * @brief Initializes processed entities, runs before first update
+         */
+        virtual void start() {};
 
         /**
          * @brief Contain logic of the system called in fixed time steps
