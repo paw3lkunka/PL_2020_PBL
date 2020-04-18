@@ -23,14 +23,16 @@ public:
      * @param vertices Vector of vertices which the mesh contains
      * @param indices Vector of indices for indexed rendering
      */
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : vertices(vertices), indices(indices) {}
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+
     /**
      * @brief Destroy the Mesh object
      * 
      */
     ~Mesh() = default;
 
-    void Setup();
+    void setup();
+    void render();
 
 private:
     GLuint vao, vbo, ebo;

@@ -23,6 +23,7 @@ class Material
 {
 public:
     Material(Shader* shader);
+    Material() = default;
     ~Material() = default;
 
     /**
@@ -38,6 +39,7 @@ public:
     void setVec4(std::string name, glm::vec4 value);
     void setMat4(std::string name, glm::mat4 value);
 
+    Shader* getShaderPtr();
     int getInt(std::string name);
     float& getFloat(std::string name);
     glm::vec3& getVec3(std::string name);

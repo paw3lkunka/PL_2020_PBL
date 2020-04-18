@@ -7,23 +7,23 @@
 #include "ConsoleModule.hpp"
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
+#include "RendererModule.hpp"
 #include "ResourceModule.hpp"
 #include "SceneModule.hpp"
+#include "RendererSystem.hpp"
+#include "CameraSystem.hpp"
 
 //TODO tmp includes
 #include "Message.inl"
 #include "Event.hpp"
 #include "Transform.inl"
+#include "Camera.inl"
+
+#include "Entity.hpp"
+#include "Component.inl"
+#include "System.hpp"
+
 #include <glm/gtx/matrix_decompose.hpp> 
-
-#include "Entity.hpp"
-#include "Component.inl"
-#include "System.hpp"
-
-#include "Entity.hpp"
-#include "Component.inl"
-#include "System.hpp"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -68,11 +68,14 @@ class Core
 
     public:       
 #pragma region statics
+        /// @brief identity matrix
+        static constexpr glm::mat4 IDENTITY_MAT = glm::mat4(1);
+
         /// @brief defines initial window width.
         static constexpr int INIT_WINDOW_WIDTH = 800;
         
         /// @brief defines initial window hight.
-        static constexpr int INIT_WINDOW_HIGHT = 600;
+        static constexpr int INIT_WINDOW_HEIGHT = 600;
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
@@ -139,7 +142,10 @@ class Core
         
         /// @brief game logic
         GameSystemsModule gameSystemsModule;
-        
+
+        /// @brief rendering
+        RendererModule rendererModule;
+
         /// @brief resource loader and container
         ResourceModule resourceModule;
         
@@ -156,95 +162,82 @@ class Core
                     instance->close();
                 }
             }
-        } tmpExit; 
+        } tmpExit;
+        
 #pragma endregion
 //TODO Es, Cs and Ss should be stored in containers/allocators, not in single variables
-#pragma region mock ECS
 
-    Entity e1 = (0, 5), e2 = (1, 5), e3 = (3, 5);
-    Transform t1, t2, t3;
+    RendererSystem rendererSystem;
+    CameraSystem cameraSystem;
 
-    class MockComponent : public Component
-    {
-        public:
-        int a; int b;
-        MockComponent(int x, int y) { a = x; b = y;}
-    } mockComponent = {2, 2}, mockComponent2 = {21, 37};
 
-    class MockInvalidComponent : public Component
-    {
-        bool aaa;
-    } otherComponent;
+    // struct MockPositionReportSystem : public System
+    // {
+    //     int counter = 1;
+    //     Transform* t;
+    //     virtual bool assertEntity(Entity* entity)
+    //     {
+    //         t = entity->getComponentPtr<Transform>();
+    //         return t != nullptr;
+    //     }
 
-    
-    struct MockSystem : public System
-    {
-        MockComponent* ptr;
-        virtual bool assertEntity(Entity* entity)
-        {
-            ptr = entity->getComponentPtr<MockComponent>();
-            return ptr != nullptr;
-        }
+    //     virtual void fixedUpdate()
+    //     {
+    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
+    //             << t->localToWorldMatrix[3][0] <<  ", " 
+    //             << t->localToWorldMatrix[3][1] <<  ", " 
+    //             << t->localToWorldMatrix[3][2] << std::endl;
+    //     }
+    // } mockReporter;
 
-        virtual void frameUpdate()
-        {
-            int a = ptr->a, b = ptr->b;
-            std::cout << a << "+" << b << "=" << a + b << std::endl;
-        }
-    } mockSystem;
+    // struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
+    // {
+    //     Transform* t;
+    //     bool pressed = false;
+    //     virtual bool assertEntity(Entity* entity)
+    //     {
+    //         t = entity->getComponentPtr<Transform>();
+    //         return t != nullptr;
+    //     }
 
-    struct MockPositionReportSystem : public System
-    {
-        int counter = 1;
-        Transform* t;
-        virtual bool assertEntity(Entity* entity)
-        {
-            t = entity->getComponentPtr<Transform>();
-            return t != nullptr;
-        }
+    //     virtual void fixedUpdate()
+    //     {
+    //         if(pressed)
+    //         {
+    //             t->localPosition += glm::vec3(0,1,0);
+    //         }
+    //     }
 
-        virtual void fixedUpdate()
-        {
-            std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
-                << t->localToWorldMatrix[3][0] <<  ", " 
-                << t->localToWorldMatrix[3][1] <<  ", " 
-                << t->localToWorldMatrix[3][2] << std::endl;
-        }
-    } mockReporter;
-
-    struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
-    {
-        Transform* t;
-        bool pressed = false;
-        virtual bool assertEntity(Entity* entity)
-        {
-            t = entity->getComponentPtr<Transform>();
-            return t != nullptr;
-        }
-
-        virtual void fixedUpdate()
-        {
-            if(pressed)
-            {
-                t->localPosition += glm::vec3(0,1,0);
-            }
-        }
-
-        virtual void receiveMessage(Message msg)
-        {
-            if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
-            {
-                pressed = true;
-            }
-        }
-    } mockReceiverSystem;
+    //     virtual void receiveMessage(Message msg)
+    //     {
+    //         if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
+    //         {
+    //             pressed = true;
+    //         }
+    //     }
+    // } mockReceiverSystem;
 #pragma endregion
 
+#pragma endregion
 
     protected:
     private:
         static Core* instance;
         GLFWwindow* window; 
+
+#pragma region Mock rendering objects
+        Shader testShader;
+        Material testMaterial;
+        
+        MeshRenderer mr0, mr1;
+        Transform cameraTransform, t0, t1;
+        Camera mainCamera;
+
+        Entity testEntity0 = (4, 2);
+        Entity testEntity1 = (5, 2);
+        Entity cameraEntity = (6, 2);
+
+#pragma endregion
 };
 
 #endif /* !CORE_HPP_ */

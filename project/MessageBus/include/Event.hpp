@@ -47,12 +47,13 @@ enum class Event : unsigned int
     GAMEPAD_AXIS_CHANGED,
 #pragma endregion
     
-    // used to define ranges of values
-#pragma region MARKERS
-    DEBUG_FIRST = DEBUG_INFO_LOG,
-    DEBUG_LAST = DEBUG_ERROR_LOG,
-    INPUT_FIRST = KEY_PRESSED,
-    INPUT_LAST = GAMEPAD_AXIS_CHANGED,
+#pragma region RENDERER
+    // Send mesh renderer data, DATA: Pointer to mesh renderer
+    RENDERER_ADD_TO_QUEUE,
+    // Send view matrix to renderer, DATA: Pointer to view matrix
+    RENDERER_SET_VIEW_MATRIX,
+    // Send projection matrix to renderer, DATA: Pointer to projection matrix
+    RENDERER_SET_PROJECTION_MATRIX,
 #pragma endregion
 
 #pragma region RESOURCES
@@ -78,6 +79,15 @@ enum class Event : unsigned int
     QUERY_MESH_DATA,
     // Mesh data to send to Renderer module. DATA: Mesh* data;
     RECEIVE_MESH_DATA,
+#pragma endregion
+
+    // used to define ranges of values
+    // ! WANRNING ! Must always be at the end of enum !
+#pragma region MARKERS
+    DEBUG_FIRST = DEBUG_INFO_LOG,
+    DEBUG_LAST = DEBUG_ERROR_LOG,
+    INPUT_FIRST = KEY_PRESSED,
+    INPUT_LAST = GAMEPAD_AXIS_CHANGED,
 #pragma endregion
 
 };
