@@ -14,8 +14,7 @@ Core* Core::instance = nullptr;
 
 #include <sstream>
 
-// ! For material testing only
-#include "Material.hpp"
+#include "RendererSystem.hpp"
 #include "FileStructures.inl"
 
 Core& GetCore()
@@ -55,7 +54,7 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(INIT_WINDOW_WIDTH, INIT_WINDOW_HIGHT, "PBL", NULL, NULL);
+    window = glfwCreateWindow(INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT, "PBL", NULL, NULL);
     if (window == NULL)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
@@ -70,67 +69,108 @@ int Core::init()
 		return 2;
 	}
 
-    glViewport(0,0,INIT_WINDOW_WIDTH,INIT_WINDOW_HIGHT);
+    glViewport(0,0,INIT_WINDOW_WIDTH,INIT_WINDOW_HEIGHT);
     
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = false;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo);
 
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &resourceModule );
+    messageBus.addReceiver( &rendererModule );
     messageBus.addReceiver( &tmpExit );
 
-#pragma region mock Material and Loading
+#pragma region Data Loading
 
     FileSystemData fsData;
     fsData.path = "Resources/Audios/sample.wav";
     fsData.typeOfFile = FileType::AUDIO;
 
-    GetCore().getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
-    GetCore().getMessageBus().notify();
-    GetCore().getMessageBus().sendMessage(Message(Event::QUERY_AUDIO_DATA, "Resources/Audios/sample.wav"));
-    GetCore().getMessageBus().notify();
+    FileSystemData unlitColorVertexShaderData;
+    unlitColorVertexShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.vert";
+    unlitColorVertexShaderData.typeOfFile = FileType::SHADER;
 
-    //std::string vertexShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.vert");
-    //std::string fragmentShader = readTextFile("Resources/Shaders/UnlitColor/UnlitColor.frag");
+    FileSystemData unlitColorFragmentShaderData;
+    unlitColorFragmentShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
+    unlitColorFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    //Shader testShader(vertexShader.c_str(), fragmentShader.c_str());
-    //Material testMaterial(&testShader);
+    FileSystemData testModel;
+    testModel.path = "Resources/Models/Test.FBX";
+    testModel.typeOfFile = FileType::MESH;
 
-    //testMaterial.use();
+    FileSystemData testTexture;
+    testTexture.path = "Resources/Textures/tex.png";
+    testTexture.typeOfFile = FileType::TEXTURE;
+
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    getMessageBus().notify();
 
 #pragma endregion
 
-#pragma region mock ECS
-    e1.addComponent(&t1);
-    e1.addComponent(&mockComponent);
-    
-    e2.addComponent(&t2);
-    e2.addComponent(&otherComponent);
-    e2.addComponent(&mockComponent2);
+#pragma region Renderer
 
-    e3.addComponent(&t3);
-    //nie powinniśmy współdzielić komponentu między dwoma encjami, ale ćiiiii..., to tylko mock xD
-    e3.addComponent(&otherComponent);
+    testShader = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
+                        resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
+    testMaterial = Material(&testShader);
+    testMaterial.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
+    mr0.material = &testMaterial;
+    mr0.mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Sphere")->second;
+
+    mr1.material = &testMaterial;
+    mr1.mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Box")->second;
+
+    testEntity0.addComponent(&mr0);
+    testEntity1.addComponent(&mr1);
+
+    t0.localPosition = { 0.0f, 10.0f, 0.0f };
+    t1.localPosition = { 0.0f, -3.0f, 0.0f };
+
+    testEntity0.addComponent(&t0);
+    testEntity1.addComponent(&t1);
+    sceneModule.rootNode.children.push_back(&t0);
     sceneModule.rootNode.children.push_back(&t1);
-    sceneModule.rootNode.children.push_back(&t2);
-    t2.children.push_back(&t3);
 
-    t1.parent = &(sceneModule.rootNode);
-    t2.parent = &(sceneModule.rootNode);
-    t3.parent = &t2;
+    gameSystemsModule.addEntity(&testEntity0);
+    gameSystemsModule.addEntity(&testEntity1);
 
-    t3.localPosition = {1,0,0};
-    
-    gameSystemsModule.addEntity(&e1);
-    gameSystemsModule.addEntity(&e2);
-    gameSystemsModule.addEntity(&e3);
+    gameSystemsModule.addSystem(&rendererSystem);
 
-    gameSystemsModule.addSystem(&mockSystem);
-    gameSystemsModule.addSystem(&mockReporter);
-    gameSystemsModule.addSystem(&mockReceiverSystem);
+#pragma endregion
+
+#pragma region Camera
+
+    mainCamera.isMain = true;
+    mainCamera.farPlane = 1000.0f;
+    mainCamera.nearPlane = 0.01f;
+    mainCamera.fieldOfView = 80.0f;
+    mainCamera.projectionMode = CameraProjection::Perspective;
+
+    cameraTransform.localPosition = glm::vec3(1.0f, 0.0f, 50.0f);
+
+    cameraEntity.addComponent(&mainCamera);
+    cameraEntity.addComponent(&cameraTransform);
+    sceneModule.rootNode.children.push_back(&cameraTransform);
+
+    gameSystemsModule.addEntity(&cameraEntity);
+    gameSystemsModule.addSystem(&cameraSystem);
+
 #pragma endregion
 
     // Everything is ok.
@@ -139,65 +179,59 @@ int Core::init()
 
 int Core::mainLoop()
 {
-    //TODO
-#pragma region for MOCK screen animation
-    float b = 0;
-    float pulse = 0.01;
-#pragma endregion
-
     double previousFrameStart = glfwGetTime();
-    double lag = 0;
+    double lag = FIXED_TIME_STEP;
 
-    //Main loop
+    // ! ----- START SYSTEM FUNCTION -----
+    
+        gameSystemsModule.run(System::START);
+
+    // * ===== Game loop ===================================================
+
     while (!glfwWindowShouldClose(window))
     {
-        double currentFrameStart = glfwGetTime();
-        double lastFrameTime = currentFrameStart - previousFrameStart;
 
-        lag += lastFrameTime;
-        previousFrameStart = currentFrameStart;
-                
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-        inputModule.captureControllersInput();
+        // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
+
+            double currentFrameStart = glfwGetTime();
+            double lastFrameTime = currentFrameStart - previousFrameStart;
+
+            lag += lastFrameTime;
+            previousFrameStart = currentFrameStart;
+
+        // ? +++++ GLFW EVENTS AND INPUT +++++
+
+            glfwPollEvents();
+            inputModule.captureControllersInput();
         
+        // ? +++++ FIXED UPDATE LOOP +++++
+
         while(lag >= FIXED_TIME_STEP)
         {
-            InfoLog("UPDATE");
+            // Read message bus messages
             messageBus.notify();
-#pragma region MOCK scene update
-            t1.localPosition += glm::vec3(0.1,0.1,0.1);
-            t1.dirty = true;
-            t2.localRotation = glm::quat({0,glm::pi<double>()/2.0,0}) * t2.localRotation;
-            t2.dirty = true;
-#pragma endregion
+            // Travese the scene grpah and update transforms
             sceneModule.updateTransforms();
+
+            // ! ----- FIXED UPDATE FUNCTION -----
+            
             gameSystemsModule.run(System::FIXED);
 
-            //TODO: maybe systems should have som kind of clean() method?
-            mockReporter.counter = 1;
-            mockReceiverSystem.pressed = false;
-
+            // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
         }
 
+        // ! ----- FRAME UPDATE FUNCTION -----
+
         gameSystemsModule.run(System::FRAME);
+        // Read message bus before rendering
         messageBus.notify();
 
+        // ? +++++ RENDER CURRENT FRAME +++++
+
+        rendererModule.render();
+        // Clear input flags at the end of frame
         inputModule.clearFlags();
-
-        //TODO RENDER FRAME
-#pragma region MOCK screen animation
-		glClearColor(.2,.4,b,1);
-		glClear(GL_COLOR_BUFFER_BIT);
-        b += pulse;
-        if ( b > 1 || b < 0)
-        {
-            pulse = -pulse;
-        }
-#pragma endregion
-
-        InfoLog("FRAME");
     }    
 
     return 0;

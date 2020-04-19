@@ -153,6 +153,18 @@ void ConsoleModule::receiveMessage(Message msg)
     }
         break;
 
+    case Event::RENDERER_ADD_TO_QUEUE:
+        std::cout << "console here: RENDERER_ADD_TO_QUEUE.\n";
+        break;
+
+    case Event::RENDERER_SET_PROJECTION_MATRIX:
+        std::cout << "console here: RENDERER_SET_PROJECTION_MATRIX.\n";
+        break;
+
+    case Event::RENDERER_SET_VIEW_MATRIX:
+        std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
+        break;
+
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
         std::cout << "WARNING: Specific console response not implemented:" << std::endl;
