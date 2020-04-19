@@ -6,13 +6,16 @@
 class Transform;
 class Camera;
 
+    //TODO documentation
 class CameraSystem : public System
 {
 public:
     CameraSystem() = default;
     virtual ~CameraSystem() = default;
 
+    //TODO documentation
     virtual bool assertEntity(Entity* entity);
+    //TODO documentation
     virtual void frameUpdate();
 
 private:

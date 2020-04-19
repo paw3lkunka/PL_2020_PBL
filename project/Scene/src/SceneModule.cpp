@@ -21,9 +21,9 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
     if(dirty)
     {
 
-        local = glm::translate(local, transform.localPosition);
-        local = local * glm::toMat4(transform.localRotation);
-        local = glm::scale(local, transform.localScale);
+        local = glm::translate(local, transform.getLocalPosition());
+        local = local * glm::toMat4(transform.getLocalRotation());
+        local = glm::scale(local, transform.getLocalScale());
         
         global = parentsMatrix * local;
 

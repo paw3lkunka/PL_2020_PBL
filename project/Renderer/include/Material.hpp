@@ -19,9 +19,11 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
 
+    //TODO documentation
 class Material
 {
 public:
+    //TODO documentation
     Material(Shader* shader);
     Material() = default;
     ~Material() = default;
@@ -32,18 +34,30 @@ public:
     void use();
 
     // Member functions for handling uniforms and textures
+    //TODO documentation
     void setTexture(std::string name, Texture value);
+    //TODO documentation
     void setInt(std::string name, int value);
+    //TODO documentation
     void setFloat(std::string name, float value);
+    //TODO documentation
     void setVec3(std::string name, glm::vec3 value);
+    //TODO documentation
     void setVec4(std::string name, glm::vec4 value);
+    //TODO documentation
     void setMat4(std::string name, glm::mat4 value);
 
+    //TODO documentation
     Shader* getShaderPtr();
+    //TODO documentation
     int getInt(std::string name);
+    //TODO documentation
     float& getFloat(std::string name);
+    //TODO documentation
     glm::vec3& getVec3(std::string name);
+    //TODO documentation
     glm::vec4& getVec4(std::string name);
+    //TODO documentation
     glm::mat4& getMat4(std::string name);
 
 private:

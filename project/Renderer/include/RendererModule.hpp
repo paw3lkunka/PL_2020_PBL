@@ -7,6 +7,7 @@
 #include <queue>
 #include <GLFW/glfw3.h>
 
+    //TODO documentation
 struct RendererModuleCreateInfo
 {
     glm::vec3 clearColor;
@@ -17,14 +18,18 @@ struct RendererModuleCreateInfo
 
 class GLFWwindow;
 
+    //TODO documentation
 class RendererModule : public IModule
 {
 public:
     RendererModule() = default;
     virtual ~RendererModule() = default;
+    //TODO documentation
     virtual void receiveMessage(Message msg);
 
+    //TODO documentation
     void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
+    //TODO documentation
     void render();
 
 private:

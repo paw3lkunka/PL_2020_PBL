@@ -12,6 +12,7 @@
 #include "SceneModule.hpp"
 #include "RendererSystem.hpp"
 #include "CameraSystem.hpp"
+#include "CameraControlSystem.hpp"
 
 //TODO tmp includes
 #include "Message.inl"
@@ -169,7 +170,7 @@ class Core
 
     RendererSystem rendererSystem;
     CameraSystem cameraSystem;
-
+    CameraControlSystem cameraControlSystem;
 
     // struct MockPositionReportSystem : public System
     // {
@@ -226,8 +227,8 @@ class Core
         GLFWwindow* window; 
 
 #pragma region Mock rendering objects
-        Shader testShader;
-        Material testMaterial;
+        Shader unlitColor, unlitTexture;
+        Material unlitColorMat, unlitTextureMat;
         
         MeshRenderer mr0, mr1;
         Transform cameraTransform, t0, t1;

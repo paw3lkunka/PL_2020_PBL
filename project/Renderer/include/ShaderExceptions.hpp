@@ -33,8 +33,10 @@ class WrongShaderInfoType : public std::exception
 private:
     const char* msg;
 public:
+    //TODO documentation
     WrongShaderInfoType(const char* msg) : msg(msg) {}
 
+    //TODO documentation
     virtual const char* what() const throw()
     {
         return msg;
