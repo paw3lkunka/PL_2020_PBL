@@ -78,7 +78,7 @@ int Core::init()
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = false;
+    rendererCreateInfo.cullFace = true;
     rendererCreateInfo.cullFaceMode = GL_BACK;
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
@@ -106,9 +106,21 @@ int Core::init()
     unlitColorFragmentShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
     unlitColorFragmentShaderData.typeOfFile = FileType::SHADER;
 
+    FileSystemData unlitTextureVertexShaderData;
+    unlitTextureVertexShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.vert";
+    unlitTextureVertexShaderData.typeOfFile = FileType::SHADER;
+
+    FileSystemData unlitTextureFragmentShaderData;
+    unlitTextureFragmentShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
+    unlitTextureFragmentShaderData.typeOfFile = FileType::SHADER;
+
     FileSystemData testModel;
     testModel.path = "Resources/Models/Test.FBX";
     testModel.typeOfFile = FileType::MESH;
+
+    FileSystemData animModel;
+    animModel.path = "Resources/Models/House Dancing.FBX";
+    animModel.typeOfFile = FileType::MESH;
 
     FileSystemData testTexture;
     testTexture.path = "Resources/Textures/tex.png";
@@ -116,7 +128,10 @@ int Core::init()
 
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     getMessageBus().notify();
@@ -125,22 +140,38 @@ int Core::init()
 
 #pragma region Renderer
 
-    testShader = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
+    unlitColor = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
                         resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
-    testMaterial = Material(&testShader);
-    testMaterial.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    unlitTexture = Shader(  resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
+                            resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
+    unlitColorMat = Material(&unlitColor);
+    unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    mr0.material = &testMaterial;
-    mr0.mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Sphere")->second;
+    TextureData texData = resourceModule.textures.find("Resources/Textures/tex.png")->second;
 
-    mr1.material = &testMaterial;
-    mr1.mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Box")->second;
+    TextureCreateInfo texCreateInfo = {};
+    texCreateInfo.format = GL_RGBA;
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.width = texData.width;
+    texCreateInfo.height = texData.height;
+    Texture texture(texData.data, texCreateInfo);
+
+    unlitTextureMat = Material(&unlitTexture);
+    unlitTextureMat.setTexture("mainTex", texture);
+
+    mr0.material = &unlitColorMat;
+    mr0.mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Surface")->second;
+
+    mr1.material = &unlitTextureMat;
+    mr1.mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Joints")->second;
 
     testEntity0.addComponent(&mr0);
     testEntity1.addComponent(&mr1);
 
-    t0.localPosition = { 0.0f, 10.0f, 0.0f };
-    t1.localPosition = { 0.0f, -3.0f, 0.0f };
+    t0.getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+    t1.getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
 
     testEntity0.addComponent(&t0);
     testEntity1.addComponent(&t1);
@@ -151,6 +182,7 @@ int Core::init()
     gameSystemsModule.addEntity(&testEntity1);
 
     gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&cameraControlSystem);
 
 #pragma endregion
 
@@ -162,7 +194,7 @@ int Core::init()
     mainCamera.fieldOfView = 80.0f;
     mainCamera.projectionMode = CameraProjection::Perspective;
 
-    cameraTransform.localPosition = glm::vec3(1.0f, 0.0f, 50.0f);
+    cameraTransform.getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
 
     cameraEntity.addComponent(&mainCamera);
     cameraEntity.addComponent(&cameraTransform);
@@ -180,6 +212,7 @@ int Core::init()
 int Core::mainLoop()
 {
     double previousFrameStart = glfwGetTime();
+    //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
 
     // ! ----- START SYSTEM FUNCTION -----

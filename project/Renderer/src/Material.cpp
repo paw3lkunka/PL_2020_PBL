@@ -52,7 +52,7 @@ void Material::use()
     int i = 0;
     for(auto texture : textures)
     {
-        texture.second.bind(i, texture.first.c_str());
+        texture.second.bind(i);
         shader->setInt(texture.first, i);
         ++i;
     }
