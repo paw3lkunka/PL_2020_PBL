@@ -2,6 +2,8 @@
 #define SPHERECOLLIDER_INL_
 
 #include "Collider.inl"
+#include "ComponentType.inl"
+
 
 #include <glm/glm.hpp>
 
@@ -10,6 +12,7 @@
  */
 struct SphereCollider : public Collider
 {
+    inline SphereCollider() { type = ComponentType::SPHERE_COLLIDER; }
     virtual ~SphereCollider() = default;
 
     /**

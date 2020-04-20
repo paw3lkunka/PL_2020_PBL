@@ -1,0 +1,17 @@
+#ifndef COMPONENTTYPE_INL_
+#define COMPONENTTYPE_INL_
+
+enum class ComponentType
+{
+    INVALID_TYPE = -1,
+    COMPONENT = 0,
+    BOX_COLLIDER,
+    CAMERA,
+    COLLIDER,
+    MESH_RENDERER,
+    RIGIDBODY,
+    SPHERE_COLLIDER,
+    TRANSFORM,
+};
+
+#endif /* !COMPONENTTYPE_INL_ */

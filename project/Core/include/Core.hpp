@@ -15,6 +15,7 @@
 #include "CameraControlSystem.hpp"
 
 //TODO tmp includes
+#include "ObjectModule.hpp"
 #include "Message.inl"
 #include "Event.hpp"
 #include "Transform.inl"
@@ -153,6 +154,9 @@ class Core
         /// @brief scene graph
         SceneModule sceneModule;
         
+        /// @brief stores all crucial objects
+        ObjectModule objectModule = ObjectModule(1024);
+
         /// @brief safely close application, on ESC press
         class : public IModule
         {
@@ -229,15 +233,6 @@ class Core
 #pragma region Mock rendering objects
         Shader unlitColor, unlitTexture;
         Material unlitColorMat, unlitTextureMat;
-        
-        MeshRenderer mr0, mr1;
-        Transform cameraTransform, t0, t1;
-        Camera mainCamera;
-
-        Entity testEntity0 = (4, 2);
-        Entity testEntity1 = (5, 2);
-        Entity cameraEntity = (6, 2);
-
 #pragma endregion
 };
 
