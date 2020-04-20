@@ -31,7 +31,9 @@ public:
      */
     ~Mesh() = default;
 
+    //TODO documentation
     void setup();
+    //TODO documentation
     void render();
 
 private:

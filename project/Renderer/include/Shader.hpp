@@ -49,16 +49,26 @@ public:
      */
     void use();
     
+    //TODO documentation
     std::unordered_map<std::string, GLenum> &getAttributes() { return attributes; }
+    //TODO documentation
     std::unordered_map<std::string, GLenum> &getUniforms() { return uniforms; }
 
+    //TODO documentation
     void setBool(const std::string& name, bool value) const;
+    //TODO documentation
 	void setInt(const std::string& name, int value) const;
+    //TODO documentation
 	void setFloat(const std::string& name, float value) const;
+    //TODO documentation
 	void setVec3(const std::string& name, float x, float y, float z) const;
+    //TODO documentation
 	void setVec3(const std::string& name, const glm::vec3& vec) const;
+    //TODO documentation
 	void setVec4(const std::string& name, float x, float y, float z, float w) const;
+    //TODO documentation
 	void setVec4(const std::string& name, const glm::vec4& vec) const;
+    //TODO documentation
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
 
 private:

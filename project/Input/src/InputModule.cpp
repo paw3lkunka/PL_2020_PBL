@@ -26,6 +26,7 @@ void InputModule::initialize(GLFWwindow* window)
     glfwSetMouseButtonCallback(window, mouseButtonsCallback);
     glfwSetCursorPosCallback(window, cursorCallback);
     glfwSetScrollCallback(window, scrollCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
 
     // Controllers
     glfwSetJoystickCallback(controllerConnectCallback);

@@ -15,10 +15,15 @@ struct Transform : public Component
 {
     virtual ~Transform() = default;
 
-    glm::vec3 localPosition = {0,0,0};
-    glm::quat localRotation = {1,0,0,0};
-    glm::vec3 localScale = {1,1,1};
-    
+    inline const glm::vec3 &getLocalPosition() { return localPosition; }
+    inline glm::vec3 &getLocalPositionModifiable() { dirty = true; return localPosition; }
+
+    inline const glm::quat &getLocalRotation() { return localRotation; }
+    inline glm::quat &getLocalRotationModifiable() { dirty = true; return localRotation; }
+
+    inline const glm::vec3 &getLocalScale() { return localScale; }
+    inline glm::vec3 &getLocalScaleModifiable() { dirty = true; return localScale; }
+
     /**
      * @brief Model matrix (local to world transform)
      */
@@ -39,6 +44,11 @@ struct Transform : public Component
      * @brief child nodes.
      */
     std::vector<Transform*> children;
+
+private:
+    glm::vec3 localPosition = {0,0,0};
+    glm::quat localRotation = {1,0,0,0};
+    glm::vec3 localScale = {1,1,1};
 };
 
 #endif /* !TRANSFORM_HPP_ */

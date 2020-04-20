@@ -6,7 +6,7 @@
 struct TextureCreateInfo
 {
     bool generateMipmaps;
-    int nrChannels, width, height;
+    int width, height;
     GLenum format, wrapMode, minFilter, magFilter;
 };
 
@@ -17,12 +17,15 @@ struct TextureCreateInfo
 class Texture
 {
 public:
-    Texture(unsigned char* data, TextureCreateInfo createInfo) : data(data), info(createInfo) {}
+    //TODO documentation
+    Texture(unsigned char* data, TextureCreateInfo createInfo) : data(data), info(createInfo) { init(); }
     Texture() = default;
     ~Texture() = default;
 
+    //TODO documentation
     void init();
-    void bind(int textureUnit, const char* name);
+    //TODO documentation
+    void bind(int textureUnit);
 
 private:
     GLuint id;
