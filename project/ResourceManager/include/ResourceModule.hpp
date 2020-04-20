@@ -3,6 +3,9 @@
 
 #include "IModule.inl"
 #include "AudioFile.h"
+#include "AssetStructers.inl"
+#include "Animation.hpp"
+#include "Mesh.hpp"
 
 #include <unordered_map>
 #include <assimp/scene.h>
@@ -11,9 +14,6 @@
 #include <glm/mat4x4.hpp>
 
 class Message;
-class Animation;
-class Mesh;
-struct TextureData;
 
 /**
  * @brief Resource Module class for reading and storage assets data

@@ -10,13 +10,13 @@
 enum class AnimationBehaviour
 {
     ///@brief Value from the default node transformation
-    DEFAULT = 0;
+    DEFAULT = 0,
     ///@brief Nearest key value without interpolation
-    CONSTANT = 1;
+    CONSTANT = 1,
     ///@brief Nearest two keys are linearly extrapolated
-    LINEAR;
+    LINEAR,
     ///@brief The animation is repeated
-    REPEAT;
+    REPEAT,
 };
 
 /**
@@ -38,7 +38,7 @@ struct KeyQuaternion
     ///@brief time of this key
     double time;
     ///@brief value of this key
-    glm::quaternion value;
+    glm::quat value;
 };
 
 #endif /* !ANIMATIONDATASTRUCTURES_INL_ */

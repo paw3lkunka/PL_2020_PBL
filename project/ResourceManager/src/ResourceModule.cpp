@@ -1,10 +1,7 @@
 #include "ResourceModule.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
-#include "Mesh.hpp"
 #include "Message.inl"
-#include "AssetStructers.inl"
-#include "Animation.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
