@@ -5,6 +5,7 @@
 #include "MeshRenderer.inl"
 
 #include <queue>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
     //TODO documentation

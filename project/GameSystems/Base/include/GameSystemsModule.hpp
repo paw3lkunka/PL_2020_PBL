@@ -28,13 +28,6 @@ class GameSystemsModule : public IModule
         virtual void receiveMessage(Message msg);
 
         /**
-         * @brief Assign ECS Entity to this object
-         * 
-         * @param entity pointer to Entity
-         */
-        void addEntity(Entity* entity);
-
-        /**
          * @brief Assign ECS System to this object
          * if system implements IMsgReceiver also connect it to MessageBus
          * @param system pointer to System
@@ -45,9 +38,9 @@ class GameSystemsModule : public IModule
          * @brief Runs all systems
          */
         void run(System::UpdateType updateType);
+        std::vector<Entity>* entities;
     protected:
     private:
-        std::vector<Entity*> entities;
         std::vector<System*> systems;
         std::vector<IMsgReceiver*> msgReceivers;
 };
