@@ -2,7 +2,10 @@
 #define ANIMATION_HPP_
 
 #include <vector>
+#include <unordered_map>
+
 #include "AnimationDataStructures.inl"
+#include "MeshDataStructures.inl"
 class Mesh;
 
 /**
@@ -23,7 +26,7 @@ public:
     Animation(std::vector<KeyVector> pKeys, std::vector<KeyQuaternion> rKeys, std::vector<KeyVector> sKeys, AnimationBehaviour bs, AnimationBehaviour as);
     ~Animation() = default;
 
-    void setMeshReference(Mesh* mesh);
+    void setBoneMappingMap(std::unordered_map<std::string, BoneInfo> map);
 
 protected:
 private:
@@ -38,8 +41,7 @@ private:
     ///@brief defines how the animation behaves after the last key
     AnimationBehaviour afterState;
 
-    ///@brief reference to mesh
-    Mesh* meshRef;
+    std::unordered_map<std::string, BoneInfo> boneMapping;
 };
 
 #endif /* !ANIMATION_HPP_ */

@@ -23,8 +23,8 @@ struct Vertex
 struct SkinnedVertex : Vertex
 {
     static constexpr int MAX_WEIGHTS = 4;
-    int boneIDs[MAX_WEIGHTS];
-    float weights[MAX_WEIGHTS];
+    int boneIDs[MAX_WEIGHTS] = {0};
+    float weights[MAX_WEIGHTS] = {0.0f};
 };
 
 struct BoneInfo

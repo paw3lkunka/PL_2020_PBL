@@ -8,8 +8,8 @@ struct SkinnedVertex;
 class SkinnedMesh
 {
 public:
-    SkinnedMesh();
-    ~SkinnedMesh();
+    SkinnedMesh(std::vector<SkinnedVertex> vertices, std::vector<unsigned int> indices);
+    ~SkinnedMesh() = default;
 
 protected:
 private:

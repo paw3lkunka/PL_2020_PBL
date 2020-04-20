@@ -42,6 +42,16 @@ void ResourceModule::receiveMessage(Message msg)
                     std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
                 }
             break;
+            case FileType::SKINNEDMESH:
+                if(loadSkinnedMesh(fsData.path))
+                {
+                    std::cout << "Skinned meshes loaded from file " << fsData.path << std::endl;
+                }
+                else
+                {
+                    std::cerr << "Can't load skinned meshes from file " << fsData.path << std::endl;
+                }
+            break;
             case FileType::SHADER:
                 if(loadShader(fsData.path))
                 {
@@ -264,6 +274,7 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
             }
         }
 
+
         processIndices(indices, mesh);
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
@@ -396,6 +407,22 @@ void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* 
             indices.push_back(face.mIndices[k]);
         }
     }
+}
+
+void ResourceModule::processAnimationNodes(aiNode* node, aiScene* scene, std::unordered_map<std::string, BoneInfo>& boneMapping, std::string filepath)
+{
+    std::string nodeName(node->mName.data);
+    aiNodeAnim* nodeToSave;
+
+    for(int i = 0; i < scene->mAnimations[0]->mNumChannels; ++i)
+    {
+        nodeToSave = scene->mAnimations[0]->mChannels[i];
+        if(std::string(nodeToSave->mNodeName.data) == nodeName)
+        {
+            break;
+        }
+    }
+    
 }
 
 glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)

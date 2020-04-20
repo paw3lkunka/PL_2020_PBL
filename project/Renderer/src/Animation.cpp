@@ -9,7 +9,7 @@ Animation::Animation(std::vector<KeyVector> pKeys, std::vector<KeyQuaternion> rK
     afterState = as;
 }
 
-void Animation::setMeshReference(Mesh* mesh)
+void Animation::setBoneMappingMap(std::unordered_map<std::string, BoneInfo> map)
 {
-    meshRef = mesh;
+    boneMapping = map;
 }
