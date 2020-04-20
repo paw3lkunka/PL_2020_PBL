@@ -3,6 +3,8 @@
 #include "Core.hpp"
 #include "Mesh.hpp"
 #include "Message.inl"
+#include "AssetStructers.inl"
+#include "Animation.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -13,7 +15,7 @@
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 
-//TODO:Fix this couts, cerrs, because it's not proffesionals
+//TODO:Fix this couts, cerrs, because it's not proffesional
 
 void ResourceModule::receiveMessage(Message msg)
 {
@@ -178,48 +180,13 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
         std::vector<unsigned int> indices;
 
         Vertex tempVertex;
-        glm::vec3 tempVector;
-        for(int i = 0; i < mesh->mNumVertices; ++i)
+        for(int j = 0; j < mesh->mNumVertices; ++j)
         {
-            //position
-            tempVector.x = mesh->mVertices[i].x;
-            tempVector.y = mesh->mVertices[i].y;
-            tempVector.z = mesh->mVertices[i].z;
-            tempVertex.position = tempVector;
-
-            //normals
-            tempVector.x = mesh->mNormals[i].x;
-            tempVector.y = mesh->mNormals[i].y;
-            tempVector.z = mesh->mNormals[i].z;
-            tempVertex.normal = tempVector;
-
-            //tangent
-            tempVector.x = mesh->mTangents[i].x;
-            tempVector.y = mesh->mTangents[i].y;
-            tempVector.z = mesh->mTangents[i].z;
-            tempVertex.tangent = tempVector;
-
-            if(mesh->mTextureCoords[0])
-            {
-                tempVertex.texcoord = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
-            }
-            else
-            {
-                tempVertex.texcoord = glm::vec2(0.0f, 0.0f);
-            }
-
+            processVertexAttributes(tempVertex, mesh, j);
             vertices.push_back(tempVertex);
-
         }
 
-        for(int i = 0; i < mesh->mNumFaces; ++i){
-            aiFace face = mesh->mFaces[i];
-
-            for(int j = 0; j < face.mNumIndices; ++j)
-            {
-                indices.push_back(face.mIndices[j]);
-            }
-        }
+        processIndices(indices, mesh);
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
@@ -246,7 +213,76 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
         return false;
     }
 
-    
+    return processSkinnedMeshNode(scene->mRootNode, scene, path);
+}
+
+bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
+{
+    bool returnFlag = true;
+    std::unordered_map<std::string, Mesh>::iterator iter;
+    for(int i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        std::vector<SkinnedVertex> vertices;
+        std::vector<unsigned int> indices;
+        std::unordered_map<std::string, BoneInfo> boneMapping;
+
+        SkinnedVertex tempSkinnedVertex;
+        Vertex tempVertex;
+        for(int j = 0; j < mesh->mNumVertices; ++j)
+        {
+            processVertexAttributes(tempVertex, mesh, j);
+            tempSkinnedVertex.position = tempVertex.position;
+            tempSkinnedVertex.normal = tempVertex.normal;
+            tempSkinnedVertex.tangent = tempVertex.tangent;
+            tempSkinnedVertex.texcoord = tempVertex.texcoord;
+            
+            vertices.push_back(tempSkinnedVertex);
+        }
+        
+        unsigned int bonesAmount = 0;
+        for(int j = 0; j < mesh->mNumBones; ++j)
+        {
+            std::string boneName(mesh->mBones[j]->mName.data);
+            unsigned int boneIndex;
+            if(boneMapping.find(boneName) == boneMapping.end())
+            {
+                BoneInfo tempBi;
+                tempBi.boneIndex = bonesAmount;
+                boneIndex = bonesAmount;
+                tempBi.boneOffset = aiMatrixToGlmMat(mesh->mBones[i]->mOffsetMatrix);
+                boneMapping[boneName] = tempBi;
+                bonesAmount++;
+            }
+            else
+            {
+                boneIndex = boneMapping[boneName].boneIndex;
+            }
+
+            for(int k = 0; k < mesh->mBones[j]->mNumWeights; ++k)
+            {
+                unsigned int vertexID =  mesh->mBones[j]->mWeights[k].mVertexId;
+                float weight = mesh->mBones[j]->mWeights[k].mWeight;
+                addBoneDataToVertex(vertices[vertexID], boneIndex, weight);
+            }
+        }
+
+        processIndices(indices, mesh);
+
+        std::string meshPath = path + "/" + mesh->mName.C_Str();
+        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
+        //meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
+        //iter = meshes.find(meshPath);
+
+        //returnFlag = returnFlag & (iter != meshes.end());
+    }
+
+    for(int i = 0; i < node->mNumChildren; ++i)
+    {
+        processSkinnedMeshNode(node->mChildren[i], scene, path);
+    }
+
+    return returnFlag;
 }
 
 #pragma endregion
@@ -300,6 +336,89 @@ bool ResourceModule::sendShader(std::string path)
         return true;
     }
     return false;
+}
+
+#pragma endregion
+
+#pragma region Helpers
+
+void ResourceModule::addBoneDataToVertex(SkinnedVertex& vertex, unsigned int& boneIndex, float& weight)
+{
+    for(int i = 0; i < vertex.MAX_WEIGHTS; ++i)
+    {
+        if(vertex.weights[i] < 0.0001f)
+        {
+            vertex.boneIDs[i] = boneIndex;
+            vertex.weights[i] = weight;
+            return;
+        }
+    }
+    // !If loop ends without return
+    std::cerr << "ResourceModule: Too many bones for this vertex!" << std::endl;
+}
+
+void ResourceModule::processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex)
+{
+    static glm::vec3 tempVector;
+    //position
+    tempVector.x = mesh->mVertices[vertexIndex].x;
+    tempVector.y = mesh->mVertices[vertexIndex].y;
+    tempVector.z = mesh->mVertices[vertexIndex].z;
+    vert.position = tempVector;
+
+    //normals
+    tempVector.x = mesh->mNormals[vertexIndex].x;
+    tempVector.y = mesh->mNormals[vertexIndex].y;
+    tempVector.z = mesh->mNormals[vertexIndex].z;
+    vert.normal = tempVector;
+
+    //tangent
+    tempVector.x = mesh->mTangents[vertexIndex].x;
+    tempVector.y = mesh->mTangents[vertexIndex].y;
+    tempVector.z = mesh->mTangents[vertexIndex].z;
+    vert.tangent = tempVector;
+
+    if(mesh->mTextureCoords[0])
+    {
+        vert.texcoord = glm::vec2(mesh->mTextureCoords[0][vertexIndex].x, mesh->mTextureCoords[0][vertexIndex].y);
+    }
+    else
+    {
+        vert.texcoord = glm::vec2(0.0f, 0.0f);
+    }
+}
+
+void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* mesh)
+{
+    for(int j = 0; j < mesh->mNumFaces; ++j)
+    {
+        aiFace face = mesh->mFaces[j];
+
+        for(int k = 0; k < face.mNumIndices; ++k)
+        {
+            indices.push_back(face.mIndices[k]);
+        }
+    }
+}
+
+glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
+{
+    aiMatrix4x4 m = matrix.Transpose();
+
+    glm::mat4 temp = glm::mat4( glm::vec4(m.a1, m.a2, m.a3, m.a4),
+                                glm::vec4(m.b1, m.b2, m.b3, m.b4), 
+                                glm::vec4(m.c1, m.c2, m.c3, m.c4), 
+                                glm::vec4(m.d1, m.d2, m.d3, m.d4));
+    std::cout   << m.a1 << " " << m.a2 << " " << m.a3 << " " << m.a4 << std::endl
+                << m.b1 << " " << m.b2 << " " << m.b3 << " " << m.b4 << std::endl
+                << m.c1 << " " << m.c2 << " " << m.c3 << " " << m.c4 << std::endl
+                << m.d1 << " " << m.d2 << " " << m.d3 << " " << m.d4 << std::endl;
+    
+    std::cout   << temp[0][0] << " " << temp[0][1] << " " << temp[0][2] << " " << temp[0][3] << std::endl
+                << temp[1][0] << " " << temp[1][1] << " " << temp[1][2] << " " << temp[1][3] << std::endl
+                << temp[2][0] << " " << temp[2][1] << " " << temp[2][2] << " " << temp[2][3] << std::endl
+                << temp[3][0] << " " << temp[3][1] << " " << temp[3][2] << " " << temp[3][3] << std::endl;
+    return temp;
 }
 
 #pragma endregion

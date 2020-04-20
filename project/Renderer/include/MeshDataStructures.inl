@@ -22,8 +22,16 @@ struct Vertex
  */
 struct SkinnedVertex : Vertex
 {
-    int boneIDs[4];
-    float weights[4];
+    static constexpr int MAX_WEIGHTS = 4;
+    int boneIDs[MAX_WEIGHTS];
+    float weights[MAX_WEIGHTS];
+};
+
+struct BoneInfo
+{
+    unsigned int boneIndex;
+    glm::mat4 boneOffset;
+    glm::mat4 finalTransformation;
 };
 
 #endif // _MESHDATASTRUCTURES_INL
