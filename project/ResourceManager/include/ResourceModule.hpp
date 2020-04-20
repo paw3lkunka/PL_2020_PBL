@@ -8,6 +8,8 @@
 
 #include <unordered_map>
 #include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <vector>
 
 class Message;
 
@@ -30,19 +32,28 @@ public:
     std::unordered_map<std::string, Mesh> meshes;
     std::unordered_map<std::string, std::string> shaders;
 private:
+
+    /**
+     * @brief assimp importer reference;
+     */
+    Assimp::Importer importer;
+
     //Storages
+    std::vector<SkinnedVertex> bones;
 
     // Send data to MessageBus methods
     bool sendAudioClip(std::string path);
     bool sendTexture(std::string path);
     bool sendMesh(std::string path);
     bool sendShader(std::string path);
+    bool sendSkinnedMesh(std::string path);
 
     //load files to storages methods
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadShader(std::string path);
     bool loadMesh(std::string path);
+    bool loadSkinnedMesh(std::string path);
 
     /**
      * @brief 

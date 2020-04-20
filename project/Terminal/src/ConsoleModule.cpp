@@ -137,7 +137,7 @@ void ConsoleModule::receiveMessage(Message msg)
     {
         TextureData* texData = msg.getValue<TextureData*>();
         std::cout << "console here: RECEIVE_TEXTURE_DATA. width: " << texData->width << ", height: " << texData->height
-                << ", nrComponents: " << texData->nrComponents << std::endl;
+                << ", nrComponents: " << texData->nrComponents << std::endl;    
     }
         break;
 

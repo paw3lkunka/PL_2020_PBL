@@ -121,6 +121,9 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     getMessageBus().notify();
 
+    getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
+    getMessageBus().notify();
+
 #pragma endregion
 
 #pragma region Renderer
