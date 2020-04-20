@@ -58,7 +58,7 @@ class Entity
          */
         int id;
         /**
-         * @brief conteins pointers to all components associated with this entity 
+         * @brief contains pointers to all components associated with this entity 
          */
         std::vector<Component*> components;
 };

@@ -19,11 +19,6 @@ void GameSystemsModule::receiveMessage(Message msg)
     
 }
 
-void GameSystemsModule::addEntity(Entity* entity)
-{
-    entities.push_back(entity);
-}
-
 void GameSystemsModule::addSystem(System* system)
 {
     systems.push_back(system);
@@ -40,9 +35,9 @@ void GameSystemsModule::run(System::UpdateType updateType)
 {
     for( auto sys : systems )
     {
-        for( auto ent : entities )
+        for( Entity& ent : *entities )
         {
-            sys->process(ent, updateType);
+            sys->process(&ent, updateType);
         }
     }
 }

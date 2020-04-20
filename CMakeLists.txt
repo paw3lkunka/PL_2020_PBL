@@ -3,8 +3,6 @@ cmake_minimum_required( VERSION 3.4 )
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_definitions(__STDC_NO_THREADS__)
-
 # Eventually clone submodules
 if(NOT EXISTS "libs/assimp/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/assimp/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
@@ -129,6 +127,7 @@ aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
 aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
 aux_source_directory( project/Audio/src                     AUDIO_SRC)
 aux_source_directory( project/ResourceManager/src           FILE_SYSTEM_SRC)
+aux_source_directory( project/ObjectsManager/src            OBJECTS_SRC)
 aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
@@ -143,6 +142,7 @@ list(
         ${PROJECT_SRC}
         ${AUDIO_SRC}
         ${FILE_SYSTEM_SRC}
+        ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
         ${RENDERER_SRC}
@@ -160,6 +160,7 @@ include_directories(
     project/GameSystems/Systems/include
     project/Audio/include
     project/ResourceManager/include
+    project/ObjectsManager/include
     project/Input/include
     project/MessageBus/include
     project/Renderer/include
@@ -187,5 +188,5 @@ target_link_libraries(
         assimp
 )    
 
-file(GLOB resources "project/Resources/*")
+file(GLOB resources "resources/*")
 file(COPY ${resources} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Resources")

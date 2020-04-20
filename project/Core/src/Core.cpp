@@ -13,6 +13,7 @@
 Core* Core::instance = nullptr;
 
 #include <sstream>
+#include "Transform.inl"
 
 #include "RendererSystem.hpp"
 #include "FileStructures.inl"
@@ -139,7 +140,6 @@ int Core::init()
 #pragma endregion
 
 #pragma region Renderer
-
     unlitColor = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
                         resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
     unlitTexture = Shader(  resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
@@ -161,25 +161,27 @@ int Core::init()
     unlitTextureMat = Material(&unlitTexture);
     unlitTextureMat.setTexture("mainTex", texture);
 
-    mr0.material = &unlitColorMat;
-    mr0.mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Surface")->second;
+    objectModule.NewEntity(2);
+    {
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->material = &unlitColorMat;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Sphere")->second;
 
-    mr1.material = &unlitTextureMat;
-    mr1.mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Joints")->second;
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+    
+    objectModule.NewEntity(2);
+    {
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->material = &unlitTextureMat;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Box")->second;
 
-    testEntity0.addComponent(&mr0);
-    testEntity1.addComponent(&mr1);
-
-    t0.getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-    t1.getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-
-    testEntity0.addComponent(&t0);
-    testEntity1.addComponent(&t1);
-    sceneModule.rootNode.children.push_back(&t0);
-    sceneModule.rootNode.children.push_back(&t1);
-
-    gameSystemsModule.addEntity(&testEntity0);
-    gameSystemsModule.addEntity(&testEntity1);
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, -3.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -187,23 +189,25 @@ int Core::init()
 #pragma endregion
 
 #pragma region Camera
+    objectModule.NewEntity(2);
+    {
+        auto c = objectModule.NewComponent<Camera>();
+            c->isMain = true;
+            c->farPlane = 1000.0f;
+            c->nearPlane = 0.01f;
+            c->fieldOfView = 80.0f;
+            c->projectionMode = CameraProjection::Perspective;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
+            t->setParent(&sceneModule.rootNode);
+    }
 
-    mainCamera.isMain = true;
-    mainCamera.farPlane = 1000.0f;
-    mainCamera.nearPlane = 0.01f;
-    mainCamera.fieldOfView = 80.0f;
-    mainCamera.projectionMode = CameraProjection::Perspective;
-
-    cameraTransform.getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
-
-    cameraEntity.addComponent(&mainCamera);
-    cameraEntity.addComponent(&cameraTransform);
-    sceneModule.rootNode.children.push_back(&cameraTransform);
-
-    gameSystemsModule.addEntity(&cameraEntity);
     gameSystemsModule.addSystem(&cameraSystem);
 
 #pragma endregion
+
+    gameSystemsModule.entities = &objectModule.entities;
 
     // Everything is ok.
     return 0;
@@ -243,7 +247,7 @@ int Core::mainLoop()
         {
             // Read message bus messages
             messageBus.notify();
-            // Travese the scene grpah and update transforms
+            // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
 
             // ! ----- FIXED UPDATE FUNCTION -----

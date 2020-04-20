@@ -2,12 +2,15 @@
 #define RIGIDBODY_INL_
 
 #include "Component.inl"
+#include "ComponentType.inl"
+
 #include <glm/glm.hpp>
 /**
  * @brief Rigidbody struct with all of its data and forces
  */
 struct Rigidbody : public Component
 {
+    inline Rigidbody() { type = ComponentType::RIGIDBODY; }
     virtual ~Rigidbody() = default;
 
     /**
