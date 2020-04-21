@@ -11,7 +11,6 @@
 #include <sstream>
 
 #include <assimp/postprocess.h>
-#include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
 
 //TODO:Fix this couts, cerrs, because it's not proffesionals
@@ -112,6 +111,8 @@ void ResourceModule::receiveMessage(Message msg)
     }
 }
 
+#pragma region Loaders
+
 bool ResourceModule::loadAudioClip(std::string path)
 {
     AudioFile audioData;
@@ -167,9 +168,7 @@ bool ResourceModule::loadShader(std::string path)
 }
 
 bool ResourceModule::loadMesh(std::string path)
-{
-    Assimp::Importer importer;
-
+{   
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -249,6 +248,22 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
     return returnFlag;
 }
 
+bool ResourceModule::loadSkinnedMesh(std::string path)
+{
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cerr << "Assimp Error: " << importer.GetErrorString();
+        return false;
+    }
+
+    return true;
+}
+
+#pragma endregion
+
+#pragma region Senders
+
 bool ResourceModule::sendAudioClip(std::string path)
 {
     std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
@@ -298,3 +313,5 @@ bool ResourceModule::sendShader(std::string path)
     }
     return false;
 }
+
+#pragma endregion

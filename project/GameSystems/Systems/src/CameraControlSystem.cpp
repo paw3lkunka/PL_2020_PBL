@@ -12,7 +12,7 @@ bool CameraControlSystem::assertEntity(Entity* entity)
 {
     transform = entity->getComponentPtr<Transform>();
     camera = entity->getComponentPtr<Camera>();
-    return (transform != nullptr && camera != nullptr);
+    return (camera != nullptr && transform != nullptr && camera->isMain);
 }
 
 void CameraControlSystem::receiveMessage(Message msg)
@@ -36,12 +36,13 @@ void CameraControlSystem::receiveMessage(Message msg)
                     movementVector.x += 1.0f;
                     break;
                 case GLFW_KEY_Q:
-                case GLFW_KEY_LEFT_SHIFT:
                     movementVector.y += -1.0f;
                     break;
                 case GLFW_KEY_E:
-                case GLFW_KEY_LEFT_CONTROL:
                     movementVector.y += 1.0f;
+                    break;
+                case GLFW_KEY_LEFT_SHIFT:
+                    speed *= 5.0f;
                     break;
             }
 
@@ -63,12 +64,13 @@ void CameraControlSystem::receiveMessage(Message msg)
                     movementVector.x -= 1.0f;
                     break;
                 case GLFW_KEY_Q:
-                case GLFW_KEY_LEFT_CONTROL:
                     movementVector.y -= -1.0f;
                     break;
                 case GLFW_KEY_E:
-                case GLFW_KEY_LEFT_SHIFT:
                     movementVector.y -= 1.0f;
+                    break;
+                case GLFW_KEY_LEFT_SHIFT:
+                    speed /= 5.0f;
                     break;
             }
 

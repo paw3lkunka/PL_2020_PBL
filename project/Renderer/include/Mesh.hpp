@@ -40,6 +40,7 @@ private:
     GLuint vao, vbo, ebo;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
+    Bounds bounds;
 };
 
 #endif // _MESH_HPP
