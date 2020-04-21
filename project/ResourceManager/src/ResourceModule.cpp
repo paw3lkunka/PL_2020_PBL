@@ -180,6 +180,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 {
     bool returnFlag = true;
     std::unordered_map<std::string, Mesh>::iterator iter;
+    std::cout << "Node: " << node->mName.C_Str() << " meshes: " << std::to_string(node->mNumMeshes) << std::endl;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -196,7 +197,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
         processIndices(indices, mesh);
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
-        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
+        std::cout << "Loaded mesh Path: " << meshPath << "/" << node->mName.C_Str() << std::endl;
         meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
         iter = meshes.find(meshPath);
 
@@ -367,7 +368,6 @@ void ResourceModule::addBoneDataToVertex(SkinnedVertex& vertex, unsigned int& bo
 
 void ResourceModule::processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex)
 {
-    static glm::vec3 tempVector;
     //position
     tempVector.x = mesh->mVertices[vertexIndex].x;
     tempVector.y = mesh->mVertices[vertexIndex].y;

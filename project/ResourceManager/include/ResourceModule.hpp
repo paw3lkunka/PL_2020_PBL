@@ -42,6 +42,8 @@ private:
      */
     Assimp::Importer importer;
 
+    glm::vec3 tempVector;
+    
     //Storages
 
     // Send data to MessageBus methods
