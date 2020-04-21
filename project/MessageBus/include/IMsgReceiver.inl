@@ -8,8 +8,8 @@ class Message;
  */
 class IMsgReceiver 
 {
-    public:
-        virtual void receiveMessage(Message msg) = 0;
+public:
+    virtual void receiveMessage(Message msg) = 0;
 };
 
 #endif /* !I_MSG_RECEIVER_INL */

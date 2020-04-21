@@ -114,8 +114,6 @@ private:
     void processIndices(std::vector<unsigned int>& indices, aiMesh* mesh);
 
 
-    void processAnimationNodes(aiNode* node, aiScene* scene, std::unordered_map<std::string, BoneInfo>& boneMapping, std::string filepath);
-
     /**
      * @brief Helper function to cast assimp matrix4x4 to glm::mat4
      * 

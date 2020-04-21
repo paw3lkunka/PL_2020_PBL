@@ -12,7 +12,7 @@
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 
-//TODO:Fix this couts, cerrs, because it's not proffesional
+//TODO:Fix this couts, cerrs, because it's not professional
 
 void ResourceModule::receiveMessage(Message msg)
 {
@@ -418,22 +418,6 @@ void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* 
             indices.push_back(face.mIndices[k]);
         }
     }
-}
-
-void ResourceModule::processAnimationNodes(aiNode* node, aiScene* scene, std::unordered_map<std::string, BoneInfo>& boneMapping, std::string filepath)
-{
-    std::string nodeName(node->mName.data);
-    aiNodeAnim* nodeToSave;
-
-    for(int i = 0; i < scene->mAnimations[0]->mNumChannels; ++i)
-    {
-        nodeToSave = scene->mAnimations[0]->mChannels[i];
-        if(std::string(nodeToSave->mNodeName.data) == nodeName)
-        {
-            break;
-        }
-    }
-    
 }
 
 glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)

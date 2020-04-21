@@ -98,10 +98,12 @@ enum class Event : unsigned int
     QUERY_MESH_DATA,
     // Mesh data to send to Renderer module. DATA: Mesh* data;
     RECEIVE_MESH_DATA,
+
+    SETUP_BONES,
 #pragma endregion
 
     // used to define ranges of values
-    // ! WANRNING ! Must always be at the end of enum !
+    // ! WARNING ! Must always be at the end of enum !
 #pragma region MARKERS
     DEBUG_FIRST = DEBUG_INFO_LOG,
     DEBUG_LAST = DEBUG_ERROR_LOG,
