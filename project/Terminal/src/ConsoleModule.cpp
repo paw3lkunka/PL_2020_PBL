@@ -154,8 +154,12 @@ void ConsoleModule::receiveMessage(Message msg)
     }
         break;
 
-    case Event::RENDERER_ADD_TO_QUEUE:
-        std::cout << "console here: RENDERER_ADD_TO_QUEUE.\n";
+    case Event::RENDERER_ADD_MESH_TO_QUEUE:
+        std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
+        break;
+
+    case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
+        std::cout << "console here: RENDERER_ADD_BILLBOARD_TO_QUEUE.\n";
         break;
 
     case Event::RENDERER_SET_PROJECTION_MATRIX:

@@ -23,15 +23,18 @@ struct Vertex
 struct SkinnedVertex : Vertex
 {
     static constexpr int MAX_WEIGHTS = 4;
+
     int boneIDs[MAX_WEIGHTS] = {0};
     float weights[MAX_WEIGHTS] = {0.0f};
 };
 
-struct BoneInfo
+/**
+ * @brief Min max bounds struct for AABB calculation
+ */
+struct Bounds
 {
-    unsigned int boneIndex;
-    glm::mat4 boneOffset;
-    glm::mat4 finalTransformation;
+    glm::vec3 minBound;
+    glm::vec3 maxBound;
 };
 
 #endif // _MESHDATASTRUCTURES_INL

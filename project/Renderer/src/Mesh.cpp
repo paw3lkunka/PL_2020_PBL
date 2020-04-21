@@ -22,7 +22,6 @@ void Mesh::setup()
 
     // Vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    std::cout << "Vertices size: " << vertices.size() << '\n';
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW); // TODO: Add support for other draw types
     
     // Indices

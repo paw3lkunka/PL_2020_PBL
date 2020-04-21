@@ -8,16 +8,16 @@
 #include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
 #include "RendererModule.hpp"
-#include "ResourceModule.hpp"
 #include "SceneModule.hpp"
-#include "AudioModule.hpp"
-#include "RendererSystem.hpp"
+#include "MeshRendererSystem.hpp"
 #include "CameraSystem.hpp"
 #include "CameraControlSystem.hpp"
+#include "BillboardRendererSystem.hpp"
+#include "ResourceModule.hpp"
+#include "AudioModule.hpp"
 #include "AudioListenerSystem.hpp"
 #include "AudioSourceSystem.hpp"
 
-//TODO tmp includes
 #include "ObjectModule.hpp"
 #include "Message.inl"
 #include "Event.hpp"
@@ -137,7 +137,7 @@ class Core
 
 #pragma region Modules
         /// @brief implements messages exchange petween modules
-        MessageBus messageBus = (128);
+        MessageBus messageBus = (1024);
         
         /// @brief reads from input devices
         InputModule inputModule;
@@ -166,67 +166,22 @@ class Core
         /// @brief safely close application, on ESC press
         class : public IModule
         {
-            virtual void receiveMessage(Message msg)
+        virtual void receiveMessage(Message msg)
             {
                 if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
                 {
-                    instance->close();
+                        instance->close();
                 }
             }
         } tmpExit;
         
 #pragma endregion
-//TODO Es, Cs and Ss should be stored in containers/allocators, not in single variables
 
-    RendererSystem rendererSystem;
+    MeshRendererSystem rendererSystem;
+    BillboardRendererSystem billboardSystem;
     CameraSystem cameraSystem;
     CameraControlSystem cameraControlSystem;
 
-    // struct MockPositionReportSystem : public System
-    // {
-    //     int counter = 1;
-    //     Transform* t;
-    //     virtual bool assertEntity(Entity* entity)
-    //     {
-    //         t = entity->getComponentPtr<Transform>();
-    //         return t != nullptr;
-    //     }
-
-    //     virtual void fixedUpdate()
-    //     {
-    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
-    //             << t->localToWorldMatrix[3][0] <<  ", " 
-    //             << t->localToWorldMatrix[3][1] <<  ", " 
-    //             << t->localToWorldMatrix[3][2] << std::endl;
-    //     }
-    // } mockReporter;
-
-    // struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
-    // {
-    //     Transform* t;
-    //     bool pressed = false;
-    //     virtual bool assertEntity(Entity* entity)
-    //     {
-    //         t = entity->getComponentPtr<Transform>();
-    //         return t != nullptr;
-    //     }
-
-    //     virtual void fixedUpdate()
-    //     {
-    //         if(pressed)
-    //         {
-    //             t->localPosition += glm::vec3(0,1,0);
-    //         }
-    //     }
-
-    //     virtual void receiveMessage(Message msg)
-    //     {
-    //         if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
-    //         {
-    //             pressed = true;
-    //         }
-    //     }
-    // } mockReceiverSystem;
 #pragma endregion
 
 #pragma region AudioModule demo - systems
@@ -247,8 +202,8 @@ class Core
         GLFWwindow* window; 
 
 #pragma region Mock rendering objects
-        Shader unlitColor, unlitTexture;
-        Material unlitColorMat, unlitTextureMat;
+        Shader unlitColor, unlitTexture, unlitInstanced;
+        Material unlitColorMat, unlitTextureMat, unlitInstancedMat;
 #pragma endregion
 };
 
