@@ -6,6 +6,8 @@
 #include "Material.hpp"
 #include "Shader.hpp"
 #include "Message.inl"
+#include "Event.hpp"
+#include "Transform.inl"
 
 #include <assimp/scene.h>
 #include <assimp/anim.h>
@@ -35,15 +37,3 @@ void ObjectModule::NewEntity(int bufferSize = 0)
     entities.push_back( Entity(nextID++, bufferSize) );
 }
 
-void ObjectModule::receiveMessage(Message msg)
-{
-    if(msg.getEvent == Event::SETUP_BONES)
-    {
-        processBones(msg.getValue<aiScene*>() );
-    }
-}
-
-void ObjectModule::processBones(aiScene* scene)
-{
-
-}

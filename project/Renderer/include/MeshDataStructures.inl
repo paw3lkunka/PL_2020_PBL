@@ -29,6 +29,17 @@ struct SkinnedVertex : Vertex
 };
 
 /**
+ * @brief Bone information for mapping
+ */
+struct BoneInfo
+{
+    unsigned int boneIndex;
+    glm::mat4 boneOffset;
+    glm::mat4 finalTransformation;
+};
+
+
+/**
  * @brief Min max bounds struct for AABB calculation
  */
 struct Bounds

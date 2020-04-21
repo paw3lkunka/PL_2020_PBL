@@ -2,6 +2,8 @@
 #include "FileStructures.inl"
 #include "Core.hpp"
 #include "Message.inl"
+#include "Transform.inl"
+#include "Bone.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -217,7 +219,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 
     for(int i = 0; i < node->mNumChildren; ++i)
     {
-        processMeshNode(node->mChildren[i], scene, path);
+        returnFlag = returnFlag & processMeshNode(node->mChildren[i], scene, path);
     }
 
     return returnFlag;
@@ -231,10 +233,15 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr << "Assimp Error: " << importer.GetErrorString();
-        return false;
+    }
+    else if(processSkinnedMeshNode(scene->mRootNode, scene, path))
+    {
+        aiNode* bonesRootNode = findRootBone(scene->mRootNode);
+        //TODO: change this nullptr to some transform, i dunno
+        return processBones(bonesRootNode, nullptr, scene);
     }
 
-    return processSkinnedMeshNode(scene->mRootNode, scene, path);
+    return false;
 }
 
 bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
@@ -272,6 +279,7 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
                 tempBi.boneOffset = aiMatrixToGlmMat(mesh->mBones[i]->mOffsetMatrix);
                 boneMapping[boneName] = tempBi;
                 bonesAmount++;
+                std::cout << "Bone Name: " << boneName << std::endl; 
             }
             else
             {
@@ -298,9 +306,44 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
 
     for(int i = 0; i < node->mNumChildren; ++i)
     {
-        processSkinnedMeshNode(node->mChildren[i], scene, path);
+        returnFlag = returnFlag & processSkinnedMeshNode(node->mChildren[i], scene, path);
     }
 
+    return returnFlag;
+}
+
+bool ResourceModule::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene)
+{
+    bool returnFlag = true;
+    Entity* entPtr;
+    Transform* tranPtr;
+    Bone* bonePtr;
+
+    for(int i = 0; i < rootNode->mNumChildren; ++i)
+    {
+        aiNodeAnim* transNode = findNodeAnim(scene->mAnimations[0], rootNode->mChildren[i]->mName.C_Str());
+
+        if(transNode)
+        {
+            objectModulePtr->NewEntity(2);
+            std::cout << "Entity processing: " << transNode->mNodeName.C_Str() << std::endl;
+
+            tranPtr = objectModulePtr->NewComponent<Transform>();
+            if(parent)
+            {
+                tranPtr->setParent(parent);
+            }
+
+            bonePtr = objectModulePtr->NewComponent<Bone>();
+            copyToVector(bonePtr->positionKeys, transNode->mPositionKeys, transNode->mNumPositionKeys);
+            copyToVector(bonePtr->rotationKeys, transNode->mRotationKeys, transNode->mNumRotationKeys);
+            copyToVector(bonePtr->scaleKeys, transNode->mScalingKeys, transNode->mNumScalingKeys);
+            bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
+            bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
+            bonePtr->offsetMatrix = boneMapping[transNode->mNodeName.C_Str()].boneOffset;
+        }
+        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene);
+    }
     return returnFlag;
 }
 
@@ -420,6 +463,41 @@ void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* 
     }
 }
 
+aiNode* ResourceModule::findRootBone(aiNode* rootNode)
+{
+    std::unordered_map<std::string, BoneInfo>::iterator iter;
+    for(int i = 0; i < rootNode->mNumChildren; ++i)
+    {
+        iter = boneMapping.find(rootNode->mChildren[i]->mName.C_Str());
+        if(iter != boneMapping.end())
+        {
+            return rootNode->mChildren[i];
+        }
+    }
+
+    for(int i = 0; i < rootNode->mNumChildren; ++i)
+    {
+        return findRootBone(rootNode->mChildren[i]);
+    }
+    // !If loop ends without return
+    std::cerr << "Wrong bone name" << std::endl;
+    return nullptr;
+}
+
+aiNodeAnim* ResourceModule::findNodeAnim(aiAnimation* animPtr, std::string nodeName)
+{
+    for (int i = 0 ; i < animPtr->mNumChannels ; i++) {
+        aiNodeAnim* pNodeAnim = animPtr->mChannels[i];
+        
+        if (std::string(pNodeAnim->mNodeName.data) == nodeName) 
+        {
+            return pNodeAnim;
+        }
+    }
+    
+    return NULL;
+}
+
 glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
 {
     aiMatrix4x4 m = matrix.Transpose();
@@ -428,16 +506,27 @@ glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
                                 glm::vec4(m.b1, m.b2, m.b3, m.b4), 
                                 glm::vec4(m.c1, m.c2, m.c3, m.c4), 
                                 glm::vec4(m.d1, m.d2, m.d3, m.d4));
-    std::cout   << m.a1 << " " << m.a2 << " " << m.a3 << " " << m.a4 << std::endl
-                << m.b1 << " " << m.b2 << " " << m.b3 << " " << m.b4 << std::endl
-                << m.c1 << " " << m.c2 << " " << m.c3 << " " << m.c4 << std::endl
-                << m.d1 << " " << m.d2 << " " << m.d3 << " " << m.d4 << std::endl;
-    
-    std::cout   << temp[0][0] << " " << temp[0][1] << " " << temp[0][2] << " " << temp[0][3] << std::endl
-                << temp[1][0] << " " << temp[1][1] << " " << temp[1][2] << " " << temp[1][3] << std::endl
-                << temp[2][0] << " " << temp[2][1] << " " << temp[2][2] << " " << temp[2][3] << std::endl
-                << temp[3][0] << " " << temp[3][1] << " " << temp[3][2] << " " << temp[3][3] << std::endl;
     return temp;
+}
+
+void ResourceModule::copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size)
+{
+    aiVectorKey temp;
+    for(int i = 0; i < size; ++i)
+    {
+        temp = tabToCopy[i];
+        vec.push_back( {temp.mTime, glm::vec3(temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+    }
+}
+
+void ResourceModule::copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size)
+{
+    aiQuatKey temp;
+    for(int i = 0; i < size; ++i)
+    {
+        temp = tabToCopy[i];
+        vec.push_back( {temp.mTime, glm::quat(temp.mValue.w, temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+    }
 }
 
 #pragma endregion

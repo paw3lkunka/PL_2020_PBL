@@ -15,6 +15,8 @@
 #include <glm/mat4x4.hpp>
 
 class Message;
+class ObjectModule;
+struct Transform;
 
 /**
  * @brief Resource Module class for reading and storage assets data
@@ -28,6 +30,9 @@ public:
      * @param msg message received
      */
     void receiveMessage(Message msg);
+
+    ///HACK: Connection between Resource Module and Object Module
+    ObjectModule* objectModulePtr;
 
     //TODO: Move STORAGES to private
     //Storages
@@ -45,6 +50,7 @@ private:
      */
     Assimp::Importer importer;
 
+    //HACK TEMPORARY HACK, I AM TOO TIRED TO DO IT BETTER
     glm::vec3 tempVector;
     unsigned int bonesAmount = 0;
     std::unordered_map<std::string, BoneInfo> boneMapping;
@@ -113,6 +119,33 @@ private:
      */
     void processIndices(std::vector<unsigned int>& indices, aiMesh* mesh);
 
+    /**
+     * @brief method that finds root node for bones
+     * 
+     * @param rootNode root node to search
+     * @return aiNode* node which is root node for bones
+     */
+    aiNode* findRootBone(aiNode* rootNode);
+
+    /**
+     * @brief method that finds animation node associated with bone node
+     * 
+     * @param animPtr pointer to scene animation
+     * @param nodeName node name for search
+     * @return aiNodeAnim* animation node associated with bone node
+     */
+    aiNodeAnim* findNodeAnim(aiAnimation* animPtr, std::string nodeName);
+
+    /**
+     * @brief method that saves bones to entities
+     * 
+     * @param rootNode root node of bones
+     * @param parent parent transform for next transform
+     * @param scene pointer to scene for reference when finding animation node
+     * @return true bones are processed and saved to entities
+     * @return false something went wrong during processing bones
+     */
+    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene);
 
     /**
      * @brief Helper function to cast assimp matrix4x4 to glm::mat4
@@ -121,6 +154,24 @@ private:
      * @return glm::mat4 casted matrix
      */
     glm::mat4 aiMatrixToGlmMat(aiMatrix4x4 matrix);
+
+    /**
+     * @brief method that copies values from aiNodeAnim VectorKey to vector<KeyVector>
+     * 
+     * @param vec vector of KeyVector structure
+     * @param tabToCopy aiVectorKey array to copy
+     * @param size of this array
+     */
+    void copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size);
+
+    /**
+     * @brief method that copies values from aiNodeAnim QuatKey to vector<KeyQuaternion>
+     * 
+     * @param vec vector of KeyQuaternion structure
+     * @param tabToCopy aiQuatKey array to copy
+     * @param size of this array
+     */
+    void copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size);
 
 };
 

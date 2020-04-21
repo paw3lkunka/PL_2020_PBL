@@ -4,19 +4,20 @@
 #include <vector>
 #include <assimp/scene.h>
 
-#include "IModule.inl"
-
 class Entity;
 class Component;
 class System;
 class Shader;
 class Material;
+class ResourceModule;
+struct Transform;
+
 enum class ComponentType;
 /**
  * @brief Stores all data of Entities, Components, Shaders and materials
  * 
  */
-class ObjectModule: public IModule
+class ObjectModule
 {
 public: 
     /**
@@ -25,12 +26,6 @@ public:
     ObjectModule();
     virtual ~ObjectModule();
 
-    /**
-     * @brief inherited from IMsgReceiver
-     *
-     * @param msg message received
-     */
-    void receiveMessage(Message msg);
 
     /**
      * @brief Creates new Entity, and pushes it to entities vector.
@@ -58,13 +53,15 @@ public:
     std::vector<Shader> shaders;
     /// @brief materials container. 
     std::vector<Material> materials;
+
+    ///HACK: Connection between Resource Module and Object Module
+    ResourceModule* resourceModulePtr;
 protected:
 
 private:    
     /// @brief used to setting entities IDs in runtime.
     static int nextID;
 
-    void processBones(aiScene* scene);
 };
 
 #include "ObjectsModule.ipp"
