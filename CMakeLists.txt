@@ -24,10 +24,6 @@ if(NOT EXISTS "libs/openal-soft/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/openal-soft/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-if(NOT EXISTS "libs/AudioFile/AudioFile.h")
-    execute_process(COMMAND git submodule update --init "libs/AudioFile/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-endif()
-
 project( PBL )
 enable_language( CXX )
 
