@@ -1,40 +1,54 @@
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
-#include <vector>
+#pragma region Includes
 
+//TODO check, which includes are really necessery
+
+// * C++ std lib
+#include <vector>
+#include <iostream>
+#include <utility>
+#include <sstream>
+
+// * System-depended
+#ifdef __linux__ 
+    #include <unistd.h>
+#elif _WIN32
+    #include <windows.h>
+#endif
+
+// * Other libs
+#include <glm/gtx/matrix_decompose.hpp> 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+// * MessgageBus
+#include "MessageBus.hpp"
+#include "Message.inl"
+#include "Event.hpp"
+
+// * Modules
 #include "InputModule.hpp"
 #include "ConsoleModule.hpp"
-#include "MessageBus.hpp"
 #include "GameSystemsModule.hpp"
 #include "RendererModule.hpp"
 #include "ResourceModule.hpp"
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
-#include "RendererSystem.hpp"
-#include "CameraSystem.hpp"
-#include "CameraControlSystem.hpp"
-#include "AudioListenerSystem.hpp"
-#include "AudioSourceSystem.hpp"
-
-//TODO tmp includes
 #include "ObjectModule.hpp"
-#include "Message.inl"
-#include "Event.hpp"
-#include "Transform.inl"
-#include "Camera.inl"
 
+// * ECS
 #include "Entity.hpp"
-#include "Component.inl"
-#include "System.hpp"
+#include "Components.inc"
+#include "Systems.inc"
 
-#include <glm/gtx/matrix_decompose.hpp> 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+// * Others
+#include "FileStructures.inl"
 
-class GLFWwindow;
-class Core;
+#pragma endregion
 
+#pragma region Global
 /**
  * @brief Get reference to initialized instance of Core class.
  * 
@@ -60,19 +74,22 @@ void WarningLog(const char* log);
  * @param log text to send
  */
 void ErrorLog(const char* log);   
+#pragma endregion
 
 /**
  * @brief Main class of program, contain all modules, initialization, game loop, and finalization;
  */
 class Core
 {
+#pragma region Friendship_declarations
     friend Core& GetCore();
     friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
-    friend void ErrorLog(const char* log);   
+    friend void ErrorLog(const char* log);  
+#pragma endregion
 
+#pragma region Constants
     public:       
-#pragma region statics
         /// @brief identity matrix
         static constexpr glm::mat4 IDENTITY_MAT = glm::mat4(1);
 
@@ -87,6 +104,7 @@ class Core
 #pragma endregion
 
 #pragma region Functions
+    public:       
         Core() = default;
         ~Core() = default;
 
@@ -136,6 +154,7 @@ class Core
 #pragma endregion
 
 #pragma region Modules
+    public:
         /// @brief implements messages exchange petween modules
         MessageBus messageBus = (128);
         
@@ -176,12 +195,24 @@ class Core
         } tmpExit;
         
 #pragma endregion
-//TODO Es, Cs and Ss should be stored in containers/allocators, not in single variables
 
-    RendererSystem rendererSystem;
-    CameraSystem cameraSystem;
-    CameraControlSystem cameraControlSystem;
+#pragma region Systems
 
+    public:       
+        //TODO documentation
+        RendererSystem rendererSystem;
+        //TODO documentation
+        CameraSystem cameraSystem;
+        //TODO documentation
+        CameraControlSystem cameraControlSystem;
+        //TODO documentation
+        AudioSourceSystem audioSourceSystem;
+        //TODO documentation
+        AudioListenerSystem audioListenerSystem;
+
+#pragma endregion
+
+#pragma region Old_commented_mocks
     // struct MockPositionReportSystem : public System
     // {
     //     int counter = 1;
@@ -229,24 +260,16 @@ class Core
     // } mockReceiverSystem;
 #pragma endregion
 
-#pragma region AudioModule demo - systems
-
-    AudioSourceSystem audioSourceSystem;
-    AudioListenerSystem audioListenerSystem;
-
-    // Needed to set a listener for a source :(
-    AudioListener* li;
-    // Needed to play that source...
-    AudioSource* so;
-
-#pragma endregion
-
-    protected:
+#pragma region TMP
+//TODO this should being successively removed
     private:
+        // Needed to set a listener for a source :(
+        AudioListener* li;
+        // Needed to play that source...
+        AudioSource* so;
         static Core* instance;
         GLFWwindow* window; 
 
-#pragma region Mock rendering objects
         Shader unlitColor, unlitTexture;
         Material unlitColorMat, unlitTextureMat;
 #pragma endregion

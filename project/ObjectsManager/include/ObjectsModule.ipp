@@ -1,4 +1,5 @@
 #include "ObjectModule.hpp"
+#include "Entity.hpp"
 
 template<typename T>
 T* ObjectModule::NewComponent()

@@ -1,27 +1,6 @@
 #include "Core.hpp"
 
-// standard C++ library
-#include <iostream>
-#include <utility>
-
-// system-depended
-#ifdef __linux__ 
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-#endif
 Core* Core::instance = nullptr;
-
-#include <sstream>
-#include "Transform.inl"
-
-#include "RendererSystem.hpp"
-#include "FileStructures.inl"
-
-#pragma region AudioModule demo - includes
-#include "AudioListener.inl"
-#include "AudioSource.inl"
-#pragma endregion
 
 Core& GetCore()
 {
