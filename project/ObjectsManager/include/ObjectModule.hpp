@@ -1,7 +1,6 @@
 #ifndef OBJECTMODULE_HPP_
 #define OBJECTMODULE_HPP_
 
-#include "StackLikeAllocator.hpp"
 #include <vector>
 
 class Entity;
@@ -19,11 +18,9 @@ class ObjectModule
     public: 
         /**
          * @brief Construct a new Object Module object
-         * 
-         * @param componentsSpace size of component stack; 
          */
-        ObjectModule(int componentsSpace);
-        virtual ~ObjectModule() = default;
+        ObjectModule();
+        virtual ~ObjectModule();
 
         /**
          * @brief Creates new Entity, and pushes it to entities vector.
@@ -45,7 +42,8 @@ class ObjectModule
         /// @brief entities container.
         std::vector<Entity> entities;
         /// @brief components container.
-        StackLikeAllocator components;
+        // HACK: object allocated on heap by "new" operator - VERY temporary solution
+        std::vector<Component*> components;
         /// @brief shaders container.
         std::vector<Shader> shaders;
         /// @brief materials container. 

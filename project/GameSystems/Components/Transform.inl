@@ -2,7 +2,6 @@
 #define TRANSFORM_HPP_
 
 #include "Component.inl"
-#include "ComponentType.inl"
 
 #include <unordered_set>
 
@@ -14,7 +13,7 @@
  */
 struct Transform : public Component
 {
-    inline Transform() { type = ComponentType::TRANSFORM; }
+    Transform() = default;
     virtual ~Transform() = default;
 
     /**

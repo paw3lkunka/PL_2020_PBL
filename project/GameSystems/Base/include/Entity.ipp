@@ -1,15 +1,13 @@
-#include "Components.inl"
+#include "Components.inc"
 
 template<typename T>
 T* Entity::getComponentPtr(int n) const
 {
-    ComponentType type = ComponentEnum<T>();
     T* result = nullptr;
     for( Component* ptr : components)
     {        
-        if( ptr->type == type )
+        if( result = dynamic_cast<T*>(ptr) )
         {
-            result = reinterpret_cast<T*>(ptr);
             n--;
             if(n < 0)
             {

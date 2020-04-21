@@ -91,9 +91,20 @@ void ResourceModule::receiveMessage(Message msg)
     }
     else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
     {
-        if(!sendAudioClip(msg.getValue<const char*>()))
+        auto filePath = msg.getValue<const char*>();
+        if(!sendAudioClip(filePath))
         {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
+            std::cerr << "Can't find open audio file " << filePath << std::endl;
+
+            if(loadAudioClip(filePath))
+            {
+                std::cout << "Audio loaded from file " << filePath << std::endl;
+                sendAudioClip(filePath);
+            }
+            else
+            {
+                std::cerr << "Can't load audio from file " << filePath << std::endl;
+            }
         }
     }
     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
@@ -113,12 +124,12 @@ void ResourceModule::receiveMessage(Message msg)
 
 bool ResourceModule::loadAudioClip(std::string path)
 {
-    AudioFile<unsigned char> audioData;
+    AudioFile audioData;
     if(audioData.load(path))
     {
         audioClips.insert( std::pair(path, audioData) );
         
-        std::unordered_map<std::string, AudioFile<unsigned char> >::iterator iter = audioClips.find(path);
+        std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
 
         return iter != audioClips.end();
     }
@@ -300,13 +311,14 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
 
 bool ResourceModule::sendAudioClip(std::string path)
 {
-    std::unordered_map<std::string, AudioFile<unsigned char> >::iterator iter = audioClips.find(path);
+    std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
 
     if(iter != audioClips.end())
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_AUDIO_DATA, &iter->second) );
+        GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, &iter->second ) );
         return true;
     }
+    
     return false;
 }
 
