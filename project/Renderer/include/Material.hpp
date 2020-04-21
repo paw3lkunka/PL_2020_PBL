@@ -60,11 +60,11 @@ public:
     //TODO documentation
     glm::mat4& getMat4(std::string name);
 
+    int ID;
+    Shader* shader;
 private:
     static int idCount;
 
-    int ID;
-    Shader* shader;
 
     std::unordered_map<std::string, Texture> textures;
     std::unordered_map<std::string, int> ints;

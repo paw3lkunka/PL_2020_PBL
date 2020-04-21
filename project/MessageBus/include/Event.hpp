@@ -68,7 +68,9 @@ enum class Event : unsigned int
 
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
-    RENDERER_ADD_TO_QUEUE,
+    RENDERER_ADD_MESH_TO_QUEUE,
+    // HACK: Send billboard renderer data, DATA: Pointer to billboard renderer
+    RENDERER_ADD_BILLBOARD_TO_QUEUE,
     // Send view matrix to renderer, DATA: Pointer to view matrix
     RENDERER_SET_VIEW_MATRIX,
     // Send projection matrix to renderer, DATA: Pointer to projection matrix

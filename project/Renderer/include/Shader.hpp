@@ -71,8 +71,8 @@ public:
     //TODO documentation
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
 
-private:
     unsigned int ID;
+private:
     std::unordered_map<std::string, GLenum> attributes;
     std::unordered_map<std::string, GLenum> uniforms;
 
