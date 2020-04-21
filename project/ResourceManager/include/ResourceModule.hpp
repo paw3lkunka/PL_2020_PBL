@@ -2,7 +2,7 @@
 #define _RESOURCEMODULE_HPP
 
 #include "IModule.inl"
-#include "AudioFile.h"
+#include "AudioFile.hpp"
 #include "AssetStructers.inl"
 #include "Mesh.hpp"
 
@@ -24,13 +24,14 @@ public:
      */
     void receiveMessage(Message msg);
 
-    // TODO: set these to private later (public just for testing)
-    std::unordered_map<std::string, AudioFile<unsigned char> > audioClips;
+    //TODO: Move STORAGES to private
+    //Storages
+    std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
     std::unordered_map<std::string, Mesh> meshes;
     std::unordered_map<std::string, std::string> shaders;
+
 private:
-    //Storages
 
     // Send data to MessageBus methods
     bool sendAudioClip(std::string path);

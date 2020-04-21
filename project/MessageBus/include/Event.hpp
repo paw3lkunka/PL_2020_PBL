@@ -46,7 +46,26 @@ enum class Event : unsigned int
     // The gamepad axis pressure amount was changed, DATA: GamepadAxisData {int gamepadId - GLFW joystick, int axisId - GLFW gamepad button, float amount}.
     GAMEPAD_AXIS_CHANGED,
 #pragma endregion
-    
+
+#pragma region AUDIO
+    // Audio Listener, initialization, generating context on device and checking if it is current context, DATA: AudioListener* .
+    AUDIO_LISTENER_INIT,
+    // Audio Listener, update attributes on device level, DATA: AudioListener* containing dirty flags and new attributes' values.
+    AUDIO_LISTENER_UPDATE,
+    // Audio Source, update listeners, generating sources for contexts on device, DATA: AudioSource* .
+    AUDIO_SOURCE_UPDATE_LISTENERS,
+    // Audio Source, update attributes on device level, DATA: AudioSource* containing dirty flags and new attributes' values.
+    AUDIO_SOURCE_UPDATE_ATTRIBUTES,
+    // Audio Source, play Source's buffer queue starting where offset is, DATA: AudioSource* .
+    AUDIO_SOURCE_PLAY,
+    // Audio Source, stop playing, stop Source's offset where it is in buffer queued, DATA: AudioSource* .
+    AUDIO_SOURCE_STOP,
+    // Audio Source, pause Source's offset where it is in buffer queue, DATA: AudioSource* .
+    AUDIO_SOURCE_PAUSE,
+    // Audio Source, stop playing,set Source's offset on the beginning of buffer queue, DATA: AudioSource* .
+    AUDIO_SOURCE_REWIND,
+#pragma endregion
+
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_TO_QUEUE,
@@ -72,7 +91,7 @@ enum class Event : unsigned int
 
     // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
     QUERY_AUDIO_DATA,
-    // Audio data to send to Audio module. DATA: AudioFile<unsigned char>* audioData;
+    // Audio data to send to Audio module. DATA: AudioFile* data;
     RECEIVE_AUDIO_DATA,
 
     // Query FROM Renderer to Resource Module. DATA: const char* filepath/mesh;
@@ -88,6 +107,8 @@ enum class Event : unsigned int
     DEBUG_LAST = DEBUG_ERROR_LOG,
     INPUT_FIRST = KEY_PRESSED,
     INPUT_LAST = GAMEPAD_AXIS_CHANGED,
+    AUDIO_FIRST = AUDIO_LISTENER_INIT,
+    AUDIO_LAST = AUDIO_SOURCE_REWIND
 #pragma endregion
 
 };

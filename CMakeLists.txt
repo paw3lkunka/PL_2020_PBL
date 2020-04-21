@@ -31,7 +31,7 @@ endif()
 project( PBL )
 enable_language( CXX )
 
-# Enable GLFW unused eatures 
+# Enable GLFW unused features 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 

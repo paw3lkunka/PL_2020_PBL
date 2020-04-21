@@ -13,6 +13,3 @@
 [submodule "libs/openal-soft"]
 	path = libs/openal-soft
 	url = https://github.com/kcat/openal-soft.git
-[submodule "libs/AudioFile"]
-	path = libs/AudioFile
-	url = https://github.com/adamstark/AudioFile.git
