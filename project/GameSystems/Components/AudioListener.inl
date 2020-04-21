@@ -9,7 +9,7 @@
 
 struct AudioListener : public Component
 {
-    inline AudioListener() { type = ComponentType::AUDIO_LISTENER; }
+    AudioListener() = default;
     
     virtual ~AudioListener() = default;
 
