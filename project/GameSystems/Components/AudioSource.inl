@@ -10,7 +10,7 @@
 
 struct AudioSource : public Component
 {
-    inline AudioSource() { type = ComponentType::AUDIO_SOURCE; }
+    AudioSource() = default;
     virtual ~AudioSource() = default;
 
     /// Audio Sources it belongs to

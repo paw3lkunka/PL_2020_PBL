@@ -161,7 +161,7 @@ class Core
         AudioModule audioModule;
         
         /// @brief stores all crucial objects
-        ObjectModule objectModule = ObjectModule(10240);
+        ObjectModule objectModule;
 
         /// @brief safely close application, on ESC press
         class : public IModule

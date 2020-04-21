@@ -2,14 +2,13 @@
 #define _CAMERA_INL
 
 #include "Component.inl"
-#include "ComponentType.inl"
 
 
 enum class CameraProjection { Perspective, Orthographic };
 
 struct Camera : public Component
 {
-    inline Camera() { type = ComponentType::CAMERA; }
+    Camera() = default;
     virtual ~Camera() = default;
     CameraProjection projectionMode;
     bool isMain;
