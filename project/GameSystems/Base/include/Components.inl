@@ -10,7 +10,9 @@
 #include "MeshRenderer.inl"    
 #include "Rigidbody.inl"    
 #include "SphereCollider.inl"    
-#include "Transform.inl"    
+#include "Transform.inl"
+#include "AudioListener.inl"
+#include "AudioSource.inl"
 
 #include <typeindex>
 
@@ -50,6 +52,14 @@ ComponentType ComponentEnum()
     else if(type == typeid(Transform))
     {
         return ComponentType::TRANSFORM;
+    }
+    else if(type == typeid(AudioListener))
+    {
+        return ComponentType::AUDIO_LISTENER;
+    }
+    else if(type == typeid(AudioSource))
+    {
+        return ComponentType::AUDIO_SOURCE;
     }
     else
     {

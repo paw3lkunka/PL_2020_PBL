@@ -12,6 +12,8 @@ enum class ComponentType
     RIGIDBODY,
     SPHERE_COLLIDER,
     TRANSFORM,
+    AUDIO_LISTENER,
+    AUDIO_SOURCE
 };
 
 #endif /* !COMPONENTTYPE_INL_ */

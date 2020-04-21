@@ -10,9 +10,12 @@
 #include "RendererModule.hpp"
 #include "ResourceModule.hpp"
 #include "SceneModule.hpp"
+#include "AudioModule.hpp"
 #include "RendererSystem.hpp"
 #include "CameraSystem.hpp"
 #include "CameraControlSystem.hpp"
+#include "AudioListenerSystem.hpp"
+#include "AudioSourceSystem.hpp"
 
 //TODO tmp includes
 #include "ObjectModule.hpp"
@@ -153,9 +156,12 @@ class Core
         
         /// @brief scene graph
         SceneModule sceneModule;
+
+        /// @brief audio logic
+        AudioModule audioModule;
         
         /// @brief stores all crucial objects
-        ObjectModule objectModule = ObjectModule(1024);
+        ObjectModule objectModule = ObjectModule(10240);
 
         /// @brief safely close application, on ESC press
         class : public IModule
@@ -222,6 +228,16 @@ class Core
     //     }
     // } mockReceiverSystem;
 #pragma endregion
+
+#pragma region AudioModule demo - systems
+
+    AudioSourceSystem audioSourceSystem;
+    AudioListenerSystem audioListenerSystem;
+
+    // Needed to set a listener for a source :(
+    AudioListener* li;
+    // Needed to play that source...
+    AudioSource* so;
 
 #pragma endregion
 
