@@ -12,11 +12,14 @@ struct Collider : public Component
     Collider() = default;
     virtual ~Collider() = default;
 
+    /**
+     * @brief types of collider depending on its behaviour. 
+     */
     enum class Type
     {
-        DYNAMIC;
-        KINEMATIC;
-        TRIGGER;
+        DYNAMIC,
+        KINEMATIC,
+        TRIGGER,
     } type;
 
 };

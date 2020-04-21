@@ -81,6 +81,11 @@ struct Transform : public Component
      * @brief Model matrix (local to world transform)
      */
     glm::mat4 localToWorldMatrix = glm::mat4(1);
+    
+    /**
+     * @brief Model matrix^-1 (world to local transform)
+     */
+    glm::mat4 worldToLocalMatrix = glm::mat4(1);
 
     /**
      * @brief Signalize, if local parameters was changed.
