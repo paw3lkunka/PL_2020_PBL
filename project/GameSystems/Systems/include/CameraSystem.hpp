@@ -6,7 +6,9 @@
 class Transform;
 class Camera;
 
-    //TODO documentation
+/**
+ * @brief 
+ */
 class CameraSystem : public System
 {
 public:
@@ -15,8 +17,14 @@ public:
 
     //TODO documentation
     virtual bool assertEntity(Entity* entity);
+    // FIXME AAAAAAAAAAAAA
+    virtual void start();
     //TODO documentation
     virtual void frameUpdate();
+
+    // FIXME TO JEST BRUDNY HACK - MOŻE TRAFIĆ NA MASTERA TYLKO JAK NIE ZDĄŻYMY TEGO ROZWIĄZAĆ INACZEJ
+    static Transform* mainCameraTransform;
+    static Camera* mainCamera;
 
 private:
     Transform* transform;

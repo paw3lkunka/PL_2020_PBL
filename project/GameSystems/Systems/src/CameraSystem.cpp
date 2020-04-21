@@ -6,11 +6,21 @@
 #include "Camera.inl"
 #include "Transform.inl"
 
+Transform* CameraSystem::mainCameraTransform = nullptr;
+Camera* CameraSystem::mainCamera = nullptr;
+
 bool CameraSystem::assertEntity(Entity* entity)
 {
     transform = entity->getComponentPtr<Transform>();
     camera = entity->getComponentPtr<Camera>();
     return (transform != nullptr && camera != nullptr);
+}
+
+void CameraSystem::start()
+{
+    // FIXME HACK HACK AHCK AHCK XD
+    mainCameraTransform = transform;
+    mainCamera = camera;
 }
 
 void CameraSystem::frameUpdate()
@@ -48,10 +58,7 @@ void CameraSystem::frameUpdate()
         }
 
         // * ===== Calculate and send view matrix to renderer =====
-        //if (transform->dirty)
-        //{
-            camera->viewMatrix = glm::inverse(transform->localToWorldMatrix);
-            GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_VIEW_MATRIX, &camera->viewMatrix));
-        //}
+        camera->viewMatrix = glm::inverse(transform->localToWorldMatrix);
+        GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_VIEW_MATRIX, &camera->viewMatrix));
     }
 }

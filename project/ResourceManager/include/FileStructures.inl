@@ -9,6 +9,7 @@ enum class FileType : unsigned int
     AUDIO,
     SHADER,
     MESH,
+    SKINNEDMESH,
     TEXTURE,
 };
 

@@ -168,7 +168,6 @@ include_directories(
     libs/assimp/include
     libs/glm/
     libs/openal-soft/include
-    libs/AudioFile/
     build/libs/assimp/include
 )
 

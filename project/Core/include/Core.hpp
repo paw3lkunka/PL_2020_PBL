@@ -33,7 +33,6 @@
 #include "ConsoleModule.hpp"
 #include "GameSystemsModule.hpp"
 #include "RendererModule.hpp"
-#include "ResourceModule.hpp"
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
@@ -156,7 +155,7 @@ class Core
 #pragma region Modules
     public:
         /// @brief implements messages exchange petween modules
-        MessageBus messageBus = (128);
+        MessageBus messageBus = (1024);
         
         /// @brief reads from input devices
         InputModule inputModule;
@@ -185,11 +184,11 @@ class Core
         /// @brief safely close application, on ESC press
         class : public IModule
         {
-            virtual void receiveMessage(Message msg)
+        virtual void receiveMessage(Message msg)
             {
                 if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
                 {
-                    instance->close();
+                        instance->close();
                 }
             }
         } tmpExit;
