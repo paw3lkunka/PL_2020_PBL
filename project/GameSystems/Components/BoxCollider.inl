@@ -2,7 +2,6 @@
 #define BOXCOLLIDER_HPP_
 
 #include "Collider.inl"
-#include "ComponentType.inl"
 
 #include <glm/glm.hpp>
 
@@ -11,7 +10,7 @@
  */
 struct BoxCollider : public Collider
 {
-    inline BoxCollider() { type = ComponentType::BOX_COLLIDER; }
+    BoxCollider() = default;
     virtual ~BoxCollider() = default;
 
     /**

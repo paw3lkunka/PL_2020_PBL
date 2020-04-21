@@ -2,7 +2,6 @@
 #define COLLIDER_HPP_
 
 #include "Component.inl"
-#include "ComponentType.inl"
 
 
 /**
@@ -10,7 +9,7 @@
  */
 struct Collider : public Component
 {
-    inline Collider() { type = ComponentType::COLLIDER; }
+    Collider() = default;
     virtual ~Collider() = default;
 
     enum class Type

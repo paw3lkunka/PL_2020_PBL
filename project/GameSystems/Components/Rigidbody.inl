@@ -2,7 +2,6 @@
 #define RIGIDBODY_INL_
 
 #include "Component.inl"
-#include "ComponentType.inl"
 
 #include <glm/glm.hpp>
 /**
@@ -10,7 +9,7 @@
  */
 struct Rigidbody : public Component
 {
-    inline Rigidbody() { type = ComponentType::RIGIDBODY; }
+    Rigidbody() = default;
     virtual ~Rigidbody() = default;
 
     /**

@@ -18,6 +18,11 @@ Core* Core::instance = nullptr;
 #include "RendererSystem.hpp"
 #include "FileStructures.inl"
 
+#pragma region AudioModule demo - includes
+#include "AudioListener.inl"
+#include "AudioSource.inl"
+#pragma endregion
+
 Core& GetCore()
 {
     return *(Core::instance);
@@ -89,6 +94,7 @@ int Core::init()
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
+    messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &resourceModule );
     messageBus.addReceiver( &rendererModule );
     messageBus.addReceiver( &tmpExit );
@@ -207,6 +213,38 @@ int Core::init()
 
 #pragma endregion
 
+#pragma region AudioModule demo - initialization
+    
+    audioModule.init();
+    
+    objectModule.NewEntity(2);
+    {
+        li = objectModule.NewComponent<AudioListener>();
+            li->getIsCurrentModifiable() = true;
+
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.NewEntity(2);
+    {
+        so = objectModule.NewComponent<AudioSource>();
+            so->listeners.push_back(li); so->dirty |= (1 << 20);
+            so->clips.push_back("Resources/Audios/test.wav"); so->dirty |= (1 << 19);
+            so->isRelative = true; so->dirty |= (1 << 3);
+            so->isLooping = true; so->dirty |= (1 << 4);
+
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    gameSystemsModule.addSystem(&audioListenerSystem);
+    gameSystemsModule.addSystem(&audioSourceSystem);
+    
+#pragma endregion
+
     gameSystemsModule.entities = &objectModule.entities;
 
     // Everything is ok.
@@ -223,8 +261,13 @@ int Core::mainLoop()
     
         gameSystemsModule.run(System::START);
 
+#pragma region AudioModule demo
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so) );
+#pragma endregion
+
     // * ===== Game loop ===================================================
 
+    //Main loop
     while (!glfwWindowShouldClose(window))
     {
 
@@ -282,6 +325,8 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    audioModule.cleanup();
+
 	glfwDestroyWindow(window);
 	glfwTerminate();
     
