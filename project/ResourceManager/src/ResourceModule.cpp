@@ -225,6 +225,8 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 
 bool ResourceModule::loadSkinnedMesh(std::string path)
 {
+    bonesAmount = 0;
+    boneMapping.clear();
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -238,13 +240,12 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
 bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::unordered_map<std::string, Mesh>::iterator iter;
+    std::unordered_map<std::string, SkinnedMesh>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         std::vector<SkinnedVertex> vertices;
         std::vector<unsigned int> indices;
-        std::unordered_map<std::string, BoneInfo> boneMapping;
 
         SkinnedVertex tempSkinnedVertex;
         Vertex tempVertex;
@@ -259,7 +260,6 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
             vertices.push_back(tempSkinnedVertex);
         }
         
-        unsigned int bonesAmount = 0;
         for(int j = 0; j < mesh->mNumBones; ++j)
         {
             std::string boneName(mesh->mBones[j]->mName.data);
@@ -280,21 +280,20 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
 
             for(int k = 0; k < mesh->mBones[j]->mNumWeights; ++k)
             {
-                unsigned int vertexID =  mesh->mBones[j]->mWeights[k].mVertexId;
+                unsigned int vertexID = mesh->mBones[j]->mWeights[k].mVertexId;
                 float weight = mesh->mBones[j]->mWeights[k].mWeight;
                 addBoneDataToVertex(vertices[vertexID], boneIndex, weight);
             }
         }
 
-
         processIndices(indices, mesh);
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        //meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
-        //iter = meshes.find(meshPath);
+        skinnedMeshes.insert(std::pair(meshPath, SkinnedMesh(vertices, indices)));
+        iter = skinnedMeshes.find(meshPath);
 
-        //returnFlag = returnFlag & (iter != meshes.end());
+        returnFlag = returnFlag & (iter != skinnedMeshes.end());
     }
 
     for(int i = 0; i < node->mNumChildren; ++i)

@@ -6,6 +6,7 @@
 #include "AssetStructers.inl"
 #include "Animation.hpp"
 #include "Mesh.hpp"
+#include "SkinnedMesh.hpp"
 
 #include <unordered_map>
 #include <assimp/scene.h>
@@ -33,6 +34,7 @@ public:
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
     std::unordered_map<std::string, Mesh> meshes;
+    std::unordered_map<std::string, SkinnedMesh> skinnedMeshes;
     std::unordered_map<std::string, std::string> shaders;
     std::unordered_map<std::string, Animation> animations;
 
@@ -44,6 +46,8 @@ private:
     Assimp::Importer importer;
 
     glm::vec3 tempVector;
+    unsigned int bonesAmount = 0;
+    std::unordered_map<std::string, BoneInfo> boneMapping;
     
     //Storages
 
