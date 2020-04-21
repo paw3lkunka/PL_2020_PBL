@@ -15,7 +15,6 @@ Core* Core::instance = nullptr;
 #include <sstream>
 #include "Transform.inl"
 
-#include "RendererSystem.hpp"
 #include "FileStructures.inl"
 
 #pragma region AudioModule demo - includes
@@ -121,6 +120,14 @@ int Core::init()
     unlitTextureFragmentShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
     unlitTextureFragmentShaderData.typeOfFile = FileType::SHADER;
 
+    FileSystemData unlitInstancedVertexShaderData;
+    unlitInstancedVertexShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert";
+    unlitInstancedVertexShaderData.typeOfFile = FileType::SHADER;
+
+    FileSystemData unlitInstancedFragmentShaderData;
+    unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
+    unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
+
     FileSystemData testModel;
     testModel.path = "Resources/Models/Test.FBX";
     testModel.typeOfFile = FileType::MESH;
@@ -137,10 +144,15 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    getMessageBus().notify();
+
+    getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
     getMessageBus().notify();
 
 #pragma endregion
@@ -150,6 +162,8 @@ int Core::init()
                         resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
     unlitTexture = Shader(  resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
                             resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
+    unlitInstanced = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
+                            resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
     unlitColorMat = Material(&unlitColor);
     unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -167,14 +181,17 @@ int Core::init()
     unlitTextureMat = Material(&unlitTexture);
     unlitTextureMat.setTexture("mainTex", texture);
 
+    unlitInstancedMat = Material(&unlitInstanced);
+    unlitInstancedMat.setTexture("mainTex", texture);
+
     objectModule.NewEntity(2);
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitColorMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Sphere")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Surface")->second;
 
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
             t->setParent(&sceneModule.rootNode);
     }
     
@@ -182,15 +199,76 @@ int Core::init()
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitTextureMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/Test.FBX/Box")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Joints")->second;
 
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, -3.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
             t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { -10.0f, 0.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 10.0f, 10.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    }
+
+    objectModule.NewEntity(2);
+    {
+        auto br = objectModule.NewComponent<BillboardRenderer>();
+            br->material = &unlitInstancedMat;
+        
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { -10.0f, 10.0f, 0.0f };
+            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
     }
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
+    gameSystemsModule.addSystem(&billboardSystem);
 
 #pragma endregion
 
