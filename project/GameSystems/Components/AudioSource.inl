@@ -84,7 +84,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of vector of listeners pointers
      */
-    inline std::vector<AudioListener*> getListeners() { return listeners; }
+    inline std::vector<AudioListener*>& getListeners() { return listeners; }
 
     /**
      * @brief Audio Listeners pointers it belongs to
@@ -98,7 +98,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of vector of paths to audio clips
      */
-    inline std::vector<std::string> getClips() { return clips; }
+    inline std::vector<std::string>& getClips() { return clips; }
 
     /**
      * @brief Paths to AudioClips queued to play for the source
