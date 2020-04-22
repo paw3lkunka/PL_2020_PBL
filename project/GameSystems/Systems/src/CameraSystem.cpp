@@ -16,11 +16,25 @@ bool CameraSystem::assertEntity(Entity* entity)
     return (transform != nullptr && camera != nullptr);
 }
 
-void CameraSystem::start()
+bool CameraSystem::setAsMain(Entity* entity)
 {
-    // FIXME HACK HACK AHCK AHCK XD
-    mainCameraTransform = transform;
-    mainCamera = camera;
+    Transform* transformTmp = entity->getComponentPtr<Transform>();
+    Camera* cameraTmp = entity->getComponentPtr<Camera>();
+    if (transformTmp != nullptr && cameraTmp != nullptr)
+    {
+        if (mainCamera != nullptr)
+        {
+            mainCamera->isMain = false;
+        }
+        cameraTmp->isMain = true;
+        mainCameraTransform = transformTmp;
+        mainCamera = cameraTmp;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void CameraSystem::frameUpdate()

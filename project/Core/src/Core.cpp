@@ -1,26 +1,6 @@
 #include "Core.hpp"
 
-// standard C++ library
-#include <iostream>
-#include <utility>
-
-// system-depended
-#ifdef __linux__ 
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-#endif
 Core* Core::instance = nullptr;
-
-#include <sstream>
-#include "Transform.inl"
-
-#include "FileStructures.inl"
-
-#pragma region AudioModule demo - includes
-#include "AudioListener.inl"
-#include "AudioSource.inl"
-#pragma endregion
 
 Core& GetCore()
 {
@@ -79,23 +59,11 @@ int Core::init()
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo);
-
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &resourceModule );
-    messageBus.addReceiver( &rendererModule );
     messageBus.addReceiver( &tmpExit );
 
 #pragma region Data Loading
@@ -131,12 +99,20 @@ int Core::init()
     unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
     unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
 
+    FileSystemData skyboxCubemapVertexShaderData;
+    skyboxCubemapVertexShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
+    skyboxCubemapVertexShaderData.typeOfFile = FileType::SHADER;
+
+    FileSystemData skyboxCubemapFragmentShaderData;
+    skyboxCubemapFragmentShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
+    skyboxCubemapFragmentShaderData.typeOfFile = FileType::SHADER;
+
     FileSystemData testModel;
-    testModel.path = "Resources/Models/Test.FBX";
+    testModel.path = "Resources/Models/Test.fbx";
     testModel.typeOfFile = FileType::MESH;
 
     FileSystemData animModel;
-    animModel.path = "Resources/Models/House Dancing.FBX";
+    animModel.path = "Resources/Models/House Dancing.fbx";
     // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
     //animModel.typeOfFile = FileType::SKINNEDMESH;
     animModel.typeOfFile = FileType::MESH;
@@ -145,15 +121,47 @@ int Core::init()
     testTexture.path = "Resources/Textures/tex.png";
     testTexture.typeOfFile = FileType::TEXTURE;
 
+    FileSystemData skyNX;
+    skyNX.path = "Resources/Textures/skybox/nx.png";
+    skyNX.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyNY;
+    skyNY.path = "Resources/Textures/skybox/ny.png";
+    skyNY.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyNZ;
+    skyNZ.path = "Resources/Textures/skybox/nz.png";
+    skyNZ.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPX;
+    skyPX.path = "Resources/Textures/skybox/px.png";
+    skyPX.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPY;
+    skyPY.path = "Resources/Textures/skybox/py.png";
+    skyPY.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPZ;
+    skyPZ.path = "Resources/Textures/skybox/pz.png";
+    skyPZ.typeOfFile = FileType::TEXTURE;
+
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNX));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNY));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNZ));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPX));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     getMessageBus().notify();
 
@@ -169,6 +177,8 @@ int Core::init()
                             resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
     unlitInstanced = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
                             resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
+    skyboxShader = Shader(  resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
+                            resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
     unlitColorMat = Material(&unlitColor);
     unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -179,6 +189,7 @@ int Core::init()
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     texCreateInfo.width = texData.width;
     texCreateInfo.height = texData.height;
     Texture texture(texData.data, texCreateInfo);
@@ -189,11 +200,51 @@ int Core::init()
     unlitInstancedMat = Material(&unlitInstanced);
     unlitInstancedMat.setTexture("mainTex", texture);
 
+    TextureData skyboxNX = resourceModule.textures.find("Resources/Textures/skybox/nx.png")->second;
+    TextureData skyboxNY = resourceModule.textures.find("Resources/Textures/skybox/ny.png")->second;
+    TextureData skyboxNZ = resourceModule.textures.find("Resources/Textures/skybox/nz.png")->second;
+    TextureData skyboxPX = resourceModule.textures.find("Resources/Textures/skybox/px.png")->second;
+    TextureData skyboxPY = resourceModule.textures.find("Resources/Textures/skybox/py.png")->second;
+    TextureData skyboxPZ = resourceModule.textures.find("Resources/Textures/skybox/pz.png")->second;
+    TextureCreateInfo skyboxCreateInfo = {};
+    skyboxCreateInfo.format = GL_RGBA;
+    skyboxCreateInfo.generateMipmaps = true;
+    skyboxCreateInfo.magFilter = GL_LINEAR;
+    skyboxCreateInfo.minFilter = GL_LINEAR;
+    skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    skyboxCreateInfo.width = skyboxNX.width;
+    skyboxCreateInfo.height = skyboxNX.height;
+    Cubemap cubemap(
+        skyboxCreateInfo,
+        skyboxNZ.data,
+        skyboxNX.data,
+        skyboxPX.data,
+        skyboxPZ.data,
+        skyboxPY.data,
+        skyboxNY.data
+    );
+
+    skyboxMat = Material(&skyboxShader);
+    skyboxMat.setCubemap("cubemap", cubemap);
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = true;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo, &skyboxMat);
+    
+    messageBus.addReceiver( &rendererModule );
+
     objectModule.NewEntity(2);
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitColorMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Surface")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -204,7 +255,7 @@ int Core::init()
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitTextureMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Joints")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -281,16 +332,17 @@ int Core::init()
     objectModule.NewEntity(2);
     {
         auto c = objectModule.NewComponent<Camera>();
-            c->isMain = true;
             c->farPlane = 1000.0f;
             c->nearPlane = 0.01f;
             c->fieldOfView = 80.0f;
             c->projectionMode = CameraProjection::Perspective;
+
         
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
     }
+    CameraSystem::setAsMain(&objectModule.entities.back());
 
     gameSystemsModule.addSystem(&cameraSystem);
 
@@ -313,13 +365,13 @@ int Core::init()
     objectModule.NewEntity(2);
     {
         so = objectModule.NewComponent<AudioSource>();
-            so->listeners.push_back(li); so->dirty |= (1 << 20);
-            so->clips.push_back("Resources/Audios/test.wav"); so->dirty |= (1 << 19);
-            so->isRelative = true; so->dirty |= (1 << 3);
-            so->isLooping = true; so->dirty |= (1 << 4);
+            so->getListenersModifiable().push_back(li);
+            so->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so->getIsRelativeModifiable() = true;
+            so->getIsLoopingModifiable() = true;
 
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
             t->setParent(&sceneModule.rootNode);
     }
 
@@ -353,6 +405,14 @@ int Core::mainLoop()
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
+#pragma region AudioModule demo
+        auto tran = li->entityPtr->getComponentPtr<Transform>();
+        tran->getLocalPositionModifiable() = tran->getLocalPosition() - glm::vec3(2.0f, 0.0f, 0.0f);
+        if(tran->getLocalPosition().x < -50.0f)
+        {
+            tran->getLocalPositionModifiable() = glm::vec3(50.0f, 0.0f, 0.0f);
+        }
+#pragma endregion
 
         // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
 

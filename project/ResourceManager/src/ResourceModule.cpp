@@ -1,6 +1,7 @@
 #include "ResourceModule.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
+#include "MeshCustom.hpp"
 #include "Message.inl"
 #include "Transform.inl"
 #include "Bone.inl"
@@ -192,8 +193,8 @@ bool ResourceModule::loadMesh(std::string path)
 bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::unordered_map<std::string, Mesh>::iterator iter;
     std::cout << "Node: " << node->mName.C_Str() << " meshes: " << std::to_string(node->mNumMeshes) << std::endl;
+    std::unordered_map<std::string, MeshCustom>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -210,8 +211,8 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
         processIndices(indices, mesh);
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
-        std::cout << "Loaded mesh Path: " << meshPath << "/" << node->mName.C_Str() << std::endl;
-        meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
+        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
+        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices)));
         iter = meshes.find(meshPath);
 
         returnFlag = returnFlag & (iter != meshes.end());
@@ -378,7 +379,7 @@ bool ResourceModule::sendTexture(std::string path)
 
 bool ResourceModule::sendMesh(std::string path)
 {
-    std::unordered_map<std::string, Mesh>::iterator iter = meshes.find(path);
+    std::unordered_map<std::string, MeshCustom>::iterator iter = meshes.find(path);
 
     if(iter != meshes.end())
     {

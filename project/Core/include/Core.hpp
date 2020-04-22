@@ -1,40 +1,56 @@
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
+#pragma region Includes
+
+//TODO check, which includes are really necessery
+
+// * C++ std lib
 #include <vector>
+#include <iostream>
+#include <utility>
+#include <sstream>
 
-#include "InputModule.hpp"
-#include "ConsoleModule.hpp"
-#include "MessageBus.hpp"
-#include "GameSystemsModule.hpp"
-#include "RendererModule.hpp"
-#include "SceneModule.hpp"
-#include "MeshRendererSystem.hpp"
-#include "CameraSystem.hpp"
-#include "CameraControlSystem.hpp"
-#include "BillboardRendererSystem.hpp"
-#include "ResourceModule.hpp"
-#include "AudioModule.hpp"
-#include "AudioListenerSystem.hpp"
-#include "AudioSourceSystem.hpp"
+// * System-depended
+#ifdef __linux__
+    #include <unistd.h>
+#elif _WIN32
+    #include <windows.h>
+#endif
 
-#include "ObjectModule.hpp"
-#include "Message.inl"
-#include "Event.hpp"
-#include "Transform.inl"
-#include "Camera.inl"
-
-#include "Entity.hpp"
-#include "Component.inl"
-#include "System.hpp"
-
-#include <glm/gtx/matrix_decompose.hpp> 
+// * Other libs
+#include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-class GLFWwindow;
-class Core;
+// * MessgageBus
+#include "MessageBus.hpp"
+#include "Message.inl"
+#include "Event.hpp"
 
+// * Modules
+#include "InputModule.hpp"
+#include "ConsoleModule.hpp"
+#include "GameSystemsModule.hpp"
+#include "RendererModule.hpp"
+#include "SceneModule.hpp"
+#include "AudioModule.hpp"
+#include "ObjectModule.hpp"
+#include "ResourceModule.hpp"
+
+// * ECS
+#include "Entity.hpp"
+#include "Components.inc"
+#include "Systems.inc"
+
+// * Others
+#include "Cubemap.hpp"
+#include "FileStructures.inl"
+
+#pragma endregion
+
+#pragma region Global
+class Core;
 /**
  * @brief Get reference to initialized instance of Core class.
  * 
@@ -60,19 +76,22 @@ void WarningLog(const char* log);
  * @param log text to send
  */
 void ErrorLog(const char* log);   
+#pragma endregion
 
 /**
  * @brief Main class of program, contain all modules, initialization, game loop, and finalization;
  */
 class Core
 {
+#pragma region Friendship_declarations
     friend Core& GetCore();
     friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
-    friend void ErrorLog(const char* log);   
+    friend void ErrorLog(const char* log);
+#pragma endregion
 
+#pragma region Constants
     public:       
-#pragma region statics
         /// @brief identity matrix
         static constexpr glm::mat4 IDENTITY_MAT = glm::mat4(1);
 
@@ -87,6 +106,7 @@ class Core
 #pragma endregion
 
 #pragma region Functions
+    public:
         Core() = default;
         ~Core() = default;
 
@@ -136,6 +156,7 @@ class Core
 #pragma endregion
 
 #pragma region Modules
+    public:
         /// @brief implements messages exchange petween modules
         MessageBus messageBus = (1024);
         
@@ -177,33 +198,85 @@ class Core
         
 #pragma endregion
 
-    MeshRendererSystem rendererSystem;
-    BillboardRendererSystem billboardSystem;
-    CameraSystem cameraSystem;
-    CameraControlSystem cameraControlSystem;
+
+#pragma region Systems
+
+    public:
+        //TODO documentation
+        CameraSystem cameraSystem;
+        //TODO documentation
+        CameraControlSystem cameraControlSystem;
+        //TODO documentation
+        AudioSourceSystem audioSourceSystem;
+        //TODO documentation
+        AudioListenerSystem audioListenerSystem;
+        //TODO documentation
+        MeshRendererSystem rendererSystem;
+        //TODO documentation
+        BillboardRendererSystem billboardSystem;
 
 #pragma endregion
 
-#pragma region AudioModule demo - systems
+#pragma region Old_commented_mocks
+    // struct MockPositionReportSystem : public System
+    // {
+    //     int counter = 1;
+    //     Transform* t;
+    //     virtual bool assertEntity(Entity* entity)
+    //     {
+    //         t = entity->getComponentPtr<Transform>();
+    //         return t != nullptr;
+    //     }
 
-    AudioSourceSystem audioSourceSystem;
-    AudioListenerSystem audioListenerSystem;
+    //     virtual void fixedUpdate()
+    //     {
+    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": "
+    //             << t->localToWorldMatrix[3][0] <<  ", "
+    //             << t->localToWorldMatrix[3][1] <<  ", "
+    //             << t->localToWorldMatrix[3][2] << std::endl;
+    //     }
+    // } mockReporter;
 
-    // Needed to set a listener for a source :(
-    AudioListener* li;
-    // Needed to play that source...
-    AudioSource* so;
+    // struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
+    // {
+    //     Transform* t;
+    //     bool pressed = false;
+    //     virtual bool assertEntity(Entity* entity)
+    //     {
+    //         t = entity->getComponentPtr<Transform>();
+    //         return t != nullptr;
+    //     }
 
+    //     virtual void fixedUpdate()
+    //     {
+    //         if(pressed)
+    //         {
+    //             t->localPosition += glm::vec3(0,1,0);
+    //         }
+    //     }
+
+    //     virtual void receiveMessage(Message msg)
+    //     {
+    //         if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
+    //         {
+    //             pressed = true;
+    //         }
+    //     }
+    // } mockReceiverSystem;
 #pragma endregion
 
-    protected:
+#pragma region TMP
+//TODO this should being successively removed
     private:
+        // Needed to set a listener for a source :(
+        AudioListener* li;
+        // Needed to play that source...
+        AudioSource* so;
         static Core* instance;
         GLFWwindow* window; 
 
-#pragma region Mock rendering objects
-        Shader unlitColor, unlitTexture, unlitInstanced;
-        Material unlitColorMat, unlitTextureMat, unlitInstancedMat;
+        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader;
+        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat;
 #pragma endregion
 };
 
