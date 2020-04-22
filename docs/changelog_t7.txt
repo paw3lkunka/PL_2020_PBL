@@ -24,9 +24,29 @@ Moduł systemów gry - implementacja architektury ECS:
 Moduł magazynu przechowujący obiekty w zorganizowany sposób:
     - bardzo tymczasowa implementacja, wiele potencjalnie niebezpiecznych rozwiązań.
 
+Moduł systemu plików, wczytujący wszystkie potrzebne pliki:
+    - shadery (fstream)
+    - siatki (Assimp)
+    - tekstury (stbi_load)
+    - animacje (Assimp)
+    - audio (fstream)
+    - zapis danych do unordered map każdego typu, w której kluczem jest podana ścieżka do pliku (lub ścieżka/nazwa_mesha) dla siatek
+    - dostęp do wskaźników do danych przez message bus
+
 Moduł sceny - implementacja grafu sceny:
     - update komponentów niezależny od ECS, inny sposób iteracji, wywołuję się przed systemami.
     - implementacja flagi dirty w celu optymalizacji.
+
+Moduł renderera - podstawowa implementacja renderingu OpenGL:
+    - Obsługa renderingu wczytanych modeli
+    - Kolejkowanie draw calli z renderer systemu (przygotowanie do sortowania i occlusion cullingu)
+    - Enkapsulacja shader programów w klasę shader
+    - Klasa materiału przechowująca uniformy dla danego shadera (i weryfikacja czy dany uniform istnieje)
+    - Obsługa tekstur
+    - Obsługa UBO dla macierzy widoku i projekcji
+    - Billboarding quadów (oraz przy okazji ich instancing)
+    - Obsługa skyboxa
+
 
 Moduł audio:
     - odpowiedź na wiadomości przesyłane przez MessageBus odnoszących się do audio
@@ -37,7 +57,7 @@ Moduł audio:
 [3 Systemy]
 
 Detekcja kolizji:
-    - Kolizje sfer, podział na na kolizje rozwarzane jednostronnie i dwustronnie.
+    - Kolizje sfer, podział na na kolizje rozważane jednostronnie i dwustronnie.
     - Docelowo zostaną zaimplemetowane także inne bryły.
 
 AudioListener:
