@@ -1,0 +1,34 @@
+[1 Ogólne] 
+
+Architektura oparta o message bus.
+    - Wymiana wiadomości pomiędzy modułami.
+
+Klasa Core zawierająca główne metody gry.
+    - Inicjalizacja modułów.
+    - Pętla o stałym kroku czasowym (podział na fixed i frame update).
+
+[2 Moduły]
+
+Moduł terminala reagujący na większość eventów przesyłanych przez message bus.
+
+Moduł inputu obsługujący klawiaturę, mysz i gamepad przy użyciu GLFW:
+    - Wrapping eventów GLFW dla myszy i klawiatury + dodanie włąsnych eventów.
+    - Własny system eventów dla gamepada.
+
+Moduł systemów gry - implementacja architektury ECS:
+    - Encje przechowujące wskaźniki na komponenty.
+    - Polimorficzne komponenty - kontenery na dane.
+    - Systemy iterujące po encjach, i działające na jednym lub kilku komponentach.
+    - Pełna kontrola nad kolejnością wykonywana się systemów.
+
+Moduł magazynu przechowujący obiekty w zorganizowany sposób:
+    - bardzo tymczasowa implementacja, wiele potencjalnie niebezpiecznych rozwiązań.
+
+Moduł sceny - implementacja grafu sceny:
+    - update komponentów niezależny od ECS, inny sposób iteracji, wywołuję się przed systemami.
+    - implementacja flagi dirty w celu optymalizacji.
+
+[3 Systemy]
+
+Detekcja kolizji:
+    - Zalążki właściwych funkcji, na obecna chwilę nie działa.
