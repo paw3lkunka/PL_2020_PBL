@@ -1,4 +1,4 @@
-#include "SkinnedMesh.hpp"
+#include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
 
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices)

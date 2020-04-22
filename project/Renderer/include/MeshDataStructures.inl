@@ -29,7 +29,7 @@ struct VertexSkinned
     glm::vec3 tangent;
     glm::vec2 texcoord;
 
-    int boneIDs[MAX_WEIGHTS] = {0};
+    unsigned int boneIDs[MAX_WEIGHTS] = {0};
     float weights[MAX_WEIGHTS] = {0.0f};
 };
 
@@ -39,8 +39,10 @@ struct VertexSkinned
 struct BoneInfo
 {
     unsigned int boneIndex;
+    /**
+     * @brief Translates vertex from local to bone space
+     */
     glm::mat4 boneOffset;
-    glm::mat4 finalTransformation;
 };
 
 

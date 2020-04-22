@@ -117,8 +117,8 @@ int Core::init()
     FileSystemData animModel;
     animModel.path = "Resources/Models/House Dancing.fbx";
     // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
-    //animModel.typeOfFile = FileType::SKINNEDMESH;
-    animModel.typeOfFile = FileType::MESH;
+    animModel.typeOfFile = FileType::SKINNEDMESH;
+    //animModel.typeOfFile = FileType::MESH;
 
     FileSystemData testTexture;
     testTexture.path = "Resources/Textures/tex.png";

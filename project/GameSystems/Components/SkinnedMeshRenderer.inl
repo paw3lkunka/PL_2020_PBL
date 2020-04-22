@@ -1,14 +1,12 @@
 #ifndef _SKINNEDMESHRENDERER_INL
 #define _SKINNEDMESHRENDERER_INL
 
-#include "MeshRenderer.inl"
+#include "Renderer.inl"
 
-struct SkinnedMeshRenderer : public MeshRenderer
+struct SkinnedMeshRenderer
 {
     SkinnedMeshRenderer() = default;
     virtual ~SkinnedMeshRenderer() = default;
-
-    // TODO: Add animation handling here
 };
 
 #endif // _SKINNEDMESHRENDERER_INL

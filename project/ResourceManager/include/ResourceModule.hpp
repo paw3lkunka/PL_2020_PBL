@@ -5,7 +5,7 @@
 #include "AudioFile.hpp"
 #include "AssetStructers.inl"
 #include "Animation.hpp"
-#include "SkinnedMesh.hpp"
+#include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
 
 #include <unordered_map>

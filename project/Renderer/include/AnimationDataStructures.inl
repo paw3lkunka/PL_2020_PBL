@@ -20,25 +20,15 @@ enum class AnimationBehaviour
 };
 
 /**
- * @brief Structure specifying glm::vec3 for given time
+ * @brief Structure with animation key data
  */
-struct KeyVector
+struct AnimationKey
 {
-    ///@brief time of this key
-    double time;
-    ///@brief value of this key
-    glm::vec3 value;
+    /// @brief position of specified animation key
+    glm::vec3 position;
+    /// @brief rotation of specified animation key
+    glm::vec3 rotation;
 };
 
-/**
- * @brief Structure specifying rotation for given time
- */
-struct KeyQuaternion
-{
-    ///@brief time of this key
-    double time;
-    ///@brief value of this key
-    glm::quat value;
-};
 
 #endif /* !ANIMATIONDATASTRUCTURES_INL_ */

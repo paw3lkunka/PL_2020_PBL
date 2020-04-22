@@ -6,10 +6,10 @@
 
 #include "System.hpp"
 
-class BonesSystem : public System
+class BoneSystem : public System
 {
 public:
-    BonesSystem() = default;
+    BoneSystem() = default;
 
     void process();
 
@@ -41,7 +41,7 @@ protected:
      */
     void frameUpdate();
     
-    virtual ~BonesSystem() = default;
+    virtual ~BoneSystem() = default;
 private:
     Bone* bone;
     Transform* transform;
