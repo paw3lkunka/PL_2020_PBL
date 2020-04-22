@@ -25,30 +25,28 @@ bool AudioSourceSystem::assertEntity(Entity* entity)
 
 void AudioSourceSystem::fixedUpdate()
 {
-    if(audioSource->dirty & (1 << 20))
+    if(audioSource->getDirty() & (1 << 20))
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
     }
 
     if(transform)
     {
-        if(audioSource->position != transform->getLocalPosition())
+        if(audioSource->getPosition() != transform->getLocalPosition())
         {
-            audioSource->position = transform->getLocalPosition();
-            audioSource->dirty |= (1 << 0);
+            audioSource->getPositionModifiable() = transform->getLocalPosition();
         }
     }
 
     if(rigidbody)
     {
-        if(audioSource->velocity != rigidbody->velocity)
+        if(audioSource->getVelocity() != rigidbody->velocity)
         {
-            audioSource->velocity = rigidbody->velocity;
-            audioSource->dirty |= (1 << 1);
+            audioSource->getVelocityModifiable() = rigidbody->velocity;
         }
     }
     
-    if(audioSource->dirty)
+    if(audioSource->getDirty())
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES, audioSource) );
     }
