@@ -3,6 +3,9 @@
 
 #include <glad/glad.h>
 
+/**
+ * @brief Texture create info, all values are required
+ */
 struct TextureCreateInfo
 {
     bool generateMipmaps;
@@ -11,20 +14,30 @@ struct TextureCreateInfo
 };
 
 /**
- * @brief Holds GL id of bound texture, pointer to raw data and texture type
- * 
+ * @brief Holds GL id of bound texture, pointer to raw data and texture info
  */
 class Texture
 {
 public:
-    //TODO documentation
+    /**
+     * @brief Construct a new Texture object
+     * 
+     * @param data byte pointer to raw texture data
+     * @param createInfo create options of texture
+     */
     Texture(unsigned char* data, TextureCreateInfo createInfo) : data(data), info(createInfo) { init(); }
     Texture() = default;
-    ~Texture() = default;
+    virtual ~Texture() = default;
 
-    //TODO documentation
+    /**
+     * @brief Initializes texture with data and options from createInfo
+     */
     void init();
-    //TODO documentation
+    /**
+     * @brief Bind texture to provided texture unit
+     * 
+     * @param textureUnit Texture unit to set
+     */
     void bind(int textureUnit);
 
 private:

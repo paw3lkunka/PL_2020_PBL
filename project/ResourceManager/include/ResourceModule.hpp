@@ -5,8 +5,8 @@
 #include "AudioFile.hpp"
 #include "AssetStructers.inl"
 #include "Animation.hpp"
-#include "Mesh.hpp"
 #include "SkinnedMesh.hpp"
+#include "MeshCustom.hpp"
 
 #include <unordered_map>
 #include <assimp/scene.h>
@@ -38,8 +38,8 @@ public:
     //Storages
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
-    std::unordered_map<std::string, Mesh> meshes;
     std::unordered_map<std::string, SkinnedMesh> skinnedMeshes;
+    std::unordered_map<std::string, MeshCustom> meshes;
     std::unordered_map<std::string, std::string> shaders;
     std::unordered_map<std::string, Animation> animations;
 

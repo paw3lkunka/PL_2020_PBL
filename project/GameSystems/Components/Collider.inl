@@ -12,12 +12,13 @@ struct Collider : public Component
     Collider() = default;
     virtual ~Collider() = default;
 
-    /**
-     * @brief Is collider trigger flag; 
-     * true = not solid, collision triggers logic
-     * false = solid collider, impassable
-     */
-    bool isTrigger;
+    enum class Type
+    {
+        DYNAMIC,
+        KINEMATIC,
+        TRIGGER,
+    } type;
+
 };
 
 #endif /* !COLLIDER_HPP_ */
