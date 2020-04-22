@@ -87,11 +87,11 @@ void AudioModule::receiveMessage(Message msg)
             alcPushCurrentContextChangesToDevice();
         }
     }
-    catch(AudioContextLevelException& e)
+    catch(AudioContextLevelException e)
     {
         ErrorLog( e.what() );
     }
-    catch(AudioDeviceLevelException& e)
+    catch(AudioDeviceLevelException e)
     {
         ErrorLog( e.what() );
     }
@@ -356,7 +356,6 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
             
             audioSourcePtr->names.insert( std::pair<AudioListener*, ALuint>(*it, newName) );
             alcPushCurrentContextChangesToDevice();
-            break;
         }
     }
 
@@ -374,8 +373,13 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
         }
     }
 
+    audioSourcePtr->getClipsModifiable();
     audioSourcePtr->getDirtyModifiable() &= ~(1 << 20);
-    audioListenerSetAsCurrentHelper(tmpCurrent);
+    
+    if(tmpCurrent)
+    {
+        audioListenerSetAsCurrentHelper(tmpCurrent);
+    }
 }
 
 void AudioModule::audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr)
@@ -498,7 +502,17 @@ void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
         return;
     }
 
-    loadAudioFileDataToBuffer(clip->second, audioFilePtr->getChannelsCount(), audioFilePtr->getSampleRate(), audioFilePtr->getBitsPerSample(), &audioFilePtr->data);
+    auto counter = queueCounters.find(clip->second);
+    if(counter == queueCounters.end() || counter->second == 0)
+    {
+        loadAudioFileDataToBuffer(clip->second, audioFilePtr->getChannelsCount(), audioFilePtr->getSampleRate(), audioFilePtr->getBitsPerSample(), &audioFilePtr->data, audioFilePtr->getSize());
+    }
+    else
+    {
+        std::stringstream message;
+        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.";
+        throw AudioDeviceLevelException(message.str().c_str());
+    }
 }
 
 void AudioModule::audioSourcePlayHandler(AudioSource* audioSourcePtr)   
@@ -572,7 +586,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
     ALboolean buffersReady = true;
     std::vector<ALuint> buffers = {};
     
-    for(auto it = audioSourcePtr->getClips().begin(); it != audioSourcePtr->getClips().end(); it++)
+    for(auto it = audioSourcePtr->getClips().begin(); it != audioSourcePtr->getClips().end() && buffersReady; it++)
     {
         auto buffer = clips.find(*it);
         if(buffer == clips.end())
@@ -586,7 +600,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
         
             buffersReady = false;
         }
-        else if(buffersReady)
+        else
         {
             buffers.push_back(buffer->second);
         }
@@ -596,15 +610,35 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
     {
         for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
         {
-            alSourceRewind(it->second);
-            alCheckErrors();
+            // Uncomment if Rewind is not automatic
+            //audioSourceRewindHandler(audioSourcePtr);
             alSourceUnqueueBuffers(it->second, audioSourcePtr->currentQueue.size(), audioSourcePtr->currentQueue.data());
             alCheckErrors();
             alSourceQueueBuffers(it->second, buffers.size(), buffers.data());
             alCheckErrors();
         }
 
+        for(auto it = audioSourcePtr->currentQueue.begin(); it != audioSourcePtr->currentQueue.end(); it++)
+        {
+            auto counter = queueCounters.find(*it);
+            counter->second--;
+        }
+
         audioSourcePtr->currentQueue.clear();
+
+        for(auto it = buffers.begin(); it != buffers.end(); it++)
+        {
+            auto counter = queueCounters.find(*it);
+            if(counter != queueCounters.end())
+            {
+                counter->second++;
+            }
+            else
+            {
+                queueCounters.insert(std::pair(*it, 1));
+            }
+        }
+
         audioSourcePtr->currentQueue = buffers;
         audioSourcePtr->getDirtyModifiable() &= ~(1 << 19);
     }
@@ -614,7 +648,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 
 #pragma region Buffers methods
 
-void AudioModule::loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, ALint sampleRate, ALubyte bitsPerSample, std::vector<ALchar>* data)
+void AudioModule::loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, ALint sampleRate, ALubyte bitsPerSample, std::vector<ALchar>* data, ALsizei size)
 {
     ALenum format;
     switch(channels)
@@ -650,7 +684,7 @@ void AudioModule::loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, A
         break;
     }
 
-    setBufferData(bufferId, format, data->data(), data->size(), sampleRate);
+    setBufferData(bufferId, format, data->data(), size, sampleRate);
 }
 
 void AudioModule::setBufferData(ALuint bufferId, ALenum format, ALvoid* data, ALsizei size, ALsizei frequency)
@@ -730,10 +764,10 @@ ALfloat AudioModule::getSourceGain(ALuint sourceId)
 
 ALboolean AudioModule::getSourceIsRelative(ALuint sourceId)
 {
-    ALint isRelative;
-    alGetSourcei(sourceId, AL_SOURCE_RELATIVE, &isRelative);
+    ALint isRelativeToListener;
+    alGetSourcei(sourceId, AL_SOURCE_RELATIVE, &isRelativeToListener);
     alCheckErrors();
-    return isRelative;
+    return isRelativeToListener;
 }
 
 ALenum AudioModule::getSourceType(ALuint sourceId)
@@ -936,9 +970,9 @@ void AudioModule::setSourceGain(ALuint sourceId, ALfloat gain)
     alCheckErrors();
 }
 
-void AudioModule::setSourceIsRelative(ALuint sourceId, ALboolean isRelative)
+void AudioModule::setSourceIsRelative(ALuint sourceId, ALboolean isRelativeToListener)
 {
-    alSourcei(sourceId, AL_SOURCE_RELATIVE, isRelative);
+    alSourcei(sourceId, AL_SOURCE_RELATIVE, isRelativeToListener);
     alCheckErrors();
 }
 

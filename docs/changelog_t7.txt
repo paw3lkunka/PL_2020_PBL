@@ -28,7 +28,26 @@ Moduł sceny - implementacja grafu sceny:
     - update komponentów niezależny od ECS, inny sposób iteracji, wywołuję się przed systemami.
     - implementacja flagi dirty w celu optymalizacji.
 
+Moduł audio:
+    - odpowiedź na wiadomości przesyłane przez MessageBus odnoszących się do audio
+    - wrap dla wielu funkcji biblioteki OpenAL-soft, komunikacja z urządzeniami audio
+    - sukcesywne wysyłanie zmian na urządzenia tylko w przypadku takiej potrzeby (wiele zmian na raz)
+    - odpowiedzialność za współdzielenie jednego buforu z plikiem dźwiękowym przez wiele źródeł na raz
+
 [3 Systemy]
 
 Detekcja kolizji:
-    - Zalążki właściwych funkcji, na obecna chwilę nie działa.
+    - Kolizje sfer, podział na na kolizje rozwarzane jednostronnie i dwustronnie.
+    - Docelowo zostaną zaimplemetowane także inne bryły.
+
+AudioListener:
+    - słuchacz Audio w przestrzeni 3d
+    - uabstrakcyjnienie obiektu Listener'a z biblioteki OpenAL-soft, umożliwiające modyfikacje jego atrybutów
+    - implementacja dirty flagi w celu uniknięcia niepotrzebnej komunikacji z urządzeniem audio
+
+AudioSource:
+    - źródło audio w przestrzenie 3d
+    - uabstrakcyjnienie obiektów Source'a z biblioteki OpenAL-soft, umożliwiające modyfikacje jego atrybutów
+    - możliwość przynależenia do wielu AudioListenerów na raz - obsłużone przez AudioModule
+    - kolejkowanie utworów do odtworzenia
+    - implementacja dirty flagi w celu uniknięcia niepotrzebnej komunikacji z urządzeniem audio

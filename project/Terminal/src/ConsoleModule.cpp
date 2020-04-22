@@ -184,22 +184,22 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::AUDIO_LISTENER_UPDATE:
         break;
 
-    case Event::AUDIO_SOURCE_PAUSE:
-        break;
-
-    case Event::AUDIO_SOURCE_PLAY:
-        break;
-
-    case Event::AUDIO_SOURCE_REWIND:
-        break;
-
-    case Event::AUDIO_SOURCE_STOP:
+    case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
         break;
 
     case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
         break;
 
-    case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
+    case Event::AUDIO_SOURCE_PLAY:
+        break;
+
+    case Event::AUDIO_SOURCE_STOP:
+        break;
+
+    case Event::AUDIO_SOURCE_PAUSE:
+        break;
+
+    case Event::AUDIO_SOURCE_REWIND:
         break;
 
     default:
