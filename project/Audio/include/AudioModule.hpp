@@ -118,6 +118,12 @@ class AudioModule : public IModule
         /// @brief Push all accepted changes to device at once
         void alcPushCurrentContextChangesToDevice();
 
+        /// @brief Process current context
+        void alcProcessCurrentContext();
+
+        /// @brief Suspend current context
+        void alcSuspendCurrentContext();
+
         #pragma region OpenAL errors checkers
 
         /**

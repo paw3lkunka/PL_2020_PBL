@@ -2,13 +2,12 @@
 #define _RENDERER_INL
 
 #include "Component.inl"
-#include "ComponentType.inl"
 
 #include "Material.hpp"
 
 struct Renderer : public Component
 {
-    inline Renderer() { type = ComponentType::RENDERER; }
+    inline Renderer() = default;
     virtual ~Renderer() = default;
 
     glm::mat4 modelMatrix;

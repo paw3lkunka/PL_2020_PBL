@@ -9,11 +9,15 @@
 
     #include "AudioListener.inl"
     #include "AudioSource.inl"
+    #include "BillboardRenderer.inl"
+    #include "Bone.inl"
     #include "BoxCollider.inl"
     #include "Camera.inl"
     #include "Collider.inl"
     #include "MeshRenderer.inl"
+    #include "Renderer.inl"
     #include "Rigidbody.inl"
+    #include "SkinnedMeshRenderer.inl"
     #include "SphereCollider.inl"
     #include "Transform.inl"
 

@@ -1,6 +1,7 @@
 #include "RendererModule.hpp"
 
 #include "Message.inl"
+#include "MeshQuad.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 void RendererModule::receiveMessage(Message msg)
@@ -8,11 +9,7 @@ void RendererModule::receiveMessage(Message msg)
     switch (msg.getEvent())
     {
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
-            {
-                MeshRenderer* mr = msg.getValue<MeshRenderer*>();
-                std::cout << "Mat ID: " << mr->material->ID << " Shader ID: " << mr->material->shader->ID << '\n';
-                renderQueue.push(msg.getValue<MeshRenderer*>());
-            }
+            renderQueue.push(msg.getValue<MeshRenderer*>());
             break;
         case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
             billboardQueue.push(msg.getValue<BillboardRenderer*>());
@@ -28,10 +25,11 @@ void RendererModule::receiveMessage(Message msg)
     }
 }
 
-void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo)
+void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo, Material* skyboxMaterial)
 {
     this->window = window;
     this->createInfo = createInfo;
+    this->skyboxMaterial = skyboxMaterial;
 
     if (createInfo.cullFace)
     {
@@ -61,6 +59,90 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProjectionBuffer, 0, 2 * sizeof(glm::mat4));
+
+    // * ===== Generate mesh for skybox rendering =====
+
+    if (skyboxMaterial != nullptr)
+    {
+        glGenVertexArrays(1, &skyboxVao);
+        glGenBuffers(1, &skyboxVbo);
+
+        glBindVertexArray(skyboxVao);
+        glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
+        // float skyCube[] = {
+        //     -1.0f, -1.0f, -1.0f,
+        //     -1.0f, -1.0f, 1.0f,
+        //     1.0f, -1.0f, 1.0f,
+        //     1.0f, -1.0f, -1.0f,
+
+        //     1.0f, 1.0f, -1.0f,
+        //     1.0f, 1.0f, 1.0f,
+
+        //     -1.0f, -1.0f, 1.0f,
+        //     -1.0f, 1.0f, 1.0f,
+
+        //     -1.0f, -1.0f, -1.0f,
+        //     -1.0f, 1.0f, -1.0f,
+
+        //     1.0f, -1.0f, -1.0f,
+        //     1.0f, 1.0f, -1.0f,
+
+        //     -1.0f, 1.0f, 1.0f,
+        //     1.0f, 1.0f, 1.0f
+        // };
+        // glBufferData(GL_ARRAY_BUFFER, 42 * sizeof(float), &skyCube, GL_STATIC_DRAW);
+
+        float skyboxVertices[] = {
+        // positions          
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+        };
+        glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        glBindVertexArray(0);
+    }
 
     // ! ----- Make buffer for billboard quad rendering -----
     glGenVertexArrays(1, &billboardVao);
@@ -136,7 +218,7 @@ void RendererModule::render()
             renderQueue.pop();
         }
 
-        // HACK Rendering billboards
+        // TODO Proper instanced rendering
         billboardQueue.front()->material->use();
         int i = 0, count = billboardQueue.size();
         glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
@@ -150,6 +232,20 @@ void RendererModule::render()
         glBindVertexArray(billboardVao);
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
         glBindVertexArray(0);
+
+        // ? +++++ Render skybox with appropriate depth test function +++++
+
+        if (skyboxMaterial != nullptr)
+        {
+            glDepthFunc(GL_LEQUAL);
+            glm::mat4 viewStatic = glm::mat4(glm::mat3(*viewMatrix));
+            skyboxMaterial->setMat4("viewStatic", viewStatic);
+            skyboxMaterial->use();
+            glBindVertexArray(skyboxVao);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glDepthFunc(GL_LESS);
+            glBindVertexArray(0);
+        }
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);

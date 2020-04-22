@@ -6,7 +6,6 @@
  * @date 2020-04-10
  * 
  * @copyright Copyright (c) 2020
- * 
  */
 #ifndef _MATERIAL_HPP
 #define _MATERIAL_HPP
@@ -17,13 +16,20 @@
 
 #include "MeshDataStructures.inl"
 #include "Texture.hpp"
+#include "Cubemap.hpp"
 #include "Shader.hpp"
 
-    //TODO documentation
+/**
+ * @brief Class encapsulating shader program and uniform variables
+ */
 class Material
 {
 public:
-    //TODO documentation
+    /**
+     * @brief Construct a new Material object
+     * 
+     * @param shader Shader to draw with
+     */
     Material(Shader* shader);
     Material() = default;
     ~Material() = default;
@@ -33,40 +39,41 @@ public:
      */
     void use();
 
-    // Member functions for handling uniforms and textures
-    //TODO documentation
+    /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture value);
-    //TODO documentation
+    /// @brief Set texture of given name in material
+    void setCubemap(std::string name, Cubemap value);
+    /// @brief Set int of given name in material
     void setInt(std::string name, int value);
-    //TODO documentation
+    /// @brief Set float of given name in material
     void setFloat(std::string name, float value);
-    //TODO documentation
+    /// @brief Set vec3 of given name in material
     void setVec3(std::string name, glm::vec3 value);
-    //TODO documentation
+    /// @brief Set vec4 of given name in material
     void setVec4(std::string name, glm::vec4 value);
-    //TODO documentation
+    /// @brief Set mat4 of given name in material
     void setMat4(std::string name, glm::mat4 value);
 
-    //TODO documentation
+    /// @brief Get pointer to underlying shader
     Shader* getShaderPtr();
-    //TODO documentation
+    /// @brief Get int of given name
     int getInt(std::string name);
-    //TODO documentation
+    /// @brief Get float of given name
     float& getFloat(std::string name);
-    //TODO documentation
+    /// @brief Get vec3 of given name
     glm::vec3& getVec3(std::string name);
-    //TODO documentation
+    /// @brief Get vec4 of given name
     glm::vec4& getVec4(std::string name);
-    //TODO documentation
+    /// @brief Get mat4 of given name
     glm::mat4& getMat4(std::string name);
 
-    int ID;
-    Shader* shader;
 private:
     static int idCount;
-
+    int ID;
+    Shader* shader;
 
     std::unordered_map<std::string, Texture> textures;
+    std::unordered_map<std::string, Cubemap> cubemaps;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
     std::unordered_map<std::string, glm::vec3> vec3s;
