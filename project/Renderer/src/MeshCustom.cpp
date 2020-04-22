@@ -6,7 +6,6 @@ MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> i
 {
     this->vertices = vertices;
     this->indices = indices;
-    std::cout << "Vertices size: " << vertices.size() << '\n';
     setup();
 }
 

@@ -10,7 +10,7 @@
     #include "AudioListenerSystem.hpp"
     #include "AudioSourceSystem.hpp"
     #include "BillboardRendererSystem.hpp"
-    #include "BonesSystem.hpp"
+    #include "BoneSystem.hpp"
     #include "CameraControlSystem.hpp"
     #include "CameraSystem.hpp"
     #include "CollisionDetectionSystem.hpp"

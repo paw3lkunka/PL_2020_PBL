@@ -19,9 +19,15 @@ struct Vertex
 /**
  * @brief vertex data with bones; animation purposes
  */
-struct SkinnedVertex : Vertex
+struct VertexSkinned
 {
     static constexpr int MAX_WEIGHTS = 4;
+
+    // IMPORTANT: It's easier to just copy these from Vertex and make offsetof than guess the offset and make mistakes
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec3 tangent;
+    glm::vec2 texcoord;
 
     int boneIDs[MAX_WEIGHTS] = {0};
     float weights[MAX_WEIGHTS] = {0.0f};

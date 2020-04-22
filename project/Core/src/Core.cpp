@@ -1,6 +1,8 @@
 #include "Core.hpp"
 
 Core* Core::instance = nullptr;
+int Core::windowWidth = INIT_WINDOW_WIDTH;
+int Core::windowHeight = INIT_WINDOW_HEIGHT;
 
 Core& GetCore()
 {
@@ -39,7 +41,7 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT, "PBL", NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, "PBL", NULL, NULL);
     if (window == NULL)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
@@ -54,7 +56,8 @@ int Core::init()
 		return 2;
 	}
 
-    glViewport(0,0,INIT_WINDOW_WIDTH,INIT_WINDOW_HEIGHT);
+    glViewport(0,0,windowWidth,windowHeight);
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
@@ -460,6 +463,14 @@ int Core::mainLoop()
     return 0;
 }
 
+void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    windowWidth = width;
+    windowHeight = height;
+    GetCore().getMessageBus().sendMessage(Message(Event::WINDOW_RESIZED, glm::ivec2(width, height)));
+    GetCore().getMessageBus().notify();
+}
 
 MessageBus& Core::getMessageBus()
 {

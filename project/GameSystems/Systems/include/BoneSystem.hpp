@@ -1,5 +1,8 @@
-#ifndef BONESSYSTEM_HPP_
-#define BONESSYSTEM_HPP_
+#ifndef BONESYSTEM_HPP_
+#define BONESYSTEM_HPP_
+
+#include "Bone.inl"
+#include "Transform.inl"
 
 #include "System.hpp"
 
@@ -40,7 +43,8 @@ protected:
     
     virtual ~BonesSystem() = default;
 private:
-
+    Bone* bone;
+    Transform* transform;
 };
 
-#endif /* !BONESSYSTEM_HPP_ */
+#endif /* !BONESYSTEM_HPP_ */

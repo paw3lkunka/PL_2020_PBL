@@ -217,57 +217,19 @@ class Core
 
 #pragma endregion
 
-#pragma region Old_commented_mocks
-    // struct MockPositionReportSystem : public System
-    // {
-    //     int counter = 1;
-    //     Transform* t;
-    //     virtual bool assertEntity(Entity* entity)
-    //     {
-    //         t = entity->getComponentPtr<Transform>();
-    //         return t != nullptr;
-    //     }
+        /**
+         * @brief Framebuffer size callback which changes size for 
+         * 
+         * @param window GLFW window pointer
+         * @param width resized window width provided by callback
+         * @param height resized window height provided by callback
+         */
+        static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+        static int windowWidth, windowHeight;
 
-    //     virtual void fixedUpdate()
-    //     {
-    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": "
-    //             << t->localToWorldMatrix[3][0] <<  ", "
-    //             << t->localToWorldMatrix[3][1] <<  ", "
-    //             << t->localToWorldMatrix[3][2] << std::endl;
-    //     }
-    // } mockReporter;
-
-    // struct MockSystemWithMsgReceiver : public System, public IMsgReceiver
-    // {
-    //     Transform* t;
-    //     bool pressed = false;
-    //     virtual bool assertEntity(Entity* entity)
-    //     {
-    //         t = entity->getComponentPtr<Transform>();
-    //         return t != nullptr;
-    //     }
-
-    //     virtual void fixedUpdate()
-    //     {
-    //         if(pressed)
-    //         {
-    //             t->localPosition += glm::vec3(0,1,0);
-    //         }
-    //     }
-
-    //     virtual void receiveMessage(Message msg)
-    //     {
-    //         if(msg.getEvent()==Event::KEY_PRESSED && msg.getValue<int>()==GLFW_KEY_UP)
-    //         {
-    //             pressed = true;
-    //         }
-    //     }
-    // } mockReceiverSystem;
-#pragma endregion
-
-#pragma region TMP
-//TODO this should being successively removed
     private:
+#pragma region TMP
+        // TODO: this should get successively removed
         // Needed to set a listener for a source :(
         AudioListener* li;
         // Needed to play that source...

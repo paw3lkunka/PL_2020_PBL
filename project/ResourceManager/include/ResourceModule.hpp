@@ -38,7 +38,7 @@ public:
     //Storages
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
-    std::unordered_map<std::string, SkinnedMesh> skinnedMeshes;
+    std::unordered_map<std::string, MeshSkinned> skinnedMeshes;
     std::unordered_map<std::string, MeshCustom> meshes;
     std::unordered_map<std::string, std::string> shaders;
     std::unordered_map<std::string, Animation> animations;
@@ -100,7 +100,7 @@ private:
      * @param boneIndex index of the bone 
      * @param weight weight of the bone
      */
-    void addBoneDataToVertex(SkinnedVertex& vertex, unsigned int& boneIndex, float& weight);
+    void addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight);
 
     /**
      * @brief method that saves basic vertex attributes

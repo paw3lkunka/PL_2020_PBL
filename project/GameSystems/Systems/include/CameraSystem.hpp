@@ -2,6 +2,7 @@
 #define _CAMERASYSTEM_HPP
 
 #include "System.hpp"
+#include "IMsgReceiver.inl"
 
 class Transform;
 class Camera;
@@ -9,11 +10,18 @@ class Camera;
 /**
  * @brief Handles perspective and view matrices. Updates main camera reference.
  */
-class CameraSystem : public System
+class CameraSystem : public System, public IMsgReceiver
 {
 public:
     CameraSystem() = default;
     virtual ~CameraSystem() = default;
+
+    /**
+     * @brief Recieve message callback from message bus
+     * 
+     * @param msg message to process
+     */
+    virtual void receiveMessage(Message msg);
 
     /**
      * @brief Set the camera as main function. Sets global static mainCamera and mainCameraTransform.
@@ -45,7 +53,10 @@ public:
      */
     virtual void frameUpdate();
 
+
 private:
+    static int width, height;
+
     Transform* transform;
     Camera* camera;
 };

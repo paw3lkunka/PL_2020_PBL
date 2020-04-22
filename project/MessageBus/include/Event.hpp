@@ -66,6 +66,13 @@ enum class Event : unsigned int
     AUDIO_SOURCE_REWIND,
 #pragma endregion
 
+#pragma region WINDOW
+
+    // Notify about window resize and send values, DATA: glm::ivec2 windowHeight and windowWidth
+    WINDOW_RESIZED,
+
+#pragma endregion
+
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_MESH_TO_QUEUE,
