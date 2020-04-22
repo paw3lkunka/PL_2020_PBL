@@ -27,8 +27,15 @@ if(NOT EXISTS "libs/openal-soft/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/openal-soft/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/json/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/json/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
+
+# Json test diasable
+set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 # Enable GLFW unused features 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -119,6 +126,7 @@ add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
 add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
+add_subdirectory(libs/json/)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -171,6 +179,7 @@ include_directories(
     libs/assimp/include
     libs/glm/
     libs/openal-soft/include
+    libs/json/single_include/nlohmann
     build/libs/assimp/include
 )
 
@@ -184,6 +193,7 @@ target_link_libraries(
         glm
         OpenAL
         assimp
+        nlohmann_json::nlohmann_json
 )    
 
 file(GLOB resources "resources/*")
