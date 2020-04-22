@@ -13,15 +13,17 @@ struct Collider : public Component
     virtual ~Collider() = default;
 
     /**
-     * @brief types of collider depending on its behaviour. 
+     * @brief Define type of collider depending on its behaviour. 
      */
     enum class Type
     {
+        // Resolve all collisions with DYNAMICs and KINEMATICs
         DYNAMIC,
+        // Don't resolve own collisions, but DYNAMICs can collide with it.
         KINEMATIC,
+        // Never resolve collisions, generate trigger events.
         TRIGGER,
-    } type;
-
+    } type = Type::DYNAMIC;
 };
 
 #endif /* !COLLIDER_HPP_ */

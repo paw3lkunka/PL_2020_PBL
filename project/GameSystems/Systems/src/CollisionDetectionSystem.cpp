@@ -6,27 +6,68 @@
 
 void CollisionDetectionSystem::start()
 {
-    colliders.push_back(collider1);
-    transforms.push_back(transform1);
+    colliders.push_back(colliderPtr);
+    transforms.push_back(transformPtr);
 }     
 
 bool CollisionDetectionSystem::assertEntity(Entity* entity)
 {
-    collider1 = entity->getComponentPtr<Collider>();
-    transform1 = entity->getComponentPtr<Transform>();
+    colliderPtr = entity->getComponentPtr<Collider>();
+    transformPtr = entity->getComponentPtr<Transform>();
     
-    return collider1 != nullptr && transform1 != nullptr;
+    return colliderPtr != nullptr && transformPtr != nullptr;
 }
+
+//HACK quick debug output
+#include <iostream>
 
 void CollisionDetectionSystem::fixedUpdate()
 {
+    if( auto sphere1 = dynamic_cast<SphereCollider*>(colliderPtr) )
+    {
+        //TODO finally it can be more human-redable, if this loop will be a function template, cause it might not be replied for each collider type
+        for (int i = 0; i < colliders.size(); i++)
+        {
+            if(sphere1 == colliders[i])
+            {
+                continue;
+            }
+
+            if( auto sphere2 = dynamic_cast<SphereCollider*>(colliders[i]) )
+            {
+                glm::vec3 separation = collsionSS(sphere1, sphere2, transformPtr, transforms[i]);
+                switch (sphere2->type)
+                {
+                case Collider::Type::KINEMATIC:
+                    //FIXME to działa tylko gdy nie ma rotacji.
+                    transformPtr->getLocalPositionModifiable() += separation;
+                    break;
+                case Collider::Type::DYNAMIC:
+                    //FIXME to działa tylko gdy nie ma rotacji.
+                    transformPtr->getLocalPositionModifiable() += separation * 0.5f;
+                    break;
+                }
+                //HACK quick debug output
+                std::cout << "SEPARATION_" << i << ": {" << separation.x << ", " << separation.y << ", " << separation.z << "}" << std::endl;
+            }
+            else
+            {
+                //TODO Implement other collisions than spheres
+            }    
+            
+        }
+    }
+    else
+    {
+        //TODO Implement other collisions than spheres
+    }    
 }
 
 //-----[ PRIVATES ]--------------------------------
 
 //TODO implement this.
 /*
-glm::vec3 collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
+glm::vec3 CollisionDetectionSystem::collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
 {
 #pragma region new of AABB in with space   
     glm::mat4 ofToWithT = withT->worldToLocalMatrix * ofT->localToWorldMatrix;
@@ -103,13 +144,13 @@ glm::vec3 collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transfo
 
 }
 
-glm::vec3 collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
+glm::vec3 CollisionDetectionSystem::collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
 {
 
 }
 */
 
-glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
+glm::vec3 CollisionDetectionSystem::collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
 {
     glm::vec3 centre1 = ofT->localToWorldMatrix * glm::vec4(of->center,1);
     glm::vec3 centre2 = withT->localToWorldMatrix * glm::vec4(with->center,1);
@@ -120,7 +161,7 @@ glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, T
 
     if(difference > 0)
     {
-        return glm::normalize(centre2 - centre1) * difference;
+        return glm::normalize(centre2 - centre1) * -difference;
     }
     else
     {
@@ -131,7 +172,7 @@ glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, T
 
 //TODO IMPLEMENTATION
 /*
-glm::vec3 collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
+glm::vec3 CollisionDetectionSystem::collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
 {
 
 }

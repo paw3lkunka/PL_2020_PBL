@@ -16,15 +16,15 @@ class SphereCollider;
 class CollisionDetectionSystem : public System
 {
     public:
-        CollisionDetectionSystem();
+        CollisionDetectionSystem() = default;
         virtual ~CollisionDetectionSystem() = default;
 
         virtual void start();        
-        virtual bool assertEntity(Entity* entity) = 0;
+        virtual bool assertEntity(Entity* entity);
         virtual void fixedUpdate();
         
-        Collider* collider1;
-        Transform* transform1;
+        Collider* colliderPtr;
+        Transform* transformPtr;
         glm::vec3 separation;
     protected:
     private:

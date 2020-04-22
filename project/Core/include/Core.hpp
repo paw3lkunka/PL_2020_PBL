@@ -214,6 +214,8 @@ class Core
         MeshRendererSystem rendererSystem;
         //TODO documentation
         BillboardRendererSystem billboardSystem;
+        //TODO documentation
+        CollisionDetectionSystem collisionDetectionSystem;
 
 #pragma endregion
 
