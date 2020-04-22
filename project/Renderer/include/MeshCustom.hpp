@@ -18,9 +18,10 @@ public:
      * @brief Construct a new Mesh object
      * 
      * @param vertices Vector of vertices which the mesh contains
-     * @param indices Vector of indices for indexed rendering
+     * @param indices Vector of indices for indexed rendering\
+     * @param bounds AABB bounds for collisions
      */
-    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds);
     /**
      * @brief Construct a new Mesh object by default (we need this for MessageBus for some reason)
      */

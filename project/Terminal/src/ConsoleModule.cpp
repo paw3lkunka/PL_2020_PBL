@@ -43,7 +43,8 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
     
     case Event::KEY_REPEAT:
-        std::cout << "console here: KEY_REPEAT. code: " << msg.getValue<int>() << std::endl;
+    // TODO: Reimplement console to second thread
+        //std::cout << "console here: KEY_REPEAT. code: " << msg.getValue<int>() << std::endl;
         break;
     
     case Event::MOUSE_BUTTON_PRESSED:

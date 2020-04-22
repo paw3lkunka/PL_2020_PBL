@@ -5,6 +5,7 @@
 #include "Message.inl"
 #include "Transform.inl"
 #include "Bone.inl"
+#include "MeshDataStructures.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -195,6 +196,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
     bool returnFlag = true;
     std::cout << "Node: " << node->mName.C_Str() << " meshes: " << std::to_string(node->mNumMeshes) << std::endl;
     std::unordered_map<std::string, MeshCustom>::iterator iter;
+    Bounds tBounds;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -212,7 +214,11 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices)));
+        aiVector3D tempVec = mesh->mAABB.mMin;
+        tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
+        tempVec = mesh->mAABB.mMax;
+        tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
+        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices, tBounds)));
         iter = meshes.find(meshPath);
 
         returnFlag = returnFlag & (iter != meshes.end());
@@ -238,8 +244,12 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
     else if(processSkinnedMeshNode(scene->mRootNode, scene, path))
     {
         aiNode* bonesRootNode = findRootBone(scene->mRootNode);
-        //TODO: change this nullptr to some transform, i dunno
-        return processBones(bonesRootNode, nullptr, scene);
+        if(bonesRootNode)
+        {
+            animationTicks.insert(std::pair<std::string, double>(path, scene->mAnimations[0]->mTicksPerSecond));
+            //TODO: change this nullptr to some transform, i dunno
+            return processBones(bonesRootNode, nullptr, scene);
+        }
     }
 
     return false;

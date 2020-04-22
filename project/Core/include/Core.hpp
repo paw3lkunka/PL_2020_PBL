@@ -96,10 +96,10 @@ class Core
         static constexpr glm::mat4 IDENTITY_MAT = glm::mat4(1);
 
         /// @brief defines initial window width.
-        static constexpr int INIT_WINDOW_WIDTH = 800;
+        static constexpr int INIT_WINDOW_WIDTH = 1280;
         
         /// @brief defines initial window hight.
-        static constexpr int INIT_WINDOW_HEIGHT = 600;
+        static constexpr int INIT_WINDOW_HEIGHT = 920;
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
