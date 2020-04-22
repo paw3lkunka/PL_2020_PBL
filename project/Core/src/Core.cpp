@@ -108,11 +108,11 @@ int Core::init()
     skyboxCubemapFragmentShaderData.typeOfFile = FileType::SHADER;
 
     FileSystemData testModel;
-    testModel.path = "Resources/Models/Test.FBX";
+    testModel.path = "Resources/Models/Test.fbx";
     testModel.typeOfFile = FileType::MESH;
 
     FileSystemData animModel;
-    animModel.path = "Resources/Models/House Dancing.FBX";
+    animModel.path = "Resources/Models/House Dancing.fbx";
     // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
     //animModel.typeOfFile = FileType::SKINNEDMESH;
     animModel.typeOfFile = FileType::MESH;
@@ -244,7 +244,7 @@ int Core::init()
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitColorMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Surface")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -255,7 +255,7 @@ int Core::init()
     {
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->material = &unlitTextureMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.FBX/Alpha_Joints")->second;
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -339,7 +339,7 @@ int Core::init()
 
         
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
     }
     CameraSystem::setAsMain(&objectModule.entities.back());
@@ -365,13 +365,13 @@ int Core::init()
     objectModule.NewEntity(2);
     {
         so = objectModule.NewComponent<AudioSource>();
-            so->listeners.push_back(li); so->dirty |= (1 << 20);
-            so->clips.push_back("Resources/Audios/test.wav"); so->dirty |= (1 << 19);
-            so->isRelative = true; so->dirty |= (1 << 3);
-            so->isLooping = true; so->dirty |= (1 << 4);
+            so->getListenersModifiable().push_back(li);
+            so->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so->getIsRelativeModifiable() = true;
+            so->getIsLoopingModifiable() = true;
 
         auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
             t->setParent(&sceneModule.rootNode);
     }
 
@@ -405,6 +405,14 @@ int Core::mainLoop()
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
+#pragma region AudioModule demo
+        auto tran = li->entityPtr->getComponentPtr<Transform>();
+        tran->getLocalPositionModifiable() = tran->getLocalPosition() - glm::vec3(2.0f, 0.0f, 0.0f);
+        if(tran->getLocalPosition().x < -50.0f)
+        {
+            tran->getLocalPositionModifiable() = glm::vec3(50.0f, 0.0f, 0.0f);
+        }
+#pragma endregion
 
         // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
 

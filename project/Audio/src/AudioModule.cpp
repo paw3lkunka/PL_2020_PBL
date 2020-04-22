@@ -161,11 +161,21 @@ void AudioModule::alcPushCurrentContextChangesToDevice()
 {
     if(currentListener)
     {
-        alcProcessContext(currentListener->context);
-        alcCheckErrors();
-        alcSuspendContext(currentListener->context);
-        alcCheckErrors();
+        alcProcessCurrentContext();
+        alcSuspendCurrentContext();
     }
+}
+
+void AudioModule::alcProcessCurrentContext()
+{
+    alcProcessContext(currentListener->context);
+    alcCheckErrors();
+}
+
+void AudioModule::alcSuspendCurrentContext()
+{
+    alcSuspendContext(currentListener->context);
+    alcCheckErrors();
 }
 
 #pragma region OpenAL errors checkers
@@ -278,6 +288,8 @@ void AudioModule::audioListenerInitHandler(AudioListener* audioListenerPtr)
 
 void AudioModule::audioListenerUpdateHandler(AudioListener* audioListenerPtr)
 {
+    alcProcessCurrentContext();
+
     if(audioListenerPtr->getDirty() & (1 << 0))
     {
         setListenerPosition(audioListenerPtr->getPosition());
@@ -324,6 +336,8 @@ void AudioModule::audioListenerUpdateHandler(AudioListener* audioListenerPtr)
 
         audioListenerPtr->getDirtyModifiable() &= ~(1 << 4);
     }
+
+    alcSuspendCurrentContext();
 }
 
 void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
@@ -331,7 +345,7 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
     auto tmpCurrent = currentListener;
     
     // Generte names for all AudioListeners that requires that
-    for(auto it = audioSourcePtr->listeners.begin(); it != audioSourcePtr->listeners.end(); it++)
+    for(auto it = audioSourcePtr->getListenersModifiable().begin(); it != audioSourcePtr->getListenersModifiable().end(); it++)
     {
         auto name = audioSourcePtr->names.find(*it);
         if(name == audioSourcePtr->names.end())
@@ -349,8 +363,8 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
     // Erase pairs of listeners and names which are no longer needed
     for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
     {
-        auto listener = std::find(audioSourcePtr->listeners.begin(), audioSourcePtr->listeners.end(), it->first);
-        if(listener == audioSourcePtr->listeners.end())
+        auto listener = std::find(audioSourcePtr->getListeners().begin(), audioSourcePtr->getListeners().end(), it->first);
+        if(listener == audioSourcePtr->getListeners().end())
         {
             audioListenerSetAsCurrentHelper(it->first);
             alDeleteSources(1, &(it->second));
@@ -360,112 +374,112 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
         }
     }
 
-    audioSourcePtr->dirty &= ~(1 << 20);
+    audioSourcePtr->getDirtyModifiable() &= ~(1 << 20);
     audioListenerSetAsCurrentHelper(tmpCurrent);
 }
 
 void AudioModule::audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr)
 {
-    if(audioSourcePtr->dirty & (1 << 19))
+    if(audioSourcePtr->getDirty() & (1 << 19))
     {
         audioSourceUpdateBuffersHelper(audioSourcePtr);
     }
     
     for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
     {
-        if(audioSourcePtr->dirty & (1 << 0))
+        if(audioSourcePtr->getDirty() & (1 << 0))
         {
-            setSourcePosition(it->second, audioSourcePtr->position);
+            setSourcePosition(it->second, audioSourcePtr->getPosition());
         }
 
-        if(audioSourcePtr->dirty & (1 << 1))
+        if(audioSourcePtr->getDirty() & (1 << 1))
         {
-            setSourceVelocity(it->second, audioSourcePtr->velocity);
+            setSourceVelocity(it->second, audioSourcePtr->getVelocity());
         }
 
-        if(audioSourcePtr->dirty & (1 << 2))
+        if(audioSourcePtr->getDirty() & (1 << 2))
         {
-            setSourceGain(it->second, audioSourcePtr->gain);
+            setSourceGain(it->second, audioSourcePtr->getGain());
         }
 
-        if(audioSourcePtr->dirty & (1 << 3))
+        if(audioSourcePtr->getDirty() & (1 << 3))
         {
-            setSourceIsRelative(it->second, audioSourcePtr->isRelative);
+            setSourceIsRelative(it->second, audioSourcePtr->getIsRelative());
         }
 
-        if(audioSourcePtr->dirty & (1 << 4))
+        if(audioSourcePtr->getDirty() & (1 << 4))
         {
-            setSourceIsLooping(it->second, audioSourcePtr->isLooping);
+            setSourceIsLooping(it->second, audioSourcePtr->getIsLooping());
         }
 
-        if(audioSourcePtr->dirty & (1 << 5))
+        if(audioSourcePtr->getDirty() & (1 << 5))
         {
-            setSourceCurrentBuffer(it->second, audioSourcePtr->currentBuffer);
+            setSourceCurrentBuffer(it->second, audioSourcePtr->getCurrentBuffer());
         }
 
-        if(audioSourcePtr->dirty & (1 << 6))
+        if(audioSourcePtr->getDirty() & (1 << 6))
         {
-            setSourceMinGain(it->second, audioSourcePtr->minGain);
+            setSourceMinGain(it->second, audioSourcePtr->getMinGain());
         }
 
-        if(audioSourcePtr->dirty & (1 << 7))
+        if(audioSourcePtr->getDirty() & (1 << 7))
         {
-            setSourceMaxGain(it->second, audioSourcePtr->maxGain);
+            setSourceMaxGain(it->second, audioSourcePtr->getMaxGain());
         }
 
-        if(audioSourcePtr->dirty & (1 << 8))
+        if(audioSourcePtr->getDirty() & (1 << 8))
         {
-            setSourceReferenceDistance(it->second, audioSourcePtr->referenceDistance);
+            setSourceReferenceDistance(it->second, audioSourcePtr->getReferenceDistance());
         }
 
-        if(audioSourcePtr->dirty & (1 << 9))
+        if(audioSourcePtr->getDirty() & (1 << 9))
         {
-            setSourceRolloffFactor(it->second, audioSourcePtr->rolloffFactor);
+            setSourceRolloffFactor(it->second, audioSourcePtr->getRolloffFactor());
         }
 
-        if(audioSourcePtr->dirty & (1 << 10))
+        if(audioSourcePtr->getDirty() & (1 << 10))
         {
-            setSourceMaxDistance(it->second, audioSourcePtr->maxDistance);
+            setSourceMaxDistance(it->second, audioSourcePtr->getMaxDistance());
         }
 
-        if(audioSourcePtr->dirty & (1 << 11))
+        if(audioSourcePtr->getDirty() & (1 << 11))
         {
-            setSourcePitch(it->second, audioSourcePtr->pitch);
+            setSourcePitch(it->second, audioSourcePtr->getPitch());
         }
 
-        if(audioSourcePtr->dirty & (1 << 12))
+        if(audioSourcePtr->getDirty() & (1 << 12))
         {
-            setSourceDirection(it->second, audioSourcePtr->direction);
+            setSourceDirection(it->second, audioSourcePtr->getDirection());
         }
 
-        if(audioSourcePtr->dirty & (1 << 13))
+        if(audioSourcePtr->getDirty() & (1 << 13))
         {
-            setSourceConeInnerAngle(it->second, audioSourcePtr->coneInnerAngle);
+            setSourceConeInnerAngle(it->second, audioSourcePtr->getConeInnerAngle());
         }
 
-        if(audioSourcePtr->dirty & (1 << 14))
+        if(audioSourcePtr->getDirty() & (1 << 14))
         {
-            setSourceConeOuterAngle(it->second, audioSourcePtr->coneOuterAngle);
+            setSourceConeOuterAngle(it->second, audioSourcePtr->getConeOuterAngle());
         }
 
-        if(audioSourcePtr->dirty & (1 << 15))
+        if(audioSourcePtr->getDirty() & (1 << 15))
         {
-            setSourceConeOuterGain(it->second, audioSourcePtr->coneOuterGain);
+            setSourceConeOuterGain(it->second, audioSourcePtr->getConeOuterGain());
         }
 
-        if(audioSourcePtr->dirty & (1 << 16))
+        if(audioSourcePtr->getDirty() & (1 << 16))
         {
-            setSourceSecOffset(it->second, audioSourcePtr->secOffset);
+            setSourceSecOffset(it->second, audioSourcePtr->getSecOffset());
         }
 
-        if(audioSourcePtr->dirty & (1 << 17))
+        if(audioSourcePtr->getDirty() & (1 << 17))
         {
-            setSourceSampleOffset(it->second, audioSourcePtr->sampleOffset);
+            setSourceSampleOffset(it->second, audioSourcePtr->getSampleOffset());
         }
 
-        if(audioSourcePtr->dirty & (1 << 18))
+        if(audioSourcePtr->getDirty() & (1 << 18))
         {
-            setSourceByteOffset(it->second, audioSourcePtr->byteOffset);
+            setSourceByteOffset(it->second, audioSourcePtr->getByteOffset());
         }
 
         // (1 << 19) stands for updating buffers queues
@@ -473,7 +487,7 @@ void AudioModule::audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr
         // (1 << 20) stands for AUDIO_SOURCE_UPDATE_LISTENERS event trigger
     }
 
-    audioSourcePtr->dirty &= ~(0b001111111111111111111);
+    audioSourcePtr->getDirtyModifiable() &= ~(0b001111111111111111111);
 }
 
 void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
@@ -489,7 +503,7 @@ void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
 
 void AudioModule::audioSourcePlayHandler(AudioSource* audioSourcePtr)   
 {
-    if(audioSourcePtr->dirty & (1 << 19))
+    if(audioSourcePtr->getDirty() & (1 << 19))
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr) );
         return;
@@ -558,7 +572,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
     ALboolean buffersReady = true;
     std::vector<ALuint> buffers = {};
     
-    for(auto it = audioSourcePtr->clips.begin(); it != audioSourcePtr->clips.end(); it++)
+    for(auto it = audioSourcePtr->getClipsModifiable().begin(); it != audioSourcePtr->getClipsModifiable().end(); it++)
     {
         auto buffer = clips.find(*it);
         if(buffer == clips.end())
@@ -592,7 +606,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 
         audioSourcePtr->currentQueue.clear();
         audioSourcePtr->currentQueue = buffers;
-        audioSourcePtr->dirty &= ~(1 << 19);
+        audioSourcePtr->getDirtyModifiable() &= ~(1 << 19);
     }
 }
 

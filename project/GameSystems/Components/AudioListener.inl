@@ -9,8 +9,7 @@
 
 struct AudioListener : public Component
 {
-    AudioListener() = default;
-    
+    inline AudioListener() = default;
     virtual ~AudioListener() = default;
 
     /**

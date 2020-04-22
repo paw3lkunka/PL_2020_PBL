@@ -7,7 +7,7 @@
 
 struct Renderer : public Component
 {
-    Renderer() = default;
+    inline Renderer() = default;
     virtual ~Renderer() = default;
 
     glm::mat4 modelMatrix;
