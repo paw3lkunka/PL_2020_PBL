@@ -68,6 +68,9 @@ int Core::init()
 
 #pragma region Data Loading
 
+    objectModule.resourceModulePtr = &resourceModule;
+    resourceModule.objectModulePtr = &objectModule;
+    
     FileSystemData fsData;
     fsData.path = "Resources/Audios/sample.wav";
     fsData.typeOfFile = FileType::AUDIO;
@@ -110,6 +113,8 @@ int Core::init()
 
     FileSystemData animModel;
     animModel.path = "Resources/Models/House Dancing.FBX";
+    // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
+    //animModel.typeOfFile = FileType::SKINNEDMESH;
     animModel.typeOfFile = FileType::MESH;
 
     FileSystemData testTexture;

@@ -10,6 +10,7 @@
     #include "AudioListener.inl"
     #include "AudioSource.inl"
     #include "BillboardRenderer.inl"
+    #include "Bone.inl"
     #include "BoxCollider.inl"
     #include "Camera.inl"
     #include "Collider.inl"

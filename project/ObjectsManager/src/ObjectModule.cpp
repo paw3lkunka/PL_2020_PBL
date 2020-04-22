@@ -3,9 +3,14 @@
 #include "Entity.hpp"
 #include "Component.inl"
 #include "System.hpp"
-
 #include "Material.hpp"
 #include "Shader.hpp"
+#include "Message.inl"
+#include "Event.hpp"
+#include "Transform.inl"
+
+#include <assimp/scene.h>
+#include <assimp/anim.h>
 
 int ObjectModule::nextID = 0;
 
@@ -31,3 +36,4 @@ void ObjectModule::NewEntity(int bufferSize = 0)
 {
     entities.push_back( Entity(nextID++, bufferSize) );
 }
+
