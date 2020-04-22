@@ -12,14 +12,14 @@
 #include <sstream>
 
 // * System-depended
-#ifdef __linux__ 
+#ifdef __linux__
     #include <unistd.h>
 #elif _WIN32
     #include <windows.h>
 #endif
 
 // * Other libs
-#include <glm/gtx/matrix_decompose.hpp> 
+#include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -36,6 +36,7 @@
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
+#include "ResourceModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -43,11 +44,13 @@
 #include "Systems.inc"
 
 // * Others
+#include "Cubemap.hpp"
 #include "FileStructures.inl"
 
 #pragma endregion
 
 #pragma region Global
+class Core;
 /**
  * @brief Get reference to initialized instance of Core class.
  * 
@@ -84,7 +87,7 @@ class Core
     friend Core& GetCore();
     friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
-    friend void ErrorLog(const char* log);  
+    friend void ErrorLog(const char* log);
 #pragma endregion
 
 #pragma region Constants
@@ -103,7 +106,7 @@ class Core
 #pragma endregion
 
 #pragma region Functions
-    public:       
+    public:
         Core() = default;
         ~Core() = default;
 
@@ -195,11 +198,10 @@ class Core
         
 #pragma endregion
 
+
 #pragma region Systems
 
-    public:       
-        //TODO documentation
-        RendererSystem rendererSystem;
+    public:
         //TODO documentation
         CameraSystem cameraSystem;
         //TODO documentation
@@ -208,6 +210,10 @@ class Core
         AudioSourceSystem audioSourceSystem;
         //TODO documentation
         AudioListenerSystem audioListenerSystem;
+        //TODO documentation
+        MeshRendererSystem rendererSystem;
+        //TODO documentation
+        BillboardRendererSystem billboardSystem;
 
 #pragma endregion
 
@@ -224,9 +230,9 @@ class Core
 
     //     virtual void fixedUpdate()
     //     {
-    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": " 
-    //             << t->localToWorldMatrix[3][0] <<  ", " 
-    //             << t->localToWorldMatrix[3][1] <<  ", " 
+    //         std::cout << "Mock Reporter - obj" << counter++ <<  ": "
+    //             << t->localToWorldMatrix[3][0] <<  ", "
+    //             << t->localToWorldMatrix[3][1] <<  ", "
     //             << t->localToWorldMatrix[3][2] << std::endl;
     //     }
     // } mockReporter;
@@ -269,8 +275,8 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-        Shader unlitColor, unlitTexture;
-        Material unlitColorMat, unlitTextureMat;
+        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader;
+        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat;
 #pragma endregion
 };
 

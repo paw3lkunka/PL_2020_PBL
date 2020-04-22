@@ -14,9 +14,9 @@ class CollisionDetectionSystem : public System
         CollisionDetectionSystem();
         virtual ~CollisionDetectionSystem() = default;
 
-        virtual void start() {};        
+        virtual void start();     
         virtual bool assertEntity(Entity* entity) = 0;
-        virtual void fixedUpdate() {};
+        virtual void fixedUpdate();
         
         Collider* colliderPtr;
         std::vector<Collider*> colliders;

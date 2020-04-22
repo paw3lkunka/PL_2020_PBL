@@ -1,8 +1,7 @@
 #include "CollisionDetectionSystem.hpp"
 
 #include "Entity.hpp"
-#include "ComponentType.inl"
-#include "Components.inl"
+#include "Components.inc"
 
 void CollisionDetectionSystem::start()
 {

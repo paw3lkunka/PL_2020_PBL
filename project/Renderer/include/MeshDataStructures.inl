@@ -7,7 +7,6 @@
 
 /**
  * @brief Base vertex data structure with only the barebones position, normal and texcoord
- * 
  */
 struct Vertex
 {

@@ -9,7 +9,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-//TODO documentation
+/**
+ * @brief Renderer module create info
+ * Setting cullFace to true requires cullFaceMode and cullFrontFace set
+ * Setting depthTest to true requires 
+ */
 struct RendererModuleCreateInfo
 {
     glm::vec3 clearColor;
@@ -20,23 +24,40 @@ struct RendererModuleCreateInfo
 
 class GLFWwindow;
 
-    //TODO documentation
+/**
+ * @brief Renderer module, handles render queues and processes draw calls
+ */
 class RendererModule : public IModule
 {
 public:
     RendererModule() = default;
     virtual ~RendererModule() = default;
-    //TODO documentation
+    
+    /**
+     * @brief Handles renderer message bus events
+     * 
+     * @param msg RENDERER_ADD_X_TO_QUEUE events
+     */
     virtual void receiveMessage(Message msg);
-
-    //TODO documentation
-    void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
-    //TODO documentation
+    /**
+     * @brief Initializes base renderer with values from RendererModuleCreate info and enables base instanced shapes
+     * 
+     * @param window GLFW window pointer
+     * @param createInfo CreateInfoStruct with renderer parameters
+     */
+    void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo, Material* skyboxMaterial = nullptr);
+    /**
+     * @brief Render current render queue
+     */
     void render();
 
 private:
     GLFWwindow* window;
     RendererModuleCreateInfo createInfo;
+    // * Skybox variables
+    unsigned int skyboxVao, skyboxVbo;
+    Material* skyboxMaterial;
+
     // HACK: Or not? Discuss this.
     unsigned int billboardVao, billboardVbo, instancedVbo;
     unsigned int viewProjectionBuffer;

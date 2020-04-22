@@ -6,7 +6,7 @@
 #include "GamepadDataStructures.inl"
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
-#include "Mesh.hpp"
+#include "MeshCustom.hpp"
 #include "AudioFile.hpp"
 
 ConsoleModule::ConsoleModule()
@@ -113,7 +113,7 @@ void ConsoleModule::receiveMessage(Message msg)
     
     case Event::RECEIVE_MESH_DATA:
     {
-        Mesh* meshData = msg.getValue<Mesh*>();
+        MeshCustom* meshData = msg.getValue<MeshCustom*>();
         std::cout << "console here: RECEIVE_MESH_DATA. Data address: " << &meshData << std::endl;
     }
         break;
@@ -155,11 +155,11 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::RENDERER_ADD_MESH_TO_QUEUE:
-        std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
+        //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;
 
     case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
-        std::cout << "console here: RENDERER_ADD_BILLBOARD_TO_QUEUE.\n";
+        //std::cout << "console here: RENDERER_ADD_BILLBOARD_TO_QUEUE.\n";
         break;
 
     case Event::RENDERER_SET_PROJECTION_MATRIX:
@@ -167,7 +167,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::RENDERER_SET_VIEW_MATRIX:
-        std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
+        //std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
         break;
 
     default:
