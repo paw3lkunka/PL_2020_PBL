@@ -2,10 +2,11 @@
 
 #include <iostream>
 
-MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds)
 {
     this->vertices = vertices;
     this->indices = indices;
+    this->bounds = bounds;
     std::cout << "Vertices size: " << vertices.size() << '\n';
     setup();
 }
