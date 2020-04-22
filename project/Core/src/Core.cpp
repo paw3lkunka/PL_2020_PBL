@@ -333,9 +333,11 @@ int Core::init()
     {
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
             t->setParent(&sceneModule.rootNode);
 
         auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
 
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
@@ -346,9 +348,11 @@ int Core::init()
     {
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
+            t->getLocalScaleModifiable() *= 10;
             t->setParent(&sceneModule.rootNode);
 
         auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
 
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
@@ -376,7 +380,9 @@ int Core::init()
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
 
-        objectModule.NewComponent<SphereCollider>();
+        auto sc = objectModule.NewComponent<SphereCollider>();
+            sc->type = Collider::Type::KINEMATIC;
+            sc->radius = 5;
     }
     CameraSystem::setAsMain(&objectModule.entities.back());
 

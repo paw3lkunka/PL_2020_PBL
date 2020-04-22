@@ -35,19 +35,16 @@ void CollisionDetectionSystem::fixedUpdate()
 
             if( auto sphere2 = dynamic_cast<SphereCollider*>(colliders[i]) )
             {
-                glm::vec3 separation = collsionSS(sphere1, sphere2, transformPtr, transforms[i]);
+                glm::vec4 separation(collsionSS(sphere1, sphere2, transformPtr, transforms[i]), 0);
                 switch (sphere2->type)
                 {
                 case Collider::Type::KINEMATIC:
-                    //FIXME to działa tylko gdy nie ma rotacji.
-                    transformPtr->getLocalPositionModifiable() += separation;
+                    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * separation);
                     break;
                 case Collider::Type::DYNAMIC:
-                    //FIXME to działa tylko gdy nie ma rotacji.
-                    transformPtr->getLocalPositionModifiable() += separation * 0.5f;
+                    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * (separation * 0.5f));
                     break;
                 }
-                //HACK quick debug output
                 std::cout << "SEPARATION_" << i << ": {" << separation.x << ", " << separation.y << ", " << separation.z << "}" << std::endl;
             }
             else
