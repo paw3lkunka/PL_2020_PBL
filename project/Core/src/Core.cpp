@@ -148,6 +148,11 @@ int Core::init()
     skyPZ.path = "Resources/Textures/skybox/pz.png";
     skyPZ.typeOfFile = FileType::TEXTURE;
 
+    FileSystemData sphere ={
+        .path = "Resources/Models/unit_sphere.fbx",
+        .typeOfFile = FileType::MESH
+    };
+
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
@@ -166,6 +171,8 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, sphere));
     getMessageBus().notify();
 
     getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
@@ -325,14 +332,45 @@ int Core::init()
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
     }
 
+    objectModule.NewEntity(3);
+    {
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+            mr->material = &unlitTextureMat;
+    }
+
+    objectModule.NewEntity(3);
+    {
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+            mr->material = &unlitColorMat;
+    }
+
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
+    gameSystemsModule.addSystem(&collisionDetectionSystem);
 
 #pragma endregion
 
 #pragma region Camera
-    objectModule.NewEntity(2);
+    objectModule.NewEntity(3);
     {
         auto c = objectModule.NewComponent<Camera>();
             c->farPlane = 1000.0f;
@@ -344,6 +382,10 @@ int Core::init()
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
+
+        auto sc = objectModule.NewComponent<SphereCollider>();
+            sc->type = Collider::Type::KINEMATIC;
+            sc->radius = 5;
     }
     CameraSystem::setAsMain(&objectModule.entities.back());
 
