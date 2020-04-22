@@ -345,7 +345,7 @@ void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
     auto tmpCurrent = currentListener;
     
     // Generte names for all AudioListeners that requires that
-    for(auto it = audioSourcePtr->getListenersModifiable().begin(); it != audioSourcePtr->getListenersModifiable().end(); it++)
+    for(auto it = audioSourcePtr->getListeners().begin(); it != audioSourcePtr->getListeners().end(); it++)
     {
         auto name = audioSourcePtr->names.find(*it);
         if(name == audioSourcePtr->names.end())
@@ -572,7 +572,7 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
     ALboolean buffersReady = true;
     std::vector<ALuint> buffers = {};
     
-    for(auto it = audioSourcePtr->getClipsModifiable().begin(); it != audioSourcePtr->getClipsModifiable().end(); it++)
+    for(auto it = audioSourcePtr->getClips().begin(); it != audioSourcePtr->getClips().end(); it++)
     {
         auto buffer = clips.find(*it);
         if(buffer == clips.end())
