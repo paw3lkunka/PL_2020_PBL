@@ -26,7 +26,7 @@ struct AudioSource : public Component
      * 1 << 0 flag: position
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
-     * 1 << 3 flag: isRelative
+     * 1 << 3 flag: isRelativeToListener
      * 1 << 4 flag: isLooping
      * 1 << 5 flag: currentBuffer
      * 1 << 6 flag: minGain
@@ -56,7 +56,7 @@ struct AudioSource : public Component
      * 1 << 0 flag: position
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
-     * 1 << 3 flag: isRelative
+     * 1 << 3 flag: isRelativeToListener
      * 1 << 4 flag: isLooping
      * 1 << 5 flag: currentBuffer
      * 1 << 6 flag: minGain
@@ -156,20 +156,24 @@ struct AudioSource : public Component
     inline ALfloat& getGainModifiable() { dirty |= (1 << 2); return gain; }
     
     /**
-     * @brief Is source considered relative value
+     * @brief Is source considered Relative to Listener
+     * If source is relative to listener, listeners transformations are not taken into accout while calculating gain.
+     * 
      * AL_SOURCE_RELATIVE set to AL_TRUE indicates that the position, velocity, cone, and direction properties of a source are to be interpreted relative to the listener position.
      * 
-     * @returns Value of isRelative
+     * @returns Value of isRelativeToListener
      */
-    inline ALboolean getIsRelative() { return isRelative; }
+    inline ALboolean getIsRelative() { return isRelativeToListener; }
     
     /**
-     * @brief Is source considered relative value
+     * @brief Is source considered Relative To Listener
+     * If source is relative to listener, listeners transformations are not taken into accout while calculating gain.
+     * 
      * AL_SOURCE_RELATIVE set to AL_TRUE indicates that the position, velocity, cone, and direction properties of a source are to be interpreted relative to the listener position.
      * 
-     * @returns Reference to isRelative
+     * @returns Reference to isRelativeToListener
      */
-    inline ALboolean& getIsRelativeModifiable() { dirty |= (1 << 3); return isRelative; }
+    inline ALboolean& getIsRelativeModifiable() { dirty |= (1 << 3); return isRelativeToListener; }
 
     /**
      * @brief Is source looping value 
@@ -541,7 +545,7 @@ struct AudioSource : public Component
         
         ALfloat gain = 0;
         
-        ALboolean isRelative = AL_TRUE;
+        ALboolean isRelativeToListener = AL_FALSE;
         
         ALboolean isLooping = AL_FALSE;
         
