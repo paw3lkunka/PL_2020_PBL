@@ -8,6 +8,21 @@
 
 Transform* CameraSystem::mainCameraTransform = nullptr;
 Camera* CameraSystem::mainCamera = nullptr;
+int CameraSystem::width = Core::INIT_WINDOW_WIDTH;
+int CameraSystem::height = Core::INIT_WINDOW_HEIGHT;
+
+void CameraSystem::receiveMessage(Message msg)
+{
+    switch (msg.getEvent())
+    {
+        case Event::WINDOW_RESIZED:
+            mainCamera->projectionChanged = true;
+            glm::ivec2 window = msg.getValue<glm::ivec2>();
+            width = window.x;
+            height = window.y;
+            break;
+    }
+}
 
 bool CameraSystem::assertEntity(Entity* entity)
 {
@@ -45,7 +60,7 @@ void CameraSystem::frameUpdate()
         // * ===== Calculate and send projection matrix to renderer =====
         if (camera->projectionChanged)
         {
-            float aspect = (float)Core::INIT_WINDOW_WIDTH / Core::INIT_WINDOW_HEIGHT;
+            float aspect = (float)width / height;
             switch (camera->projectionMode)
             {
                 case CameraProjection::Perspective:

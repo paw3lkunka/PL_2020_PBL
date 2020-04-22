@@ -43,7 +43,8 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
     
     case Event::KEY_REPEAT:
-        std::cout << "console here: KEY_REPEAT. code: " << msg.getValue<int>() << std::endl;
+    // TODO: Reimplement console to second thread
+        //std::cout << "console here: KEY_REPEAT. code: " << msg.getValue<int>() << std::endl;
         break;
     
     case Event::MOUSE_BUTTON_PRESSED:
@@ -55,14 +56,16 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
         
     case Event::MOUSE_CURSOR_MOVED:
-    {
-        CursorData cData = msg.getValue<CursorData>();
-        std::cout << "console here: MOUSE_CURSOR_MOVED. pos: " << cData.xPos << ", " << cData.yPos << ", delta: " << cData.xDelta << ", " << cData.yDelta << std::endl;
-    }
+    // TODO: Reimplement console to second thread
+    // {
+    //     CursorData cData = msg.getValue<CursorData>();
+    //     std::cout << "console here: MOUSE_CURSOR_MOVED. pos: " << cData.xPos << ", " << cData.yPos << ", delta: " << cData.xDelta << ", " << cData.yDelta << std::endl;
+    // }
         break;
     
     case Event::MOUSE_CURSOR_STOPPED:
-        std::cout << "console here: MOUSE_CURSOR_STOPPED." << std::endl;
+    // TODO: Reimplement console to second thread
+        // std::cout << "console here: MOUSE_CURSOR_STOPPED." << std::endl;
         break;
     
     case Event::MOUSE_SCROLL_MOVED:
@@ -169,6 +172,34 @@ void ConsoleModule::receiveMessage(Message msg)
 
     case Event::RENDERER_SET_VIEW_MATRIX:
         //std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
+        break;
+
+    case Event::WINDOW_RESIZED:
+        std::cout << "console here: WINDOW_RESIZED. Width: " << msg.getValue<glm::ivec2>().x << " Height: " << msg.getValue<glm::ivec2>().y << '\n';
+        break;
+
+    case Event::AUDIO_LISTENER_INIT:
+        break;
+
+    case Event::AUDIO_LISTENER_UPDATE:
+        break;
+
+    case Event::AUDIO_SOURCE_PAUSE:
+        break;
+
+    case Event::AUDIO_SOURCE_PLAY:
+        break;
+
+    case Event::AUDIO_SOURCE_REWIND:
+        break;
+
+    case Event::AUDIO_SOURCE_STOP:
+        break;
+
+    case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
+        break;
+
+    case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
         break;
 
     default:

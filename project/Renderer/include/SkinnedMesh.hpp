@@ -1,19 +1,29 @@
 #ifndef SKINNEDMESH_HPP_
 #define SKINNEDMESH_HPP_
+
+#include "Mesh.inl"
+
 #include <vector>
 
-struct SkinnedVertex;
+struct VertexSkinned;
 
 //TODO: Fill this class with things u need
-class SkinnedMesh
+class MeshSkinned : public Mesh
 {
 public:
-    SkinnedMesh(std::vector<SkinnedVertex> vertices, std::vector<unsigned int> indices);
-    ~SkinnedMesh() = default;
+    MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices);
+    MeshSkinned() = default;
+    ~MeshSkinned() = default;
+
+    void setup();
+    virtual void render();
+    virtual void renderInstanced() {}
 
 protected:
 private:
-    std::vector<SkinnedVertex> vertices;
+    GLuint vao, vbo, ebo;
+    Bounds bounds;
+    std::vector<VertexSkinned> vertices;
     std::vector<unsigned int> indices;
 };
 

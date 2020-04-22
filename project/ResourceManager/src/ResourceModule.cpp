@@ -258,14 +258,14 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
 bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::unordered_map<std::string, SkinnedMesh>::iterator iter;
+    std::unordered_map<std::string, MeshSkinned>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::vector<SkinnedVertex> vertices;
+        std::vector<VertexSkinned> vertices;
         std::vector<unsigned int> indices;
 
-        SkinnedVertex tempSkinnedVertex;
+        VertexSkinned tempSkinnedVertex;
         Vertex tempVertex;
         for(int j = 0; j < mesh->mNumVertices; ++j)
         {
@@ -309,7 +309,7 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        skinnedMeshes.insert(std::pair(meshPath, SkinnedMesh(vertices, indices)));
+        skinnedMeshes.insert(std::pair(meshPath, MeshSkinned(vertices, indices)));
         iter = skinnedMeshes.find(meshPath);
 
         returnFlag = returnFlag & (iter != skinnedMeshes.end());
@@ -416,7 +416,7 @@ bool ResourceModule::sendShader(std::string path)
 
 #pragma region Helpers
 
-void ResourceModule::addBoneDataToVertex(SkinnedVertex& vertex, unsigned int& boneIndex, float& weight)
+void ResourceModule::addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight)
 {
     for(int i = 0; i < vertex.MAX_WEIGHTS; ++i)
     {
