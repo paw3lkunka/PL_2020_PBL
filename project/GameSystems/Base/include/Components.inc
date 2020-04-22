@@ -9,7 +9,6 @@
 
     #include "AudioListener.inl"
     #include "AudioSource.inl"
-    #include "Bone.inl"
     #include "BoxCollider.inl"
     #include "Camera.inl"
     #include "Collider.inl"

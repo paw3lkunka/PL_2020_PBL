@@ -8,7 +8,6 @@
 #include "AssetStructers.inl"
 #include "Mesh.hpp"
 #include "AudioFile.hpp"
-#include <assimp/scene.h>
 
 ConsoleModule::ConsoleModule()
 {
@@ -148,12 +147,12 @@ void ConsoleModule::receiveMessage(Message msg)
     
     case Event::RECEIVE_AUDIO_DATA:
     {
+        
         auto aData = msg.getValue<AudioFile*>();
         std::cout << "console here: RECEIVE_AUDIO_DATA. Path: " << aData->getFilePath() << " Sample rate: " << aData->getSampleRate() 
             << " Channels: " << static_cast<int>(aData->getChannelsCount()) << " Bit depth: " << static_cast<int>(aData->getBitsPerSample()) <<  std::endl;
     }
         break;
-
 
     case Event::RENDERER_ADD_MESH_TO_QUEUE:
         std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
