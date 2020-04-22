@@ -24,6 +24,8 @@ void CollisionDetectionSystem::fixedUpdate()
 
 //-----[ PRIVATES ]--------------------------------
 
+//TODO implement this.
+/*
 glm::vec3 collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
 {
 #pragma region new of AABB in with space   
@@ -105,6 +107,7 @@ glm::vec3 collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Tran
 {
 
 }
+*/
 
 glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
 {
@@ -126,7 +129,10 @@ glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, T
     
 }
 
+//TODO IMPLEMENTATION
+/*
 glm::vec3 collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
 {
 
 }
+*/
