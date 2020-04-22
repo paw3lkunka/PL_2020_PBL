@@ -14,9 +14,9 @@ struct Collider : public Component
 
     enum class Type
     {
-        DYNAMIC;
-        KINEMATIC;
-        TRIGGER;
+        DYNAMIC,
+        KINEMATIC,
+        TRIGGER,
     } type;
 
 };

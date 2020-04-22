@@ -7,7 +7,7 @@ class Transform;
 class Camera;
 
 /**
- * @brief 
+ * @brief Handles perspective and view matrices. Updates main camera reference.
  */
 class CameraSystem : public System
 {
@@ -15,16 +15,35 @@ public:
     CameraSystem() = default;
     virtual ~CameraSystem() = default;
 
-    //TODO documentation
-    virtual bool assertEntity(Entity* entity);
-    // FIXME AAAAAAAAAAAAA
-    virtual void start();
-    //TODO documentation
-    virtual void frameUpdate();
-
-    // FIXME TO JEST BRUDNY HACK - MOŻE TRAFIĆ NA MASTERA TYLKO JAK NIE ZDĄŻYMY TEGO ROZWIĄZAĆ INACZEJ
+    /**
+     * @brief Set the camera as main function. Sets global static mainCamera and mainCameraTransform.
+     * 
+     * @param entity Entity to set as main camera (only if contains transform and camera components)
+     * @return true if entity is valid and main camera was switched
+     * @return false if entity was invalid
+     */
+    static bool setAsMain(Entity* entity);
+    /**
+     * @brief Transform of a camera with which we're rendering
+     */
     static Transform* mainCameraTransform;
+    /**
+     * @brief Camera with which we're rendering
+     */
     static Camera* mainCamera;
+
+    /**
+     * @brief Looks for entities with camera and transform components
+     * 
+     * @param entity Entity proveided by system
+     * @return true if transform and camera components are found
+     * @return false if above condition tests false
+     */
+    virtual bool assertEntity(Entity* entity);
+    /**
+     * @brief Updates camera projection and view matrices
+     */
+    virtual void frameUpdate();
 
 private:
     Transform* transform;

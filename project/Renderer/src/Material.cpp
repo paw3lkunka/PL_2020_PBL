@@ -56,6 +56,14 @@ void Material::use()
         shader->setInt(texture.first, i);
         ++i;
     }
+    
+    // * ===== Cubemap samplers =====
+    for(auto cubemap : cubemaps)
+    {
+        cubemap.second.bind(i);
+        shader->setInt(cubemap.first, i);
+        ++i;
+    }
 
     // * ===== Ints =====
     for(auto var : ints)
@@ -88,12 +96,27 @@ void Material::use()
     }
 }
 
+// FIXME: MAKE THIS PASS BY REFERENCE TO SAVE DATA YOU MORON
 void Material::setTexture(std::string name, Texture value)
 {
     std::unordered_map<std::string, Texture>::iterator texturesIter = textures.find(name);
     if (texturesIter != textures.end())
     {
         texturesIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
+    }
+}
+
+void Material::setCubemap(std::string name, Cubemap value)
+{
+    std::unordered_map<std::string, Cubemap>::iterator cubemapsIter = cubemaps.find(name);
+    if (cubemapsIter != cubemaps.end())
+    {
+        cubemapsIter->second = value;
     }
     else
     {

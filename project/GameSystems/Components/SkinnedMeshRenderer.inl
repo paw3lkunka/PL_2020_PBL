@@ -5,8 +5,8 @@
 
 struct SkinnedMeshRenderer : public MeshRenderer
 {
-    inline MeshRenderer() { type = ComponentType::SKINNED_MESH_RENDERER; }
-    virtual ~MeshRenderer() = default;
+    SkinnedMeshRenderer() = default;
+    virtual ~SkinnedMeshRenderer() = default;
 
     // TODO: Add animation handling here
 };

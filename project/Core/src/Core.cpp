@@ -59,23 +59,11 @@ int Core::init()
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo);
-
     messageBus.addReceiver( &inputModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &resourceModule );
-    messageBus.addReceiver( &rendererModule );
     messageBus.addReceiver( &tmpExit );
 
 #pragma region Data Loading
@@ -108,6 +96,14 @@ int Core::init()
     unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
     unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
 
+    FileSystemData skyboxCubemapVertexShaderData;
+    skyboxCubemapVertexShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
+    skyboxCubemapVertexShaderData.typeOfFile = FileType::SHADER;
+
+    FileSystemData skyboxCubemapFragmentShaderData;
+    skyboxCubemapFragmentShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
+    skyboxCubemapFragmentShaderData.typeOfFile = FileType::SHADER;
+
     FileSystemData testModel;
     testModel.path = "Resources/Models/Test.FBX";
     testModel.typeOfFile = FileType::MESH;
@@ -120,15 +116,47 @@ int Core::init()
     testTexture.path = "Resources/Textures/tex.png";
     testTexture.typeOfFile = FileType::TEXTURE;
 
+    FileSystemData skyNX;
+    skyNX.path = "Resources/Textures/skybox/nx.png";
+    skyNX.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyNY;
+    skyNY.path = "Resources/Textures/skybox/ny.png";
+    skyNY.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyNZ;
+    skyNZ.path = "Resources/Textures/skybox/nz.png";
+    skyNZ.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPX;
+    skyPX.path = "Resources/Textures/skybox/px.png";
+    skyPX.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPY;
+    skyPY.path = "Resources/Textures/skybox/py.png";
+    skyPY.typeOfFile = FileType::TEXTURE;
+
+    FileSystemData skyPZ;
+    skyPZ.path = "Resources/Textures/skybox/pz.png";
+    skyPZ.typeOfFile = FileType::TEXTURE;
+
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNX));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNY));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNZ));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPX));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
     getMessageBus().notify();
 
@@ -144,6 +172,8 @@ int Core::init()
                             resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
     unlitInstanced = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
                             resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
+    skyboxShader = Shader(  resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
+                            resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
     unlitColorMat = Material(&unlitColor);
     unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -154,6 +184,7 @@ int Core::init()
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     texCreateInfo.width = texData.width;
     texCreateInfo.height = texData.height;
     Texture texture(texData.data, texCreateInfo);
@@ -163,6 +194,46 @@ int Core::init()
 
     unlitInstancedMat = Material(&unlitInstanced);
     unlitInstancedMat.setTexture("mainTex", texture);
+
+    TextureData skyboxNX = resourceModule.textures.find("Resources/Textures/skybox/nx.png")->second;
+    TextureData skyboxNY = resourceModule.textures.find("Resources/Textures/skybox/ny.png")->second;
+    TextureData skyboxNZ = resourceModule.textures.find("Resources/Textures/skybox/nz.png")->second;
+    TextureData skyboxPX = resourceModule.textures.find("Resources/Textures/skybox/px.png")->second;
+    TextureData skyboxPY = resourceModule.textures.find("Resources/Textures/skybox/py.png")->second;
+    TextureData skyboxPZ = resourceModule.textures.find("Resources/Textures/skybox/pz.png")->second;
+    TextureCreateInfo skyboxCreateInfo = {};
+    skyboxCreateInfo.format = GL_RGBA;
+    skyboxCreateInfo.generateMipmaps = true;
+    skyboxCreateInfo.magFilter = GL_LINEAR;
+    skyboxCreateInfo.minFilter = GL_LINEAR;
+    skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    skyboxCreateInfo.width = skyboxNX.width;
+    skyboxCreateInfo.height = skyboxNX.height;
+    Cubemap cubemap(
+        skyboxCreateInfo,
+        skyboxNZ.data,
+        skyboxNX.data,
+        skyboxPX.data,
+        skyboxPZ.data,
+        skyboxPY.data,
+        skyboxNY.data
+    );
+
+    skyboxMat = Material(&skyboxShader);
+    skyboxMat.setCubemap("cubemap", cubemap);
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = true;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo, &skyboxMat);
+    
+    messageBus.addReceiver( &rendererModule );
 
     objectModule.NewEntity(2);
     {
@@ -256,16 +327,17 @@ int Core::init()
     objectModule.NewEntity(2);
     {
         auto c = objectModule.NewComponent<Camera>();
-            c->isMain = true;
             c->farPlane = 1000.0f;
             c->nearPlane = 0.01f;
             c->fieldOfView = 80.0f;
             c->projectionMode = CameraProjection::Perspective;
+
         
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(1.0f, 0.0f, 50.0f);
             t->setParent(&sceneModule.rootNode);
     }
+    CameraSystem::setAsMain(&objectModule.entities.back());
 
     gameSystemsModule.addSystem(&cameraSystem);
 

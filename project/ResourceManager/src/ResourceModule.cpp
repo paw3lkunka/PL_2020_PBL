@@ -1,7 +1,7 @@
 #include "ResourceModule.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
-#include "Mesh.hpp"
+#include "MeshCustom.hpp"
 #include "Message.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -181,7 +181,7 @@ bool ResourceModule::loadMesh(std::string path)
 bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::unordered_map<std::string, Mesh>::iterator iter;
+    std::unordered_map<std::string, MeshCustom>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -234,7 +234,7 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        meshes.insert(std::pair(meshPath, Mesh(vertices, indices)));
+        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices)));
         iter = meshes.find(meshPath);
 
         returnFlag = returnFlag & (iter != meshes.end());
@@ -291,7 +291,7 @@ bool ResourceModule::sendTexture(std::string path)
 
 bool ResourceModule::sendMesh(std::string path)
 {
-    std::unordered_map<std::string, Mesh>::iterator iter = meshes.find(path);
+    std::unordered_map<std::string, MeshCustom>::iterator iter = meshes.find(path);
 
     if(iter != meshes.end())
     {
