@@ -23,6 +23,11 @@ bool CollisionDetectionSystem::assertEntity(Entity* entity)
 
 void CollisionDetectionSystem::fixedUpdate()
 {
+    if(colliderPtr->type != Collider::Type::DYNAMIC)
+    {
+        return;
+    }
+
     if( auto sphere1 = dynamic_cast<SphereCollider*>(colliderPtr) )
     {
         //TODO finally it can be more human-redable, if this loop will be a function template, cause it might not be replied for each collider type
@@ -45,7 +50,7 @@ void CollisionDetectionSystem::fixedUpdate()
                     transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * (separation * 0.5f));
                     break;
                 }
-                std::cout << "SEPARATION_" << i << ": {" << separation.x << ", " << separation.y << ", " << separation.z << "}" << std::endl;
+                //std::cout << "SEPARATION_" << i << ": {" << separation.x << ", " << separation.y << ", " << separation.z << "}" << std::endl;
             }
             else
             {
