@@ -352,6 +352,7 @@ bool ResourceModule::processBones(aiNode* rootNode, Transform* parent, const aiS
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
             bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
             bonePtr->offsetMatrix = boneMapping[transNode->mNodeName.C_Str()].boneOffset;
+            bonePtr->boneID = boneMapping[transNode->mNodeName.C_Str()].boneIndex;
         }
         returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene);
     }

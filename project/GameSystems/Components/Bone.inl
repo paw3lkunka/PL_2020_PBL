@@ -24,6 +24,8 @@ struct Bone : Component
     AnimationBehaviour afterState;
     ///@brief skinning transform (Inverse Bind Pose)
     glm::mat4 offsetMatrix;
+    ///@brief bone id in animation hierarchy
+    unsigned int boneID;
 };
 
 #endif /* !BONE_INL_ */
