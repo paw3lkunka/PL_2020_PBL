@@ -41,7 +41,8 @@ public:
     std::unordered_map<std::string, SkinnedMesh> skinnedMeshes;
     std::unordered_map<std::string, MeshCustom> meshes;
     std::unordered_map<std::string, std::string> shaders;
-    std::unordered_map<std::string, Animation> animations;
+    //TODO: Better solution for saving animation ticks
+    std::unordered_map<std::string, double> animationTicks;
 
 private:
 
