@@ -115,6 +115,14 @@ class AudioModule : public IModule
          */
         std::unordered_map<std::string, ALuint> clips = {};
 
+        /**
+         * @brief Unordered map of buffer names and their queue counters
+         * 
+         * FIRST: Name (id) of the buffer
+         * SECOND: Queues it is in counter
+         */
+        std::unordered_map<ALuint, ALint> queueCounters = {};
+
         /// @brief Push all accepted changes to device at once
         void alcPushCurrentContextChangesToDevice();
 
@@ -209,8 +217,9 @@ class AudioModule : public IModule
          * @param sampleRate - Sample rate (frequency in Hertz) of the clip
          * @param bitsPerSample - Number of bits per sample (ex. 8bit or 16bit)
          * @param data - Raw data of audio clip 
+         * @param size - Actual size read from clip header
          */
-        void loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, ALint sampleRate, ALubyte bitsPerSample, std::vector<ALchar>* data);
+        void loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, ALint sampleRate, ALubyte bitsPerSample, std::vector<ALchar>* data, ALsizei size);
 
         /**
          * @brief Set the Buffer Data object
@@ -300,7 +309,9 @@ class AudioModule : public IModule
         ALfloat getSourceGain(ALuint sourceId);
 
         /**
-         * @brief Get the Source Is Relative 
+         * @brief Get the Source Is Relative To Listener
+         * If source is relative to listener, listeners transformations are not taken into accout while calculating gain.
+         * 
          * AL_SOURCE_RELATIVE set to AL_TRUE indicates that the position, velocity, cone, and direction properties of a source are to be interpreted relative to the listener position.
          * 
          * @param sourceId - Name (id) of the source, unique in the context
@@ -617,13 +628,15 @@ class AudioModule : public IModule
         void setSourceGain(ALuint sourceId, ALfloat gain);
         
         /**
-         * @brief Set the Source Is Relative 
+         * @brief Set the Source Is Relative To Listener
+         * If source is relative to listener, listeners transformations are not taken into accout while calculating gain.
+         * 
          * AL_SOURCE_RELATIVE set to AL_TRUE indicates that the position, velocity, cone, and direction properties of a source are to be interpreted relative to the listener position.
          * 
          * @param sourceId - Name (id) of the source, unique in the context
-         * @param isRelative - Is source considered relative value
+         * @param isRelativeToListener - Is source considered relative to listener
          */
-        void setSourceIsRelative(ALuint sourceId, ALboolean isRelative);
+        void setSourceIsRelative(ALuint sourceId, ALboolean isRelativeToListener);
         
         /**
          * @brief Set the Source Is Looping 

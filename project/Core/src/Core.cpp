@@ -148,6 +148,11 @@ int Core::init()
     skyPZ.path = "Resources/Textures/skybox/pz.png";
     skyPZ.typeOfFile = FileType::TEXTURE;
 
+    FileSystemData sphere ={
+        .path = "Resources/Models/unit_sphere.fbx",
+        .typeOfFile = FileType::MESH
+    };
+
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
@@ -166,6 +171,8 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, sphere));
     getMessageBus().notify();
 
     getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
@@ -325,14 +332,50 @@ int Core::init()
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
     }
 
+    objectModule.NewEntity(4);
+    {
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+            mr->material = &unlitTextureMat;
+
+        so1 = objectModule.NewComponent<AudioSource>();
+            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so1->getIsRelativeModifiable() = false;
+            so1->getIsLoopingModifiable() = true;
+    }
+
+    objectModule.NewEntity(3);
+    {
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.NewComponent<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.NewComponent<MeshRenderer>();
+            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+            mr->material = &unlitColorMat;
+    }
+
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
+    gameSystemsModule.addSystem(&collisionDetectionSystem);
 
 #pragma endregion
 
 #pragma region Camera
-    objectModule.NewEntity(2);
+    objectModule.NewEntity(4);
     {
         auto c = objectModule.NewComponent<Camera>();
             c->farPlane = 1000.0f;
@@ -344,6 +387,18 @@ int Core::init()
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
+
+        li = objectModule.NewComponent<AudioListener>();
+            li->getIsCurrentModifiable() = true;
+            li->getGainModifiable() = 1.0f;
+            li->getVelocityModifiable();
+            li->getPositionModifiable();
+            li->getAtModifiable();
+            li->getUpModifiable();
+
+        auto sc = objectModule.NewComponent<SphereCollider>();
+            sc->type = Collider::Type::KINEMATIC;
+            sc->radius = 5;
     }
     CameraSystem::setAsMain(&objectModule.entities.back());
 
@@ -354,24 +409,47 @@ int Core::init()
 #pragma region AudioModule demo - initialization
     
     audioModule.init();
-    
+
+
+    so1->getListenersModifiable().push_back(li);
+    /*
     objectModule.NewEntity(2);
     {
-        li = objectModule.NewComponent<AudioListener>();
-            li->getIsCurrentModifiable() = true;
+        so1 = objectModule.NewComponent<AudioSource>();
+            so1->getListenersModifiable().push_back(li);
+            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so1->getIsRelativeModifiable() = false;
+            so1->getIsLoopingModifiable() = true;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
             t->setParent(&sceneModule.rootNode);
     }
+    */
 
+    /*
     objectModule.NewEntity(2);
     {
-        so = objectModule.NewComponent<AudioSource>();
-            so->getListenersModifiable().push_back(li);
-            so->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so->getIsRelativeModifiable() = true;
-            so->getIsLoopingModifiable() = true;
+        so2 = objectModule.NewComponent<AudioSource>();
+            so2->getListenersModifiable().push_back(li);
+            so2->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so2->getIsRelativeModifiable() = false;
+            so2->getIsLoopingModifiable() = true;
+
+        auto t = objectModule.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+    */
+    
+    objectModule.NewEntity(2);
+    {
+        so3 = objectModule.NewComponent<AudioSource>();
+            so3->getListenersModifiable().push_back(li);
+            so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+            so3->getIsRelativeModifiable() = true;
+            so3->getGainModifiable() = 0.01f;
+            so3->getIsLoopingModifiable() = true;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
@@ -400,7 +478,9 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
 #pragma endregion
 
     // * ===== Game loop ===================================================
@@ -408,14 +488,6 @@ int Core::mainLoop()
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
-#pragma region AudioModule demo
-        auto tran = li->entityPtr->getComponentPtr<Transform>();
-        tran->getLocalPositionModifiable() = tran->getLocalPosition() - glm::vec3(2.0f, 0.0f, 0.0f);
-        if(tran->getLocalPosition().x < -50.0f)
-        {
-            tran->getLocalPositionModifiable() = glm::vec3(50.0f, 0.0f, 0.0f);
-        }
-#pragma endregion
 
         // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
 

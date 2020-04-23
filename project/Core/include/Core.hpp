@@ -214,6 +214,8 @@ class Core
         MeshRendererSystem rendererSystem;
         //TODO documentation
         BillboardRendererSystem billboardSystem;
+        //TODO documentation
+        CollisionDetectionSystem collisionDetectionSystem;
 
 #pragma endregion
 
@@ -233,7 +235,10 @@ class Core
         // Needed to set a listener for a source :(
         AudioListener* li;
         // Needed to play that source...
-        AudioSource* so;
+        AudioSource* so1;
+        AudioSource* so2;
+        AudioSource* so3;
+
         static Core* instance;
         GLFWwindow* window; 
 
