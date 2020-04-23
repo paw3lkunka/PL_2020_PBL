@@ -73,6 +73,7 @@ enum class Event : unsigned int
 
 #pragma endregion
 
+//XXX dopisujcie do markerów
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_MESH_TO_QUEUE,
@@ -84,6 +85,7 @@ enum class Event : unsigned int
     RENDERER_SET_PROJECTION_MATRIX,
 #pragma endregion
 
+//XXX dopisujcie do markerów
 #pragma region RESOURCES
     //Resource module load file event. DATA: FileSystemData {const char* filepath, FileType typeOfFile}
     LOAD_FILE,
@@ -112,6 +114,15 @@ enum class Event : unsigned int
     SETUP_BONES,
 #pragma endregion
 
+#pragma region COLLISIONS
+    // Collision between DYNAMIC and DYNAMIC or KINEMATIC collider was detected
+    COLLSION_DETECT,
+    // DYNAMIC collider entered TRIGGER
+    TRIGGER_ENTER,
+    // DYNAMIC collider escaped TRIGGER
+    TRIGGER_EXIT,
+#pragma endregion
+
     // used to define ranges of values
     // ! WARNING ! Must always be at the end of enum !
 #pragma region MARKERS
@@ -120,7 +131,13 @@ enum class Event : unsigned int
     INPUT_FIRST = KEY_PRESSED,
     INPUT_LAST = GAMEPAD_AXIS_CHANGED,
     AUDIO_FIRST = AUDIO_LISTENER_INIT,
-    AUDIO_LAST = AUDIO_SOURCE_REWIND
+    AUDIO_LAST = AUDIO_SOURCE_REWIND,
+    RENDERER_FIRST = RENDERER_ADD_MESH_TO_QUEUE,
+    RENDERER_LAST = RENDERER_SET_PROJECTION_MATRIX,
+    RESOURCES_FIRST = LOAD_FILE,
+    RESOURCES_LAST = SETUP_BONES,
+    COLLISIONS_FIRST = COLLSION_DETECT,
+    COLLISIONS_LAST = TRIGGER_EXIT,
 #pragma endregion
 
 };
