@@ -4,6 +4,8 @@
 #include "Entity.hpp"
 #include "Components.inc"
 
+#include "CollisionDataStructures.inl"
+
 void CollisionDetectionSystem::start()
 {
     colliders.push_back(colliderPtr);
@@ -43,14 +45,22 @@ void CollisionDetectionSystem::fixedUpdate()
                 glm::vec4 separation(collsionSS(sphere1, sphere2, transformPtr, transforms[i]), 0);
                 switch (sphere2->type)
                 {
-                case Collider::Type::KINEMATIC:
-                    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * separation);
-                    break;
                 case Collider::Type::DYNAMIC:
-                    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * (separation * 0.5f));
+                    separation /= 2.0f;
+
+                case Collider::Type::KINEMATIC:
+                    {                        
+                        transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * separation);   
+                        CollisionData data = {sphere1, sphere2, separation};
+                        Message msg(Event::COLLSION_DETECT, data);
+                        GetCore().messageBus.sendMessage(msg);
+                    }
                     break;
-                }
-                //std::cout << "SEPARATION_" << i << ": {" << separation.x << ", " << separation.y << ", " << separation.z << "}" << std::endl;
+
+                case Collider::Type::TRIGGER:
+                    //TODO implement
+                    break;
+                }                
             }
             else
             {
