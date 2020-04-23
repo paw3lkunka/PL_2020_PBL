@@ -115,12 +115,12 @@ enum class Event : unsigned int
 #pragma endregion
 
 #pragma region COLLISIONS
-    // Collision between DYNAMIC and DYNAMIC or KINEMATIC collider was detected
+    // Collision between DYNAMIC and DYNAMIC or KINEMATIC collider was detected. DATA: CollisionData {Collider* cause, Collider* target, vec3 separation}.
     COLLSION_DETECT,
-    // DYNAMIC collider entered TRIGGER
-    TRIGGER_ENTER,
-    // DYNAMIC collider escaped TRIGGER
-    TRIGGER_EXIT,
+    // DYNAMIC collider entered TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
+    TRIGGER_ENTER, //XXX temporarily unused
+    // DYNAMIC collider escaped TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
+    TRIGGER_EXIT, //XXX temporarily unused
 #pragma endregion
 
     // used to define ranges of values
