@@ -214,6 +214,10 @@ class Core
         MeshRendererSystem rendererSystem;
         //TODO documentation
         BillboardRendererSystem billboardSystem;
+        //TODO documentation
+        BoneSystem boneSystem;
+        //TODO documentation
+        SkinnedMeshRendererSystem skinnedMeshRendererSystem;
 
 #pragma endregion
 
@@ -237,8 +241,8 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader;
-        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat;
+        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
+        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion
 };
 

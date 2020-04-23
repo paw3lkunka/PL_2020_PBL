@@ -12,7 +12,9 @@ struct Bone : Component
     virtual ~Bone() = default;
 
     ///@brief position keys of this animation
-    std::map<double, AnimationKey> animationKeys;
+    std::map<double, glm::vec3> positionKeys;
+    ///@brief position keys of this animation
+    std::map<double, glm::quat> rotationKeys;
     ///@brief defines how the animation behaves before the first key
     AnimationBehaviour beforeState;
     ///@brief defines how the animation behaves after the last key

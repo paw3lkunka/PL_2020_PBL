@@ -3,9 +3,11 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
+#include "SkinnedMeshRenderer.inl"
 #include "BillboardRenderer.inl"
 
 #include <queue>
+#include <map>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -57,7 +59,8 @@ private:
     // * Skybox variables
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial;
-
+    // * Bone zone
+    std::map<int, glm::mat4>* bones;
     // HACK: Or not? Discuss this.
     unsigned int billboardVao, billboardVbo, instancedVbo;
     unsigned int viewProjectionBuffer;
@@ -66,6 +69,7 @@ private:
     std::queue<MeshRenderer*> renderQueue;
     // HACK PLZ MAKE THIS POLYMORPHIC AS SOON AS YOU CAN
     std::queue<BillboardRenderer*> billboardQueue;
+    std::queue<SkinnedMeshRenderer*> skinnedQueue;
     
 };
 

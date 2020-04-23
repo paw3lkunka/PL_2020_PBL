@@ -340,18 +340,23 @@ bool ResourceModule::processBones(aiNode* rootNode, Transform* parent, const aiS
             std::cout << "Entity processing: " << transNode->mNodeName.C_Str() << std::endl;
 
             tranPtr = objectModulePtr->NewComponent<Transform>();
-            if(parent)
+            if (parent != nullptr)
             {
                 tranPtr->setParent(parent);
             }
+            else
+            {
+                tranPtr->setParent(&GetCore().sceneModule.rootNode);
+            }
 
             bonePtr = objectModulePtr->NewComponent<Bone>();
-            copyToVector(bonePtr->positionKeys, transNode->mPositionKeys, transNode->mNumPositionKeys);
-            copyToVector(bonePtr->rotationKeys, transNode->mRotationKeys, transNode->mNumRotationKeys);
-            copyToVector(bonePtr->scaleKeys, transNode->mScalingKeys, transNode->mNumScalingKeys);
+            copyToMap(bonePtr, transNode);
+            // copyToVector(bonePtr->positionKeys, transNode->mPositionKeys, transNode->mNumPositionKeys);
+            // copyToVector(bonePtr->rotationKeys, transNode->mRotationKeys, transNode->mNumRotationKeys);
+            // copyToVector(bonePtr->scaleKeys, transNode->mScalingKeys, transNode->mNumScalingKeys);
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
             bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
-            bonePtr->offsetMatrix = boneMapping[transNode->mNodeName.C_Str()].boneOffset;
+            //bonePtr->offsetMatrix = boneMapping[transNode->mNodeName.C_Str()].boneOffset;
             bonePtr->boneID = boneMapping[transNode->mNodeName.C_Str()].boneIndex;
         }
         returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene);
@@ -521,23 +526,41 @@ glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
     return temp;
 }
 
-void ResourceModule::copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size)
-{
-    aiVectorKey temp;
-    for(int i = 0; i < size; ++i)
-    {
-        temp = tabToCopy[i];
-        vec.push_back( {temp.mTime, glm::vec3(temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
-    }
-}
+// void ResourceModule::copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size)
+// {
+//     aiVectorKey temp;
+//     for(int i = 0; i < size; ++i)
+//     {
+//         temp = tabToCopy[i];
+//         vec.push_back( {temp.mTime, glm::vec3(temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+//     }
+// }
 
-void ResourceModule::copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size)
+// void ResourceModule::copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size)
+// {
+//     aiQuatKey temp;
+//     for(int i = 0; i < size; ++i)
+//     {
+//         temp = tabToCopy[i];
+//         vec.push_back( {temp.mTime, glm::quat(temp.mValue.w, temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+//     }
+// }
+
+void ResourceModule::copyToMap(Bone* bone, aiNodeAnim* animNode)
 {
-    aiQuatKey temp;
-    for(int i = 0; i < size; ++i)
+    // * ===== Copy positions ====
+    for(int i = 0; i < animNode->mNumPositionKeys; ++i)
     {
-        temp = tabToCopy[i];
-        vec.push_back( {temp.mTime, glm::quat(temp.mValue.w, temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+        bone->positionKeys[animNode->mPositionKeys[i].mTime] = {animNode->mPositionKeys[i].mValue.x,
+                                                                animNode->mPositionKeys[i].mValue.y,
+                                                                animNode->mPositionKeys[i].mValue.z };
+    }
+    for (int i = 0; i < animNode->mNumRotationKeys; ++i)
+    {
+        bone->rotationKeys[animNode->mRotationKeys[i].mTime] = {animNode->mRotationKeys[i].mValue.w,
+                                                                animNode->mRotationKeys[i].mValue.x,
+                                                                animNode->mRotationKeys[i].mValue.y,
+                                                                animNode->mRotationKeys[i].mValue.z };
     }
 }
 

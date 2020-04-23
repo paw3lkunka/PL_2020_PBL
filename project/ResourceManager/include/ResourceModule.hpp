@@ -4,7 +4,6 @@
 #include "IModule.inl"
 #include "AudioFile.hpp"
 #include "AssetStructers.inl"
-#include "Animation.hpp"
 #include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
 
@@ -16,6 +15,7 @@
 
 class Message;
 class ObjectModule;
+class Bone;
 struct Transform;
 
 /**
@@ -163,7 +163,7 @@ private:
      * @param tabToCopy aiVectorKey array to copy
      * @param size of this array
      */
-    void copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size);
+    //void copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size);
 
     /**
      * @brief method that copies values from aiNodeAnim QuatKey to vector<KeyQuaternion>
@@ -172,7 +172,15 @@ private:
      * @param tabToCopy aiQuatKey array to copy
      * @param size of this array
      */
-    void copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size);
+    //void copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size);
+
+    /**
+     * @brief copies position and rotation keys to map of AnimKeys
+     * 
+     * @param bone bone to process
+     * @param animNode anim node to process
+     */
+    void copyToMap(Bone* bone, aiNodeAnim* animNode);
 
 };
 

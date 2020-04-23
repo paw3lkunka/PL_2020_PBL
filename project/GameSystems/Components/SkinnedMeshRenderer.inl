@@ -3,7 +3,7 @@
 
 #include "Renderer.inl"
 
-struct SkinnedMeshRenderer
+struct SkinnedMeshRenderer : public Renderer
 {
     SkinnedMeshRenderer() = default;
     virtual ~SkinnedMeshRenderer() = default;

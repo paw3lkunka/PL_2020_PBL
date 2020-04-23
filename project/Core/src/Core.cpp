@@ -102,6 +102,14 @@ int Core::init()
     unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
     unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
 
+    FileSystemData unlitSkinnedVertexShaderData;
+    unlitSkinnedVertexShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert";
+    unlitSkinnedVertexShaderData.typeOfFile = FileType::SHADER;
+
+    FileSystemData unlitSkinnedFragmentShaderData;
+    unlitSkinnedFragmentShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag";
+    unlitSkinnedFragmentShaderData.typeOfFile = FileType::SHADER;
+
     FileSystemData skyboxCubemapVertexShaderData;
     skyboxCubemapVertexShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
     skyboxCubemapVertexShaderData.typeOfFile = FileType::SHADER;
@@ -154,6 +162,8 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedVertexShaderData));
+    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
@@ -182,6 +192,9 @@ int Core::init()
                             resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
     skyboxShader = Shader(  resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
                             resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
+    skinnedShader = Shader( resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert")->second.c_str(),
+                            resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag")->second.c_str());
+
     unlitColorMat = Material(&unlitColor);
     unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -230,6 +243,8 @@ int Core::init()
     skyboxMat = Material(&skyboxShader);
     skyboxMat.setCubemap("cubemap", cubemap);
 
+    skinnedMat = Material(&skinnedShader);
+
     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -245,9 +260,9 @@ int Core::init()
 
     objectModule.NewEntity(2);
     {
-        auto mr = objectModule.NewComponent<MeshRenderer>();
-            mr->material = &unlitColorMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
+        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
+            mr->material = &skinnedMat;
+            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -256,9 +271,9 @@ int Core::init()
     
     objectModule.NewEntity(2);
     {
-        auto mr = objectModule.NewComponent<MeshRenderer>();
-            mr->material = &unlitTextureMat;
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
+        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
+            mr->material = &skinnedMat;
+            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
@@ -328,6 +343,8 @@ int Core::init()
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
+    gameSystemsModule.addSystem(&boneSystem);
+    gameSystemsModule.addSystem(&skinnedMeshRendererSystem);
 
 #pragma endregion
 
@@ -436,12 +453,13 @@ int Core::mainLoop()
         {
             // Read message bus messages
             messageBus.notify();
-            // Traverse the scene graph and update transforms
-            sceneModule.updateTransforms();
 
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
+
+            // Traverse the scene graph and update transforms
+            sceneModule.updateTransforms();
 
             // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
@@ -451,6 +469,7 @@ int Core::mainLoop()
 
         gameSystemsModule.run(System::FRAME);
         // Read message bus before rendering
+        // TODO: Should transform update be here also?
         messageBus.notify();
 
         // ? +++++ RENDER CURRENT FRAME +++++
