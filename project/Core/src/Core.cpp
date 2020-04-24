@@ -348,6 +348,7 @@ int Core::init()
 
         so1 = objectModule.NewComponent<AudioSource>();
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so1->getGainModifiable() = 8.0f;
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }
@@ -448,7 +449,7 @@ int Core::init()
             so3->getListenersModifiable().push_back(li);
             so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
             so3->getIsRelativeModifiable() = true;
-            so3->getGainModifiable() = 0.01f;
+            so3->getGainModifiable() = 0.25f;
             so3->getIsLoopingModifiable() = true;
 
         auto t = objectModule.NewComponent<Transform>();
