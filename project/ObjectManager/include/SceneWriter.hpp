@@ -10,15 +10,13 @@ class SceneWriter
 public:
     SceneWriter() = default;
     ~SceneWriter() = default;
-
-    void tempScene();
     void saveScene();
 
-protected:
-private:
     AssetReader ar;
     ObjectModule om;
     SceneModule sm;
+protected:
+private:
 };
 
 #endif /* !SCENEWRITER_HPP_ */

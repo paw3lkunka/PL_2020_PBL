@@ -149,7 +149,7 @@ bool AssetReader::loadTexture(std::string path)
         textures.insert( std::pair(path, tData) );
         
         std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
-
+        std::cout << "Tex loaded: " << path << std::endl;
         return iter != textures.end();
     }
     return false;
@@ -254,7 +254,7 @@ bool AssetReader::loadSkinnedMesh(std::string path)
         {
             animationTicks.insert(std::pair<std::string, double>(path, scene->mAnimations[0]->mTicksPerSecond));
             //TODO: change this nullptr to some transform, i dunno
-            return processBones(bonesRootNode, nullptr, scene);
+            return processBones(bonesRootNode, nullptr, scene, path);
         }
     }
 
@@ -331,7 +331,7 @@ bool AssetReader::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std
     return returnFlag;
 }
 
-bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene)
+bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
     Entity* entPtr;
@@ -354,16 +354,17 @@ bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScen
             }
             else
             {
-                tranPtr->setParent(&GetCore().sceneModule.rootNode);
+                tranPtr->setParent(&(sceneModulePtr->rootNode));
             }
 
             bonePtr = objectModulePtr->NewComponent<Bone>();
             copyToMap(bonePtr, transNode);
+            bonePtr->filePath = path;
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
             bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
             bonePtr->boneID = boneMapping[transNode->mNodeName.C_Str()];
         }
-        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene);
+        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene, path);
     }
     return returnFlag;
 }

@@ -17,7 +17,8 @@ Cubemap::Cubemap(TextureCreateInfo createInfo,
             top(top),
             bottom(bottom) 
 {
-    init();
+    //TODO uncomment when ready
+    //init();
 }
 
 void Cubemap::init()

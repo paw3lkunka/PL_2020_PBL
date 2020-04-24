@@ -2,7 +2,8 @@
 
 Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath) : IFileSystem(filePath), data(data), info(createInfo)
 {
-    init(); 
+    //TODO uncomment if ready
+    //init(); 
 }
 
 void Texture::init()

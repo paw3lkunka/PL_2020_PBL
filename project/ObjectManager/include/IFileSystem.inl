@@ -14,6 +14,7 @@ public:
 private:
     std::string filePath;
     friend class SceneWriter;
+    friend class AssetReader;
 };
 
 #endif /* !IFILESYSTEM_INL_ */

@@ -39,48 +39,48 @@ Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, con
     unsigned int vertex, fragment, geometry;
     int success;
     char infoLog[512];
+    //TODO uncomment if ready
+    // // TODO: Decide if the exceptions should be caught or left to crash xd
+    // vertex = compileShader(vertexShaderCode, GL_VERTEX_SHADER);
+    // fragment = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
+    // if (geometryShaderCode != nullptr)
+    // {
+    //     // Compile geometry shader only if the code is provided
+    //     geometry = compileShader(geometryShaderCode, GL_GEOMETRY_SHADER);
+    // }
 
-    // TODO: Decide if the exceptions should be caught or left to crash xd
-    vertex = compileShader(vertexShaderCode, GL_VERTEX_SHADER);
-    fragment = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
-    if (geometryShaderCode != nullptr)
-    {
-        // Compile geometry shader only if the code is provided
-        geometry = compileShader(geometryShaderCode, GL_GEOMETRY_SHADER);
-    }
+    // // * Shader program creation ==========================================
+    // ID = glCreateProgram();
+    // glAttachShader(ID, vertex);
+    // glAttachShader(ID, fragment);
+    // if (geometryShaderCode != nullptr)
+    // {
+    //     glAttachShader(ID, geometry);
+    // }
 
-    // * Shader program creation ==========================================
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    if (geometryShaderCode != nullptr)
-    {
-        glAttachShader(ID, geometry);
-    }
+    // glLinkProgram(ID);
 
-    glLinkProgram(ID);
-
-    // Handle linking errors
-    glGetProgramiv(ID, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(ID, 512, nullptr, infoLog);
-        // TODO: Add message bus debug error log
+    // // Handle linking errors
+    // glGetProgramiv(ID, GL_LINK_STATUS, &success);
+    // if (!success)
+    // {
+    //     glGetProgramInfoLog(ID, 512, nullptr, infoLog);
+    //     // TODO: Add message bus debug error log
         
-        std::cerr << "Shader program linking error\n" << infoLog << '\n';
-    }
+    //     std::cerr << "Shader program linking error\n" << infoLog << '\n';
+    // }
 
-    // Get info about shader variables
-    retrieveShaderInfo(GL_ACTIVE_ATTRIBUTES, attributes);
-    retrieveShaderInfo(GL_ACTIVE_UNIFORMS, uniforms);
+    // // Get info about shader variables
+    // retrieveShaderInfo(GL_ACTIVE_ATTRIBUTES, attributes);
+    // retrieveShaderInfo(GL_ACTIVE_UNIFORMS, uniforms);
 
-    // * Delete the unncecessary shader programs =========================
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
-    if (geometryShaderCode != nullptr)
-    {
-        glDeleteShader(geometry);
-    }
+    // // * Delete the unncecessary shader programs =========================
+    // glDeleteShader(vertex);
+    // glDeleteShader(fragment);
+    // if (geometryShaderCode != nullptr)
+    // {
+    //     glDeleteShader(geometry);
+    // }
 }
 
 unsigned int Shader::compileShader(const char* shaderCode, GLenum shaderType)

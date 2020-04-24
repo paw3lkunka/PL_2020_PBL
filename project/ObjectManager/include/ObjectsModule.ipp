@@ -7,5 +7,6 @@ T* ObjectModule::NewComponent()
     //HACK AS FUCK
     T* ptr = new T();
     entities.back().addComponent(ptr);
+    components.push_back(ptr);
     return ptr;
 }

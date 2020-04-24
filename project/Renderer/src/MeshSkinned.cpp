@@ -6,7 +6,8 @@ MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsign
     this->vertices = vertices;
     this->indices = indices;
     this->bounds = bounds;
-    setup();
+    //TODO uncomment if ready
+    //setup();
 }
 
 void MeshSkinned::setup()

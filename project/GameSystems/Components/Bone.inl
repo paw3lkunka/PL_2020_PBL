@@ -5,10 +5,12 @@
 
 #include "Component.inl"
 #include "AnimationDataStructures.inl"
+#include "IFileSystem.inl"
 
-struct Bone : Component
+struct Bone : public Component, public IFileSystem
 {
     Bone() = default;
+    Bone(std::string filePath) : IFileSystem(filePath) {}
     virtual ~Bone() = default;
 
     ///@brief position keys of this animation

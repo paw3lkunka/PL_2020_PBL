@@ -8,7 +8,8 @@ MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> i
     this->indices = indices;
     this->bounds = bounds;
     std::cout << "Vertices size: " << vertices.size() << '\n';
-    setup();
+    //TODO uncomment if ready
+    //setup();
 }
 
 void MeshCustom::setup()

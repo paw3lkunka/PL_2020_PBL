@@ -14,6 +14,7 @@
 #include <glm/mat4x4.hpp>
 
 class ObjectModule;
+class SceneModule;
 class Bone;
 class SceneWriter;
 struct Transform;
@@ -32,10 +33,12 @@ public:
     ///HACK: Connection between Resource Module and Object Module
     ObjectModule* objectModulePtr;
 
+    SceneModule* sceneModulePtr;
+
     //TODO: Better solution for saving animation ticks
     std::unordered_map<std::string, double> animationTicks;
 
-private:
+//private:
 
     /**
      * @brief assimp importer reference;
@@ -135,10 +138,11 @@ private:
      * @param rootNode root node of bones
      * @param parent parent transform for next transform
      * @param scene pointer to scene for reference when finding animation node
+     * @param path file path from bones are read
      * @return true bones are processed and saved to entities
      * @return false something went wrong during processing bones
      */
-    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene);
+    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path);
 
     /**
      * @brief Helper function to cast assimp matrix4x4 to glm::mat4

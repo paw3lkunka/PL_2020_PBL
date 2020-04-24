@@ -73,6 +73,11 @@ public:
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
 
     unsigned int ID;
+
+    std::string vertexShaderPath;
+    std::string fragmentShaderPath;
+    std::string geometryShaderPath;
+
 private:
     std::unordered_map<std::string, GLenum> attributes;
     std::unordered_map<std::string, GLenum> uniforms;
