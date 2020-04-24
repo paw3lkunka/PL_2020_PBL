@@ -14,15 +14,16 @@
 #include <unordered_map>
 #include <string>
 
-#include "MeshDataStructures.inl"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
-#include "Shader.hpp"
+#include "ISerializable.inl"
+
+class Shader;
 
 /**
  * @brief Class encapsulating shader program and uniform variables
  */
-class Material
+class Material: public ISerializable
 {
 public:
     /**

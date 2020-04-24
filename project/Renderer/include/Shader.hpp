@@ -18,6 +18,7 @@
 #include <iostream>
 
 #include "ShaderExceptions.hpp"
+#include "ISerializable.inl"
 
 constexpr GLsizei NAME_BUF_SIZE = 32;
 
@@ -25,7 +26,7 @@ constexpr GLsizei NAME_BUF_SIZE = 32;
  * @brief Shader class, responsible for compiling shaders and creating shader programs
  * 
  */
-class Shader
+class Shader: public ISerializable
 {
 public:
     /**

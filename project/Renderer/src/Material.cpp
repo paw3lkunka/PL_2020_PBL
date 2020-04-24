@@ -1,5 +1,6 @@
 #include "Material.hpp"
 #include "Core.hpp"
+#include "Shader.hpp"
 
 #include <iostream>
 

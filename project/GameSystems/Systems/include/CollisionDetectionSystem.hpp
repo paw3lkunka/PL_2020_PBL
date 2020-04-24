@@ -6,8 +6,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-
-enum class ComponentType;
 class Transform;
 class Collider;
 class BoxCollider;

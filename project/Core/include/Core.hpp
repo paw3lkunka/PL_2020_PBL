@@ -36,7 +36,6 @@
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
-#include "ResourceModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -171,9 +170,6 @@ class Core
 
         /// @brief rendering
         RendererModule rendererModule;
-
-        /// @brief resource loader and container
-        ResourceModule resourceModule;
         
         /// @brief scene graph
         SceneModule sceneModule;
@@ -245,8 +241,8 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
-        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
+        //Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
+        //Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion
 };
 

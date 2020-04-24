@@ -2,6 +2,9 @@
 
 #include "Entity.hpp"
 #include "Core.hpp"
+#include "MeshRenderer.inl"
+#include "Transform.inl"
+#include "Message.inl"
 
 bool MeshRendererSystem::assertEntity(Entity* entity)
 {

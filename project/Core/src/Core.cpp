@@ -66,321 +66,317 @@ int Core::init()
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
-    messageBus.addReceiver( &resourceModule );
     messageBus.addReceiver( &tmpExit );
 
 #pragma region Data Loading
-
-    objectModule.resourceModulePtr = &resourceModule;
-    resourceModule.objectModulePtr = &objectModule;
     
-    FileSystemData fsData;
-    fsData.path = "Resources/Audios/sample.wav";
-    fsData.typeOfFile = FileType::AUDIO;
+    // FileSystemData fsData;
+    // fsData.path = "Resources/Audios/sample.wav";
+    // fsData.typeOfFile = FileType::AUDIO;
 
-    FileSystemData unlitColorVertexShaderData;
-    unlitColorVertexShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.vert";
-    unlitColorVertexShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitColorVertexShaderData;
+    // unlitColorVertexShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.vert";
+    // unlitColorVertexShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitColorFragmentShaderData;
-    unlitColorFragmentShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
-    unlitColorFragmentShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitColorFragmentShaderData;
+    // unlitColorFragmentShaderData.path = "Resources/Shaders/UnlitColor/UnlitColor.frag";
+    // unlitColorFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitTextureVertexShaderData;
-    unlitTextureVertexShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.vert";
-    unlitTextureVertexShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitTextureVertexShaderData;
+    // unlitTextureVertexShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.vert";
+    // unlitTextureVertexShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitTextureFragmentShaderData;
-    unlitTextureFragmentShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
-    unlitTextureFragmentShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitTextureFragmentShaderData;
+    // unlitTextureFragmentShaderData.path = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
+    // unlitTextureFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitInstancedVertexShaderData;
-    unlitInstancedVertexShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert";
-    unlitInstancedVertexShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitInstancedVertexShaderData;
+    // unlitInstancedVertexShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert";
+    // unlitInstancedVertexShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitInstancedFragmentShaderData;
-    unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
-    unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitInstancedFragmentShaderData;
+    // unlitInstancedFragmentShaderData.path = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
+    // unlitInstancedFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitSkinnedVertexShaderData;
-    unlitSkinnedVertexShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert";
-    unlitSkinnedVertexShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitSkinnedVertexShaderData;
+    // unlitSkinnedVertexShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert";
+    // unlitSkinnedVertexShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData unlitSkinnedFragmentShaderData;
-    unlitSkinnedFragmentShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag";
-    unlitSkinnedFragmentShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData unlitSkinnedFragmentShaderData;
+    // unlitSkinnedFragmentShaderData.path = "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag";
+    // unlitSkinnedFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData skyboxCubemapVertexShaderData;
-    skyboxCubemapVertexShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
-    skyboxCubemapVertexShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData skyboxCubemapVertexShaderData;
+    // skyboxCubemapVertexShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
+    // skyboxCubemapVertexShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData skyboxCubemapFragmentShaderData;
-    skyboxCubemapFragmentShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
-    skyboxCubemapFragmentShaderData.typeOfFile = FileType::SHADER;
+    // FileSystemData skyboxCubemapFragmentShaderData;
+    // skyboxCubemapFragmentShaderData.path = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
+    // skyboxCubemapFragmentShaderData.typeOfFile = FileType::SHADER;
 
-    FileSystemData testModel;
-    testModel.path = "Resources/Models/Test.fbx";
-    testModel.typeOfFile = FileType::MESH;
+    // FileSystemData testModel;
+    // testModel.path = "Resources/Models/Test.fbx";
+    // testModel.typeOfFile = FileType::MESH;
 
-    FileSystemData animModel;
-    animModel.path = "Resources/Models/House Dancing.fbx";
-    // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
-    animModel.typeOfFile = FileType::SKINNEDMESH;
-    //animModel.typeOfFile = FileType::MESH;
+    // FileSystemData animModel;
+    // animModel.path = "Resources/Models/House Dancing.fbx";
+    // // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
+    // animModel.typeOfFile = FileType::SKINNEDMESH;
+    // //animModel.typeOfFile = FileType::MESH;
 
-    FileSystemData testTexture;
-    testTexture.path = "Resources/Textures/tex.png";
-    testTexture.typeOfFile = FileType::TEXTURE;
+    // FileSystemData testTexture;
+    // testTexture.path = "Resources/Textures/tex.png";
+    // testTexture.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyNX;
-    skyNX.path = "Resources/Textures/skybox/nx.png";
-    skyNX.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyNX;
+    // skyNX.path = "Resources/Textures/skybox/nx.png";
+    // skyNX.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyNY;
-    skyNY.path = "Resources/Textures/skybox/ny.png";
-    skyNY.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyNY;
+    // skyNY.path = "Resources/Textures/skybox/ny.png";
+    // skyNY.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyNZ;
-    skyNZ.path = "Resources/Textures/skybox/nz.png";
-    skyNZ.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyNZ;
+    // skyNZ.path = "Resources/Textures/skybox/nz.png";
+    // skyNZ.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyPX;
-    skyPX.path = "Resources/Textures/skybox/px.png";
-    skyPX.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyPX;
+    // skyPX.path = "Resources/Textures/skybox/px.png";
+    // skyPX.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyPY;
-    skyPY.path = "Resources/Textures/skybox/py.png";
-    skyPY.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyPY;
+    // skyPY.path = "Resources/Textures/skybox/py.png";
+    // skyPY.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData skyPZ;
-    skyPZ.path = "Resources/Textures/skybox/pz.png";
-    skyPZ.typeOfFile = FileType::TEXTURE;
+    // FileSystemData skyPZ;
+    // skyPZ.path = "Resources/Textures/skybox/pz.png";
+    // skyPZ.typeOfFile = FileType::TEXTURE;
 
-    FileSystemData sphere ={
-        .path = "Resources/Models/unit_sphere.fbx",
-        .typeOfFile = FileType::MESH
-    };
+    // FileSystemData sphere ={
+    //     .path = "Resources/Models/unit_sphere.fbx",
+    //     .typeOfFile = FileType::MESH
+    // };
 
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedVertexShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNX));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNY));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNZ));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPX));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, sphere));
-    getMessageBus().notify();
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorVertexShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitColorFragmentShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureVertexShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitTextureFragmentShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedVertexShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitInstancedFragmentShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedVertexShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedFragmentShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNX));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNY));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNZ));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPX));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPY));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, fsData));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyPZ));
+    // getMessageBus().sendMessage(Message(Event::LOAD_FILE, sphere));
+    // getMessageBus().notify();
 
-    getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
-    getMessageBus().notify();
+    // getMessageBus().sendMessage(Message(Event::QUERY_TEXTURE_DATA, "Resources/Textures/tex.png"));
+    // getMessageBus().notify();
 
 #pragma endregion
 
 #pragma region Renderer
-    unlitColor = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
-                        resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
-    unlitTexture = Shader(  resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
-                            resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
-    unlitInstanced = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
-                            resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
-    skyboxShader = Shader(  resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
-                            resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
-    skinnedShader = Shader( resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert")->second.c_str(),
-                            resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag")->second.c_str());
+    // unlitColor = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
+    //                     resourceModule.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
+    // unlitTexture = Shader(  resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
+    //                         resourceModule.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
+    // unlitInstanced = Shader(resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
+    //                         resourceModule.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
+    // skyboxShader = Shader(  resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
+    //                         resourceModule.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
+    // skinnedShader = Shader( resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert")->second.c_str(),
+    //                         resourceModule.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag")->second.c_str());
 
-    unlitColorMat = Material(&unlitColor);
-    unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    // unlitColorMat = Material(&unlitColor);
+    // unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    TextureData texData = resourceModule.textures.find("Resources/Textures/tex.png")->second;
+    // TextureData texData = resourceModule.textures.find("Resources/Textures/tex.png")->second;
 
-    TextureCreateInfo texCreateInfo = {};
-    texCreateInfo.format = GL_RGBA;
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-    texCreateInfo.width = texData.width;
-    texCreateInfo.height = texData.height;
-    Texture texture(texData.data, texCreateInfo);
+    // TextureCreateInfo texCreateInfo = {};
+    // texCreateInfo.format = GL_RGBA;
+    // texCreateInfo.generateMipmaps = true;
+    // texCreateInfo.magFilter = GL_LINEAR;
+    // texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    // texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    // texCreateInfo.width = texData.width;
+    // texCreateInfo.height = texData.height;
+    // Texture texture(texData.data, texCreateInfo);
 
-    unlitTextureMat = Material(&unlitTexture);
-    unlitTextureMat.setTexture("mainTex", texture);
+    // unlitTextureMat = Material(&unlitTexture);
+    // unlitTextureMat.setTexture("mainTex", texture);
 
-    unlitInstancedMat = Material(&unlitInstanced);
-    unlitInstancedMat.setTexture("mainTex", texture);
+    // unlitInstancedMat = Material(&unlitInstanced);
+    // unlitInstancedMat.setTexture("mainTex", texture);
 
-    TextureData skyboxNX = resourceModule.textures.find("Resources/Textures/skybox/nx.png")->second;
-    TextureData skyboxNY = resourceModule.textures.find("Resources/Textures/skybox/ny.png")->second;
-    TextureData skyboxNZ = resourceModule.textures.find("Resources/Textures/skybox/nz.png")->second;
-    TextureData skyboxPX = resourceModule.textures.find("Resources/Textures/skybox/px.png")->second;
-    TextureData skyboxPY = resourceModule.textures.find("Resources/Textures/skybox/py.png")->second;
-    TextureData skyboxPZ = resourceModule.textures.find("Resources/Textures/skybox/pz.png")->second;
-    TextureCreateInfo skyboxCreateInfo = {};
-    skyboxCreateInfo.format = GL_RGBA;
-    skyboxCreateInfo.generateMipmaps = true;
-    skyboxCreateInfo.magFilter = GL_LINEAR;
-    skyboxCreateInfo.minFilter = GL_LINEAR;
-    skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-    skyboxCreateInfo.width = skyboxNX.width;
-    skyboxCreateInfo.height = skyboxNX.height;
-    Cubemap cubemap(
-        skyboxCreateInfo,
-        skyboxNZ.data,
-        skyboxNX.data,
-        skyboxPX.data,
-        skyboxPZ.data,
-        skyboxPY.data,
-        skyboxNY.data
-    );
+    // TextureData skyboxNX = resourceModule.textures.find("Resources/Textures/skybox/nx.png")->second;
+    // TextureData skyboxNY = resourceModule.textures.find("Resources/Textures/skybox/ny.png")->second;
+    // TextureData skyboxNZ = resourceModule.textures.find("Resources/Textures/skybox/nz.png")->second;
+    // TextureData skyboxPX = resourceModule.textures.find("Resources/Textures/skybox/px.png")->second;
+    // TextureData skyboxPY = resourceModule.textures.find("Resources/Textures/skybox/py.png")->second;
+    // TextureData skyboxPZ = resourceModule.textures.find("Resources/Textures/skybox/pz.png")->second;
+    // TextureCreateInfo skyboxCreateInfo = {};
+    // skyboxCreateInfo.format = GL_RGBA;
+    // skyboxCreateInfo.generateMipmaps = true;
+    // skyboxCreateInfo.magFilter = GL_LINEAR;
+    // skyboxCreateInfo.minFilter = GL_LINEAR;
+    // skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    // skyboxCreateInfo.width = skyboxNX.width;
+    // skyboxCreateInfo.height = skyboxNX.height;
+    // Cubemap cubemap(
+    //     skyboxCreateInfo,
+    //     skyboxNZ.data,
+    //     skyboxNX.data,
+    //     skyboxPX.data,
+    //     skyboxPZ.data,
+    //     skyboxPY.data,
+    //     skyboxNY.data
+    // );
 
-    skyboxMat = Material(&skyboxShader);
-    skyboxMat.setCubemap("cubemap", cubemap);
+    // skyboxMat = Material(&skyboxShader);
+    // skyboxMat.setCubemap("cubemap", cubemap);
 
-    skinnedMat = Material(&skinnedShader);
+    // skinnedMat = Material(&skinnedShader);
 
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, &skyboxMat);
+    // // ! ----- Renderer initialization block -----
+    // RendererModuleCreateInfo rendererCreateInfo = {};
+    // rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    // rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    // rendererCreateInfo.cullFace = true;
+    // rendererCreateInfo.cullFaceMode = GL_BACK;
+    // rendererCreateInfo.cullFrontFace = GL_CCW;
+    // rendererCreateInfo.depthTest = true;
+    // rendererCreateInfo.wireframeMode = false;
+    // rendererModule.initialize(window, rendererCreateInfo, &skyboxMat);
     
     messageBus.addReceiver( &rendererModule );
 
-    objectModule.NewEntity(2);
-    {
-        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
     
-    objectModule.NewEntity(2);
-    {
-        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { -10.0f, 0.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { -10.0f, 0.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 10.0f, 10.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 10.0f, 10.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(2);
-    {
-        auto br = objectModule.NewComponent<BillboardRenderer>();
-            br->material = &unlitInstancedMat;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto br = objectModule.NewComponent<BillboardRenderer>();
+    //         br->material = &unlitInstancedMat;
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { -10.0f, 10.0f, 0.0f };
-            t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { -10.0f, 10.0f, 0.0f };
+    //         t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
+    // }
 
-    objectModule.NewEntity(4);
-    {
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.NewEntity(4);
+    // {
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto c = objectModule.NewComponent<SphereCollider>();
-            c->radius = 10;
+    //     auto c = objectModule.NewComponent<SphereCollider>();
+    //         c->radius = 10;
 
-        auto mr = objectModule.NewComponent<MeshRenderer>();
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
-            mr->material = &unlitTextureMat;
+    //     auto mr = objectModule.NewComponent<MeshRenderer>();
+    //         mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+    //         mr->material = &unlitTextureMat;
 
-        so1 = objectModule.NewComponent<AudioSource>();
-            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getIsRelativeModifiable() = false;
-            so1->getIsLoopingModifiable() = true;
-    }
+    //     so1 = objectModule.NewComponent<AudioSource>();
+    //         so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+    //         so1->getIsRelativeModifiable() = false;
+    //         so1->getIsLoopingModifiable() = true;
+    // }
 
-    objectModule.NewEntity(3);
-    {
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.NewEntity(3);
+    // {
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto c = objectModule.NewComponent<SphereCollider>();
-            c->radius = 10;
+    //     auto c = objectModule.NewComponent<SphereCollider>();
+    //         c->radius = 10;
 
-        auto mr = objectModule.NewComponent<MeshRenderer>();
-            mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
-            mr->material = &unlitColorMat;
-    }
+    //     auto mr = objectModule.NewComponent<MeshRenderer>();
+    //         mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+    //         mr->material = &unlitColorMat;
+    // }
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);

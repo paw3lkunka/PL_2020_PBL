@@ -2,6 +2,9 @@
 
 #include "Entity.hpp"
 #include "Core.hpp"
+#include "SkinnedMeshRenderer.inl"
+#include "Transform.inl"
+#include "Message.inl"
 
 bool SkinnedMeshRendererSystem::assertEntity(Entity* entity)
 {

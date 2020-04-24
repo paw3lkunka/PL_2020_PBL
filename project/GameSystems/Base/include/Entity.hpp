@@ -3,13 +3,15 @@
 
 #include <vector>
 
+#include "ISerializable.inl"
+
 class Component;
 
 /**
  * @brief Representation of all objects in games, technically a collection of Components
  * 
  */
-class Entity 
+class Entity : public ISerializable
 {
     public:
         /**

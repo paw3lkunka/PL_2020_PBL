@@ -3,6 +3,9 @@
 
 #include <glad/glad.h>
 
+#include "ISerializable.inl"
+#include "IFileSystem.inl"
+
 /**
  * @brief Texture create info, all values are required
  */
@@ -16,7 +19,7 @@ struct TextureCreateInfo
 /**
  * @brief Holds GL id of bound texture, pointer to raw data and texture info
  */
-class Texture
+class Texture : public ISerializable, public IFileSystem
 {
 public:
     /**
@@ -24,8 +27,9 @@ public:
      * 
      * @param data byte pointer to raw texture data
      * @param createInfo create options of texture
+     * @param filePath path to file from texture is loaded
      */
-    Texture(unsigned char* data, TextureCreateInfo createInfo) : data(data), info(createInfo) { init(); }
+    Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath);
     Texture() = default;
     virtual ~Texture() = default;
 

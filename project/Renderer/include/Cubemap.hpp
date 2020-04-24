@@ -1,12 +1,13 @@
 #ifndef _CUBEMAP_HPP
 #define _CUBEMAP_HPP
 
+#include "ISerializable.inl"
 #include "Texture.hpp"
 
 /**
  * @brief Holds id of cubemap, pointer to raw data and create info
  */
-class Cubemap
+class Cubemap : public ISerializable
 {
 public:
     Cubemap(TextureCreateInfo createInfo,

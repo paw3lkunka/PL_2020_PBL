@@ -1,5 +1,10 @@
 #include "Texture.hpp"
 
+Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath) : IFileSystem(filePath), data(data), info(createInfo)
+{
+    init(); 
+}
+
 void Texture::init()
 {
     glGenTextures(1, &id);

@@ -2,9 +2,10 @@
 #define _SKINNEDMESHRENDERERSYSTEM_HPP
 
 #include "System.hpp"
-#include "SkinnedMeshRenderer.inl"
-#include "Transform.inl"
-#include "Message.inl"
+struct SkinnedMeshRenderer;
+struct Transform;
+struct Message;
+
 
     //TODO documentation
 class SkinnedMeshRendererSystem : public System

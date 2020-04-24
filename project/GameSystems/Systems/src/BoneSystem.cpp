@@ -2,6 +2,8 @@
 
 #include "Core.hpp"
 #include "Entity.hpp"
+#include "Bone.inl"
+#include "Transform.inl"
 
 bool BoneSystem::assertEntity(Entity* entity)
 {

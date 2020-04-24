@@ -2,9 +2,11 @@
 #define _MESHRENDERERSYSTEM_HPP
 
 #include "System.hpp"
-#include "MeshRenderer.inl"
-#include "Transform.inl"
-#include "Message.inl"
+
+struct MeshRenderer;
+struct Transform;
+class Message;
+
 
     //TODO documentation
 class MeshRendererSystem : public System

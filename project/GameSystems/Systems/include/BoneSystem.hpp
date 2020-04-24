@@ -1,10 +1,13 @@
 #ifndef BONESYSTEM_HPP_
 #define BONESYSTEM_HPP_
 
-#include "Bone.inl"
-#include "Transform.inl"
+struct Bone;
+struct Transform;
 
 #include "System.hpp"
+
+#include <glm/glm.hpp>
+#include <map>
 
 class BoneSystem : public System
 {

@@ -1,17 +1,22 @@
-#include "Core.hpp"
+//#include "Core.hpp"
+#include "SceneWriter.hpp"
 
 int main()
 {
-    Core core;
+    // Core core;
 
-    if( int errorCode = core.init() )
-    {
-        return errorCode;
-    }
+    // if( int errorCode = core.init() )
+    // {
+    //     return errorCode;
+    // }
 
-    int exitCode = core.mainLoop();
+    // int exitCode = core.mainLoop();
 
-    core.cleanup();
+    // core.cleanup();
 
-    return exitCode;
+    // return exitCode;
+
+    SceneWriter sw;
+    sw.tempScene();
+    sw.saveScene();
 }

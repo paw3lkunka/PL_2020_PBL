@@ -2,6 +2,8 @@
 
 #include "Message.inl"
 #include "MeshQuad.hpp"
+#include "Shader.hpp"
+
 #include <glm/gtc/type_ptr.hpp>
 
 //TODO: TEMP STRING STREAM
