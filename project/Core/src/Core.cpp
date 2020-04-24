@@ -1,4 +1,8 @@
 #include "Core.hpp"
+#include "Message.inl"
+#include "Event.hpp"
+#include "Cubemap.hpp"
+#include "FileStructures.inl"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -66,7 +70,7 @@ int Core::init()
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
-    messageBus.addReceiver( &tmpExit );
+    //messageBus.addReceiver( &tmpExit );
 
 #pragma region Data Loading
     
@@ -401,7 +405,7 @@ int Core::init()
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
 
-        li = objectModule.NewComponent<AudioListener>();
+        auto li = objectModule.NewComponent<AudioListener>();
             li->getIsCurrentModifiable() = true;
             li->getGainModifiable() = 1.0f;
             li->getVelocityModifiable();
@@ -424,7 +428,7 @@ int Core::init()
     audioModule.init();
 
 
-    so1->getListenersModifiable().push_back(li);
+    // so1->getListenersModifiable().push_back(li);
     /*
     objectModule.NewEntity(2);
     {
@@ -455,19 +459,19 @@ int Core::init()
     }
     */
     
-    objectModule.NewEntity(2);
-    {
-        so3 = objectModule.NewComponent<AudioSource>();
-            so3->getListenersModifiable().push_back(li);
-            so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
-            so3->getIsRelativeModifiable() = true;
-            so3->getGainModifiable() = 0.01f;
-            so3->getIsLoopingModifiable() = true;
+    // objectModule.NewEntity(2);
+    // {
+    //     so3 = objectModule.NewComponent<AudioSource>();
+    //         so3->getListenersModifiable().push_back(li);
+    //         so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+    //         so3->getIsRelativeModifiable() = true;
+    //         so3->getGainModifiable() = 0.01f;
+    //         so3->getIsLoopingModifiable() = true;
 
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
 
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
@@ -491,9 +495,9 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
+        // //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
 #pragma endregion
 
     // * ===== Game loop ===================================================

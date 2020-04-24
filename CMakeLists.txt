@@ -133,8 +133,7 @@ aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
 aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
 aux_source_directory( project/Audio/src                     AUDIO_SRC)
-aux_source_directory( project/ResourceManager/src           FILE_SYSTEM_SRC)
-aux_source_directory( project/ObjectsManager/src            OBJECTS_SRC)
+aux_source_directory( project/ObjectManager/src             OBJECTS_SRC)
 aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
@@ -148,7 +147,6 @@ list(
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
-        ${FILE_SYSTEM_SRC}
         ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
@@ -166,8 +164,7 @@ include_directories(
     project/GameSystems/Components
     project/GameSystems/Systems/include
     project/Audio/include
-    project/ResourceManager/include
-    project/ObjectsManager/include
+    project/ObjectManager/include
     project/Input/include
     project/MessageBus/include
     project/Renderer/include

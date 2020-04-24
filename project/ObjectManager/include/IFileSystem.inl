@@ -3,7 +3,7 @@
 
 #include <string>
 
-//#include "SceneWriter.hpp"
+class SceneWriter;
 
 class IFileSystem
 {
@@ -13,7 +13,7 @@ public:
     virtual ~IFileSystem() = default;
 private:
     std::string filePath;
-    //friend class SceneWriter;
+    friend class SceneWriter;
 };
 
 #endif /* !IFILESYSTEM_INL_ */

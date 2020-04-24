@@ -4,6 +4,7 @@
 #include "Entity.hpp"
 #include "Bone.inl"
 #include "Transform.inl"
+#include "Message.inl"
 
 bool BoneSystem::assertEntity(Entity* entity)
 {

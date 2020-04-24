@@ -25,8 +25,6 @@
 
 // * MessgageBus
 #include "MessageBus.hpp"
-#include "Message.inl"
-#include "Event.hpp"
 
 // * Modules
 #include "InputModule.hpp"
@@ -43,8 +41,10 @@
 #include "Systems.inc"
 
 // * Others
-#include "Cubemap.hpp"
-#include "FileStructures.inl"
+
+class Message;
+enum class Event : unsigned int;
+class Cubemap;
 
 #pragma endregion
 
@@ -180,17 +180,18 @@ class Core
         /// @brief stores all crucial objects
         ObjectModule objectModule;
 
-        /// @brief safely close application, on ESC press
-        class : public IModule
-        {
-        virtual void receiveMessage(Message msg)
-            {
-                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-                {
-                        instance->close();
-                }
-            }
-        } tmpExit;
+        //TODO Please, do something better here ;-;
+        // /// @brief safely close application, on ESC press
+        // class : public IModule
+        // {
+        // virtual void receiveMessage(Message msg)
+        //     {
+        //         if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
+        //         {
+        //                 instance->close();
+        //         }
+        //     }
+        // } tmpExit;
         
 #pragma endregion
 
@@ -229,18 +230,17 @@ class Core
         static int windowWidth, windowHeight;
 
     private:
-#pragma region TMP
-        // TODO: this should get successively removed
-        // Needed to set a listener for a source :(
-        AudioListener* li;
-        // Needed to play that source...
-        AudioSource* so1;
-        AudioSource* so2;
-        AudioSource* so3;
-
         static Core* instance;
         GLFWwindow* window; 
 
+#pragma region TMP
+        // TODO: this should get successively removed
+        // // Needed to set a listener for a source :(
+        // AudioListener* li;
+        // // Needed to play that source...
+        // AudioSource* so1;
+        // AudioSource* so2;
+        // AudioSource* so3;
         //Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
         //Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion

@@ -5,6 +5,7 @@
 
 #include "Camera.inl"
 #include "Transform.inl"
+#include "Message.inl"
 
 Transform* CameraSystem::mainCameraTransform = nullptr;
 Camera* CameraSystem::mainCamera = nullptr;
