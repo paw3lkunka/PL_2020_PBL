@@ -4,12 +4,18 @@
 #include "MeshQuad.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
+//TODO: TEMP STRING STREAM
+#include <sstream>
+
 void RendererModule::receiveMessage(Message msg)
 {
     switch (msg.getEvent())
     {
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
             renderQueue.push(msg.getValue<MeshRenderer*>());
+            break;
+        case Event::RENDERER_ADD_SKINNED_MESH_TO_QUEUE:
+            skinnedQueue.push(msg.getValue<SkinnedMeshRenderer*>());
             break;
         case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
             billboardQueue.push(msg.getValue<BillboardRenderer*>());
@@ -21,6 +27,9 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_SET_VIEW_MATRIX:
             viewChanged = true;
             viewMatrix = msg.getValue<glm::mat4*>(); // TODO: No need to set pointer every time
+            break;
+        case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:
+            bones = msg.getValue<std::map<int, glm::mat4>*>();
             break;
     }
 }
@@ -216,6 +225,23 @@ void RendererModule::render()
             renderQueue.front()->material->getShaderPtr()->setMat4("model", renderQueue.front()->modelMatrix);
             renderQueue.front()->mesh->render();
             renderQueue.pop();
+        }
+
+        // TODO: Proper skinned mesh rendering
+
+        while(!skinnedQueue.empty())
+        {
+            std::ostringstream ss;
+            for(auto bone : *bones)
+            {
+                ss << "gBones[" << bone.first << "]";
+                skinnedQueue.front()->material->setMat4(ss.str(), bone.second);
+                ss.clear();
+            }
+            skinnedQueue.front()->material->use();
+            skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
+            skinnedQueue.front()->mesh->render();
+            skinnedQueue.pop();
         }
 
         // TODO Proper instanced rendering

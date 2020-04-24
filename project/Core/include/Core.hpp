@@ -216,6 +216,9 @@ class Core
         BillboardRendererSystem billboardSystem;
         //TODO documentation
         CollisionDetectionSystem collisionDetectionSystem;
+        BoneSystem boneSystem;
+        //TODO documentation
+        SkinnedMeshRendererSystem skinnedMeshRendererSystem;
 
 #pragma endregion
 
@@ -242,8 +245,8 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader;
-        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat;
+        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
+        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion
 };
 

@@ -3,18 +3,12 @@
 
 #include "Component.inl"
 
-#include "Material.hpp"
-#include "MeshCustom.hpp"
+#include "Renderer.inl"
 
-struct MeshRenderer : public Component
+struct MeshRenderer : public Renderer
 {
     MeshRenderer() = default;
     virtual ~MeshRenderer() = default;
-    
-    glm::mat4 modelMatrix;
-    
-    Material* material;
-    MeshCustom* mesh;
 };
 
 #endif // _MESHRENDERER_INL

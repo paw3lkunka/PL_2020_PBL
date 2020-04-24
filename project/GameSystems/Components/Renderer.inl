@@ -4,6 +4,7 @@
 #include "Component.inl"
 
 #include "Material.hpp"
+#include "Mesh.inl"
 
 struct Renderer : public Component
 {
@@ -13,6 +14,7 @@ struct Renderer : public Component
     glm::mat4 modelMatrix;
     
     Material* material;
+    Mesh* mesh;
 };
 
 #endif // _RENDERER_INL

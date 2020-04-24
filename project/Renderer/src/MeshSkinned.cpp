@@ -1,4 +1,4 @@
-#include "SkinnedMesh.hpp"
+#include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
 
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices)
@@ -52,5 +52,7 @@ void MeshSkinned::setup()
 
 void MeshSkinned::render()
 {
-
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

@@ -6,14 +6,12 @@
 
 #include "System.hpp"
 
-class BonesSystem : public System
+class BoneSystem : public System
 {
 public:
-    BonesSystem() = default;
+    BoneSystem() = default;
 
     void process();
-
-protected:
     /**
      * @brief Checks, if given Entity contain all required components
      * implementation should also save pointers to components in class variables 
@@ -41,8 +39,14 @@ protected:
      */
     void frameUpdate();
     
-    virtual ~BonesSystem() = default;
+    virtual ~BoneSystem() = default;
 private:
+    glm::vec3 interpolatePositionKeys(double time);
+    glm::quat interpolateRotationKeys(double time);
+    std::map<int, glm::mat4> boneTransforms;
+    double animationTime;
+    double animationStep = 0.1f;
+
     Bone* bone;
     Transform* transform;
 };
