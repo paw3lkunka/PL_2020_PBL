@@ -4,6 +4,7 @@
 #include "Material.hpp"
 #include "Texture.hpp"
 #include "BillboardRenderer.inl"
+#include "Components.inc"
 
 int main()
 {
@@ -49,18 +50,30 @@ int main()
 
     auto unlitColor = Shader(sw.ar.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
                         sw.ar.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
+    unlitColor.vertexShaderPath = "Resources/Shaders/UnlitColor/UnlitColor.vert";
+    unlitColor.fragmentShaderPath = "Resources/Shaders/UnlitColor/UnlitColor.frag";
+    
 
     auto unlitTexture = Shader(  sw.ar.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
                             sw.ar.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
+    unlitTexture.vertexShaderPath = "Resources/Shaders/UnlitTexture/UnlitTexture.vert";
+    unlitTexture.fragmentShaderPath = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
 
     auto unlitInstanced = Shader(sw.ar.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
                             sw.ar.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
+    unlitInstanced.vertexShaderPath = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert";
+    unlitInstanced.fragmentShaderPath = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
+    
 
     auto skyboxShader = Shader(  sw.ar.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
                             sw.ar.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
+    skyboxShader.vertexShaderPath = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
+    skyboxShader.fragmentShaderPath = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
 
     auto skinnedShader = Shader( sw.ar.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert")->second.c_str(),
                             sw.ar.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag")->second.c_str());
+    skinnedShader.vertexShaderPath = "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert";
+    skinnedShader.fragmentShaderPath = "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag";
 
     std::cout << "Shaders compiled" <<std::endl;
     auto unlitColorMat = Material(&unlitColor);
@@ -107,6 +120,12 @@ int main()
         skyboxPY.data,
         skyboxNY.data
     );
+    cubemap.frontPath = "Resources/Textures/skybox/nz.png";
+    cubemap.leftPath = "Resources/Textures/skybox/nx.png";
+    cubemap.rightPath = "Resources/Textures/skybox/px.png";
+    cubemap.backPath = "Resources/Textures/skybox/pz.png";
+    cubemap.topPath = "Resources/Textures/skybox/py.png";
+    cubemap.bottomPath = "Resources/Textures/skybox/ny.png";
 
     auto skyboxMat = Material(&skyboxShader);
     skyboxMat.setCubemap("cubemap", cubemap);
@@ -235,6 +254,32 @@ int main()
         auto mr = sw.om.NewComponent<MeshRenderer>();
             mr->mesh = &sw.ar.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
             mr->material = &unlitColorMat;
+    }
+
+    sw.om.NewEntity(4);
+    {
+        auto c = sw.om.NewComponent<Camera>();
+            c->farPlane = 1000.0f;
+            c->nearPlane = 0.01f;
+            c->fieldOfView = 80.0f;
+            c->projectionMode = CameraProjection::Perspective;
+
+        
+        auto t = sw.om.NewComponent<Transform>();
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+            t->setParent(&sw.sm.rootNode);
+
+        auto li = sw.om.NewComponent<AudioListener>();
+            li->getIsCurrentModifiable() = true;
+            li->getGainModifiable() = 1.0f;
+            li->getVelocityModifiable();
+            li->getPositionModifiable();
+            li->getAtModifiable();
+            li->getUpModifiable();
+
+        auto sc = sw.om.NewComponent<SphereCollider>();
+            sc->type = Collider::Type::KINEMATIC;
+            sc->radius = 5;
     }
 
     sw.saveScene();

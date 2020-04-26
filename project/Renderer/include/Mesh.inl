@@ -5,7 +5,7 @@
 #include "ISerializable.inl"
 #include "IFileSystem.inl"
 
-class Mesh : public IFileSystem
+class Mesh : public IFileSystem, public ISerializable
 {
 public:
 

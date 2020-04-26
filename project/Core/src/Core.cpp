@@ -392,31 +392,31 @@ int Core::init()
 #pragma endregion
 
 #pragma region Camera
-    objectModule.NewEntity(4);
-    {
-        auto c = objectModule.NewComponent<Camera>();
-            c->farPlane = 1000.0f;
-            c->nearPlane = 0.01f;
-            c->fieldOfView = 80.0f;
-            c->projectionMode = CameraProjection::Perspective;
+    // objectModule.NewEntity(4);
+    // {
+    //     auto c = objectModule.NewComponent<Camera>();
+    //         c->farPlane = 1000.0f;
+    //         c->nearPlane = 0.01f;
+    //         c->fieldOfView = 80.0f;
+    //         c->projectionMode = CameraProjection::Perspective;
 
         
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-            t->setParent(&sceneModule.rootNode);
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto li = objectModule.NewComponent<AudioListener>();
-            li->getIsCurrentModifiable() = true;
-            li->getGainModifiable() = 1.0f;
-            li->getVelocityModifiable();
-            li->getPositionModifiable();
-            li->getAtModifiable();
-            li->getUpModifiable();
+    //     auto li = objectModule.NewComponent<AudioListener>();
+    //         li->getIsCurrentModifiable() = true;
+    //         li->getGainModifiable() = 1.0f;
+    //         li->getVelocityModifiable();
+    //         li->getPositionModifiable();
+    //         li->getAtModifiable();
+    //         li->getUpModifiable();
 
-        auto sc = objectModule.NewComponent<SphereCollider>();
-            sc->type = Collider::Type::KINEMATIC;
-            sc->radius = 5;
-    }
+    //     auto sc = objectModule.NewComponent<SphereCollider>();
+    //         sc->type = Collider::Type::KINEMATIC;
+    //         sc->radius = 5;
+    // }
     CameraSystem::setAsMain(&objectModule.entities.back());
 
     gameSystemsModule.addSystem(&cameraSystem);

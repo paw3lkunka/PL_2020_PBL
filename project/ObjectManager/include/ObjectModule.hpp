@@ -2,6 +2,7 @@
 #define OBJECTMODULE_HPP_
 
 #include <vector>
+#include <functional>
 #include <assimp/scene.h>
 
 class Entity;
@@ -10,6 +11,7 @@ class System;
 class Shader;
 class Material;
 class ResourceModule;
+class Mesh;
 struct Transform;
 
 /**
@@ -46,12 +48,12 @@ public:
     /// @brief entities container.
     std::vector<Entity> entities;
     /// @brief components container.
-    // HACK: object allocated on heap by "new" operator - VERY temporary solution
     std::vector<Component*> components;
     /// @brief shaders container.
     std::vector<Shader> shaders;
-    /// @brief materials container. 
-    std::vector<Material> materials;
+    /// @brief mesh container. 
+    std::vector<Mesh> meshes;
+
 
     ///HACK: Connection between Resource Module and Object Module
     ResourceModule* resourceModulePtr;

@@ -14,7 +14,7 @@ struct Camera : public Component
 
     CameraProjection projectionMode;
     bool isMain;
-    float fieldOfView, othographicSize, nearPlane, farPlane;
+    float fieldOfView, orthographicSize, nearPlane, farPlane;
     
     /// @brief Dirty flags
     bool projectionChanged = true;

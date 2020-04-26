@@ -74,9 +74,9 @@ public:
 
     unsigned int ID;
 
-    std::string vertexShaderPath;
-    std::string fragmentShaderPath;
-    std::string geometryShaderPath;
+    std::string vertexShaderPath = "";
+    std::string fragmentShaderPath = "";
+    std::string geometryShaderPath = "";
 
 private:
     std::unordered_map<std::string, GLenum> attributes;

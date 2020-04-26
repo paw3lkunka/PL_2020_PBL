@@ -23,6 +23,13 @@ public:
     void init();
     void bind(int textureUnit);
 
+    std::string frontPath;
+    std::string leftPath;
+    std::string rightPath;
+    std::string backPath;
+    std::string topPath;
+    std::string bottomPath;
+
 private:
     GLuint id;
     TextureCreateInfo info;
