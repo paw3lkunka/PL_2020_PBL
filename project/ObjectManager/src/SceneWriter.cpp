@@ -69,7 +69,54 @@ void SceneWriter::saveScene()
         }
     }
 
-    
+    for(int i = 0; i < objContainerPtr->textures.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "texture00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "texture0" + std::to_string(i);
+        }
+        else
+        {
+            name = "texture" + std::to_string(i);
+        }
+        j[name]["serializationID"] = objContainerPtr->textures[i].serializationID;
+        j[name]["filePath"] = objContainerPtr->textures[i].filePath;
+        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->textures[i].info.generateMipmaps;
+        j[name]["creationInfo"]["minFilter"] = objContainerPtr->textures[i].info.minFilter;
+        j[name]["creationInfo"]["magFilter"] = objContainerPtr->textures[i].info.magFilter;
+        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->textures[i].info.wrapMode;
+    }
+
+    for(int i = 0; i < objContainerPtr->cubemaps.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "cubemap00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "cubemap0" + std::to_string(i);
+        }
+        else
+        {
+            name = "cubemap" + std::to_string(i);
+        }
+        j[name]["serializationID"] = objContainerPtr->cubemaps[i].serializationID;
+        j[name]["frontPath"] = objContainerPtr->cubemaps[i].frontPath;
+        j[name]["backPath"] = objContainerPtr->cubemaps[i].backPath;
+        j[name]["leftPath"] = objContainerPtr->cubemaps[i].leftPath;
+        j[name]["rightPath"] = objContainerPtr->cubemaps[i].rightPath;
+        j[name]["topPath"] = objContainerPtr->cubemaps[i].topPath;
+        j[name]["bottomPath"] = objContainerPtr->cubemaps[i].bottomPath;
+        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->cubemaps[i].info.generateMipmaps;
+        j[name]["creationInfo"]["minFilter"] = objContainerPtr->cubemaps[i].info.minFilter;
+        j[name]["creationInfo"]["magFilter"] = objContainerPtr->cubemaps[i].info.magFilter;
+        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->cubemaps[i].info.wrapMode;
+    }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
     {
@@ -85,6 +132,7 @@ void SceneWriter::saveScene()
         {
             name = "component" + std::to_string(i);
         }
+        std::cout << "entity id: " << objContainerPtr->components[i]->entityPtr->getId() << "\t";
         j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
         j[name]["serialization ID"] = objContainerPtr->components[i]->serializationID;
         if(dynamic_cast<Transform*>(objContainerPtr->components[i]))

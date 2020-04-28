@@ -6,6 +6,10 @@ class ObjectContainer;
 
 class Shader;
 class Entity;
+class Texture;
+class Cubemap;
+class Material;
+struct TextureCreateInfo;
 
 class ObjectMaker
 {
@@ -30,7 +34,18 @@ public:
 
     Shader& newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
 
-    Texture& newTexture(const char* filePath);
+    Texture& newTexture(const char* filePath, TextureCreateInfo createInfo);
+
+    Cubemap& newCubemap(TextureCreateInfo createInfo, 
+                        const char* frontPath, 
+                        const char* leftPath, 
+                        const char* rightPath,
+                        const char* backPath,
+                        const char* topPath,
+                        const char* bottomPath);
+
+    // template<typename T>
+    // Mesh* newMesh(const char* filePath);
 
 protected:
 private:

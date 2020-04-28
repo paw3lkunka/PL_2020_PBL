@@ -9,6 +9,7 @@
  */
 class Cubemap : public ISerializable
 {
+    friend class SceneWriter;
 public:
     Cubemap(TextureCreateInfo createInfo,
             unsigned char* front,

@@ -8,6 +8,8 @@ class Component;
 class Shader;
 class Mesh;
 class Texture;
+class Cubemap;
+class Material;
 
 class ObjectMaker;
 class ObjectModule;
@@ -37,6 +39,10 @@ private:
     std::vector<Mesh*> meshes;
     /// @brief texture container. 
     std::vector<Texture> textures;
+    ///@brief cubemaps constainer.
+    std::vector<Cubemap> cubemaps;
+    
+    std::vector<Material> materials;
 };
 
 #endif /* !OBJECTCONTAINER_HPP_ */

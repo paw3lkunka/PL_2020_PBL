@@ -6,6 +6,8 @@
 #include "ISerializable.inl"
 #include "IFileSystem.inl"
 
+class SceneWriter;
+
 /**
  * @brief Texture create info, all values are required
  */
@@ -21,6 +23,7 @@ struct TextureCreateInfo
  */
 class Texture : public ISerializable, public IFileSystem
 {
+    friend class SceneWriter;
 public:
     /**
      * @brief Construct a new Texture object

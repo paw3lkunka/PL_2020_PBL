@@ -9,8 +9,6 @@ Entity::Entity(int id, int bufferSize)
     this->components.reserve(bufferSize);
 }
 
-#include <iostream>
-
 void Entity::addComponent(Component* ptr)
 {
     components.push_back(ptr);

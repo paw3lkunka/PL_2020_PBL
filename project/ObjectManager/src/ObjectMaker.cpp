@@ -5,6 +5,10 @@
 
 #include "Shader.hpp"
 #include "Entity.hpp"
+#include "Texture.hpp"
+#include "Cubemap.hpp"
+#include "Material.hpp"
+#include "AssetStructers.inl"
 
 int ObjectMaker::nextID = 0;
 bool ObjectMaker::hasInstance = false;
@@ -59,4 +63,56 @@ Shader& ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmen
         }
     }
     throw AssetLoadingException("Shader");
+}
+
+Texture& ObjectMaker::newTexture(const char* filePath, TextureCreateInfo createInfo)
+{
+    if(objModPtr->assetReader.loadTexture(filePath))
+    {
+        TextureData texData = objModPtr->assetReader.textures[filePath];
+        createInfo.width = texData.width;
+        createInfo.height = texData.height;
+        createInfo.format = texData.nrComponents == 1 ? GL_RED : texData.nrComponents == 3 ? GL_RGB : GL_RGBA;
+
+        objContainer->textures.push_back(Texture(texData.data, createInfo, filePath));
+        return objContainer->textures[objContainer->textures.size() - 1];
+    }
+    throw AssetLoadingException("Texture");
+}
+
+Cubemap& ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
+                    const char* rightPath, const char* backPath, const char* topPath, const char* bottomPath)
+{
+    bool loaded = true;
+    loaded &= objModPtr->assetReader.loadTexture(frontPath);
+    loaded &= objModPtr->assetReader.loadTexture(leftPath);
+    loaded &= objModPtr->assetReader.loadTexture(rightPath);
+    loaded &= objModPtr->assetReader.loadTexture(backPath);
+    loaded &= objModPtr->assetReader.loadTexture(topPath);
+    loaded &= objModPtr->assetReader.loadTexture(bottomPath);
+
+    if(loaded)
+    {
+        TextureData frontData = objModPtr->assetReader.textures[frontPath];
+        createInfo.width = frontData.width;
+        createInfo.height = frontData.height;
+        createInfo.format = frontData.nrComponents == 1 ? GL_RED : frontData.nrComponents == 3 ? GL_RGB : GL_RGBA;
+        TextureData leftData = objModPtr->assetReader.textures[leftPath];
+        TextureData rightData = objModPtr->assetReader.textures[rightPath];
+        TextureData backData = objModPtr->assetReader.textures[backPath];
+        TextureData topData = objModPtr->assetReader.textures[topPath];
+        TextureData bottomData = objModPtr->assetReader.textures[bottomPath];
+        
+
+        objContainer->cubemaps.push_back(Cubemap(createInfo, frontData.data, leftData.data, rightData.data, backData.data, topData.data, bottomData.data));
+        auto map = &objContainer->cubemaps[objContainer->cubemaps.size() - 1];
+        map->frontPath = frontPath;
+        map->bottomPath = bottomPath;
+        map->leftPath = leftPath;
+        map->rightPath = rightPath;
+        map->topPath = topPath;
+        map->backPath = backPath;
+        return objContainer->cubemaps[objContainer->cubemaps.size() - 1];
+    }
+    throw AssetLoadingException("Cubemap");
 }

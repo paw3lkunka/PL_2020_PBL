@@ -29,13 +29,6 @@ int main()
     objMod.assetReader.loadMesh("Resources/Models/Test.fbx");
     objMod.assetReader.loadMesh("Resources/Models/unit_sphere.fbx");
     //objMod.assetReader.loadSkinnedMesh("Resources/Models/House Dancing.fbx");
-    objMod.assetReader.loadTexture("Resources/Textures/tex.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/nx.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/ny.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/nz.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/px.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/py.png");
-    objMod.assetReader.loadTexture("Resources/Textures/skybox/pz.png");
 
     auto unlitColor = objMod.objectMaker.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
     
@@ -53,17 +46,13 @@ int main()
     auto unlitColorMat = Material(&unlitColor);
     //unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    TextureData texData = objMod.assetReader.textures.find("Resources/Textures/tex.png")->second;
 
     TextureCreateInfo texCreateInfo = {};
-    texCreateInfo.format = GL_RGBA;
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
     texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-    texCreateInfo.width = texData.width;
-    texCreateInfo.height = texData.height;
-    Texture texture(texData.data, texCreateInfo, "Resources/Textures/tex.png");
+    auto texture = objMod.objectMaker.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
     auto unlitTextureMat = Material(&unlitTexture);
     unlitTextureMat.setTexture("mainTex", texture);
@@ -71,35 +60,19 @@ int main()
     auto unlitInstancedMat = Material(&unlitInstanced);
     unlitInstancedMat.setTexture("mainTex", texture);
 
-    TextureData skyboxNX = objMod.assetReader.textures.find("Resources/Textures/skybox/nx.png")->second;
-    TextureData skyboxNY = objMod.assetReader.textures.find("Resources/Textures/skybox/ny.png")->second;
-    TextureData skyboxNZ = objMod.assetReader.textures.find("Resources/Textures/skybox/nz.png")->second;
-    TextureData skyboxPX = objMod.assetReader.textures.find("Resources/Textures/skybox/px.png")->second;
-    TextureData skyboxPY = objMod.assetReader.textures.find("Resources/Textures/skybox/py.png")->second;
-    TextureData skyboxPZ = objMod.assetReader.textures.find("Resources/Textures/skybox/pz.png")->second;
     TextureCreateInfo skyboxCreateInfo = {};
-    skyboxCreateInfo.format = GL_RGBA;
     skyboxCreateInfo.generateMipmaps = true;
     skyboxCreateInfo.magFilter = GL_LINEAR;
     skyboxCreateInfo.minFilter = GL_LINEAR;
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-    skyboxCreateInfo.width = skyboxNX.width;
-    skyboxCreateInfo.height = skyboxNX.height;
-    Cubemap cubemap(
-        skyboxCreateInfo,
-        skyboxNZ.data,
-        skyboxNX.data,
-        skyboxPX.data,
-        skyboxPZ.data,
-        skyboxPY.data,
-        skyboxNY.data
-    );
-    cubemap.frontPath = "Resources/Textures/skybox/nz.png";
-    cubemap.leftPath = "Resources/Textures/skybox/nx.png";
-    cubemap.rightPath = "Resources/Textures/skybox/px.png";
-    cubemap.backPath = "Resources/Textures/skybox/pz.png";
-    cubemap.topPath = "Resources/Textures/skybox/py.png";
-    cubemap.bottomPath = "Resources/Textures/skybox/ny.png";
+
+    auto cubemap = objMod.objectMaker.newCubemap(skyboxCreateInfo, 
+                                "Resources/Textures/skybox/nz.png", 
+                                "Resources/Textures/skybox/nx.png", 
+                                "Resources/Textures/skybox/px.png",
+                                "Resources/Textures/skybox/pz.png",
+                                "Resources/Textures/skybox/py.png",
+                                "Resources/Textures/skybox/ny.png");
 
     auto skyboxMat = Material(&skyboxShader);
     skyboxMat.setCubemap("cubemap", cubemap);
