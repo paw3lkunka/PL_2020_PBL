@@ -18,7 +18,7 @@
 #include "Cubemap.hpp"
 #include "ISerializable.inl"
 
-class Shader;
+#include "Shader.hpp"
 
 /**
  * @brief Class encapsulating shader program and uniform variables

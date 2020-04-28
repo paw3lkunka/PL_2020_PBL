@@ -1,5 +1,6 @@
 //#include "Core.hpp"
-#include "SceneWriter.hpp"
+#include "ObjectModule.hpp"
+#include "SceneModule.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
 #include "Texture.hpp"
@@ -21,65 +22,38 @@ int main()
 
     // return exitCode;
 
-    SceneWriter sw;
+    ObjectModule objMod;
+    SceneModule sceneModule;
 
-    sw.ar.objectModulePtr = &sw.om;
-    sw.ar.sceneModulePtr = &sw.sm;
+    objMod.assetReader.loadAudioClip("Resources/Audios/sample.wav");
+    objMod.assetReader.loadMesh("Resources/Models/Test.fbx");
+    objMod.assetReader.loadMesh("Resources/Models/unit_sphere.fbx");
+    //objMod.assetReader.loadSkinnedMesh("Resources/Models/House Dancing.fbx");
+    objMod.assetReader.loadTexture("Resources/Textures/tex.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/nx.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/ny.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/nz.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/px.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/py.png");
+    objMod.assetReader.loadTexture("Resources/Textures/skybox/pz.png");
 
-    sw.ar.loadAudioClip("Resources/Audios/sample.wav");
-    sw.ar.loadShader("Resources/Shaders/UnlitColor/UnlitColor.vert");
-    sw.ar.loadShader("Resources/Shaders/UnlitColor/UnlitColor.frag");
-    sw.ar.loadShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert");
-    sw.ar.loadShader("Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-    sw.ar.loadShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert");
-    sw.ar.loadShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
-    sw.ar.loadShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert");
-    sw.ar.loadShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
-    sw.ar.loadShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert");
-    sw.ar.loadShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-    sw.ar.loadMesh("Resources/Models/Test.fbx");
-    sw.ar.loadMesh("Resources/Models/unit_sphere.fbx");
-    sw.ar.loadSkinnedMesh("Resources/Models/House Dancing.fbx");
-    sw.ar.loadTexture("Resources/Textures/tex.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/nx.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/ny.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/nz.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/px.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/py.png");
-    sw.ar.loadTexture("Resources/Textures/skybox/pz.png");
-
-    auto unlitColor = Shader(sw.ar.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.vert")->second.c_str(),
-                        sw.ar.shaders.find("Resources/Shaders/UnlitColor/UnlitColor.frag")->second.c_str());
-    unlitColor.vertexShaderPath = "Resources/Shaders/UnlitColor/UnlitColor.vert";
-    unlitColor.fragmentShaderPath = "Resources/Shaders/UnlitColor/UnlitColor.frag";
+    auto unlitColor = objMod.objectMaker.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
     
 
-    auto unlitTexture = Shader(  sw.ar.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.vert")->second.c_str(),
-                            sw.ar.shaders.find("Resources/Shaders/UnlitTexture/UnlitTexture.frag")->second.c_str());
-    unlitTexture.vertexShaderPath = "Resources/Shaders/UnlitTexture/UnlitTexture.vert";
-    unlitTexture.fragmentShaderPath = "Resources/Shaders/UnlitTexture/UnlitTexture.frag";
+    auto unlitTexture = objMod.objectMaker.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
 
-    auto unlitInstanced = Shader(sw.ar.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert")->second.c_str(),
-                            sw.ar.shaders.find("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag")->second.c_str());
-    unlitInstanced.vertexShaderPath = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert";
-    unlitInstanced.fragmentShaderPath = "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag";
+    auto unlitInstanced = objMod.objectMaker.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
     
 
-    auto skyboxShader = Shader(  sw.ar.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert")->second.c_str(),
-                            sw.ar.shaders.find("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag")->second.c_str());
-    skyboxShader.vertexShaderPath = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert";
-    skyboxShader.fragmentShaderPath = "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag";
+    auto skyboxShader = objMod.objectMaker.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-    auto skinnedShader = Shader( sw.ar.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert")->second.c_str(),
-                            sw.ar.shaders.find("Resources/Shaders/UnlitSkinned/UnlitSkinned.frag")->second.c_str());
-    skinnedShader.vertexShaderPath = "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert";
-    skinnedShader.fragmentShaderPath = "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag";
+    auto skinnedShader = objMod.objectMaker.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
     std::cout << "Shaders compiled" <<std::endl;
     auto unlitColorMat = Material(&unlitColor);
     //unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    TextureData texData = sw.ar.textures.find("Resources/Textures/tex.png")->second;
+    TextureData texData = objMod.assetReader.textures.find("Resources/Textures/tex.png")->second;
 
     TextureCreateInfo texCreateInfo = {};
     texCreateInfo.format = GL_RGBA;
@@ -97,12 +71,12 @@ int main()
     auto unlitInstancedMat = Material(&unlitInstanced);
     unlitInstancedMat.setTexture("mainTex", texture);
 
-    TextureData skyboxNX = sw.ar.textures.find("Resources/Textures/skybox/nx.png")->second;
-    TextureData skyboxNY = sw.ar.textures.find("Resources/Textures/skybox/ny.png")->second;
-    TextureData skyboxNZ = sw.ar.textures.find("Resources/Textures/skybox/nz.png")->second;
-    TextureData skyboxPX = sw.ar.textures.find("Resources/Textures/skybox/px.png")->second;
-    TextureData skyboxPY = sw.ar.textures.find("Resources/Textures/skybox/py.png")->second;
-    TextureData skyboxPZ = sw.ar.textures.find("Resources/Textures/skybox/pz.png")->second;
+    TextureData skyboxNX = objMod.assetReader.textures.find("Resources/Textures/skybox/nx.png")->second;
+    TextureData skyboxNY = objMod.assetReader.textures.find("Resources/Textures/skybox/ny.png")->second;
+    TextureData skyboxNZ = objMod.assetReader.textures.find("Resources/Textures/skybox/nz.png")->second;
+    TextureData skyboxPX = objMod.assetReader.textures.find("Resources/Textures/skybox/px.png")->second;
+    TextureData skyboxPY = objMod.assetReader.textures.find("Resources/Textures/skybox/py.png")->second;
+    TextureData skyboxPZ = objMod.assetReader.textures.find("Resources/Textures/skybox/pz.png")->second;
     TextureCreateInfo skyboxCreateInfo = {};
     skyboxCreateInfo.format = GL_RGBA;
     skyboxCreateInfo.generateMipmaps = true;
@@ -132,144 +106,145 @@ int main()
 
     auto skinnedMat = Material(&skinnedShader);
 
-    sw.om.NewEntity(2);
-    {
-        auto mr = sw.om.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &sw.ar.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
+    // objMod.objectMaker.newEntity(2);
+    // {
+    //     auto mr = objMod.objectMaker.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &objMod.assetReader.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
-        auto t = sw.om.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sw.sm.rootNode);
-    }
+    //     auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
     
-    sw.om.NewEntity(2);
-    {
-        auto mr = sw.om.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &sw.ar.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
+    // objMod.objectMaker.newEntity(2);
+    // {
+    //     auto mr = objMod.objectMaker.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &objMod.assetReader.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
-        auto t = sw.om.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sw.sm.rootNode);
-    }
+    //     auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
     }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
     }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -10.0f, 0.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
 
     }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 10.0f, 10.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
     }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
     }
 
-    sw.om.NewEntity(2);
+    objMod.objectMaker.newEntity(2);
     {
-        auto br = sw.om.NewComponent<BillboardRenderer>();
+        auto br = objMod.objectMaker.newEmptyComponentForLastEntity<BillboardRenderer>();
             br->material = &unlitInstancedMat;
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -10.0f, 10.0f, 0.0f };
             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
     }
 
-    sw.om.NewEntity(4);
+    objMod.objectMaker.newEntity(4);
     {
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
             t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
 
-        auto c = sw.om.NewComponent<SphereCollider>();
+        auto c = objMod.objectMaker.newEmptyComponentForLastEntity<SphereCollider>();
             c->radius = 10;
 
-        auto mr = sw.om.NewComponent<MeshRenderer>();
-            mr->mesh = &sw.ar.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+        auto mr = objMod.objectMaker.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = &objMod.assetReader.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
             mr->material = &unlitTextureMat;
 
-        auto so1 = sw.om.NewComponent<AudioSource>();
+        auto so1 = objMod.objectMaker.newEmptyComponentForLastEntity<AudioSource>();
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }
 
-    sw.om.NewEntity(3);
+    objMod.objectMaker.newEntity(3);
     {
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
 
-        auto c = sw.om.NewComponent<SphereCollider>();
+        auto c = objMod.objectMaker.newEmptyComponentForLastEntity<SphereCollider>();
             c->radius = 10;
 
-        auto mr = sw.om.NewComponent<MeshRenderer>();
-            mr->mesh = &sw.ar.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
+        auto mr = objMod.objectMaker.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = &objMod.assetReader.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
             mr->material = &unlitColorMat;
     }
 
-    sw.om.NewEntity(4);
+    objMod.objectMaker.newEntity(4);
     {
-        auto c = sw.om.NewComponent<Camera>();
+        auto c = objMod.objectMaker.newEmptyComponentForLastEntity<Camera>();
             c->farPlane = 1000.0f;
             c->nearPlane = 0.01f;
             c->fieldOfView = 80.0f;
             c->projectionMode = CameraProjection::Perspective;
 
         
-        auto t = sw.om.NewComponent<Transform>();
+        auto t = objMod.objectMaker.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-            t->setParent(&sw.sm.rootNode);
+            t->setParent(&sceneModule.rootNode);
 
-        auto li = sw.om.NewComponent<AudioListener>();
+        auto li = objMod.objectMaker.newEmptyComponentForLastEntity<AudioListener>();
             li->getIsCurrentModifiable() = true;
             li->getGainModifiable() = 1.0f;
             li->getVelocityModifiable();
@@ -277,10 +252,10 @@ int main()
             li->getAtModifiable();
             li->getUpModifiable();
 
-        auto sc = sw.om.NewComponent<SphereCollider>();
+        auto sc = objMod.objectMaker.newEmptyComponentForLastEntity<SphereCollider>();
             sc->type = Collider::Type::KINEMATIC;
             sc->radius = 5;
     }
 
-    sw.saveScene();
+    objMod.sceneWriter.saveScene();
 }

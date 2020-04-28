@@ -1,4 +1,5 @@
 #include "Shader.hpp"
+#include "ShaderExceptions.hpp"
 
 void Shader::setBool(const std::string& name, bool value) const
 {

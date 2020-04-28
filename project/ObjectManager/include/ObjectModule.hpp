@@ -2,17 +2,15 @@
 #define OBJECTMODULE_HPP_
 
 #include <vector>
-#include <functional>
 #include <assimp/scene.h>
 
 class Entity;
-class Component;
-class System;
-class Shader;
-class Material;
-class ResourceModule;
-class Mesh;
-struct Transform;
+
+#include "ObjectContainer.hpp"
+#include "ObjectMaker.hpp"
+#include "AssetReader.hpp"
+#include "SceneReader.hpp"
+#include "SceneWriter.hpp"
 
 /**
  * @brief Stores all data of Entities, Components, Shaders and materials
@@ -20,51 +18,24 @@ struct Transform;
  */
 class ObjectModule
 {
+    friend class ObjectMaker;
+    friend int main();
 public: 
     /**
      * @brief Construct a new Object Module object
      */
-    ObjectModule();
-    virtual ~ObjectModule();
+    ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this) {}
+    virtual ~ObjectModule() = default;
 
-
-    /**
-     * @brief Creates new Entity, and pushes it to entities vector.
-     * New components will be added to it, until next invocation.
-     * @param bufferSize initial size of component pointers vector.
-     */
-    void NewEntity(int bufferSize);
-    
-    /**
-     * @brief Create new component of given type, and return pointer to it.
-     * Component will be automaticaly added to last created entity in this module.
-     * @return T* type of component;
-     */
-    template<typename T>
-    T* NewComponent();
-
-    // TODO this is still WIP section
-
-    /// @brief entities container.
-    std::vector<Entity> entities;
-    /// @brief components container.
-    std::vector<Component*> components;
-    /// @brief shaders container.
-    std::vector<Shader> shaders;
-    /// @brief mesh container. 
-    std::vector<Mesh> meshes;
-
-
-    ///HACK: Connection between Resource Module and Object Module
-    ResourceModule* resourceModulePtr;
-protected:
-
-private:    
-    /// @brief used to setting entities ID in runtime.
-    static int nextID;
-
+    std::vector<Entity>* getEntitiesVector();
+//private:    
+    ObjectMaker objectMaker;
+    ObjectContainer objectContainer;
+    AssetReader assetReader;
+    SceneReader sceneReader;
+    SceneWriter sceneWriter;
 };
 
-#include "ObjectsModule.ipp"
+#include "ObjectMaker.ipp"
 
 #endif /* !OBJECTMODULE_HPP_ */

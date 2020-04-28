@@ -1,14 +1,27 @@
 #include "SceneWriter.hpp"
+#include "Components.inc"
+#include "ObjectModule.hpp"
+#include "ObjectContainer.hpp"
 
+#include "Material.hpp"
+#include "Texture.hpp"
+#include "MeshCustom.hpp"
+#include "MeshSkinned.hpp"
+#include "Shader.hpp"
 
 #include <fstream>
 #include <iomanip>
 
+SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
+{
+    objModulePtr = objectModulePtr;
+    objContainerPtr = &objectModulePtr->objectContainer;
+}
 
 void SceneWriter::saveScene()
 {
     std::string name;
-    for( int i = 0; i < om.entities.size(); ++i)
+    for( int i = 0; i < objContainerPtr->entities.size(); ++i)
     {
         childrenID.clear();
         if(i < 10)
@@ -23,17 +36,42 @@ void SceneWriter::saveScene()
         {
             name = "entity" + std::to_string(i);
         }
-        j[name]["id"] = om.entities[i].getId();
-        j[name]["serialization ID"] = om.entities[i].serializationID;
-        std::cout << om.entities[i].getComponentsPtr()->size() << "\t";
-        for(int j = 0; j < om.entities[i].getComponentsPtr()->size(); ++j)
+        j[name]["id"] = objContainerPtr->entities[i].getId();
+        j[name]["serialization ID"] = objContainerPtr->entities[i].serializationID;
+        std::cout << objContainerPtr->entities[i].getComponentsPtr()->size() << "\t";
+        for(int j = 0; j < objContainerPtr->entities[i].getComponentsPtr()->size(); ++j)
         {
-            childrenID.push_back(om.entities[i].getComponentsPtr()->operator[](j)->serializationID);
+            childrenID.push_back(objContainerPtr->entities[i].getComponentsPtr()->operator[](j)->serializationID);
         }
         j[name]["components"] = childrenID;
     }
 
-    for( int i = 0; i < om.components.size(); ++i)
+    for(int i = 0; i < objContainerPtr->shaders.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "shader00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "shader0" + std::to_string(i);
+        }
+        else
+        {
+            name = "shader" + std::to_string(i);
+        }
+        j[name]["serializationID"] = objContainerPtr->shaders[i].serializationID;
+        j[name]["fragmentShaderPath"] = objContainerPtr->shaders[i].fragmentShaderPath;
+        j[name]["vertexShaderPath"] = objContainerPtr->shaders[i].vertexShaderPath;
+        if(objContainerPtr->shaders[i].geometryShaderPath != "")
+        {
+            j[name]["geometryShaderPath"] = objContainerPtr->shaders[i].geometryShaderPath;
+        }
+    }
+
+    
+
+    for( int i = 0; i < objContainerPtr->components.size(); ++i)
     {
         if(i < 10)
         {
@@ -47,46 +85,46 @@ void SceneWriter::saveScene()
         {
             name = "component" + std::to_string(i);
         }
-        j[name]["entity id"] = om.components[i]->entityPtr->getId();
-        j[name]["serialization ID"] = om.components[i]->serializationID;
-        if(dynamic_cast<Transform*>(om.components[i]))
+        j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
+        j[name]["serialization ID"] = objContainerPtr->components[i]->serializationID;
+        if(dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
-            Transform* temp = dynamic_cast<Transform*>(om.components[i]);
+            Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]);
             saveTransform(name, temp);
         }
-        else if(dynamic_cast<Bone*>(om.components[i]))
+        else if(dynamic_cast<Bone*>(objContainerPtr->components[i]))
         {
-            Bone* temp = dynamic_cast<Bone*>(om.components[i]);
+            Bone* temp = dynamic_cast<Bone*>(objContainerPtr->components[i]);
             saveBone(name, temp);
         }
-        else if(dynamic_cast<AudioSource*>(om.components[i]))
+        else if(dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
-            AudioSource* temp = dynamic_cast<AudioSource*>(om.components[i]);
+            AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]);
             saveAudioSource(name, temp);
         }
-        else if(dynamic_cast<AudioListener*>(om.components[i]))
+        else if(dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
         {
-            AudioListener* temp = dynamic_cast<AudioListener*>(om.components[i]);
+            AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]);
             saveAudioListener(name, temp);
         }
-        else if(dynamic_cast<Camera*>(om.components[i]))
+        else if(dynamic_cast<Camera*>(objContainerPtr->components[i]))
         {
-            Camera* temp = dynamic_cast<Camera*>(om.components[i]);
+            Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]);
             saveCamera(name, temp);
         }
-        else if(dynamic_cast<BillboardRenderer*>(om.components[i]))
+        else if(dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]))
         {
-            BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(om.components[i]);
+            BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]);
             saveBillboardRenderer(name, temp);
         }
-        else if(dynamic_cast<Renderer*>(om.components[i]))
+        else if(dynamic_cast<Renderer*>(objContainerPtr->components[i]))
         {
-            Renderer* temp = dynamic_cast<Renderer*>(om.components[i]);
+            Renderer* temp = dynamic_cast<Renderer*>(objContainerPtr->components[i]);
             saveRenderer(name, temp);
         }
-        else if(dynamic_cast<SphereCollider*>(om.components[i]))
+        else if(dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
-            SphereCollider* temp = dynamic_cast<SphereCollider*>(om.components[i]);
+            SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
             saveSphereCollider(name, temp);
         }
     }

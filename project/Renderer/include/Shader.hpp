@@ -17,7 +17,6 @@
 #include <unordered_map>
 #include <iostream>
 
-#include "ShaderExceptions.hpp"
 #include "ISerializable.inl"
 
 constexpr GLsizei NAME_BUF_SIZE = 32;

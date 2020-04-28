@@ -1,26 +1,38 @@
 #ifndef SCENEWRITER_HPP_
 #define SCENEWRITER_HPP_
 
-#include "AssetReader.hpp"
-#include "ObjectModule.hpp"
-#include "SceneModule.hpp"
-
 #include <json.hpp>
 
+class ObjectModule;
+class ObjectContainer;
 class Component;
+struct Bone;
+struct Transform;
+struct AudioListener;
+struct AudioSource;
+struct Camera;
+struct Renderer;
+struct BillboardRenderer;
+struct SphereCollider;
+class Material;
+class Texture;
+class MeshCustom;
+class MeshSkinned;
+class Shader;
 
 class SceneWriter
 {
 public:
+    SceneWriter(ObjectModule* objectModulePtr);
     SceneWriter() = default;
     ~SceneWriter() = default;
     void saveScene();
 
-    AssetReader ar;
-    ObjectModule om;
-    SceneModule sm;
 protected:
 private:
+    ObjectModule* objModulePtr;
+    ObjectContainer* objContainerPtr;
+
     ///@brief vector for saving children id for components
     std::vector<unsigned int> childrenID;
     nlohmann::json j;

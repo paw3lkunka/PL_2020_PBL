@@ -5,12 +5,6 @@
 
 //TODO check, which includes are really necessery
 
-// * C++ std lib
-#include <vector>
-#include <iostream>
-#include <utility>
-#include <sstream>
-
 // * System-depended
 #ifdef __linux__
     #include <unistd.h>

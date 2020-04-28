@@ -4,8 +4,8 @@
 class SceneReader
 {
 public:
-    SceneReader();
-    ~SceneReader();
+    SceneReader() = default;
+    ~SceneReader() = default;
 
 protected:
 private:

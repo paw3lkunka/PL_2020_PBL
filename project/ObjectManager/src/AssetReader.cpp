@@ -6,6 +6,7 @@
 #include "Transform.inl"
 #include "Bone.inl"
 #include "MeshDataStructures.inl"
+#include "ObjectMaker.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -344,20 +345,20 @@ bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScen
 
         if(transNode)
         {
-            objectModulePtr->NewEntity(2);
+            objectModulePtr->objectMaker.newEntity(2);
             std::cout << "Entity processing: " << transNode->mNodeName.C_Str() << std::endl;
 
-            tranPtr = objectModulePtr->NewComponent<Transform>();
+            tranPtr = objectModulePtr->objectMaker.newEmptyComponent<Transform>();
             if (parent != nullptr)
             {
                 tranPtr->setParent(parent);
             }
             else
             {
-                tranPtr->setParent(&(sceneModulePtr->rootNode));
+                tranPtr->setParent(&(GetCore().sceneModule.rootNode));
             }
 
-            bonePtr = objectModulePtr->NewComponent<Bone>();
+            bonePtr = objectModulePtr->objectMaker.newEmptyComponent<Bone>();
             copyToMap(bonePtr, transNode);
             bonePtr->filePath = path;
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);

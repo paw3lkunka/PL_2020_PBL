@@ -4,6 +4,12 @@
 #include "Cubemap.hpp"
 #include "FileStructures.inl"
 
+// * C++ std lib
+#include <vector>
+#include <iostream>
+#include <utility>
+#include <sstream>
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -417,7 +423,7 @@ int Core::init()
     //         sc->type = Collider::Type::KINEMATIC;
     //         sc->radius = 5;
     // }
-    CameraSystem::setAsMain(&objectModule.entities.back());
+    //CameraSystem::setAsMain(&objectModule.objectContainer.entities.back());
 
     gameSystemsModule.addSystem(&cameraSystem);
 
@@ -478,7 +484,7 @@ int Core::init()
     
 #pragma endregion
 
-    gameSystemsModule.entities = &objectModule.entities;
+    gameSystemsModule.entities = objectModule.getEntitiesVector();
 
     // Everything is ok.
     return 0;

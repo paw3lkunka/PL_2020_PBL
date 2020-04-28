@@ -7,6 +7,7 @@
 #include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
 
+
 #include <unordered_map>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
@@ -14,6 +15,7 @@
 #include <glm/mat4x4.hpp>
 
 class ObjectModule;
+class ObjectMaker;
 class SceneModule;
 class Bone;
 class SceneWriter;
@@ -24,21 +26,18 @@ struct Transform;
  */
 class AssetReader
 {
-    friend class SceneWriter;
+    friend class ObjectMaker;
 public:
 
+    AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) {}
     AssetReader() = default;
     ~AssetReader() = default;
-
-    ///HACK: Connection between Resource Module and Object Module
-    ObjectModule* objectModulePtr;
-
-    SceneModule* sceneModulePtr;
 
     //TODO: Better solution for saving animation ticks
     std::unordered_map<std::string, double> animationTicks;
 
 //private:
+    ObjectModule* objectModulePtr;
 
     /**
      * @brief assimp importer reference;
