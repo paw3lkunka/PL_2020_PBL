@@ -358,6 +358,7 @@ int Core::init()
 
         so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so1->getGainModifiable() = 8.0f;
             so1->getIsRelativeModifiable() = false;
             so1->getGainModifiable() = 10.0f;
             so1->getIsLoopingModifiable() = true;
