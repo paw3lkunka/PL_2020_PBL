@@ -16,23 +16,38 @@ struct Rigidbody : public Component
      * @brief Mass of the rigidbody
      */
     float mass;
+
     /**
      * @brief Drag of the rigidbody
      */
     float drag;
+
     /**
      * @brief Angular drag of the rigidbody
      */
     float angularDrag;
 
+    bool ignoreGravity = false;
+
     /**
-     * @brief Velocity of the rigidbody
+     * @brief Force of the rigidbody
      */
-    glm::vec3 velocity;
+    glm::vec3 force;
+
     /**
      * @brief Torque of the rigidbody
      */
     glm::vec3 torque;
+
+    /**
+     * @brief Velocity of the rigidbody,
+     */
+    glm::vec3 velocity;
+
+    /**
+     * @brief Angular velocity of the rigidbody
+     */
+    glm::vec3 angularVelocity;
 };
 
 #endif
