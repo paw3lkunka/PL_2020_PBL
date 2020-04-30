@@ -120,7 +120,7 @@ int Core::init()
 
     std::cout << "Shaders compiled" <<std::endl;
     Material* unlitColorMat = objectModule.newMaterial(unlitColor);
-    //unlitColorMat.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 
     TextureCreateInfo texCreateInfo = {};
@@ -342,10 +342,25 @@ int Core::init()
             t->setParent(&sceneModule.rootNode);
     }
 
+    objectModule.newEntity(3);
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable()={-10.5f,0.0f,10.0f};
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            mr->material = unlitColorMat;
+    }
+
     objectModule.newEntity(4);
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 0.5f, 0.0f, 10.0f };
+            t->getLocalPositionModifiable() = { 10.5f, 0.0f, 10.0f };
             t->getLocalScaleModifiable() *= 10;
             t->setParent(&sceneModule.rootNode);
 
@@ -357,26 +372,11 @@ int Core::init()
             mr->material = unlitTextureMat;
 
         so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+            so1->getListenersModifiable().push_back(li);
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getGainModifiable() = 8.0f;
+            so1->getGainModifiable() = 100.5f;
             so1->getIsRelativeModifiable() = false;
-            so1->getGainModifiable() = 10.0f;
             so1->getIsLoopingModifiable() = true;
-    }
-
-    objectModule.newEntity(3);
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
-
-        auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-            c->radius = 10;
-
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
-            mr->material = unlitColorMat;
     }
 
     objectModule.newEntity(4);
@@ -412,7 +412,7 @@ int Core::init()
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
-    //gameSystemsModule.addSystem(&collisionDetectionSystem);
+    gameSystemsModule.addSystem(&collisionDetectionSystem);
     gameSystemsModule.addSystem(&boneSystem);
     //gameSystemsModule.addSystem(&skinnedMeshRendererSystem);
 
@@ -460,12 +460,12 @@ int Core::init()
 
     objectModule.newEntity(2);
     {
-            so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so3->getListenersModifiable().push_back(li);
-            so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
-            so3->getIsRelativeModifiable() = true;
-            so3->getGainModifiable() = 1.0f;
-            so3->getIsLoopingModifiable() = true;
+        so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->getListenersModifiable().push_back(li);
+        so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.1f;
+        so3->getIsLoopingModifiable() = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
@@ -500,6 +500,8 @@ int Core::mainLoop()
 #pragma endregion
 
     // * ===== Game loop ===================================================
+
+    sceneModule.updateTransforms();
 
     //Main loop
     while (!glfwWindowShouldClose(window))
