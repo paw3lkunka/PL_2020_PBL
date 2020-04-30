@@ -89,7 +89,8 @@ int Core::init()
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
-    //messageBus.addReceiver( &tmpExit );
+    messageBus.addReceiver( &objectModule );
+    messageBus.addReceiver( &tmpExit );
 
 #pragma region Data Loading
     
@@ -101,7 +102,8 @@ int Core::init()
     objectModule.newModel("Resources/Models/Right_bank.FBX", FileType::MESH);
     objectModule.newModel("Resources/Models/Riverbed.FBX", FileType::MESH);
     objectModule.newModel("Resources/Models/Water.FBX", FileType::MESH);
-    
+    objectModule.newAudioClip("Resources/Audios/sample.wav");
+    objectModule.newAudioClip("Resources/Audios/test.wav");
     
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
@@ -203,7 +205,7 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Water.FBX/Water");
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
@@ -216,7 +218,7 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Cliffs.FBX/Cliffs");
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
@@ -229,7 +231,7 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Left_bank.FBX/Left_bank");
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
@@ -242,7 +244,7 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Right_bank.FBX/Right_bank");
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
@@ -255,7 +257,7 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Riverbed.FBX/Riverbed");
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
@@ -354,9 +356,10 @@ int Core::init()
             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
             mr->material = unlitTextureMat;
 
-        auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
             so1->getIsRelativeModifiable() = false;
+            so1->getGainModifiable() = 10.0f;
             so1->getIsLoopingModifiable() = true;
     }
 
@@ -388,7 +391,7 @@ int Core::init()
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
 
-        auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+        li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
             li->getIsCurrentModifiable() = true;
             li->getGainModifiable() = 1.0f;
             li->getVelocityModifiable();
@@ -423,24 +426,21 @@ int Core::init()
 
 #pragma region AudioModule demo - initialization
     
-    //audioModule.init();
+    audioModule.init();
+    
+    // objectModule.newEntity(2);
+    // {
+    //     so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+    //         so1->getListenersModifiable().push_back(li);
+    //         so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+    //         so1->getIsRelativeModifiable() = false;
+    //         so1->getIsLoopingModifiable() = true;
 
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
 
-    //so1->getListenersModifiable().push_back(li);
-    /*
-    objectModule.NewEntity(2);
-    {
-        so1 = objectModule.NewComponent<AudioSource>();
-            so1->getListenersModifiable().push_back(li);
-            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getIsRelativeModifiable() = false;
-            so1->getIsLoopingModifiable() = true;
-
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
-    */
 
     /*
     objectModule.NewEntity(2);
@@ -456,23 +456,23 @@ int Core::init()
             t->setParent(&sceneModule.rootNode);
     }
     */
-    
-    // objectModule.newEntity(2);
-    // {
-    //     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-    //         so3->getListenersModifiable().push_back(li);
-    //         so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
-    //         so3->getIsRelativeModifiable() = true;
-    //         so3->getGainModifiable() = 0.01f;
-    //         so3->getIsLoopingModifiable() = true;
 
-    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-    //         t->setParent(&sceneModule.rootNode);
-    // }
+    objectModule.newEntity(2);
+    {
+            so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+            so3->getListenersModifiable().push_back(li);
+            so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+            so3->getIsRelativeModifiable() = true;
+            so3->getGainModifiable() = 1.0f;
+            so3->getIsLoopingModifiable() = true;
 
-    // gameSystemsModule.addSystem(&audioListenerSystem);
-    // gameSystemsModule.addSystem(&audioSourceSystem);
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    gameSystemsModule.addSystem(&audioListenerSystem);
+    gameSystemsModule.addSystem(&audioSourceSystem);
     
 #pragma endregion
 
@@ -493,9 +493,9 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
-        // //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
 #pragma endregion
 
     // * ===== Game loop ===================================================

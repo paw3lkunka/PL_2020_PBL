@@ -184,16 +184,16 @@ class Core
 
         //TODO Please, do something better here ;-;
         // /// @brief safely close application, on ESC press
-        // class : public IModule
-        // {
-        // virtual void receiveMessage(Message msg)
-        //     {
-        //         if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-        //         {
-        //                 instance->close();
-        //         }
-        //     }
-        // } tmpExit;
+        class : public IModule
+        {
+        virtual void receiveMessage(Message msg)
+            {
+                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
+                {
+                        instance->close();
+                }
+            }
+        } tmpExit;
         
 #pragma endregion
 
@@ -238,11 +238,11 @@ class Core
 #pragma region TMP
         // TODO: this should get successively removed
         // // Needed to set a listener for a source :(
-        // AudioListener* li;
-        // // Needed to play that source...
-        // AudioSource* so1;
-        // AudioSource* so2;
-        // AudioSource* so3;
+        AudioListener* li;
+        // Needed to play that source...
+        AudioSource* so1;
+        AudioSource* so2;
+        AudioSource* so3;
         //Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
         //Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion

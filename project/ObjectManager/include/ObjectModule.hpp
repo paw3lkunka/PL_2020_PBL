@@ -12,18 +12,20 @@ class Material;
 enum class FileType: unsigned int;
 struct Bounds;
 struct TextureCreateInfo;
+class Message;
 
 #include "ObjectContainer.hpp"
 #include "ObjectMaker.hpp"
 #include "AssetReader.hpp"
 #include "SceneReader.hpp"
 #include "SceneWriter.hpp"
+#include "IModule.inl"
 
 /**
  * @brief Stores all data of Entities, Components, Shaders and materials
  * 
  */
-class ObjectModule
+class ObjectModule : public IModule
 {
     friend class ObjectMaker;
     friend class SceneWriter;
@@ -41,6 +43,8 @@ public:
      * @return std::vector<Entity>* pointer to vector
      */
     std::vector<Entity>* getEntitiesVector();
+
+    void receiveMessage(Message msg);
 
 #pragma region SceneWriter Wrapper
     /**
@@ -144,6 +148,8 @@ public:
      * @return Material& reference to material
      */
     Material* newMaterial(Shader* shader);
+
+    void newAudioClip(const char* filePath);
 
 #pragma endregion
 

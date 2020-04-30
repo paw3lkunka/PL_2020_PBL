@@ -7,6 +7,8 @@
 #include "Cubemap.hpp"
 #include "Material.hpp"
 #include "AssetStructers.inl"
+#include "Message.inl"
+#include "Core.hpp"
 
 #include <assimp/scene.h>
 #include <assimp/anim.h>
@@ -14,6 +16,23 @@
 std::vector<Entity>* ObjectModule::getEntitiesVector()
 {
     return &objectContainer.entities;
+}
+
+void ObjectModule::receiveMessage(Message msg)
+{
+    switch(msg.getEvent())
+    {
+        case Event::QUERY_AUDIO_DATA:
+        {
+            std::unordered_map<std::string, AudioFile>::iterator iter = assetReader.audioClips.find(msg.getValue<const char*>());
+
+            if(iter != assetReader.audioClips.end())
+            {
+                GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, &iter->second ) );
+            }
+        }
+        break;
+    }
 }
 #pragma region SceneWriter Wrapper
 void ObjectModule::saveScene(const char* filePath)
@@ -97,6 +116,11 @@ void ObjectModule::newModel(const char* filePath, FileType type)
 Material* ObjectModule::newMaterial(Shader* shader)
 {
     return objectMaker.newMaterial(shader);
+}
+
+void ObjectModule::newAudioClip(const char* filePath)
+{
+    assetReader.loadAudioClip(filePath);
 }
 
 #pragma endregion

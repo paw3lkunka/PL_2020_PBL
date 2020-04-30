@@ -14,8 +14,5 @@ int main()
     core.cleanup();
 
     return exitCode;
-
-
-    //objMod.assetReader.loadAudioClip("Resources/Audios/sample.wav");
     
 }
