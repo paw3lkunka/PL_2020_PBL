@@ -19,6 +19,15 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
     objContainerPtr = &objectModulePtr->objectContainer;
 }
 
+SceneWriter::~SceneWriter()
+{
+    delete objModulePtr;
+    objModulePtr = nullptr;
+    
+    delete objContainerPtr;
+    objContainerPtr = nullptr;
+}
+
 void SceneWriter::saveScene(const char* filePath)
 {
     std::string name;

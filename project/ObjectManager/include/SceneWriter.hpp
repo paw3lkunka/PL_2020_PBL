@@ -21,15 +21,23 @@ class MeshSkinned;
 class Shader;
 
 /**
- * @brief 
- * 
+ * @brief Scene saver to file class
  */
 class SceneWriter
 {
 public:
+    /**
+     * @brief Construct a new Scene Writer object
+     * 
+     * @param objectModulePtr pointer to composition parent 
+     */
     SceneWriter(ObjectModule* objectModulePtr);
-    SceneWriter() = default;
-    ~SceneWriter() = default;
+
+    /**
+     * @brief Destroy the Scene Writer object
+     */
+    ~SceneWriter();
+
     /**
      * @brief saving scene to file
      * 
@@ -39,13 +47,20 @@ public:
 
 protected:
 private:
+
+    ///@brief pointer to composition parent
     ObjectModule* objModulePtr;
+
+    ///@brief pointer to object container to make easier access
     ObjectContainer* objContainerPtr;
 
     ///@brief vector for saving children id for components
     std::vector<unsigned int> childrenID;
+
+    ///@brief json object - parser to json
     nlohmann::json j;
 
+    ///@brief saving components
     void saveBone(std::string name, Bone* componentPtr);
     void saveTransform(std::string name, Transform* componentPtr);
     void saveAudioListener(std::string name, AudioListener* componentPtr);
@@ -55,6 +70,7 @@ private:
     void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
 
+    ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);
     void saveTexture(std::string name, Texture* assetPtr);
     void saveMeshCustom(std::string name, MeshCustom* assetPtr);

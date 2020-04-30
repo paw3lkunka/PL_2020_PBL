@@ -10,6 +10,9 @@
 #include <utility>
 #include <sstream>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -32,6 +35,16 @@ void WarningLog(const char* log)
 void ErrorLog(const char* log)
 {   
     Core::instance->messageBus.sendMessage(Message(Event::DEBUG_ERROR_LOG, log));
+}
+
+glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
+{
+    glm::mat4 temp = glm::mat4(1);
+    temp = glm::rotate(temp, glm::radians(eulerAngles.x), glm::vec3(1.0, 0.0, 0.0));
+    temp = glm::rotate(temp, glm::radians(eulerAngles.y), glm::vec3(0.0, 1.0, 0.0));
+    temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
+    glm::quat quatFinal = glm::quat(temp);
+    return quatFinal;
 }
 
 int Core::init()
@@ -83,6 +96,13 @@ int Core::init()
     objectModule.newModel("Resources/Models/Test.fbx", FileType::MESH);
     objectModule.newModel("Resources/Models/unit_sphere.fbx", FileType::MESH);
     objectModule.newModel("Resources/Models/House Dancing.fbx", FileType::MESH);
+    objectModule.newModel("Resources/Models/Cliffs.FBX", FileType::MESH);
+    objectModule.newModel("Resources/Models/Left_bank.FBX", FileType::MESH);
+    objectModule.newModel("Resources/Models/Right_bank.FBX", FileType::MESH);
+    objectModule.newModel("Resources/Models/Riverbed.FBX", FileType::MESH);
+    objectModule.newModel("Resources/Models/Water.FBX", FileType::MESH);
+    
+    
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
     
@@ -133,6 +153,18 @@ int Core::init()
 
     Material* skinnedMat = objectModule.newMaterial(skinnedShader);
 
+    Material* waterMat = objectModule.newMaterial(unlitColor);
+    waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+    Material* cliffsMat = objectModule.newMaterial(unlitColor);
+    cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
+
+    Material* riverBedMat = objectModule.newMaterial(unlitColor);
+    riverBedMat->setVec4("color", glm::vec4(0.407f, 0.2f, 0.070f, 1.0f));
+
+    Material* riverBankMat = objectModule.newMaterial(unlitColor);
+    riverBankMat->setVec4("color", glm::vec4(0.333f, 0.741f, 0.278f, 1.0f));
+
 #pragma endregion
 
 #pragma region Renderer
@@ -153,7 +185,7 @@ int Core::init()
 #pragma endregion
 
 #pragma region Entities
-   objectModule.newEntity(2);
+    objectModule.newEntity(2);
     {
         auto mr = objectModule.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
             mr->material = unlitColorMat;
@@ -161,6 +193,71 @@ int Core::init()
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.newEntity(2);
+    {
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = waterMat;
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Water.FBX/Water");
+
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
+            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.newEntity(2);
+    {
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = cliffsMat;
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Cliffs.FBX/Cliffs");
+
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
+            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.newEntity(2);
+    {
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = riverBankMat;
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Left_bank.FBX/Left_bank");
+
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
+            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.newEntity(2);
+    {
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = riverBankMat;
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Right_bank.FBX/Right_bank");
+
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
+            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(&sceneModule.rootNode);
+    }
+
+    objectModule.newEntity(2);
+    {
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = riverBedMat;
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Riverbed.FBX/Riverbed");
+
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {0.0f, -10.0f, 0.0f};
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
+            t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
     }
     

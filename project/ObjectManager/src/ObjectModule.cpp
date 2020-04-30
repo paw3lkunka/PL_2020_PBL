@@ -96,13 +96,6 @@ void ObjectModule::newModel(const char* filePath, FileType type)
 
 Material* ObjectModule::newMaterial(Shader* shader)
 {
-    for(Material* m : objectContainer.materials)
-    {
-        if(m->getShaderPtr() == shader)
-        {
-            return m;
-        }
-    }
     return objectMaker.newMaterial(shader);
 }
 

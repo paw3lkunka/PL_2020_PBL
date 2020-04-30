@@ -69,6 +69,14 @@ void WarningLog(const char* log);
  * @param log text to send
  */
 void ErrorLog(const char* log);   
+
+/**
+ * @brief euler to quaternion conversion
+ *
+ * @param eulerAngles euler angle 
+ * @return glm::quat quaternion representatoin of angle
+ */
+glm::quat eulerToQuaternion(glm::vec3 eulerAngles);
 #pragma endregion
 
 /**

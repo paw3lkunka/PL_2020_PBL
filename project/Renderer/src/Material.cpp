@@ -53,7 +53,6 @@ void Material::use()
     
     // * ===== Texture samplers =====
     int i = 0;
-    std::cout << "Textures size: " << textures.size() << "\n";
     for(std::pair<std::string, Texture*> texture : textures)
     {
         if(texture.second != nullptr)
