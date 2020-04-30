@@ -13,6 +13,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
@@ -197,7 +198,6 @@ bool AssetReader::loadMesh(std::string path)
 bool AssetReader::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::cout << "Node: " << node->mName.C_Str() << " meshes: " << std::to_string(node->mNumMeshes) << std::endl;
     std::unordered_map<std::string, MeshCustom>::iterator iter;
     Bounds tBounds;
     for(int i = 0; i < node->mNumMeshes; i++)
@@ -221,10 +221,9 @@ bool AssetReader::processMeshNode(aiNode* node, const aiScene* scene, std::strin
         tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
         tempVec = mesh->mAABB.mMax;
         tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices, tBounds, path, meshPath)));
-        iter = meshes.find(meshPath);
+        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
 
-        returnFlag = returnFlag & (iter != meshes.end());
+        returnFlag = returnFlag & (theMesh != nullptr);
     }
 
     for(int i = 0; i < node->mNumChildren; ++i)
@@ -295,7 +294,6 @@ bool AssetReader::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std
                 boneIndex = bonesAmount;
                 boneMapping[boneName] = boneIndex;
                 bonesAmount++;
-                std::cout << "Bone Name: " << boneName << std::endl; 
             }
             else
             {
@@ -318,10 +316,9 @@ bool AssetReader::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std
         tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
         tempVec = mesh->mAABB.mMax;
         tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        skinnedMeshes.insert(std::pair(meshPath, MeshSkinned(vertices, indices, tBounds, path, meshPath)));
-        iter = skinnedMeshes.find(meshPath);
+        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
 
-        returnFlag = returnFlag & (iter != skinnedMeshes.end());
+        returnFlag = returnFlag & (theMesh != nullptr);
     }
 
     for(int i = 0; i < node->mNumChildren; ++i)
@@ -346,9 +343,8 @@ bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScen
         if(transNode)
         {
             objectModulePtr->objectMaker.newEntity(2);
-            std::cout << "Entity processing: " << transNode->mNodeName.C_Str() << std::endl;
 
-            tranPtr = objectModulePtr->objectMaker.newEmptyComponent<Transform>();
+            tranPtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Transform>();
             if (parent != nullptr)
             {
                 tranPtr->setParent(parent);
@@ -358,7 +354,7 @@ bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScen
                 tranPtr->setParent(&(GetCore().sceneModule.rootNode));
             }
 
-            bonePtr = objectModulePtr->objectMaker.newEmptyComponent<Bone>();
+            bonePtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Bone>();
             copyToMap(bonePtr, transNode);
             bonePtr->filePath = path;
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);

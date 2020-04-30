@@ -17,6 +17,21 @@ struct TooManyInstancesException : public std::exception
     }
 };
 
+struct FileNotFoundException : public std::exception
+{
+    const char* message;
+
+    FileNotFoundException(const char* type)
+    {
+        message = "File not found %s", type;
+    }
+
+    const char* what()
+    {
+        return message;
+    }
+};
+
 struct AssetLoadingException : public std::exception
 {
     const char* message;

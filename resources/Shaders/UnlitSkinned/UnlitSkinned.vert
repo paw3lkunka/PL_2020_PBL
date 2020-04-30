@@ -13,7 +13,7 @@ layout (std140, binding = 0) uniform Matrices
     mat4 view;
 };
 
-const int MAX_BONES = 256;
+const int MAX_BONES = 128;
 
 out vec2 uv0;
 out vec3 normal0;

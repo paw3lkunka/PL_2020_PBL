@@ -42,6 +42,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     this->createInfo = createInfo;
     this->skyboxMaterial = skyboxMaterial;
 
+
     if (createInfo.cullFace)
     {
         glEnable(GL_CULL_FACE);
@@ -247,18 +248,21 @@ void RendererModule::render()
         }
 
         // TODO Proper instanced rendering
-        billboardQueue.front()->material->use();
-        int i = 0, count = billboardQueue.size();
-        glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
-        glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-        while(!billboardQueue.empty())
+        if(!billboardQueue.empty())
         {
-            glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
-            billboardQueue.pop();
-            ++i;
+            billboardQueue.front()->material->use();
+            int i = 0, count = billboardQueue.size();
+            glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
+            glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+            while(!billboardQueue.empty())
+            {
+                glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
+                billboardQueue.pop();
+                ++i;
+            }
+            glBindVertexArray(billboardVao);
+            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
         }
-        glBindVertexArray(billboardVao);
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
         glBindVertexArray(0);
 
         // ? +++++ Render skybox with appropriate depth test function +++++

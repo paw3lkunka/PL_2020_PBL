@@ -2,12 +2,14 @@
 #include "ObjectModule.hpp"
 #include "ObjectContainer.hpp"
 #include "ObjectExceptions.inl"
+#include "FileStructures.inl"
 
 #include "Shader.hpp"
 #include "Entity.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
+#include "Components.inc"
 #include "AssetStructers.inl"
 
 int ObjectMaker::nextID = 0;
@@ -30,7 +32,7 @@ Entity& ObjectMaker::newEntity(int bufferSize = 0)
     return objContainer->entities[objContainer->entities.size() - 1];
 }
 
-Shader& ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
+Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
 {
     bool loaded = true;
     loaded &= objModPtr->assetReader.loadShader(fragmentShaderPath);
@@ -46,41 +48,50 @@ Shader& ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmen
         if(geometryShaderPath != nullptr)
         {
             std::string geometryShaderData = objModPtr->assetReader.shaders[geometryShaderPath];
-            objContainer->shaders.push_back(Shader(vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str()));
-            Shader& shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
-            shaderRef.vertexShaderPath = vertexShaderPath;
-            shaderRef.fragmentShaderPath = fragmentShaderPath;
-            shaderRef.geometryShaderPath = geometryShaderPath;
+            objContainer->shaders.push_back(new Shader(vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str()));
+            Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            shaderRef->vertexShaderPath = vertexShaderPath;
+            shaderRef->fragmentShaderPath = fragmentShaderPath;
+            shaderRef->geometryShaderPath = geometryShaderPath;
+
+            objModPtr->assetReader.shaders.erase( objModPtr->assetReader.shaders.find(fragmentShaderPath) );
+            objModPtr->assetReader.shaders.erase( objModPtr->assetReader.shaders.find(vertexShaderPath) );
+            objModPtr->assetReader.shaders.erase( objModPtr->assetReader.shaders.find(geometryShaderPath) );
             return shaderRef;
         }
         else
         {
-            objContainer->shaders.push_back(Shader(vertexShaderData.c_str(), fragmentShaderData.c_str()));
-            Shader& shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
-            shaderRef.vertexShaderPath = vertexShaderPath;
-            shaderRef.fragmentShaderPath = fragmentShaderPath;
+            objContainer->shaders.push_back(new Shader(vertexShaderData.c_str(), fragmentShaderData.c_str()));
+            Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            shaderRef->vertexShaderPath = vertexShaderPath;
+            shaderRef->fragmentShaderPath = fragmentShaderPath;
+
+            objModPtr->assetReader.shaders.erase( objModPtr->assetReader.shaders.find(fragmentShaderPath) );
+            objModPtr->assetReader.shaders.erase( objModPtr->assetReader.shaders.find(vertexShaderPath) );
             return shaderRef;
         }
     }
     throw AssetLoadingException("Shader");
 }
 
-Texture& ObjectMaker::newTexture(const char* filePath, TextureCreateInfo createInfo)
+Texture* ObjectMaker::newTexture(const char* filePath, TextureCreateInfo createInfo)
 {
     if(objModPtr->assetReader.loadTexture(filePath))
     {
-        TextureData texData = objModPtr->assetReader.textures[filePath];
-        createInfo.width = texData.width;
-        createInfo.height = texData.height;
-        createInfo.format = texData.nrComponents == 1 ? GL_RED : texData.nrComponents == 3 ? GL_RGB : GL_RGBA;
-
-        objContainer->textures.push_back(Texture(texData.data, createInfo, filePath));
+        auto iter = objModPtr->assetReader.textures.find(filePath);
+        TextureData* texData = &iter->second;
+        createInfo.width = texData->width;
+        createInfo.height = texData->height;
+        createInfo.format = texData->nrComponents == 1 ? GL_RED : texData->nrComponents == 3 ? GL_RGB : GL_RGBA;
+        std::cout << "assigned" << std::endl;
+        objContainer->textures.push_back(new Texture(texData->data, createInfo, filePath));
+        std::cout << "made" << std::endl;
         return objContainer->textures[objContainer->textures.size() - 1];
     }
     throw AssetLoadingException("Texture");
 }
 
-Cubemap& ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
+Cubemap* ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
                     const char* rightPath, const char* backPath, const char* topPath, const char* bottomPath)
 {
     bool loaded = true;
@@ -104,8 +115,8 @@ Cubemap& ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
         TextureData bottomData = objModPtr->assetReader.textures[bottomPath];
         
 
-        objContainer->cubemaps.push_back(Cubemap(createInfo, frontData.data, leftData.data, rightData.data, backData.data, topData.data, bottomData.data));
-        auto map = &objContainer->cubemaps[objContainer->cubemaps.size() - 1];
+        objContainer->cubemaps.push_back(new Cubemap(createInfo, frontData.data, leftData.data, rightData.data, backData.data, topData.data, bottomData.data));
+        auto map = objContainer->cubemaps[objContainer->cubemaps.size() - 1];
         map->frontPath = frontPath;
         map->bottomPath = bottomPath;
         map->leftPath = leftPath;
@@ -115,4 +126,23 @@ Cubemap& ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
         return objContainer->cubemaps[objContainer->cubemaps.size() - 1];
     }
     throw AssetLoadingException("Cubemap");
+}
+
+void ObjectMaker::newModel(const char* filePath, FileType type)
+{
+    switch(type)
+    {
+        case FileType::MESH:
+            objModPtr->assetReader.loadMesh(filePath);
+            break;
+        case FileType::SKINNEDMESH:
+            objModPtr->assetReader.loadSkinnedMesh(filePath);
+            break;
+    }
+}
+
+Material* ObjectMaker::newMaterial(Shader* shader)
+{
+    objContainer->materials.push_back(new Material(shader));
+    return objContainer->materials[objContainer->materials.size() - 1];
 }

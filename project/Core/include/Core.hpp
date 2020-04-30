@@ -3,7 +3,7 @@
 
 #pragma region Includes
 
-//TODO check, which includes are really necessery
+//TODO check, which includes are really necessary
 
 // * System-depended
 #ifdef __linux__
@@ -209,7 +209,7 @@ class Core
         CollisionDetectionSystem collisionDetectionSystem;
         BoneSystem boneSystem;
         //TODO documentation
-        SkinnedMeshRendererSystem skinnedMeshRendererSystem;
+        //SkinnedMeshRendererSystem skinnedMeshRendererSystem;
 
 #pragma endregion
 

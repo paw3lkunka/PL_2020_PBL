@@ -4,6 +4,8 @@
 #include <string>
 
 class SceneWriter;
+class ObjectModule;
+class AssetReader;
 
 class IFileSystem
 {
@@ -15,6 +17,7 @@ private:
     std::string filePath;
     friend class SceneWriter;
     friend class AssetReader;
+    friend class ObjectModule;
 };
 
 #endif /* !IFILESYSTEM_INL_ */

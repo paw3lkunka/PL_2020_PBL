@@ -3,7 +3,7 @@
 
 #include <vector>
 
-class Message;
+#include "Message.inl"
 class IModule;
 
 /**

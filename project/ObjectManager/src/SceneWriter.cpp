@@ -8,6 +8,7 @@
 #include "MeshCustom.hpp"
 #include "MeshSkinned.hpp"
 #include "Shader.hpp"
+#include "Entity.hpp"
 
 #include <fstream>
 #include <iomanip>
@@ -18,9 +19,10 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
     objContainerPtr = &objectModulePtr->objectContainer;
 }
 
-void SceneWriter::saveScene()
+void SceneWriter::saveScene(const char* filePath)
 {
     std::string name;
+    std::unordered_map<std::string, unsigned int> childrenMap;
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
     {
         childrenID.clear();
@@ -38,7 +40,6 @@ void SceneWriter::saveScene()
         }
         j[name]["id"] = objContainerPtr->entities[i].getId();
         j[name]["serialization ID"] = objContainerPtr->entities[i].serializationID;
-        std::cout << objContainerPtr->entities[i].getComponentsPtr()->size() << "\t";
         for(int j = 0; j < objContainerPtr->entities[i].getComponentsPtr()->size(); ++j)
         {
             childrenID.push_back(objContainerPtr->entities[i].getComponentsPtr()->operator[](j)->serializationID);
@@ -60,12 +61,70 @@ void SceneWriter::saveScene()
         {
             name = "shader" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->shaders[i].serializationID;
-        j[name]["fragmentShaderPath"] = objContainerPtr->shaders[i].fragmentShaderPath;
-        j[name]["vertexShaderPath"] = objContainerPtr->shaders[i].vertexShaderPath;
-        if(objContainerPtr->shaders[i].geometryShaderPath != "")
+        j[name]["serializationID"] = objContainerPtr->shaders[i]->serializationID;
+        j[name]["fragmentShaderPath"] = objContainerPtr->shaders[i]->fragmentShaderPath;
+        j[name]["vertexShaderPath"] = objContainerPtr->shaders[i]->vertexShaderPath;
+        if(objContainerPtr->shaders[i]->geometryShaderPath != "")
         {
-            j[name]["geometryShaderPath"] = objContainerPtr->shaders[i].geometryShaderPath;
+            j[name]["geometryShaderPath"] = objContainerPtr->shaders[i]->geometryShaderPath;
+        }
+    }
+
+    for(int i = 0; i < objContainerPtr->materials.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "material00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "material0" + std::to_string(i);
+        }
+        else
+        {
+            name = "material" + std::to_string(i);
+        }
+        j[name]["serializationID"] = objContainerPtr->materials[i]->serializationID;
+        j[name]["shaderSerializationID"] = objContainerPtr->materials[i]->shader->serializationID;
+        childrenMap.clear();
+        for(auto c : objContainerPtr->materials[i]->cubemaps)
+        {
+            childrenMap[c.first] = c.second->serializationID;
+        }
+        j[name]["cubemaps"] = childrenMap;
+
+        childrenMap.clear();
+        for(auto t : objContainerPtr->materials[i]->textures)
+        {
+            childrenMap[t.first] = t.second->serializationID;
+        }
+        j[name]["textures"] = childrenMap;
+    }
+
+    for(int i = 0; i < objContainerPtr->meshes.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "mesh00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "mesh0" + std::to_string(i);
+        }
+        else
+        {
+            name = "mesh" + std::to_string(i);
+        }
+        j[name]["serializationID"] = objContainerPtr->meshes[i]->serializationID;
+        j[name]["meshPath"] = objContainerPtr->meshes[i]->getMeshPath();
+        j[name]["filePath"] = objContainerPtr->meshes[i]->filePath;
+        if(dynamic_cast<MeshCustom*>(objContainerPtr->meshes[i]) != nullptr)
+        {
+            j[name]["type"] = "MeshCustom";
+        }
+        else if(dynamic_cast<MeshSkinned*>(objContainerPtr->meshes[i]) != nullptr)
+        {
+            j[name]["type"] = "MeshSkinned";
         }
     }
 
@@ -83,12 +142,12 @@ void SceneWriter::saveScene()
         {
             name = "texture" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->textures[i].serializationID;
-        j[name]["filePath"] = objContainerPtr->textures[i].filePath;
-        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->textures[i].info.generateMipmaps;
-        j[name]["creationInfo"]["minFilter"] = objContainerPtr->textures[i].info.minFilter;
-        j[name]["creationInfo"]["magFilter"] = objContainerPtr->textures[i].info.magFilter;
-        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->textures[i].info.wrapMode;
+        j[name]["serializationID"] = objContainerPtr->textures[i]->serializationID;
+        j[name]["filePath"] = objContainerPtr->textures[i]->filePath;
+        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->textures[i]->info.generateMipmaps;
+        j[name]["creationInfo"]["minFilter"] = objContainerPtr->textures[i]->info.minFilter;
+        j[name]["creationInfo"]["magFilter"] = objContainerPtr->textures[i]->info.magFilter;
+        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->textures[i]->info.wrapMode;
     }
 
     for(int i = 0; i < objContainerPtr->cubemaps.size(); ++i)
@@ -105,17 +164,17 @@ void SceneWriter::saveScene()
         {
             name = "cubemap" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->cubemaps[i].serializationID;
-        j[name]["frontPath"] = objContainerPtr->cubemaps[i].frontPath;
-        j[name]["backPath"] = objContainerPtr->cubemaps[i].backPath;
-        j[name]["leftPath"] = objContainerPtr->cubemaps[i].leftPath;
-        j[name]["rightPath"] = objContainerPtr->cubemaps[i].rightPath;
-        j[name]["topPath"] = objContainerPtr->cubemaps[i].topPath;
-        j[name]["bottomPath"] = objContainerPtr->cubemaps[i].bottomPath;
-        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->cubemaps[i].info.generateMipmaps;
-        j[name]["creationInfo"]["minFilter"] = objContainerPtr->cubemaps[i].info.minFilter;
-        j[name]["creationInfo"]["magFilter"] = objContainerPtr->cubemaps[i].info.magFilter;
-        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->cubemaps[i].info.wrapMode;
+        j[name]["serializationID"] = objContainerPtr->cubemaps[i]->serializationID;
+        j[name]["frontPath"] = objContainerPtr->cubemaps[i]->frontPath;
+        j[name]["backPath"] = objContainerPtr->cubemaps[i]->backPath;
+        j[name]["leftPath"] = objContainerPtr->cubemaps[i]->leftPath;
+        j[name]["rightPath"] = objContainerPtr->cubemaps[i]->rightPath;
+        j[name]["topPath"] = objContainerPtr->cubemaps[i]->topPath;
+        j[name]["bottomPath"] = objContainerPtr->cubemaps[i]->bottomPath;
+        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->cubemaps[i]->info.generateMipmaps;
+        j[name]["creationInfo"]["minFilter"] = objContainerPtr->cubemaps[i]->info.minFilter;
+        j[name]["creationInfo"]["magFilter"] = objContainerPtr->cubemaps[i]->info.magFilter;
+        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->cubemaps[i]->info.wrapMode;
     }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
@@ -132,7 +191,7 @@ void SceneWriter::saveScene()
         {
             name = "component" + std::to_string(i);
         }
-        std::cout << "entity id: " << objContainerPtr->components[i]->entityPtr->getId() << "\t";
+
         j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
         j[name]["serialization ID"] = objContainerPtr->components[i]->serializationID;
         if(dynamic_cast<Transform*>(objContainerPtr->components[i]))
@@ -177,7 +236,7 @@ void SceneWriter::saveScene()
         }
     }
 
-    std::ofstream file("test.json");
+    std::ofstream file(filePath);
     if(file.good())
     {
         file << std::setw(4) << j;

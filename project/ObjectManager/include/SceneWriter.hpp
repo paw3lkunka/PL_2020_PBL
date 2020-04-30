@@ -20,13 +20,22 @@ class MeshCustom;
 class MeshSkinned;
 class Shader;
 
+/**
+ * @brief 
+ * 
+ */
 class SceneWriter
 {
 public:
     SceneWriter(ObjectModule* objectModulePtr);
     SceneWriter() = default;
     ~SceneWriter() = default;
-    void saveScene();
+    /**
+     * @brief saving scene to file
+     * 
+     * @param filePath for saving
+     */
+    void saveScene(const char* filePath);
 
 protected:
 private:
@@ -53,7 +62,5 @@ private:
     void saveShader(std::string name, Shader* assetPtr);
 
 };
-
-#include "SceneWriter.ipp"
 
 #endif /* !SCENEWRITER_HPP_ */

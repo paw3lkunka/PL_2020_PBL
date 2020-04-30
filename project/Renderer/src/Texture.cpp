@@ -1,9 +1,9 @@
 #include "Texture.hpp"
+#include <iostream>
 
 Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath) : IFileSystem(filePath), data(data), info(createInfo)
 {
-    //TODO uncomment if ready
-    //init(); 
+    init(); 
 }
 
 void Texture::init()
