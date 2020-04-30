@@ -4,13 +4,13 @@
 #include "System.hpp"
 
 class Transform;
-class rigidbody
+class Rigidbody;
 
 /**
  * @brief Calculate speed and position of rigidbody depending on forces, and current speed
  * 
  */
-class KinematicSystem : System
+class KinematicSystem : public System
 {
     public:
 

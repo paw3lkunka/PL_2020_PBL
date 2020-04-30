@@ -14,6 +14,8 @@
     #include "CameraControlSystem.hpp"
     #include "CameraSystem.hpp"
     #include "CollisionDetectionSystem.hpp"
+    #include "GravitySystem.hpp"
+    #include "KinematicSystem.hpp"
     #include "MeshRendererSystem.hpp"
 
 #endif /* !SYSTEMS_INC_AUTOGEN */

@@ -8,10 +8,9 @@
 class Rigidbody;
 
 /**
- * @brief Calculate gravity force for rigidbody
- * 
+ * @brief Calculate gravity force for rigidbody 
  */
-class GravitySystem : System
+class GravitySystem : public System
 {
     public:
         static glm::vec3 G_CONST;

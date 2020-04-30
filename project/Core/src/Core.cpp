@@ -353,25 +353,31 @@ int Core::init()
             so1->getIsLoopingModifiable() = true;
     }
 
-    objectModule.NewEntity(3);
+    objectModule.NewEntity(4);
     {
         auto t = objectModule.NewComponent<Transform>();
             t->getLocalPositionModifiable()={-0.5f,0.0f,10.0f};
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalScaleModifiable() = {1.0f, 1.0f, 1.0f};
             t->setParent(&sceneModule.rootNode);
 
         auto c = objectModule.NewComponent<SphereCollider>();
-            c->radius = 10;
+            c->radius = 1;
 
         auto mr = objectModule.NewComponent<MeshRenderer>();
             mr->mesh = &resourceModule.meshes.find("Resources/Models/unit_sphere.fbx/Sphere001")->second;
             mr->material = &unlitColorMat;
+
+        auto rb = objectModule.NewComponent<Rigidbody>();
+            rb->drag = 5;
+            rb->mass = 100;
     }
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
+    gameSystemsModule.addSystem(&gravitySystem);
+    gameSystemsModule.addSystem(&kinematicSystem);
 
 #pragma endregion
 

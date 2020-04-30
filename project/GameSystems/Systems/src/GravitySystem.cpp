@@ -13,5 +13,5 @@ bool GravitySystem::assertEntity(Entity* entity)
 
 void GravitySystem::fixedUpdate()
 {
-    rBodyPtr->force += rBodyPtr->mass * G_CONST;
+    rBodyPtr->force -= rBodyPtr->mass * G_CONST;
 }

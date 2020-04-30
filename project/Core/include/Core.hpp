@@ -103,6 +103,9 @@ class Core
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
+
+        /// @brief frame-independent time between updates in seconds in lower precision.
+        static constexpr float FIXED_TIME_STEP_F = (float)FIXED_TIME_STEP;
 #pragma endregion
 
 #pragma region Functions
@@ -216,6 +219,10 @@ class Core
         BillboardRendererSystem billboardSystem;
         //TODO documentation
         CollisionDetectionSystem collisionDetectionSystem;
+        //TODO documentation
+        GravitySystem gravitySystem;
+        //TODO documentation
+        KinematicSystem kinematicSystem;
 
 #pragma endregion
 

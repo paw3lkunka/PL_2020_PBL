@@ -204,12 +204,12 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::COLLSION_DETECT:
-        {
+        {/*
             CollisionData data = msg.getValue<CollisionData>();
             std::cout << data.cause << " collided with " << data.target << " separation vector: (" 
                 << data.separation.x << ", " 
                 << data.separation.y << ", "  
-                << data.separation.z << ")." << std::endl; 
+                << data.separation.z << ")." << std::endl; */
         }
         break;
         
