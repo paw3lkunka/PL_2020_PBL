@@ -183,7 +183,7 @@ void SceneReader::readMeshes()
 
 void SceneReader::readComponents()
 {
-git 
+
 }
 
 void SceneReader::readEntities()
