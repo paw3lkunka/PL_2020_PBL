@@ -5,6 +5,7 @@
 
 #include "Material.hpp"
 #include "Texture.hpp"
+#include "Cubemap.hpp"
 #include "MeshCustom.hpp"
 #include "MeshSkinned.hpp"
 #include "Shader.hpp"
@@ -31,7 +32,14 @@ SceneWriter::~SceneWriter()
 void SceneWriter::saveScene(const char* filePath)
 {
     std::string name;
-    std::unordered_map<std::string, unsigned int> childrenMap;
+    j["Amounts"]["entities"] = objContainerPtr->entities.size();
+    j["Amounts"]["shaders"] = objContainerPtr->shaders.size();
+    j["Amounts"]["materials"] = objContainerPtr->materials.size();
+    j["Amounts"]["components"] = objContainerPtr->components.size();
+    j["Amounts"]["meshes"] = objContainerPtr->meshes.size();
+    j["Amounts"]["textures"] = objContainerPtr->textures.size();
+    j["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
+    
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
     {
         childrenID.clear();
@@ -70,13 +78,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "shader" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->shaders[i]->serializationID;
-        j[name]["fragmentShaderPath"] = objContainerPtr->shaders[i]->fragmentShaderPath;
-        j[name]["vertexShaderPath"] = objContainerPtr->shaders[i]->vertexShaderPath;
-        if(objContainerPtr->shaders[i]->geometryShaderPath != "")
-        {
-            j[name]["geometryShaderPath"] = objContainerPtr->shaders[i]->geometryShaderPath;
-        }
+        saveShader(name, objContainerPtr->shaders[i]);
     }
 
     for(int i = 0; i < objContainerPtr->materials.size(); ++i)
@@ -93,21 +95,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "material" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->materials[i]->serializationID;
-        j[name]["shaderSerializationID"] = objContainerPtr->materials[i]->shader->serializationID;
-        childrenMap.clear();
-        for(auto c : objContainerPtr->materials[i]->cubemaps)
-        {
-            childrenMap[c.first] = c.second->serializationID;
-        }
-        j[name]["cubemaps"] = childrenMap;
-
-        childrenMap.clear();
-        for(auto t : objContainerPtr->materials[i]->textures)
-        {
-            childrenMap[t.first] = t.second->serializationID;
-        }
-        j[name]["textures"] = childrenMap;
+        saveMaterial(name, objContainerPtr->materials[i]);
     }
 
     for(int i = 0; i < objContainerPtr->meshes.size(); ++i)
@@ -124,17 +112,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "mesh" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->meshes[i]->serializationID;
-        j[name]["meshPath"] = objContainerPtr->meshes[i]->getMeshPath();
-        j[name]["filePath"] = objContainerPtr->meshes[i]->filePath;
-        if(dynamic_cast<MeshCustom*>(objContainerPtr->meshes[i]) != nullptr)
-        {
-            j[name]["type"] = "MeshCustom";
-        }
-        else if(dynamic_cast<MeshSkinned*>(objContainerPtr->meshes[i]) != nullptr)
-        {
-            j[name]["type"] = "MeshSkinned";
-        }
+        saveMesh(name, objContainerPtr->meshes[i]);
     }
 
     for(int i = 0; i < objContainerPtr->textures.size(); ++i)
@@ -151,12 +129,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "texture" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->textures[i]->serializationID;
-        j[name]["filePath"] = objContainerPtr->textures[i]->filePath;
-        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->textures[i]->info.generateMipmaps;
-        j[name]["creationInfo"]["minFilter"] = objContainerPtr->textures[i]->info.minFilter;
-        j[name]["creationInfo"]["magFilter"] = objContainerPtr->textures[i]->info.magFilter;
-        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->textures[i]->info.wrapMode;
+        saveTexture(name, objContainerPtr->textures[i]);
     }
 
     for(int i = 0; i < objContainerPtr->cubemaps.size(); ++i)
@@ -173,17 +146,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "cubemap" + std::to_string(i);
         }
-        j[name]["serializationID"] = objContainerPtr->cubemaps[i]->serializationID;
-        j[name]["frontPath"] = objContainerPtr->cubemaps[i]->frontPath;
-        j[name]["backPath"] = objContainerPtr->cubemaps[i]->backPath;
-        j[name]["leftPath"] = objContainerPtr->cubemaps[i]->leftPath;
-        j[name]["rightPath"] = objContainerPtr->cubemaps[i]->rightPath;
-        j[name]["topPath"] = objContainerPtr->cubemaps[i]->topPath;
-        j[name]["bottomPath"] = objContainerPtr->cubemaps[i]->bottomPath;
-        j[name]["creationInfo"]["generateMipmaps"] = objContainerPtr->cubemaps[i]->info.generateMipmaps;
-        j[name]["creationInfo"]["minFilter"] = objContainerPtr->cubemaps[i]->info.minFilter;
-        j[name]["creationInfo"]["magFilter"] = objContainerPtr->cubemaps[i]->info.magFilter;
-        j[name]["creationInfo"]["wrapMode"] = objContainerPtr->cubemaps[i]->info.wrapMode;
+        saveCubemap(name, objContainerPtr->cubemaps[i]);
     }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
@@ -355,4 +318,74 @@ void SceneWriter::saveSphereCollider(std::string name, SphereCollider* component
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
     j[name]["center"]["z"] = componentPtr->center.z;
+}
+
+void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
+    childrenMap.clear();
+    for(auto c : assetPtr->cubemaps)
+    {
+        childrenMap[c.first] = c.second->serializationID;
+    }
+    j[name]["cubemaps"] = childrenMap;
+
+    childrenMap.clear();
+    for(auto t : assetPtr->textures)
+    {
+        childrenMap[t.first] = t.second->serializationID;
+    }
+    j[name]["textures"] = childrenMap;
+}
+
+void SceneWriter::saveTexture(std::string name, Texture* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["filePath"] = assetPtr->filePath;
+    j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+}
+
+void SceneWriter::saveMesh(std::string name, Mesh* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["meshPath"] = assetPtr->getMeshPath();
+    j[name]["filePath"] = assetPtr->filePath;
+    if(dynamic_cast<MeshCustom*>(assetPtr) != nullptr)
+    {
+        j[name]["type"] = "MeshCustom";
+    }
+    else if(dynamic_cast<MeshSkinned*>(assetPtr) != nullptr)
+    {
+        j[name]["type"] = "MeshSkinned";
+    }
+}
+
+void SceneWriter::saveShader(std::string name, Shader* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["fragmentShaderPath"] = assetPtr->fragmentShaderPath;
+    j[name]["vertexShaderPath"] = assetPtr->vertexShaderPath;
+    if(assetPtr->geometryShaderPath != "")
+    {
+        j[name]["geometryShaderPath"] = assetPtr->geometryShaderPath;
+    }
+}
+
+void SceneWriter::saveCubemap(std::string name, Cubemap* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["frontPath"] = assetPtr->frontPath;
+    j[name]["backPath"] = assetPtr->backPath;
+    j[name]["leftPath"] = assetPtr->leftPath;
+    j[name]["rightPath"] = assetPtr->rightPath;
+    j[name]["topPath"] = assetPtr->topPath;
+    j[name]["bottomPath"] = assetPtr->bottomPath;
+    j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
 }

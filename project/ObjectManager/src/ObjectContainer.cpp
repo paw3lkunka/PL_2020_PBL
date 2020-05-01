@@ -98,3 +98,99 @@ MeshSkinned* ObjectContainer::getMeshSkinnedFromPath(const char* meshPath)
     }
     throw FileNotFoundException(meshPath);
 }
+
+Entity* ObjectContainer::getEntityFromID(unsigned int entityID)
+{
+    for(int i = 0; i < entities.size(); ++i)
+    {
+        if(entities[i].getId() == entityID)
+        {
+            return &entities[i];
+        }
+    }
+    return nullptr;
+}
+
+Entity* ObjectContainer::getEntityFromSerializationID(unsigned int serializationID)
+{
+    for(int i = 0; i < entities.size(); ++i)
+    {
+        if(entities[i].serializationID == serializationID)
+        {
+            return &entities[i];
+        }
+    }
+    return nullptr;
+}
+
+Component* ObjectContainer::getComponentFromSerializationID(unsigned int serializationID)
+{
+    for(auto c : components)
+    {
+        if(c->serializationID == serializationID)
+        {
+            return c;
+        }
+    }
+    return nullptr;
+}
+
+Shader* ObjectContainer::getShaderFromSerializationID(unsigned int serializationID)
+{
+    for(auto s : shaders)
+    {
+        if(s->serializationID == serializationID)
+        {
+            return s;
+        }
+    }
+    return nullptr;
+}
+
+Mesh* ObjectContainer::getMeshFromSerializationID(unsigned int serializationID)
+{
+    for(auto m : meshes)
+    {
+        if(m->serializationID == serializationID)
+        {
+            return m;
+        }
+    }
+    return nullptr;
+}
+
+Texture* ObjectContainer::getTextureFromSerializationID(unsigned int serializationID)
+{
+    for(auto t : textures)
+    {
+        if(t->serializationID == serializationID)
+        {
+            return t;
+        }
+    }
+    return nullptr;
+}
+
+Cubemap* ObjectContainer::getCubemapFromSerializationID(unsigned int serializationID)
+{
+    for(auto c : cubemaps)
+    {
+        if(c->serializationID == serializationID)
+        {
+            return c;
+        }
+    }
+    return nullptr;
+}
+
+Material* ObjectContainer::getMaterialFromSerializationID(unsigned int serializationID)
+{
+    for(auto m : materials)
+    {
+        if(m->serializationID == serializationID)
+        {
+            return m;
+        }
+    }
+    return nullptr;
+}

@@ -29,12 +29,13 @@ class ObjectModule : public IModule
 {
     friend class ObjectMaker;
     friend class SceneWriter;
+    friend class SceneReader;
     friend class AssetReader;
 public: 
     /**
      * @brief Construct a new Object Module object
      */
-    ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this) {}
+    ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this), sceneReader(this) {}
     virtual ~ObjectModule() = default;
 
     /**
@@ -45,6 +46,8 @@ public:
     std::vector<Entity>* getEntitiesVector();
 
     void receiveMessage(Message msg);
+
+    void readScene(std::string path);
 
 #pragma region SceneWriter Wrapper
     /**
@@ -69,9 +72,9 @@ public:
      * new entity making
      * 
      * @param bufferSize entity buffer size
-     * @return Entity& reference for added entity
+     * @return Entity* pointer for added entity
      */
-    Entity& newEntity(int bufferSize);
+    Entity* newEntity(int bufferSize);
     
     /**
      * @brief (Object maker wrapper)
@@ -98,7 +101,7 @@ public:
      * @param vertexShaderPath path of vertex shader
      * @param fragmentShaderPath path of fragment shader
      * @param geometryShaderPath path of geometry shader (optional)
-     * @return Shader& reference to shader
+     * @return Shader* pointer to shader
      */
     Shader* newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
 
@@ -107,7 +110,7 @@ public:
      * 
      * @param filePath path to texture file
      * @param createInfo basic create info (without information from file like width, height)
-     * @return Texture& reference to texture
+     * @return Texture* pointer to texture
      */
     Texture* newTexture(const char* filePath, TextureCreateInfo createInfo);
 
@@ -121,7 +124,7 @@ public:
      * @param backPath back wall path
      * @param topPath top wall path
      * @param bottomPath bottom wall path
-     * @return Cubemap& reference to cubemap
+     * @return Cubemap* pointer to cubemap
      */
     Cubemap* newCubemap(TextureCreateInfo createInfo, 
                         const char* frontPath, 
@@ -145,7 +148,7 @@ public:
      * make new material and save it to container
      * 
      * @param shader pointer for initialization
-     * @return Material& reference to material
+     * @return Material* pointer to material
      */
     Material* newMaterial(Shader* shader);
 

@@ -92,6 +92,8 @@ int Core::init()
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &tmpExit );
 
+    objectModule.readScene("scene.json");
+
 #pragma region Data Loading
     
     objectModule.newModel("Resources/Models/Test.fbx", FileType::MESH);
@@ -116,7 +118,7 @@ int Core::init()
 
     auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-    auto skinnedShader = objectModule.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
+    //auto skinnedShader = objectModule.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
     std::cout << "Shaders compiled" <<std::endl;
     Material* unlitColorMat = objectModule.newMaterial(unlitColor);
@@ -153,7 +155,7 @@ int Core::init()
     Material* skyboxMat = objectModule.newMaterial(skyboxShader);
     skyboxMat->setCubemap("cubemap", cubemap);
 
-    Material* skinnedMat = objectModule.newMaterial(skinnedShader);
+    //Material* skinnedMat = objectModule.newMaterial(skinnedShader);
 
     Material* waterMat = objectModule.newMaterial(unlitColor);
     waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
@@ -359,28 +361,6 @@ int Core::init()
 
     objectModule.newEntity(4);
     {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 10.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
-
-        auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-            c->radius = 10;
-
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
-            mr->material = unlitTextureMat;
-
-        so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so1->getListenersModifiable().push_back(li);
-            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getGainModifiable() = 100.5f;
-            so1->getIsRelativeModifiable() = false;
-            so1->getIsLoopingModifiable() = true;
-    }
-
-    objectModule.newEntity(4);
-    {
         auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
             c->farPlane = 1000.0f;
             c->nearPlane = 0.01f;
@@ -407,12 +387,11 @@ int Core::init()
 
 #pragma endregion
 
-    objectModule.saveScene("test.json");
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
-    gameSystemsModule.addSystem(&collisionDetectionSystem);
+    //gameSystemsModule.addSystem(&collisionDetectionSystem);
     gameSystemsModule.addSystem(&boneSystem);
     //gameSystemsModule.addSystem(&skinnedMeshRendererSystem);
 
@@ -472,6 +451,28 @@ int Core::init()
             t->setParent(&sceneModule.rootNode);
     }
 
+    objectModule.newEntity(4);
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 10.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+            c->radius = 10;
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            mr->material = unlitTextureMat;
+
+        so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+            so1->getListenersModifiable().push_back(li);
+            so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
+            so1->getGainModifiable() = 100.5f;
+            so1->getIsRelativeModifiable() = false;
+            so1->getIsLoopingModifiable() = true;
+    }
+
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
     
@@ -479,6 +480,7 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    objectModule.saveScene("saved.json");
     // Everything is ok.
     return 0;
 }

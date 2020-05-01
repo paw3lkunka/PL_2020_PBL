@@ -19,8 +19,9 @@ Material::Material(Shader* shader) : shader(shader)
         {
         case GL_SAMPLER_2D:
             textures.insert(std::pair<std::string, Texture*>(var.first, nullptr));
-            std::cout << "Texture Name: " <<  var.first << std::endl;
-            std::cout << "Textures size: " << textures.size() << std::endl;
+            break;
+        case GL_SAMPLER_CUBE:
+            cubemaps.insert(std::pair<std::string, Cubemap*>(var.first, nullptr));
             break;
         case GL_INT:
             ints[var.first] = 0;
@@ -126,6 +127,7 @@ void Material::setCubemap(std::string name, Cubemap* value)
     {
         // ! Name not found, aborting !
         // TODO: Insert appropriate debug log
+        std::cout << "Wrong uniform name: " << name << std::endl;
     }
 }
 

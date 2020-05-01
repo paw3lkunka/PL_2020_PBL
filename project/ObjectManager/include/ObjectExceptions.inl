@@ -4,46 +4,49 @@
 
 struct TooManyInstancesException : public std::exception
 {
-    const char* message;
+    std::string message;
 
     TooManyInstancesException(const char* type)
     {
-        message = "Too many instances of object %s", type;
+        message = "Too many instances of object ";
+        message += type;
     }
 
-    const char* what()
+    const char* what() const noexcept
     {
-        return message;
+        return message.c_str();
     }
 };
 
 struct FileNotFoundException : public std::exception
 {
-    const char* message;
+    std::string message;
 
     FileNotFoundException(const char* type)
     {
-        message = "File not found %s", type;
+        message = "File not found ";
+        message += type;
     }
 
-    const char* what()
+    const char* what() const noexcept
     {
-        return message;
+        return message.c_str();
     }
 };
 
 struct AssetLoadingException : public std::exception
 {
-    const char* message;
+    std::string message;
 
     AssetLoadingException(const char* type)
     {
-        message = "Error while loading asset %s", type;
+        message = "Error while loading asset ";
+        message += type;
     }
 
-    const char* what()
+    const char* what() const noexcept
     {
-        return message;
+        return message.c_str();
     }
 };
 

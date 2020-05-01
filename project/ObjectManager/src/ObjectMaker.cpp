@@ -26,10 +26,10 @@ ObjectMaker::ObjectMaker(ObjectModule* objectmodulePtr)
     objContainer = &objectmodulePtr->objectContainer;
 }
 
-Entity& ObjectMaker::newEntity(int bufferSize = 0)
+Entity* ObjectMaker::newEntity(int bufferSize = 0)
 {
-    objContainer->entities.push_back( Entity(nextID++, bufferSize) );
-    return objContainer->entities[objContainer->entities.size() - 1];
+    objContainer->entities.push_back(Entity(nextID++, bufferSize) );
+    return &objContainer->entities[objContainer->entities.size() - 1];
 }
 
 Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
@@ -39,7 +39,7 @@ Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmen
     loaded &= objModPtr->assetReader.loadShader(vertexShaderPath);
     if(geometryShaderPath != nullptr)
     {
-        loaded &= objModPtr->assetReader.loadShader(fragmentShaderPath);
+        loaded &= objModPtr->assetReader.loadShader(geometryShaderPath);
     }
     if(loaded)
     {
@@ -83,9 +83,7 @@ Texture* ObjectMaker::newTexture(const char* filePath, TextureCreateInfo createI
         createInfo.width = texData->width;
         createInfo.height = texData->height;
         createInfo.format = texData->nrComponents == 1 ? GL_RED : texData->nrComponents == 3 ? GL_RGB : GL_RGBA;
-        std::cout << "assigned" << std::endl;
         objContainer->textures.push_back(new Texture(texData->data, createInfo, filePath));
-        std::cout << "made" << std::endl;
         return objContainer->textures[objContainer->textures.size() - 1];
     }
     throw AssetLoadingException("Texture");

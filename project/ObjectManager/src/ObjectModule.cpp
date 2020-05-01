@@ -34,6 +34,12 @@ void ObjectModule::receiveMessage(Message msg)
         break;
     }
 }
+
+void ObjectModule::readScene(std::string path)
+{
+    sceneReader.readScene(path);
+}
+
 #pragma region SceneWriter Wrapper
 void ObjectModule::saveScene(const char* filePath)
 {
@@ -57,7 +63,7 @@ MeshSkinned* ObjectModule::getMeshSkinnedFromPath(const char* meshPath)
 
 #pragma region objectMaker Wrapper
 
-Entity& ObjectModule::newEntity(int bufferSize)
+Entity* ObjectModule::newEntity(int bufferSize)
 {
     return objectMaker.newEntity(bufferSize);
 }
@@ -66,7 +72,8 @@ Shader* ObjectModule::newShader(const char* vertexShaderPath, const char* fragme
 {   
     for(Shader* s : objectContainer.shaders)
     {
-        if(s->vertexShaderPath == vertexShaderPath && s->fragmentShaderPath == fragmentShaderPath && s->geometryShaderPath == geometryShaderPath)
+        if(s->vertexShaderPath == std::string(vertexShaderPath) 
+        && s->fragmentShaderPath == std::string(fragmentShaderPath) )
         {
             return s;
         }

@@ -43,6 +43,14 @@ public:
      */
     MeshSkinned* getMeshSkinnedFromPath(const char* meshPath);
     
+    Entity* getEntityFromID(unsigned int entityID);
+    Entity* getEntityFromSerializationID(unsigned int serializationID);
+    Component* getComponentFromSerializationID(unsigned int serializationID);
+    Shader* getShaderFromSerializationID(unsigned int serializationID);
+    Mesh* getMeshFromSerializationID(unsigned int serializationID);
+    Texture* getTextureFromSerializationID(unsigned int serializationID);
+    Cubemap* getCubemapFromSerializationID(unsigned int serializationID);
+    Material* getMaterialFromSerializationID(unsigned int serializationID);
 
 protected:
 private:

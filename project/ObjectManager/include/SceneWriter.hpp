@@ -16,8 +16,8 @@ struct BillboardRenderer;
 struct SphereCollider;
 class Material;
 class Texture;
-class MeshCustom;
-class MeshSkinned;
+class Mesh;
+class Cubemap;
 class Shader;
 
 /**
@@ -57,6 +57,9 @@ private:
     ///@brief vector for saving children id for components
     std::vector<unsigned int> childrenID;
 
+    ///@brief map for saving children of materials
+    std::unordered_map<std::string, unsigned int> childrenMap;
+
     ///@brief json object - parser to json
     nlohmann::json j;
 
@@ -73,10 +76,9 @@ private:
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);
     void saveTexture(std::string name, Texture* assetPtr);
-    void saveMeshCustom(std::string name, MeshCustom* assetPtr);
-    void saveMeshSkinned(std::string name, MeshSkinned* assetPtr);
+    void saveMesh(std::string name, Mesh* assetPtr);
     void saveShader(std::string name, Shader* assetPtr);
-
+    void saveCubemap(std::string name, Cubemap* assetPtr);
 };
 
 #endif /* !SCENEWRITER_HPP_ */

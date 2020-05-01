@@ -27,22 +27,24 @@ struct Transform;
 class AssetReader
 {
     friend class ObjectMaker;
+    friend class ObjectModule;
 public:
 
-    AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) {}
-    AssetReader() = default;
+    AssetReader(ObjectModule* objModule);
     ~AssetReader() = default;
 
     //TODO: Better solution for saving animation ticks
     std::unordered_map<std::string, double> animationTicks;
 
-//private:
+private:
     ObjectModule* objectModulePtr;
 
     /**
      * @brief assimp importer reference;
      */
     Assimp::Importer importer;
+
+    static bool hasInstance;
 
     ///@brief var for process vertex attributes method
     glm::vec3 tempVector;
@@ -54,8 +56,6 @@ public:
     //Storages
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
-    std::unordered_map<std::string, MeshSkinned> skinnedMeshes;
-    std::unordered_map<std::string, MeshCustom> meshes;
     std::unordered_map<std::string, std::string> shaders;
 
 

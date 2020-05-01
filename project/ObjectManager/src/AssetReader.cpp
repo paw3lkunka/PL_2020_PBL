@@ -7,6 +7,8 @@
 #include "Bone.inl"
 #include "MeshDataStructures.inl"
 #include "ObjectMaker.hpp"
+#include "ObjectModule.hpp"
+#include "ObjectExceptions.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -19,6 +21,17 @@
 #include <glm/glm.hpp>
 
 //TODO:Fix this couts, cerrs, because it's not professional
+
+bool AssetReader::hasInstance = false;
+
+AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
+{
+    if(hasInstance)
+    {
+        throw TooManyInstancesException("Asset Reader");
+    }
+    hasInstance = true;
+}
 
 // void AssetReader::receiveMessage(Message msg)
 // {
@@ -154,6 +167,10 @@ bool AssetReader::loadTexture(std::string path)
         std::cout << "Tex loaded: " << path << std::endl;
         return iter != textures.end();
     }
+    else
+    {
+        std::cerr << "Error while loading texture " << path << std::endl;
+    }
     return false;
 }
 
@@ -173,6 +190,8 @@ bool AssetReader::loadShader(std::string path)
     }
     catch(std::ifstream::failure e)
     {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Error while loading " << path << std::endl;
         return false;
     }
 
