@@ -15,6 +15,5 @@
     #include "CameraSystem.hpp"
     #include "CollisionDetectionSystem.hpp"
     #include "MeshRendererSystem.hpp"
-    #include "SkinnedMeshRendererSystem.hpp"
 
 #endif /* !SYSTEMS_INC_AUTOGEN */

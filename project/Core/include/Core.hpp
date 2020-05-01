@@ -216,8 +216,6 @@ class Core
         BillboardRendererSystem billboardSystem;
         //TODO documentation
         BoneSystem boneSystem;
-        //TODO documentation
-        SkinnedMeshRendererSystem skinnedMeshRendererSystem;
 
 #pragma endregion
 

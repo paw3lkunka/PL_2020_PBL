@@ -18,6 +18,10 @@ class ObjectModule;
 class Bone;
 struct Transform;
 
+void displayNodeHierarchy(aiNode* node, int depth = 0);
+void displayAssimpMat4(aiMatrix4x4 mat);
+void displayGlmMat4(glm::mat4 mat);
+
 /**
  * @brief Resource Module class for reading and storage assets data
  */
@@ -43,6 +47,12 @@ public:
     std::unordered_map<std::string, std::string> shaders;
     //TODO: Better solution for saving animation ticks
     std::unordered_map<std::string, double> animationTicks;
+    /**
+     * @brief Bones data collection
+     * @key path/bone_name
+     */
+    std::unordered_map<std::string, BoneInfo> bones;
+    std::vector<glm::mat4> finalTransforms;
 
 private:
 
@@ -53,8 +63,6 @@ private:
 
     //HACK TEMPORARY HACK, I AM TOO TIRED TO DO IT BETTER
     glm::vec3 tempVector;
-    unsigned int bonesAmount = 0;
-    std::unordered_map<std::string, BoneInfo> boneMapping;
     
     //Storages
 
@@ -71,6 +79,10 @@ private:
     bool loadShader(std::string path);
     bool loadMesh(std::string path);
     bool loadSkinnedMesh(std::string path);
+
+    // TODO: Documentation
+    void processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
+    Mesh* createMesh(aiMesh* node, std::string path);
 
     /**
      * @brief Recursive method of processing meshes
@@ -126,7 +138,7 @@ private:
      * @param rootNode root node to search
      * @return aiNode* node which is root node for bones
      */
-    aiNode* findRootBone(aiNode* rootNode);
+    //aiNode* findRootBone(aiNode* rootNode);
 
     /**
      * @brief method that finds animation node associated with bone node
@@ -180,7 +192,7 @@ private:
      * @param bone bone to process
      * @param animNode anim node to process
      */
-    void copyToMap(Bone* bone, aiNodeAnim* animNode);
+    void copyToMap(Bone* bone, aiNodeAnim* animNode, glm::mat4 boneOffset);
 
 };
 

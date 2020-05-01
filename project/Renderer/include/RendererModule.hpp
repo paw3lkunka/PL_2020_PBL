@@ -3,7 +3,6 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
-#include "SkinnedMeshRenderer.inl"
 #include "BillboardRenderer.inl"
 
 #include <queue>
@@ -69,7 +68,6 @@ private:
     std::queue<MeshRenderer*> renderQueue;
     // HACK PLZ MAKE THIS POLYMORPHIC AS SOON AS YOU CAN
     std::queue<BillboardRenderer*> billboardQueue;
-    std::queue<SkinnedMeshRenderer*> skinnedQueue;
     
 };
 

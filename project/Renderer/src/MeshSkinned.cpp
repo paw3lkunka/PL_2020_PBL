@@ -1,9 +1,19 @@
 #include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
 
-MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices)
+#include <iostream>
+
+MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds)
 {
     this->vertices = vertices;
+    this->bounds = bounds;
+    // for(auto var : this->vertices)
+    // {
+    //     std::cout << "BoneIDs:\n";
+    //     std::cout << var.boneIDs[0] << ' ' << var.boneIDs[1] << ' ' << var.boneIDs[2] << ' ' << var.boneIDs[3] << '\n';
+    //     std::cout << var.weights[0] << ' ' << var.weights[1] << ' ' << var.weights[2] << ' ' << var.weights[3] << '\n';
+    // }
+
     this->indices = indices;
     setup();
 }

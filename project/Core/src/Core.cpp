@@ -258,27 +258,27 @@ int Core::init()
     
     messageBus.addReceiver( &rendererModule );
 
-    objectModule.NewEntity(2);
-    {
-        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto mr = objectModule.NewComponent<MeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
 
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
     
-    objectModule.NewEntity(2);
-    {
-        auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
-            mr->material = &skinnedMat;
-            mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
+    // objectModule.NewEntity(2);
+    // {
+    //     auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
+    //         mr->material = &skinnedMat;
+    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
 
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
+    //     auto t = objectModule.NewComponent<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //         t->setParent(&sceneModule.rootNode);
+    // }
 
     objectModule.NewEntity(2);
     {
@@ -344,7 +344,6 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&boneSystem);
-    gameSystemsModule.addSystem(&skinnedMeshRendererSystem);
 
 #pragma endregion
 

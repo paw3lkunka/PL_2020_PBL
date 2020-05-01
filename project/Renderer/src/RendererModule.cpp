@@ -14,9 +14,6 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
             renderQueue.push(msg.getValue<MeshRenderer*>());
             break;
-        case Event::RENDERER_ADD_SKINNED_MESH_TO_QUEUE:
-            skinnedQueue.push(msg.getValue<SkinnedMeshRenderer*>());
-            break;
         case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
             billboardQueue.push(msg.getValue<BillboardRenderer*>());
             break;
@@ -229,35 +226,45 @@ void RendererModule::render()
 
         // TODO: Proper skinned mesh rendering
 
-        while(!skinnedQueue.empty())
-        {
-            std::ostringstream ss;
-            for(auto bone : *bones)
-            {
-                ss << "gBones[" << bone.first << "]";
-                skinnedQueue.front()->material->setMat4(ss.str(), bone.second);
-                ss.clear();
-            }
-            skinnedQueue.front()->material->use();
-            skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
-            skinnedQueue.front()->mesh->render();
-            skinnedQueue.pop();
-        }
+        // while(!skinnedQueue.empty())
+        // {
+        //     skinnedQueue.front()->material->use();
+        //     std::stringstream ss;
+        //     int i = 0;
+        //     for(auto bone : *bones)
+        //     {
+        //         ss << "gBones[" << bone.first << "]";
+        //         skinnedQueue.front()->material->getShaderPtr()->setMat4(ss.str(), bone.second);
+        //         // std::cout << "Matrix no: " << i << '\n';
+        //         // std::cout << bone.second[0][0] << ' ' << bone.second[0][1] << ' ' << bone.second[0][2] << ' ' << bone.second[0][3] << '\n';
+        //         // std::cout << bone.second[1][0] << ' ' << bone.second[1][1] << ' ' << bone.second[1][2] << ' ' << bone.second[1][3] << '\n';
+        //         // std::cout << bone.second[2][0] << ' ' << bone.second[2][1] << ' ' << bone.second[2][2] << ' ' << bone.second[2][3] << '\n';
+        //         // std::cout << bone.second[3][0] << ' ' << bone.second[3][1] << ' ' << bone.second[3][2] << ' ' << bone.second[3][3] << '\n';
+        //         std::stringstream().swap(ss);
+        //         ++i;
+        //     }
+        //     skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
+        //     skinnedQueue.front()->mesh->render();
+        //     skinnedQueue.pop();
+        // }
 
         // TODO Proper instanced rendering
-        billboardQueue.front()->material->use();
-        int i = 0, count = billboardQueue.size();
-        glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
-        glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-        while(!billboardQueue.empty())
+        if (!billboardQueue.empty())
         {
-            glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
-            billboardQueue.pop();
-            ++i;
+            billboardQueue.front()->material->use();
+            int i = 0, count = billboardQueue.size();
+            glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
+            glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+            while(!billboardQueue.empty())
+            {
+                glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
+                billboardQueue.pop();
+                ++i;
+            }
+            glBindVertexArray(billboardVao);
+            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
+            glBindVertexArray(0);
         }
-        glBindVertexArray(billboardVao);
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
-        glBindVertexArray(0);
 
         // ? +++++ Render skybox with appropriate depth test function +++++
 

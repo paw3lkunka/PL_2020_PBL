@@ -38,11 +38,10 @@ struct VertexSkinned
  */
 struct BoneInfo
 {
+    /// @brief Index of the bone, used for referencing bones from vertices
     unsigned int boneIndex;
-    /**
-     * @brief Translates vertex from local to bone space
-     */
-    glm::mat4 boneOffset;
+    /// @brief Translates vertex from local to bone space
+    glm::mat4 offsetMatrix;
 };
 
 

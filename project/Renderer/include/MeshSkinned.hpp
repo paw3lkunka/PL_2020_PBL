@@ -11,7 +11,7 @@ struct VertexSkinned;
 class MeshSkinned : public Mesh
 {
 public:
-    MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices);
+    MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds);
     MeshSkinned() = default;
     ~MeshSkinned() = default;
 

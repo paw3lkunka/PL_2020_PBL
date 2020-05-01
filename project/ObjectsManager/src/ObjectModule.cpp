@@ -9,6 +9,7 @@
 #include "Event.hpp"
 #include "Transform.inl"
 
+#include <vector>
 #include <assimp/scene.h>
 #include <assimp/anim.h>
 
@@ -34,6 +35,35 @@ ObjectModule::~ObjectModule()
 
 void ObjectModule::NewEntity(int bufferSize = 0)
 {
-    entities.push_back( Entity(nextID++, bufferSize) );
+    entities.push_back(Entity(nextID++, "", bufferSize));
 }
 
+void ObjectModule::NewEntity(std::string name, int bufferSize = 0)
+{
+    entities.push_back(Entity(nextID++, name, bufferSize));
+}
+
+Entity* ObjectModule::FindEntity(std::string name)
+{
+    for(auto &entity : entities)
+    {
+        if (entity.name == name)
+        {
+            return &entity;
+        }
+    }
+    return nullptr;
+}
+
+std::vector<Entity*> ObjectModule::FindAllEntities(std::string name)
+{
+    std::vector<Entity*> entities;
+    for(auto entity : entities)
+    {
+        if (entity->name == name)
+        {
+            entities.push_back(entity);
+        }
+    }
+    return entities;
+}

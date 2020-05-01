@@ -33,6 +33,27 @@ public:
      * @param bufferSize initial size of component pointers vector.
      */
     void NewEntity(int bufferSize);
+    /**
+     * @brief Creates new Entity, and pushes it to entities vector.
+     * New components will be added to it, until next invocation.
+     * @param bufferSize initial size of component pointers vector.
+     * @param name name of the entity
+     */
+    void NewEntity(std::string name, int bufferSize);
+    /**
+     * @brief Finds and returns first entity by name
+     * 
+     * @param name name of an entity to look for
+     * @return Entity* pointer to found entity or nullptr
+     */
+    Entity* FindEntity(std::string name);
+    /**
+     * @brief Finds all entities which match a given name
+     * 
+     * @param name name of an entity to look for
+     * @return std::vector<Entity*> Vector of pointers to entities
+     */
+    std::vector<Entity*> FindAllEntities(std::string name);
     
     /**
      * @brief Create new component of given type, and return pointer to it.

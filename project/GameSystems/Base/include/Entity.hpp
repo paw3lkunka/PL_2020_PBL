@@ -2,6 +2,7 @@
 #define ENTITY_HPP_
 
 #include <vector>
+#include <string>
 
 class Component;
 
@@ -12,13 +13,15 @@ class Component;
 class Entity 
 {
     public:
+        std::string name = "";
+
         /**
          * @brief Construct a new Entity object
          * 
          * @param id id of Entity
          * @param bufferSize allow to set initial buffer size (optional)
          */
-        Entity(int id, int bufferSize = 0);
+        Entity(int id, std::string name, int bufferSize);
 
         /**
          * @brief Creates two-way pointer connection between this Entity, and pointed Component 

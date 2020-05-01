@@ -3,9 +3,10 @@
 #include "Component.inl"
 #include "System.hpp"
 
-Entity::Entity(int id, int bufferSize)
+Entity::Entity(int id, std::string name, int bufferSize)
 {
     this->id = id;
+    this->name = name;
     this->components.reserve(bufferSize);
 }
 
