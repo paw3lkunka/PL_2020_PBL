@@ -52,6 +52,8 @@ public:
     Cubemap* getCubemapFromSerializationID(unsigned int serializationID);
     Material* getMaterialFromSerializationID(unsigned int serializationID);
 
+    Material* getMaterialFromName(const char* name);
+
 protected:
 private:
     ObjectModule* objModule;

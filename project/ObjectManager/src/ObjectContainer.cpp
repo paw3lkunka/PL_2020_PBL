@@ -16,7 +16,7 @@
 ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule) 
 {
     shaders.reserve(50);
-    components.reserve(100);
+    components.reserve(200);
     entities.reserve(50);
     meshes.reserve(50);
     textures.reserve(50);
@@ -27,7 +27,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
 ObjectContainer::ObjectContainer()
 {
     shaders.reserve(50);
-    components.reserve(100);
+    components.reserve(200);
     entities.reserve(50);
     meshes.reserve(50);
     textures.reserve(50);
@@ -188,6 +188,18 @@ Material* ObjectContainer::getMaterialFromSerializationID(unsigned int serializa
     for(auto m : materials)
     {
         if(m->serializationID == serializationID)
+        {
+            return m;
+        }
+    }
+    return nullptr;
+}
+
+Material* ObjectContainer::getMaterialFromName(const char* name)
+{
+    for(auto m : materials)
+    {
+        if(m->getName() == name)
         {
             return m;
         }

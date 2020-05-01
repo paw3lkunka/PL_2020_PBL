@@ -64,6 +64,8 @@ public:
 
     MeshSkinned* getMeshSkinnedFromPath(const char* meshPath);
 
+    Material* getMaterialFromName(const char* name);
+
 #pragma endregion
 
 #pragma region ObjectMaker Wrapper

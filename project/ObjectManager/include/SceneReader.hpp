@@ -31,6 +31,15 @@ private:
     void readEntities();
 
     std::string setName(std::string name, int index);
+
+    // * read components by type
+    void readTransform(std::string name);
+    void readAudioSource(std::string name);
+    void readAudioListener(std::string name);
+    void readCamera(std::string name);
+    void readBillboardRenderer(std::string name);
+    void readRenderer(std::string name);
+    void readSphereCollider(std::string name);
 };
 
 #endif /* !SCENEREADER_HPP_ */

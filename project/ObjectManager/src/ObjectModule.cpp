@@ -59,6 +59,11 @@ MeshSkinned* ObjectModule::getMeshSkinnedFromPath(const char* meshPath)
     return objectContainer.getMeshSkinnedFromPath(meshPath);
 }
 
+Material* ObjectModule::getMaterialFromName(const char* name)
+{
+    return objectContainer.getMaterialFromName(name);
+}
+
 #pragma endregion
 
 #pragma region objectMaker Wrapper

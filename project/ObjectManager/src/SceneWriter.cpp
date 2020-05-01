@@ -56,7 +56,7 @@ void SceneWriter::saveScene(const char* filePath)
             name = "entity" + std::to_string(i);
         }
         j[name]["id"] = objContainerPtr->entities[i].getId();
-        j[name]["serialization ID"] = objContainerPtr->entities[i].serializationID;
+        j[name]["serializationID"] = objContainerPtr->entities[i].serializationID;
         for(int j = 0; j < objContainerPtr->entities[i].getComponentsPtr()->size(); ++j)
         {
             childrenID.push_back(objContainerPtr->entities[i].getComponentsPtr()->operator[](j)->serializationID);
@@ -165,7 +165,7 @@ void SceneWriter::saveScene(const char* filePath)
         }
 
         j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
-        j[name]["serialization ID"] = objContainerPtr->components[i]->serializationID;
+        j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
         if(dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
             Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]);

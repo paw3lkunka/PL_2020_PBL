@@ -1,8 +1,10 @@
 #include "SceneReader.hpp"
 #include "ObjectModule.hpp"
 #include "ObjectExceptions.inl"
-
 #include "FileStructures.inl"
+#include "Core.hpp"
+#include "Collider.inl"
+#include "Camera.inl"
 
 #include <fstream>
 #include <iostream>
@@ -31,8 +33,8 @@ void SceneReader::readScene(std::string filePath)
     readCubemaps();
     readMaterials();
     readMeshes();
-    readComponents();
     readEntities();
+    readComponents();
 }
 
 void SceneReader::readShaders()
@@ -61,7 +63,7 @@ void SceneReader::readShaders()
         }
         catch(nlohmann::detail::out_of_range)
         {
-            std::cout << "Catched exception" << std::endl;
+            std::cout << "Caught exception" << std::endl;
             shader = objModulePtr->newShader(vertexShaderPath.c_str(), fragmentShaderPath.c_str());
         }
         shader->serializationID = j.at(name).at("serializationID").get<unsigned int>();
@@ -183,12 +185,63 @@ void SceneReader::readMeshes()
 
 void SceneReader::readComponents()
 {
-
+    int componentsAmount = j.at("Amounts").at("components");
+    std::string componentType;
+    std::string name;
+    for(int i = 0; i < componentsAmount; ++i)
+    {
+        name = setName("component", i);
+        componentType = j.at(name).at("type").get<std::string>();
+        if(componentType == "Transform")
+        {
+            std::cout << "Transform" << std::endl;
+            readTransform(name);
+        }
+        else if(componentType == "AudioSource")
+        {
+            std::cout << "AudioSource" << std::endl;
+            readAudioSource(name);
+        }
+        else if(componentType == "AudioListener")
+        {
+            std::cout << "AudioListener" << std::endl;
+            readAudioListener(name);
+        }
+        else if(componentType == "Camera")
+        {
+            std::cout << "Camera" << std::endl;
+            readCamera(name);
+        }
+        else if(componentType == "Renderer")
+        {
+            std::cout << "Renderer" << std::endl;
+            readRenderer(name);
+        }
+        else if(componentType == "SphereCollider")
+        {
+            std::cout << "SphereCollider" << std::endl;
+            readSphereCollider(name);
+        }
+        else if(componentType == "BillboardRenderer")
+        {
+            std::cout << "BillboardRenderer" << std::endl;
+            readBillboardRenderer(name);
+        }
+    }
 }
 
 void SceneReader::readEntities()
 {
-
+    int entitiesAmount = j.at("Amounts").at("entities");
+    std::vector<unsigned int> components;
+    std::string name;
+    for(int i = 0; i < entitiesAmount; ++i)
+    {
+        name = setName("entity", i);
+        j.at(name).at("components").get_to(components);
+        auto entity = objModulePtr->newEntity(components.size());
+        entity->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    }
 }
 
 std::string SceneReader::setName(std::string name, int index)
@@ -206,4 +259,191 @@ std::string SceneReader::setName(std::string name, int index)
         return name += std::to_string(index);
     }
     
+}
+
+void SceneReader::readTransform(std::string name)
+{
+    glm::vec3 tempVec;
+    glm::quat tempRot;
+    auto trans = objModulePtr->newEmptyComponent<Transform>();
+    trans->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    try
+    {
+        auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
+        if(parentID != 0)
+        {
+            auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
+            trans->setParent(parentTrans);
+        }
+        else
+        {
+            trans->setParent(&GetCore().sceneModule.rootNode);
+        }
+        
+    }
+    catch(nlohmann::detail::out_of_range)
+    {
+        std::cout << "No patent transform for " << name << std::endl;
+    }
+    
+    tempVec.x = j.at(name).at("localPosition").at("x").get<float>();
+    tempVec.y = j.at(name).at("localPosition").at("y").get<float>();
+    tempVec.z = j.at(name).at("localPosition").at("z").get<float>();
+    trans->getLocalPositionModifiable() = tempVec;
+
+    tempVec.x = j.at(name).at("localScale").at("x").get<float>();
+    tempVec.y = j.at(name).at("localScale").at("y").get<float>();
+    tempVec.z = j.at(name).at("localScale").at("z").get<float>();
+    trans->getLocalScaleModifiable() = tempVec;
+
+    
+    tempRot.w = j.at(name).at("localRotation").at("w").get<float>();
+    tempRot.x = j.at(name).at("localRotation").at("x").get<float>();
+    tempRot.y = j.at(name).at("localRotation").at("y").get<float>();
+    tempRot.z = j.at(name).at("localRotation").at("z").get<float>();
+    trans->getLocalRotationModifiable() = tempRot;
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(trans);
+} 
+
+void SceneReader::readAudioSource(std::string name)
+{
+    auto aSource = objModulePtr->newEmptyComponent<AudioSource>();
+    aSource->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    aSource->getConeInnerAngleModifiable() = j.at(name).at("coneInnerAngle").get<float>();
+    aSource->getConeOuterAngleModifiable() = j.at(name).at("coneOuterAngle").get<float>();
+    aSource->getConeOuterGainModifiable() = j.at(name).at("coneOuterGain").get<float>();
+    aSource->getIsLoopingModifiable() = j.at(name).at("isLooping").get<int>();
+    aSource->getIsRelativeModifiable() = j.at(name).at("isRelativeToListener").get<int>();
+    if(j.at(name).at("maxDistance").get<std::string>() == "infinity")
+    {
+        aSource->getMaxDistanceModifiable() = std::numeric_limits<float>::infinity();
+    }
+    else
+    {
+        aSource->getMaxDistanceModifiable() = j.at(name).at("maxDistance").get<float>();
+    }
+    aSource->getMaxGainModifiable() = j.at(name).at("maxGain").get<float>();
+    aSource->getMinGainModifiable() = j.at(name).at("minGain").get<float>();
+    aSource->getPitchModifiable() = j.at(name).at("pitch").get<float>();
+    aSource->getReferenceDistanceModifiable() = j.at(name).at("referenceDistance").get<float>();
+    aSource->getRolloffFactorModifiable() = j.at(name).at("rolloffFactor").get<float>();
+
+    glm::vec3 tempVec;
+    tempVec.x = j.at(name).at("direction").at("x");
+    tempVec.y = j.at(name).at("direction").at("y");
+    tempVec.z = j.at(name).at("direction").at("z");
+
+    std::vector<std::string> clips;
+
+    j.at(name).at("clips").get_to(clips);
+    for(int i = 0; i < clips.size(); ++i)
+    {
+        aSource->getClipsModifiable().push_back(clips[i]);
+        objModulePtr->newAudioClip(clips[i].c_str());
+    }
+
+    std::vector<int> listeners;
+    j.at(name).at("listeners").get_to(listeners);
+
+    for(int i = 0; i < listeners.size(); ++i)
+    {
+        aSource->getListenersModifiable().push_back(dynamic_cast<AudioListener*>(objModulePtr->objectContainer.getComponentFromSerializationID(listeners[i])));
+    }
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(aSource);
+}
+
+void SceneReader::readAudioListener(std::string name)
+{
+    auto audioListener = objModulePtr->newEmptyComponent<AudioListener>();
+    audioListener->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    glm::vec3 tempVec;
+    tempVec.x = j.at(name).at("at").at("x");
+    tempVec.y = j.at(name).at("at").at("y");
+    tempVec.z = j.at(name).at("at").at("z");
+    audioListener->getAtModifiable() = tempVec;
+
+    tempVec.x = j.at(name).at("up").at("x");
+    tempVec.y = j.at(name).at("up").at("y");
+    tempVec.z = j.at(name).at("up").at("z");
+    audioListener->getUpModifiable() = tempVec;
+
+    audioListener->getIsCurrentModifiable() = j.at(name).at("isCurrent").get<int>();
+    audioListener->getGainModifiable() = j.at(name).at("gain").get<float>();
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(audioListener);
+}
+
+void SceneReader::readCamera(std::string name)
+{
+    auto camera = objModulePtr->newEmptyComponent<Camera>();
+    camera->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    camera->farPlane = j.at(name).at("farPlane").get<float>();
+    camera->fieldOfView = j.at(name).at("fieldOfView").get<float>();
+    camera->nearPlane = j.at(name).at("nearPlane").get<float>();
+    camera->orthographicSize = j.at(name).at("orthographicSize").get<float>();
+    camera->projectionMode = CameraProjection(j.at(name).at("projectionMode").get<int>());
+    camera->isMain = j.at(name).at("isMain").get<bool>();
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(camera);
+}
+
+void SceneReader::readBillboardRenderer(std::string name)
+{
+    auto bRenderer = objModulePtr->newEmptyComponent<BillboardRenderer>();
+    bRenderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int childID = j.at(name).at("material").get<unsigned int>();
+    bRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(bRenderer);
+}
+
+void SceneReader::readRenderer(std::string name)
+{
+    auto renderer = objModulePtr->newEmptyComponent<Renderer>();
+    renderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int childID = j.at(name).at("material").get<unsigned int>();
+    renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+    childID = j.at(name).at("mesh").get<unsigned int>();
+    renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(renderer);
+}
+
+void SceneReader::readSphereCollider(std::string name)
+{
+    auto sphereCollider = objModulePtr->newEmptyComponent<SphereCollider>();
+    sphereCollider->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    glm::vec3 center;
+    center.x = j.at(name).at("center").at("x").get<float>();
+    center.y = j.at(name).at("center").at("y").get<float>();
+    center.z = j.at(name).at("center").at("z").get<float>();
+    
+    sphereCollider->center = center;
+    sphereCollider->radius = j.at(name).at("radius").get<float>();
+    sphereCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(sphereCollider);
 }
