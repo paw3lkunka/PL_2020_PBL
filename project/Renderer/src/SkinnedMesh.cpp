@@ -1,6 +1,9 @@
 #include "SkinnedMesh.hpp"
 #include "MeshDataStructures.inl"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices)
 {
     this->vertices = vertices;

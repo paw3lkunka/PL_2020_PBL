@@ -40,8 +40,8 @@
 
 // * ECS
 #include "Entity.hpp"
-#include "Components.inc"
-#include "Systems.inc"
+#include "ComponentsPreDeclarations.hxx"
+#include "SystemsPreDeclarations.hxx"
 
 // * Others
 #include "Cubemap.hpp"
@@ -206,23 +206,23 @@ class Core
 
     public:
         //TODO documentation
-        CameraSystem cameraSystem;
+        static CameraSystem cameraSystem;
         //TODO documentation
-        CameraControlSystem cameraControlSystem;
+        static CameraControlSystem cameraControlSystem;
         //TODO documentation
-        AudioSourceSystem audioSourceSystem;
+        static AudioSourceSystem audioSourceSystem;
         //TODO documentation
-        AudioListenerSystem audioListenerSystem;
+        static AudioListenerSystem audioListenerSystem;
         //TODO documentation
-        MeshRendererSystem rendererSystem;
+        static MeshRendererSystem rendererSystem;
         //TODO documentation
-        BillboardRendererSystem billboardSystem;
+        static BillboardRendererSystem billboardSystem;
         //TODO documentation
-        CollisionDetectionSystem collisionDetectionSystem;
+        static CollisionDetectionSystem collisionDetectionSystem;
         //TODO documentation
-        GravitySystem gravitySystem;
+        static GravitySystem gravitySystem;
         //TODO documentation
-        KinematicSystem kinematicSystem;
+        static KinematicSystem kinematicSystem;
 
 #pragma endregion
 

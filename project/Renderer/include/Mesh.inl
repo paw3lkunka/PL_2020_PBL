@@ -1,8 +1,6 @@
 #ifndef _MESH_HPP
 #define _MESH_HPP
 
-#include "MeshDataStructures.inl"
-
 class Mesh
 {
 public:

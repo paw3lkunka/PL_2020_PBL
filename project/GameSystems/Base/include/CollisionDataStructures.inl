@@ -30,4 +30,13 @@ struct TriggerData
     Collider* trigger;
 };
 
+/**
+ * @brief Stores object projected on straight line 
+ */
+struct Projection1D
+{
+    float start;
+    float end;
+};
+
 #endif /* !COLLISIONDATASTRUCTURES_INL_ */

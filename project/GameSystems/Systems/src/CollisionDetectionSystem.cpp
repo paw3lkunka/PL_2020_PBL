@@ -20,9 +20,6 @@ bool CollisionDetectionSystem::assertEntity(Entity* entity)
     return colliderPtr != nullptr && transformPtr != nullptr;
 }
 
-//HACK quick debug output
-#include <iostream>
-
 void CollisionDetectionSystem::fixedUpdate()
 {
     if(colliderPtr->type != Collider::Type::DYNAMIC)
@@ -32,143 +29,23 @@ void CollisionDetectionSystem::fixedUpdate()
 
     if( auto sphere1 = dynamic_cast<SphereCollider*>(colliderPtr) )
     {
-        //TODO finally it can be more human-redable, if this loop will be a function template, cause it might not be replied for each collider type
-        for (int i = 0; i < colliders.size(); i++)
-        {
-            if(sphere1 == colliders[i])
-            {
-                continue;
-            }
-
-            if( auto sphere2 = dynamic_cast<SphereCollider*>(colliders[i]) )
-            {
-                glm::vec4 separation(collsionSS(sphere1, sphere2, transformPtr, transforms[i]), 0);
-                switch (sphere2->type)
-                {
-                case Collider::Type::DYNAMIC:
-                    separation /= 2.0f;
-
-                case Collider::Type::KINEMATIC:
-                    {                        
-                        transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * separation);   
-                        CollisionData data = {sphere1, sphere2, separation};
-                        Message msg(Event::COLLSION_DETECT, data);
-                        GetCore().messageBus.sendMessage(msg);
-                    }
-                    break;
-
-                case Collider::Type::TRIGGER:
-                    //TODO implement
-                    break;
-                }                
-            }
-            else
-            {
-                //TODO Implement other collisions than spheres
-            }    
-            
-        }
+        collisionOf(sphere1);
     }
-    else
+    else if( auto box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
     {
-        //TODO Implement other collisions than spheres
-    }    
+        collisionOf(box1);
+    }  
 }
 
-//-----[ PRIVATES ]--------------------------------
 
-//TODO implement this.
-/*
-glm::vec3 CollisionDetectionSystem::collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
+template<>
+glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,SphereCollider>(SphereCollider* sphere1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
 {
-#pragma region new of AABB in with space   
-    glm::mat4 ofToWithT = withT->worldToLocalMatrix * ofT->localToWorldMatrix;
-    glm::vec4 vert[8];
-
-    for (int i = 0; i < 8; i++)
-    {
-        vert[i] = ofToWithT * of->vert[i];
-    }
-
-    struct
-    {        
-        glm::vec3 min;
-        glm::vec3 max;
-    } a, b;
-
-    b.min = with->center - with->halfSize;
-    b.max = with->center + with->halfSize;
-
-    a.min = vert[0];
-    a.max = vert[0];
-
-    for (int i = 1; i < 8; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if( a.min[j] > vert[i][j] )
-            {
-                a.min[j] = vert[i][j];
-            }
-
-            if( a.max[j] < vert[i][j] )
-            {
-                a.max[j] = vert[i][j];
-            }
-        }            
-    }
-
-#pragma endregion
-    int condition = 0;
-    glm::vec3 separation[6]{};
-
-    if(a.min.x < b.max.x)
-    {
-        separation[0] = glm::vec3(1.0f,0.0f,0.0f) * (b.min.x - a.max.x);
-        condition++;
-    }    
-    if(a.max.x > b.min.x)
-    {
-        separation[1] = glm::vec3(-1.0f,0.0f,0.0f) * (a.max.x - b.min.x);
-        condition++;
-    }    
-    if(a.min.x < b.max.y)
-    {
-        separation[2] = glm::vec3(0.0f,1.0f,0.0f) * (b.min.y - a.max.y);
-        condition++;
-    }    
-    if(a.max.y > b.min.y)
-    {
-        separation[3] = glm::vec3(0.0f,-1.0f,0.0f) * (a.max.y - b.min.y);
-        condition++;
-    }    
-    if(a.min.z < b.max.z)
-    {
-        separation[4] = glm::vec3(0.0f,0.0f,1.0f) * (b.min.z - a.max.z);
-        condition++;
-    }    
-    if(a.max.z > b.min.z)
-    {
-        separation[5] = glm::vec3(0.0f,0.0f,-1.0f) * (a.max.z - b.min.z);
-        condition++;
-    }
-    
-
-}
-
-glm::vec3 CollisionDetectionSystem::collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
-{
-
-}
-*/
-
-glm::vec3 CollisionDetectionSystem::collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT)
-{
-    glm::vec3 centre1 = ofT->localToWorldMatrix * glm::vec4(of->center,1);
-    glm::vec3 centre2 = withT->localToWorldMatrix * glm::vec4(with->center,1);
+    glm::vec3 centre1 = transform1->localToWorldMatrix * glm::vec4(sphere1->center,1);
+    glm::vec3 centre2 = transform2->localToWorldMatrix * glm::vec4(sphere2->center,1);
 
     float distance = glm::distance(centre1, centre2);
-    float radiiSum = of->radius + with->radius; 
+    float radiiSum = sphere1->radius + sphere2->radius; 
     float difference = radiiSum - distance;
 
     if(difference > 0)
@@ -182,10 +59,70 @@ glm::vec3 CollisionDetectionSystem::collsionSS(SphereCollider* of, SphereCollide
     
 }
 
-//TODO IMPLEMENTATION
-/*
-glm::vec3 CollisionDetectionSystem::collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT)
+template<>
+glm::vec3 CollisionDetectionSystem::collsion<BoxCollider, BoxCollider>(BoxCollider* coll1, BoxCollider* coll2, Transform* trans1, Transform* trans2)
 {
+    glm::vec4 faceNormals[6]
+    {
+        trans1->localToWorldMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+        trans1->localToWorldMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+        trans1->localToWorldMatrix * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
 
+        trans2->localToWorldMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+        trans2->localToWorldMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+        trans2->localToWorldMatrix * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+    };
+
+    glm::vec3 separation = {0.0f, 0.0f, 0.0f};
+    
+    //TODO unfinished
+
+    for (auto& line: faceNormals)
+    {
+        Projection1D proj1 = axisProjection(coll1, static_cast<glm::vec3>(line), trans1->localToWorldMatrix);
+        Projection1D proj2 = axisProjection(coll2, static_cast<glm::vec3>(line), trans2->localToWorldMatrix);
+
+        if (proj1.end < proj2.start || proj1.end < proj2.start)
+        {
+            
+        }
+    }
+    return separation;
 }
-*/
+
+//TODO not implemented
+template<>
+glm::vec3 CollisionDetectionSystem::collsion<BoxCollider,SphereCollider>(BoxCollider* box1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
+{
+    return {1,2,3};
+}
+
+//TODO not implemented
+template<>
+glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,BoxCollider>(SphereCollider* sphere1, BoxCollider* box2, Transform* transform1, Transform* transform2)
+{
+    return {1,2,3};
+}
+
+
+Projection1D CollisionDetectionSystem::axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld)
+{
+    glm::vec3 centreWS = static_cast<glm::vec3>(localToWorld * glm::vec4(sphere->center, 1.0f));
+    float centre1D = glm::dot(centreWS, axis);
+    return {centre1D - sphere->radius, centre1D + sphere->radius};
+}
+
+Projection1D CollisionDetectionSystem::axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld)
+{
+    Projection1D result = {INFINITY, -INFINITY};
+
+    for (auto point : box->vert)
+    {
+        float point1D = glm::dot(static_cast<glm::vec3>(localToWorld * point), axis);
+
+        result.start = glm::min(result.start, point1D);
+        result.end = glm::min(result.end, point1D);
+    }
+
+    return result;
+}

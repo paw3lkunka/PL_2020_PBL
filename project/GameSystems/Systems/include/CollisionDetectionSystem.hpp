@@ -6,8 +6,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-
 enum class ComponentType;
+struct Projection1D;
 class Transform;
 class Collider;
 class BoxCollider;
@@ -31,11 +31,19 @@ class CollisionDetectionSystem : public System
         std::vector<Collider*> colliders;
         std::vector<Transform*> transforms;
 
-        glm::vec3 collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT);
-        glm::vec3 collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Transform* withT);
+        template<class T>
+        void collisionOf(T collider);
 
-        glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT);
-        glm::vec3 collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT);
+        template<class T1, class T2>
+        void collisionWith(T1 collider1, T2 collider2, Transform* transform2);
+
+        template<class T1, class T2>
+        glm::vec3 collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
+        
+        Projection1D axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld);
+        Projection1D axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld);
 };
+
+#include "CollisionDetectionSystem.ipp"
 
 #endif /* !COLLISIONDETECTION_HPP_ */

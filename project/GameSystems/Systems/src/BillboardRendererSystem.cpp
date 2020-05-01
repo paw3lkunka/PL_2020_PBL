@@ -5,6 +5,7 @@
 
 #include "Entity.hpp"
 #include "Core.hpp"
+#include "Systems.inc"
 
 bool BillboardRendererSystem::assertEntity(Entity* entity)
 {

@@ -1,4 +1,6 @@
 #include "Core.hpp"
+#include "Components.inc"
+#include "Systems.inc"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -570,3 +572,13 @@ void Core::close()
 {
     glfwSetWindowShouldClose(window,true);
 }
+
+CameraSystem Core::cameraSystem;
+CameraControlSystem Core::cameraControlSystem;
+AudioSourceSystem Core::audioSourceSystem;
+AudioListenerSystem Core::audioListenerSystem;
+MeshRendererSystem Core::rendererSystem;
+BillboardRendererSystem Core::billboardSystem;
+CollisionDetectionSystem Core::collisionDetectionSystem;
+GravitySystem Core::gravitySystem;
+KinematicSystem Core::kinematicSystem;
