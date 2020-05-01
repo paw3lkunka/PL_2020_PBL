@@ -6,7 +6,7 @@
 
 int Material::idCount = 0;
 
-Material::Material(Shader* shader) : shader(shader)
+Material::Material(Shader* shader, const char* name) : shader(shader), name(name)
 {
     // Set material ID on construction
     ID = idCount;
@@ -204,6 +204,11 @@ void Material::setMat4(std::string name, glm::mat4 value)
 Shader* Material::getShaderPtr()
 {
     return shader;
+}
+
+const char* Material::getName()
+{
+    return name.c_str();
 }
 
 int Material::getInt(std::string name)

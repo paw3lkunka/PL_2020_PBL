@@ -31,8 +31,9 @@ public:
      * @brief Construct a new Material object
      * 
      * @param shader Shader to draw with
+     * @param name name of the material
      */
-    Material(Shader* shader);
+    Material(Shader* shader, const char* name);
     ~Material() = default;
 
     /**
@@ -57,6 +58,14 @@ public:
 
     /// @brief Get pointer to underlying shader
     Shader* getShaderPtr();
+
+    /**
+     * @brief Get the Name of the material
+     * 
+     * @return const char* name
+     */
+    const char* getName();
+
     /// @brief Get int of given name
     int getInt(std::string name);
     /// @brief Get float of given name
@@ -72,6 +81,7 @@ private:
     static int idCount;
     int ID;
     Shader* shader;
+    std::string name;
 
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, Cubemap*> cubemaps;
