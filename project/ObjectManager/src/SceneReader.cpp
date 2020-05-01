@@ -2,6 +2,8 @@
 #include "ObjectModule.hpp"
 #include "ObjectExceptions.inl"
 
+#include "FileStructures.inl"
+
 #include <fstream>
 #include <iostream>
 
@@ -124,9 +126,12 @@ void SceneReader::readMaterials()
         name = setName("material", i);
         children.clear();
 
+        auto matName = j.at(name).at("name").get<std::string>();
+
         shaderID = j.at(name).at("shaderSerializationID").get<unsigned int>();
         auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
-        auto material = objModulePtr->newMaterial(shader);
+
+        auto material = objModulePtr->newMaterial(shader, matName);
         material->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
         j.at(name).at("cubemaps").get_to(children);
@@ -150,12 +155,35 @@ void SceneReader::readMaterials()
 
 void SceneReader::readMeshes()
 {
+    std::string name;
+    int meshesAmount = j.at("Amounts").at("meshes");
+    std::string filePath, meshPath;
+    for(int i = 0; i < meshesAmount; ++i)
+    {
+        name = setName("mesh", i);
+        filePath = j.at(name).at("filePath").get<std::string>();
+        meshPath = j.at(name).at("meshPath").get<std::string>();
 
+        auto meshType = j.at(name).at("type").get<std::string>();
+        if(meshType == "MeshCustom")
+        {
+            objModulePtr->newModel(filePath.c_str(), FileType::MESH);
+            auto mesh = objModulePtr->getMeshCustomFromPath(meshPath.c_str());
+            mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+        }
+        else if(meshType == "MeshSkinned")
+        {
+            objModulePtr->newModel(filePath.c_str(), FileType::SKINNEDMESH);
+            auto mesh = objModulePtr->getMeshSkinnedFromPath(meshPath.c_str());
+            mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+        }
+        else;
+    }
 }
 
 void SceneReader::readComponents()
 {
-
+git 
 }
 
 void SceneReader::readEntities()

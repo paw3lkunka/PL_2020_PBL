@@ -120,9 +120,16 @@ void ObjectModule::newModel(const char* filePath, FileType type)
     objectMaker.newModel(filePath, type);
 }
 
-Material* ObjectModule::newMaterial(Shader* shader)
+Material* ObjectModule::newMaterial(Shader* shader, std::string name)
 {
-    return objectMaker.newMaterial(shader);
+    for(auto m : objectContainer.materials)
+    {
+        if(m->getName() == name)
+        {
+            return m;
+        }
+    }
+    return objectMaker.newMaterial(shader, name);
 }
 
 void ObjectModule::newAudioClip(const char* filePath)

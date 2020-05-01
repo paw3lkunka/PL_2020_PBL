@@ -2,6 +2,7 @@
 #define OBJECTMAKER_HPP_
 
 #include <vector>
+#include <string>
 
 class ObjectModule;
 class ObjectContainer;
@@ -113,9 +114,10 @@ public:
      * @brief make new material and save it to container
      * 
      * @param shader pointer for initialization
+     * @param name name of material
      * @return Material* pointer to material
      */
-    Material* newMaterial(Shader* shader);
+    Material* newMaterial(Shader* shader, std::string name);
 
 protected:
 private:

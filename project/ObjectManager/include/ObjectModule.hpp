@@ -150,7 +150,7 @@ public:
      * @param shader pointer for initialization
      * @return Material* pointer to material
      */
-    Material* newMaterial(Shader* shader);
+    Material* newMaterial(Shader* shader, std::string name);
 
     void newAudioClip(const char* filePath);
 

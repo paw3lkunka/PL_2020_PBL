@@ -324,6 +324,7 @@ void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
+    j[name]["name"] = assetPtr->getName();
     childrenMap.clear();
     for(auto c : assetPtr->cubemaps)
     {

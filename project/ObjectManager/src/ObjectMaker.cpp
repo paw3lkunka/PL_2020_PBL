@@ -139,8 +139,8 @@ void ObjectMaker::newModel(const char* filePath, FileType type)
     }
 }
 
-Material* ObjectMaker::newMaterial(Shader* shader)
+Material* ObjectMaker::newMaterial(Shader* shader, std::string name)
 {
-    objContainer->materials.push_back(new Material(shader));
+    objContainer->materials.push_back(new Material(shader, name.c_str()));
     return objContainer->materials[objContainer->materials.size() - 1];
 }

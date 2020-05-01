@@ -92,6 +92,7 @@ int Core::init()
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &tmpExit );
 
+    // ! Scene loading
     objectModule.readScene("scene.json");
 
 #pragma region Data Loading
@@ -121,7 +122,7 @@ int Core::init()
     //auto skinnedShader = objectModule.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
     std::cout << "Shaders compiled" <<std::endl;
-    Material* unlitColorMat = objectModule.newMaterial(unlitColor);
+    Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat");
     unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 
@@ -132,10 +133,10 @@ int Core::init()
     texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
-    Material* unlitTextureMat = objectModule.newMaterial(unlitTexture);
+    Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat");
     unlitTextureMat->setTexture("mainTex", texture);
 
-    Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced);
+    Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat");
     unlitInstancedMat->setTexture("mainTex", texture);
 
     TextureCreateInfo skyboxCreateInfo = {};
@@ -152,21 +153,21 @@ int Core::init()
                                 "Resources/Textures/skybox/py.png",
                                 "Resources/Textures/skybox/ny.png");
 
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader);
+    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat");
     skyboxMat->setCubemap("cubemap", cubemap);
 
     //Material* skinnedMat = objectModule.newMaterial(skinnedShader);
 
-    Material* waterMat = objectModule.newMaterial(unlitColor);
+    Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat");
     waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-    Material* cliffsMat = objectModule.newMaterial(unlitColor);
+    Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat");
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
 
-    Material* riverBedMat = objectModule.newMaterial(unlitColor);
+    Material* riverBedMat = objectModule.newMaterial(unlitColor, "riverBedMat");
     riverBedMat->setVec4("color", glm::vec4(0.407f, 0.2f, 0.070f, 1.0f));
 
-    Material* riverBankMat = objectModule.newMaterial(unlitColor);
+    Material* riverBankMat = objectModule.newMaterial(unlitColor, "riverBankMat");
     riverBankMat->setVec4("color", glm::vec4(0.333f, 0.741f, 0.278f, 1.0f));
 
 #pragma endregion
@@ -480,7 +481,10 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    // ! scene saving
     objectModule.saveScene("saved.json");
+    //objectModule.saveScene("scene.json");
+    
     // Everything is ok.
     return 0;
 }
