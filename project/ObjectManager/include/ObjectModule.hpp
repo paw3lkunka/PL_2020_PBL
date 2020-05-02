@@ -45,9 +45,29 @@ public:
      */
     std::vector<Entity>* getEntitiesVector();
 
+    /**
+     * @brief Inherited from IModule
+     * 
+     * @param msg message to receive
+     */
     void receiveMessage(Message msg);
 
+    /**
+     * @brief read scene to file
+     * 
+     * @param path path to json file to read
+     */
     void readScene(std::string path);
+
+    /**
+     * @brief comparsion cstrings
+     * 
+     * @param str1 first string
+     * @param str2 second string
+     * @return true strings are the same
+     * @return false strings aren't the same
+     */
+    bool compareStrings(const char* str1, const char* str2);
 
 #pragma region SceneWriter Wrapper
     /**
@@ -164,6 +184,10 @@ private:
     AssetReader assetReader;
     SceneReader sceneReader;
     SceneWriter sceneWriter;
+
+    
+    bool compareStrings(std::string str1, std::string str2);
+    
 };
 
 #include "ObjectModule.ipp"

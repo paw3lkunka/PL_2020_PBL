@@ -199,7 +199,7 @@ Material* ObjectContainer::getMaterialFromName(const char* name)
 {
     for(auto m : materials)
     {
-        if(m->getName() == name)
+        if(objModule->compareStrings(m->getName(), name))
         {
             return m;
         }

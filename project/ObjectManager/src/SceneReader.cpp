@@ -128,11 +128,14 @@ void SceneReader::readMaterials()
         name = setName("material", i);
         children.clear();
 
-        auto matName = j.at(name).at("name").get<std::string>();
 
         shaderID = j.at(name).at("shaderSerializationID").get<unsigned int>();
         auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
 
+        auto matName = j.at(name).at("name").get<std::string>();
+        //TODO Delete shitty cout
+        std::cout << "Material name: " << matName << std::endl;
+        
         auto material = objModulePtr->newMaterial(shader, matName);
         material->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
@@ -190,6 +193,7 @@ void SceneReader::readComponents()
     std::string name;
     for(int i = 0; i < componentsAmount; ++i)
     {
+        //TODO Delete shitty couts
         name = setName("component", i);
         componentType = j.at(name).at("type").get<std::string>();
         if(componentType == "Transform")

@@ -40,6 +40,27 @@ void ObjectModule::readScene(std::string path)
     sceneReader.readScene(path);
 }
 
+bool ObjectModule::compareStrings(const char* str1, const char* str2)
+{
+    return compareStrings(std::string(str1), std::string(str2));
+}
+
+bool ObjectModule::compareStrings(std::string str1, std::string str2)
+{
+    if(str1.length() != str2.length())
+    {
+        return false;
+    }
+    for(int i = 0; i < str1.length(); ++i)
+    {
+        if( str1[i] != str2[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 #pragma region SceneWriter Wrapper
 void ObjectModule::saveScene(const char* filePath)
 {
@@ -129,7 +150,7 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name)
 {
     for(auto m : objectContainer.materials)
     {
-        if(m->getName() == name)
+        if(compareStrings(m->getName(), name.c_str()))
         {
             return m;
         }

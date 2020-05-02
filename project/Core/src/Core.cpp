@@ -402,7 +402,7 @@ int Core::init()
     auto entitiesVector = objectModule.getEntitiesVector();
     for(auto e : *entitiesVector)
     {
-        if(e.getComponentPtr<Camera>()->isMain)
+        if(e.getComponentPtr<Camera>() != nullptr && e.getComponentPtr<Camera>()->isMain)
         {
             CameraSystem::setAsMain(&e);
         }
