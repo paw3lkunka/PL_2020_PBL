@@ -153,6 +153,7 @@ add_library(lib ${SOURCE_FILES} )
 
 include_directories( 
     project
+    project/Autogen/include
     project/Core/include
     project/GameSystems/Base/include
     project/GameSystems/Components

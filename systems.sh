@@ -2,10 +2,10 @@
 
 _path="$(dirname "$0")/project/GameSystems/Systems/include"
 
-_file1="../../Base/include/Systems.inc"
+_file1="$(dirname "$0")/project/Autogen/include/Systems.inc"
 _guardian1="SYSTEMS_INC_AUTOGEN"
 
-_file2="../../Base/include/SystemsPreDeclarations.hxx"
+_file2="$(dirname "$0")/project/Autogen/include/SystemsPreDeclarations.hxx"
 _guardian2="SYSTEMS_PRE_DECL__INC_AUTOGEN"
 
 cd $_path
@@ -24,7 +24,7 @@ echo "#ifndef $_guardian2" >> $_file2
 echo "#define $_guardian2" >> $_file2
 echo >> $_file1
 echo "#include \"System.hpp\"" >> $_file1
-echo >> $_file1
+echo | tee -a $_file1 >> $_file2
 
 for _header in *
 do
@@ -33,7 +33,7 @@ do
     echo "class $_class;" >> $_file2
 done
 
-echo >> $_file1
+echo | tee -a $_file1 >> $_file2
 echo "#endif /* !$_guardian1 */" >> $_file1
 echo "#endif /* !$_guardian2 */" >> $_file2
 echo "File: $_path/Components.inc generated."
