@@ -18,7 +18,7 @@ public:
      * @param entity pointer to asserted entity
      * @returns if entity has all required components
      */
-    bool assertEntity(Entity* entity);
+    virtual bool assertEntity(Entity* entity);
 
     /**
      * @brief Initializes processed entities, runs before first update
@@ -48,7 +48,6 @@ private:
     double animationStep = 0.1f;
 
     Bone* bone;
-    Transform* transform;
 };
 
 #endif /* !BONESYSTEM_HPP_ */

@@ -62,7 +62,7 @@ private:
     std::map<int, glm::mat4>* bones;
     // HACK: Or not? Discuss this.
     unsigned int billboardVao, billboardVbo, instancedVbo;
-    unsigned int viewProjectionBuffer;
+    unsigned int viewProjectionBuffer, boneBuffer;
     bool projectionChanged = false, viewChanged = false;
     glm::mat4* projectionMatrix, * viewMatrix;
     std::queue<MeshRenderer*> renderQueue;

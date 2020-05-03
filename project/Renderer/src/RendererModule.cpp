@@ -66,6 +66,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProjectionBuffer, 0, 2 * sizeof(glm::mat4));
 
+    // * ===== Setup Uniform Buffer Object for bone info =====
+    glGenBuffers(1, &boneBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, VertexSkinned::MAX_BONES * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, boneBuffer, 0, VertexSkinned::MAX_BONES * sizeof(glm::mat4));
+
     // * ===== Generate mesh for skybox rendering =====
 
     if (skyboxMaterial != nullptr)
@@ -193,6 +201,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindVertexArray(0);
 }
 
+#include "Entity.hpp"
+
 void RendererModule::render()
 {
     if (window != nullptr)
@@ -213,6 +223,13 @@ void RendererModule::render()
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), viewMatrix);
             viewChanged = false;
         }
+
+        // ? +++++ Send skinning data to ubo +++++
+        glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+        for(auto &bone : *bones)
+        {
+            glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+        }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         // ? +++++ Execute (order 66) rendering loop +++++
@@ -229,20 +246,20 @@ void RendererModule::render()
         // while(!skinnedQueue.empty())
         // {
         //     skinnedQueue.front()->material->use();
-        //     std::stringstream ss;
-        //     int i = 0;
-        //     for(auto bone : *bones)
-        //     {
-        //         ss << "gBones[" << bone.first << "]";
-        //         skinnedQueue.front()->material->getShaderPtr()->setMat4(ss.str(), bone.second);
-        //         // std::cout << "Matrix no: " << i << '\n';
-        //         // std::cout << bone.second[0][0] << ' ' << bone.second[0][1] << ' ' << bone.second[0][2] << ' ' << bone.second[0][3] << '\n';
-        //         // std::cout << bone.second[1][0] << ' ' << bone.second[1][1] << ' ' << bone.second[1][2] << ' ' << bone.second[1][3] << '\n';
-        //         // std::cout << bone.second[2][0] << ' ' << bone.second[2][1] << ' ' << bone.second[2][2] << ' ' << bone.second[2][3] << '\n';
-        //         // std::cout << bone.second[3][0] << ' ' << bone.second[3][1] << ' ' << bone.second[3][2] << ' ' << bone.second[3][3] << '\n';
-        //         std::stringstream().swap(ss);
-        //         ++i;
-        //     }
+        //         std::stringstream ss;
+        // int i = 0;
+        // for(auto bone : *bones)
+        // {
+        //     ss << "gBones[" << bone.first << "]";
+        //     skinnedQueue.front()->material->getShaderPtr()->setMat4(ss.str(), bone.second);
+        //     // std::cout << "Matrix no: " << i << '\n';
+        //     // std::cout << bone.second[0][0] << ' ' << bone.second[0][1] << ' ' << bone.second[0][2] << ' ' << bone.second[0][3] << '\n';
+        //     // std::cout << bone.second[1][0] << ' ' << bone.second[1][1] << ' ' << bone.second[1][2] << ' ' << bone.second[1][3] << '\n';
+        //     // std::cout << bone.second[2][0] << ' ' << bone.second[2][1] << ' ' << bone.second[2][2] << ' ' << bone.second[2][3] << '\n';
+        //     // std::cout << bone.second[3][0] << ' ' << bone.second[3][1] << ' ' << bone.second[3][2] << ' ' << bone.second[3][3] << '\n';
+        //     std::stringstream().swap(ss);
+        //     ++i;
+        // }
         //     skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
         //     skinnedQueue.front()->mesh->render();
         //     skinnedQueue.pop();

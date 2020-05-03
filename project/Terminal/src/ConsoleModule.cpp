@@ -174,6 +174,10 @@ void ConsoleModule::receiveMessage(Message msg)
         //std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
         break;
 
+    case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:
+        std::cout << "console here: RENDERER_SET_BONE_TRANSFORMS_PTR.\n";
+        break;
+
     case Event::WINDOW_RESIZED:
         std::cout << "console here: WINDOW_RESIZED. Width: " << msg.getValue<glm::ivec2>().x << " Height: " << msg.getValue<glm::ivec2>().y << '\n';
         break;

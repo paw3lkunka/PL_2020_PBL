@@ -16,7 +16,7 @@ public:
     ~MeshSkinned() = default;
 
     void setup();
-    virtual void render();
+    void render();
     virtual void renderInstanced() {}
 
 protected:

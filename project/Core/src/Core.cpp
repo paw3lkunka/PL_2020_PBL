@@ -123,10 +123,12 @@ int Core::init()
     testModel.typeOfFile = FileType::MESH;
 
     FileSystemData animModel;
-    animModel.path = "Resources/Models/House Dancing.fbx";
-    // ! SEGFAULT - uncomment if there will be SinnedMeshRenderer
-    animModel.typeOfFile = FileType::SKINNEDMESH;
-    //animModel.typeOfFile = FileType::MESH;
+    animModel.path = "Resources/Models/House Dancing.FBX";
+    animModel.typeOfFile = FileType::MESH;
+
+    // FileSystemData animModel;
+    // animModel.path = "Resources/Models/plane_skin.FBX";
+    // animModel.typeOfFile = FileType::MESH;
 
     FileSystemData testTexture;
     testTexture.path = "Resources/Textures/tex.png";
@@ -166,7 +168,7 @@ int Core::init()
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, unlitSkinnedFragmentShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapVertexShaderData));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyboxCubemapFragmentShaderData));
-    getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
+    //getMessageBus().sendMessage(Message(Event::LOAD_FILE, testModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, animModel));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, testTexture));
     getMessageBus().sendMessage(Message(Event::LOAD_FILE, skyNX));
@@ -258,27 +260,24 @@ int Core::init()
     
     messageBus.addReceiver( &rendererModule );
 
-    // objectModule.NewEntity(2);
-    // {
-    //     auto mr = objectModule.NewComponent<MeshRenderer>();
-    //         mr->material = &skinnedMat;
-    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Surface")->second;
+    skinnedMat.setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    // auto e1 = objectModule.FindEntity("Alpha_Surface");
+    // e1->getComponentPtr<MeshRenderer>()->material = &unlitTextureMat;
 
-    //     auto t = objectModule.NewComponent<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    //         t->setParent(&sceneModule.rootNode);
-    // }
+    // auto e2 = objectModule.FindEntity("Plane_skin");
+    // e2->getComponentPtr<MeshRenderer>()->material = &skinnedMat;
+
+    // auto e1 = objectModule.FindEntity("Alpha_Surface");
+    // e1->getComponentPtr<MeshRenderer>()->material = &unlitTextureMat;
+
+    auto e2 = objectModule.FindEntity("Alpha_Joints");
+    e2->getComponentPtr<MeshRenderer>()->material = &skinnedMat;
+
+    // auto e3 = objectModule.FindEntity("Sphere");
+    // e3->getComponentPtr<MeshRenderer>()->material = &unlitColorMat;
     
-    // objectModule.NewEntity(2);
-    // {
-    //     auto mr = objectModule.NewComponent<SkinnedMeshRenderer>();
-    //         mr->material = &skinnedMat;
-    //         mr->mesh = &resourceModule.skinnedMeshes.find("Resources/Models/House Dancing.fbx/Alpha_Joints")->second;
-
-    //     auto t = objectModule.NewComponent<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    //         t->setParent(&sceneModule.rootNode);
-    // }
+    // auto e4 = objectModule.FindEntity("Box");
+    // e4->getComponentPtr<MeshRenderer>()->material = &unlitColorMat;
 
     objectModule.NewEntity(2);
     {
@@ -351,7 +350,7 @@ int Core::init()
     objectModule.NewEntity(2);
     {
         auto c = objectModule.NewComponent<Camera>();
-            c->farPlane = 1000.0f;
+            c->farPlane = 10000.0f;
             c->nearPlane = 0.01f;
             c->fieldOfView = 80.0f;
             c->projectionMode = CameraProjection::Perspective;

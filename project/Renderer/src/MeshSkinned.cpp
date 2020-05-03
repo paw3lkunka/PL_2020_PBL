@@ -5,7 +5,9 @@
 
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds)
 {
+    std::cout << "Skinned mesh\n";
     this->vertices = vertices;
+    std::cout << "Vertices count: " << this->vertices.size() << '\n';
     this->bounds = bounds;
     // for(auto var : this->vertices)
     // {
@@ -15,6 +17,7 @@ MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsign
     // }
 
     this->indices = indices;
+    std::cout << "Indices count: " << this->indices.size() << '\n';
     setup();
 }
 
@@ -31,10 +34,12 @@ void MeshSkinned::setup()
     // Vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexSkinned), vertices.data(), GL_STATIC_DRAW);
+    std::cout << "Vertices count: " << this->vertices.size() << '\n';
 
     // Indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    std::cout << "Indices count: " << this->indices.size() << '\n';
 
     // ===== Attrib pointers =====
     glEnableVertexAttribArray(0);

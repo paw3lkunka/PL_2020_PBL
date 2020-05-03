@@ -38,7 +38,7 @@ public:
     /**
      * @brief Bind buffers and render normally
      */
-    virtual void render();
+    void render();
 
     virtual void renderInstanced() {}
 

@@ -3,11 +3,12 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 
+glm::mat4 Bone::globalInverseTransform = glm::mat4(1.0f);
+
 bool BoneSystem::assertEntity(Entity* entity)
 {
-    transform = entity->getComponentPtr<Transform>();
     bone = entity->getComponentPtr<Bone>();
-    return (transform != nullptr && bone != nullptr);
+    return bone != nullptr;
 }
 
 void BoneSystem::start()
@@ -31,7 +32,8 @@ void BoneSystem::fixedUpdate()
 void BoneSystem::frameUpdate()
 {
     // * ===== Retrieve interpolated bone transformations and set them  =====
-    boneTransforms[bone->boneID] = transform->localToWorldMatrix;
+    boneTransforms[bone->boneIndex] = Bone::globalInverseTransform * bone->mTransform * bone->offsetMatrix;
+    //bone->offsetMatrix 
 }
 
 // glm::vec3 BoneSystem::interpolatePositionKeys(double time)
