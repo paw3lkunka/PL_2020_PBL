@@ -1,10 +1,11 @@
-#include "SkinnedMesh.hpp"
+#include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
 
-MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices)
+MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {
     this->vertices = vertices;
     this->indices = indices;
+    this->bounds = bounds;
     setup();
 }
 
@@ -52,5 +53,7 @@ void MeshSkinned::setup()
 
 void MeshSkinned::render()
 {
-
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

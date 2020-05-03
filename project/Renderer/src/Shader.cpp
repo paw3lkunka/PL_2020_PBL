@@ -1,4 +1,5 @@
 #include "Shader.hpp"
+#include "ShaderExceptions.hpp"
 
 void Shader::setBool(const std::string& name, bool value) const
 {
@@ -39,7 +40,6 @@ Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, con
     unsigned int vertex, fragment, geometry;
     int success;
     char infoLog[512];
-
     // TODO: Decide if the exceptions should be caught or left to crash xd
     vertex = compileShader(vertexShaderCode, GL_VERTEX_SHADER);
     fragment = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER);

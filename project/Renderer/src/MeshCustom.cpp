@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds)
+MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {
     this->vertices = vertices;
     this->indices = indices;
