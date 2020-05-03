@@ -4,9 +4,9 @@
 #include "IModule.inl"
 #include "AudioFile.hpp"
 #include "AssetStructers.inl"
-#include "Animation.hpp"
-#include "SkinnedMesh.hpp"
+#include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
+
 
 #include <unordered_map>
 #include <assimp/scene.h>
@@ -14,56 +14,50 @@
 #include <vector>
 #include <glm/mat4x4.hpp>
 
-class Message;
 class ObjectModule;
+class ObjectMaker;
+class SceneModule;
+class Bone;
+class SceneWriter;
 struct Transform;
 
 /**
  * @brief Resource Module class for reading and storage assets data
  */
-class ResourceModule : public IModule
+class AssetReader
 {
+    friend class ObjectMaker;
+    friend class ObjectModule;
 public:
-    /**
-     * @brief inherited from IModule
-     * 
-     * @param msg message received
-     */
-    void receiveMessage(Message msg);
 
-    ///HACK: Connection between Resource Module and Object Module
-    ObjectModule* objectModulePtr;
+    AssetReader(ObjectModule* objModule);
+    ~AssetReader() = default;
 
-    //TODO: Move STORAGES to private
-    //Storages
-    std::unordered_map<std::string, AudioFile> audioClips;
-    std::unordered_map<std::string, TextureData> textures;
-    std::unordered_map<std::string, MeshSkinned> skinnedMeshes;
-    std::unordered_map<std::string, MeshCustom> meshes;
-    std::unordered_map<std::string, std::string> shaders;
     //TODO: Better solution for saving animation ticks
     std::unordered_map<std::string, double> animationTicks;
 
 private:
+    ObjectModule* objectModulePtr;
 
     /**
      * @brief assimp importer reference;
      */
     Assimp::Importer importer;
 
-    //HACK TEMPORARY HACK, I AM TOO TIRED TO DO IT BETTER
+    static bool hasInstance;
+
+    ///@brief var for process vertex attributes method
     glm::vec3 tempVector;
+    ///@brief helpful while reading bones
     unsigned int bonesAmount = 0;
-    std::unordered_map<std::string, BoneInfo> boneMapping;
+    ///@brief map os bones, key = name, value = index
+    std::unordered_map<std::string, unsigned int> boneMapping;
     
     //Storages
+    std::unordered_map<std::string, AudioFile> audioClips;
+    std::unordered_map<std::string, TextureData> textures;
+    std::unordered_map<std::string, std::string> shaders;
 
-    // Send data to MessageBus methods
-    bool sendAudioClip(std::string path);
-    bool sendTexture(std::string path);
-    bool sendMesh(std::string path);
-    bool sendShader(std::string path);
-    bool sendSkinnedMesh(std::string path);
 
     //load files to storages methods
     bool loadAudioClip(std::string path);
@@ -143,10 +137,11 @@ private:
      * @param rootNode root node of bones
      * @param parent parent transform for next transform
      * @param scene pointer to scene for reference when finding animation node
+     * @param path file path from bones are read
      * @return true bones are processed and saved to entities
      * @return false something went wrong during processing bones
      */
-    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene);
+    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path);
 
     /**
      * @brief Helper function to cast assimp matrix4x4 to glm::mat4
@@ -157,22 +152,12 @@ private:
     glm::mat4 aiMatrixToGlmMat(aiMatrix4x4 matrix);
 
     /**
-     * @brief method that copies values from aiNodeAnim VectorKey to vector<KeyVector>
+     * @brief copies position and rotation keys to map of AnimKeys
      * 
-     * @param vec vector of KeyVector structure
-     * @param tabToCopy aiVectorKey array to copy
-     * @param size of this array
+     * @param bone bone to process
+     * @param animNode anim node to process
      */
-    void copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size);
-
-    /**
-     * @brief method that copies values from aiNodeAnim QuatKey to vector<KeyQuaternion>
-     * 
-     * @param vec vector of KeyQuaternion structure
-     * @param tabToCopy aiQuatKey array to copy
-     * @param size of this array
-     */
-    void copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size);
+    void copyToMap(Bone* bone, aiNodeAnim* animNode);
 
 };
 

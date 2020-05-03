@@ -1,12 +1,14 @@
 #ifndef COMPONENT_HPP_
 #define COMPONENT_HPP_
 
+#include "ISerializable.inl"
+
 class Entity;
 
 /**
  * @brief Base struct for all ECS data structures, should not contain any logic
  */
-struct Component
+struct Component : public ISerializable
 {
     Component() = default;
     virtual ~Component() = default;

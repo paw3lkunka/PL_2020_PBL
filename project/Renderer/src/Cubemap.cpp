@@ -1,5 +1,7 @@
 #include "Cubemap.hpp"
 
+#include "Texture.hpp"
+
 Cubemap::Cubemap(TextureCreateInfo createInfo,
             unsigned char* front,
             unsigned char* left,

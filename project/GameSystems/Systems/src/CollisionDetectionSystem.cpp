@@ -1,6 +1,7 @@
 #include "CollisionDetectionSystem.hpp"
 
 #include "Core.hpp"
+#include "Message.inl"
 #include "Entity.hpp"
 #include "Components.inc"
 

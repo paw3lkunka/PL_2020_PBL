@@ -3,8 +3,12 @@
 
 #include "System.hpp"
 #include "IMsgReceiver.inl"
-#include "Transform.inl"
-#include "Camera.inl"
+
+#include <glm/glm.hpp>
+
+struct Transform;
+struct Camera;
+
 
 /**
  * @brief Camera control system responsible for simple input interpretation (fly around)

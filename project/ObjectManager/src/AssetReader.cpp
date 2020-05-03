@@ -1,4 +1,4 @@
-#include "ResourceModule.hpp"
+#include "AssetReader.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
 #include "MeshCustom.hpp"
@@ -6,127 +6,142 @@
 #include "Transform.inl"
 #include "Bone.inl"
 #include "MeshDataStructures.inl"
+#include "ObjectMaker.hpp"
+#include "ObjectModule.hpp"
+#include "ObjectExceptions.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 
 //TODO:Fix this couts, cerrs, because it's not professional
 
-void ResourceModule::receiveMessage(Message msg)
-{
-    if(msg.getEvent() == Event::LOAD_FILE)
-    {
-        FileSystemData fsData = msg.getValue<FileSystemData>();
-        switch(fsData.typeOfFile)
-        {
-            case FileType::AUDIO:
-                if(loadAudioClip(fsData.path))
-                {
-                    std::cout << "Audio loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load audio from file " << fsData.path << std::endl;
-                }
-                
-            break;
-            case FileType::MESH:
-                if(loadMesh(fsData.path))
-                {
-                    std::cout << "Meshes loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
-                }
-            break;
-            case FileType::SKINNEDMESH:
-                if(loadSkinnedMesh(fsData.path))
-                {
-                    std::cout << "Skinned meshes loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load skinned meshes from file " << fsData.path << std::endl;
-                }
-            break;
-            case FileType::SHADER:
-                if(loadShader(fsData.path))
-                {
-                    std::cout << "Shader loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Shader from file " << fsData.path << " could not be read." << std::endl;
-                }
-            break;
-            case FileType::TEXTURE:
-                if(loadTexture(fsData.path))
-                {
-                    std::cout << "Texture loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load texture from file " << fsData.path << std::endl;
-                }
-                
-            break;
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_MESH_DATA)
-    {
-        if(!sendMesh(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
-    {
-        if(!sendTexture(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
-    {
-        auto filePath = msg.getValue<const char*>();
-        if(!sendAudioClip(filePath))
-        {
-            std::cerr << "Can't find open audio file " << filePath << std::endl;
+bool AssetReader::hasInstance = false;
 
-            if(loadAudioClip(filePath))
-            {
-                std::cout << "Audio loaded from file " << filePath << std::endl;
-                sendAudioClip(filePath);
-            }
-            else
-            {
-                std::cerr << "Can't load audio from file " << filePath << std::endl;
-            }
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
+AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
+{
+    if(hasInstance)
     {
-        if(!sendShader(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
+        throw TooManyInstancesException("Asset Reader");
     }
-    else
-    {
-        //do nothing
-    }
+    hasInstance = true;
 }
+
+// void AssetReader::receiveMessage(Message msg)
+// {
+//     if(msg.getEvent() == Event::LOAD_FILE)
+//     {
+//         FileSystemData fsData = msg.getValue<FileSystemData>();
+//         switch(fsData.typeOfFile)
+//         {
+//             case FileType::AUDIO:
+//                 if(loadAudioClip(fsData.path))
+//                 {
+//                     std::cout << "Audio loaded from file " << fsData.path << std::endl;
+//                 }
+//                 else
+//                 {
+//                     std::cerr << "Can't load audio from file " << fsData.path << std::endl;
+//                 }
+                
+//             break;
+//             case FileType::MESH:
+//                 if(loadMesh(fsData.path))
+//                 {
+//                     std::cout << "Meshes loaded from file " << fsData.path << std::endl;
+//                 }
+//                 else
+//                 {
+//                     std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
+//                 }
+//             break;
+//             case FileType::SKINNEDMESH:
+//                 if(loadSkinnedMesh(fsData.path))
+//                 {
+//                     std::cout << "Skinned meshes loaded from file " << fsData.path << std::endl;
+//                 }
+//                 else
+//                 {
+//                     std::cerr << "Can't load skinned meshes from file " << fsData.path << std::endl;
+//                 }
+//             break;
+//             case FileType::SHADER:
+//                 if(loadShader(fsData.path))
+//                 {
+//                     std::cout << "Shader loaded from file " << fsData.path << std::endl;
+//                 }
+//                 else
+//                 {
+//                     std::cerr << "Shader from file " << fsData.path << " could not be read." << std::endl;
+//                 }
+//             break;
+//             case FileType::TEXTURE:
+//                 if(loadTexture(fsData.path))
+//                 {
+//                     std::cout << "Texture loaded from file " << fsData.path << std::endl;
+//                 }
+//                 else
+//                 {
+//                     std::cerr << "Can't load texture from file " << fsData.path << std::endl;
+//                 }
+                
+//             break;
+//         }
+//     }
+//     else if(msg.getEvent() == Event::QUERY_MESH_DATA)
+//     {
+//         if(!sendMesh(msg.getValue<const char*>()))
+//         {
+//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
+//         }
+//     }
+//     else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
+//     {
+//         if(!sendTexture(msg.getValue<const char*>()))
+//         {
+//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
+//         }
+//     }
+//     else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
+//     {
+//         auto filePath = msg.getValue<const char*>();
+//         if(!sendAudioClip(filePath))
+//         {
+//             std::cerr << "Can't find open audio file " << filePath << std::endl;
+
+//             if(loadAudioClip(filePath))
+//             {
+//                 std::cout << "Audio loaded from file " << filePath << std::endl;
+//                 sendAudioClip(filePath);
+//             }
+//             else
+//             {
+//                 std::cerr << "Can't load audio from file " << filePath << std::endl;
+//             }
+//         }
+//     }
+//     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
+//     {
+//         if(!sendShader(msg.getValue<const char*>()))
+//         {
+//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
+//         }
+//     }
+//     else
+//     {
+//         //do nothing
+//     }
+// }
 
 #pragma region Loaders
 
-bool ResourceModule::loadAudioClip(std::string path)
+bool AssetReader::loadAudioClip(std::string path)
 {
     AudioFile audioData;
     if(audioData.load(path))
@@ -140,7 +155,7 @@ bool ResourceModule::loadAudioClip(std::string path)
     return false;
 }
 
-bool ResourceModule::loadTexture(std::string path)
+bool AssetReader::loadTexture(std::string path)
 {
     TextureData tData;
     tData.data = stbi_load(path.c_str(), &tData.width, &tData.height, &tData.nrComponents, 0);
@@ -149,13 +164,17 @@ bool ResourceModule::loadTexture(std::string path)
         textures.insert( std::pair(path, tData) );
         
         std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
-
+        std::cout << "Tex loaded: " << path << std::endl;
         return iter != textures.end();
+    }
+    else
+    {
+        std::cerr << "Error while loading texture " << path << std::endl;
     }
     return false;
 }
 
-bool ResourceModule::loadShader(std::string path)
+bool AssetReader::loadShader(std::string path)
 {
     std::string buffer = "";
     std::ifstream file;
@@ -171,6 +190,8 @@ bool ResourceModule::loadShader(std::string path)
     }
     catch(std::ifstream::failure e)
     {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Error while loading " << path << std::endl;
         return false;
     }
 
@@ -180,7 +201,9 @@ bool ResourceModule::loadShader(std::string path)
     return iter != shaders.end();
 }
 
-bool ResourceModule::loadMesh(std::string path)
+#pragma region Mesh
+
+bool AssetReader::loadMesh(std::string path)
 {   
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -191,10 +214,9 @@ bool ResourceModule::loadMesh(std::string path)
     return processMeshNode(scene->mRootNode, scene, path);
 }
 
-bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
+bool AssetReader::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
-    std::cout << "Node: " << node->mName.C_Str() << " meshes: " << std::to_string(node->mNumMeshes) << std::endl;
     std::unordered_map<std::string, MeshCustom>::iterator iter;
     Bounds tBounds;
     for(int i = 0; i < node->mNumMeshes; i++)
@@ -218,10 +240,9 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
         tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
         tempVec = mesh->mAABB.mMax;
         tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        meshes.insert(std::pair(meshPath, MeshCustom(vertices, indices, tBounds)));
-        iter = meshes.find(meshPath);
+        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
 
-        returnFlag = returnFlag & (iter != meshes.end());
+        returnFlag = returnFlag & (theMesh != nullptr);
     }
 
     for(int i = 0; i < node->mNumChildren; ++i)
@@ -232,7 +253,11 @@ bool ResourceModule::processMeshNode(aiNode* node, const aiScene* scene, std::st
     return returnFlag;
 }
 
-bool ResourceModule::loadSkinnedMesh(std::string path)
+#pragma endregion
+
+#pragma region Skinned Mesh
+
+bool AssetReader::loadSkinnedMesh(std::string path)
 {
     bonesAmount = 0;
     boneMapping.clear();
@@ -248,16 +273,17 @@ bool ResourceModule::loadSkinnedMesh(std::string path)
         {
             animationTicks.insert(std::pair<std::string, double>(path, scene->mAnimations[0]->mTicksPerSecond));
             //TODO: change this nullptr to some transform, i dunno
-            return processBones(bonesRootNode, nullptr, scene);
+            return processBones(bonesRootNode, nullptr, scene, path);
         }
     }
 
     return false;
 }
 
-bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
+bool AssetReader::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
+    Bounds tBounds;
     std::unordered_map<std::string, MeshSkinned>::iterator iter;
     for(int i = 0; i < node->mNumMeshes; i++)
     {
@@ -284,17 +310,13 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
             unsigned int boneIndex;
             if(boneMapping.find(boneName) == boneMapping.end())
             {
-                BoneInfo tempBi;
-                tempBi.boneIndex = bonesAmount;
                 boneIndex = bonesAmount;
-                tempBi.boneOffset = aiMatrixToGlmMat(mesh->mBones[i]->mOffsetMatrix);
-                boneMapping[boneName] = tempBi;
+                boneMapping[boneName] = boneIndex;
                 bonesAmount++;
-                std::cout << "Bone Name: " << boneName << std::endl; 
             }
             else
             {
-                boneIndex = boneMapping[boneName].boneIndex;
+                boneIndex = boneMapping[boneName];
             }
 
             for(int k = 0; k < mesh->mBones[j]->mNumWeights; ++k)
@@ -309,10 +331,13 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
 
         std::string meshPath = path + "/" + mesh->mName.C_Str();
         std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        skinnedMeshes.insert(std::pair(meshPath, MeshSkinned(vertices, indices)));
-        iter = skinnedMeshes.find(meshPath);
+        aiVector3D tempVec = mesh->mAABB.mMin;
+        tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
+        tempVec = mesh->mAABB.mMax;
+        tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
+        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
 
-        returnFlag = returnFlag & (iter != skinnedMeshes.end());
+        returnFlag = returnFlag & (theMesh != nullptr);
     }
 
     for(int i = 0; i < node->mNumChildren; ++i)
@@ -323,7 +348,7 @@ bool ResourceModule::processSkinnedMeshNode(aiNode* node, const aiScene* scene, 
     return returnFlag;
 }
 
-bool ResourceModule::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene)
+bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path)
 {
     bool returnFlag = true;
     Entity* entPtr;
@@ -336,91 +361,41 @@ bool ResourceModule::processBones(aiNode* rootNode, Transform* parent, const aiS
 
         if(transNode)
         {
-            objectModulePtr->NewEntity(2);
-            std::cout << "Entity processing: " << transNode->mNodeName.C_Str() << std::endl;
+            objectModulePtr->objectMaker.newEntity(2);
 
-            tranPtr = objectModulePtr->NewComponent<Transform>();
-            if(parent)
+            tranPtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Transform>();
+            if (parent != nullptr)
             {
                 tranPtr->setParent(parent);
             }
+            else
+            {
+                tranPtr->setParent(&(GetCore().sceneModule.rootNode));
+            }
 
-            bonePtr = objectModulePtr->NewComponent<Bone>();
-            copyToVector(bonePtr->positionKeys, transNode->mPositionKeys, transNode->mNumPositionKeys);
-            copyToVector(bonePtr->rotationKeys, transNode->mRotationKeys, transNode->mNumRotationKeys);
-            copyToVector(bonePtr->scaleKeys, transNode->mScalingKeys, transNode->mNumScalingKeys);
+            bonePtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Bone>();
+            copyToMap(bonePtr, transNode);
+            bonePtr->filePath = path;
             bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
             bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
-            bonePtr->offsetMatrix = boneMapping[transNode->mNodeName.C_Str()].boneOffset;
+            bonePtr->boneID = boneMapping[transNode->mNodeName.C_Str()];
         }
-        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene);
+        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene, path);
     }
     return returnFlag;
 }
 
 #pragma endregion
 
-#pragma region Senders
-
-bool ResourceModule::sendAudioClip(std::string path)
-{
-    std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
-
-    if(iter != audioClips.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, &iter->second ) );
-        return true;
-    }
-    
-    return false;
-}
-
-bool ResourceModule::sendTexture(std::string path)
-{
-    std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
-
-    if(iter != textures.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_TEXTURE_DATA, &iter->second) );
-        return true;
-    }
-    return false;
-}
-
-bool ResourceModule::sendMesh(std::string path)
-{
-    std::unordered_map<std::string, MeshCustom>::iterator iter = meshes.find(path);
-
-    if(iter != meshes.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_MESH_DATA, &iter->second) );
-        return true;
-    }
-    return false;
-}
-
-bool ResourceModule::sendShader(std::string path)
-{
-    std::unordered_map<std::string, std::string>::iterator iter = shaders.find(path);
-    Message msgToSend;
-    if(iter != shaders.end())
-    {  
-        msgToSend = Message(Event::RECEIVE_SHADER_DATA, iter->second.c_str());
-        GetCore().getMessageBus().sendMessage( msgToSend );
-        return true;
-    }
-    return false;
-}
-
 #pragma endregion
 
 #pragma region Helpers
 
-void ResourceModule::addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight)
+void AssetReader::addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight)
 {
     for(int i = 0; i < vertex.MAX_WEIGHTS; ++i)
     {
-        if(vertex.weights[i] < 0.0001f)
+        if(vertex.weights[i] < 0.0001f) // if vertex has no weight on this index
         {
             vertex.boneIDs[i] = boneIndex;
             vertex.weights[i] = weight;
@@ -428,10 +403,10 @@ void ResourceModule::addBoneDataToVertex(VertexSkinned& vertex, unsigned int& bo
         }
     }
     // !If loop ends without return
-    std::cerr << "ResourceModule: Too many bones for this vertex!" << std::endl;
+    std::cerr << "AssetReader: Too many bones for this vertex!" << std::endl;
 }
 
-void ResourceModule::processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex)
+void AssetReader::processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex)
 {
     //position
     tempVector.x = mesh->mVertices[vertexIndex].x;
@@ -461,7 +436,7 @@ void ResourceModule::processVertexAttributes(Vertex& vert, aiMesh* mesh, int ver
     }
 }
 
-void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* mesh)
+void AssetReader::processIndices(std::vector<unsigned int>& indices, aiMesh* mesh)
 {
     for(int j = 0; j < mesh->mNumFaces; ++j)
     {
@@ -474,9 +449,9 @@ void ResourceModule::processIndices(std::vector<unsigned int>& indices, aiMesh* 
     }
 }
 
-aiNode* ResourceModule::findRootBone(aiNode* rootNode)
+aiNode* AssetReader::findRootBone(aiNode* rootNode)
 {
-    std::unordered_map<std::string, BoneInfo>::iterator iter;
+    std::unordered_map<std::string, unsigned int>::iterator iter;
     for(int i = 0; i < rootNode->mNumChildren; ++i)
     {
         iter = boneMapping.find(rootNode->mChildren[i]->mName.C_Str());
@@ -495,7 +470,7 @@ aiNode* ResourceModule::findRootBone(aiNode* rootNode)
     return nullptr;
 }
 
-aiNodeAnim* ResourceModule::findNodeAnim(aiAnimation* animPtr, std::string nodeName)
+aiNodeAnim* AssetReader::findNodeAnim(aiAnimation* animPtr, std::string nodeName)
 {
     for (int i = 0 ; i < animPtr->mNumChannels ; i++) {
         aiNodeAnim* pNodeAnim = animPtr->mChannels[i];
@@ -509,7 +484,7 @@ aiNodeAnim* ResourceModule::findNodeAnim(aiAnimation* animPtr, std::string nodeN
     return NULL;
 }
 
-glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
+glm::mat4 AssetReader::aiMatrixToGlmMat(aiMatrix4x4 matrix)
 {
     aiMatrix4x4 m = matrix.Transpose();
 
@@ -520,23 +495,21 @@ glm::mat4 ResourceModule::aiMatrixToGlmMat(aiMatrix4x4 matrix)
     return temp;
 }
 
-void ResourceModule::copyToVector(std::vector<KeyVector>& vec, aiVectorKey* tabToCopy, unsigned int size)
+void AssetReader::copyToMap(Bone* bone, aiNodeAnim* animNode)
 {
-    aiVectorKey temp;
-    for(int i = 0; i < size; ++i)
+    // * ===== Copy positions ====
+    for(int i = 0; i < animNode->mNumPositionKeys; ++i)
     {
-        temp = tabToCopy[i];
-        vec.push_back( {temp.mTime, glm::vec3(temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+        bone->positionKeys[animNode->mPositionKeys[i].mTime] = {animNode->mPositionKeys[i].mValue.x,
+                                                                animNode->mPositionKeys[i].mValue.y,
+                                                                animNode->mPositionKeys[i].mValue.z };
     }
-}
-
-void ResourceModule::copyToVector(std::vector<KeyQuaternion>& vec, aiQuatKey* tabToCopy, unsigned int size)
-{
-    aiQuatKey temp;
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < animNode->mNumRotationKeys; ++i)
     {
-        temp = tabToCopy[i];
-        vec.push_back( {temp.mTime, glm::quat(temp.mValue.w, temp.mValue.x, temp.mValue.y, temp.mValue.z)} );
+        bone->rotationKeys[animNode->mRotationKeys[i].mTime] = {animNode->mRotationKeys[i].mValue.w,
+                                                                animNode->mRotationKeys[i].mValue.x,
+                                                                animNode->mRotationKeys[i].mValue.y,
+                                                                animNode->mRotationKeys[i].mValue.z };
     }
 }
 

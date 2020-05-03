@@ -2,7 +2,7 @@
 
 #include "Core.hpp"
 #include "Event.hpp"
-
+#include "Message.inl"
 #include "Entity.hpp"
 
 #include "AudioSource.inl"

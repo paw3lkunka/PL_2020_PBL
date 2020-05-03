@@ -2,7 +2,12 @@
 
 #include "Message.inl"
 #include "MeshQuad.hpp"
+#include "Shader.hpp"
+
 #include <glm/gtc/type_ptr.hpp>
+
+//TODO: TEMP STRING STREAM
+#include <sstream>
 
 void RendererModule::receiveMessage(Message msg)
 {
@@ -10,6 +15,9 @@ void RendererModule::receiveMessage(Message msg)
     {
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
             renderQueue.push(msg.getValue<MeshRenderer*>());
+            break;
+        case Event::RENDERER_ADD_SKINNED_MESH_TO_QUEUE:
+            skinnedQueue.push(msg.getValue<SkinnedMeshRenderer*>());
             break;
         case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
             billboardQueue.push(msg.getValue<BillboardRenderer*>());
@@ -22,6 +30,9 @@ void RendererModule::receiveMessage(Message msg)
             viewChanged = true;
             viewMatrix = msg.getValue<glm::mat4*>(); // TODO: No need to set pointer every time
             break;
+        case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:
+            bones = msg.getValue<std::map<int, glm::mat4>*>();
+            break;
     }
 }
 
@@ -30,6 +41,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     this->window = window;
     this->createInfo = createInfo;
     this->skyboxMaterial = skyboxMaterial;
+
 
     if (createInfo.cullFace)
     {
@@ -218,19 +230,39 @@ void RendererModule::render()
             renderQueue.pop();
         }
 
-        // TODO Proper instanced rendering
-        billboardQueue.front()->material->use();
-        int i = 0, count = billboardQueue.size();
-        glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
-        glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-        while(!billboardQueue.empty())
+        // TODO: Proper skinned mesh rendering
+
+        while(!skinnedQueue.empty())
         {
-            glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
-            billboardQueue.pop();
-            ++i;
+            std::ostringstream ss;
+            for(auto bone : *bones)
+            {
+                ss << "gBones[" << bone.first << "]";
+                skinnedQueue.front()->material->setMat4(ss.str(), bone.second);
+                ss.clear();
+            }
+            skinnedQueue.front()->material->use();
+            skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
+            skinnedQueue.front()->mesh->render();
+            skinnedQueue.pop();
         }
-        glBindVertexArray(billboardVao);
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
+
+        // TODO Proper instanced rendering
+        if(!billboardQueue.empty())
+        {
+            billboardQueue.front()->material->use();
+            int i = 0, count = billboardQueue.size();
+            glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
+            glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+            while(!billboardQueue.empty())
+            {
+                glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
+                billboardQueue.pop();
+                ++i;
+            }
+            glBindVertexArray(billboardVao);
+            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
+        }
         glBindVertexArray(0);
 
         // ? +++++ Render skybox with appropriate depth test function +++++

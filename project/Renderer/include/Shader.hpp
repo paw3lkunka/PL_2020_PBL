@@ -17,7 +17,7 @@
 #include <unordered_map>
 #include <iostream>
 
-#include "ShaderExceptions.hpp"
+#include "ISerializable.inl"
 
 constexpr GLsizei NAME_BUF_SIZE = 32;
 
@@ -25,7 +25,7 @@ constexpr GLsizei NAME_BUF_SIZE = 32;
  * @brief Shader class, responsible for compiling shaders and creating shader programs
  * 
  */
-class Shader
+class Shader: public ISerializable
 {
 public:
     /**
@@ -72,6 +72,11 @@ public:
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
 
     unsigned int ID;
+
+    std::string vertexShaderPath = "";
+    std::string fragmentShaderPath = "";
+    std::string geometryShaderPath = "";
+
 private:
     std::unordered_map<std::string, GLenum> attributes;
     std::unordered_map<std::string, GLenum> uniforms;

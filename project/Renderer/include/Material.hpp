@@ -14,24 +14,26 @@
 #include <unordered_map>
 #include <string>
 
-#include "MeshDataStructures.inl"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
+#include "ISerializable.inl"
+
 #include "Shader.hpp"
 
 /**
  * @brief Class encapsulating shader program and uniform variables
  */
-class Material
+class Material: public ISerializable
 {
+friend class SceneWriter;
 public:
     /**
      * @brief Construct a new Material object
      * 
      * @param shader Shader to draw with
+     * @param name name of the material
      */
-    Material(Shader* shader);
-    Material() = default;
+    Material(Shader* shader, const char* name);
     ~Material() = default;
 
     /**
@@ -40,9 +42,9 @@ public:
     void use();
 
     /// @brief Set texture of given name in material
-    void setTexture(std::string name, Texture value);
+    void setTexture(std::string name, Texture* value);
     /// @brief Set texture of given name in material
-    void setCubemap(std::string name, Cubemap value);
+    void setCubemap(std::string name, Cubemap* value);
     /// @brief Set int of given name in material
     void setInt(std::string name, int value);
     /// @brief Set float of given name in material
@@ -56,6 +58,14 @@ public:
 
     /// @brief Get pointer to underlying shader
     Shader* getShaderPtr();
+
+    /**
+     * @brief Get the Name of the material
+     * 
+     * @return const char* name
+     */
+    const char* getName();
+
     /// @brief Get int of given name
     int getInt(std::string name);
     /// @brief Get float of given name
@@ -71,9 +81,10 @@ private:
     static int idCount;
     int ID;
     Shader* shader;
+    std::string name;
 
-    std::unordered_map<std::string, Texture> textures;
-    std::unordered_map<std::string, Cubemap> cubemaps;
+    std::unordered_map<std::string, Texture*> textures;
+    std::unordered_map<std::string, Cubemap*> cubemaps;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
     std::unordered_map<std::string, glm::vec3> vec3s;

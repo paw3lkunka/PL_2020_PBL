@@ -6,6 +6,9 @@
 #include "Entity.hpp"
 #include "Core.hpp"
 #include "Systems.inc"
+#include "Camera.inl"
+#include "Transform.inl"
+#include "Message.inl"
 
 bool BillboardRendererSystem::assertEntity(Entity* entity)
 {

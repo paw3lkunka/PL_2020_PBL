@@ -27,8 +27,15 @@ if(NOT EXISTS "libs/openal-soft/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/openal-soft/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/json/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/json/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
+
+# Json test diasable
+set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 # Enable GLFW unused features 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -119,14 +126,14 @@ add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
 add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
+add_subdirectory(libs/json/)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
 aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
 aux_source_directory( project/Audio/src                     AUDIO_SRC)
-aux_source_directory( project/ResourceManager/src           FILE_SYSTEM_SRC)
-aux_source_directory( project/ObjectsManager/src            OBJECTS_SRC)
+aux_source_directory( project/ObjectManager/src             OBJECTS_SRC)
 aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
@@ -140,7 +147,6 @@ list(
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
-        ${FILE_SYSTEM_SRC}
         ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
@@ -159,8 +165,7 @@ include_directories(
     project/GameSystems/Components
     project/GameSystems/Systems/include
     project/Audio/include
-    project/ResourceManager/include
-    project/ObjectsManager/include
+    project/ObjectManager/include
     project/Input/include
     project/MessageBus/include
     project/Renderer/include
@@ -172,6 +177,7 @@ include_directories(
     libs/assimp/include
     libs/glm/
     libs/openal-soft/include
+    libs/json/single_include/nlohmann
     build/libs/assimp/include
 )
 
@@ -185,6 +191,7 @@ target_link_libraries(
         glm
         OpenAL
         assimp
+        nlohmann_json::nlohmann_json
 )    
 
 file(GLOB resources "resources/*")
