@@ -13,19 +13,15 @@
 #include "MeshCustom.hpp"
 #include "MeshSkinned.hpp"
 
+bool ObjectContainer::hasInstance = false;
+
 ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule) 
 {
-    shaders.reserve(50);
-    components.reserve(200);
-    entities.reserve(50);
-    meshes.reserve(50);
-    textures.reserve(50);
-    cubemaps.reserve(10);
-    materials.reserve(20);
-}
-
-ObjectContainer::ObjectContainer()
-{
+    if(hasInstance)
+    {
+        throw TooManyInstancesException("ObjectContainer");
+    }
+    hasInstance = true;
     shaders.reserve(50);
     components.reserve(200);
     entities.reserve(50);
@@ -40,37 +36,44 @@ ObjectContainer::~ObjectContainer()
     for(auto c : components)
     {
         delete c;
+        c = nullptr;
     }
     components.clear();
     
     for(auto m : meshes)
     {
         delete m;
+        m = nullptr;
     }
     meshes.clear();
 
     entities.clear();
+
     for(auto s : shaders)
     {
         delete s;
+        s = nullptr;
     }
     shaders.clear();
 
     for(auto t : textures)
     {
         delete t;
+        t = nullptr;
     }
     textures.clear();
 
     for(auto m : materials)
     {
         delete m;
+        m = nullptr;
     }
     materials.clear();
 
     for(auto c : cubemaps)
     {
         delete c;
+        c = nullptr;
     }
     cubemaps.clear();
 }
@@ -79,7 +82,7 @@ MeshCustom* ObjectContainer::getMeshCustomFromPath(const char* meshPath)
 {
     for(auto m : meshes)
     {
-        if(m->getMeshPath() == meshPath && dynamic_cast<MeshCustom*>(m) != nullptr)
+        if(objModule->compareStrings(m->getMeshPath().c_str(), meshPath) && dynamic_cast<MeshCustom*>(m) != nullptr)
         {
             return dynamic_cast<MeshCustom*>(m);
         }
@@ -91,7 +94,7 @@ MeshSkinned* ObjectContainer::getMeshSkinnedFromPath(const char* meshPath)
 {
     for(auto m : meshes)
     {
-        if(m->getMeshPath() == meshPath && dynamic_cast<MeshSkinned*>(m) != nullptr)
+        if(objModule->compareStrings(m->getMeshPath().c_str(), meshPath) && dynamic_cast<MeshSkinned*>(m) != nullptr)
         {
             return dynamic_cast<MeshSkinned*>(m);
         }
@@ -104,6 +107,18 @@ Entity* ObjectContainer::getEntityFromID(unsigned int entityID)
     for(int i = 0; i < entities.size(); ++i)
     {
         if(entities[i].getId() == entityID)
+        {
+            return &entities[i];
+        }
+    }
+    return nullptr;
+}
+
+Entity* ObjectContainer::getEntityFromName(const char* name)
+{
+    for(int i = 0; i < entities.size(); ++i)
+    {
+        if(objModule->compareStrings(entities[i].getName().c_str(), name) )
         {
             return &entities[i];
         }

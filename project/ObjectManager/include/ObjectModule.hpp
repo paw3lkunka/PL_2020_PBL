@@ -53,13 +53,6 @@ public:
     void receiveMessage(Message msg);
 
     /**
-     * @brief read scene to file
-     * 
-     * @param path path to json file to read
-     */
-    void readScene(std::string path);
-
-    /**
      * @brief comparsion cstrings
      * 
      * @param str1 first string
@@ -69,22 +62,64 @@ public:
      */
     bool compareStrings(const char* str1, const char* str2);
 
-#pragma region SceneWriter Wrapper
+#pragma region Scene Wrapper
     /**
      * @brief scene writer wrapped, saving scene
      * 
      * @param filePath path to file to save scene
      */
     void saveScene(const char* filePath);
+
+    /**
+     * @brief read scene to file
+     * 
+     * @param path path to json file to read
+     */
+    void readScene(std::string path);
+
 #pragma endregion
 
 #pragma region ObjectContainer Wrapper
 
-    MeshCustom* getMeshCustomFromPath(const char* meshPath);
+    /**
+     * @brief Get the Mesh Custom From Path 
+     * 
+     * @param meshPath from file
+     * @return MeshCustom* object if found, else throws FileNotFoundException
+     */
+    MeshCustom* getMeshCustomFromPath(const char* meshPath) { return objectContainer.getMeshCustomFromPath(meshPath); }
 
-    MeshSkinned* getMeshSkinnedFromPath(const char* meshPath);
+    /**
+     * @brief Get the Mesh Skinned From Path
+     * 
+     * @param meshPath from model file
+     * @return MeshSkinned* object if found, else throws FileNotFoundException
+     */
+    MeshSkinned* getMeshSkinnedFromPath(const char* meshPath) { return objectContainer.getMeshSkinnedFromPath(meshPath); }
+    
+    /**
+     * @brief Get the Entity by ID
+     * 
+     * @param entityID id of entity to find
+     * @return Entity* entity pointer or nullptr if can't find
+     */
+    Entity* getEntityFromID(unsigned int entityID) { return objectContainer.getEntityFromID(entityID); }
 
-    Material* getMaterialFromName(const char* name);
+    /**
+     * @brief Get the Entity by name
+     * 
+     * @param name of entity
+     * @return Entity* pointer or nullptr if can't find
+     */
+    Entity* getEntityFromName(const char* name) { return objectContainer.getEntityFromName(name); }
+
+    /**
+     * @brief Get the Material by name
+     * 
+     * @param name of material
+     * @return Material* pointer or nullptr if can't find
+     */
+    Material* getMaterialFromName(const char* name) {return objectContainer.getMaterialFromName(name); }
 
 #pragma endregion
 
@@ -94,9 +129,10 @@ public:
      * new entity making
      * 
      * @param bufferSize entity buffer size
+     * @param name of the entity (optional)
      * @return Entity* pointer for added entity
      */
-    Entity* newEntity(int bufferSize);
+    Entity* newEntity(int bufferSize, std::string name = "");
     
     /**
      * @brief (Object maker wrapper)
@@ -174,6 +210,11 @@ public:
      */
     Material* newMaterial(Shader* shader, std::string name);
 
+    /**
+     * @brief creating new audio clip and saving to map
+     * 
+     * @param filePath to audio file
+     */
     void newAudioClip(const char* filePath);
 
 #pragma endregion

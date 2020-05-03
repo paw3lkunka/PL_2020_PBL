@@ -13,6 +13,8 @@ struct AudioSource;
 struct Camera;
 struct Renderer;
 struct BillboardRenderer;
+struct MeshRenderer;
+struct SkinnedMeshRenderer;
 struct SphereCollider;
 class Material;
 class Texture;
@@ -69,7 +71,8 @@ private:
     void saveAudioListener(std::string name, AudioListener* componentPtr);
     void saveAudioSource(std::string name, AudioSource* componentPtr);
     void saveCamera(std::string name, Camera* componentPtr);
-    void saveRenderer(std::string name, Renderer* componentPtr);
+    void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
+    void saveSkinnedMeshRenderer(std::string name, SkinnedMeshRenderer* componentPtr);
     void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
 

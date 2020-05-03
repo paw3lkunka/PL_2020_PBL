@@ -13,6 +13,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <glm/gtc/type_ptr.hpp>
 
 SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 {
@@ -56,6 +57,7 @@ void SceneWriter::saveScene(const char* filePath)
             name = "entity" + std::to_string(i);
         }
         j[name]["id"] = objContainerPtr->entities[i].getId();
+        j[name]["name"] = objContainerPtr->entities[i].getName();
         j[name]["serializationID"] = objContainerPtr->entities[i].serializationID;
         for(int j = 0; j < objContainerPtr->entities[i].getComponentsPtr()->size(); ++j)
         {
@@ -196,10 +198,15 @@ void SceneWriter::saveScene(const char* filePath)
             BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]);
             saveBillboardRenderer(name, temp);
         }
-        else if(dynamic_cast<Renderer*>(objContainerPtr->components[i]))
+        else if(dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
-            Renderer* temp = dynamic_cast<Renderer*>(objContainerPtr->components[i]);
-            saveRenderer(name, temp);
+            MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]);
+            saveMeshRenderer(name, temp);
+        }
+        else if(dynamic_cast<SkinnedMeshRenderer*>(objContainerPtr->components[i]))
+        {
+            SkinnedMeshRenderer* temp = dynamic_cast<SkinnedMeshRenderer*>(objContainerPtr->components[i]);
+            saveSkinnedMeshRenderer(name, temp);
         }
         else if(dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
@@ -265,6 +272,7 @@ void SceneWriter::saveAudioSource(std::string name, AudioSource* componentPtr)
     j[name]["isRelativeToListener"] = componentPtr->getIsRelative();
     j[name]["isLooping"] = componentPtr->getIsLooping();
     j[name]["minGain"] = componentPtr->getMinGain();
+    j[name]["gain"] = componentPtr->getGain();
     j[name]["maxGain"] = componentPtr->getMaxGain();
     j[name]["referenceDistance"] = componentPtr->getReferenceDistance();
     j[name]["rolloffFactor"] = componentPtr->getRolloffFactor();
@@ -296,12 +304,19 @@ void SceneWriter::saveCamera(std::string name, Camera* componentPtr)
     j[name]["farPlane"] = componentPtr->farPlane;
 }
 
-void SceneWriter::saveRenderer(std::string name, Renderer* componentPtr)
+void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
 {
-    j[name]["type"] = "Renderer";
+    j[name]["type"] = "MeshRenderer";
     j[name]["material"] = componentPtr->material->serializationID;
     j[name]["mesh"] = componentPtr->mesh->serializationID;
     
+}
+
+void SceneWriter::saveSkinnedMeshRenderer(std::string name, SkinnedMeshRenderer* componentPtr)
+{
+    j[name]["type"] = "SkinnedMeshRenderer";
+    j[name]["material"] = componentPtr->material->serializationID;
+    j[name]["mesh"] = componentPtr->mesh->serializationID;
 }
 
 void SceneWriter::saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr)
@@ -338,6 +353,74 @@ void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
         childrenMap[t.first] = t.second->serializationID;
     }
     j[name]["textures"] = childrenMap;
+
+    childrenMap.clear();
+    for(auto i : assetPtr->ints)
+    {
+        childrenMap[i.first] = i.second;
+    }
+    j[name]["ints"] = childrenMap;
+
+    std::unordered_map<std::string, float> floatMap;
+
+    for(auto f : assetPtr->floats)
+    {
+        floatMap[f.first] = f.second;
+    }
+    j[name]["floats"] = floatMap;
+
+
+    std::unordered_map<std::string, std::vector<float>> structMap;
+    std::vector<float> floatVec;
+    for(auto v : assetPtr->vec3s)
+    {
+        floatVec.clear();
+        floatVec.push_back(v.second.x);
+        floatVec.push_back(v.second.y);
+        floatVec.push_back(v.second.z);
+        
+        structMap[v.first] = floatVec;
+    }
+
+    j[name]["vec3s"] = structMap;
+
+    structMap.clear();
+    for(auto v : assetPtr->vec4s)
+    {
+        floatVec.clear();
+        floatVec.push_back(v.second.w);
+        floatVec.push_back(v.second.x);
+        floatVec.push_back(v.second.y);
+        floatVec.push_back(v.second.z);
+
+        structMap[v.first] = floatVec;
+    }
+    j[name]["vec4s"] = structMap;
+
+    structMap.clear();
+    for(auto m : assetPtr->mat4s)
+    {
+        floatVec.clear();
+        floatVec.push_back(m.second[0][0]);
+        floatVec.push_back(m.second[0][1]);
+        floatVec.push_back(m.second[0][2]);
+        floatVec.push_back(m.second[0][3]);
+        floatVec.push_back(m.second[1][0]);
+        floatVec.push_back(m.second[1][1]);
+        floatVec.push_back(m.second[1][2]);
+        floatVec.push_back(m.second[1][3]);
+        floatVec.push_back(m.second[2][0]);
+        floatVec.push_back(m.second[2][1]);
+        floatVec.push_back(m.second[2][2]);
+        floatVec.push_back(m.second[2][3]);
+        floatVec.push_back(m.second[3][0]);
+        floatVec.push_back(m.second[3][1]);
+        floatVec.push_back(m.second[3][2]);
+        floatVec.push_back(m.second[3][3]);
+
+        structMap[m.first] = floatVec;
+    }
+    j[name]["mat4s"] = structMap;
 }
 
 void SceneWriter::saveTexture(std::string name, Texture* assetPtr)

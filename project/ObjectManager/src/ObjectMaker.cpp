@@ -26,9 +26,9 @@ ObjectMaker::ObjectMaker(ObjectModule* objectmodulePtr)
     objContainer = &objectmodulePtr->objectContainer;
 }
 
-Entity* ObjectMaker::newEntity(int bufferSize = 0)
+Entity* ObjectMaker::newEntity(int bufferSize, std::string name)
 {
-    objContainer->entities.push_back(Entity(nextID++, bufferSize) );
+    objContainer->entities.push_back(Entity(nextID++, bufferSize, name) );
     return &objContainer->entities[objContainer->entities.size() - 1];
 }
 

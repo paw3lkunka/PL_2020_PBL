@@ -35,11 +35,6 @@ void ObjectModule::receiveMessage(Message msg)
     }
 }
 
-void ObjectModule::readScene(std::string path)
-{
-    sceneReader.readScene(path);
-}
-
 bool ObjectModule::compareStrings(const char* str1, const char* str2)
 {
     return compareStrings(std::string(str1), std::string(str2));
@@ -61,37 +56,25 @@ bool ObjectModule::compareStrings(std::string str1, std::string str2)
     return true;
 }
 
-#pragma region SceneWriter Wrapper
+#pragma region Scene Wrapper
 void ObjectModule::saveScene(const char* filePath)
 {
     sceneWriter.saveScene(filePath);
 }
-#pragma endregion
 
-#pragma region objectContainer Wrapper
-
-MeshCustom* ObjectModule::getMeshCustomFromPath(const char* meshPath)
+void ObjectModule::readScene(std::string path)
 {
-    return objectContainer.getMeshCustomFromPath(meshPath);
-}
-
-MeshSkinned* ObjectModule::getMeshSkinnedFromPath(const char* meshPath)
-{
-    return objectContainer.getMeshSkinnedFromPath(meshPath);
-}
-
-Material* ObjectModule::getMaterialFromName(const char* name)
-{
-    return objectContainer.getMaterialFromName(name);
+    sceneReader.readScene(path);
 }
 
 #pragma endregion
+
 
 #pragma region objectMaker Wrapper
 
-Entity* ObjectModule::newEntity(int bufferSize)
+Entity* ObjectModule::newEntity(int bufferSize, std::string name)
 {
-    return objectMaker.newEntity(bufferSize);
+    return objectMaker.newEntity(bufferSize, name);
 }
 
 Shader* ObjectModule::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)

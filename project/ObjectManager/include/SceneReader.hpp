@@ -38,7 +38,8 @@ private:
     void readAudioListener(std::string name);
     void readCamera(std::string name);
     void readBillboardRenderer(std::string name);
-    void readRenderer(std::string name);
+    void readMeshRenderer(std::string name);
+    void readSkinnedMeshRenderer(std::string name);
     void readSphereCollider(std::string name);
 };
 

@@ -27,9 +27,10 @@ public:
      * @brief new entity making
      * 
      * @param bufferSize entity buffer size
+     * @param name entity name
      * @return Entity* pointer for added entity
      */
-    Entity* newEntity(int bufferSize);
+    Entity* newEntity(int bufferSize = 0, std::string name = "");
     
     /**
      * @brief Create new empty component of given type, save to container and return pointer to it.

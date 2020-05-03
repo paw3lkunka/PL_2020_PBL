@@ -121,6 +121,9 @@ void SceneReader::readMaterials()
     std::string name;
     int materialsAmount = j.at("Amounts").at("materials").get<int>();
     std::unordered_map<std::string, unsigned int> children;
+    std::unordered_map<std::string, int> ints;
+    std::unordered_map<std::string, float> floats;
+    std::unordered_map<std::string, std::vector<float>> structMap;
     unsigned int shaderID;
 
     for(int i = 0; i < materialsAmount; ++i)
@@ -133,9 +136,7 @@ void SceneReader::readMaterials()
         auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
 
         auto matName = j.at(name).at("name").get<std::string>();
-        //TODO Delete shitty cout
-        std::cout << "Material name: " << matName << std::endl;
-        
+
         auto material = objModulePtr->newMaterial(shader, matName);
         material->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
@@ -154,6 +155,54 @@ void SceneReader::readMaterials()
             unsigned int texID = iter.second;
             auto texture = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
             material->setTexture(iter.first, texture);
+        }
+
+        ints.clear();
+        j.at(name).at("ints").get_to(ints);
+
+        for(auto iter : ints)
+        {
+            material->setInt(iter.first, iter.second);
+        }
+
+        floats.clear();
+        j.at(name).at("floats").get_to(floats);
+
+        for(auto iter : floats)
+        {
+            material->setFloat(iter.first, iter.second);
+        }
+
+        structMap.clear();
+        j.at(name).at("vec3s").get_to(structMap);
+        for(auto iter : structMap)
+        {
+            std::string uniName = iter.first;
+            glm::vec3 vector(iter.second[0], iter.second[1], iter.second[2]);
+            material->setVec3(uniName, vector);
+        }
+
+        structMap.clear();
+        j.at(name).at("vec4s").get_to(structMap);
+        for(auto iter : structMap)
+        {
+            std::string uniName = iter.first;
+            glm::vec4 vector(iter.second[1], iter.second[2], iter.second[3], iter.second[0]); //!x, y, z, w
+            material->setVec4(uniName, vector);
+        }
+
+        structMap.clear();
+        j.at(name).at("mat4s").get_to(structMap);
+        for(auto iter : structMap)
+        {
+            std::string uniName = iter.first;
+            glm::vec4 c0(iter.second[0], iter.second[1], iter.second[2], iter.second[3]);
+            glm::vec4 c1(iter.second[4], iter.second[5], iter.second[6], iter.second[7]);
+            glm::vec4 c2(iter.second[8], iter.second[9], iter.second[10], iter.second[11]);
+            glm::vec4 c3(iter.second[12], iter.second[13], iter.second[14], iter.second[15]);
+            
+            glm::mat4 matrix(c0, c1, c2, c3);
+            material->setMat4(uniName, matrix);
         }
     }
 }
@@ -193,8 +242,8 @@ void SceneReader::readComponents()
     std::string name;
     for(int i = 0; i < componentsAmount; ++i)
     {
-        //TODO Delete shitty couts
         name = setName("component", i);
+        std::cout << "Component : "  << name << " ";
         componentType = j.at(name).at("type").get<std::string>();
         if(componentType == "Transform")
         {
@@ -216,10 +265,15 @@ void SceneReader::readComponents()
             std::cout << "Camera" << std::endl;
             readCamera(name);
         }
-        else if(componentType == "Renderer")
+        else if(componentType == "MeshRenderer")
         {
-            std::cout << "Renderer" << std::endl;
-            readRenderer(name);
+            std::cout << "MeshRenderer" << std::endl;
+            readMeshRenderer(name);
+        }
+        else if(componentType == "SkinnedMeshRenderer")
+        {
+            std::cout << "SkinnedMeshRenderer" << std::endl;
+            readSkinnedMeshRenderer(name);
         }
         else if(componentType == "SphereCollider")
         {
@@ -243,7 +297,9 @@ void SceneReader::readEntities()
     {
         name = setName("entity", i);
         j.at(name).at("components").get_to(components);
-        auto entity = objModulePtr->newEntity(components.size());
+
+        auto entityName = j.at(name).at("name").get<std::string>();
+        auto entity = objModulePtr->newEntity(components.size(), entityName);
         entity->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     }
 }
@@ -332,6 +388,7 @@ void SceneReader::readAudioSource(std::string name)
     }
     aSource->getMaxGainModifiable() = j.at(name).at("maxGain").get<float>();
     aSource->getMinGainModifiable() = j.at(name).at("minGain").get<float>();
+    aSource->getGainModifiable() = j.at(name).at("gain").get<float>();
     aSource->getPitchModifiable() = j.at(name).at("pitch").get<float>();
     aSource->getReferenceDistanceModifiable() = j.at(name).at("referenceDistance").get<float>();
     aSource->getRolloffFactorModifiable() = j.at(name).at("rolloffFactor").get<float>();
@@ -417,9 +474,9 @@ void SceneReader::readBillboardRenderer(std::string name)
     entity->addComponent(bRenderer);
 }
 
-void SceneReader::readRenderer(std::string name)
+void SceneReader::readMeshRenderer(std::string name)
 {
-    auto renderer = objModulePtr->newEmptyComponent<Renderer>();
+    auto renderer = objModulePtr->newEmptyComponent<MeshRenderer>();
     renderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     unsigned int childID = j.at(name).at("material").get<unsigned int>();
@@ -427,6 +484,29 @@ void SceneReader::readRenderer(std::string name)
 
     childID = j.at(name).at("mesh").get<unsigned int>();
     renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+    std::cout << "Material " << renderer->material->getName() << std::endl;
+    std::cout << "Mesh " << renderer->mesh->getMeshPath() << std::endl;
+    
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(renderer);
+}
+
+void SceneReader::readSkinnedMeshRenderer(std::string name)
+{
+    auto renderer = objModulePtr->newEmptyComponent<SkinnedMeshRenderer>();
+    renderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int childID = j.at(name).at("material").get<unsigned int>();
+    renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+    childID = j.at(name).at("mesh").get<unsigned int>();
+    renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+    std::cout << "Material " << renderer->material->getName() << std::endl;
+    std::cout << "Mesh " << renderer->mesh->getMeshPath() << std::endl;
 
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);

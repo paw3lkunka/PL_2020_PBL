@@ -239,12 +239,6 @@ class Core
         // TODO: this should get successively removed
         // // Needed to set a listener for a source :(
         AudioListener* li;
-        // Needed to play that source...
-        AudioSource* so1;
-        AudioSource* so2;
-        AudioSource* so3;
-        //Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
-        //Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
 #pragma endregion
 };
 

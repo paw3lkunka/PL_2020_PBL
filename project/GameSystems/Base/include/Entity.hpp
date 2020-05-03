@@ -2,6 +2,7 @@
 #define ENTITY_HPP_
 
 #include <vector>
+#include <string>
 
 #include "ISerializable.inl"
 
@@ -13,56 +14,69 @@ class Component;
  */
 class Entity : public ISerializable
 {
-    public:
-        /**
-         * @brief Construct a new Entity object
-         * 
-         * @param id id of Entity
-         * @param bufferSize allow to set initial buffer size (optional)
-         */
-        Entity(int id, int bufferSize = 0);
+public:
+    /**
+     * @brief Construct a new Entity object
+     * 
+     * @param id id of Entity
+     * @param bufferSize allow to set initial buffer size (optional)
+     * @param name of entity (optional)
+     */
+    Entity(int id, int bufferSize = 0, std::string name = "");
 
-        /**
-         * @brief Creates two-way pointer connection between this Entity, and pointed Component 
-         * @param ptr 
-         */
-        void addComponent(Component* ptr);
+    /**
+     * @brief Creates two-way pointer connection between this Entity, and pointed Component 
+     * @param ptr 
+     */
+    void addComponent(Component* ptr);
 
-        /**
-         * @brief Get the Id object
-         * 
-         * @return int 
-         */
-        const int getId() const;
+    /**
+     * @brief Get the Id object
+     * 
+     * @return int 
+     */
+    const int getId() const;
 
-        /**
-         * @brief Get vector of all components
-         * 
-         * @return const std::vector<Component*>* 
-         */
-        const std::vector<Component*>* getComponentsPtr() const;
+    /**
+     * @brief Get the Name of the entity
+     * 
+     * @return const std::string name of entity
+     */
+    const std::string getName() const;
 
-        /**
-         * @brief Get the n-th Component of given type
-         * 
-         * @tparam T type of component
-         * @param n occurrence of component (default: 0)
-         * @return const T* pointer to component (nullptr if wasn't found)
-         */
-        template<typename T>
-        T* getComponentPtr(int n = 0) const;
-        
-        virtual ~Entity() = default;
-    protected:
-    private:
-        /**
-         * @brief ID of entity - should be unique
-         */
-        int id;
-        /**
-         * @brief contains pointers to all components associated with this entity 
-         */
-        std::vector<Component*> components;
+    /**
+     * @brief Get vector of all components
+     * 
+     * @return const std::vector<Component*>* 
+     */
+    const std::vector<Component*>* getComponentsPtr() const;
+
+    /**
+     * @brief Get the n-th Component of given type
+     * 
+     * @tparam T type of component
+     * @param n occurrence of component (default: 0)
+     * @return const T* pointer to component (nullptr if wasn't found)
+     */
+    template<typename T>
+    T* getComponentPtr(int n = 0) const;
+    
+    virtual ~Entity() = default;
+protected:
+private:
+    /**
+     * @brief ID of entity - should be unique
+     */
+    int id;
+    /**
+     * @brief contains pointers to all components associated with this entity 
+     */
+    std::vector<Component*> components;
+
+    /**
+     * @brief name of the entity
+     */
+    std::string name;
 };
 
 #include "Entity.ipp"

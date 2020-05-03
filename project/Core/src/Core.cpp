@@ -93,88 +93,12 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    objectModule.readScene("scene.json");
-
-#pragma region Data Loading
-    
-//     objectModule.newModel("Resources/Models/Test.fbx", FileType::MESH);
-//     objectModule.newModel("Resources/Models/unit_sphere.fbx", FileType::MESH);
-//     objectModule.newModel("Resources/Models/House Dancing.fbx", FileType::MESH);
-//     objectModule.newModel("Resources/Models/Cliffs.FBX", FileType::MESH);
-//     objectModule.newModel("Resources/Models/Left_bank.FBX", FileType::MESH);
-//     objectModule.newModel("Resources/Models/Right_bank.FBX", FileType::MESH);
-//     objectModule.newModel("Resources/Models/Riverbed.FBX", FileType::MESH);
-//     objectModule.newModel("Resources/Models/Water.FBX", FileType::MESH);
-//     objectModule.newAudioClip("Resources/Audios/sample.wav");
-//     objectModule.newAudioClip("Resources/Audios/test.wav");
-    
-
-//     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
-    
-
-//     auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-
-//     auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
-    
-
-//     auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-
-//     //auto skinnedShader = objectModule.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
-
-//     std::cout << "Shaders compiled" <<std::endl;
-//     Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat");
-//     unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    objectModule.readScene("Resources/Scenes/mainScene.json");
 
 
-//     TextureCreateInfo texCreateInfo = {};
-//     texCreateInfo.generateMipmaps = true;
-//     texCreateInfo.magFilter = GL_LINEAR;
-//     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-//     texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-//     auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
+    #pragma region Renderer
 
-//     Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat");
-//     unlitTextureMat->setTexture("mainTex", texture);
-
-//     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat");
-//     unlitInstancedMat->setTexture("mainTex", texture);
-
-//     TextureCreateInfo skyboxCreateInfo = {};
-//     skyboxCreateInfo.generateMipmaps = true;
-//     skyboxCreateInfo.magFilter = GL_LINEAR;
-//     skyboxCreateInfo.minFilter = GL_LINEAR;
-//     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-
-//     auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-//                                 "Resources/Textures/skybox/nz.png", 
-//                                 "Resources/Textures/skybox/nx.png", 
-//                                 "Resources/Textures/skybox/px.png",
-//                                 "Resources/Textures/skybox/pz.png",
-//                                 "Resources/Textures/skybox/py.png",
-//                                 "Resources/Textures/skybox/ny.png");
-
-//     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat");
-//     skyboxMat->setCubemap("cubemap", cubemap);
-
-//     //Material* skinnedMat = objectModule.newMaterial(skinnedShader);
-
-//     Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat");
-//     waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
-//     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat");
-//     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
-
-//     Material* riverBedMat = objectModule.newMaterial(unlitColor, "riverBedMat");
-//     riverBedMat->setVec4("color", glm::vec4(0.407f, 0.2f, 0.070f, 1.0f));
-
-//     Material* riverBankMat = objectModule.newMaterial(unlitColor, "riverBankMat");
-//     riverBankMat->setVec4("color", glm::vec4(0.333f, 0.741f, 0.278f, 1.0f));
-
-// #pragma endregion
-
-// #pragma region Renderer
-
-//     // // ! ----- Renderer initialization block -----
+    // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
@@ -186,207 +110,7 @@ int Core::init()
     rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
-
-// #pragma endregion
-
-// #pragma region Entities
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
-//             mr->material = unlitColorMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/House Dancing.fbx/Alpha_Surface");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->material = waterMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Water.FBX/Water");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-//             t->getLocalScaleModifiable() = {5, 5, 5};
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->material = cliffsMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Cliffs.FBX/Cliffs");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-//             t->getLocalScaleModifiable() = {5, 5, 5};
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->material = riverBankMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Left_bank.FBX/Left_bank");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-//             t->getLocalScaleModifiable() = {5, 5, 5};
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->material = riverBankMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Right_bank.FBX/Right_bank");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-//             t->getLocalScaleModifiable() = {5, 5, 5};
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->material = riverBedMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Riverbed.FBX/Riverbed");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-//             t->getLocalScaleModifiable() = {5, 5, 5};
-//             t->setParent(&sceneModule.rootNode);
-//     }
-    
-//     objectModule.newEntity(2);
-//     {
-//         auto mr = objectModule.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
-//             mr->material = unlitColorMat;
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/House Dancing.fbx/Alpha_Joints");
-
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 10.0f, 0.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { -10.0f, 0.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 10.0f, 10.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { 0.0f, 10.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(2);
-//     {
-//         auto br = objectModule.newEmptyComponentForLastEntity<BillboardRenderer>();
-//             br->material = unlitInstancedMat;
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = { -10.0f, 10.0f, 0.0f };
-//             t->getLocalScaleModifiable() = { 10.0f, 10.0f, 10.0f };
-//             t->setParent(&sceneModule.rootNode);
-//     }
-
-//     objectModule.newEntity(3);
-//     {
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable()={-10.5f,0.0f,10.0f};
-//             t->getLocalScaleModifiable() *= 10;
-//             t->setParent(&sceneModule.rootNode);
-
-//         auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-//             c->radius = 10;
-
-//         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//             mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
-//             mr->material = unlitColorMat;
-//     }
-
-//     objectModule.newEntity(4);
-//     {
-//         auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
-//             c->farPlane = 1000.0f;
-//             c->nearPlane = 0.01f;
-//             c->fieldOfView = 80.0f;
-//             c->projectionMode = CameraProjection::Perspective;
-
-        
-//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-//             t->setParent(&sceneModule.rootNode);
-
-//         li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
-//             li->getIsCurrentModifiable() = true;
-//             li->getGainModifiable() = 1.0f;
-//             li->getVelocityModifiable();
-//             li->getPositionModifiable();
-//             li->getAtModifiable();
-//             li->getUpModifiable();
-
-//         auto sc = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-//             sc->type = Collider::Type::KINEMATIC;
-//             sc->radius = 5;
-//     }
-
-#pragma endregion
+    #pragma endregion
 
 
     gameSystemsModule.addSystem(&rendererSystem);
@@ -399,14 +123,8 @@ int Core::init()
 
 #pragma region Camera
     // ! Finding main camera
-    auto entitiesVector = objectModule.getEntitiesVector();
-    for(auto e : *entitiesVector)
-    {
-        if(e.getComponentPtr<Camera>() != nullptr && e.getComponentPtr<Camera>()->isMain)
-        {
-            CameraSystem::setAsMain(&e);
-        }
-    }
+    
+    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
 
     gameSystemsModule.addSystem(&cameraSystem);
 
@@ -415,71 +133,6 @@ int Core::init()
 #pragma region AudioModule demo - initialization
     
     audioModule.init();
-    
-    // objectModule.newEntity(2);
-    // {
-    //     so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-    //         so1->getListenersModifiable().push_back(li);
-    //         so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-    //         so1->getIsRelativeModifiable() = false;
-    //         so1->getIsLoopingModifiable() = true;
-
-    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-    //         t->setParent(&sceneModule.rootNode);
-    // }
-
-
-    /*
-    objectModule.NewEntity(2);
-    {
-        so2 = objectModule.NewComponent<AudioSource>();
-            so2->getListenersModifiable().push_back(li);
-            so2->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so2->getIsRelativeModifiable() = false;
-            so2->getIsLoopingModifiable() = true;
-
-        auto t = objectModule.NewComponent<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-            t->setParent(&sceneModule.rootNode);
-    }
-    */
-
-    // objectModule.newEntity(2);
-    // {
-    //     so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-    //     so3->getListenersModifiable().push_back(li);
-    //     so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
-    //     so3->getIsRelativeModifiable() = true;
-    //     so3->getGainModifiable() = 0.1f;
-    //     so3->getIsLoopingModifiable() = true;
-
-    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
-    //         t->setParent(&sceneModule.rootNode);
-    // }
-
-    // objectModule.newEntity(4);
-    // {
-    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-    //         t->getLocalPositionModifiable() = { 10.5f, 0.0f, 10.0f };
-    //         t->getLocalScaleModifiable() *= 10;
-    //         t->setParent(&sceneModule.rootNode);
-
-    //     auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-    //         c->radius = 10;
-
-    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-    //         mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
-    //         mr->material = unlitTextureMat;
-
-    //     so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-    //         so1->getListenersModifiable().push_back(li);
-    //         so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-    //         so1->getGainModifiable() = 100.5f;
-    //         so1->getIsRelativeModifiable() = false;
-    //         so1->getIsLoopingModifiable() = true;
-    // }
 
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
@@ -487,10 +140,6 @@ int Core::init()
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
-
-    // ! scene saving
-    objectModule.saveScene("saved.json");
-    //objectModule.saveScene("scene.json");
     
     // Everything is ok.
     return 0;
@@ -507,10 +156,8 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-//TODO: Rozwiąż to do cholery Ziemniak xD
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so1) );
-        // //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so2) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, so3) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sampleSound")->getComponentPtr<AudioSource>()) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
@@ -585,6 +232,9 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    //HACK: scene saving- uncomment when changing something in scene
+    objectModule.saveScene("../resources/Scenes/savedScene.json");
+
     audioModule.cleanup();
 
 	glfwDestroyWindow(window);
