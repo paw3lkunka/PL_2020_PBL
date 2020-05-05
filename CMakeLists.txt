@@ -128,6 +128,13 @@ add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
 
+#Disables library warnings
+target_compile_options(assimp PUBLIC -w)
+target_compile_options(OpenAL PUBLIC -w)
+target_compile_options(alsoft-config PUBLIC -w)
+target_compile_options(makemhr PUBLIC -w)
+target_compile_options(sofa-info PUBLIC -w)
+
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
