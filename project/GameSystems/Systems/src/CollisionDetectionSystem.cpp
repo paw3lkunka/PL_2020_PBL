@@ -38,7 +38,7 @@ void CollisionDetectionSystem::fixedUpdate()
     }  
 }
 
-
+/*
 template<>
 glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,SphereCollider>(SphereCollider* sphere1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
 {
@@ -59,52 +59,7 @@ glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,SphereCollider>(Sphe
     }
     
 }
-
-template<>
-glm::vec3 CollisionDetectionSystem::collsion<BoxCollider, BoxCollider>(BoxCollider* coll1, BoxCollider* coll2, Transform* trans1, Transform* trans2)
-{
-    glm::vec4 faceNormals[6]
-    {
-        trans1->localToWorldMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        trans1->localToWorldMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        trans1->localToWorldMatrix * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-
-        trans2->localToWorldMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
-        trans2->localToWorldMatrix * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
-        trans2->localToWorldMatrix * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-    };
-
-    glm::vec3 separation = {0.0f, 0.0f, 0.0f};
-    
-    //TODO unfinished
-
-    for (auto& line: faceNormals)
-    {
-        Projection1D proj1 = axisProjection(coll1, static_cast<glm::vec3>(line), trans1->localToWorldMatrix);
-        Projection1D proj2 = axisProjection(coll2, static_cast<glm::vec3>(line), trans2->localToWorldMatrix);
-
-        if (proj1.end < proj2.start || proj1.end < proj2.start)
-        {
-            
-        }
-    }
-    return separation;
-}
-
-//TODO not implemented
-template<>
-glm::vec3 CollisionDetectionSystem::collsion<BoxCollider,SphereCollider>(BoxCollider* box1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
-{
-    return {1,2,3};
-}
-
-//TODO not implemented
-template<>
-glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,BoxCollider>(SphereCollider* sphere1, BoxCollider* box2, Transform* transform1, Transform* transform2)
-{
-    return {1,2,3};
-}
-
+*/
 
 Projection1D CollisionDetectionSystem::axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld)
 {
@@ -112,6 +67,7 @@ Projection1D CollisionDetectionSystem::axisProjection(SphereCollider* sphere, gl
     float centre1D = glm::dot(centreWS, axis);
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
+
 
 Projection1D CollisionDetectionSystem::axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld)
 {

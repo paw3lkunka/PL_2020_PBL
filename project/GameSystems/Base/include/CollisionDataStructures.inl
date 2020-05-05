@@ -14,6 +14,7 @@ struct __attribute__((packed)) CollisionData
     Collider* cause;
     /// @brief Collider with which collision was resolved
     Collider* target;
+    //TODO should be removed / changed after phisic collisions implementation
     /// @brief Separation vector for 'cause' collider
     glm::vec3 separation;
 };

@@ -107,8 +107,8 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
-    gameSystemsModule.addSystem(&gravitySystem);
-    gameSystemsModule.addSystem(&kinematicSystem);
+    //gameSystemsModule.addSystem(&gravitySystem);
+    //gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&boneSystem);
 
 #pragma region Camera
@@ -244,6 +244,6 @@ AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
 BillboardRendererSystem Core::billboardSystem;
 CollisionDetectionSystem Core::collisionDetectionSystem;
-GravitySystem Core::gravitySystem;
-KinematicSystem Core::kinematicSystem;
+//GravitySystem Core::gravitySystem;
+//KinematicSystem Core::kinematicSystem;
 BoneSystem Core::boneSystem;

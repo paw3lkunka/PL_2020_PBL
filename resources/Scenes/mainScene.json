@@ -407,7 +407,7 @@
             "y": 0.0,
             "z": 0.0
         },
-        "colliderType": 0,
+        "colliderType": 2,
         "entity id": 13,
         "radius": 10.0,
         "serializationID": 66,
@@ -476,7 +476,7 @@
             "y": 0.0,
             "z": 0.0
         },
-        "colliderType": 1,
+        "colliderType": 0,
         "entity id": 14,
         "radius": 5.0,
         "serializationID": 72,
@@ -740,7 +740,7 @@
             67
         ],
         "id": 13,
-        "name": "",
+        "name": "SphereTrigger",
         "serializationID": 64
     },
     "entity014": {

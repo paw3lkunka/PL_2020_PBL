@@ -121,12 +121,20 @@ set(BUILD_DOCS OFF CACHE BOOL "" FORCE) #Assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
+
 add_subdirectory(libs/glad/)
 add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
 add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
+
+#Disables library warnings
+target_compile_options(assimp PUBLIC -w)
+target_compile_options(OpenAL PUBLIC -w)
+target_compile_options(alsoft-config PUBLIC -w)
+target_compile_options(makemhr PUBLIC -w)
+target_compile_options(sofa-info PUBLIC -w)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -156,6 +164,7 @@ list(
 )
 
 add_library(lib ${SOURCE_FILES} )
+
 
 include_directories( 
     project

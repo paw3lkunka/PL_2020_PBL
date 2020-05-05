@@ -527,6 +527,8 @@ void SceneReader::readSphereCollider(std::string name)
     sphereCollider->radius = j.at(name).at("radius").get<float>();
     sphereCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
+    std::cout << "COLLIDER TYPE: " << (int)sphereCollider->type << std::endl;
+
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     entity->addComponent(sphereCollider);

@@ -38,7 +38,7 @@ class CollisionDetectionSystem : public System
         void collisionWith(T1 collider1, T2 collider2, Transform* transform2);
 
         template<class T1, class T2>
-        glm::vec3 collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
+        bool collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
         
         Projection1D axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld);
         Projection1D axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld);

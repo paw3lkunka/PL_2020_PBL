@@ -7,8 +7,8 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "CollisionDataStructures.inl"
-#include "MeshCustom.hpp"
-#include "AudioFile.hpp"
+#include "Components.inc"
+#include "Systems.inc"
 #include <assimp/scene.h>
 
 ConsoleModule::ConsoleModule()
@@ -214,7 +214,11 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
         
     case Event::TRIGGER_ENTER:
-        //TODO implementation
+    {
+        auto aData = msg.getValue<TriggerData*>();
+        //HACK - to compile
+        //std::cout << "Trigger " << Name(aData->trigger) << " entered by: " << Name(aData->cause) << std::endl;
+    }
         break;
         
     case Event::TRIGGER_EXIT:
