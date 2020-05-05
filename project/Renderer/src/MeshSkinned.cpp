@@ -5,19 +5,15 @@
 
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds)
 {
-    std::cout << "Skinned mesh\n";
     this->vertices = vertices;
-    std::cout << "Vertices count: " << this->vertices.size() << '\n';
-    this->bounds = bounds;
-    // for(auto var : this->vertices)
+    // std::cout << "BoneIDs:\n";
+    // for (int i = 0; i < 1000; i++)
     // {
-    //     std::cout << "BoneIDs:\n";
-    //     std::cout << var.boneIDs[0] << ' ' << var.boneIDs[1] << ' ' << var.boneIDs[2] << ' ' << var.boneIDs[3] << '\n';
-    //     std::cout << var.weights[0] << ' ' << var.weights[1] << ' ' << var.weights[2] << ' ' << var.weights[3] << '\n';
+    //     std::cout << this->vertices[i].boneIDs[0] << ' ' << this->vertices[i].boneIDs[1] << ' ' << this->vertices[i].boneIDs[2] << ' ' << this->vertices[i].boneIDs[3] << '\n';
     // }
-
+    // std::cout << std::endl;
+    this->bounds = bounds;
     this->indices = indices;
-    std::cout << "Indices count: " << this->indices.size() << '\n';
     setup();
 }
 

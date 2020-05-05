@@ -1,15 +1,17 @@
 #ifndef BONESYSTEM_HPP_
 #define BONESYSTEM_HPP_
 
-#include "Bone.inl"
-#include "Transform.inl"
+#include "Skeleton.inl"
 
 #include "System.hpp"
 
-class BoneSystem : public System
+#include <map>
+
+class SkeletonSystem : public System
 {
 public:
-    BoneSystem() = default;
+    SkeletonSystem() = default;
+    virtual ~SkeletonSystem() = default;
 
     void process();
     /**
@@ -39,15 +41,13 @@ public:
      */
     void frameUpdate();
     
-    virtual ~BoneSystem() = default;
 private:
-    glm::vec3 interpolatePositionKeys(double time);
-    glm::quat interpolateRotationKeys(double time);
+    void processHierarchy(Bone* bone);
+    
     std::map<int, glm::mat4> boneTransforms;
     double animationTime;
-    double animationStep = 0.1f;
 
-    Bone* bone;
+    Skeleton* skeleton;
 };
 
 #endif /* !BONESYSTEM_HPP_ */

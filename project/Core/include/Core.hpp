@@ -215,7 +215,7 @@ class Core
         //TODO documentation
         BillboardRendererSystem billboardSystem;
         //TODO documentation
-        BoneSystem boneSystem;
+        SkeletonSystem skeletonSystem;
 
 #pragma endregion
 

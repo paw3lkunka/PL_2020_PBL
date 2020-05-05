@@ -123,12 +123,8 @@ int Core::init()
     testModel.typeOfFile = FileType::MESH;
 
     FileSystemData animModel;
-    animModel.path = "Resources/Models/House Dancing.FBX";
+    animModel.path = "Resources/Models/House Dancing.fbx";
     animModel.typeOfFile = FileType::MESH;
-
-    // FileSystemData animModel;
-    // animModel.path = "Resources/Models/plane_skin.FBX";
-    // animModel.typeOfFile = FileType::MESH;
 
     FileSystemData testTexture;
     testTexture.path = "Resources/Textures/tex.png";
@@ -267,8 +263,8 @@ int Core::init()
     // auto e2 = objectModule.FindEntity("Plane_skin");
     // e2->getComponentPtr<MeshRenderer>()->material = &skinnedMat;
 
-    // auto e1 = objectModule.FindEntity("Alpha_Surface");
-    // e1->getComponentPtr<MeshRenderer>()->material = &unlitTextureMat;
+    auto e1 = objectModule.FindEntity("Alpha_Surface");
+    e1->getComponentPtr<MeshRenderer>()->material = &skinnedMat;
 
     auto e2 = objectModule.FindEntity("Alpha_Joints");
     e2->getComponentPtr<MeshRenderer>()->material = &skinnedMat;
@@ -342,7 +338,7 @@ int Core::init()
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
-    gameSystemsModule.addSystem(&boneSystem);
+    gameSystemsModule.addSystem(&skeletonSystem);
 
 #pragma endregion
 

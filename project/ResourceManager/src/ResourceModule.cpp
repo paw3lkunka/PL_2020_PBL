@@ -5,6 +5,7 @@
 #include "Message.inl"
 #include "Transform.inl"
 #include "Bone.inl"
+#include "Skeleton.inl"
 #include "MeshDataStructures.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -185,19 +186,35 @@ bool ResourceModule::loadMesh(std::string path)
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr << "Assimp Error: " << importer.GetErrorString();
+        return false;
     }
     else
     {
         std::cout << "Node structure:\n";
         displayNodeHierarchy(scene->mRootNode);
 
-        Bone::globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
+        globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
         
+        // * ----- Process and create entities with mesh renderers -----
         processNode(scene->mRootNode, scene, path);
-        processBone(scene->mRootNode, scene, path);
+
+        // * ----- Process and create bones -----
+        Bone* rootBone = processBone(scene->mRootNode, scene, path);
+
+        // * ----- Process animations -----
+        if (processAnimations(scene, path))
+        {
+            // * ----- Create skeleton object and bind root node -----
+            objectModulePtr->NewEntity(scene->mRootNode->mName.C_Str() + std::string("_skeleton"), 1);
+            auto s = objectModulePtr->NewComponent<Skeleton>();
+            s->animation = &animations.begin()->second;
+            s->globalInverseTransform = globalInverseTransform;
+            s->rootBone = rootBone;
+        }
+
     }
 
-    return false;
+    return true;
 }
 
 bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
@@ -241,14 +258,8 @@ bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string
         auto mr = objectModulePtr->NewComponent<MeshRenderer>();
             mr->mesh = newMesh;
     }
-    
-    
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
-    // for (int i = node->mNumChildren - 1; i >= 0; i--)
-    // {
-    //     processNode(node->mChildren[i], scene, path, nodeTransform);
-    // }
     for (int i = 0; i < node->mNumChildren; i++)
     {
         processNode(node->mChildren[i], scene, path, nodeTransform);
@@ -257,46 +268,96 @@ bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string
     return true;
 }
 
-bool ResourceModule::processBone(aiNode* node, const aiScene* scene, std::string path, glm::mat4 parentTransform)
+Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
+    //std::cout << "BONE ZONE: " << bones.size() << '\n';
+    //std::cout << path << "/" << node->mName.C_Str() << '\n';
+    //std::cout << "Does this key exist? " << bones.count(path + "/" + node->mName.C_Str()) << '\n';
+
     auto bone = bones.find(path + "/" + node->mName.C_Str());
-    if (bone == bones.end())
+    // HACK: I have no patience to deal with this now
+    for (size_t i = 0; i < node->mNumChildren; i++)
     {
-        std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n";
+        bone = bones.find(path + "/" + node->mChildren[i]->mName.C_Str());
+        if (bone != bones.end())
+        {
+            break;
+        }
     }
 
-    glm::mat4 boneTransform = glm::mat4(1.0f);
+    //std::cout << "IS BONES END? " << (bone != bones.end()) << '\n';
+
     if (bone != bones.end())
     {
-        std::cout << "Found bone: " << bone->first << " id: " << bone->second.boneIndex << '\n';
-        objectModulePtr->NewEntity(node->mName.C_Str(), 1);
+        // * ----- If bone of the same name as node is found, fill additional bone data -----
+        bone->second.localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
+        bone->second.parent = parent;
 
-        boneTransform = parentTransform * aiMatrixToGlmMat4(node->mTransformation);
-
-        // * ----- If bone of the same name as node is found, add appropriate component to entity -----
-        auto b = objectModulePtr->NewComponent<Bone>();
-        b->boneIndex = bone->second.boneIndex;
-        b->mTransform = boneTransform;
-        b->boneName = bone->first;
-        b->offsetMatrix = bone->second.offsetMatrix;
-    }
-    
-    // ? +++++ Process animations (if any) ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // TODO
-
-    // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
-    // for (int i = node->mNumChildren - 1; i >= 0; i--)
-    // {
-    //     processNode(node->mChildren[i], scene, path, nodeTransform);
-    // }
-    if (node->mNumChildren > 0u)
-    {
-        for (unsigned int i = 0u; i < node->mNumChildren; i++)
+        // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
+        for (unsigned int i = 1; i <= node->mNumChildren; ++i)
         {
-            std::cout << "for(int i = 0; " << i << " < " << node->mNumChildren << " ; " << i + 1 << '\n';
-            processBone(node->mChildren[i], scene, path, boneTransform);
+            Bone* childBone = processBone(node->mChildren[i - 1], scene, path, &bone->second);
+            if (childBone != nullptr)
+            {
+                bone->second.children.push_back(childBone);
+            }
         }
+        return &bone->second;
+    }
+    else
+    {
+        // * ----- Otherwise return nullptr -----
+        return nullptr;
+    }
+    return nullptr;
+}
+
+bool ResourceModule::processAnimations(const aiScene* scene, std::string path)
+{
+    if (scene->HasAnimations())
+    {
+        for (size_t i = 0; i < scene->mNumAnimations; i++)
+        {
+            Animation newAnim;
+            
+            for (size_t j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
+            {
+                unsigned int nodeBoneID = bones[path + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()].boneID;
+                newAnim.addNode(nodeBoneID);
+
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++)
+                {
+                    newAnim.addPositionKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime,
+                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue));
+                }
+                
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumRotationKeys; k++)
+                {
+                    newAnim.addRotationKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime,
+                        aiQuaternionToGlmQuat(scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue));
+                }
+
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumScalingKeys; k++)
+                {
+                    newAnim.addScaleKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime,
+                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue));
+                }
+            }
+            
+            std::cout << "========= Added animation " << scene->mAnimations[i]->mName.C_Str() << " ========\n";
+
+            animations[path + "/" + scene->mAnimations[i]->mName.C_Str()] = newAnim;
+        }
+        
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -342,24 +403,27 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         unsigned int globalBoneIndex = bones.size();
 
         // XXX: I'm not sure if the insert will just do nothing if the key already exists (and that's what I want it to do) 
-        // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models
+        // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models   
 
-        // std::cout << "Inserting bone with name: " << mesh->mBones[i]->mName.C_Str() << '\n';
-        // std::cout << "++++++++++++++++++++++++++++ BONE OFFSET MATRIX ++++++++++++++++++++++++++++++++++\n";
-        // displayAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
-        // std::cout << "++++++++++++++++++++++++++++ DECOMPOSED ++++++++++++++++++++++++++++++++++++++++++\n";
-        // displayGlmMat4Decomposed(aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
-
-        bones.insert(
-            { 
-                path + "/" + mesh->mBones[i]->mName.C_Str(),
-                BoneInfo 
-                {
-                    globalBoneIndex, // bone id
-                    aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix)
+        auto bone = bones.find(path + "/" + mesh->mBones[i]->mName.C_Str());
+        if (bone == bones.end())
+        {
+            std::cout << "INSERTING BONE WITH NAME: " << path + "/" + mesh->mBones[i]->mName.C_Str() << '\n';
+            bones.insert(
+                { 
+                    path + "/" + mesh->mBones[i]->mName.C_Str(),
+                    // TODO: Check if holding bone name in the structure is really necessary
+                    Bone(   globalBoneIndex,
+                            path + "/" + mesh->mBones[i]->mName.C_Str(),
+                            aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix))
                 }
-            }
-        );
+            );
+        }
+        else
+        {
+            globalBoneIndex = bone->second.boneID;
+        }
+        
 
         for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; j++)
         {
@@ -390,6 +454,7 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
     // ? +++++ Check if mesh is influenced by bones +++++
     if (!mesh->HasBones())
     {
+        std::cout << "======================== Regular mesh " << mesh->mName.C_Str() <<  " created\n";
         // ? +++++ Create regular mesh and return it +++++
         std::vector<Vertex> vertices;
 
@@ -429,6 +494,7 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
     }
     else
     {
+        std::cout << "======================== Skinned mesh " << mesh->mName.C_Str() <<  " created\n";
         // ? +++++ Create skinned mesh and return it +++++
         std::vector<VertexSkinned> vertices;
         
@@ -487,6 +553,13 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
 
         // ? ----- Create skinned mesh object -----
+        // std::cout << "=================================== BoneIDs and weights:\n";
+        // for (size_t i = 0; i < 40000; i += 100)
+        // {
+        //     std::cout << vertices[i].boneIDs[0] << ' ' << vertices[i].boneIDs[1] << ' ' << vertices[i].boneIDs[2] << ' ' << vertices[i].boneIDs[3] << '\n';
+        //     std::cout << vertices[i].weights[0] << ' ' << vertices[i].weights[1] << ' ' << vertices[i].weights[2] << ' ' << vertices[i].weights[3] << '\n';
+        // }
+        
         MeshSkinned meshSkinned(vertices, indices, bounds);
 
         // * ----- Add mesh to resource container -----

@@ -6,8 +6,11 @@
 #include "AssetStructers.inl"
 #include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
+#include "Animation.hpp"
+#include "Bone.inl"
 
 #include <unordered_map>
+#include <map>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <vector>
@@ -17,7 +20,6 @@
 
 class Message;
 class ObjectModule;
-class Bone;
 struct Transform;
 
 void displayNodeHierarchy(aiNode* node, int depth = 0);
@@ -49,13 +51,12 @@ public:
     std::unordered_map<std::string, MeshSkinned> skinnedMeshes;
     std::unordered_map<std::string, MeshCustom> meshes;
     std::unordered_map<std::string, std::string> shaders;
-    //TODO: Better solution for saving animation ticks
-    std::unordered_map<std::string, double> animationTicks;
     /**
      * @brief Bones data collection
      * @key path/bone_name
      */
-    std::unordered_map<std::string, BoneInfo> bones;
+    std::unordered_map<std::string, Bone> bones;
+    std::map<std::string, Animation> animations;
     std::vector<glm::mat4> finalTransforms;
 
 private:
@@ -65,10 +66,10 @@ private:
      */
     Assimp::Importer importer;
 
-    //HACK TEMPORARY HACK, I AM TOO TIRED TO DO IT BETTER
-    glm::vec3 tempVector;
-    
     //Storages
+
+    // FIXME: I dont have the patience to do it in other way
+    glm::mat4 globalInverseTransform;
 
     // Send data to MessageBus methods
     bool sendAudioClip(std::string path);
@@ -85,7 +86,8 @@ private:
 
     // TODO: Documentation
     bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
-    bool processBone(aiNode* node, const aiScene* scene, std::string path, glm::mat4 parentTransform = glm::mat4(1.0f));
+    Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent = nullptr);
+    bool processAnimations(const aiScene* scene, std::string path);
     Mesh* createMesh(aiMesh* node, std::string path);
 
     static inline glm::vec3 aiVectortoGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }
