@@ -56,6 +56,10 @@ public:
      * @key path/bone_name
      */
     std::unordered_map<std::string, Bone> bones;
+    /**
+     * @brief Anitmations data collection
+     * @key path/animation_name
+     */
     std::map<std::string, Animation> animations;
     std::vector<glm::mat4> finalTransforms;
 
@@ -68,7 +72,7 @@ private:
 
     //Storages
 
-    // FIXME: I dont have the patience to do it in other way
+    // TODO: I dont have the patience to do it another way
     glm::mat4 globalInverseTransform;
 
     // Send data to MessageBus methods

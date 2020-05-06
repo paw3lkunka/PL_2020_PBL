@@ -190,8 +190,8 @@ bool ResourceModule::loadMesh(std::string path)
     }
     else
     {
-        std::cout << "Node structure:\n";
-        displayNodeHierarchy(scene->mRootNode);
+        // std::cout << "Node structure:\n";
+        // displayNodeHierarchy(scene->mRootNode);
 
         globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
         
@@ -271,22 +271,8 @@ bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string
 Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
-    //std::cout << "BONE ZONE: " << bones.size() << '\n';
-    //std::cout << path << "/" << node->mName.C_Str() << '\n';
-    //std::cout << "Does this key exist? " << bones.count(path + "/" + node->mName.C_Str()) << '\n';
 
     auto bone = bones.find(path + "/" + node->mName.C_Str());
-    // HACK: I have no patience to deal with this now
-    for (size_t i = 0; i < node->mNumChildren; i++)
-    {
-        bone = bones.find(path + "/" + node->mChildren[i]->mName.C_Str());
-        if (bone != bones.end())
-        {
-            break;
-        }
-    }
-
-    //std::cout << "IS BONES END? " << (bone != bones.end()) << '\n';
 
     if (bone != bones.end())
     {
@@ -295,9 +281,9 @@ Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::strin
         bone->second.parent = parent;
 
         // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
-        for (unsigned int i = 1; i <= node->mNumChildren; ++i)
+        for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            Bone* childBone = processBone(node->mChildren[i - 1], scene, path, &bone->second);
+            Bone* childBone = processBone(node->mChildren[i], scene, path, &bone->second);
             if (childBone != nullptr)
             {
                 bone->second.children.push_back(childBone);
@@ -308,7 +294,16 @@ Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::strin
     else
     {
         // * ----- Otherwise return nullptr -----
-        return nullptr;
+        Bone* rootBone = nullptr;
+        for (unsigned int i = 0; i < node->mNumChildren; ++i)
+        {
+            Bone* bonePtr = processBone(node->mChildren[i], scene, path, nullptr);
+            if (bonePtr != nullptr)
+            {
+                rootBone = bonePtr;
+            }
+        }
+        return rootBone;
     }
     return nullptr;
 }
@@ -347,8 +342,6 @@ bool ResourceModule::processAnimations(const aiScene* scene, std::string path)
                         aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue));
                 }
             }
-            
-            std::cout << "========= Added animation " << scene->mAnimations[i]->mName.C_Str() << " ========\n";
 
             animations[path + "/" + scene->mAnimations[i]->mName.C_Str()] = newAnim;
         }
@@ -408,11 +401,13 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         auto bone = bones.find(path + "/" + mesh->mBones[i]->mName.C_Str());
         if (bone == bones.end())
         {
-            std::cout << "INSERTING BONE WITH NAME: " << path + "/" + mesh->mBones[i]->mName.C_Str() << '\n';
+            if (globalBoneIndex == 38)
+            {
+                displayAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
+            }
             bones.insert(
                 { 
                     path + "/" + mesh->mBones[i]->mName.C_Str(),
-                    // TODO: Check if holding bone name in the structure is really necessary
                     Bone(   globalBoneIndex,
                             path + "/" + mesh->mBones[i]->mName.C_Str(),
                             aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix))
@@ -454,7 +449,6 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
     // ? +++++ Check if mesh is influenced by bones +++++
     if (!mesh->HasBones())
     {
-        std::cout << "======================== Regular mesh " << mesh->mName.C_Str() <<  " created\n";
         // ? +++++ Create regular mesh and return it +++++
         std::vector<Vertex> vertices;
 
@@ -494,7 +488,6 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
     }
     else
     {
-        std::cout << "======================== Skinned mesh " << mesh->mName.C_Str() <<  " created\n";
         // ? +++++ Create skinned mesh and return it +++++
         std::vector<VertexSkinned> vertices;
         
@@ -520,10 +513,18 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
             float weights[VertexSkinned::MAX_WEIGHTS];
 
             int number = VertexSkinned::MAX_WEIGHTS < count ? VertexSkinned::MAX_WEIGHTS : count; 
-            for (size_t j = 0; j < number; j++)
+            for (size_t j = 0; j < 4; j++)
             {
-                ids[j] = range.first->second.boneId;
-                weights[j] = range.first->second.weight;
+                if (j < number)
+                {
+                    ids[j] = range.first->second.boneId;
+                    weights[j] = range.first->second.weight;
+                }
+                else
+                {
+                    ids[j] = 0;
+                    weights[j] = 0.0;
+                }
                 // Increment iterator
                 range.first++;
             }
@@ -552,14 +553,7 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         bounds.maxBound = {mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z};
         bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
 
-        // ? ----- Create skinned mesh object -----
-        // std::cout << "=================================== BoneIDs and weights:\n";
-        // for (size_t i = 0; i < 40000; i += 100)
-        // {
-        //     std::cout << vertices[i].boneIDs[0] << ' ' << vertices[i].boneIDs[1] << ' ' << vertices[i].boneIDs[2] << ' ' << vertices[i].boneIDs[3] << '\n';
-        //     std::cout << vertices[i].weights[0] << ' ' << vertices[i].weights[1] << ' ' << vertices[i].weights[2] << ' ' << vertices[i].weights[3] << '\n';
-        // }
-        
+        // ? ----- Create skinned mesh object -----        
         MeshSkinned meshSkinned(vertices, indices, bounds);
 
         // * ----- Add mesh to resource container -----

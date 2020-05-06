@@ -70,7 +70,7 @@ glm::quat Animation::getRotationLerp(AnimationNode &node, double time)
         if (time <= node.rotations[i].first)
         {
             float interpolant = (time - node.rotations[i - 1].first) / (node.rotations[i].first - node.rotations[i - 1].first);
-            return glm::lerp(node.rotations[i - 1].second, node.rotations[i].second, interpolant);
+            return glm::slerp(node.rotations[i - 1].second, node.rotations[i].second, interpolant);
         }
     }
     // TODO: Handle unexpected behaviour
@@ -90,36 +90,3 @@ glm::vec3 Animation::getScaleLerp(AnimationNode &node, double time)
     // TODO: Handle unexpected behaviour
     return glm::vec3(1.0f);
 }
-
-    // double lastDiff = 0.0;
-    // Keyframe* lastKey;
-    // for(auto &key : keyframes)
-    // {
-    //     double diff = abs(time - key.time);
-    //     // TODO: Verify if this is working
-    //     if (lastDiff < diff)
-    //     {
-    //         double step = (key.time - lastKey->time);
-    //         float interpolant = 0;
-    //         if (step != 0.0)
-    //         {
-    //             interpolant = lastDiff / step;
-    //         }
-
-    //         std::vector<AnimTransformation> interpolated;
-    //         interpolated.reserve(lastKey->transforms.size());
-            
-    //         for (size_t i = 0; i < lastKey->transforms.size(); i++)
-    //         {
-    //             glm::vec3 interpPos = glm::mix(lastKey->transforms[i].position, key.transforms[i].position, interpolant);
-    //             glm::quat interpRot = glm::slerp(lastKey->transforms[i].rotation, key.transforms[i].rotation, interpolant);
-    //             glm::vec3 interpScl = glm::mix(lastKey->transforms[i].scale, key.transforms[i].scale, interpolant);
-    //             interpolated.push_back({interpPos, interpRot, interpScl});
-    //         }
-
-    //         return Keyframe(time, interpolated);
-    //     }
-    //     lastDiff = diff;
-    //     lastKey = &key;
-    // }
-    // return Keyframe();

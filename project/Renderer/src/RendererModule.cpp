@@ -83,72 +83,50 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(skyboxVao);
         glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
-        // float skyCube[] = {
-        //     -1.0f, -1.0f, -1.0f,
-        //     -1.0f, -1.0f, 1.0f,
-        //     1.0f, -1.0f, 1.0f,
-        //     1.0f, -1.0f, -1.0f,
+        float skyboxVertices[] = 
+        {
+            // positions          
+            -1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
 
-        //     1.0f, 1.0f, -1.0f,
-        //     1.0f, 1.0f, 1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
 
-        //     -1.0f, -1.0f, 1.0f,
-        //     -1.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
 
-        //     -1.0f, -1.0f, -1.0f,
-        //     -1.0f, 1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
 
-        //     1.0f, -1.0f, -1.0f,
-        //     1.0f, 1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
 
-        //     -1.0f, 1.0f, 1.0f,
-        //     1.0f, 1.0f, 1.0f
-        // };
-        // glBufferData(GL_ARRAY_BUFFER, 42 * sizeof(float), &skyCube, GL_STATIC_DRAW);
-
-        float skyboxVertices[] = {
-        // positions          
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f
         };
         glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
 
@@ -240,30 +218,6 @@ void RendererModule::render()
             renderQueue.front()->mesh->render();
             renderQueue.pop();
         }
-
-        // TODO: Proper skinned mesh rendering
-
-        // while(!skinnedQueue.empty())
-        // {
-        //     skinnedQueue.front()->material->use();
-        //         std::stringstream ss;
-        // int i = 0;
-        // for(auto bone : *bones)
-        // {
-        //     ss << "gBones[" << bone.first << "]";
-        //     skinnedQueue.front()->material->getShaderPtr()->setMat4(ss.str(), bone.second);
-        //     // std::cout << "Matrix no: " << i << '\n';
-        //     // std::cout << bone.second[0][0] << ' ' << bone.second[0][1] << ' ' << bone.second[0][2] << ' ' << bone.second[0][3] << '\n';
-        //     // std::cout << bone.second[1][0] << ' ' << bone.second[1][1] << ' ' << bone.second[1][2] << ' ' << bone.second[1][3] << '\n';
-        //     // std::cout << bone.second[2][0] << ' ' << bone.second[2][1] << ' ' << bone.second[2][2] << ' ' << bone.second[2][3] << '\n';
-        //     // std::cout << bone.second[3][0] << ' ' << bone.second[3][1] << ' ' << bone.second[3][2] << ' ' << bone.second[3][3] << '\n';
-        //     std::stringstream().swap(ss);
-        //     ++i;
-        // }
-        //     skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
-        //     skinnedQueue.front()->mesh->render();
-        //     skinnedQueue.pop();
-        // }
 
         // TODO Proper instanced rendering
         if (!billboardQueue.empty())

@@ -40,6 +40,9 @@ struct Bone
      * @brief Matrix used to translate the offset bone into the animation pose
      */
     glm::mat4 localBoneTransform;
+    /**
+     * @brief Bone transformation (local combined with all parents)
+     */
     glm::mat4 boneTransform;
 };
 

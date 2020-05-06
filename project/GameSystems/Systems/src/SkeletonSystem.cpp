@@ -17,15 +17,12 @@ void SkeletonSystem::start()
 
 void SkeletonSystem::fixedUpdate()
 {
-    // * ===== Interpolate between keyframes based on animationTime and save values to transform =====
-    animationTime += Core::FIXED_TIME_STEP * 10.0f;
+    animationTime += Core::FIXED_TIME_STEP * 16.0f;
 }
 
 void SkeletonSystem::frameUpdate()
 {
     processHierarchy(skeleton->rootBone);
-    //boneTransforms[bone->boneIndex] = Bone::globalInverseTransform * bone->mTransform * bone->offsetMatrix;
-    //bone->offsetMatrix 
 }
 
 void SkeletonSystem::processHierarchy(Bone* bone)
@@ -52,7 +49,7 @@ void SkeletonSystem::processHierarchy(Bone* bone)
             bone->boneTransform = bone->localBoneTransform;
         }
     }
-    
+
     boneTransforms[bone->boneID] = skeleton->globalInverseTransform * bone->boneTransform * bone->offsetMatrix;
 
     for(auto child : bone->children)
