@@ -173,11 +173,6 @@ void SceneWriter::saveScene(const char* filePath)
             Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]);
             saveTransform(name, temp);
         }
-        else if(dynamic_cast<Bone*>(objContainerPtr->components[i]))
-        {
-            Bone* temp = dynamic_cast<Bone*>(objContainerPtr->components[i]);
-            saveBone(name, temp);
-        }
         else if(dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
             AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]);
@@ -203,11 +198,6 @@ void SceneWriter::saveScene(const char* filePath)
             MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]);
             saveMeshRenderer(name, temp);
         }
-        else if(dynamic_cast<SkinnedMeshRenderer*>(objContainerPtr->components[i]))
-        {
-            SkinnedMeshRenderer* temp = dynamic_cast<SkinnedMeshRenderer*>(objContainerPtr->components[i]);
-            saveSkinnedMeshRenderer(name, temp);
-        }
         else if(dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
             SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
@@ -221,12 +211,6 @@ void SceneWriter::saveScene(const char* filePath)
         file << std::setw(4) << j;
     }
     file.close();
-}
-
-void SceneWriter::saveBone(std::string name, Bone* componentPtr)
-{
-    j[name]["type"] = "Bone";
-    j[name]["filePath"] = componentPtr->filePath;
 }
 
 void SceneWriter::saveTransform(std::string name, Transform* componentPtr)
@@ -310,13 +294,6 @@ void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
     j[name]["material"] = componentPtr->material->serializationID;
     j[name]["mesh"] = componentPtr->mesh->serializationID;
     
-}
-
-void SceneWriter::saveSkinnedMeshRenderer(std::string name, SkinnedMeshRenderer* componentPtr)
-{
-    j[name]["type"] = "SkinnedMeshRenderer";
-    j[name]["material"] = componentPtr->material->serializationID;
-    j[name]["mesh"] = componentPtr->mesh->serializationID;
 }
 
 void SceneWriter::saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr)

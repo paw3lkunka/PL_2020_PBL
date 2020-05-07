@@ -1,5 +1,6 @@
 #include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
+#include <iostream>
 
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {

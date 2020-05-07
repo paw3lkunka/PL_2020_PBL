@@ -158,8 +158,6 @@ Bone* ObjectModule::getBonePtrByName(const char* name)
     }
     catch(const std::out_of_range& e)
     {
-        std::cerr << e.what() << '\n';
-        
         return nullptr;
     }
 }
@@ -172,8 +170,6 @@ Animation* ObjectModule::getAnimationPtrByName(const char* name)
     }
     catch(const std::out_of_range& e)
     {
-        std::cerr << e.what() << '\n';
-        
         return nullptr;
     }
 }

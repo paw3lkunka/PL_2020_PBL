@@ -25,6 +25,7 @@ T* ObjectMaker::newMesh(std::vector<U> vertices, std::vector<unsigned int> indic
 {
     if(std::string(typeid(T).name()).find("Mesh") != std::string::npos)
     {
+        std::cout << filePath + "/" + meshName << std::endl;
         objContainer->meshes.push_back(new T(vertices, indices, bounds, filePath, filePath + "/" + meshName));
         return dynamic_cast<T*>(objContainer->meshes[objContainer->meshes.size() - 1]);
     }

@@ -216,6 +216,7 @@ void RendererModule::render()
         // ? +++++ Execute (order 66) rendering loop +++++
         while(!renderQueue.empty())
         {
+            std::cout << "Material: " << renderQueue.front()->material->getName() << std::endl;
             renderQueue.front()->material->use();
             renderQueue.front()->material->getShaderPtr()->setMat4("model", renderQueue.front()->modelMatrix);
             renderQueue.front()->mesh->render();

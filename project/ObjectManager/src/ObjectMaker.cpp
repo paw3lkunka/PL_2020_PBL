@@ -140,9 +140,11 @@ Material* ObjectMaker::newMaterial(Shader* shader, std::string name)
 Animation* ObjectMaker::newAnimation(Animation& animation, std::string path, std::string name)
 {
     objContainer->animations[path + "/" + name] = animation;
+    return &objContainer->animations[path + "/" + name];
 }
 
 Bone* ObjectMaker::newBone(Bone& bone, std::string path, std::string name)
 {
     objContainer->bones[path + "/" + name] = bone;
+    return &objContainer->bones[path + "/" + name];
 }
