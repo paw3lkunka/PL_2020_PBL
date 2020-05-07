@@ -1,9 +1,7 @@
 #include "MeshSkinned.hpp"
 #include "MeshDataStructures.inl"
 
-#include <iostream>
-
-MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds)
+MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {
     this->vertices = vertices;
     // std::cout << "BoneIDs:\n";
@@ -14,6 +12,7 @@ MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsign
     // std::cout << std::endl;
     this->bounds = bounds;
     this->indices = indices;
+    this->bounds = bounds;
     setup();
 }
 

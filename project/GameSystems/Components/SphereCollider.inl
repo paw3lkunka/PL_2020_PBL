@@ -17,12 +17,12 @@ struct SphereCollider : public Collider
     /**
      * @brief Collider local center
      */
-    glm::vec3 center;
+    glm::vec3 center = {0.0f, 0.0f, 0.0f};
 
     /**
      * @brief Radius of the sphere collider
      */
-    float radius;
+    float radius = 1.0f;
 };
 
 #endif /* !SPHERECOLLIDER_INL_ */

@@ -14,14 +14,8 @@
 class MeshCustom : public Mesh
 {
 public:
-    /**
-     * @brief Construct a new Mesh object
-     * 
-     * @param vertices Vector of vertices which the mesh contains
-     * @param indices Vector of indices for indexed rendering\
-     * @param bounds AABB bounds for collisions
-     */
-    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds);
+    //TODO Documentation
+    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath);
     /**
      * @brief Construct a new Mesh object by default (we need this for MessageBus for some reason)
      */

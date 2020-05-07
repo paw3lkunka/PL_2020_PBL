@@ -9,8 +9,8 @@
 #include "Animation.hpp"
 #include "Bone.inl"
 
+
 #include <unordered_map>
-#include <map>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <vector>
@@ -18,8 +18,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Message;
 class ObjectModule;
+class ObjectMaker;
+class SceneModule;
+class Bone;
+class SceneWriter;
 struct Transform;
 
 void displayNodeHierarchy(aiNode* node, int depth = 0);
@@ -31,56 +34,31 @@ void displayGlmMat4(glm::mat4 mat);
 /**
  * @brief Resource Module class for reading and storage assets data
  */
-class ResourceModule : public IModule
+class AssetReader
 {
+    friend class ObjectMaker;
+    friend class ObjectModule;
 public:
-    /**
-     * @brief inherited from IModule
-     * 
-     * @param msg message received
-     */
-    void receiveMessage(Message msg);
 
-    ///HACK: Connection between Resource Module and Object Module
-    ObjectModule* objectModulePtr;
-
-    //TODO: Move STORAGES to private
-    //Storages
-    std::unordered_map<std::string, AudioFile> audioClips;
-    std::unordered_map<std::string, TextureData> textures;
-    std::unordered_map<std::string, MeshSkinned> skinnedMeshes;
-    std::unordered_map<std::string, MeshCustom> meshes;
-    std::unordered_map<std::string, std::string> shaders;
-    /**
-     * @brief Bones data collection
-     * @key path/bone_name
-     */
-    std::unordered_map<std::string, Bone> bones;
-    /**
-     * @brief Anitmations data collection
-     * @key path/animation_name
-     */
-    std::map<std::string, Animation> animations;
-    std::vector<glm::mat4> finalTransforms;
+    AssetReader(ObjectModule* objModule);
+    ~AssetReader() = default;
 
 private:
+    ObjectModule* objectModulePtr;
 
     /**
      * @brief assimp importer reference;
      */
     Assimp::Importer importer;
 
-    //Storages
+    static bool hasInstance;
+
+    std::unordered_map<std::string, AudioFile> audioClips;
+    std::unordered_map<std::string, TextureData> textures;
+    std::unordered_map<std::string, std::string> shaders;
 
     // TODO: I dont have the patience to do it another way
     glm::mat4 globalInverseTransform;
-
-    // Send data to MessageBus methods
-    bool sendAudioClip(std::string path);
-    bool sendTexture(std::string path);
-    bool sendMesh(std::string path);
-    bool sendShader(std::string path);
-    bool sendSkinnedMesh(std::string path);
 
     //load files to storages methods
     bool loadAudioClip(std::string path);
@@ -91,7 +69,7 @@ private:
     // TODO: Documentation
     bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
     Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent = nullptr);
-    bool processAnimations(const aiScene* scene, std::string path);
+    Animation* processAnimations(const aiScene* scene, std::string path);
     Mesh* createMesh(aiMesh* node, std::string path);
 
     static inline glm::vec3 aiVectortoGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }

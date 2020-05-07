@@ -2,6 +2,8 @@
 
 #include "Message.inl"
 #include "MeshQuad.hpp"
+#include "Shader.hpp"
+
 #include <glm/gtc/type_ptr.hpp>
 
 //TODO: TEMP STRING STREAM
@@ -36,6 +38,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     this->window = window;
     this->createInfo = createInfo;
     this->skyboxMaterial = skyboxMaterial;
+
 
     if (createInfo.cullFace)
     {

@@ -1,4 +1,4 @@
-#include "ResourceModule.hpp"
+#include "AssetReader.hpp"
 #include "FileStructures.inl"
 #include "Core.hpp"
 #include "MeshCustom.hpp"
@@ -7,6 +7,9 @@
 #include "Bone.inl"
 #include "Skeleton.inl"
 #include "MeshDataStructures.inl"
+#include "ObjectMaker.hpp"
+#include "ObjectModule.hpp"
+#include "ObjectExceptions.inl"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -16,113 +19,27 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <string>
 
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 
-//TODO:Fix this couts, cerrs, because it's not professional
+bool AssetReader::hasInstance = false;
 
-void ResourceModule::receiveMessage(Message msg)
+AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
 {
-    if(msg.getEvent() == Event::LOAD_FILE)
+    if(hasInstance)
     {
-        FileSystemData fsData = msg.getValue<FileSystemData>();
-        switch(fsData.typeOfFile)
-        {
-            case FileType::AUDIO:
-                if(loadAudioClip(fsData.path))
-                {
-                    std::cout << "Audio loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load audio from file " << fsData.path << std::endl;
-                }
-                
-            break;
-            case FileType::MESH:
-                if(loadMesh(fsData.path))
-                {
-                    std::cout << "Meshes loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
-                }
-            break;
-            case FileType::SHADER:
-                if(loadShader(fsData.path))
-                {
-                    std::cout << "Shader loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Shader from file " << fsData.path << " could not be read." << std::endl;
-                }
-            break;
-            case FileType::TEXTURE:
-                if(loadTexture(fsData.path))
-                {
-                    std::cout << "Texture loaded from file " << fsData.path << std::endl;
-                }
-                else
-                {
-                    std::cerr << "Can't load texture from file " << fsData.path << std::endl;
-                }
-                
-            break;
-        }
+        throw TooManyInstancesException("Asset Reader");
     }
-    else if(msg.getEvent() == Event::QUERY_MESH_DATA)
-    {
-        if(!sendMesh(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
-    {
-        if(!sendTexture(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
-    {
-        auto filePath = msg.getValue<const char*>();
-        if(!sendAudioClip(filePath))
-        {
-            std::cerr << "Can't find open audio file " << filePath << std::endl;
-
-            if(loadAudioClip(filePath))
-            {
-                std::cout << "Audio loaded from file " << filePath << std::endl;
-                sendAudioClip(filePath);
-            }
-            else
-            {
-                std::cerr << "Can't load audio from file " << filePath << std::endl;
-            }
-        }
-    }
-    else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
-    {
-        if(!sendShader(msg.getValue<const char*>()))
-        {
-            std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-        }
-    }
-    else
-    {
-        //do nothing
-    }
+    hasInstance = true;
 }
 
 #pragma region Loaders
 
-bool ResourceModule::loadAudioClip(std::string path)
+bool AssetReader::loadAudioClip(std::string path)
 {
     AudioFile audioData;
     if(audioData.load(path))
@@ -136,7 +53,7 @@ bool ResourceModule::loadAudioClip(std::string path)
     return false;
 }
 
-bool ResourceModule::loadTexture(std::string path)
+bool AssetReader::loadTexture(std::string path)
 {
     TextureData tData;
     tData.data = stbi_load(path.c_str(), &tData.width, &tData.height, &tData.nrComponents, 0);
@@ -145,13 +62,17 @@ bool ResourceModule::loadTexture(std::string path)
         textures.insert( std::pair(path, tData) );
         
         std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
-
+        std::cout << "Tex loaded: " << path << std::endl;
         return iter != textures.end();
+    }
+    else
+    {
+        std::cerr << "Error while loading texture " << path << std::endl;
     }
     return false;
 }
 
-bool ResourceModule::loadShader(std::string path)
+bool AssetReader::loadShader(std::string path)
 {
     std::string buffer = "";
     std::ifstream file;
@@ -167,6 +88,8 @@ bool ResourceModule::loadShader(std::string path)
     }
     catch(std::ifstream::failure e)
     {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Error while loading " << path << std::endl;
         return false;
     }
 
@@ -177,7 +100,7 @@ bool ResourceModule::loadShader(std::string path)
 }
 
 
-bool ResourceModule::loadMesh(std::string path)
+bool AssetReader::loadMesh(std::string path)
 {
     // ? +++++ Load the assimp scene from provided path +++++
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
@@ -202,12 +125,13 @@ bool ResourceModule::loadMesh(std::string path)
         Bone* rootBone = processBone(scene->mRootNode, scene, path);
 
         // * ----- Process animations -----
-        if (processAnimations(scene, path))
+        Animation* animation = processAnimations(scene, path);
+        if (animation != nullptr)
         {
             // * ----- Create skeleton object and bind root node -----
-            objectModulePtr->NewEntity(scene->mRootNode->mName.C_Str() + std::string("_skeleton"), 1);
-            auto s = objectModulePtr->NewComponent<Skeleton>();
-            s->animation = &animations.begin()->second;
+            objectModulePtr->newEntity(1, scene->mRootNode->mName.C_Str() + std::string("_skeleton"));
+            auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
+            s->animation = animation;
             s->globalInverseTransform = globalInverseTransform;
             s->rootBone = rootBone;
         }
@@ -217,17 +141,17 @@ bool ResourceModule::loadMesh(std::string path)
     return true;
 }
 
-bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
+bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
 {
     Transform* nodeTransform = nullptr;
     // ? +++++ Process meshes (if any) ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
         // * ----- Create new entity with provided name -----
-        objectModulePtr->NewEntity(node->mName.C_Str(), 2);
+        objectModulePtr->newEntity(2, node->mName.C_Str());
 
         // * ----- Create transform and set parent -----
-        nodeTransform = objectModulePtr->NewComponent<Transform>();
+        nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
         
         // HACK: Decomposing matrix and setting values individually
         glm::mat4 localTransformMat = aiMatrixToGlmMat4(node->mTransformation);
@@ -255,7 +179,7 @@ bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string
         // ! and mesh renderer system is not equipped to handle this
 
         // * ----- Create mesh renderer and add created mesh -----
-        auto mr = objectModulePtr->NewComponent<MeshRenderer>();
+        auto mr = objectModulePtr->newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = newMesh;
     }
 
@@ -268,28 +192,28 @@ bool ResourceModule::processNode(aiNode* node, const aiScene* scene, std::string
     return true;
 }
 
-Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
+Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
 
-    auto bone = bones.find(path + "/" + node->mName.C_Str());
+    Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + node->mName.C_Str()).c_str());
 
-    if (bone != bones.end())
+    if (bone != nullptr)
     {
         // * ----- If bone of the same name as node is found, fill additional bone data -----
-        bone->second.localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
-        bone->second.parent = parent;
+        bone->localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
+        bone->parent = parent;
 
         // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
         for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            Bone* childBone = processBone(node->mChildren[i], scene, path, &bone->second);
+            Bone* childBone = processBone(node->mChildren[i], scene, path, bone);
             if (childBone != nullptr)
             {
-                bone->second.children.push_back(childBone);
+                bone->children.push_back(childBone);
             }
         }
-        return &bone->second;
+        return bone;
     }
     else
     {
@@ -308,17 +232,18 @@ Bone* ResourceModule::processBone(aiNode* node, const aiScene* scene, std::strin
     return nullptr;
 }
 
-bool ResourceModule::processAnimations(const aiScene* scene, std::string path)
+Animation* AssetReader::processAnimations(const aiScene* scene, std::string path)
 {
     if (scene->HasAnimations())
     {
+        Animation* firstAnim = nullptr;
         for (size_t i = 0; i < scene->mNumAnimations; i++)
         {
             Animation newAnim;
             
             for (size_t j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
             {
-                unsigned int nodeBoneID = bones[path + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()].boneID;
+                unsigned int nodeBoneID = objectModulePtr->getBonePtrByName((path + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->boneID;
                 newAnim.addNode(nodeBoneID);
 
                 for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++)
@@ -343,18 +268,22 @@ bool ResourceModule::processAnimations(const aiScene* scene, std::string path)
                 }
             }
 
-            animations[path + "/" + scene->mAnimations[i]->mName.C_Str()] = newAnim;
+            Animation* tempAnim = objectModulePtr->objectMaker.newAnimation(newAnim, path, scene->mAnimations[i]->mName.C_Str());
+            if (i == 0)
+            {
+                firstAnim = tempAnim;
+            }
         }
         
-        return true;
+        return firstAnim;
     }
     else
     {
-        return false;
+        return nullptr;
     }
 }
 
-Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
+Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
 {
     std::list<glm::vec3> positions;
     std::list<glm::vec3> normals;
@@ -393,30 +322,23 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         // * Author note: each loop inserts one bone into global map of bones and then saves all the weights and bone ids
         // * by vertex id to local map. The bone id is created from the size of the map to ensure uniqueness of the id,
         // * because this is the only way to map vertex to bone.
-        unsigned int globalBoneIndex = bones.size();
+        unsigned int globalBoneIndex = objectModulePtr->objectContainer.getBoneCount();
 
         // XXX: I'm not sure if the insert will just do nothing if the key already exists (and that's what I want it to do) 
         // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models   
 
-        auto bone = bones.find(path + "/" + mesh->mBones[i]->mName.C_Str());
-        if (bone == bones.end())
+        Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + mesh->mBones[i]->mName.C_Str()).c_str());
+        if (bone == nullptr)
         {
-            if (globalBoneIndex == 38)
-            {
-                displayAssimpMat4(mesh->mBones[i]->mOffsetMatrix);
-            }
-            bones.insert(
-                { 
-                    path + "/" + mesh->mBones[i]->mName.C_Str(),
-                    Bone(   globalBoneIndex,
+            Bone boneToAdd( globalBoneIndex,
                             path + "/" + mesh->mBones[i]->mName.C_Str(),
-                            aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix))
-                }
-            );
+                            aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
+
+            objectModulePtr->objectMaker.newBone(boneToAdd, path, mesh->mBones[i]->mName.C_Str());
         }
         else
         {
-            globalBoneIndex = bone->second.boneID;
+            globalBoneIndex = bone->boneID;
         }
         
 
@@ -478,13 +400,9 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         bounds.maxBound = {mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z};
         bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
 
-        MeshCustom meshCustom(vertices, indices, bounds);
-
         // * ----- Add mesh to resource container -----
-        meshes[path + "/" + mesh->mName.C_Str()] = meshCustom;
-
         // ! ===== Return appropriate mesh pointer =====
-        return &meshes[path + "/" + mesh->mName.C_Str()];
+        return objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, bounds, path, mesh->mName.C_Str());
     }
     else
     {
@@ -553,70 +471,13 @@ Mesh* ResourceModule::createMesh(aiMesh* mesh, std::string path)
         bounds.maxBound = {mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z};
         bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
 
-        // ? ----- Create skinned mesh object -----        
-        MeshSkinned meshSkinned(vertices, indices, bounds);
-
         // * ----- Add mesh to resource container -----
-        skinnedMeshes[path + "/" + mesh->mName.C_Str()] = meshSkinned;
-
         // ! ===== Return appropriate mesh pointer =====
-        return &skinnedMeshes[path + "/" + mesh->mName.C_Str()];
+        return objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, bounds, path, mesh->mName.C_Str());
     }
 }
 
 #pragma endregion
-
-#pragma region Senders
-
-bool ResourceModule::sendAudioClip(std::string path)
-{
-    std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
-
-    if(iter != audioClips.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, &iter->second ) );
-        return true;
-    }
-    
-    return false;
-}
-
-bool ResourceModule::sendTexture(std::string path)
-{
-    std::unordered_map<std::string, TextureData>::iterator iter = textures.find(path);
-
-    if(iter != textures.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_TEXTURE_DATA, &iter->second) );
-        return true;
-    }
-    return false;
-}
-
-bool ResourceModule::sendMesh(std::string path)
-{
-    std::unordered_map<std::string, MeshCustom>::iterator iter = meshes.find(path);
-
-    if(iter != meshes.end())
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::RECEIVE_MESH_DATA, &iter->second) );
-        return true;
-    }
-    return false;
-}
-
-bool ResourceModule::sendShader(std::string path)
-{
-    std::unordered_map<std::string, std::string>::iterator iter = shaders.find(path);
-    Message msgToSend;
-    if(iter != shaders.end())
-    {  
-        msgToSend = Message(Event::RECEIVE_SHADER_DATA, iter->second.c_str());
-        GetCore().getMessageBus().sendMessage( msgToSend );
-        return true;
-    }
-    return false;
-}
 
 #pragma endregion
 

@@ -4,8 +4,12 @@
 #include "System.hpp"
 #include "Camera.inl"
 #include "BillboardRenderer.inl"
-#include "Transform.inl"
-#include "Message.inl"
+
+#include <glm/gtx/quaternion.hpp>
+
+class Transform;
+class Message;
+struct Camera;
 
 class BillboardRendererSystem : public System
 {

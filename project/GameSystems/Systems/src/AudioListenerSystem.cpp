@@ -4,6 +4,7 @@
 
 #include "Core.hpp"
 #include "Event.hpp"
+#include "Message.inl"
 
 #include "Entity.hpp"
 
@@ -35,7 +36,7 @@ void AudioListenerSystem::fixedUpdate()
     if(transform)
     {
         glm::vec3 scale; // unused
-        glm::quat orientation;
+        glm::quat orientation; // unused
         glm::vec3 translation;
         glm::vec3 skew; // unused
         glm::vec4 perspective; // unused
@@ -46,13 +47,13 @@ void AudioListenerSystem::fixedUpdate()
             audioListener->getPositionModifiable() = translation;
         }
 
-        auto at = static_cast<glm::vec3>(glm::toMat4(orientation) * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f));
+        auto at = glm::normalize( static_cast<glm::vec3>( glm::toMat4(orientation) * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) ) );
         if(audioListener->getAt() != at)
         {
             audioListener->getAtModifiable() = at;
         }
 
-        auto up = static_cast<glm::vec3>(glm::toMat4(orientation) * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+        auto up = glm::normalize( static_cast<glm::vec3>( glm::toMat4(orientation) * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) ) );
         if(audioListener->getUp() != up)
         {
             audioListener->getUpModifiable() = up;

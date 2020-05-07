@@ -7,6 +7,8 @@
 #include "Entity.hpp"
 #include "Message.inl"
 #include "MouseDataStructures.inl"
+#include "Transform.inl"
+#include "Camera.inl"
 
 bool CameraControlSystem::assertEntity(Entity* entity)
 {

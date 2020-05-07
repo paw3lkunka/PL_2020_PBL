@@ -5,6 +5,7 @@
 
 #include "Camera.inl"
 #include "Transform.inl"
+#include "Message.inl"
 
 Transform* CameraSystem::mainCameraTransform = nullptr;
 Camera* CameraSystem::mainCamera = nullptr;
@@ -73,10 +74,10 @@ void CameraSystem::frameUpdate()
                     break;
                 case CameraProjection::Orthographic:
                     camera->projectionMatrix = glm::ortho(
-                                                    -camera->othographicSize * aspect,
-                                                    camera->othographicSize * aspect,
-                                                    -camera->othographicSize,
-                                                    camera->othographicSize,
+                                                    -camera->orthographicSize * aspect,
+                                                    camera->orthographicSize * aspect,
+                                                    -camera->orthographicSize,
+                                                    camera->orthographicSize,
                                                     camera->nearPlane,
                                                     camera->farPlane
                                                     );

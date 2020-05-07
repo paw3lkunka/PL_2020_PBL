@@ -1,4 +1,10 @@
 #include "Texture.hpp"
+#include <iostream>
+
+Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath) : IFileSystem(filePath), data(data), info(createInfo)
+{
+    init(); 
+}
 
 void Texture::init()
 {

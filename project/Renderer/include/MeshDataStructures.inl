@@ -34,18 +34,6 @@ struct VertexSkinned
     float weights[MAX_WEIGHTS] = {0.0f};
 };
 
-// /**
-//  * @brief Bone information for mapping
-//  */
-// struct BoneInfo
-// {
-//     /// @brief Index of the bone, used for referencing bones from vertices
-//     unsigned int boneIndex;
-//     /// @brief Translates vertex from local to bone space
-//     glm::mat4 offsetMatrix;
-// };
-
-
 /**
  * @brief Min max bounds struct for AABB calculation
  */

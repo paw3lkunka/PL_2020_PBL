@@ -3,13 +3,7 @@
 
 #pragma region Includes
 
-//TODO check, which includes are really necessery
-
-// * C++ std lib
-#include <vector>
-#include <iostream>
-#include <utility>
-#include <sstream>
+//TODO check, which includes are really necessary
 
 // * System-depended
 #ifdef __linux__
@@ -25,8 +19,6 @@
 
 // * MessgageBus
 #include "MessageBus.hpp"
-#include "Message.inl"
-#include "Event.hpp"
 
 // * Modules
 #include "InputModule.hpp"
@@ -36,7 +28,6 @@
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
-#include "ResourceModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -44,8 +35,10 @@
 #include "Systems.inc"
 
 // * Others
-#include "Cubemap.hpp"
-#include "FileStructures.inl"
+
+class Message;
+enum class Event : unsigned int;
+class Cubemap;
 
 #pragma endregion
 
@@ -76,6 +69,14 @@ void WarningLog(const char* log);
  * @param log text to send
  */
 void ErrorLog(const char* log);   
+
+/**
+ * @brief euler to quaternion conversion
+ *
+ * @param eulerAngles euler angle 
+ * @return glm::quat quaternion representatoin of angle
+ */
+glm::quat eulerToQuaternion(glm::vec3 eulerAngles);
 #pragma endregion
 
 /**
@@ -171,9 +172,6 @@ class Core
 
         /// @brief rendering
         RendererModule rendererModule;
-
-        /// @brief resource loader and container
-        ResourceModule resourceModule;
         
         /// @brief scene graph
         SceneModule sceneModule;
@@ -184,7 +182,8 @@ class Core
         /// @brief stores all crucial objects
         ObjectModule objectModule;
 
-        /// @brief safely close application, on ESC press
+        //TODO Please, do something better here ;-;
+        // /// @brief safely close application, on ESC press
         class : public IModule
         {
         virtual void receiveMessage(Message msg)
@@ -216,6 +215,8 @@ class Core
         BillboardRendererSystem billboardSystem;
         //TODO documentation
         SkeletonSystem skeletonSystem;
+        //TODO documentation
+        CollisionDetectionSystem collisionDetectionSystem;
 
 #pragma endregion
 
@@ -230,17 +231,13 @@ class Core
         static int windowWidth, windowHeight;
 
     private:
-#pragma region TMP
-        // TODO: this should get successively removed
-        // Needed to set a listener for a source :(
-        AudioListener* li;
-        // Needed to play that source...
-        AudioSource* so;
         static Core* instance;
         GLFWwindow* window; 
 
-        Shader unlitColor, unlitTexture, unlitInstanced, skyboxShader, skinnedShader;
-        Material unlitColorMat, unlitTextureMat, unlitInstancedMat, skyboxMat, skinnedMat;
+#pragma region TMP
+        // TODO: this should get successively removed
+        // // Needed to set a listener for a source :(
+        AudioListener* li;
 #pragma endregion
 };
 

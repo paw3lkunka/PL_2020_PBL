@@ -2,7 +2,7 @@
 
 #include "Core.hpp"
 #include "Event.hpp"
-
+#include "Message.inl"
 #include "Entity.hpp"
 
 #include "AudioSource.inl"
@@ -30,11 +30,18 @@ void AudioSourceSystem::fixedUpdate()
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
     }
 
+    glm::vec3 scale; // unused
+    glm::quat orientation;
+    glm::vec3 translation;
+    glm::vec3 skew; // unused
+    glm::vec4 perspective; // unused
+    glm::decompose(transform->localToWorldMatrix, scale, orientation, translation, skew, perspective);
+
     if(transform)
     {
-        if(audioSource->getPosition() != transform->getLocalPosition())
+        if(audioSource->getPosition() != translation)
         {
-            audioSource->getPositionModifiable() = transform->getLocalPosition();
+            audioSource->getPositionModifiable() = translation;
         }
     }
 

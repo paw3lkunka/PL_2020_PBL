@@ -1,11 +1,12 @@
 #include "Material.hpp"
 #include "Core.hpp"
+#include "Message.inl"
 
 #include <iostream>
 
 int Material::idCount = 0;
 
-Material::Material(Shader* shader) : shader(shader)
+Material::Material(Shader* shader, const char* name) : shader(shader), name(name)
 {
     // Set material ID on construction
     ID = idCount;
@@ -17,7 +18,10 @@ Material::Material(Shader* shader) : shader(shader)
         switch (var.second)
         {
         case GL_SAMPLER_2D:
-            textures[var.first] = Texture();
+            textures.insert(std::pair<std::string, Texture*>(var.first, nullptr));
+            break;
+        case GL_SAMPLER_CUBE:
+            cubemaps.insert(std::pair<std::string, Cubemap*>(var.first, nullptr));
             break;
         case GL_INT:
             ints[var.first] = 0;
@@ -50,17 +54,20 @@ void Material::use()
     
     // * ===== Texture samplers =====
     int i = 0;
-    for(auto texture : textures)
+    for(std::pair<std::string, Texture*> texture : textures)
     {
-        texture.second.bind(i);
-        shader->setInt(texture.first, i);
-        ++i;
+        if(texture.second != nullptr)
+        {
+            texture.second->bind(i);
+            shader->setInt(texture.first, i);
+            ++i;
+        }
     }
     
     // * ===== Cubemap samplers =====
     for(auto cubemap : cubemaps)
     {
-        cubemap.second.bind(i);
+        cubemap.second->bind(i);
         shader->setInt(cubemap.first, i);
         ++i;
     }
@@ -96,24 +103,22 @@ void Material::use()
     }
 }
 
-// FIXME: MAKE THIS PASS BY REFERENCE TO SAVE DATA YOU MORON
-void Material::setTexture(std::string name, Texture value)
+void Material::setTexture(std::string name, Texture* value)
 {
-    std::unordered_map<std::string, Texture>::iterator texturesIter = textures.find(name);
+    std::unordered_map<std::string, Texture*>::iterator texturesIter = textures.find(name);
     if (texturesIter != textures.end())
     {
         texturesIter->second = value;
     }
     else
     {
-        // ! Name not found, aborting !
-        // TODO: Insert appropriate debug log
+        std::cerr << "Uniform not found: " << name << std::endl;
     }
 }
 
-void Material::setCubemap(std::string name, Cubemap value)
+void Material::setCubemap(std::string name, Cubemap* value)
 {
-    std::unordered_map<std::string, Cubemap>::iterator cubemapsIter = cubemaps.find(name);
+    std::unordered_map<std::string, Cubemap*>::iterator cubemapsIter = cubemaps.find(name);
     if (cubemapsIter != cubemaps.end())
     {
         cubemapsIter->second = value;
@@ -122,6 +127,7 @@ void Material::setCubemap(std::string name, Cubemap value)
     {
         // ! Name not found, aborting !
         // TODO: Insert appropriate debug log
+        std::cout << "Wrong uniform name: " << name << std::endl;
     }
 }
 
@@ -198,6 +204,11 @@ void Material::setMat4(std::string name, glm::mat4 value)
 Shader* Material::getShaderPtr()
 {
     return shader;
+}
+
+const char* Material::getName()
+{
+    return name.c_str();
 }
 
 int Material::getInt(std::string name)
