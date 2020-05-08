@@ -74,6 +74,13 @@ void ObjectModule::readScene(std::string path)
 
 Entity* ObjectModule::newEntity(int bufferSize, std::string name)
 {
+    for(int i = 0; i < objectContainer.entities.size(); ++i)
+    {
+        if(objectContainer.entities[i].getName() != "" && objectContainer.entities[i].getName() == name)
+        {
+            return &objectContainer.entities[i];
+        }
+    }
     return objectMaker.newEntity(bufferSize, name);
 }
 

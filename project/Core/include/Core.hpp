@@ -234,11 +234,6 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-#pragma region TMP
-        // TODO: this should get successively removed
-        // // Needed to set a listener for a source :(
-        AudioListener* li;
-#pragma endregion
 };
 
 #endif /* !CORE_HPP_ */

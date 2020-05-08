@@ -203,6 +203,10 @@ void SceneWriter::saveScene(const char* filePath)
             SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
             saveSphereCollider(name, temp);
         }
+        else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Skeleton";
+        }
     }
 
     std::ofstream file(filePath);
