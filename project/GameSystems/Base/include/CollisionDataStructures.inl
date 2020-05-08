@@ -1,8 +1,11 @@
 #ifndef COLLISIONDATASTRUCTURES_INL_
 #define COLLISIONDATASTRUCTURES_INL_
 
-#include "Collider.inl"
+#include <functional>
+
 #include <glm/glm.hpp>
+
+#include "Collider.inl"
 
 /**
  * @brief Data structure for collision event
@@ -39,5 +42,26 @@ struct Projection1D
     float start;
     float end;
 };
+
+inline bool operator == (TriggerData a, TriggerData b) { return a.cause == b.cause && a.trigger == b.trigger; }
+
+class TriggerDataHasher
+{
+    public:
+        size_t operator () (const TriggerData& td) const
+        {
+            return (std::hash<Collider*>()(td.cause) + 1147499) ^ (std::hash<Collider*>()(td.trigger) + 2000029);
+        }
+};
+
+class TriggerDataEquals
+{
+    public:
+        bool operator () (const TriggerData& t1, const TriggerData& t2) const
+        {
+            return t1 == t2;
+        }
+};
+
 
 #endif /* !COLLISIONDATASTRUCTURES_INL_ */

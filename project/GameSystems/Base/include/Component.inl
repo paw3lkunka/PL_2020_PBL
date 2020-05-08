@@ -20,8 +20,8 @@ struct Component : public ISerializable
     Entity* entityPtr;
 };
 
-//inline const std::string __attribute__((always_inline)) Name(Component& c) { return c.entityPtr->getName(); }
-//inline const std::string __attribute__((always_inline)) Name(Component* c) { return c->entityPtr->getName(); }
+const std::string Name(Component& c);
+const std::string Name(Component* c);
 
 
 #endif /* !COMPONENT_HPP_ */

@@ -1,5 +1,7 @@
 #include "ConsoleModule.hpp"
 
+#include <iostream>
+
 #include "MessageBus.hpp"
 #include "Message.inl"
 #include "MouseDataStructures.inl"
@@ -215,14 +217,16 @@ void ConsoleModule::receiveMessage(Message msg)
         
     case Event::TRIGGER_ENTER:
     {
-        auto aData = msg.getValue<TriggerData*>();
-        //HACK - to compile
-        //std::cout << "Trigger " << Name(aData->trigger) << " entered by: " << Name(aData->cause) << std::endl;
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.trigger) << " was entered by: " << Name(tData.cause) << std::endl;
     }
         break;
         
     case Event::TRIGGER_EXIT:
-        //TODO implementation
+    {
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.trigger) << " was exited by: " << Name(tData.cause) << std::endl;
+    }
         break;
 
     default:

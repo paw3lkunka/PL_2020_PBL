@@ -28,17 +28,18 @@ void CollisionDetectionSystem::fixedUpdate()
         return;
     }
 
-    if( auto sphere1 = dynamic_cast<SphereCollider*>(colliderPtr) )
+    if( SphereCollider* sphere1 = dynamic_cast<SphereCollider*>(colliderPtr) )
     {
         collisionOf(sphere1);
     }
-    else if( auto box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
+    else if( BoxCollider* box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
     {
         collisionOf(box1);
     }  
 }
 
 /*
+//TODO probaby wont be used
 template<>
 glm::vec3 CollisionDetectionSystem::collsion<SphereCollider,SphereCollider>(SphereCollider* sphere1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
 {

@@ -19,7 +19,7 @@ bool CollisionDetectionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1,
 }
 
 template<class T>
-void CollisionDetectionSystem::collisionOf(T collider)
+void CollisionDetectionSystem::collisionOf(T* collider)
 {
     for (int i = 0; i < colliders.size(); i++)
     {
@@ -27,11 +27,11 @@ void CollisionDetectionSystem::collisionOf(T collider)
         {
             continue;
         }
-        if( auto sphere2 = dynamic_cast<SphereCollider*>(colliders[i]) )
-        {        
+        if( SphereCollider* sphere2 = dynamic_cast<SphereCollider*>(colliders[i]) )
+        {
             collisionWith(collider, sphere2, transforms[i]);
         }
-        else if( auto box2 = dynamic_cast<BoxCollider*>(colliders[i]) )
+        else if( BoxCollider* box2 = dynamic_cast<BoxCollider*>(colliders[i]) )
         {        
             collisionWith(collider, box2, transforms[i]); 
         } 
@@ -40,10 +40,11 @@ void CollisionDetectionSystem::collisionOf(T collider)
 }
 
 template<class T1, class T2>
-void CollisionDetectionSystem::collisionWith(T1 collider1, T2 collider2, Transform* transform2)
+void CollisionDetectionSystem::collisionWith(T1* collider1, T2* collider2, Transform* transform2)
 {
     if(collsion(collider1, collider2, transformPtr, transform2))
     {
+        std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
         switch (collider2->type)
         {
         case Collider::Type::DYNAMIC:
@@ -58,10 +59,23 @@ void CollisionDetectionSystem::collisionWith(T1 collider1, T2 collider2, Transfo
             //TODO implement phisic based collision
             break;
         case Collider::Type::TRIGGER:
-            TriggerData data = {collider1,collider2};            
-            GetCore().messageBus.sendMessage( Message(Event::TRIGGER_ENTER, data) );
+            TriggerData data = {collider1, collider2};
+            if(activeTriggers.find(data) == activeTriggers.end())
+            {
+                GetCore().messageBus.sendMessage( Message(Event::TRIGGER_ENTER, data) );
+                activeTriggers.insert(data);
+            }
             break;
         }   
+    }
+    else if(collider2->type == Collider::Type::TRIGGER)
+    {   
+        TriggerData data = {collider1, collider2};
+        if(activeTriggers.find(data) != activeTriggers.end())
+        {
+            GetCore().messageBus.sendMessage( Message(Event::TRIGGER_EXIT, data) );
+            activeTriggers.erase(data);
+        }
     }
 }
 
