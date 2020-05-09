@@ -13,5 +13,6 @@ bool GravitySystem::assertEntity(Entity* entity)
 
 void GravitySystem::fixedUpdate()
 {
-    rBodyPtr->force -= rBodyPtr->mass * G_CONST;
+    Impulse i = {-rBodyPtr->mass * G_CONST, {0,0,0}};
+    rBodyPtr->impulses.push_back(i);
 }

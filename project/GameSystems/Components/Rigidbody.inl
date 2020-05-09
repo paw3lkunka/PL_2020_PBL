@@ -3,7 +3,11 @@
 
 #include "Component.inl"
 
+#include <vector>
 #include <glm/glm.hpp>
+
+#include "PhisicStructures.inl"
+
 /**
  * @brief Rigidbody struct with all of its data and forces
  */
@@ -12,41 +16,25 @@ struct Rigidbody : public Component
     Rigidbody() = default;
     virtual ~Rigidbody() = default;
 
-    /**
-     * @brief Mass of the rigidbody
-     */
+    ///@brief Mass of the rigidbody
     float mass;
 
-    /**
-     * @brief Drag of the rigidbody
-     */
+    ///@brief Drag of the rigidbody
     float drag;
 
-    /**
-     * @brief Angular drag of the rigidbody
-     */
+    ///@brief Angular drag of the rigidbody
     float angularDrag;
 
+    ///@brief Stores all impulses - cleared on the end of frame
+    std::vector<Impulse> impulses;
+
+    ///@brief determines, if gravity affects this body
     bool ignoreGravity = false;
 
-    /**
-     * @brief Force of the rigidbody
-     */
-    glm::vec3 force;
-
-    /**
-     * @brief Torque of the rigidbody
-     */
-    glm::vec3 torque;
-
-    /**
-     * @brief Velocity of the rigidbody,
-     */
+    ///@brief Velocity of the rigidbody,
     glm::vec3 velocity;
 
-    /**
-     * @brief Angular velocity of the rigidbody
-     */
+    ///@brief Angular velocity of the rigidbody
     glm::vec3 angularVelocity;
 };
 
