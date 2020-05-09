@@ -39,7 +39,6 @@ private:
     void readCamera(std::string name);
     void readBillboardRenderer(std::string name);
     void readMeshRenderer(std::string name);
-    void readSkinnedMeshRenderer(std::string name);
     void readSphereCollider(std::string name);
 };
 

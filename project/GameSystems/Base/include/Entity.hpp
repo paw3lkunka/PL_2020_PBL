@@ -76,7 +76,7 @@ private:
     /**
      * @brief name of the entity
      */
-    std::string name;
+    std::string name = "";
 };
 
 #include "Entity.ipp"

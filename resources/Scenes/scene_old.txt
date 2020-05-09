@@ -1,18 +1,19 @@
-#pragma region Data Loading
+        #pragma region Data Loading
     
-    objectModule.newModel("Resources/Models/Test.fbx", FileType::MESH);
-    objectModule.newModel("Resources/Models/unit_sphere.fbx", FileType::MESH);
-    objectModule.newModel("Resources/Models/House Dancing.fbx", FileType::MESH);
-    objectModule.newModel("Resources/Models/Cliffs.FBX", FileType::MESH);
-    objectModule.newModel("Resources/Models/Left_bank.FBX", FileType::MESH);
-    objectModule.newModel("Resources/Models/Right_bank.FBX", FileType::MESH);
-    objectModule.newModel("Resources/Models/Riverbed.FBX", FileType::MESH);
-    objectModule.newModel("Resources/Models/Water.FBX", FileType::MESH);
+    objectModule.newModel("Resources/Models/unit_sphere.fbx");
+    objectModule.newModel("Resources/Models/House Dancing.fbx");
+    objectModule.newModel("Resources/Models/Cliffs.FBX");
+    objectModule.newModel("Resources/Models/Left_bank.FBX");
+    objectModule.newModel("Resources/Models/Right_bank.FBX");
+    objectModule.newModel("Resources/Models/Riverbed.FBX");
+    objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
     
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
+
+    auto unlitSkinned = objectModule.newShader("Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
     
 
     auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
@@ -23,10 +24,12 @@
     auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
 
-    std::cout << "Shaders compiled" <<std::endl;
+    std::cout << "Shaders compiled" << std::endl;
     Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat");
     unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
+    Material* unlitSkinnedMat = objectModule.newMaterial(unlitSkinned, "unlitSkinnedMat");
+    unlitSkinnedMat->setVec4("color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
@@ -75,91 +78,82 @@
 #pragma endregion
 
 #pragma region Entities
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
-            mr->material = unlitColorMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/House Dancing.fbx/Alpha_Surface");
+        auto entity = objectModule.getEntityFromName("Alpha_Surface");
+        if(entity != nullptr)
+        {
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = unlitSkinnedMat;
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+        }
     }
 
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        auto entity = objectModule.getEntityFromName("Water");
+
+        auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Water.FBX/Water");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
     }
 
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        auto entity = objectModule.getEntityFromName("Cliffs");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = cliffsMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Cliffs.FBX/Cliffs");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
     }
 
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        auto entity = objectModule.getEntityFromName("Left_bank");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBankMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Left_bank.FBX/Left_bank");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
     }
 
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        auto entity = objectModule.getEntityFromName("Right_bank");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBankMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Right_bank.FBX/Right_bank");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
             t->setParent(&sceneModule.rootNode);
     }
 
-    objectModule.newEntity(2);
     {
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        auto entity = objectModule.getEntityFromName("Riverbed");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBedMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Riverbed.FBX/Riverbed");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
             t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
     }
-    
-    objectModule.newEntity(2);
-    {
-        auto mr = objectModule.newEmptyComponentForLastEntity<SkinnedMeshRenderer>();
-            mr->material = unlitColorMat;
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/House Dancing.fbx/Alpha_Joints");
 
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    {
+        auto entity = objectModule.getEntityFromName("Alpha_Joints");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = unlitSkinnedMat;
+
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-            t->setParent(&sceneModule.rootNode);
     }
 
     objectModule.newEntity(2);
@@ -230,19 +224,20 @@
             t->setParent(&sceneModule.rootNode);
     }
 
-    objectModule.newEntity(3);
     {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        auto entity = objectModule.getEntityFromName("Sphere001");
+        auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable()={-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
             t->setParent(&sceneModule.rootNode);
 
-        auto c = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = unlitColorMat;
+
+        auto c = objectModule.newEmptyComponent<SphereCollider>();
             c->radius = 10;
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
-            mr->material = unlitColorMat;
+        entity->addComponent(c);
     }
 
     objectModule.newEntity(4, "Camera");
@@ -258,7 +253,7 @@
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
 
-        li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+        auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
             li->getIsCurrentModifiable() = true;
             li->getGainModifiable() = 1.0f;
             li->getVelocityModifiable();
@@ -277,7 +272,7 @@
 objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(li);
+        so3->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
         so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 0.1f;
@@ -303,7 +298,7 @@ objectModule.newEntity(2, "sampleSound");
             mr->material = unlitTextureMat;
 
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so1->getListenersModifiable().push_back(li);
+            so1->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
             so1->getGainModifiable() = 100.5f;
             so1->getIsRelativeModifiable() = false;

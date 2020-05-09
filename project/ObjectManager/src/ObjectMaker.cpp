@@ -126,21 +126,25 @@ Cubemap* ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
     throw AssetLoadingException("Cubemap");
 }
 
-void ObjectMaker::newModel(const char* filePath, FileType type)
+void ObjectMaker::newModel(const char* filePath)
 {
-    switch(type)
-    {
-        case FileType::MESH:
-            objModPtr->assetReader.loadMesh(filePath);
-            break;
-        case FileType::SKINNEDMESH:
-            objModPtr->assetReader.loadSkinnedMesh(filePath);
-            break;
-    }
+    objModPtr->assetReader.loadMesh(filePath);
 }
 
 Material* ObjectMaker::newMaterial(Shader* shader, std::string name)
 {
     objContainer->materials.push_back(new Material(shader, name.c_str()));
     return objContainer->materials[objContainer->materials.size() - 1];
+}
+
+Animation* ObjectMaker::newAnimation(Animation& animation, std::string path, std::string name)
+{
+    objContainer->animations[path + "/" + name] = animation;
+    return &objContainer->animations[path + "/" + name];
+}
+
+Bone* ObjectMaker::newBone(Bone& bone, std::string path, std::string name)
+{
+    objContainer->bones[path + "/" + name] = bone;
+    return &objContainer->bones[path + "/" + name];
 }

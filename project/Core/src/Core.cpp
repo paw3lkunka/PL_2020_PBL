@@ -85,8 +85,7 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
-
-    #pragma region Renderer
+#pragma region Renderer
 
     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
@@ -100,8 +99,7 @@ int Core::init()
     rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
-    #pragma endregion
-
+#pragma endregion
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -109,15 +107,7 @@ int Core::init()
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
     //gameSystemsModule.addSystem(&kinematicSystem);
-    gameSystemsModule.addSystem(&boneSystem);
-
-#pragma region Camera
-    // ! Finding main camera
-    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
-
-    gameSystemsModule.addSystem(&cameraSystem);
-
-#pragma endregion
+    gameSystemsModule.addSystem(&skeletonSystem);
 
 #pragma region AudioModule demo - initialization
     
@@ -126,6 +116,14 @@ int Core::init()
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
     
+#pragma endregion
+
+#pragma region Camera
+    // ! Finding main camera
+    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
+
+    gameSystemsModule.addSystem(&cameraSystem);
+
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
@@ -246,4 +244,4 @@ BillboardRendererSystem Core::billboardSystem;
 CollisionDetectionSystem Core::collisionDetectionSystem;
 //GravitySystem Core::gravitySystem;
 //KinematicSystem Core::kinematicSystem;
-BoneSystem Core::boneSystem;
+SkeletonSystem Core::skeletonSystem;
