@@ -16,9 +16,6 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
             renderQueue.push(msg.getValue<MeshRenderer*>());
             break;
-        case Event::RENDERER_ADD_SKINNED_MESH_TO_QUEUE:
-            skinnedQueue.push(msg.getValue<SkinnedMeshRenderer*>());
-            break;
         case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
             billboardQueue.push(msg.getValue<BillboardRenderer*>());
             break;
@@ -72,6 +69,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProjectionBuffer, 0, 2 * sizeof(glm::mat4));
 
+    // * ===== Setup Uniform Buffer Object for bone info =====
+    glGenBuffers(1, &boneBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, VertexSkinned::MAX_BONES * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, boneBuffer, 0, VertexSkinned::MAX_BONES * sizeof(glm::mat4));
+
     // * ===== Generate mesh for skybox rendering =====
 
     if (skyboxMaterial != nullptr)
@@ -81,72 +86,50 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(skyboxVao);
         glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
-        // float skyCube[] = {
-        //     -1.0f, -1.0f, -1.0f,
-        //     -1.0f, -1.0f, 1.0f,
-        //     1.0f, -1.0f, 1.0f,
-        //     1.0f, -1.0f, -1.0f,
+        float skyboxVertices[] = 
+        {
+            // positions          
+            -1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
 
-        //     1.0f, 1.0f, -1.0f,
-        //     1.0f, 1.0f, 1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
 
-        //     -1.0f, -1.0f, 1.0f,
-        //     -1.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
 
-        //     -1.0f, -1.0f, -1.0f,
-        //     -1.0f, 1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
 
-        //     1.0f, -1.0f, -1.0f,
-        //     1.0f, 1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
 
-        //     -1.0f, 1.0f, 1.0f,
-        //     1.0f, 1.0f, 1.0f
-        // };
-        // glBufferData(GL_ARRAY_BUFFER, 42 * sizeof(float), &skyCube, GL_STATIC_DRAW);
-
-        float skyboxVertices[] = {
-        // positions          
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f
         };
         glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
 
@@ -199,6 +182,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindVertexArray(0);
 }
 
+#include "Entity.hpp"
+
 void RendererModule::render()
 {
     if (window != nullptr)
@@ -219,6 +204,13 @@ void RendererModule::render()
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), viewMatrix);
             viewChanged = false;
         }
+
+        // ? +++++ Send skinning data to ubo +++++
+        glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+        for(auto &bone : *bones)
+        {
+            glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+        }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         // ? +++++ Execute (order 66) rendering loop +++++
@@ -230,25 +222,8 @@ void RendererModule::render()
             renderQueue.pop();
         }
 
-        // TODO: Proper skinned mesh rendering
-
-        while(!skinnedQueue.empty())
-        {
-            std::ostringstream ss;
-            for(auto bone : *bones)
-            {
-                ss << "gBones[" << bone.first << "]";
-                skinnedQueue.front()->material->setMat4(ss.str(), bone.second);
-                ss.clear();
-            }
-            skinnedQueue.front()->material->use();
-            skinnedQueue.front()->material->getShaderPtr()->setMat4("model", skinnedQueue.front()->modelMatrix);
-            skinnedQueue.front()->mesh->render();
-            skinnedQueue.pop();
-        }
-
         // TODO Proper instanced rendering
-        if(!billboardQueue.empty())
+        if (!billboardQueue.empty())
         {
             billboardQueue.front()->material->use();
             int i = 0, count = billboardQueue.size();
@@ -262,8 +237,8 @@ void RendererModule::render()
             }
             glBindVertexArray(billboardVao);
             glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
+            glBindVertexArray(0);
         }
-        glBindVertexArray(0);
 
         // ? +++++ Render skybox with appropriate depth test function +++++
 

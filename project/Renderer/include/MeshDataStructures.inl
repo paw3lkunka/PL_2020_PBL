@@ -22,6 +22,7 @@ struct Vertex
 struct VertexSkinned
 {
     static constexpr int MAX_WEIGHTS = 4;
+    static constexpr int MAX_BONES = 128;
 
     // IMPORTANT: It's easier to just copy these from Vertex and make offsetof than guess the offset and make mistakes
     glm::vec3 position;
@@ -32,7 +33,6 @@ struct VertexSkinned
     unsigned int boneIDs[MAX_WEIGHTS] = {0};
     float weights[MAX_WEIGHTS] = {0.0f};
 };
-
 
 /**
  * @brief Min max bounds struct for AABB calculation

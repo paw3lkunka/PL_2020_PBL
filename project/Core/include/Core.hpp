@@ -214,10 +214,9 @@ class Core
         //TODO documentation
         BillboardRendererSystem billboardSystem;
         //TODO documentation
-        CollisionDetectionSystem collisionDetectionSystem;
-        BoneSystem boneSystem;
+        SkeletonSystem skeletonSystem;
         //TODO documentation
-        //SkinnedMeshRendererSystem skinnedMeshRendererSystem;
+        CollisionDetectionSystem collisionDetectionSystem;
 
 #pragma endregion
 
@@ -235,11 +234,6 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-#pragma region TMP
-        // TODO: this should get successively removed
-        // // Needed to set a listener for a source :(
-        AudioListener* li;
-#pragma endregion
 };
 
 #endif /* !CORE_HPP_ */
