@@ -14,20 +14,23 @@ layout (std140, binding = 0) uniform Matrices
 };
 
 const int MAX_BONES = 128;
+layout (std140, binding = 1) uniform gBones
+{
+    mat4 finalTransform[MAX_BONES];
+};
 
 out vec2 uv0;
 out vec3 normal0;
 out vec3 worldPos0;
 
 uniform mat4 model;
-uniform mat4 gBones[MAX_BONES];
 
 void main()
 {
-    mat4 boneTransform = gBones[boneIDs[0]] * weights[0];
-    boneTransform += gBones[boneIDs[1]] * weights[1];
-    boneTransform += gBones[boneIDs[2]] * weights[2];
-    boneTransform += gBones[boneIDs[3]] * weights[3];
+    mat4 boneTransform = finalTransform[boneIDs[0]] * weights[0];
+    boneTransform += finalTransform[boneIDs[1]] * weights[1];
+    boneTransform += finalTransform[boneIDs[2]] * weights[2];
+    boneTransform += finalTransform[boneIDs[3]] * weights[3];
 
     vec4 posLocal = boneTransform * vec4(position, 1.0);
     gl_Position = projection * view * model * posLocal;

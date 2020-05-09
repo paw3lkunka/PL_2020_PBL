@@ -95,8 +95,7 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
-
-    #pragma region Renderer
+#pragma region Renderer
 
     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
@@ -110,25 +109,13 @@ int Core::init()
     rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
-    #pragma endregion
-
+#pragma endregion
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
-    //gameSystemsModule.addSystem(&collisionDetectionSystem);
-    gameSystemsModule.addSystem(&boneSystem);
-    //gameSystemsModule.addSystem(&skinnedMeshRendererSystem);
+    gameSystemsModule.addSystem(&skeletonSystem);
 
-
-#pragma region Camera
-    // ! Finding main camera
-    
-    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
-
-    gameSystemsModule.addSystem(&cameraSystem);
-
-#pragma endregion
 
 #pragma region AudioModule demo - initialization
     
@@ -137,6 +124,15 @@ int Core::init()
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
     
+#pragma endregion
+
+#pragma region Camera
+    // ! Finding main camera
+    
+    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
+
+    gameSystemsModule.addSystem(&cameraSystem);
+
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();

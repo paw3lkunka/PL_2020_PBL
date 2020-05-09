@@ -3,7 +3,6 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
-#include "SkinnedMeshRenderer.inl"
 #include "BillboardRenderer.inl"
 
 #include <queue>
@@ -63,13 +62,12 @@ private:
     std::map<int, glm::mat4>* bones;
     // HACK: Or not? Discuss this.
     unsigned int billboardVao, billboardVbo, instancedVbo;
-    unsigned int viewProjectionBuffer;
+    unsigned int viewProjectionBuffer, boneBuffer;
     bool projectionChanged = false, viewChanged = false;
     glm::mat4* projectionMatrix, * viewMatrix;
     std::queue<MeshRenderer*> renderQueue;
     // HACK PLZ MAKE THIS POLYMORPHIC AS SOON AS YOU CAN
     std::queue<BillboardRenderer*> billboardQueue;
-    std::queue<SkinnedMeshRenderer*> skinnedQueue;
     
 };
 

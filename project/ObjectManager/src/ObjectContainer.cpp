@@ -221,3 +221,18 @@ Material* ObjectContainer::getMaterialFromName(const char* name)
     }
     return nullptr;
 }
+
+Bone* ObjectContainer::getBonePtrByName(const char* name)
+{
+    return &bones.at(name);
+}
+
+unsigned int ObjectContainer::getBoneCount()
+{
+    return bones.size();
+}
+
+Animation* ObjectContainer::getAnimationPtrByName(const char* name)
+{
+    return &animations.at(name);
+}

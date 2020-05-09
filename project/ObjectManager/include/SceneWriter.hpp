@@ -14,7 +14,6 @@ struct Camera;
 struct Renderer;
 struct BillboardRenderer;
 struct MeshRenderer;
-struct SkinnedMeshRenderer;
 struct SphereCollider;
 class Material;
 class Texture;
@@ -66,13 +65,11 @@ private:
     nlohmann::json j;
 
     ///@brief saving components
-    void saveBone(std::string name, Bone* componentPtr);
     void saveTransform(std::string name, Transform* componentPtr);
     void saveAudioListener(std::string name, AudioListener* componentPtr);
     void saveAudioSource(std::string name, AudioSource* componentPtr);
     void saveCamera(std::string name, Camera* componentPtr);
     void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
-    void saveSkinnedMeshRenderer(std::string name, SkinnedMeshRenderer* componentPtr);
     void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
 

@@ -10,11 +10,10 @@
     #include "AudioListenerSystem.hpp"
     #include "AudioSourceSystem.hpp"
     #include "BillboardRendererSystem.hpp"
-    #include "BoneSystem.hpp"
     #include "CameraControlSystem.hpp"
     #include "CameraSystem.hpp"
     #include "CollisionDetectionSystem.hpp"
     #include "MeshRendererSystem.hpp"
-    #include "SkinnedMeshRendererSystem.hpp"
+    #include "SkeletonSystem.hpp"
 
 #endif /* !SYSTEMS_INC_AUTOGEN */

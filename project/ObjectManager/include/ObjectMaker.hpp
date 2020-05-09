@@ -12,6 +12,8 @@ class Entity;
 class Texture;
 class Cubemap;
 class Material;
+class Animation;
+class Bone;
 enum class FileType: unsigned int;
 struct Bounds;
 struct TextureCreateInfo;
@@ -94,7 +96,7 @@ public:
      * @param filePath to model
      * @param type type of meshes (skinned/ custom)
      */
-    void newModel(const char* filePath, FileType type);
+    void newModel(const char* filePath);
 
     /**
      * @brief make new mesh and save it to container
@@ -109,7 +111,7 @@ public:
      * @return T* type of mesh
      */
     template<typename T, typename U>
-    T* newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, const char* filePath, const char* meshPath);
+    T* newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string& filePath, std::string meshName);
 
     /**
      * @brief make new material and save it to container
@@ -119,6 +121,11 @@ public:
      * @return Material* pointer to material
      */
     Material* newMaterial(Shader* shader, std::string name);
+
+    // TODO niewchecmiesietobic dikuemntijcj
+    Animation* newAnimation(Animation& animation, std::string path, std::string name);
+    // TODO niewchecmiesietobic dikuemntijcj
+    Bone* newBone(Bone& bone, std::string path, std::string name);
 
 protected:
 private:
