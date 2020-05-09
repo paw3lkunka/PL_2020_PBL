@@ -5,6 +5,7 @@
 #include "Message.inl"
 #include "Transform.inl"
 #include "Bone.inl"
+#include "Skeleton.inl"
 #include "MeshDataStructures.inl"
 #include "ObjectMaker.hpp"
 #include "ObjectModule.hpp"
@@ -15,12 +16,15 @@
 
 #include <fstream>
 #include <sstream>
+#include <list>
+#include <vector>
+#include <map>
 #include <string>
 
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
-
-//TODO:Fix this couts, cerrs, because it's not professional
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 
 bool AssetReader::hasInstance = false;
 
@@ -32,112 +36,6 @@ AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule)
     }
     hasInstance = true;
 }
-
-// void AssetReader::receiveMessage(Message msg)
-// {
-//     if(msg.getEvent() == Event::LOAD_FILE)
-//     {
-//         FileSystemData fsData = msg.getValue<FileSystemData>();
-//         switch(fsData.typeOfFile)
-//         {
-//             case FileType::AUDIO:
-//                 if(loadAudioClip(fsData.path))
-//                 {
-//                     std::cout << "Audio loaded from file " << fsData.path << std::endl;
-//                 }
-//                 else
-//                 {
-//                     std::cerr << "Can't load audio from file " << fsData.path << std::endl;
-//                 }
-                
-//             break;
-//             case FileType::MESH:
-//                 if(loadMesh(fsData.path))
-//                 {
-//                     std::cout << "Meshes loaded from file " << fsData.path << std::endl;
-//                 }
-//                 else
-//                 {
-//                     std::cerr << "Can't load meshes from file " << fsData.path << std::endl;
-//                 }
-//             break;
-//             case FileType::SKINNEDMESH:
-//                 if(loadSkinnedMesh(fsData.path))
-//                 {
-//                     std::cout << "Skinned meshes loaded from file " << fsData.path << std::endl;
-//                 }
-//                 else
-//                 {
-//                     std::cerr << "Can't load skinned meshes from file " << fsData.path << std::endl;
-//                 }
-//             break;
-//             case FileType::SHADER:
-//                 if(loadShader(fsData.path))
-//                 {
-//                     std::cout << "Shader loaded from file " << fsData.path << std::endl;
-//                 }
-//                 else
-//                 {
-//                     std::cerr << "Shader from file " << fsData.path << " could not be read." << std::endl;
-//                 }
-//             break;
-//             case FileType::TEXTURE:
-//                 if(loadTexture(fsData.path))
-//                 {
-//                     std::cout << "Texture loaded from file " << fsData.path << std::endl;
-//                 }
-//                 else
-//                 {
-//                     std::cerr << "Can't load texture from file " << fsData.path << std::endl;
-//                 }
-                
-//             break;
-//         }
-//     }
-//     else if(msg.getEvent() == Event::QUERY_MESH_DATA)
-//     {
-//         if(!sendMesh(msg.getValue<const char*>()))
-//         {
-//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-//         }
-//     }
-//     else if(msg.getEvent() == Event::QUERY_TEXTURE_DATA)
-//     {
-//         if(!sendTexture(msg.getValue<const char*>()))
-//         {
-//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-//         }
-//     }
-//     else if(msg.getEvent() == Event::QUERY_AUDIO_DATA)
-//     {
-//         auto filePath = msg.getValue<const char*>();
-//         if(!sendAudioClip(filePath))
-//         {
-//             std::cerr << "Can't find open audio file " << filePath << std::endl;
-
-//             if(loadAudioClip(filePath))
-//             {
-//                 std::cout << "Audio loaded from file " << filePath << std::endl;
-//                 sendAudioClip(filePath);
-//             }
-//             else
-//             {
-//                 std::cerr << "Can't load audio from file " << filePath << std::endl;
-//             }
-//         }
-//     }
-//     else if(msg.getEvent() == Event::QUERY_SHADER_DATA)
-//     {
-//         if(!sendShader(msg.getValue<const char*>()))
-//         {
-//             std::cerr << "Can't find file " << msg.getValue<const char*>() << std::endl;
-//         }
-//     }
-//     else
-//     {
-//         //do nothing
-//     }
-// }
 
 #pragma region Loaders
 
@@ -201,188 +99,382 @@ bool AssetReader::loadShader(std::string path)
     return iter != shaders.end();
 }
 
-#pragma region Mesh
 
 bool AssetReader::loadMesh(std::string path)
-{   
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+{
+    // ? +++++ Load the assimp scene from provided path +++++
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
+    
+    // Check for assimp errors and display them
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr << "Assimp Error: " << importer.GetErrorString();
         return false;
     }
-    return processMeshNode(scene->mRootNode, scene, path);
-}
-
-bool AssetReader::processMeshNode(aiNode* node, const aiScene* scene, std::string path)
-{
-    bool returnFlag = true;
-    std::unordered_map<std::string, MeshCustom>::iterator iter;
-    Bounds tBounds;
-    for(int i = 0; i < node->mNumMeshes; i++)
+    else
     {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
+        // std::cout << "Node structure:\n";
+        // displayNodeHierarchy(scene->mRootNode);
 
-        Vertex tempVertex;
-        for(int j = 0; j < mesh->mNumVertices; ++j)
+        globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
+        
+        // * ----- Process and create entities with mesh renderers -----
+        processNode(scene->mRootNode, scene, path);
+
+        // * ----- Process and create bones -----
+        Bone* rootBone = processBone(scene->mRootNode, scene, path);
+
+        // * ----- Process animations -----
+        Animation* animation = processAnimations(scene, path);
+        if (animation != nullptr)
         {
-            processVertexAttributes(tempVertex, mesh, j);
-            vertices.push_back(tempVertex);
+            // * ----- Create skeleton object and bind root node -----
+            objectModulePtr->newEntity(1, scene->mRootNode->mName.C_Str() + std::string("_skeleton"));
+            auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
+            s->animation = animation;
+            s->globalInverseTransform = globalInverseTransform;
+            s->rootBone = rootBone;
         }
 
-        processIndices(indices, mesh);
-
-        std::string meshPath = path + "/" + mesh->mName.C_Str();
-        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        aiVector3D tempVec = mesh->mAABB.mMin;
-        tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        tempVec = mesh->mAABB.mMax;
-        tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
-
-        returnFlag = returnFlag & (theMesh != nullptr);
     }
 
-    for(int i = 0; i < node->mNumChildren; ++i)
-    {
-        returnFlag = returnFlag & processMeshNode(node->mChildren[i], scene, path);
-    }
-
-    return returnFlag;
+    return true;
 }
 
-#pragma endregion
-
-#pragma region Skinned Mesh
-
-bool AssetReader::loadSkinnedMesh(std::string path)
+bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
 {
-    bonesAmount = 0;
-    boneMapping.clear();
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    Transform* nodeTransform = nullptr;
+    // ? +++++ Process meshes (if any) ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    for (size_t i = 0; i < node->mNumMeshes; i++)
     {
-        std::cerr << "Assimp Error: " << importer.GetErrorString();
-    }
-    else if(processSkinnedMeshNode(scene->mRootNode, scene, path))
-    {
-        aiNode* bonesRootNode = findRootBone(scene->mRootNode);
-        if(bonesRootNode)
+        // * ----- Create new entity with provided name -----
+        objectModulePtr->newEntity(2, node->mName.C_Str());
+
+        // * ----- Create transform and set parent -----
+        nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
+        
+        // HACK: Decomposing matrix and setting values individually
+        glm::mat4 localTransformMat = aiMatrixToGlmMat4(node->mTransformation);
+        glm::vec3 position, scale, skew;
+        glm::vec4 perspective;
+        glm::quat rotation;
+        glm::decompose(localTransformMat, scale, rotation, position, skew, perspective);
+
+        nodeTransform->getLocalPositionModifiable() = position;
+        nodeTransform->getLocalRotationModifiable() = rotation;
+        nodeTransform->getLocalScaleModifiable() = scale;
+        
+        if (parent != nullptr)
         {
-            animationTicks.insert(std::pair<std::string, double>(path, scene->mAnimations[0]->mTicksPerSecond));
-            //TODO: change this nullptr to some transform, i dunno
-            return processBones(bonesRootNode, nullptr, scene, path);
+            nodeTransform->setParent(parent);
         }
+        else
+        {
+            nodeTransform->setParent(&GetCore().sceneModule.rootNode);
+        }
+
+        Mesh* newMesh = createMesh(scene->mMeshes[node->mMeshes[i]], path);
+
+        // FIXME: If node contains more than one mesh, the entity receives more than one MeshRenderer
+        // ! and mesh renderer system is not equipped to handle this
+
+        // * ----- Create mesh renderer and add created mesh -----
+        auto mr = objectModulePtr->newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = newMesh;
     }
 
-    return false;
+    // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
+    for (int i = 0; i < node->mNumChildren; i++)
+    {
+        processNode(node->mChildren[i], scene, path, nodeTransform);
+    }
+
+    return true;
 }
 
-bool AssetReader::processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path)
+Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
 {
-    bool returnFlag = true;
-    Bounds tBounds;
-    std::unordered_map<std::string, MeshSkinned>::iterator iter;
-    for(int i = 0; i < node->mNumMeshes; i++)
-    {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::vector<VertexSkinned> vertices;
-        std::vector<unsigned int> indices;
+    // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
 
-        VertexSkinned tempSkinnedVertex;
-        Vertex tempVertex;
-        for(int j = 0; j < mesh->mNumVertices; ++j)
+    Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + node->mName.C_Str()).c_str());
+
+    if (bone != nullptr)
+    {
+        // * ----- If bone of the same name as node is found, fill additional bone data -----
+        bone->localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
+        bone->parent = parent;
+
+        // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
+        for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            processVertexAttributes(tempVertex, mesh, j);
-            tempSkinnedVertex.position = tempVertex.position;
-            tempSkinnedVertex.normal = tempVertex.normal;
-            tempSkinnedVertex.tangent = tempVertex.tangent;
-            tempSkinnedVertex.texcoord = tempVertex.texcoord;
+            Bone* childBone = processBone(node->mChildren[i], scene, path, bone);
+            if (childBone != nullptr)
+            {
+                bone->children.push_back(childBone);
+            }
+        }
+        return bone;
+    }
+    else
+    {
+        // * ----- Otherwise return nullptr -----
+        Bone* rootBone = nullptr;
+        for (unsigned int i = 0; i < node->mNumChildren; ++i)
+        {
+            Bone* bonePtr = processBone(node->mChildren[i], scene, path, nullptr);
+            if (bonePtr != nullptr)
+            {
+                rootBone = bonePtr;
+            }
+        }
+        return rootBone;
+    }
+    return nullptr;
+}
+
+Animation* AssetReader::processAnimations(const aiScene* scene, std::string path)
+{
+    if (scene->HasAnimations())
+    {
+        Animation* firstAnim = nullptr;
+        for (size_t i = 0; i < scene->mNumAnimations; i++)
+        {
+            Animation newAnim;
             
-            vertices.push_back(tempSkinnedVertex);
+            for (size_t j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
+            {
+                unsigned int nodeBoneID = objectModulePtr->getBonePtrByName((path + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->boneID;
+                newAnim.addNode(nodeBoneID);
+
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++)
+                {
+                    newAnim.addPositionKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime,
+                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue));
+                }
+                
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumRotationKeys; k++)
+                {
+                    newAnim.addRotationKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mTime,
+                        aiQuaternionToGlmQuat(scene->mAnimations[i]->mChannels[j]->mRotationKeys[k].mValue));
+                }
+
+                for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumScalingKeys; k++)
+                {
+                    newAnim.addScaleKey(nodeBoneID, 
+                        scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime,
+                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue));
+                }
+            }
+
+            Animation* tempAnim = objectModulePtr->objectMaker.newAnimation(newAnim, path, scene->mAnimations[i]->mName.C_Str());
+            if (i == 0)
+            {
+                firstAnim = tempAnim;
+            }
         }
         
-        for(int j = 0; j < mesh->mNumBones; ++j)
-        {
-            std::string boneName(mesh->mBones[j]->mName.data);
-            unsigned int boneIndex;
-            if(boneMapping.find(boneName) == boneMapping.end())
-            {
-                boneIndex = bonesAmount;
-                boneMapping[boneName] = boneIndex;
-                bonesAmount++;
-            }
-            else
-            {
-                boneIndex = boneMapping[boneName];
-            }
-
-            for(int k = 0; k < mesh->mBones[j]->mNumWeights; ++k)
-            {
-                unsigned int vertexID = mesh->mBones[j]->mWeights[k].mVertexId;
-                float weight = mesh->mBones[j]->mWeights[k].mWeight;
-                addBoneDataToVertex(vertices[vertexID], boneIndex, weight);
-            }
-        }
-
-        processIndices(indices, mesh);
-
-        std::string meshPath = path + "/" + mesh->mName.C_Str();
-        std::cout << "Loaded mesh Path: " << meshPath << std::endl;
-        aiVector3D tempVec = mesh->mAABB.mMin;
-        tBounds.minBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        tempVec = mesh->mAABB.mMax;
-        tBounds.maxBound = glm::vec3(tempVec.x, tempVec.y, tempVec.z);
-        auto theMesh = objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, tBounds, path.c_str(), meshPath.c_str());
-
-        returnFlag = returnFlag & (theMesh != nullptr);
+        return firstAnim;
     }
-
-    for(int i = 0; i < node->mNumChildren; ++i)
+    else
     {
-        returnFlag = returnFlag & processSkinnedMeshNode(node->mChildren[i], scene, path);
+        return nullptr;
     }
-
-    return returnFlag;
 }
 
-bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path)
+Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
 {
-    bool returnFlag = true;
-    Entity* entPtr;
-    Transform* tranPtr;
-    Bone* bonePtr;
-
-    for(int i = 0; i < rootNode->mNumChildren; ++i)
+    std::list<glm::vec3> positions;
+    std::list<glm::vec3> normals;
+    std::list<glm::vec3> tangents;
+    std::list<glm::vec2> texcoords;
+    struct VertexWeightInfo
     {
-        aiNodeAnim* transNode = findNodeAnim(scene->mAnimations[0], rootNode->mChildren[i]->mName.C_Str());
+        float weight;
+        unsigned int boneId;
+    };
+    std::multimap<unsigned int, VertexWeightInfo> idWeight;
 
-        if(transNode)
+    // ? +++++ Loading data for base vertex +++++
+    for (size_t i = 0; i < mesh->mNumVertices; i++)
+    {
+        // * ----- Base data: position, normal, tangent -----
+        positions.push_back( {mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z} );
+        normals.push_back( {mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z} );
+        tangents.push_back( {mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z} );
+
+        // * ----- Optional data: texcoords -----
+        // TODO: Support more than one uv channel
+        if (mesh->mTextureCoords[0])
         {
-            objectModulePtr->objectMaker.newEntity(2);
-
-            tranPtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Transform>();
-            if (parent != nullptr)
-            {
-                tranPtr->setParent(parent);
-            }
-            else
-            {
-                tranPtr->setParent(&(GetCore().sceneModule.rootNode));
-            }
-
-            bonePtr = objectModulePtr->objectMaker.newEmptyComponentForLastEntity<Bone>();
-            copyToMap(bonePtr, transNode);
-            bonePtr->filePath = path;
-            bonePtr->beforeState = AnimationBehaviour((unsigned int)transNode->mPreState);
-            bonePtr->afterState = AnimationBehaviour((unsigned int)transNode->mPostState);
-            bonePtr->boneID = boneMapping[transNode->mNodeName.C_Str()];
+            texcoords.push_back( {mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y} );
         }
-        returnFlag = returnFlag & processBones(rootNode->mChildren[i], new Transform(*tranPtr), scene, path);
+        else
+        {
+            texcoords.push_back( {0.0f, 0.0f} );
+        }
     }
-    return returnFlag;
+
+    // ? ----- Loading optional data: bones, boneWeights, boneIDs -----
+    for (size_t i = 0; i < mesh->mNumBones; i++)
+    {
+        // * Author note: each loop inserts one bone into global map of bones and then saves all the weights and bone ids
+        // * by vertex id to local map. The bone id is created from the size of the map to ensure uniqueness of the id,
+        // * because this is the only way to map vertex to bone.
+        unsigned int globalBoneIndex = objectModulePtr->objectContainer.getBoneCount();
+
+        // XXX: I'm not sure if the insert will just do nothing if the key already exists (and that's what I want it to do) 
+        // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models   
+
+        Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + mesh->mBones[i]->mName.C_Str()).c_str());
+        if (bone == nullptr)
+        {
+            Bone boneToAdd( globalBoneIndex,
+                            path + "/" + mesh->mBones[i]->mName.C_Str(),
+                            aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
+
+            objectModulePtr->objectMaker.newBone(boneToAdd, path, mesh->mBones[i]->mName.C_Str());
+        }
+        else
+        {
+            globalBoneIndex = bone->boneID;
+        }
+        
+
+        for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+        {
+            idWeight.insert(
+                { 
+                    mesh->mBones[i]->mWeights[j].mVertexId,
+                    VertexWeightInfo 
+                    {
+                        mesh->mBones[i]->mWeights[j].mWeight, // weight
+                        globalBoneIndex // bone id
+                    }
+                }
+            );
+        }
+    }
+
+    // ? +++++ Loading indices data +++++
+    std::vector<unsigned int> indices;
+    for (size_t i = 0; i < mesh->mNumFaces; i++)
+    {
+        for (size_t j = 0; j < mesh->mFaces[i].mNumIndices; j++)
+        {
+            indices.push_back(mesh->mFaces[i].mIndices[j]);
+        }
+    }
+
+    // TODO: A lot of code is repeated here, there might be a way to make it simpler but now I don't have the patience to bother
+    // ? +++++ Check if mesh is influenced by bones +++++
+    if (!mesh->HasBones())
+    {
+        // ? +++++ Create regular mesh and return it +++++
+        std::vector<Vertex> vertices;
+
+        std::list<glm::vec3>::iterator posIter = positions.begin();
+        std::list<glm::vec3>::iterator normIter = normals.begin();
+        std::list<glm::vec3>::iterator tangIter = tangents.begin();
+        std::list<glm::vec2>::iterator uvIter = texcoords.begin();
+        while (posIter != positions.end())
+        {
+            vertices.push_back(
+                Vertex {
+                    *posIter,
+                    *normIter,
+                    *tangIter,
+                    *uvIter
+                }
+            );
+
+            posIter++;
+            normIter++;
+            tangIter++;
+            uvIter++;
+        }
+
+        // ? +++++ Create mesh bounds from AABB +++++
+        Bounds bounds;
+        bounds.maxBound = {mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z};
+        bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
+
+        // * ----- Add mesh to resource container -----
+        // ! ===== Return appropriate mesh pointer =====
+        return objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, bounds, path, mesh->mName.C_Str());
+    }
+    else
+    {
+        // ? +++++ Create skinned mesh and return it +++++
+        std::vector<VertexSkinned> vertices;
+        
+        std::list<glm::vec3>::iterator posIter = positions.begin();
+        std::list<glm::vec3>::iterator normIter = normals.begin();
+        std::list<glm::vec3>::iterator tangIter = tangents.begin();
+        std::list<glm::vec2>::iterator uvIter = texcoords.begin();
+        unsigned int i = 0;
+        while (posIter != positions.end())
+        {
+            // * ----- Getting by the vertex id -----
+            auto range = idWeight.equal_range(i);
+            
+            int count = std::distance(range.first, range.second);
+            if (count > VertexSkinned::MAX_WEIGHTS)
+            {
+                // TODO: Proper error logging
+                std::cerr << "Tried to insert " << count << " weights while max is " << VertexSkinned::MAX_WEIGHTS << "\n";
+                std::cerr << "The excess will be clipped but the weight values will be incorrect, either increase the max weights or decrease bone influence in the model\n";
+            }
+
+            unsigned int ids[VertexSkinned::MAX_WEIGHTS];
+            float weights[VertexSkinned::MAX_WEIGHTS];
+
+            int number = VertexSkinned::MAX_WEIGHTS < count ? VertexSkinned::MAX_WEIGHTS : count; 
+            for (size_t j = 0; j < 4; j++)
+            {
+                if (j < number)
+                {
+                    ids[j] = range.first->second.boneId;
+                    weights[j] = range.first->second.weight;
+                }
+                else
+                {
+                    ids[j] = 0;
+                    weights[j] = 0.0;
+                }
+                // Increment iterator
+                range.first++;
+            }
+            
+
+            vertices.push_back(
+                VertexSkinned {
+                    *posIter,
+                    *normIter,
+                    *tangIter,
+                    *uvIter,
+                    {ids[0], ids[1], ids[2], ids[3]},
+                    {weights[0], weights[1], weights[2], weights[3]}
+                }
+            );
+
+            posIter++;
+            normIter++;
+            tangIter++;
+            uvIter++;
+            i++;
+        }
+
+        // ? ----- Create mesh bounds from AABB -----
+        Bounds bounds;
+        bounds.maxBound = {mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z};
+        bounds.minBound = {mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z};
+
+        // * ----- Add mesh to resource container -----
+        // ! ===== Return appropriate mesh pointer =====
+        return objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, bounds, path, mesh->mName.C_Str());
+    }
 }
 
 #pragma endregion
@@ -391,126 +483,51 @@ bool AssetReader::processBones(aiNode* rootNode, Transform* parent, const aiScen
 
 #pragma region Helpers
 
-void AssetReader::addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight)
+void displayNodeHierarchy(aiNode* node, int depth)
 {
-    for(int i = 0; i < vertex.MAX_WEIGHTS; ++i)
+    for (size_t i = 0; i < depth; i++)
     {
-        if(vertex.weights[i] < 0.0001f) // if vertex has no weight on this index
-        {
-            vertex.boneIDs[i] = boneIndex;
-            vertex.weights[i] = weight;
-            return;
-        }
+        std::cout << '-';
     }
-    // !If loop ends without return
-    std::cerr << "AssetReader: Too many bones for this vertex!" << std::endl;
-}
+    std::cout << node->mName.C_Str() << '\n';
 
-void AssetReader::processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex)
-{
-    //position
-    tempVector.x = mesh->mVertices[vertexIndex].x;
-    tempVector.y = mesh->mVertices[vertexIndex].y;
-    tempVector.z = mesh->mVertices[vertexIndex].z;
-    vert.position = tempVector;
-
-    //normals
-    tempVector.x = mesh->mNormals[vertexIndex].x;
-    tempVector.y = mesh->mNormals[vertexIndex].y;
-    tempVector.z = mesh->mNormals[vertexIndex].z;
-    vert.normal = tempVector;
-
-    //tangent
-    tempVector.x = mesh->mTangents[vertexIndex].x;
-    tempVector.y = mesh->mTangents[vertexIndex].y;
-    tempVector.z = mesh->mTangents[vertexIndex].z;
-    vert.tangent = tempVector;
-
-    if(mesh->mTextureCoords[0])
+    for (size_t i = 0; i < node->mNumChildren; i++)
     {
-        vert.texcoord = glm::vec2(mesh->mTextureCoords[0][vertexIndex].x, mesh->mTextureCoords[0][vertexIndex].y);
-    }
-    else
-    {
-        vert.texcoord = glm::vec2(0.0f, 0.0f);
+        displayNodeHierarchy(node->mChildren[i], depth + 1);
     }
 }
 
-void AssetReader::processIndices(std::vector<unsigned int>& indices, aiMesh* mesh)
+void displayGlmMat4Decomposed(glm::mat4 mat)
 {
-    for(int j = 0; j < mesh->mNumFaces; ++j)
-    {
-        aiFace face = mesh->mFaces[j];
-
-        for(int k = 0; k < face.mNumIndices; ++k)
-        {
-            indices.push_back(face.mIndices[k]);
-        }
-    }
+    glm::vec3 position, scale, skew;
+    glm::vec4 perspective;
+    glm::quat rotation;
+    glm::decompose(mat, scale, rotation, position, skew, perspective);
+    glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
+    std::cout << "Position: " << position.x << ' ' << position.y << ' ' << position.z << '\n';
+    std::cout << "Rotation (deg): " << euler.x << ' ' << euler.y << ' ' << euler.z << '\n';
+    std::cout << "Scale: " << scale.x << ' ' << scale.y << ' ' << scale.z << '\n';
 }
 
-aiNode* AssetReader::findRootBone(aiNode* rootNode)
+void displayGlmVec3(glm::vec3 vec)
 {
-    std::unordered_map<std::string, unsigned int>::iterator iter;
-    for(int i = 0; i < rootNode->mNumChildren; ++i)
-    {
-        iter = boneMapping.find(rootNode->mChildren[i]->mName.C_Str());
-        if(iter != boneMapping.end())
-        {
-            return rootNode->mChildren[i];
-        }
-    }
-
-    for(int i = 0; i < rootNode->mNumChildren; ++i)
-    {
-        return findRootBone(rootNode->mChildren[i]);
-    }
-    // !If loop ends without return
-    std::cerr << "Wrong bone name" << std::endl;
-    return nullptr;
+    std::cout << vec.x << ' ' << vec.y << ' ' << vec.z << '\n';
 }
 
-aiNodeAnim* AssetReader::findNodeAnim(aiAnimation* animPtr, std::string nodeName)
+void displayAssimpMat4(aiMatrix4x4 mat)
 {
-    for (int i = 0 ; i < animPtr->mNumChannels ; i++) {
-        aiNodeAnim* pNodeAnim = animPtr->mChannels[i];
-        
-        if (std::string(pNodeAnim->mNodeName.data) == nodeName) 
-        {
-            return pNodeAnim;
-        }
-    }
-    
-    return NULL;
+    std::cout << mat[0][0] << '\t' << mat[0][1] << '\t' << mat[0][2] << '\t' << mat[0][3] << '\n';
+    std::cout << mat[1][0] << '\t' << mat[1][1] << '\t' << mat[1][2] << '\t' << mat[1][3] << '\n'; 
+    std::cout << mat[2][0] << '\t' << mat[2][1] << '\t' << mat[2][2] << '\t' << mat[2][3] << '\n'; 
+    std::cout << mat[3][0] << '\t' << mat[3][1] << '\t' << mat[3][2] << '\t' << mat[3][3] << '\n'; 
 }
 
-glm::mat4 AssetReader::aiMatrixToGlmMat(aiMatrix4x4 matrix)
+void displayGlmMat4(glm::mat4 mat)
 {
-    aiMatrix4x4 m = matrix.Transpose();
-
-    glm::mat4 temp = glm::mat4( glm::vec4(m.a1, m.a2, m.a3, m.a4),
-                                glm::vec4(m.b1, m.b2, m.b3, m.b4), 
-                                glm::vec4(m.c1, m.c2, m.c3, m.c4), 
-                                glm::vec4(m.d1, m.d2, m.d3, m.d4));
-    return temp;
-}
-
-void AssetReader::copyToMap(Bone* bone, aiNodeAnim* animNode)
-{
-    // * ===== Copy positions ====
-    for(int i = 0; i < animNode->mNumPositionKeys; ++i)
-    {
-        bone->positionKeys[animNode->mPositionKeys[i].mTime] = {animNode->mPositionKeys[i].mValue.x,
-                                                                animNode->mPositionKeys[i].mValue.y,
-                                                                animNode->mPositionKeys[i].mValue.z };
-    }
-    for (int i = 0; i < animNode->mNumRotationKeys; ++i)
-    {
-        bone->rotationKeys[animNode->mRotationKeys[i].mTime] = {animNode->mRotationKeys[i].mValue.w,
-                                                                animNode->mRotationKeys[i].mValue.x,
-                                                                animNode->mRotationKeys[i].mValue.y,
-                                                                animNode->mRotationKeys[i].mValue.z };
-    }
+    std::cout << mat[0][0] << '\t' << mat[1][0] << '\t' << mat[2][0] << '\t' << mat[3][0] << '\n';
+    std::cout << mat[0][1] << '\t' << mat[1][1] << '\t' << mat[2][1] << '\t' << mat[3][1] << '\n'; 
+    std::cout << mat[0][2] << '\t' << mat[1][2] << '\t' << mat[2][2] << '\t' << mat[3][2] << '\n'; 
+    std::cout << mat[0][3] << '\t' << mat[1][3] << '\t' << mat[2][3] << '\t' << mat[3][3] << '\n'; 
 }
 
 #pragma endregion

@@ -21,11 +21,12 @@ T* ObjectMaker::newEmptyComponentForLastEntity()
 }
 
 template<typename T, typename U>
-T* ObjectMaker::newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, const char* filePath, const char* meshPath)
+T* ObjectMaker::newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string& filePath, std::string meshName)
 {
     if(std::string(typeid(T).name()).find("Mesh") != std::string::npos)
     {
-        objContainer->meshes.push_back(new T(vertices, indices, bounds, filePath, meshPath));
+        std::cout << filePath + "/" + meshName << std::endl;
+        objContainer->meshes.push_back(new T(vertices, indices, bounds, filePath, filePath + "/" + meshName));
         return dynamic_cast<T*>(objContainer->meshes[objContainer->meshes.size() - 1]);
     }
     return nullptr;

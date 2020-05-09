@@ -6,6 +6,8 @@
 #include "AssetStructers.inl"
 #include "MeshSkinned.hpp"
 #include "MeshCustom.hpp"
+#include "Animation.hpp"
+#include "Bone.inl"
 
 
 #include <unordered_map>
@@ -13,6 +15,8 @@
 #include <assimp/Importer.hpp>
 #include <vector>
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ObjectModule;
 class ObjectMaker;
@@ -20,6 +24,12 @@ class SceneModule;
 class Bone;
 class SceneWriter;
 struct Transform;
+
+void displayNodeHierarchy(aiNode* node, int depth = 0);
+void displayGlmVec3(glm::vec3 vec);
+void displayGlmMat4Decomposed(glm::mat4 mat);
+void displayAssimpMat4(aiMatrix4x4 mat);
+void displayGlmMat4(glm::mat4 mat);
 
 /**
  * @brief Resource Module class for reading and storage assets data
@@ -33,9 +43,6 @@ public:
     AssetReader(ObjectModule* objModule);
     ~AssetReader() = default;
 
-    //TODO: Better solution for saving animation ticks
-    std::unordered_map<std::string, double> animationTicks;
-
 private:
     ObjectModule* objectModulePtr;
 
@@ -46,119 +53,30 @@ private:
 
     static bool hasInstance;
 
-    ///@brief var for process vertex attributes method
-    glm::vec3 tempVector;
-    ///@brief helpful while reading bones
-    unsigned int bonesAmount = 0;
-    ///@brief map os bones, key = name, value = index
-    std::unordered_map<std::string, unsigned int> boneMapping;
-    
-    //Storages
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
     std::unordered_map<std::string, std::string> shaders;
 
+    // TODO: I dont have the patience to do it another way
+    glm::mat4 globalInverseTransform;
 
     //load files to storages methods
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadShader(std::string path);
     bool loadMesh(std::string path);
-    bool loadSkinnedMesh(std::string path);
 
-    /**
-     * @brief Recursive method of processing meshes
-     * 
-     * @param node of imported model
-     * @param scene assimp structure containing nodes
-     * @param path path to file to load (for saving to map purposes)
-     * @return true meshes processed and saved to map
-     * @return false something went wrong during processing meshes
-     */
-    bool processMeshNode(aiNode* node, const aiScene* scene, std::string path);
+    // TODO: Documentation
+    bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
+    Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent = nullptr);
+    Animation* processAnimations(const aiScene* scene, std::string path);
+    Mesh* createMesh(aiMesh* node, std::string path);
 
-    /**
-     * @brief Recursive method of processing meshes with bones
-     * 
-     * @param node of imported model
-     * @param scene assimp structure containing nodes
-     * @param path to file to load (for saving purposes)
-     * @return true meshes with pones processed and saved
-     * @return false something went wrong during processing
-     */
-    bool processSkinnedMeshNode(aiNode* node, const aiScene* scene, std::string path);
-
-    /**
-     * @brief Method that adds bone data to skinned vertex
-     * 
-     * @param vertex to add bone data
-     * @param boneIndex index of the bone 
-     * @param weight weight of the bone
-     */
-    void addBoneDataToVertex(VertexSkinned& vertex, unsigned int& boneIndex, float& weight);
-
-    /**
-     * @brief method that saves basic vertex attributes
-     * 
-     * @param vert reference to vertex to save values
-     * @param mesh pointer to mesh in which that vertex is
-     * @param vertexIndex index of vertex in mesh
-     */
-    void processVertexAttributes(Vertex& vert, aiMesh* mesh, int vertexIndex);
-
-    /**
-     * @brief process mesh indices
-     * 
-     * @param indices reference for vector to save indices
-     * @param mesh pointer to mesh from indices are taken
-     */
-    void processIndices(std::vector<unsigned int>& indices, aiMesh* mesh);
-
-    /**
-     * @brief method that finds root node for bones
-     * 
-     * @param rootNode root node to search
-     * @return aiNode* node which is root node for bones
-     */
-    aiNode* findRootBone(aiNode* rootNode);
-
-    /**
-     * @brief method that finds animation node associated with bone node
-     * 
-     * @param animPtr pointer to scene animation
-     * @param nodeName node name for search
-     * @return aiNodeAnim* animation node associated with bone node
-     */
-    aiNodeAnim* findNodeAnim(aiAnimation* animPtr, std::string nodeName);
-
-    /**
-     * @brief method that saves bones to entities
-     * 
-     * @param rootNode root node of bones
-     * @param parent parent transform for next transform
-     * @param scene pointer to scene for reference when finding animation node
-     * @param path file path from bones are read
-     * @return true bones are processed and saved to entities
-     * @return false something went wrong during processing bones
-     */
-    bool processBones(aiNode* rootNode, Transform* parent, const aiScene* scene, std::string path);
-
-    /**
-     * @brief Helper function to cast assimp matrix4x4 to glm::mat4
-     * 
-     * @param matrix assimp matrix to cast
-     * @return glm::mat4 casted matrix
-     */
-    glm::mat4 aiMatrixToGlmMat(aiMatrix4x4 matrix);
-
-    /**
-     * @brief copies position and rotation keys to map of AnimKeys
-     * 
-     * @param bone bone to process
-     * @param animNode anim node to process
-     */
-    void copyToMap(Bone* bone, aiNodeAnim* animNode);
-
+    static inline glm::vec3 aiVectortoGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }
+    static inline glm::vec2 aiVectortoGlmVec2(const aiVector3D &v) { return glm::vec2(v.x, v.y); }
+    static inline glm::quat aiQuaternionToGlmQuat(const aiQuaternion &q) { return glm::quat(q.w, q.x, q.y, q.z); }
+    static inline glm::mat4 aiMatrixToGlmMat4(const aiMatrix4x4 &m) { return glm::transpose(glm::make_mat4(&m.a1)); }
+    static inline glm::mat4 aiMatrixToGlmMat4(const aiMatrix3x3 &m) { return glm::transpose(glm::make_mat3(&m.a1)); }
 };
 
 #endif // _RESOURCEMODULE_HPP

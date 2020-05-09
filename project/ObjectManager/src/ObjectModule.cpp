@@ -74,6 +74,13 @@ void ObjectModule::readScene(std::string path)
 
 Entity* ObjectModule::newEntity(int bufferSize, std::string name)
 {
+    for(int i = 0; i < objectContainer.entities.size(); ++i)
+    {
+        if(objectContainer.entities[i].getName() != "" && objectContainer.entities[i].getName() == name)
+        {
+            return &objectContainer.entities[i];
+        }
+    }
     return objectMaker.newEntity(bufferSize, name);
 }
 
@@ -117,7 +124,7 @@ Cubemap* ObjectModule::newCubemap(TextureCreateInfo createInfo, const char* fron
     return objectMaker.newCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
-void ObjectModule::newModel(const char* filePath, FileType type)
+void ObjectModule::newModel(const char* filePath)
 {
     for(auto m : objectContainer.meshes)
     {
@@ -126,7 +133,7 @@ void ObjectModule::newModel(const char* filePath, FileType type)
             return;
         }
     }
-    objectMaker.newModel(filePath, type);
+    objectMaker.newModel(filePath);
 }
 
 Material* ObjectModule::newMaterial(Shader* shader, std::string name)
@@ -144,6 +151,34 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name)
 void ObjectModule::newAudioClip(const char* filePath)
 {
     assetReader.loadAudioClip(filePath);
+}
+
+#pragma endregion
+
+#pragma region ObjectContainer wrapper
+
+Bone* ObjectModule::getBonePtrByName(const char* name)
+{
+    try
+    {
+        return objectContainer.getBonePtrByName(name);
+    }
+    catch(const std::out_of_range& e)
+    {
+        return nullptr;
+    }
+}
+
+Animation* ObjectModule::getAnimationPtrByName(const char* name)
+{
+    try
+    {
+        return objectContainer.getAnimationPtrByName(name);
+    }
+    catch(const std::out_of_range& e)
+    {
+        return nullptr;
+    }
 }
 
 #pragma endregion

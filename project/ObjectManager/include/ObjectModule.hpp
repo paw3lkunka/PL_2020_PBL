@@ -121,6 +121,11 @@ public:
      */
     Material* getMaterialFromName(const char* name) {return objectContainer.getMaterialFromName(name); }
 
+    // TODO documentation
+    Bone* getBonePtrByName(const char* name);
+    // TODO documentation
+    Animation* getAnimationPtrByName(const char* name);
+
 #pragma endregion
 
 #pragma region ObjectMaker Wrapper
@@ -198,7 +203,7 @@ public:
      * @param filePath to model
      * @param type type of meshes (skinned/ custom)
      */
-    void newModel(const char* filePath, FileType type);
+    void newModel(const char* filePath);
 
 
     /**

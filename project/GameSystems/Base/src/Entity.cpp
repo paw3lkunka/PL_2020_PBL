@@ -6,8 +6,8 @@
 Entity::Entity(int id, int bufferSize, std::string name)
 {
     this->id = id;
-    this->components.reserve(bufferSize);
     this->name = name;
+    this->components.reserve(bufferSize);
 }
 
 void Entity::addComponent(Component* ptr)
