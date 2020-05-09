@@ -1,11 +1,13 @@
 #ifndef BONESYSTEM_HPP_
 #define BONESYSTEM_HPP_
 
-#include "Skeleton.inl"
-
 #include "System.hpp"
 
 #include <map>
+#include <glm/mat4x4.hpp>
+
+struct Skeleton;
+struct Bone;
 
 class SkeletonSystem : public System
 {

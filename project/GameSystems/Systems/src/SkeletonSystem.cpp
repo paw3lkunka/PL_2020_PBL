@@ -1,5 +1,7 @@
 #include "SkeletonSystem.hpp"
 
+#include "Skeleton.inl"
+#include "Bone.inl"
 #include "Core.hpp"
 #include "Entity.hpp"
 

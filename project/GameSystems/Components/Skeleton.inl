@@ -2,9 +2,11 @@
 #define _SKELETON_INL
 
 #include "Component.inl"
+#include <glm/mat4x4.hpp>
 
-#include "Animation.hpp"
-#include "Bone.inl"
+class Animation;
+struct Bone;
+
 
 struct Skeleton : public Component
 {
