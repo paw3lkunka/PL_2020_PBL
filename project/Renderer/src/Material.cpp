@@ -6,13 +6,13 @@
 
 int Material::idCount = 0;
 
-Material::Material(Shader* shader, const char* name) : shader(shader), name(name)
+Material::Material(Shader* shader, const char* name, bool enableInstancing) : shader(shader), name(name)
 {
     // Set material ID on construction
     ID = idCount;
     idCount++;
 
-    std::unordered_map<std::string, GLenum> uniforms = shader->getUniforms();
+    std::unordered_map<std::string, GLenum>& uniforms = shader->getUniforms();
     for(auto var : uniforms)
     {
         switch (var.second)
@@ -41,8 +41,28 @@ Material::Material(Shader* shader, const char* name) : shader(shader), name(name
         default:
             // ! Undefined uniform type !
             // TODO: Throw exception here
+            std::cerr << "Material " << name << " encountered an unsupported uniform type with name " << var.first << '\n';
             break;
         }
+    }
+
+    bool instancingSupported = false;
+    std::unordered_map<std::string, GLenum>& attributes = shader->getAttributes();
+    
+    for(auto var : attributes)
+    {
+        if (var.first == "instanceModel")
+        {
+            instancingSupported = true;
+            break;
+        }
+    }
+
+    if (enableInstancing && !instancingSupported)
+    {
+        enableInstancing = false;
+        // TODO: Proper error logging
+        std::cerr << "Instancing for material " << name << " is not supported! Falling back to normal rendering.\n";
     }
 }
 
@@ -56,7 +76,7 @@ void Material::use()
     int i = 0;
     for(std::pair<std::string, Texture*> texture : textures)
     {
-        if(texture.second != nullptr)
+        if (texture.second != nullptr)
         {
             texture.second->bind(i);
             shader->setInt(texture.first, i);
@@ -67,9 +87,12 @@ void Material::use()
     // * ===== Cubemap samplers =====
     for(auto cubemap : cubemaps)
     {
-        cubemap.second->bind(i);
-        shader->setInt(cubemap.first, i);
-        ++i;
+        if (cubemap.second != nullptr)
+        {
+            cubemap.second->bind(i);
+            shader->setInt(cubemap.first, i);
+            ++i;
+        }
     }
 
     // * ===== Ints =====
@@ -101,6 +124,17 @@ void Material::use()
     {
         shader->setMat4(var.first, var.second);
     }
+}
+
+void Material::setMVP(glm::mat4 M, glm::mat4 VP, std::string name)
+{
+    M = VP * M;
+    shader->setMat4(name, M);
+}
+
+void Material::setModel(glm::mat4 M, std::string name)
+{
+    shader->setMat4(name, M);
 }
 
 void Material::setTexture(std::string name, Texture* value)

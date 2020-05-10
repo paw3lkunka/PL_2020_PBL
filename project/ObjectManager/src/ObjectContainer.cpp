@@ -9,7 +9,7 @@
 #include "Cubemap.hpp"
 #include "Material.hpp"
 #include "Transform.inl"
-#include "Mesh.inl"
+#include "Mesh.hpp"
 #include "MeshCustom.hpp"
 #include "MeshSkinned.hpp"
 

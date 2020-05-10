@@ -1,7 +1,7 @@
 #ifndef SKINNEDMESH_HPP_
 #define SKINNEDMESH_HPP_
 
-#include "Mesh.inl"
+#include "Mesh.hpp"
 
 #include <vector>
 

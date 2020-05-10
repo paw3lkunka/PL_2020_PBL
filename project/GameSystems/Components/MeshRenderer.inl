@@ -3,7 +3,7 @@
 
 #include "Component.inl"
 #include "Material.hpp"
-#include "Mesh.inl"
+#include "Mesh.hpp"
 
 struct MeshRenderer : public Component
 {

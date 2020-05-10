@@ -7,7 +7,6 @@ MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> i
     this->vertices = vertices;
     this->indices = indices;
     this->bounds = bounds;
-    std::cout << "Vertices size: " << vertices.size() << '\n';
     setup();
 }
 
@@ -50,5 +49,12 @@ void MeshCustom::render()
 {
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+void MeshCustom::renderInstanced(int count)
+{
+    glBindVertexArray(vao);
+    glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, count);
     glBindVertexArray(0);
 }

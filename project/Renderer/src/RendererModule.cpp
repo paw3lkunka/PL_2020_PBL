@@ -182,14 +182,16 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindVertexArray(0);
 }
 
-#include "Entity.hpp"
-
 void RendererModule::render()
 {
     if (window != nullptr)
     {
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
-        glClearColor(createInfo.clearColor.x, createInfo.clearColor.y, createInfo.clearColor.z, 1.0f);
+        // if (createInfo.clearFlags & GL_COLOR_BUFFER_BIT)
+        // {
+        //     glClearColor(createInfo.clearColor.x, createInfo.clearColor.y, createInfo.clearColor.z, 1.0f);
+        // }
+
         glClear(createInfo.clearFlags);
 
         // ? ++++++ Send projection matrices to UBO if needed +++++

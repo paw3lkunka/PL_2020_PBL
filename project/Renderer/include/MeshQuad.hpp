@@ -1,17 +1,24 @@
 #ifndef _MESHQUAD_HPP
 #define _MESHQUAD_HPP
 
-#include "Mesh.inl"
+#include "Mesh.hpp"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 
-class MeshQuad
+/**
+ * @brief Class encapsulating standard quad rendering
+ *  Used mainly for instanced rendering
+ */
+class MeshQuad : public Mesh
 {
 public:
-    MeshQuad() = default;
+    MeshQuad() : Mesh("", "") { setup(); }
     virtual ~MeshQuad() = default;
 
+    /**
+     * @brief Creates buffers and fills them with data
+     */
     static void setup();
     
     virtual void render();

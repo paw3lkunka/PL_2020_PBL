@@ -1,7 +1,7 @@
 #ifndef _MESHCUSTOM_HPP
 #define _MESHCUSTOM_HPP
 
-#include "Mesh.inl"
+#include "Mesh.hpp"
 #include "MeshDataStructures.inl"
 
 #include <glm/glm.hpp>
@@ -33,8 +33,10 @@ public:
      * @brief Bind buffers and render normally
      */
     void render();
-
-    virtual void renderInstanced() {}
+    /**
+     * @brief Render all the mesh instances
+     */
+    void renderInstanced(int count);
 
 private:
     GLuint vao, vbo, ebo;
