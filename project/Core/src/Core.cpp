@@ -85,6 +85,28 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
+    if (updateScene)
+    {
+        Entity* s001 = objectModule.getEntityFromName("Sphere001");
+        Entity* sTrig = objectModule.getEntityFromName("SphereTrigger");
+
+        Rigidbody* rb1 = objectModule.newEmptyComponent<Rigidbody>();
+        Rigidbody* rb2 = objectModule.newEmptyComponent<Rigidbody>();
+
+        rb1->mass = 5;
+        rb1->momentOfInertia = SphereMomentOfInertia(5, 10);
+        rb1->drag = 1;
+        rb1->angularDrag = 1;
+
+        rb2->mass = 5;
+        rb2->momentOfInertia = SphereMomentOfInertia(5, 10, true);
+        rb2->drag = 1;
+        rb2->angularDrag = 1;
+
+        s001->addComponent(rb1);
+        sTrig->addComponent(rb2);
+    }
+
 #pragma region Renderer
 
     // ! ----- Renderer initialization block -----

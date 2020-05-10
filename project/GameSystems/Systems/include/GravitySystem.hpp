@@ -7,6 +7,8 @@
 
 class Rigidbody;
 
+//TODO USUŃ TO!!!!
+
 /**
  * @brief Calculate gravity force for rigidbody 
  */

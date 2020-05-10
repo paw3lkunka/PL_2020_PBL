@@ -1,3 +1,6 @@
+#ifndef PHYSIC_STRUCTURES_INL
+#define PHYSIC_STRUCTURES_INL
+
 #include <glm/glm.hpp>
 
 /**
@@ -11,3 +14,5 @@ struct Impulse
     ///@brief Application point of force about centre of rigidbody in world space.
     glm::vec3 point = {0.0f, 0.0f, 0.0f};
 };
+
+#endif /*PHYSIC_STRUCTURES_INL*/
