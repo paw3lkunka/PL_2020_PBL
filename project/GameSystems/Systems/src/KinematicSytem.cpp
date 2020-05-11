@@ -41,5 +41,9 @@ void KinematicSystem::fixedUpdate()
     transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
     transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
+    std::cout << "Velocity: " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << "\n" ;
+    std::cout << "Position: " << transformPtr->getLocalPosition().x << ", " << transformPtr->getLocalPosition().x << ", " << transformPtr->getLocalPosition().x << "\n" ;
+    std::cout << "Velocity: " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << "\n" ;
+
     rBodyPtr->impulses.clear();
 }
