@@ -358,9 +358,7 @@ void SceneReader::readTransform(std::string name)
             std::cout << "No parent transform for " << name << std::endl;
         }
 
-        unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-        auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-        entity->addComponent(trans);
+        assignToEntity(name, trans);
     }
 
     tempVec.x = j.at(name).at("localPosition").at("x").get<float>();
@@ -428,9 +426,7 @@ void SceneReader::readAudioSource(std::string name)
         aSource->getListenersModifiable().push_back(dynamic_cast<AudioListener*>(objModulePtr->objectContainer.getComponentFromSerializationID(listeners[i])));
     }
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(aSource);
+    assignToEntity(name, aSource);
 }
 
 void SceneReader::readAudioListener(std::string name)
@@ -452,9 +448,7 @@ void SceneReader::readAudioListener(std::string name)
     audioListener->getIsCurrentModifiable() = j.at(name).at("isCurrent").get<int>();
     audioListener->getGainModifiable() = j.at(name).at("gain").get<float>();
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(audioListener);
+    assignToEntity(name, audioListener);
 }
 
 void SceneReader::readCamera(std::string name)
@@ -469,9 +463,7 @@ void SceneReader::readCamera(std::string name)
     camera->projectionMode = CameraProjection(j.at(name).at("projectionMode").get<int>());
     camera->isMain = j.at(name).at("isMain").get<bool>();
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(camera);
+    assignToEntity(name, camera);
 }
 
 void SceneReader::readBillboardRenderer(std::string name)
@@ -482,9 +474,7 @@ void SceneReader::readBillboardRenderer(std::string name)
     unsigned int childID = j.at(name).at("material").get<unsigned int>();
     bRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(bRenderer);
+    assignToEntity(name, bRenderer);
 }
 
 void SceneReader::readMeshRenderer(std::string name)
@@ -509,9 +499,7 @@ void SceneReader::readMeshRenderer(std::string name)
         childID = j.at(name).at("mesh").get<unsigned int>();
         renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
 
-        unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-        auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-        entity->addComponent(renderer);
+        assignToEntity(name, renderer);
     }
 }
 
@@ -529,9 +517,7 @@ void SceneReader::readSphereCollider(std::string name)
     sphereCollider->radius = j.at(name).at("radius").get<float>();
     sphereCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(sphereCollider);
+    assignToEntity(name, sphereCollider);
 }
 
 void SceneReader::readBoxCollider(std::string name)
@@ -549,13 +535,7 @@ void SceneReader::readBoxCollider(std::string name)
 
     boxCollider->calculateVert();
 
-    //TODO PODANIE O ZROBIENIE Z TEGO FUNKCJI
-    //ZDJĘCIE #1
-    //ZDJĘCIE #2
-    //ZDJĘCIE #3
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(boxCollider);
+    assignToEntity(name, boxCollider);
 }
 
 void SceneReader::readRigidbody(std::string name)
@@ -573,7 +553,12 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();
     rigidbody->ignoreGravity = j.at(name).at("ignoreGravity").get<bool>();
 
+    assignToEntity(name, rigidbody);
+}
+
+void SceneReader::assignToEntity(std::string name, Component* component)
+{
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(rigidbody);
+    entity->addComponent(component);
 }

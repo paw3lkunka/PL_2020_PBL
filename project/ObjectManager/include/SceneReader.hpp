@@ -6,6 +6,7 @@
 
 class AssetReader;
 class ObjectModule;
+struct Component;
 
 class SceneReader
 {
@@ -42,6 +43,8 @@ private:
     void readSphereCollider(std::string name);
     void readBoxCollider(std::string name);
     void readRigidbody(std::string name);
+
+    void assignToEntity(std::string name, Component* component);
 };
 
 #endif /* !SCENEREADER_HPP_ */

@@ -168,49 +168,40 @@ void SceneWriter::saveScene(const char* filePath)
 
         j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
         j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
-        if(dynamic_cast<Transform*>(objContainerPtr->components[i]))
+        if(Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
-            Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]);
             saveTransform(name, temp);
         }
-        else if(dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
+        else if(AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
-            AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]);
             saveAudioSource(name, temp);
         }
-        else if(dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
+        else if(AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
         {
-            AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]);
             saveAudioListener(name, temp);
         }
-        else if(dynamic_cast<Camera*>(objContainerPtr->components[i]))
+        else if(Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]))
         {
-            Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]);
             saveCamera(name, temp);
         }
-        else if(dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]))
+        else if(BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]))
         {
-            BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]);
             saveBillboardRenderer(name, temp);
         }
-        else if(dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
+        else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
-            MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]);
             saveMeshRenderer(name, temp);
         }
-        else if(dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
+        else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
-            SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
             saveSphereCollider(name, temp);
         }
-        else if(dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
-        {   
-            BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]);
+        else if(BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
+        {
             saveBoxCollider(name, temp);
         }
-        else if(dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
+        else if(Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
         {
-            Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]);
             saveRigidbody(name, temp);
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
