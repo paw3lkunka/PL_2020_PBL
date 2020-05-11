@@ -12,13 +12,13 @@ class Rigidbody;
  * @brief Calculate speed and position of rigidbody depending on forces, and current speed
  * 
  */
-class KinematicSystem : public System
+class PhysicSystem : public System
 {
     public:
         static glm::vec3 G_CONST;
 
-        KinematicSystem() = default;
-        virtual ~KinematicSystem() = default;
+        PhysicSystem() = default;
+        virtual ~PhysicSystem() = default;
 
     protected:
         virtual bool assertEntity(Entity* entity);
