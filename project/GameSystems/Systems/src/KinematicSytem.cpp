@@ -17,8 +17,8 @@ bool KinematicSystem::assertEntity(Entity* entity)
 
 void KinematicSystem::fixedUpdate()
 {
-    glm::vec3 force;
-    glm::vec3 torque;
+    glm::vec3 force = {0,0,0};
+    glm::vec3 torque = {0,0,0};
 
     for(Impulse& impuse : rBodyPtr->impulses)
     {
@@ -38,14 +38,8 @@ void KinematicSystem::fixedUpdate()
     glm::vec3 angularAcceleration = rBodyPtr->momentOfInertia * torque;
     rBodyPtr->angularVelocity += angularAcceleration * Core::FIXED_TIME_STEP_F;
 
-//EXPERIMENT simplification
     transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
-    transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation(); 
+    transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
-/*
-    glm::vec3 offset = rBodyPtr->velocity * Core::FIXED_TIME_STEP_F + acceleration * Core::FIXED_TIME_STEP_F * Core::FIXED_TIME_STEP_F / 2.0f;
-    glm::vec4 offsetLocal = transformPtr->worldToLocalMatrix * glm::vec4(offset, 0.0f);
-    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(offsetLocal);
-*/
     rBodyPtr->impulses.clear();
 }

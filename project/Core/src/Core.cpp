@@ -128,7 +128,7 @@ int Core::init()
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
-    //gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
 
 #pragma region AudioModule demo - initialization
@@ -264,6 +264,6 @@ AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
 BillboardRendererSystem Core::billboardSystem;
 CollisionDetectionSystem Core::collisionDetectionSystem;
-//GravitySystem Core::gravitySystem;
-//KinematicSystem Core::kinematicSystem;
+GravitySystem Core::gravitySystem;
+KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;

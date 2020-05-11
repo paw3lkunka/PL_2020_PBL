@@ -623,7 +623,7 @@
     "component041": {
         "angularDrag": 1.0,
         "drag": 1.0,
-        "entity id": 13,
+        "entity id": 17,
         "ignoreGravity": false,
         "mass": 5.0,
         "momentOfInertia": {
@@ -770,11 +770,10 @@
     "entity013": {
         "components": [
             64,
-            65,
-            84
+            65
         ],
         "id": 13,
-        "name": "SphereTrigger",
+        "name": "",
         "serializationID": 63
     },
     "entity014": {
@@ -811,7 +810,8 @@
             79,
             80,
             81,
-            82
+            82,
+            84
         ],
         "id": 17,
         "name": "sphereSound",

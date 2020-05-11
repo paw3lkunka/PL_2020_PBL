@@ -19,9 +19,21 @@ struct Component : public ISerializable
      */
     Entity* entityPtr;
 };
-//TODO Documentation (and make it camelCase, goddamnit)
+
+/**
+ * @brief Get name of entity containing given component
+ * 
+ * @param c - Reference to component
+ * @return const std::string - Name of entity
+ */
 const std::string Name(Component& c);
-//TODO Documentation (and make it camelCase, goddamnit)
+
+/**
+ * @brief Get name of entity containing given component
+ * 
+ * @param c - Pointer to component
+ * @return const std::string - Name of entity
+ */
 const std::string Name(Component* c);
 
 
