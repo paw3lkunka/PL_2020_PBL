@@ -9,6 +9,7 @@ _file2="$(dirname "$0")/project/Autogen/include/ComponentsPreDeclarations.hxx"
 _guardian2="COMPONENTS_PRE_DECL_INC_AUTOGEN"
 
 touch $_file1 $_file2
+cd $_path
 > $_file1
 > $_file2
 
