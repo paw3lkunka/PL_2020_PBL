@@ -135,7 +135,6 @@ bool AssetReader::loadMesh(std::string path)
             s->globalInverseTransform = globalInverseTransform;
             s->rootBone = rootBone;
         }
-
     }
 
     return true;

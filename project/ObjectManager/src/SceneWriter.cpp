@@ -2,6 +2,7 @@
 #include "Components.inc"
 #include "ObjectModule.hpp"
 #include "ObjectContainer.hpp"
+#include "ObjectExceptions.inl"
 
 #include "Material.hpp"
 #include "Texture.hpp"
@@ -15,8 +16,15 @@
 #include <iomanip>
 #include <glm/gtc/type_ptr.hpp>
 
+bool SceneWriter::hasInstance = false;
+
 SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 {
+    if(hasInstance)
+    {
+        throw TooManyInstancesException("SceneWriter");
+    }
+    hasInstance = true;
     objModulePtr = objectModulePtr;
     objContainerPtr = &objectModulePtr->objectContainer;
 }

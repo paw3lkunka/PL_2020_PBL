@@ -28,7 +28,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     meshes.reserve(50);
     textures.reserve(50);
     cubemaps.reserve(10);
-    materials.reserve(20);
+    materials.reserve(30);
 }
 
 ObjectContainer::~ObjectContainer()

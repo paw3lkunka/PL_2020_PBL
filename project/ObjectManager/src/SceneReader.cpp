@@ -222,13 +222,13 @@ void SceneReader::readMeshes()
         if(meshType == "MeshCustom")
         {
             objModulePtr->newModel(filePath.c_str());
-            auto mesh = objModulePtr->getMeshCustomFromPath(meshPath.c_str());
+            auto mesh = objModulePtr->getMeshCustomPtrByPath(meshPath.c_str());
             mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
         }
         else if(meshType == "MeshSkinned")
         {
             objModulePtr->newModel(filePath.c_str());
-            auto mesh = objModulePtr->getMeshSkinnedFromPath(meshPath.c_str());
+            auto mesh = objModulePtr->getMeshSkinnedPtrByPath(meshPath.c_str());
             mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
         }
         else;

@@ -41,6 +41,7 @@ public:
 protected:
 private:
 
+    static bool hasInstance;
     ///@brief pointer to composition parent
     ObjectModule* objModulePtr;
 

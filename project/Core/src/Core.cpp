@@ -87,7 +87,36 @@ int Core::init()
 
     if (updateScene)
     {
-        
+        objectModule.newModel("Resources/Models/paddle_and_hands.FBX");
+
+        Shader* unlitColor = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
+        {
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "paddle");
+            mr->material->setVec4("color", glm::vec4(0.592, 0.313, 0.09, 1.0));
+
+            Transform* trans = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(30, 0, 30);
+            trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
+        }
+        {
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "hand_right");
+            mr->material->setVec4("color", glm::vec4(0.956, 0.384, 0.898, 1.0));
+            
+            Transform* trans = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(-30, 0, -30);
+            trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
+        }
+        {
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "hand_left");
+            mr->material->setVec4("color", glm::vec4(0.737, 0.352, 0.929, 1.0));
+
+            Transform* trans = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(-60, 0, -30);
+            trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
+        }
     }
 
 #pragma region Renderer
@@ -101,7 +130,7 @@ int Core::init()
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
+    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
@@ -125,7 +154,7 @@ int Core::init()
 
 #pragma region Camera
     // ! Finding main camera
-    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
+    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
 
     gameSystemsModule.addSystem(&cameraSystem);
 
@@ -148,8 +177,8 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sphereSound")->getComponentPtr<AudioSource>()));
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion  
 
     // * ===== Game loop ===================================================
