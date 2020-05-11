@@ -6,6 +6,8 @@
 #include "Entity.hpp"
 #include "Components.inc"
 
+glm::vec3 KinematicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
+
 bool KinematicSystem::assertEntity(Entity* entity)
 {
     transformPtr = entity->getComponentPtr<Transform>();
@@ -28,6 +30,11 @@ void KinematicSystem::fixedUpdate()
 
     glm::vec3 dragForce = -0.5f * rBodyPtr->drag * rBodyPtr->velocity * glm::abs(rBodyPtr->velocity);
     force += dragForce;
+
+    if( !rBodyPtr->ignoreGravity)
+    {
+        force += -rBodyPtr->mass * G_CONST;
+    }
 
     glm::vec3 acceleration = force / rBodyPtr->mass;
     rBodyPtr->velocity += acceleration * Core::FIXED_TIME_STEP_F;    

@@ -3,6 +3,8 @@
 
 #include "System.hpp"
 
+#include <glm/glm.hpp>
+
 class Transform;
 class Rigidbody;
 
@@ -13,6 +15,7 @@ class Rigidbody;
 class KinematicSystem : public System
 {
     public:
+        static glm::vec3 G_CONST;
 
         KinematicSystem() = default;
         virtual ~KinematicSystem() = default;

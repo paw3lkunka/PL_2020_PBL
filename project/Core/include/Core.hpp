@@ -227,8 +227,6 @@ class Core
         //TODO documentation
         static CollisionDetectionSystem collisionDetectionSystem;
         //TODO documentation
-        static GravitySystem gravitySystem;
-        //TODO documentation
         static KinematicSystem kinematicSystem;
         //TODO documentation
         static SkeletonSystem skeletonSystem;
