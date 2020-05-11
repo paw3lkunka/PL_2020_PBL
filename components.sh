@@ -9,7 +9,6 @@ _file2="$(dirname "$0")/project/Autogen/include/ComponentsPreDeclarations.hxx"
 _guardian2="COMPONENTS_PRE_DECL_INC_AUTOGEN"
 
 touch $_file1 $_file2
-cd $_path
 > $_file1
 > $_file2
 
@@ -26,10 +25,10 @@ echo >> $_file1
 echo "#include \"Component.inl\"" >> $_file1
 echo | tee -a $_file1 >> $_file2
 
-for _header in *
+for _header in $_path/*
 do
-    echo "    #include \"$_header\"" >> $_file1
-    _class=$(echo $_header | cut -f1 -d'.')
+    echo "    #include \"$(basename $_header)\"" >> $_file1
+    _class=$(echo $(basename $_header) | cut -f1 -d'.')
     echo "class $_class;" >> $_file2
 done
 

@@ -6,9 +6,9 @@
 #include "Entity.hpp"
 #include "Components.inc"
 
-glm::vec3 KinematicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
+glm::vec3 PhysicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
 
-bool KinematicSystem::assertEntity(Entity* entity)
+bool PhysicSystem::assertEntity(Entity* entity)
 {
     transformPtr = entity->getComponentPtr<Transform>();
     rBodyPtr = entity->getComponentPtr<Rigidbody>();
@@ -17,7 +17,7 @@ bool KinematicSystem::assertEntity(Entity* entity)
 
 #include <iostream>
 
-void KinematicSystem::fixedUpdate()
+void PhysicSystem::fixedUpdate()
 {
     glm::vec3 force = {0,0,0};
     glm::vec3 torque = {0,0,0};
