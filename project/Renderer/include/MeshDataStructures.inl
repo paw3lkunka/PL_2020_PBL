@@ -21,7 +21,7 @@ struct Vertex
  */
 struct VertexSkinned
 {
-    static constexpr int MAX_WEIGHTS = 4;
+    static constexpr int MAX_WEIGHTS = 6;
     static constexpr int MAX_BONES = 128;
 
     // IMPORTANT: It's easier to just copy these from Vertex and make offsetof than guess the offset and make mistakes

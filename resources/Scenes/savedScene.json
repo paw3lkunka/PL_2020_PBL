@@ -1,10 +1,10 @@
 {
     "Amounts": {
-        "components": 48,
+        "components": 42,
         "cubemaps": 1,
-        "entities": 21,
-        "materials": 12,
-        "meshes": 11,
+        "entities": 18,
+        "materials": 9,
+        "meshes": 8,
         "shaders": 5,
         "textures": 1
     },
@@ -444,10 +444,10 @@
             "z": 126.61427307128906
         },
         "localRotation": {
-            "w": 0.998725175857544,
-            "x": 0.04797222092747688,
-            "y": -0.015689272433519363,
-            "z": 0.0007536099292337894
+            "w": 0.9881290197372437,
+            "x": 0.11258309334516525,
+            "y": -0.10385652631521225,
+            "z": 0.011832958087325096
         },
         "localScale": {
             "x": 1.0,
@@ -460,9 +460,9 @@
     },
     "component032": {
         "at": {
-            "x": 0.031266242265701294,
-            "y": 0.0958457887172699,
-            "z": -0.9949049949645996
+            "x": 0.20258291065692902,
+            "y": 0.2249511182308197,
+            "z": -0.9530777335166931
         },
         "entity id": 15,
         "gain": 1.0,
@@ -470,9 +470,9 @@
         "serializationID": 73,
         "type": "AudioListener",
         "up": {
-            "x": -0.0030105975456535816,
-            "y": 0.9953961968421936,
-            "z": 0.09579849243164063
+            "x": -0.04676996171474457,
+            "y": 0.9743700623512268,
+            "z": 0.2200354039669037
         }
     },
     "component033": {
@@ -633,93 +633,6 @@
         },
         "serializationID": 84,
         "type": "Rigidbody"
-    },
-    "component042": {
-        "entity id": 18,
-        "localPosition": {
-            "x": 30.0,
-            "y": 0.0,
-            "z": 30.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
-        },
-        "serializationID": 86,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component043": {
-        "entity id": 18,
-        "material": 97,
-        "mesh": 87,
-        "serializationID": 88,
-        "type": "MeshRenderer"
-    },
-    "component044": {
-        "entity id": 19,
-        "localPosition": {
-            "x": -30.0,
-            "y": 0.0,
-            "z": -30.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
-        },
-        "serializationID": 90,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component045": {
-        "entity id": 19,
-        "material": 98,
-        "mesh": 91,
-        "serializationID": 92,
-        "type": "MeshRenderer"
-    },
-    "component046": {
-        "entity id": 20,
-        "localPosition": {
-            "x": -60.0,
-            "y": 0.0,
-            "z": -30.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
-        },
-        "serializationID": 94,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component047": {
-        "entity id": 20,
-        "material": 99,
-        "mesh": 95,
-        "serializationID": 96,
-        "type": "MeshRenderer"
     },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox/pz.png",
@@ -903,33 +816,6 @@
         "id": 17,
         "name": "sphereSound",
         "serializationID": 78
-    },
-    "entity018": {
-        "components": [
-            86,
-            88
-        ],
-        "id": 18,
-        "name": "Paddle",
-        "serializationID": 85
-    },
-    "entity019": {
-        "components": [
-            90,
-            92
-        ],
-        "id": 19,
-        "name": "Hand_right",
-        "serializationID": 89
-    },
-    "entity020": {
-        "components": [
-            94,
-            96
-        ],
-        "id": 20,
-        "name": "Hand_left",
-        "serializationID": 93
     },
     "material000": {
         "cubemaps": {},
@@ -1261,17 +1147,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.9995065927505493,
-                -0.0030105970799922943,
-                -0.031266238540410995,
+                0.9781475067138672,
+                -0.04676995798945427,
+                -0.20258289575576782,
                 0.0,
-                -0.0,
-                0.9953961968421936,
-                -0.0958457738161087,
+                -7.4505797087454084e-09,
+                0.974370002746582,
+                -0.22495108842849731,
                 0.0,
-                0.03141084685921669,
-                0.09579848498106003,
-                0.9949049949645996,
+                0.2079116404056549,
+                0.2200353592634201,
+                0.9530776143074036,
                 0.0,
                 0.0,
                 0.0,
@@ -1582,228 +1468,6 @@
             ]
         }
     },
-    "material009": {
-        "cubemaps": {},
-        "floats": {},
-        "ints": {},
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "view": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "paddle",
-        "serializationID": 97,
-        "shaderSerializationID": 35,
-        "textures": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.5920000076293945,
-                0.31299999356269836,
-                0.09000000357627869
-            ]
-        }
-    },
-    "material010": {
-        "cubemaps": {},
-        "floats": {},
-        "ints": {},
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "view": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "hand_right",
-        "serializationID": 98,
-        "shaderSerializationID": 35,
-        "textures": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.9559999704360962,
-                0.3840000033378601,
-                0.8980000019073486
-            ]
-        }
-    },
-    "material011": {
-        "cubemaps": {},
-        "floats": {},
-        "ints": {},
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "view": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "hand_left",
-        "serializationID": 99,
-        "shaderSerializationID": 35,
-        "textures": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.7369999885559082,
-                0.35199999809265137,
-                0.9290000200271606
-            ]
-        }
-    },
     "mesh000": {
         "filePath": "Resources/Models/unit_sphere.fbx",
         "meshPath": "Resources/Models/unit_sphere.fbx/Sphere001",
@@ -1851,24 +1515,6 @@
         "meshPath": "Resources/Models/Water.FBX/Water",
         "serializationID": 33,
         "type": "MeshCustom"
-    },
-    "mesh008": {
-        "filePath": "Resources/Models/paddle_and_hands.FBX",
-        "meshPath": "Resources/Models/paddle_and_hands.FBX/Paddle",
-        "serializationID": 87,
-        "type": "MeshCustom"
-    },
-    "mesh009": {
-        "filePath": "Resources/Models/paddle_and_hands.FBX",
-        "meshPath": "Resources/Models/paddle_and_hands.FBX/Hand_right",
-        "serializationID": 91,
-        "type": "MeshSkinned"
-    },
-    "mesh010": {
-        "filePath": "Resources/Models/paddle_and_hands.FBX",
-        "meshPath": "Resources/Models/paddle_and_hands.FBX/Hand_left",
-        "serializationID": 95,
-        "type": "MeshSkinned"
     },
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/UnlitColor/UnlitColor.frag",
