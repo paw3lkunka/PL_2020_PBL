@@ -31,8 +31,8 @@
 
 // * ECS
 #include "Entity.hpp"
-#include "Components.inc"
-#include "Systems.inc"
+#include "ComponentsPreDeclarations.hxx"
+#include "SystemsPreDeclarations.hxx"
 
 // * Others
 
@@ -73,7 +73,7 @@ void ErrorLog(const char* log);
 /**
  * @brief euler to quaternion conversion
  *
- * @param eulerAngles euler angle 
+ * @param eulerAngles euler angle
  * @return glm::quat quaternion representatoin of angle
  */
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles);
@@ -91,6 +91,14 @@ class Core
     friend void ErrorLog(const char* log);
 #pragma endregion
 
+#pragma region setup
+    public:       
+        /**
+         * @brief Determines, if scene file should be updated during initialization 
+         */
+        bool updateScene = false;
+#pragma endregion
+
 #pragma region Constants
     public:       
         /// @brief identity matrix
@@ -104,6 +112,9 @@ class Core
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
+
+        /// @brief frame-independent time between updates in seconds in lower precision.
+        static constexpr float FIXED_TIME_STEP_F = (float)FIXED_TIME_STEP;
 #pragma endregion
 
 #pragma region Functions
@@ -202,21 +213,25 @@ class Core
 
     public:
         //TODO documentation
-        CameraSystem cameraSystem;
+        static CameraSystem cameraSystem;
         //TODO documentation
-        CameraControlSystem cameraControlSystem;
+        static CameraControlSystem cameraControlSystem;
         //TODO documentation
-        AudioSourceSystem audioSourceSystem;
+        static AudioSourceSystem audioSourceSystem;
         //TODO documentation
-        AudioListenerSystem audioListenerSystem;
+        static AudioListenerSystem audioListenerSystem;
         //TODO documentation
-        MeshRendererSystem rendererSystem;
+        static MeshRendererSystem rendererSystem;
         //TODO documentation
-        BillboardRendererSystem billboardSystem;
+        static BillboardRendererSystem billboardSystem;
         //TODO documentation
-        SkeletonSystem skeletonSystem;
+        static CollisionDetectionSystem collisionDetectionSystem;
         //TODO documentation
-        CollisionDetectionSystem collisionDetectionSystem;
+        static GravitySystem gravitySystem;
+        //TODO documentation
+        static KinematicSystem kinematicSystem;
+        //TODO documentation
+        static SkeletonSystem skeletonSystem;
 
 #pragma endregion
 

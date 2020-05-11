@@ -1,11 +1,16 @@
 #ifndef COLLISIONDETECTION_HPP_
 #define COLLISIONDETECTION_HPP_
 
-#include "System.hpp"
+#include <vector>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
-#include <vector>
 
+#include "CollisionDataStructures.inl"
+#include "System.hpp"
+
+enum class ComponentType;
+struct Projection1D;
 class Transform;
 class Collider;
 class BoxCollider;
@@ -28,12 +33,21 @@ class CollisionDetectionSystem : public System
     private:
         std::vector<Collider*> colliders;
         std::vector<Transform*> transforms;
+        std::unordered_set<TriggerData,TriggerDataHasher,TriggerDataEquals> activeTriggers;
 
-        glm::vec3 collsionBB(BoxCollider* of, BoxCollider* with, Transform* ofT, Transform* withT);
-        glm::vec3 collsionBS(BoxCollider* of, SphereCollider* with, Transform* ofT, Transform* withT);
+        template<class T>
+        void collisionOf(T* collider);
 
-        glm::vec3 collsionSS(SphereCollider* of, SphereCollider* with, Transform* ofT, Transform* withT);
-        glm::vec3 collsionSB(SphereCollider* of, BoxCollider* with, Transform* ofT, Transform* withT);
+        template<class T1, class T2>
+        void collisionWith(T1* collider1, T2* collider2, Transform* transform2);
+
+        template<class T1, class T2>
+        bool collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
+        
+        Projection1D axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld);
+        Projection1D axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld);
 };
+
+#include "CollisionDetectionSystem.ipp"
 
 #endif /* !COLLISIONDETECTION_HPP_ */

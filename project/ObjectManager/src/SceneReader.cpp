@@ -274,6 +274,16 @@ void SceneReader::readComponents()
             std::cout << "SphereCollider" << std::endl;
             readSphereCollider(name);
         }
+        else if(componentType == "BoxCollider")
+        {
+            std::cout << "BoxCollider" << std::endl;
+            readBoxCollider(name);
+        }
+        else if(componentType == "Rigidbody")
+        {
+            std::cout << "Rigidbody" << std::endl;
+            readRigidbody(name);
+        }
         else if(componentType == "BillboardRenderer")
         {
             std::cout << "BillboardRenderer" << std::endl;
@@ -522,4 +532,48 @@ void SceneReader::readSphereCollider(std::string name)
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     entity->addComponent(sphereCollider);
+}
+
+void SceneReader::readBoxCollider(std::string name)
+{
+    auto boxCollider = objModulePtr->newEmptyComponent<BoxCollider>();
+    boxCollider->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    
+    boxCollider->center.x = j.at(name).at("center").at("x").get<float>();
+    boxCollider->center.y = j.at(name).at("center").at("y").get<float>();
+    boxCollider->center.z = j.at(name).at("center").at("z").get<float>();
+    
+    boxCollider->halfSize.x = j.at(name).at("halfSize").at("x").get<float>();
+    boxCollider->halfSize.y = j.at(name).at("halfSize").at("y").get<float>();
+    boxCollider->halfSize.z = j.at(name).at("halfSize").at("z").get<float>();
+
+    boxCollider->calculateVert();
+
+    //TODO PODANIE O ZROBIENIE Z TEGO FUNKCJI
+    //ZDJĘCIE #1
+    //ZDJĘCIE #2
+    //ZDJĘCIE #3
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(boxCollider);
+}
+
+void SceneReader::readRigidbody(std::string name)
+{
+    auto rigidbody = objModulePtr->newEmptyComponent<Rigidbody>();
+    rigidbody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    rigidbody->mass = j.at(name).at("mass").get<float>();
+
+    rigidbody->momentOfInertia[0][0] = j.at(name).at("momentOfInertia").at("0,0").get<float>();
+    rigidbody->momentOfInertia[1][1] = j.at(name).at("momentOfInertia").at("1,1").get<float>();
+    rigidbody->momentOfInertia[2][2] = j.at(name).at("momentOfInertia").at("2,2").get<float>();
+
+    rigidbody->drag = j.at(name).at("drag").get<float>();
+    rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();
+    rigidbody->ignoreGravity = j.at(name).at("ignoreGravity").get<bool>();
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(rigidbody);
 }

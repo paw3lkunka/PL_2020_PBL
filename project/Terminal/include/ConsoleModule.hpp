@@ -1,7 +1,6 @@
 #ifndef CONSOLEMODULE_HPP_
 #define CONSOLEMODULE_HPP_
 
-#include <iostream>
 #include "IModule.inl"
 
 class MessageBus;
@@ -21,7 +20,8 @@ class ConsoleModule : public IModule {
          */
         virtual void receiveMessage(Message msg);
 
-    private:        
+    private:
+
 };
 
 #endif /* !CONSOLEMODULE_HPP_ */

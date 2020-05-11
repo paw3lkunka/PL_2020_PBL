@@ -2,6 +2,7 @@
 #define _MESHQUAD_HPP
 
 #include "Mesh.inl"
+#include "MeshDataStructures.inl"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>

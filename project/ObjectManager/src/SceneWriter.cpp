@@ -203,6 +203,16 @@ void SceneWriter::saveScene(const char* filePath)
             SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
             saveSphereCollider(name, temp);
         }
+        else if(dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
+        {   
+            BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]);
+            saveBoxCollider(name, temp);
+        }
+        else if(dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
+        {
+            Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]);
+            saveRigidbody(name, temp);
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
@@ -314,6 +324,29 @@ void SceneWriter::saveSphereCollider(std::string name, SphereCollider* component
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
     j[name]["center"]["z"] = componentPtr->center.z;
+}
+
+void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
+{
+    j[name]["type"] = "BoxCollider";
+    j[name]["center"]["x"] = componentPtr->center.x;
+    j[name]["center"]["y"] = componentPtr->center.y;
+    j[name]["center"]["z"] = componentPtr->center.z;
+    j[name]["halfSize"]["x"] = componentPtr->halfSize.x;
+    j[name]["halfSize"]["y"] = componentPtr->halfSize.y;
+    j[name]["halfSize"]["z"] = componentPtr->halfSize.z;
+}
+
+void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
+{
+    j[name]["type"] = "Rigidbody";
+    j[name]["mass"] = componentPtr->mass;
+    j[name]["momentOfInertia"]["0,0"] = componentPtr->momentOfInertia[0][0];
+    j[name]["momentOfInertia"]["1,1"] = componentPtr->momentOfInertia[1][1];
+    j[name]["momentOfInertia"]["2,2"] = componentPtr->momentOfInertia[2][2];
+    j[name]["drag"] = componentPtr->drag;
+    j[name]["angularDrag"] = componentPtr->angularDrag;
+    j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
