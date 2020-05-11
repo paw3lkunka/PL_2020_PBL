@@ -17,22 +17,33 @@ bool KinematicSystem::assertEntity(Entity* entity)
 
 void KinematicSystem::fixedUpdate()
 {
-    // a = F / m
-    // V = V0 + a * t
-    // s = V * t + a * t^2 / 2
-    glm::vec3 dragForce = 0.5f * rBodyPtr->drag * rBodyPtr->velocity * glm::abs(rBodyPtr->velocity);
-    glm::vec3 force = rBodyPtr->force + dragForce;
+    glm::vec3 force = {0,0,0};
+    glm::vec3 torque = {0,0,0};
 
-    glm::vec3 acceleration =  force / rBodyPtr->mass;
+    for(Impulse& impuse : rBodyPtr->impulses)
+    {
+        force += impuse.force;
+        torque += glm::cross(impuse.point, impuse.force);
+    }
+
+    glm::vec3 dragForce = 0.5f * rBodyPtr->drag * rBodyPtr->velocity * glm::abs(rBodyPtr->velocity);
+    force += dragForce;
+
+    glm::vec3 acceleration = force / rBodyPtr->mass;
     rBodyPtr->velocity += acceleration * Core::FIXED_TIME_STEP_F;    
 
-//EXPERIMENT simplification
-    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
+    glm::vec3 dragTorque = 0.5f * rBodyPtr->angularDrag * rBodyPtr->angularVelocity * glm::abs(rBodyPtr->angularDrag);
+    torque += dragTorque;
 
-/*
-    glm::vec3 offset = rBodyPtr->velocity * Core::FIXED_TIME_STEP_F + acceleration * Core::FIXED_TIME_STEP_F * Core::FIXED_TIME_STEP_F / 2.0f;
-    glm::vec4 offsetLocal = transformPtr->worldToLocalMatrix * glm::vec4(offset, 0.0f);
-    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(offsetLocal);
-*/
-    rBodyPtr->force = {0.0f, 0.0f, 0.0f};
+    glm::vec3 angularAcceleration = rBodyPtr->momentOfInertia * torque;
+    rBodyPtr->angularVelocity += angularAcceleration * Core::FIXED_TIME_STEP_F;
+
+    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
+    transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
+
+    std::cout << "Velocity: " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << "\n" ;
+    std::cout << "Position: " << transformPtr->getLocalPosition().x << ", " << transformPtr->getLocalPosition().x << ", " << transformPtr->getLocalPosition().x << "\n" ;
+    std::cout << "Velocity: " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << ", " << rBodyPtr->velocity.x << "\n" ;
+
+    rBodyPtr->impulses.clear();
 }

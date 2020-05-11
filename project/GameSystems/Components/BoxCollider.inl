@@ -25,7 +25,10 @@ struct BoxCollider : public Collider
     }
 
     //TODO documentation
-    BoxCollider(glm::vec3 centre, glm::vec3 size)
+    BoxCollider() = default;
+
+    //TODO documentation
+    BoxCollider(glm::vec3 center, glm::vec3 size)
     {
         this->center = center;
         this->halfSize = size * 0.5f;
@@ -33,7 +36,7 @@ struct BoxCollider : public Collider
     }
     
     //TODO documentation
-    BoxCollider(glm::vec3 centre, float width, float height, float depth)
+    BoxCollider(glm::vec3 center, float width, float height, float depth)
     {
         this->center = center;
         this->halfSize = {width * 0.5f, height * 0.5f, depth * 0.5f};

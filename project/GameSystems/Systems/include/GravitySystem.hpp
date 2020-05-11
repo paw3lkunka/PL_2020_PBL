@@ -7,6 +7,9 @@
 
 class Rigidbody;
 
+//TODO USUŃ TO!!!!
+//do sprawdzającego requesta - jeśli to czytasz, to opieprz Andrzeja za śmiecenie na repo
+
 /**
  * @brief Calculate gravity force for rigidbody 
  */

@@ -85,6 +85,11 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
+    if (updateScene)
+    {
+        
+    }
+
 #pragma region Renderer
 
     // ! ----- Renderer initialization block -----
@@ -242,6 +247,6 @@ AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
 BillboardRendererSystem Core::billboardSystem;
 CollisionDetectionSystem Core::collisionDetectionSystem;
-//GravitySystem Core::gravitySystem;
-//KinematicSystem Core::kinematicSystem;
+GravitySystem Core::gravitySystem;
+KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;

@@ -8,8 +8,8 @@ _guardian1="SYSTEMS_INC_AUTOGEN"
 _file2="$(dirname "$0")/project/Autogen/include/SystemsPreDeclarations.hxx"
 _guardian2="SYSTEMS_PRE_DECL__INC_AUTOGEN"
 
-cd $_path
 touch $_file1 $_file2
+cd $_path
 > $_file1
 > $_file2
 

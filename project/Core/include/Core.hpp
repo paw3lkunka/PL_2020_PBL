@@ -91,6 +91,14 @@ class Core
     friend void ErrorLog(const char* log);
 #pragma endregion
 
+#pragma region setup
+    public:       
+        /**
+         * @brief Determines, if scene file should be updated during initialization 
+         */
+        bool updateScene = false;
+#pragma endregion
+
 #pragma region Constants
     public:       
         /// @brief identity matrix
