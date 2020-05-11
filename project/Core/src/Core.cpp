@@ -1,17 +1,7 @@
 #include "Core.hpp"
-#include "Message.inl"
-#include "Event.hpp"
-#include "Cubemap.hpp"
-#include "FileStructures.inl"
 
-// * C++ std lib
-#include <vector>
-#include <iostream>
-#include <utility>
-#include <sstream>
-
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include "Components.inc"
+#include "Systems.inc"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -114,8 +104,10 @@ int Core::init()
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
+    gameSystemsModule.addSystem(&collisionDetectionSystem);
+    //gameSystemsModule.addSystem(&gravitySystem);
+    //gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
-
 
 #pragma region AudioModule demo - initialization
     
@@ -128,7 +120,6 @@ int Core::init()
 
 #pragma region Camera
     // ! Finding main camera
-    
     CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
 
     gameSystemsModule.addSystem(&cameraSystem);
@@ -136,7 +127,7 @@ int Core::init()
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
-    
+
     // Everything is ok.
     return 0;
 }
@@ -243,3 +234,14 @@ void Core::close()
 {
     glfwSetWindowShouldClose(window,true);
 }
+
+CameraSystem Core::cameraSystem;
+CameraControlSystem Core::cameraControlSystem;
+AudioSourceSystem Core::audioSourceSystem;
+AudioListenerSystem Core::audioListenerSystem;
+MeshRendererSystem Core::rendererSystem;
+BillboardRendererSystem Core::billboardSystem;
+CollisionDetectionSystem Core::collisionDetectionSystem;
+//GravitySystem Core::gravitySystem;
+//KinematicSystem Core::kinematicSystem;
+SkeletonSystem Core::skeletonSystem;

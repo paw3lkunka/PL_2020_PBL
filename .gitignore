@@ -34,8 +34,14 @@
 #Visual Studio
 *.sln
 
+#Enviroment settings
 .vs/
 .vscode/
+
+#Build files
 [Bb]uild/
+
+#Auto-generated files
+project/Autogen/
 
 

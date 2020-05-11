@@ -1,5 +1,7 @@
 #include "ConsoleModule.hpp"
 
+#include <iostream>
+
 #include "MessageBus.hpp"
 #include "Message.inl"
 #include "MouseDataStructures.inl"
@@ -7,8 +9,8 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "CollisionDataStructures.inl"
-#include "MeshCustom.hpp"
-#include "AudioFile.hpp"
+#include "Components.inc"
+#include "Systems.inc"
 #include <assimp/scene.h>
 
 ConsoleModule::ConsoleModule()
@@ -208,21 +210,27 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::COLLSION_DETECT:
-        {
+        {/*
             CollisionData data = msg.getValue<CollisionData>();
             std::cout << data.cause << " collided with " << data.target << " separation vector: (" 
                 << data.separation.x << ", " 
                 << data.separation.y << ", "  
-                << data.separation.z << ")." << std::endl; 
+                << data.separation.z << ")." << std::endl; */
         }
         break;
         
     case Event::TRIGGER_ENTER:
-        //TODO implementation
+    {
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.trigger) << " was entered by: " << Name(tData.cause) << std::endl;
+    }
         break;
         
     case Event::TRIGGER_EXIT:
-        //TODO implementation
+    {
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.trigger) << " was exited by: " << Name(tData.cause) << std::endl;
+    }
         break;
 
     default:

@@ -2,6 +2,10 @@
 #define SKINNEDMESH_HPP_
 
 #include "Mesh.inl"
+#include "MeshDataStructures.inl"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <vector>
 

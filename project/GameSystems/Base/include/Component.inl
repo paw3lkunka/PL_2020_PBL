@@ -3,6 +3,8 @@
 
 #include "ISerializable.inl"
 
+#include <string>
+
 class Entity;
 
 /**
@@ -17,5 +19,10 @@ struct Component : public ISerializable
      */
     Entity* entityPtr;
 };
+//TODO Documentation (and make it camelCase, goddamnit)
+const std::string Name(Component& c);
+//TODO Documentation (and make it camelCase, goddamnit)
+const std::string Name(Component* c);
+
 
 #endif /* !COMPONENT_HPP_ */
