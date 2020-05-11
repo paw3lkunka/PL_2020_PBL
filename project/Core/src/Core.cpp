@@ -127,8 +127,8 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
-    //gameSystemsModule.addSystem(&gravitySystem);
-    //gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&gravitySystem);
+    gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
 
 #pragma region AudioModule demo - initialization
