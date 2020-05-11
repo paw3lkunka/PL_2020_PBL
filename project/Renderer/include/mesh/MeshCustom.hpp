@@ -1,8 +1,8 @@
 #ifndef _MESHCUSTOM_HPP
 #define _MESHCUSTOM_HPP
 
-#include "Mesh.hpp"
-#include "MeshDataStructures.inl"
+#include "mesh/Mesh.hpp"
+#include "mesh/MeshDataStructures.inl"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>

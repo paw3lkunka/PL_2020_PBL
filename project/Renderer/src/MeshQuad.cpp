@@ -1,4 +1,4 @@
-#include "MeshQuad.hpp"
+#include "mesh/MeshQuad.hpp"
 
 GLuint MeshQuad::vao = 0;
 GLuint MeshQuad::vbo = 0;

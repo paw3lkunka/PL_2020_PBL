@@ -9,9 +9,9 @@
 #include "Cubemap.hpp"
 #include "Material.hpp"
 #include "Transform.inl"
-#include "Mesh.hpp"
-#include "MeshCustom.hpp"
-#include "MeshSkinned.hpp"
+#include "mesh/Mesh.hpp"
+#include "mesh/MeshCustom.hpp"
+#include "mesh/MeshSkinned.hpp"
 
 bool ObjectContainer::hasInstance = false;
 

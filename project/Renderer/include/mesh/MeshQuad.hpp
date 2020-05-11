@@ -1,7 +1,7 @@
 #ifndef _MESHQUAD_HPP
 #define _MESHQUAD_HPP
 
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>

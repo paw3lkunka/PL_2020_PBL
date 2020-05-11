@@ -94,6 +94,13 @@ public:
      * @return const char* name
      */
     const char* getName();
+    
+    /**
+     * @brief Get the id of material
+     * 
+     * @return unsigned int Material's ID
+     */
+    unsigned int getID() { return ID; }
 
     /// @brief Get int of given name
     int getInt(std::string name);
@@ -107,8 +114,8 @@ public:
     glm::mat4& getMat4(std::string name);
 
 private:
-    static int idCount;
-    int ID;
+    static unsigned int idCount;
+    unsigned int ID;
     bool enableInstancing;
     Shader* shader;
     std::string name;

@@ -113,7 +113,6 @@ int Core::init()
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
 
 

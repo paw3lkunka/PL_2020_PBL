@@ -6,8 +6,8 @@
 #include "Material.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
-#include "MeshCustom.hpp"
-#include "MeshSkinned.hpp"
+#include "mesh/MeshCustom.hpp"
+#include "mesh/MeshSkinned.hpp"
 #include "Shader.hpp"
 #include "Entity.hpp"
 

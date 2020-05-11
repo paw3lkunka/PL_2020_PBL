@@ -7,7 +7,7 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "CollisionDataStructures.inl"
-#include "MeshCustom.hpp"
+#include "mesh/MeshCustom.hpp"
 #include "AudioFile.hpp"
 #include <assimp/scene.h>
 

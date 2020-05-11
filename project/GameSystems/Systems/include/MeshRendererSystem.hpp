@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "System.hpp"
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 #include "Material.hpp"
 
 struct MeshRenderer;
@@ -25,10 +25,6 @@ public:
     virtual void frameUpdate();
 
 private:
-    // Used for instanced rendering
-    // TODO: Using pointers as keys may not be the smartest idea, update to mesh and material ids 
-    std::unordered_map<std::pair<Mesh*, Material*>, std::vector<glm::mat4>> meshInstances;
-
     Transform* transform;
     MeshRenderer* meshRenderer;
 };

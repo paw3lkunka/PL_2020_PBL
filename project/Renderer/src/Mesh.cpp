@@ -1,4 +1,4 @@
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 
 unsigned int Mesh::idcount = 0;
 

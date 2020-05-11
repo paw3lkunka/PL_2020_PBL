@@ -212,8 +212,6 @@ class Core
         //TODO documentation
         MeshRendererSystem rendererSystem;
         //TODO documentation
-        BillboardRendererSystem billboardSystem;
-        //TODO documentation
         SkeletonSystem skeletonSystem;
         //TODO documentation
         CollisionDetectionSystem collisionDetectionSystem;

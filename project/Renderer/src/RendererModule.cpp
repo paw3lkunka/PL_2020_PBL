@@ -1,8 +1,10 @@
 #include "RendererModule.hpp"
 
 #include "Message.inl"
-#include "MeshQuad.hpp"
+#include "mesh/MeshQuad.hpp"
 #include "Shader.hpp"
+
+#include <algorithm>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -14,10 +16,26 @@ void RendererModule::receiveMessage(Message msg)
     switch (msg.getEvent())
     {
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
-            renderQueue.push(msg.getValue<MeshRenderer*>());
-            break;
-        case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
-            billboardQueue.push(msg.getValue<BillboardRenderer*>());
+            MeshRenderer* mr = msg.getValue<MeshRenderer*>();
+            if (mr->material->instancingEnabled)
+            {
+                // ? +++++ Create new instanced packet or just add an instance matrix +++++
+                auto ID = std::pair<unsigned int, unsigned int>(mr->mesh->getID(), mr->material->getID());
+                auto packet = instancedPackets.insert({ID, InstancedPacket(mr->mesh, mr->material)});
+                packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
+                // ? +++++ If packet was created, add it to the queue +++++
+                if (packet.second)
+                {
+                    renderQueue.push_back(&packet.first->second);
+                }
+            }
+            else
+            {
+                // ? +++++ Create new packet for normal rendering +++++
+                normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
+                // ? +++++ Add packet to render queue +++++
+                renderQueue.push_back(&normalPackets.back());
+            }
             break;
         case Event::RENDERER_SET_PROJECTION_MATRIX:
             projectionChanged = true;
@@ -39,6 +57,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     this->createInfo = createInfo;
     this->skyboxMaterial = skyboxMaterial;
 
+    normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
+    instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
 
     if (createInfo.cullFace)
     {
@@ -139,28 +159,10 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glBindVertexArray(0);
     }
 
-    // ! ----- Make buffer for billboard quad rendering -----
-    glGenVertexArrays(1, &billboardVao);
-    glGenBuffers(1, &billboardVbo);
-    glGenBuffers(1, &instancedVbo);
+    // * ----- Make buffer for instanced transforms -----
+    glGenBuffers(1, &instanceTransformBuffer);
 
-    glBindVertexArray(billboardVao);
-    glBindBuffer(GL_ARRAY_BUFFER, billboardVbo);
-    float vertices[20] = {
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f
-    };
-    glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), &vertices, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-
-    glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceTransformBuffer);
     std::size_t vec4Size = sizeof(glm::vec4);
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
@@ -179,6 +181,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
@@ -187,11 +190,6 @@ void RendererModule::render()
     if (window != nullptr)
     {
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
-        // if (createInfo.clearFlags & GL_COLOR_BUFFER_BIT)
-        // {
-        //     glClearColor(createInfo.clearColor.x, createInfo.clearColor.y, createInfo.clearColor.z, 1.0f);
-        // }
-
         glClear(createInfo.clearFlags);
 
         // ? ++++++ Send projection matrices to UBO if needed +++++
@@ -215,31 +213,18 @@ void RendererModule::render()
         }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+        // ? +++++ Calculate the View-Projection matrix +++++
+        glm::mat4 VP = (*projectionMatrix) * (*viewMatrix);
+
+        // ? +++++ Sort the render queue +++++
+        std::sort(renderQueue.begin(), renderQueue.end(), 
+            [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
+
         // ? +++++ Execute (order 66) rendering loop +++++
         while(!renderQueue.empty())
         {
-            renderQueue.front()->material->use();
-            renderQueue.front()->material->getShaderPtr()->setMat4("model", renderQueue.front()->modelMatrix);
-            renderQueue.front()->mesh->render();
-            renderQueue.pop();
-        }
-
-        // TODO Proper instanced rendering
-        if (!billboardQueue.empty())
-        {
-            billboardQueue.front()->material->use();
-            int i = 0, count = billboardQueue.size();
-            glBindBuffer(GL_ARRAY_BUFFER, instancedVbo);
-            glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-            while(!billboardQueue.empty())
-            {
-                glBufferSubData(GL_ARRAY_BUFFER, i * sizeof(glm::mat4), sizeof(glm::mat4), &billboardQueue.front()->modelMatrix);
-                billboardQueue.pop();
-                ++i;
-            }
-            glBindVertexArray(billboardVao);
-            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
-            glBindVertexArray(0);
+            renderQueue.front()->render(VP, instanceTransformBuffer);
+            renderQueue.pop_front();
         }
 
         // ? +++++ Render skybox with appropriate depth test function +++++

@@ -15,13 +15,6 @@ bool MeshRendererSystem::assertEntity(Entity* entity)
 
 void MeshRendererSystem::frameUpdate()
 {
-    if (meshRenderer->material->instancingEnabled())
-    {
-
-    }
-    else
-    {
-        meshRenderer->modelMatrix = transform->localToWorldMatrix;
-        GetCore().messageBus.sendMessage(Message(Event::RENDERER_ADD_MESH_TO_QUEUE, meshRenderer));
-    }
+    meshRenderer->modelMatrix = transform->localToWorldMatrix;
+    GetCore().messageBus.sendMessage(Message(Event::RENDERER_ADD_MESH_TO_QUEUE, meshRenderer));
 }

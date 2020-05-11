@@ -3,9 +3,12 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
-#include "BillboardRenderer.inl"
 
-#include <queue>
+#include "packets/RenderPacket.inl"
+#include "packets/NormalPacket.inl"
+#include "packets/InstancedPacket.inl"
+
+#include <deque>
 #include <map>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -51,8 +54,15 @@ public:
      * @brief Render current render queue
      */
     void render();
+    /**
+     * @brief Cleanup after frame rendering
+     */
+    void frameCleanup();
 
 private:
+    static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
+    static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
+
     GLFWwindow* window;
     RendererModuleCreateInfo createInfo;
     // * Skybox variables
@@ -60,14 +70,17 @@ private:
     Material* skyboxMaterial;
     // * Bone zone
     std::map<int, glm::mat4>* bones;
-    // HACK: Or not? Discuss this.
-    unsigned int billboardVao, billboardVbo, instancedVbo;
+    // * Instance buffer
+    unsigned int instanceTransformBuffer;
+    // * UBO buffers
     unsigned int viewProjectionBuffer, boneBuffer;
+    // * Dirty flags
     bool projectionChanged = false, viewChanged = false;
     glm::mat4* projectionMatrix, * viewMatrix;
-    std::queue<MeshRenderer*> renderQueue;
-    // HACK PLZ MAKE THIS POLYMORPHIC AS SOON AS YOU CAN
-    std::queue<BillboardRenderer*> billboardQueue;
+    
+    std::deque<RenderPacket*> renderQueue;
+    std::vector<NormalPacket> normalPackets;
+    std::unordered_map<std::pair<unsigned int, unsigned int>, InstancedPacket> instancedPackets; // ? +++++ Pair mesh id, material id +++++
     
 };
 

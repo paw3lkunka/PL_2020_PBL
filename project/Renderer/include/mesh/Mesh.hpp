@@ -1,7 +1,7 @@
 #ifndef _MESH_HPP
 #define _MESH_HPP
 
-#include "MeshDataStructures.inl"
+#include "mesh/MeshDataStructures.inl"
 #include "ISerializable.inl"
 #include "IFileSystem.inl"
 
