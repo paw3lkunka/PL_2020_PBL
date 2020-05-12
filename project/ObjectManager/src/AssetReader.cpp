@@ -126,9 +126,11 @@ bool AssetReader::loadMesh(std::string path)
 
         if(rootBone != nullptr)
         {
+            std::cout << "Root bone: " << rootBone->boneName << std::endl;
             // * ----- Process animations -----
             Animation* animation = processAnimations(scene, path);
             // * ----- Create skeleton object and bind root node -----
+            std::cout << "Skeleton: " << scene->mRootNode->mName.C_Str() + std::string("_skeleton") << std::endl;
             objectModulePtr->newEntity(1, scene->mRootNode->mName.C_Str() + std::string("_skeleton"));
             auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
             s->animation = animation;

@@ -1,7 +1,6 @@
 #pragma region Data Loading
     
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
-    //objectModule.newModel("Resources/Models/House Dancing.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
     objectModule.newModel("Resources/Models/Right_bank.FBX");
@@ -59,8 +58,6 @@
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat");
     skyboxMat->setCubemap("cubemap", cubemap);
-
-    //Material* skinnedMat = objectModule.newMaterial(skinnedShader);
 
     Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat");
     waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
