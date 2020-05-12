@@ -1,7 +1,7 @@
-        #pragma region Data Loading
+#pragma region Data Loading
     
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
-    objectModule.newModel("Resources/Models/House Dancing.fbx");
+    //objectModule.newModel("Resources/Models/House Dancing.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
     objectModule.newModel("Resources/Models/Right_bank.FBX");
@@ -9,7 +9,6 @@
     objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
-    
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 
@@ -78,20 +77,20 @@
 #pragma endregion
 
 #pragma region Entities
-    {
-        auto entity = objectModule.getEntityFromName("Alpha_Surface");
-        if(entity != nullptr)
-        {
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = unlitSkinnedMat;
+    // {
+    //     auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
+    //     if(entity != nullptr)
+    //     {
+    //         auto mr = entity->getComponentPtr<MeshRenderer>();
+    //             mr->material = unlitSkinnedMat;
 
-            auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-        }
-    }
+    //         auto t = entity->getComponentPtr<Transform>();
+    //             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    //     }
+    // }
 
     {
-        auto entity = objectModule.getEntityFromName("Water");
+        auto entity = objectModule.getEntityPtrByName("Water");
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
@@ -103,7 +102,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Cliffs");
+        auto entity = objectModule.getEntityPtrByName("Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = cliffsMat;
 
@@ -114,7 +113,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Left_bank");
+        auto entity = objectModule.getEntityPtrByName("Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBankMat;
 
@@ -125,7 +124,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Right_bank");
+        auto entity = objectModule.getEntityPtrByName("Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBankMat;
 
@@ -137,7 +136,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Riverbed");
+        auto entity = objectModule.getEntityPtrByName("Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = riverBedMat;
 
@@ -147,14 +146,15 @@
             t->getLocalScaleModifiable() = {5, 5, 5};
     }
 
-    {
-        auto entity = objectModule.getEntityFromName("Alpha_Joints");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = unlitSkinnedMat;
+    // {
+    //     auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+    //     auto mr = entity->getComponentPtr<MeshRenderer>();
+    //         mr->material = unlitSkinnedMat;
 
-        auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    }
+    //     auto t = entity->getComponentPtr<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    // }
+
 
     objectModule.newEntity(2);
     {
@@ -225,7 +225,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Sphere001");
+        auto entity = objectModule.getEntityPtrByName("Sphere001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable()={-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -272,7 +272,7 @@
 objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
         so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 0.1f;
@@ -294,11 +294,11 @@ objectModule.newEntity(2, "sampleSound");
             c->radius = 10;
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
             mr->material = unlitTextureMat;
 
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so1->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
+            so1->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
             so1->getGainModifiable() = 100.5f;
             so1->getIsRelativeModifiable() = false;

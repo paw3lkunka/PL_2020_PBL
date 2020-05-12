@@ -85,64 +85,37 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
+
     if (updateScene)
     {
-        objectModule.newModel("Resources/Models/Karakter.FBX");
+        objectModule.newModel("Resources/Models/paddle_and_hands.FBX");
 
         Shader* unlitColor = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
-        // {
-        //     MeshRenderer* mr = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<MeshRenderer>();
-        //     mr->material = objectModule.newMaterial(unlitColor, "paddle");
-        //     mr->material->setVec4("color", glm::vec4(0.592, 0.313, 0.09, 1.0));
-
-        //     Transform* trans = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>();
-        //     trans->getLocalPositionModifiable() = glm::vec3(30, 0, 30);
-        //     trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
-        // }
-        // {
-        //     MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<MeshRenderer>();
-        //     mr->material = objectModule.newMaterial(unlitColor, "hand_right");
-        //     mr->material->setVec4("color", glm::vec4(0.956, 0.384, 0.898, 1.0));
-            
-        //     Transform* trans = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<Transform>();
-        //     trans->getLocalPositionModifiable() = glm::vec3(-30, 0, -30);
-        //     trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
-        // }
-        // {
-        //     MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<MeshRenderer>();
-        //     mr->material = objectModule.newMaterial(unlitColor, "hand_left");
-        //     mr->material->setVec4("color", glm::vec4(0.737, 0.352, 0.929, 1.0));
-
-        //     Transform* trans = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<Transform>();
-        //     trans->getLocalPositionModifiable() = glm::vec3(-60, 0, -30);
-        //     trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
-        // }
-
         {
-            MeshRenderer* mr = objectModule.getEntityPtrByName("KarakterVucut_GEO")->getComponentPtr<MeshRenderer>();
-            mr->material = objectModule.newMaterial(unlitColor, "karakterVucut_GEO");
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "paddle");
             mr->material->setVec4("color", glm::vec4(0.592, 0.313, 0.09, 1.0));
 
-            Transform* trans = objectModule.getEntityPtrByName("KarakterVucut_GEO")->getComponentPtr<Transform>();
-            trans->getLocalPositionModifiable() = glm::vec3(-100, 0, -100);
+            Transform* trans = objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(30, 0, 30);
             trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
         }
         {
-            MeshRenderer* mr = objectModule.getEntityPtrByName("KarakterKas_GEO")->getComponentPtr<MeshRenderer>();
-            mr->material = objectModule.newMaterial(unlitColor, "karakterKas_GEO");
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "hand_right");
             mr->material->setVec4("color", glm::vec4(0.956, 0.384, 0.898, 1.0));
             
-            Transform* trans = objectModule.getEntityPtrByName("KarakterKas_GEO")->getComponentPtr<Transform>();
-            trans->getLocalPositionModifiable() = glm::vec3(-100, 0, -100);
+            Transform* trans = objectModule.getEntityPtrByName("Hand_right")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(-30, 0, -30);
             trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
         }
         {
-            MeshRenderer* mr = objectModule.getEntityPtrByName("KarakterGoz_GEO")->getComponentPtr<MeshRenderer>();
-            mr->material = objectModule.newMaterial(unlitColor, "karakterGoz_GEO");
+            MeshRenderer* mr = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.newMaterial(unlitColor, "hand_left");
             mr->material->setVec4("color", glm::vec4(0.737, 0.352, 0.929, 1.0));
 
-            Transform* trans = objectModule.getEntityPtrByName("KarakterGoz_GEO")->getComponentPtr<Transform>();
-            trans->getLocalPositionModifiable() = glm::vec3(-100, 0, -100);
+            Transform* trans = objectModule.getEntityPtrByName("Hand_left")->getComponentPtr<Transform>();
+            trans->getLocalPositionModifiable() = glm::vec3(-60, 0, -30);
             trans->getLocalScaleModifiable() = glm::vec3(10, 10, 10);
         }
     }
@@ -190,6 +163,8 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    //HACK: scene saving- uncomment when changing something in scene
+    objectModule.saveScene("../resources/Scenes/savedScene.json");
     // Everything is ok.
     return 0;
 }

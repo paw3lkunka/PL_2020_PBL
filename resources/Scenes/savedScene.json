@@ -2,9 +2,9 @@
     "Amounts": {
         "components": 42,
         "cubemaps": 1,
-        "entities": 18,
-        "materials": 9,
-        "meshes": 8,
+        "entities": 19,
+        "materials": 12,
+        "meshes": 9,
         "shaders": 5,
         "textures": 1
     },
@@ -32,7 +32,7 @@
     },
     "component001": {
         "entity id": 0,
-        "material": 40,
+        "material": 30,
         "mesh": 3,
         "serializationID": 4,
         "type": "MeshRenderer"
@@ -41,19 +41,19 @@
         "entity id": 1,
         "localPosition": {
             "x": 0.0,
-            "y": 0.0,
-            "z": -25.0
+            "y": -30.0,
+            "z": 0.0
         },
         "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
+            "w": 0.7071067690849304,
+            "x": -0.7071067690849304,
             "y": 0.0,
             "z": 0.0
         },
         "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
+            "x": 5.0,
+            "y": 5.0,
+            "z": 5.0
         },
         "serializationID": 6,
         "transform parentID": 0,
@@ -61,7 +61,7 @@
     },
     "component003": {
         "entity id": 1,
-        "material": 41,
+        "material": 38,
         "mesh": 7,
         "serializationID": 8,
         "type": "MeshRenderer"
@@ -70,19 +70,19 @@
         "entity id": 2,
         "localPosition": {
             "x": 0.0,
-            "y": 0.0,
-            "z": -25.0
+            "y": -30.0,
+            "z": 0.0
         },
         "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
+            "w": 0.7071067690849304,
+            "x": -0.7071067690849304,
             "y": 0.0,
             "z": 0.0
         },
         "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
+            "x": 5.0,
+            "y": 5.0,
+            "z": 5.0
         },
         "serializationID": 10,
         "transform parentID": 0,
@@ -90,18 +90,13 @@
     },
     "component005": {
         "entity id": 2,
-        "material": 41,
+        "material": 40,
         "mesh": 11,
         "serializationID": 12,
         "type": "MeshRenderer"
     },
     "component006": {
         "entity id": 3,
-        "serializationID": 14,
-        "type": "Skeleton"
-    },
-    "component007": {
-        "entity id": 4,
         "localPosition": {
             "x": 0.0,
             "y": -30.0,
@@ -118,19 +113,19 @@
             "y": 5.0,
             "z": 5.0
         },
-        "serializationID": 16,
+        "serializationID": 14,
         "transform parentID": 0,
         "type": "Transform"
+    },
+    "component007": {
+        "entity id": 3,
+        "material": 40,
+        "mesh": 15,
+        "serializationID": 16,
+        "type": "MeshRenderer"
     },
     "component008": {
         "entity id": 4,
-        "material": 48,
-        "mesh": 17,
-        "serializationID": 18,
-        "type": "MeshRenderer"
-    },
-    "component009": {
-        "entity id": 5,
         "localPosition": {
             "x": 0.0,
             "y": -30.0,
@@ -147,116 +142,52 @@
             "y": 5.0,
             "z": 5.0
         },
-        "serializationID": 20,
+        "serializationID": 18,
         "transform parentID": 0,
         "type": "Transform"
+    },
+    "component009": {
+        "entity id": 4,
+        "material": 39,
+        "mesh": 19,
+        "serializationID": 20,
+        "type": "MeshRenderer"
     },
     "component010": {
         "entity id": 5,
-        "material": 50,
-        "mesh": 21,
+        "localPosition": {
+            "x": 0.0,
+            "y": -30.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 0.7071067690849304,
+            "x": -0.7071067690849304,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 5.0,
+            "y": 5.0,
+            "z": 5.0
+        },
         "serializationID": 22,
-        "type": "MeshRenderer"
+        "transform parentID": 0,
+        "type": "Transform"
     },
     "component011": {
-        "entity id": 6,
-        "localPosition": {
-            "x": 0.0,
-            "y": -30.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 5.0,
-            "y": 5.0,
-            "z": 5.0
-        },
+        "entity id": 5,
+        "material": 37,
+        "mesh": 23,
         "serializationID": 24,
-        "transform parentID": 0,
-        "type": "Transform"
+        "type": "MeshRenderer"
     },
     "component012": {
-        "entity id": 6,
-        "material": 50,
-        "mesh": 25,
-        "serializationID": 26,
-        "type": "MeshRenderer"
-    },
-    "component013": {
-        "entity id": 7,
+        "entity id": 15,
         "localPosition": {
-            "x": 0.0,
-            "y": -30.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "x": 30.0,
             "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 5.0,
-            "y": 5.0,
-            "z": 5.0
-        },
-        "serializationID": 28,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component014": {
-        "entity id": 7,
-        "material": 49,
-        "mesh": 29,
-        "serializationID": 30,
-        "type": "MeshRenderer"
-    },
-    "component015": {
-        "entity id": 8,
-        "localPosition": {
-            "x": 0.0,
-            "y": -30.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 5.0,
-            "y": 5.0,
-            "z": 5.0
-        },
-        "serializationID": 32,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component016": {
-        "entity id": 8,
-        "material": 47,
-        "mesh": 33,
-        "serializationID": 34,
-        "type": "MeshRenderer"
-    },
-    "component017": {
-        "entity id": 9,
-        "material": 44,
-        "serializationID": 52,
-        "type": "BillboardRenderer"
-    },
-    "component018": {
-        "entity id": 9,
-        "localPosition": {
-            "x": 10.0,
-            "y": 0.0,
-            "z": 0.0
+            "z": 30.0
         },
         "localRotation": {
             "w": 1.0,
@@ -269,20 +200,90 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 53,
+        "serializationID": 74,
         "transform parentID": 0,
         "type": "Transform"
     },
+    "component013": {
+        "entity id": 15,
+        "material": 87,
+        "mesh": 75,
+        "serializationID": 76,
+        "type": "MeshRenderer"
+    },
+    "component014": {
+        "entity id": 16,
+        "localPosition": {
+            "x": -30.0,
+            "y": 0.0,
+            "z": -30.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 10.0,
+            "y": 10.0,
+            "z": 10.0
+        },
+        "serializationID": 78,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component015": {
+        "entity id": 16,
+        "material": 88,
+        "mesh": 79,
+        "serializationID": 80,
+        "type": "MeshRenderer"
+    },
+    "component016": {
+        "entity id": 17,
+        "localPosition": {
+            "x": -60.0,
+            "y": 0.0,
+            "z": -30.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 10.0,
+            "y": 10.0,
+            "z": 10.0
+        },
+        "serializationID": 82,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component017": {
+        "entity id": 17,
+        "material": 89,
+        "mesh": 83,
+        "serializationID": 84,
+        "type": "MeshRenderer"
+    },
+    "component018": {
+        "entity id": 18,
+        "serializationID": 38,
+        "type": "Skeleton"
+    },
     "component019": {
-        "entity id": 10,
-        "material": 44,
-        "serializationID": 55,
+        "entity id": 6,
+        "material": 34,
+        "serializationID": 42,
         "type": "BillboardRenderer"
     },
     "component020": {
-        "entity id": 10,
+        "entity id": 6,
         "localPosition": {
-            "x": 0.0,
+            "x": 10.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -297,20 +298,20 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 56,
+        "serializationID": 43,
         "transform parentID": 0,
         "type": "Transform"
     },
     "component021": {
-        "entity id": 11,
-        "material": 44,
-        "serializationID": 58,
+        "entity id": 7,
+        "material": 34,
+        "serializationID": 45,
         "type": "BillboardRenderer"
     },
     "component022": {
-        "entity id": 11,
+        "entity id": 7,
         "localPosition": {
-            "x": -10.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -325,21 +326,21 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 59,
+        "serializationID": 46,
         "transform parentID": 0,
         "type": "Transform"
     },
     "component023": {
-        "entity id": 12,
-        "material": 44,
-        "serializationID": 61,
+        "entity id": 8,
+        "material": 34,
+        "serializationID": 48,
         "type": "BillboardRenderer"
     },
     "component024": {
-        "entity id": 12,
+        "entity id": 8,
         "localPosition": {
-            "x": 10.0,
-            "y": 10.0,
+            "x": -10.0,
+            "y": 0.0,
             "z": 0.0
         },
         "localRotation": {
@@ -353,18 +354,46 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 62,
+        "serializationID": 49,
         "transform parentID": 0,
         "type": "Transform"
     },
     "component025": {
-        "entity id": 13,
-        "material": 44,
-        "serializationID": 64,
+        "entity id": 9,
+        "material": 34,
+        "serializationID": 51,
         "type": "BillboardRenderer"
     },
     "component026": {
-        "entity id": 13,
+        "entity id": 9,
+        "localPosition": {
+            "x": 10.0,
+            "y": 10.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 10.0,
+            "y": 10.0,
+            "z": 10.0
+        },
+        "serializationID": 52,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component027": {
+        "entity id": 10,
+        "material": 34,
+        "serializationID": 54,
+        "type": "BillboardRenderer"
+    },
+    "component028": {
+        "entity id": 10,
         "localPosition": {
             "x": 0.0,
             "y": 10.0,
@@ -381,18 +410,18 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 65,
+        "serializationID": 55,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component027": {
-        "entity id": 14,
-        "material": 44,
-        "serializationID": 67,
+    "component029": {
+        "entity id": 11,
+        "material": 34,
+        "serializationID": 57,
         "type": "BillboardRenderer"
     },
-    "component028": {
-        "entity id": 14,
+    "component030": {
+        "entity id": 11,
         "localPosition": {
             "x": -10.0,
             "y": 10.0,
@@ -409,85 +438,85 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 68,
+        "serializationID": 58,
         "transform parentID": 0,
         "type": "Transform"
-    },
-    "component029": {
-        "center": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "colliderType": 2,
-        "entity id": 0,
-        "radius": 10.0,
-        "serializationID": 69,
-        "type": "SphereCollider"
-    },
-    "component030": {
-        "entity id": 15,
-        "farPlane": 1000.0,
-        "fieldOfView": 80.0,
-        "isMain": true,
-        "nearPlane": 0.009999999776482582,
-        "orthographicSize": 0.0,
-        "projectionMode": 0,
-        "serializationID": 71,
-        "type": "Camera"
     },
     "component031": {
-        "entity id": 15,
-        "localPosition": {
-            "x": 8.06914234161377,
-            "y": 32.976951599121094,
-            "z": 126.61427307128906
-        },
-        "localRotation": {
-            "w": 0.9881290197372437,
-            "x": 0.11258309334516525,
-            "y": -0.10385652631521225,
-            "z": 0.011832958087325096
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 72,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component032": {
-        "at": {
-            "x": 0.20258291065692902,
-            "y": 0.2249511182308197,
-            "z": -0.9530777335166931
-        },
-        "entity id": 15,
-        "gain": 1.0,
-        "isCurrent": 1,
-        "serializationID": 73,
-        "type": "AudioListener",
-        "up": {
-            "x": -0.04676996171474457,
-            "y": 0.9743700623512268,
-            "z": 0.2200354039669037
-        }
-    },
-    "component033": {
         "center": {
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
         "colliderType": 0,
-        "entity id": 15,
-        "radius": 5.0,
-        "serializationID": 74,
+        "entity id": 0,
+        "radius": 10.0,
+        "serializationID": 59,
         "type": "SphereCollider"
     },
+    "component032": {
+        "entity id": 12,
+        "farPlane": 1000.0,
+        "fieldOfView": 80.0,
+        "isMain": true,
+        "nearPlane": 0.009999999776482582,
+        "orthographicSize": 0.0,
+        "projectionMode": 0,
+        "serializationID": 61,
+        "type": "Camera"
+    },
+    "component033": {
+        "entity id": 12,
+        "localPosition": {
+            "x": 6.726728916168213,
+            "y": 44.63517761230469,
+            "z": 127.80247497558594
+        },
+        "localRotation": {
+            "w": 0.9967961311340332,
+            "x": -0.07669929414987564,
+            "y": -0.022620389237999916,
+            "z": -0.0017405444523319602
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 62,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
     "component034": {
+        "at": {
+            "x": 0.044828835874795914,
+            "y": -0.15298587083816528,
+            "z": -0.9872111678123474
+        },
+        "entity id": 12,
+        "gain": 1.0,
+        "isCurrent": 1,
+        "serializationID": 63,
+        "type": "AudioListener",
+        "up": {
+            "x": 0.006939871236681938,
+            "y": 0.9882283806800842,
+            "z": -0.1528283804655075
+        }
+    },
+    "component035": {
+        "center": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "colliderType": 1,
+        "entity id": 12,
+        "radius": 5.0,
+        "serializationID": 64,
+        "type": "SphereCollider"
+    },
+    "component036": {
         "clips": [
             "Resources/Audios/sample.wav"
         ],
@@ -499,12 +528,12 @@
             "y": 0.0,
             "z": 0.0
         },
-        "entity id": 16,
+        "entity id": 13,
         "gain": 0.10000000149011612,
         "isLooping": 1,
         "isRelativeToListener": 1,
         "listeners": [
-            73
+            63
         ],
         "maxDistance": "infinity",
         "maxGain": 1.0,
@@ -512,11 +541,11 @@
         "pitch": 1.0,
         "referenceDistance": 1.0,
         "rolloffFactor": 1.0,
-        "serializationID": 76,
+        "serializationID": 66,
         "type": "AudioSource"
     },
-    "component035": {
-        "entity id": 16,
+    "component037": {
+        "entity id": 13,
         "localPosition": {
             "x": 0.0,
             "y": 0.0,
@@ -533,12 +562,12 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 77,
+        "serializationID": 67,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component036": {
-        "entity id": 17,
+    "component038": {
+        "entity id": 14,
         "localPosition": {
             "x": 10.5,
             "y": 0.0,
@@ -555,30 +584,30 @@
             "y": 10.0,
             "z": 10.0
         },
-        "serializationID": 79,
+        "serializationID": 69,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component037": {
+    "component039": {
         "center": {
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
         "colliderType": 0,
-        "entity id": 17,
+        "entity id": 14,
         "radius": 10.0,
-        "serializationID": 80,
+        "serializationID": 70,
         "type": "SphereCollider"
     },
-    "component038": {
-        "entity id": 17,
-        "material": 43,
+    "component040": {
+        "entity id": 14,
+        "material": 33,
         "mesh": 3,
-        "serializationID": 81,
+        "serializationID": 71,
         "type": "MeshRenderer"
     },
-    "component039": {
+    "component041": {
         "clips": [
             "Resources/Audios/test.wav"
         ],
@@ -590,12 +619,12 @@
             "y": 0.0,
             "z": 0.0
         },
-        "entity id": 17,
+        "entity id": 14,
         "gain": 100.5,
         "isLooping": 1,
         "isRelativeToListener": 0,
         "listeners": [
-            73
+            63
         ],
         "maxDistance": "infinity",
         "maxGain": 1.0,
@@ -603,36 +632,8 @@
         "pitch": 1.0,
         "referenceDistance": 1.0,
         "rolloffFactor": 1.0,
-        "serializationID": 82,
+        "serializationID": 72,
         "type": "AudioSource"
-    },
-    "component040": {
-        "angularDrag": 1.0,
-        "drag": 1.0,
-        "entity id": 0,
-        "ignoreGravity": false,
-        "mass": 5.0,
-        "momentOfInertia": {
-            "0,0": 200.0,
-            "1,1": 200.0,
-            "2,2": 200.0
-        },
-        "serializationID": 83,
-        "type": "Rigidbody"
-    },
-    "component041": {
-        "angularDrag": 1.0,
-        "drag": 1.0,
-        "entity id": 17,
-        "ignoreGravity": false,
-        "mass": 5.0,
-        "momentOfInertia": {
-            "0,0": 333.3333435058594,
-            "1,1": 333.3333435058594,
-            "2,2": 333.3333435058594
-        },
-        "serializationID": 84,
-        "type": "Rigidbody"
     },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox/pz.png",
@@ -646,15 +647,14 @@
         "frontPath": "Resources/Textures/skybox/nz.png",
         "leftPath": "Resources/Textures/skybox/nx.png",
         "rightPath": "Resources/Textures/skybox/px.png",
-        "serializationID": 45,
+        "serializationID": 35,
         "topPath": "Resources/Textures/skybox/py.png"
     },
     "entity000": {
         "components": [
             2,
             4,
-            69,
-            83
+            59
         ],
         "id": 0,
         "name": "Sphere001",
@@ -666,7 +666,7 @@
             8
         ],
         "id": 1,
-        "name": "Alpha_Surface",
+        "name": "Cliffs",
         "serializationID": 5
     },
     "entity002": {
@@ -675,147 +675,155 @@
             12
         ],
         "id": 2,
-        "name": "Alpha_Joints",
+        "name": "Left_bank",
         "serializationID": 9
     },
     "entity003": {
         "components": [
-            14
+            14,
+            16
         ],
         "id": 3,
-        "name": "RootNode_skeleton",
+        "name": "Right_bank",
         "serializationID": 13
     },
     "entity004": {
         "components": [
-            16,
-            18
+            18,
+            20
         ],
         "id": 4,
-        "name": "Cliffs",
-        "serializationID": 15
+        "name": "Riverbed",
+        "serializationID": 17
     },
     "entity005": {
         "components": [
-            20,
-            22
+            22,
+            24
         ],
         "id": 5,
-        "name": "Left_bank",
-        "serializationID": 19
+        "name": "Water",
+        "serializationID": 21
     },
     "entity006": {
         "components": [
-            24,
-            26
+            74,
+            76
         ],
-        "id": 6,
-        "name": "Right_bank",
-        "serializationID": 23
+        "id": 15,
+        "name": "Paddle",
+        "serializationID": 73
     },
     "entity007": {
         "components": [
-            28,
-            30
+            78,
+            80
         ],
-        "id": 7,
-        "name": "Riverbed",
-        "serializationID": 27
+        "id": 16,
+        "name": "Hand_right",
+        "serializationID": 77
     },
     "entity008": {
         "components": [
-            32,
-            34
-        ],
-        "id": 8,
-        "name": "Water",
-        "serializationID": 31
-    },
-    "entity009": {
-        "components": [
-            52,
-            53
-        ],
-        "id": 9,
-        "name": "",
-        "serializationID": 51
-    },
-    "entity010": {
-        "components": [
-            55,
-            56
-        ],
-        "id": 10,
-        "name": "",
-        "serializationID": 54
-    },
-    "entity011": {
-        "components": [
-            58,
-            59
-        ],
-        "id": 11,
-        "name": "",
-        "serializationID": 57
-    },
-    "entity012": {
-        "components": [
-            61,
-            62
-        ],
-        "id": 12,
-        "name": "",
-        "serializationID": 60
-    },
-    "entity013": {
-        "components": [
-            64,
-            65
-        ],
-        "id": 13,
-        "name": "",
-        "serializationID": 63
-    },
-    "entity014": {
-        "components": [
-            67,
-            68
-        ],
-        "id": 14,
-        "name": "",
-        "serializationID": 66
-    },
-    "entity015": {
-        "components": [
-            71,
-            72,
-            73,
-            74
-        ],
-        "id": 15,
-        "name": "Camera",
-        "serializationID": 70
-    },
-    "entity016": {
-        "components": [
-            76,
-            77
-        ],
-        "id": 16,
-        "name": "sampleSound",
-        "serializationID": 75
-    },
-    "entity017": {
-        "components": [
-            79,
-            80,
-            81,
             82,
             84
         ],
         "id": 17,
+        "name": "Hand_left",
+        "serializationID": 81
+    },
+    "entity009": {
+        "components": [
+            38
+        ],
+        "id": 18,
+        "name": "RootNode_skeleton",
+        "serializationID": 85
+    },
+    "entity010": {
+        "components": [
+            42,
+            43
+        ],
+        "id": 6,
+        "name": "",
+        "serializationID": 41
+    },
+    "entity011": {
+        "components": [
+            45,
+            46
+        ],
+        "id": 7,
+        "name": "",
+        "serializationID": 44
+    },
+    "entity012": {
+        "components": [
+            48,
+            49
+        ],
+        "id": 8,
+        "name": "",
+        "serializationID": 47
+    },
+    "entity013": {
+        "components": [
+            51,
+            52
+        ],
+        "id": 9,
+        "name": "",
+        "serializationID": 50
+    },
+    "entity014": {
+        "components": [
+            54,
+            55
+        ],
+        "id": 10,
+        "name": "",
+        "serializationID": 53
+    },
+    "entity015": {
+        "components": [
+            57,
+            58
+        ],
+        "id": 11,
+        "name": "",
+        "serializationID": 56
+    },
+    "entity016": {
+        "components": [
+            61,
+            62,
+            63,
+            64
+        ],
+        "id": 12,
+        "name": "Camera",
+        "serializationID": 60
+    },
+    "entity017": {
+        "components": [
+            66,
+            67
+        ],
+        "id": 13,
+        "name": "sampleSound",
+        "serializationID": 65
+    },
+    "entity018": {
+        "components": [
+            69,
+            70,
+            71,
+            72
+        ],
+        "id": 14,
         "name": "sphereSound",
-        "serializationID": 78
+        "serializationID": 68
     },
     "material000": {
         "cubemaps": {},
@@ -878,8 +886,8 @@
             ]
         },
         "name": "unlitColorMat",
-        "serializationID": 40,
-        "shaderSerializationID": 35,
+        "serializationID": 30,
+        "shaderSerializationID": 25,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -970,8 +978,8 @@
             ]
         },
         "name": "unlitSkinnedMat",
-        "serializationID": 41,
-        "shaderSerializationID": 36,
+        "serializationID": 31,
+        "shaderSerializationID": 26,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -1044,10 +1052,10 @@
             ]
         },
         "name": "unlitTextureMat",
-        "serializationID": 43,
-        "shaderSerializationID": 37,
+        "serializationID": 33,
+        "shaderSerializationID": 27,
         "textures": {
-            "mainTex": 42
+            "mainTex": 32
         },
         "vec3s": {},
         "vec4s": {}
@@ -1095,17 +1103,17 @@
             ]
         },
         "name": "unlitInstancedMat",
-        "serializationID": 44,
-        "shaderSerializationID": 38,
+        "serializationID": 34,
+        "shaderSerializationID": 28,
         "textures": {
-            "mainTex": 42
+            "mainTex": 32
         },
         "vec3s": {},
         "vec4s": {}
     },
     "material004": {
         "cubemaps": {
-            "cubemap": 45
+            "cubemap": 35
         },
         "floats": {},
         "ints": {},
@@ -1147,17 +1155,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.9781475067138672,
-                -0.04676995798945427,
-                -0.20258289575576782,
+                0.9989705681800842,
+                0.006939870771020651,
+                -0.044828832149505615,
                 0.0,
-                -7.4505797087454084e-09,
-                0.974370002746582,
-                -0.22495108842849731,
+                4.656612873077393e-10,
+                0.9882283806800842,
+                0.15298587083816528,
                 0.0,
-                0.2079116404056549,
-                0.2200353592634201,
-                0.9530776143074036,
+                0.04536283016204834,
+                -0.1528283655643463,
+                0.9872110486030579,
                 0.0,
                 0.0,
                 0.0,
@@ -1166,8 +1174,8 @@
             ]
         },
         "name": "skyboxMat",
-        "serializationID": 46,
-        "shaderSerializationID": 39,
+        "serializationID": 36,
+        "shaderSerializationID": 29,
         "textures": {},
         "vec3s": {},
         "vec4s": {}
@@ -1233,8 +1241,8 @@
             ]
         },
         "name": "waterMat",
-        "serializationID": 47,
-        "shaderSerializationID": 35,
+        "serializationID": 37,
+        "shaderSerializationID": 25,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -1307,8 +1315,8 @@
             ]
         },
         "name": "cliffsMat",
-        "serializationID": 48,
-        "shaderSerializationID": 35,
+        "serializationID": 38,
+        "shaderSerializationID": 25,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -1381,8 +1389,8 @@
             ]
         },
         "name": "riverBedMat",
-        "serializationID": 49,
-        "shaderSerializationID": 35,
+        "serializationID": 39,
+        "shaderSerializationID": 25,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -1455,8 +1463,8 @@
             ]
         },
         "name": "riverBankMat",
-        "serializationID": 50,
-        "shaderSerializationID": 35,
+        "serializationID": 40,
+        "shaderSerializationID": 25,
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -1468,6 +1476,228 @@
             ]
         }
     },
+    "material009": {
+        "cubemaps": {},
+        "floats": {},
+        "ints": {},
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "paddle",
+        "serializationID": 87,
+        "shaderSerializationID": 25,
+        "textures": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.5920000076293945,
+                0.31299999356269836,
+                0.09000000357627869
+            ]
+        }
+    },
+    "material010": {
+        "cubemaps": {},
+        "floats": {},
+        "ints": {},
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "hand_right",
+        "serializationID": 88,
+        "shaderSerializationID": 25,
+        "textures": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.9559999704360962,
+                0.3840000033378601,
+                0.8980000019073486
+            ]
+        }
+    },
+    "material011": {
+        "cubemaps": {},
+        "floats": {},
+        "ints": {},
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "hand_left",
+        "serializationID": 89,
+        "shaderSerializationID": 25,
+        "textures": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.7369999885559082,
+                0.35199999809265137,
+                0.9290000200271606
+            ]
+        }
+    },
     "mesh000": {
         "filePath": "Resources/Models/unit_sphere.fbx",
         "meshPath": "Resources/Models/unit_sphere.fbx/Sphere001",
@@ -1475,70 +1705,76 @@
         "type": "MeshCustom"
     },
     "mesh001": {
-        "filePath": "Resources/Models/House Dancing.fbx",
-        "meshPath": "Resources/Models/House Dancing.fbx/Alpha_Surface",
-        "serializationID": 7,
-        "type": "MeshSkinned"
-    },
-    "mesh002": {
-        "filePath": "Resources/Models/House Dancing.fbx",
-        "meshPath": "Resources/Models/House Dancing.fbx/Alpha_Joints",
-        "serializationID": 11,
-        "type": "MeshSkinned"
-    },
-    "mesh003": {
         "filePath": "Resources/Models/Cliffs.FBX",
         "meshPath": "Resources/Models/Cliffs.FBX/Cliffs",
-        "serializationID": 17,
+        "serializationID": 7,
+        "type": "MeshCustom"
+    },
+    "mesh002": {
+        "filePath": "Resources/Models/Left_bank.FBX",
+        "meshPath": "Resources/Models/Left_bank.FBX/Left_bank",
+        "serializationID": 11,
+        "type": "MeshCustom"
+    },
+    "mesh003": {
+        "filePath": "Resources/Models/Right_bank.FBX",
+        "meshPath": "Resources/Models/Right_bank.FBX/Right_bank",
+        "serializationID": 15,
         "type": "MeshCustom"
     },
     "mesh004": {
-        "filePath": "Resources/Models/Left_bank.FBX",
-        "meshPath": "Resources/Models/Left_bank.FBX/Left_bank",
-        "serializationID": 21,
+        "filePath": "Resources/Models/Riverbed.FBX",
+        "meshPath": "Resources/Models/Riverbed.FBX/Riverbed",
+        "serializationID": 19,
         "type": "MeshCustom"
     },
     "mesh005": {
-        "filePath": "Resources/Models/Right_bank.FBX",
-        "meshPath": "Resources/Models/Right_bank.FBX/Right_bank",
-        "serializationID": 25,
+        "filePath": "Resources/Models/Water.FBX",
+        "meshPath": "Resources/Models/Water.FBX/Water",
+        "serializationID": 23,
         "type": "MeshCustom"
     },
     "mesh006": {
-        "filePath": "Resources/Models/Riverbed.FBX",
-        "meshPath": "Resources/Models/Riverbed.FBX/Riverbed",
-        "serializationID": 29,
+        "filePath": "Resources/Models/paddle_and_hands.FBX",
+        "meshPath": "Resources/Models/paddle_and_hands.FBX/Paddle",
+        "serializationID": 75,
         "type": "MeshCustom"
     },
     "mesh007": {
-        "filePath": "Resources/Models/Water.FBX",
-        "meshPath": "Resources/Models/Water.FBX/Water",
-        "serializationID": 33,
-        "type": "MeshCustom"
+        "filePath": "Resources/Models/paddle_and_hands.FBX",
+        "meshPath": "Resources/Models/paddle_and_hands.FBX/Hand_right",
+        "serializationID": 79,
+        "type": "MeshSkinned"
+    },
+    "mesh008": {
+        "filePath": "Resources/Models/paddle_and_hands.FBX",
+        "meshPath": "Resources/Models/paddle_and_hands.FBX/Hand_left",
+        "serializationID": 83,
+        "type": "MeshSkinned"
     },
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/UnlitColor/UnlitColor.frag",
-        "serializationID": 35,
+        "serializationID": 25,
         "vertexShaderPath": "Resources/Shaders/UnlitColor/UnlitColor.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag",
-        "serializationID": 36,
+        "serializationID": 26,
         "vertexShaderPath": "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert"
     },
     "shader002": {
         "fragmentShaderPath": "Resources/Shaders/UnlitTexture/UnlitTexture.frag",
-        "serializationID": 37,
+        "serializationID": 27,
         "vertexShaderPath": "Resources/Shaders/UnlitTexture/UnlitTexture.vert"
     },
     "shader003": {
         "fragmentShaderPath": "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag",
-        "serializationID": 38,
+        "serializationID": 28,
         "vertexShaderPath": "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert"
     },
     "shader004": {
         "fragmentShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag",
-        "serializationID": 39,
+        "serializationID": 29,
         "vertexShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert"
     },
     "texture000": {
@@ -1549,6 +1785,6 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Textures/tex.png",
-        "serializationID": 42
+        "serializationID": 32
     }
 }

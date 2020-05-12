@@ -37,7 +37,7 @@ void ObjectModule::receiveMessage(Message msg)
 
 bool ObjectModule::compareStrings(const char* str1, const char* str2)
 {
-    return compareStrings(std::string(str1), std::string(str2));
+    return std::strcmp(str1, str2) == 0;
 }
 
 bool ObjectModule::compareStrings(std::string str1, std::string str2)
@@ -76,7 +76,7 @@ Entity* ObjectModule::newEntity(int bufferSize, std::string name)
 {
     for(int i = 0; i < objectContainer.entities.size(); ++i)
     {
-        if(objectContainer.entities[i].getName() != "" && objectContainer.entities[i].getName() == name)
+        if(objectContainer.entities[i].getName() != "" && std::strcmp(objectContainer.entities[i].getName().c_str(), name.c_str()) == 0)
         {
             return &objectContainer.entities[i];
         }

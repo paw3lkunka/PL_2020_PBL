@@ -124,17 +124,17 @@ bool AssetReader::loadMesh(std::string path)
         // * ----- Process and create bones -----
         Bone* rootBone = processBone(scene->mRootNode, scene, path);
 
-        // * ----- Process animations -----
-        Animation* animation = processAnimations(scene, path);
-        if (animation != nullptr)
+        if(rootBone != nullptr)
         {
+            // * ----- Process animations -----
+            Animation* animation = processAnimations(scene, path);
             // * ----- Create skeleton object and bind root node -----
             objectModulePtr->newEntity(1, scene->mRootNode->mName.C_Str() + std::string("_skeleton"));
             auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
             s->animation = animation;
             s->globalInverseTransform = globalInverseTransform;
             s->rootBone = rootBone;
-        }
+        }   
     }
 
     return true;
@@ -334,6 +334,8 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
                             aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
 
             objectModulePtr->objectMaker.newBone(boneToAdd, path, mesh->mBones[i]->mName.C_Str());
+
+            std::cout << "Bone" << path + "/" + mesh->mBones[i]->mName.C_Str() << std::endl;
         }
         else
         {

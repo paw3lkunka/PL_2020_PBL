@@ -205,13 +205,17 @@ void RendererModule::render()
             viewChanged = false;
         }
 
-        // ? +++++ Send skinning data to ubo +++++
-        glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
-        for(auto &bone : *bones)
+        if(bones != nullptr)
         {
-            glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+            // ? +++++ Send skinning data to ubo +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+            for(auto &bone : *bones)
+            {
+                glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+            }
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
         }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        
 
         // ? +++++ Execute (order 66) rendering loop +++++
         while(!renderQueue.empty())

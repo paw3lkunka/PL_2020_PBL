@@ -55,7 +55,7 @@ void AudioModule::receiveMessage(Message msg)
 
         case Event::AUDIO_SOURCE_PLAY:
         {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
+            AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
             audioSourcePlayHandler(audioSourcePtr);
         }
             break;

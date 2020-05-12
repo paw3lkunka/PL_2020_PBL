@@ -305,6 +305,7 @@ void SceneReader::readEntities()
         auto entityName = j.at(name).at("name").get<std::string>();
         auto entity = objModulePtr->newEntity(components.size(), entityName);
         entity->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+        entity->id = j.at(name).at("id").get<unsigned int>();
     }
 }
 
@@ -327,14 +328,17 @@ std::string SceneReader::setName(std::string name, int index)
 
 void SceneReader::readTransform(std::string name)
 {
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    auto component = objModulePtr->objectContainer.getComponentFromSerializationID(serializationID);
+    auto component = entity->getComponentPtr<Transform>();
     glm::vec3 tempVec;
     glm::quat tempRot;
     Transform* trans;
     if(component != nullptr)
     {
-        trans = dynamic_cast<Transform*>(component);
+        trans = component;
+        trans->serializationID = serializationID;
     }
     else
     {
@@ -479,13 +483,17 @@ void SceneReader::readBillboardRenderer(std::string name)
 
 void SceneReader::readMeshRenderer(std::string name)
 {
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto component = entity->getComponentPtr<MeshRenderer>();
+
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    auto component = objModulePtr->objectContainer.getComponentFromSerializationID(serializationID);
     if(component != nullptr) // * if component exists (if was made by mesh processing)
     {
         auto renderer = dynamic_cast<MeshRenderer*>(component);
         unsigned int childID = j.at(name).at("material").get<unsigned int>();
         renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        renderer->serializationID = serializationID;
         return;
     }
     else // * if component was made by core
