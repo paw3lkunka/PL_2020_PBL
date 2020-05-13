@@ -210,7 +210,7 @@ class Core
 
 
 #pragma region Systems
-
+//TODO must be a better way, than static fields
     public:
         //TODO documentation
         static CameraSystem cameraSystem;
@@ -226,6 +226,8 @@ class Core
         static BillboardRendererSystem billboardSystem;
         //TODO documentation
         static CollisionSystem collisionDetectionSystem;
+        //TODO documentation
+        static PhysicalBasedInputSystem physicalBasedInputSystem;
         //TODO documentation
         static PhysicSystem physicSystem;
         //TODO documentation

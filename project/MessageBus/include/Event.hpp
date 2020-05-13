@@ -73,7 +73,6 @@ enum class Event : unsigned int
 
 #pragma endregion
 
-//XXX dopisujcie do markerów
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_MESH_TO_QUEUE,
@@ -89,7 +88,6 @@ enum class Event : unsigned int
     RENDERER_SET_BONE_TRANSFORMS_PTR,
 #pragma endregion
 
-//XXX dopisujcie do markerów
 #pragma region RESOURCES
     //Resource module load file event. DATA: FileSystemData {const char* filepath, FileType typeOfFile}
     LOAD_FILE,
@@ -122,9 +120,9 @@ enum class Event : unsigned int
     // Collision between DYNAMIC and DYNAMIC or KINEMATIC collider was detected. DATA: CollisionData {Collider* cause, Collider* target, vec3 separation}.
     COLLSION_DETECT,
     // DYNAMIC collider entered TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
-    TRIGGER_ENTER, //XXX temporarily unused
+    TRIGGER_ENTER,
     // DYNAMIC collider escaped TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
-    TRIGGER_EXIT, //XXX temporarily unused
+    TRIGGER_EXIT,
 #pragma endregion
 
     // used to define ranges of values

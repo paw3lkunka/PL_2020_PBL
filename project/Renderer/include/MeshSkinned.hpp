@@ -20,8 +20,11 @@ public:
     MeshSkinned() = default;
     ~MeshSkinned() = default;
 
+    //TODO Documentation
     void setup();
+    //TODO Documentation
     void render();
+    //TODO Documentation
     virtual void renderInstanced() {}
 
 protected:

@@ -114,6 +114,9 @@ add_subdirectory(libs/json/)
 #Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
+#FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
+# W wolnej chwili wartoby sprawdzić, o co tu chodzi.
+#                                                     ~ Andrzej
 target_compile_options(alsoft-config PUBLIC -w)
 target_compile_options(makemhr PUBLIC -w)
 target_compile_options(sofa-info PUBLIC -w)

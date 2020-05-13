@@ -89,7 +89,13 @@ int Core::init()
     {
         // ! Manual extension of scene, runned by -u param
         {
-            Entity* entity = objectModule.newEntity(4, "PhisicBasedInput");
+            Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+
+            PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+                keymap->continous[GLFW_KEY_UP].force    = {  0.0f,  0.0f,  5.0f };
+                keymap->continous[GLFW_KEY_DOWN].force  = {  0.0f,  0.0f, -5.0f };
+                keymap->continous[GLFW_KEY_LEFT].force  = {  5.0f,  0.0f,  0.0f };
+                keymap->continous[GLFW_KEY_RIGHT].force = { -5.0f,  0.0f,  0.0f };
 
             Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
                 transform->setParent(&sceneModule.rootNode);
@@ -110,8 +116,8 @@ int Core::init()
                 meshRenderer->mesh = mesh;
             
             Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                rigidbody->drag = 0;
-                rigidbody->angularDrag = 0;
+                rigidbody->drag = 1;
+                rigidbody->angularDrag = 1;
                 rigidbody->mass = 10;
                 rigidbody->ignoreGravity = true;
         }
@@ -122,13 +128,14 @@ int Core::init()
 
     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
+        rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+        rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+        rendererCreateInfo.cullFace = true;
+        rendererCreateInfo.cullFaceMode = GL_BACK;
+        rendererCreateInfo.cullFrontFace = GL_CCW;
+        rendererCreateInfo.depthTest = true;
+        rendererCreateInfo.wireframeMode = false;
+
     rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
@@ -138,6 +145,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
 
@@ -274,5 +282,6 @@ AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
 BillboardRendererSystem Core::billboardSystem;
 CollisionSystem Core::collisionDetectionSystem;
+PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
