@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-int Material::idCount = 0;
+unsigned int Material::idCount = 0;
 
 Material::Material(Shader* shader, const char* name, bool enableInstancing) : shader(shader), name(name)
 {

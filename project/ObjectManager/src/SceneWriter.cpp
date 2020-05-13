@@ -188,11 +188,6 @@ void SceneWriter::saveScene(const char* filePath)
             Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]);
             saveCamera(name, temp);
         }
-        else if(dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]))
-        {
-            BillboardRenderer* temp = dynamic_cast<BillboardRenderer*>(objContainerPtr->components[i]);
-            saveBillboardRenderer(name, temp);
-        }
         else if(dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
             MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]);
@@ -300,12 +295,6 @@ void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
     
 }
 
-void SceneWriter::saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr)
-{
-    j[name]["type"] = "BillboardRenderer";
-    j[name]["material"] = componentPtr->material->serializationID;
-}
-
 void SceneWriter::saveSphereCollider(std::string name, SphereCollider* componentPtr)
 {
     j[name]["type"] = "SphereCollider";
@@ -321,6 +310,7 @@ void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
     j[name]["name"] = assetPtr->getName();
+    j[name]["instancingEnabled"] = assetPtr->instancingEnabled();
     childrenMap.clear();
     for(auto c : assetPtr->cubemaps)
     {

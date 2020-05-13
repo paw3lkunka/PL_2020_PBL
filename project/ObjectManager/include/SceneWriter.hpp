@@ -12,7 +12,6 @@ struct AudioListener;
 struct AudioSource;
 struct Camera;
 struct Renderer;
-struct BillboardRenderer;
 struct MeshRenderer;
 struct SphereCollider;
 class Material;
@@ -70,7 +69,6 @@ private:
     void saveAudioSource(std::string name, AudioSource* componentPtr);
     void saveCamera(std::string name, Camera* componentPtr);
     void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
-    void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
 
     ///@brief saving assets

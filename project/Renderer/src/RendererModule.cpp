@@ -16,12 +16,12 @@ void RendererModule::receiveMessage(Message msg)
     switch (msg.getEvent())
     {
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
+        {
             MeshRenderer* mr = msg.getValue<MeshRenderer*>();
-            if (mr->material->instancingEnabled)
+            if (mr->material->instancingEnabled())
             {
                 // ? +++++ Create new instanced packet or just add an instance matrix +++++
-                auto ID = std::pair<unsigned int, unsigned int>(mr->mesh->getID(), mr->material->getID());
-                auto packet = instancedPackets.insert({ID, InstancedPacket(mr->mesh, mr->material)});
+                auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
                 packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
                 // ? +++++ If packet was created, add it to the queue +++++
                 if (packet.second)
@@ -37,6 +37,7 @@ void RendererModule::receiveMessage(Message msg)
                 renderQueue.push_back(&normalPackets.back());
             }
             break;
+        }
         case Event::RENDERER_SET_PROJECTION_MATRIX:
             projectionChanged = true;
             projectionMatrix = msg.getValue<glm::mat4*>(); // TODO: No need to set pointer every time

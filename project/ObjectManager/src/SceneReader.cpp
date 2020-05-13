@@ -134,11 +134,12 @@ void SceneReader::readMaterials()
 
         shaderID = j.at(name).at("shaderSerializationID").get<unsigned int>();
         auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
-
+        auto instancingEnabled = j.at(name).at("instancingEnabled").get<bool>();
         auto matName = j.at(name).at("name").get<std::string>();
 
         auto material = objModulePtr->newMaterial(shader, matName);
         material->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
 
         j.at(name).at("cubemaps").get_to(children);
         for(auto iter : children)
@@ -273,11 +274,6 @@ void SceneReader::readComponents()
         {
             std::cout << "SphereCollider" << std::endl;
             readSphereCollider(name);
-        }
-        else if(componentType == "BillboardRenderer")
-        {
-            std::cout << "BillboardRenderer" << std::endl;
-            readBillboardRenderer(name);
         }
     }
 }
@@ -462,19 +458,6 @@ void SceneReader::readCamera(std::string name)
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     entity->addComponent(camera);
-}
-
-void SceneReader::readBillboardRenderer(std::string name)
-{
-    auto bRenderer = objModulePtr->newEmptyComponent<BillboardRenderer>();
-    bRenderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-
-    unsigned int childID = j.at(name).at("material").get<unsigned int>();
-    bRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
-
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(bRenderer);
 }
 
 void SceneReader::readMeshRenderer(std::string name)
