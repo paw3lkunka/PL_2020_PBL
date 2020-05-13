@@ -37,7 +37,7 @@ void PhysicalBasedInputSystem::fixedUpdate()
         try
         {
             rigidbodyPtr->impulses.push_back(keymapPtr->single.at(keycode));
-            rigidbodyPtr->impulses.push_back(keymapPtr->continous.at(keycode));
+            rigidbodyPtr->impulses.push_back(keymapPtr->continuous.at(keycode));
         }
         catch(std::out_of_range){}
     }
@@ -46,7 +46,7 @@ void PhysicalBasedInputSystem::fixedUpdate()
     {
         try
         {
-            rigidbodyPtr->impulses.push_back(keymapPtr->continous.at(keycode));
+            rigidbodyPtr->impulses.push_back(keymapPtr->continuous.at(keycode));
         }
         catch(std::out_of_range){}
     }

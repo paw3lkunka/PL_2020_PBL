@@ -36,7 +36,7 @@ struct PhysicalInputKeymap : public Component
     /**
      * @brief strores keycodes and Forces acting as long, as appropriate key is down
      */
-    std::unordered_map<int,Impulse> continous;
+    std::unordered_map<int,Impulse> continuous;
     
 };
 

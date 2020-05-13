@@ -92,10 +92,10 @@ int Core::init()
             Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
 
             PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-                keymap->continous[GLFW_KEY_UP].force    = {  0.0f,  0.0f,  5.0f };
-                keymap->continous[GLFW_KEY_DOWN].force  = {  0.0f,  0.0f, -5.0f };
-                keymap->continous[GLFW_KEY_LEFT].force  = {  5.0f,  0.0f,  0.0f };
-                keymap->continous[GLFW_KEY_RIGHT].force = { -5.0f,  0.0f,  0.0f };
+                keymap->continuous[GLFW_KEY_UP   ].force = {  0.0f,  0.0f,  5.0f };
+                keymap->continuous[GLFW_KEY_DOWN ].force = {  0.0f,  0.0f, -5.0f };
+                keymap->continuous[GLFW_KEY_LEFT ].force = {  5.0f,  0.0f,  0.0f };
+                keymap->continuous[GLFW_KEY_RIGHT].force = { -5.0f,  0.0f,  0.0f };
 
             Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
                 transform->setParent(&sceneModule.rootNode);
