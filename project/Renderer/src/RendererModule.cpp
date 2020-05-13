@@ -6,6 +6,9 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include "imgui.h"
+#include "examples/imgui_impl_opengl3.h"
+
 //TODO: TEMP STRING STREAM
 #include <sstream>
 
@@ -188,6 +191,9 @@ void RendererModule::render()
 {
     if (window != nullptr)
     {
+        //TODO Remove if it became useless
+        // !IMGUI RENDER
+        ImGui::Render();
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
         glClearColor(createInfo.clearColor.x, createInfo.clearColor.y, createInfo.clearColor.z, 1.0f);
         glClear(createInfo.clearFlags);
@@ -257,6 +263,9 @@ void RendererModule::render()
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
         }
+        //TODO Remove if it became useless
+        // !IMGUI RENDER
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
