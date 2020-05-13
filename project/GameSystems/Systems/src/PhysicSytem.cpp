@@ -15,14 +15,12 @@ bool PhysicSystem::assertEntity(Entity* entity)
     return transformPtr && rBodyPtr;
 }
 
-#include <iostream>
-
 void PhysicSystem::fixedUpdate()
 {
     glm::vec3 force = {0,0,0};
     glm::vec3 torque = {0,0,0};
 
-    for(Impulse& impuse : rBodyPtr->impulses)
+    for (Impulse& impuse : rBodyPtr->impulses)
     {
         force += impuse.force;
         torque += glm::cross(impuse.point, impuse.force);
@@ -31,7 +29,7 @@ void PhysicSystem::fixedUpdate()
     glm::vec3 dragForce = -0.5f * rBodyPtr->drag * rBodyPtr->velocity * glm::abs(rBodyPtr->velocity);
     force += dragForce;
 
-    if( !rBodyPtr->ignoreGravity)
+    if (!rBodyPtr->ignoreGravity)
     {
         force += -rBodyPtr->mass * G_CONST;
     }

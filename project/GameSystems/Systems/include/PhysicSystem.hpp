@@ -27,7 +27,6 @@ class PhysicSystem : public System
     private:
         Transform* transformPtr;
         Rigidbody* rBodyPtr;
-
 };
 
 #endif /* !KINEMATICSYSTEM_HPP_ */

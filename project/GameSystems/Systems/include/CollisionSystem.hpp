@@ -15,39 +15,63 @@ class Transform;
 class Collider;
 class BoxCollider;
 class SphereCollider;
+class Rigidbody;
 
-class CollisionDetectionSystem : public System
+//TODO DOCUMENTATION !!!
+class CollisionSystem : public System
 {
     public:
-        CollisionDetectionSystem() = default;
-        virtual ~CollisionDetectionSystem() = default;
+        CollisionSystem() = default;
+        virtual ~CollisionSystem() = default;
 
+//TODO DOCUMENTATION !!!
         virtual void start();        
+//TODO DOCUMENTATION !!!
         virtual bool assertEntity(Entity* entity);
+//TODO DOCUMENTATION !!!
         virtual void fixedUpdate();
         
+//TODO DOCUMENTATION !!!
         Collider* colliderPtr;
+//TODO DOCUMENTATION !!!
         Transform* transformPtr;
+//TODO DOCUMENTATION !!!
+        Rigidbody* rigidbodyPtr;
+//TODO DOCUMENTATION !!!
         glm::vec3 separation;
     protected:
     private:
+//TODO DOCUMENTATION !!!
         std::vector<Collider*> colliders;
+//TODO DOCUMENTATION !!!
         std::vector<Transform*> transforms;
-        std::unordered_set<TriggerData,TriggerDataHasher,TriggerDataEquals> activeTriggers;
+//TODO DOCUMENTATION !!!
+        std::vector<Rigidbody*> rigidbodies;
+//TODO DOCUMENTATION !!!
+        std::unordered_set<CollisionData,CollisionDataHasher,CollisionDataEquals> activeTriggers;
 
+//TODO DOCUMENTATION !!!
         template<class T>
         void collisionOf(T* collider);
 
+//TODO DOCUMENTATION !!!
         template<class T1, class T2>
-        void collisionWith(T1* collider1, T2* collider2, Transform* transform2);
+        void collisionWith(T1* collider1, T2* collider2, Transform* transform2, Rigidbody* rigidbody2);
 
+//TODO DOCUMENTATION !!!
         template<class T1, class T2>
         bool collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
+
+//TODO DOCUMENTATION !!!
+        template<class T1, class T2>
+        void resolveCollsion(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
         
+//TODO DOCUMENTATION !!!
         Projection1D axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld);
+//TODO DOCUMENTATION !!!
         Projection1D axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld);
 };
 
-#include "CollisionDetectionSystem.ipp"
+#include "CollisionSystem.ipp"
 
 #endif /* !COLLISIONDETECTION_HPP_ */

@@ -35,4 +35,5 @@ done
 echo | tee -a $_file1 >> $_file2
 echo "#endif /* !$_guardian1 */" >> $_file1
 echo "#endif /* !$_guardian2 */" >> $_file2
-echo "File: $_path/Components.inc generated."
+echo "File: $_file1 generated."
+echo "File: $_file2 generated."

@@ -225,7 +225,7 @@ class Core
         //TODO documentation
         static BillboardRendererSystem billboardSystem;
         //TODO documentation
-        static CollisionDetectionSystem collisionDetectionSystem;
+        static CollisionSystem collisionDetectionSystem;
         //TODO documentation
         static PhysicSystem physicSystem;
         //TODO documentation

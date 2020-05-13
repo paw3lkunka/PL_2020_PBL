@@ -87,7 +87,35 @@ int Core::init()
 
     if (updateScene)
     {
-        
+        // ! Manual extension of scene, runned by -u param
+        {
+            Entity* entity = objectModule.newEntity(4, "PhisicBasedInput");
+
+            Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+                transform->setParent(&sceneModule.rootNode);
+                transform->getLocalPositionModifiable().y = 20;
+                transform->getLocalScaleModifiable() *= 5;
+
+            SphereCollider* collider;
+                collider = objectModule.getEntityFromName("Camera")->detachComponent<SphereCollider>();
+                entity->addComponent(collider);
+
+            MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                MeshCustom* mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
+                Shader* shader = objectModule.getMaterialFromName("unlitColorMat")->getShaderPtr();
+                Material* material = objectModule.newMaterial(shader, "KULA");
+                    material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
+            
+                meshRenderer->material = material;
+                meshRenderer->mesh = mesh;
+            
+            Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                rigidbody->drag = 0;
+                rigidbody->angularDrag = 0;
+                rigidbody->mass = 10;
+                rigidbody->ignoreGravity = true;
+        }
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer
@@ -245,6 +273,6 @@ AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
 BillboardRendererSystem Core::billboardSystem;
-CollisionDetectionSystem Core::collisionDetectionSystem;
+CollisionSystem Core::collisionDetectionSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
