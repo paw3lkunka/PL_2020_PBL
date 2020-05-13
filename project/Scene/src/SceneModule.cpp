@@ -57,6 +57,6 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
 
     for(Transform* t : transform.children)
     {
-        process(*t, global, dirty);
+        process(*t, transform.localToWorldMatrix, dirty);
     }
 }

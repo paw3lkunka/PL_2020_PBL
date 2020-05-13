@@ -1,4 +1,4 @@
-#pragma region Data Loading
+    #pragma region Data Loading
     
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
@@ -301,3 +301,64 @@ objectModule.newEntity(2, "sampleSound");
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }
+
+    objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
+        Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat");
+        paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Paddle");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = paddleMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
+                t->getLocalScaleModifiable() = {5, 5, 5};
+        }
+
+        Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat");
+        attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = attachMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
+                t->getLocalScaleModifiable() = {5, 5, 5};
+        }
+        
+        {
+            auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = paddleMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
+                t->getLocalScaleModifiable() = {5, 5, 5};
+        }
+
+        Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat");
+        playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Player");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = playerMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0,0,90));
+                t->getLocalScaleModifiable() = {5, 5, 5};
+        }
+
+        Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat");
+        kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Kayak");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = kayakMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270,0,0));
+                t->getLocalScaleModifiable() = {5, 5, 5};
+        }

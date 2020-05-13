@@ -338,32 +338,32 @@ void SceneReader::readTransform(std::string name)
     if(component != nullptr)
     {
         trans = component;
-        trans->serializationID = serializationID;
     }
     else
     {
         trans = objModulePtr->newEmptyComponent<Transform>();
-        trans->serializationID = serializationID;
-        try
-        {  
-            auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
-            if(parentID != 0)
-            {
-                auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
-                trans->setParent(parentTrans);
-            }
-            else
-            {
-                trans->setParent(&GetCore().sceneModule.rootNode);
-            }
-        }
-        catch(nlohmann::detail::out_of_range)
+    }
+    trans->serializationID = serializationID;
+    try
+    {  
+        auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
+        if(parentID != 0)
         {
-            std::cout << "No parent transform for " << name << std::endl;
+            std::cout << parentID << std::endl;
+            auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
+            trans->setParent(parentTrans);
         }
+        else
+        {
+            trans->setParent(&GetCore().sceneModule.rootNode);
+        }
+    }
+    catch(nlohmann::detail::out_of_range)
+    {
+        std::cout << "No parent transform for " << name << std::endl;
+    }
 
         assignToEntity(name, trans);
-    }
 
     tempVec.x = j.at(name).at("localPosition").at("x").get<float>();
     tempVec.y = j.at(name).at("localPosition").at("y").get<float>();
