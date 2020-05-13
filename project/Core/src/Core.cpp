@@ -64,6 +64,7 @@ int Core::init()
 		return 1;
 	}
 	glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -244,7 +245,7 @@ int Core::mainLoop()
         ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
         ImGui::Text("Transform:");
         ImGui::DragFloat3("Position: ", (float*)&e->getComponentPtr<Transform>()->getLocalPositionModifiable(), 1.0f, -100.0f, 100.0f, "%.2f");
-        if(ImGui::DragFloat3("Rotation: ", (float*)&rotation, 1.0f, -180.0f, 180.0f, "%.1f"))
+        if(ImGui::DragFloat3("Rotation: ", (float*)&rotation, 1.0f, -360.0f, 360.0f, "%.1f"))
         {
             e->getComponentPtr<Transform>()->getLocalRotationModifiable() = eulerToQuaternion(rotation);
         }

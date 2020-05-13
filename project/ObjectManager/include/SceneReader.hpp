@@ -45,6 +45,7 @@ private:
     void readRigidbody(std::string name);
 
     void assignToEntity(std::string name, Component* component);
+    void readTransformParents(std::string name);
 };
 
 #endif /* !SCENEREADER_HPP_ */

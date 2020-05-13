@@ -290,6 +290,16 @@ void SceneReader::readComponents()
             readBillboardRenderer(name);
         }
     }
+
+    for(int i = 0; i < componentsAmount; ++i)
+    {
+        name = setName("component", i);
+        componentType = j.at(name).at("type").get<std::string>();
+        if(componentType == "Transform")
+        {
+            readTransformParents(name);
+        }
+    }
 }
 
 void SceneReader::readEntities()
@@ -342,28 +352,10 @@ void SceneReader::readTransform(std::string name)
     else
     {
         trans = objModulePtr->newEmptyComponent<Transform>();
+        assignToEntity(name, trans);
     }
     trans->serializationID = serializationID;
-    try
-    {  
-        auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
-        if(parentID != 0)
-        {
-            std::cout << parentID << std::endl;
-            auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
-            trans->setParent(parentTrans);
-        }
-        else
-        {
-            trans->setParent(&GetCore().sceneModule.rootNode);
-        }
-    }
-    catch(nlohmann::detail::out_of_range)
-    {
-        std::cout << "No parent transform for " << name << std::endl;
-    }
 
-        assignToEntity(name, trans);
 
     tempVec.x = j.at(name).at("localPosition").at("x").get<float>();
     tempVec.y = j.at(name).at("localPosition").at("y").get<float>();
@@ -569,4 +561,30 @@ void SceneReader::assignToEntity(std::string name, Component* component)
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     entity->addComponent(component);
+}
+
+void SceneReader::readTransformParents(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    auto trans = entity->getComponentPtr<Transform>();
+    try
+    {  
+        auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
+        if(parentID != 0)
+        {
+            std::cout << parentID << std::endl;
+            auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
+            trans->setParent(parentTrans);
+        }
+        else
+        {
+            trans->setParent(&GetCore().sceneModule.rootNode);
+        }
+    }
+    catch(nlohmann::detail::out_of_range)
+    {
+        std::cout << "No parent transform for " << name << std::endl;
+    }
 }

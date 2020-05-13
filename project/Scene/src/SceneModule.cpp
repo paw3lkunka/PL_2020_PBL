@@ -48,6 +48,7 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
     #pragma endregion
 
         transform.dirty = false;
+        global = transform.localToWorldMatrix;
     }
     else
     {
@@ -57,6 +58,6 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
 
     for(Transform* t : transform.children)
     {
-        process(*t, transform.localToWorldMatrix, dirty);
+        process(*t, global, dirty);
     }
 }
