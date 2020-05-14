@@ -78,12 +78,20 @@ struct Transform : public Component
     inline const Transform* getParent() { return parent; }
 
     /**
-     * @brief Model matrix (local to world transform)
+     * @brief All transformation in world space.
+     * localToWorldMatrix * localMatrix
+     */
+    glm::mat4 modelMatrix = glm::mat4(1);
+
+    /**
+     * @brief Transformation from local space to world space.
+     * THIS IS NOT A MODEL MATRIX!
      */
     glm::mat4 localToWorldMatrix = glm::mat4(1);
     
     /**
-     * @brief Model matrix^-1 (world to local transform)
+     * @brief Transformation from world space to local space
+     * localToWorldMatrix^-1
      */
     glm::mat4 worldToLocalMatrix = glm::mat4(1);
 
