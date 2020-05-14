@@ -32,10 +32,11 @@ void ErrorLog(const char* log)
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 {
     glm::mat4 temp = glm::mat4(1);
-    temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.x), glm::vec3(1.0, 0.0, 0.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.y), glm::vec3(0.0, 1.0, 0.0));
+    temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     glm::quat quatFinal = glm::quat(temp);
+
     return quatFinal;
 }
 
@@ -249,12 +250,15 @@ int Core::mainLoop()
             e = objectModule.getEntityPtrByID(currentItem);
             eTrans = e->getComponentPtr<Transform>();
             //rotation is quaternion in ZXY 
-            glm::quat rot = eTrans->getLocalRotation();
-            glm::vec4 worldRot = eTrans->localToWorldMatrix * glm::vec4(rot.x, rot.y, rot.z, rot.w);
-            glm::vec3 tempRot = glm::eulerAngles(glm::quat(worldRot.w, worldRot.x, worldRot.y, worldRot.z)) * 180.0f / glm::pi<float>();
-            //prescribing ZXY to XYZ
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat worldRot = worldRotDec * eTrans->getLocalRotation();
+            glm::vec3 tempRot = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
             rotation = tempRot;
-            //rotation = glm::vec3(tempRot.y, tempRot.z, tempRot.x);
+            //rotation = glm::vec3(tempRot.x, tempRot.z, tempRot.y);
         }
 
         ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
@@ -262,9 +266,13 @@ int Core::mainLoop()
         ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 1.0f, -100.0f, 100.0f, "%.2f");
         if(ImGui::DragFloat3("World rotation: ", (float*)&rotation, 1.0f, -360.0f, 360.0f, "%.1f"))
         {
-            glm::quat worldQuat = eulerToQuaternion(rotation);
-            glm::vec4 rot = eTrans->worldToLocalMatrix * glm::normalize(glm::vec4(worldQuat.x, worldQuat.y, worldQuat.z, worldQuat.w));
-            eTrans->getLocalRotationModifiable() = glm::quat(rot.w, rot.x, rot.y, rot.z);   
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat rot = worldRotDec * eulerToQuaternion(rotation);
+            eTrans->getLocalRotationModifiable() = rot;  
         }
         ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
         if(eTrans->getParent()->serializationID == 0)
