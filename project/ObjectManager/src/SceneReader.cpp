@@ -135,9 +135,10 @@ void SceneReader::readMaterials()
         shaderID = j.at(name).at("shaderSerializationID").get<unsigned int>();
         auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
         auto instancingEnabled = j.at(name).at("instancingEnabled").get<bool>();
+        auto renderingType = j.at(name).at("renderingType").get<int>();
         auto matName = j.at(name).at("name").get<std::string>();
 
-        auto material = objModulePtr->newMaterial(shader, matName, instancingEnabled);
+        auto material = objModulePtr->newMaterial(shader, matName, (RenderType)renderingType, instancingEnabled);
         material->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
 

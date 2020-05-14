@@ -6,7 +6,8 @@
 
 unsigned int Material::idCount = 0;
 
-Material::Material(Shader* shader, const char* name, bool enableInstancing) : shader(shader), name(name), enableInstancing(enableInstancing)
+Material::Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing)
+    : shader(shader), name(name), enableInstancing(enableInstancing), renderType(renderType)
 {
     // Set material ID on construction
     ID = idCount;

@@ -78,12 +78,14 @@ private:
     bool projectionChanged = false, viewChanged = false;
     glm::mat4* projectionMatrix, * viewMatrix;
     
-    std::deque<RenderPacket*> renderQueue;
-    
+    std::deque<RenderPacket*> opaqueQueue;
+    std::deque<RenderPacket*> transparentQueue;
+
+    // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
-    std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ Pair mesh id, material id +++++
+    std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ zie_t = mesh id << 32 | material id +++++
 
     __attribute__((always_inline)) inline size_t key(unsigned int first, unsigned int second) { return (size_t) first << 32 | second; }
 };

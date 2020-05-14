@@ -474,15 +474,15 @@
     "component033": {
         "entity id": 16,
         "localPosition": {
-            "x": -13.764849662780762,
-            "y": 92.8855972290039,
-            "z": 104.82573699951172
+            "x": -65.81822967529297,
+            "y": 40.17090606689453,
+            "z": -5.891284942626953
         },
         "localRotation": {
-            "w": 0.9659618735313416,
-            "x": -0.20796579122543335,
-            "y": -0.15039758384227753,
-            "z": -0.032379698008298874
+            "w": 0.7031713128089905,
+            "x": -0.09507258981466293,
+            "y": -0.69828200340271,
+            "z": -0.09441153705120087
         },
         "localScale": {
             "x": 1.0,
@@ -495,9 +495,9 @@
     },
     "component034": {
         "at": {
-            "x": 0.2770889401435852,
-            "y": -0.41151371598243713,
-            "z": -0.8682615756988525
+            "x": 0.9640718698501587,
+            "y": -0.2655563950538635,
+            "z": -0.006726861000061035
         },
         "entity id": 16,
         "gain": 1.0,
@@ -505,9 +505,9 @@
         "serializationID": 77,
         "type": "AudioListener",
         "up": {
-            "x": 0.1251102238893509,
-            "y": 0.9114036560058594,
-            "z": -0.3920344412326813
+            "x": 0.2655499279499054,
+            "y": 0.9640953540802002,
+            "z": -0.0018528997898101807
         }
     },
     "component035": {
@@ -893,6 +893,7 @@
             ]
         },
         "name": "unlitColorMat",
+        "renderingType": 0,
         "serializationID": 44,
         "shaderSerializationID": 39,
         "textures": {},
@@ -986,6 +987,7 @@
             ]
         },
         "name": "unlitSkinnedMat",
+        "renderingType": 0,
         "serializationID": 45,
         "shaderSerializationID": 40,
         "textures": {},
@@ -1061,6 +1063,7 @@
             ]
         },
         "name": "unlitTextureMat",
+        "renderingType": 0,
         "serializationID": 47,
         "shaderSerializationID": 41,
         "textures": {
@@ -1113,13 +1116,21 @@
             ]
         },
         "name": "unlitInstancedMat",
+        "renderingType": 1,
         "serializationID": 48,
         "shaderSerializationID": 42,
         "textures": {
             "mainTex": 46
         },
         "vec3s": {},
-        "vec4s": {}
+        "vec4s": {
+            "color": [
+                0.25,
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
     },
     "material004": {
         "cubemaps": {
@@ -1166,17 +1177,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.952664315700531,
-                0.1251102238893509,
-                -0.2770889401435852,
+                0.006977381184697151,
+                0.2655499279499054,
+                -0.9640719294548035,
                 0.0,
-                7.450581485102248e-09,
-                0.9114037156105042,
-                0.4115137457847595,
+                -3.259629011154175e-09,
+                0.9640953540802002,
+                0.2655563950538635,
                 0.0,
-                0.30402442812919617,
-                -0.39203447103500366,
-                0.8682616949081421,
+                0.9999756813049316,
+                -0.0018528876826167107,
+                0.006726859137415886,
                 0.0,
                 0.0,
                 0.0,
@@ -1185,6 +1196,7 @@
             ]
         },
         "name": "skyboxMat",
+        "renderingType": 0,
         "serializationID": 50,
         "shaderSerializationID": 43,
         "textures": {},
@@ -1253,13 +1265,14 @@
             ]
         },
         "name": "waterMat",
+        "renderingType": 1,
         "serializationID": 51,
         "shaderSerializationID": 39,
         "textures": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.5,
                 0.0,
                 0.0,
                 1.0
@@ -1328,6 +1341,7 @@
             ]
         },
         "name": "cliffsMat",
+        "renderingType": 0,
         "serializationID": 52,
         "shaderSerializationID": 39,
         "textures": {},
@@ -1403,6 +1417,7 @@
             ]
         },
         "name": "riverBedMat",
+        "renderingType": 0,
         "serializationID": 53,
         "shaderSerializationID": 39,
         "textures": {},
@@ -1478,6 +1493,7 @@
             ]
         },
         "name": "riverBankMat",
+        "renderingType": 0,
         "serializationID": 54,
         "shaderSerializationID": 39,
         "textures": {},

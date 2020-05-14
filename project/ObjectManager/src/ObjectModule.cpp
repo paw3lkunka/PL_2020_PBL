@@ -136,7 +136,7 @@ void ObjectModule::newModel(const char* filePath)
     objectMaker.newModel(filePath);
 }
 
-Material* ObjectModule::newMaterial(Shader* shader, std::string name, bool instancingEnabled)
+Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled)
 {
     for(auto m : objectContainer.materials)
     {
@@ -145,7 +145,7 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name, bool insta
             return m;
         }
     }
-    return objectMaker.newMaterial(shader, name, instancingEnabled);
+    return objectMaker.newMaterial(shader, name, renderingType, instancingEnabled);
 }
 
 void ObjectModule::newAudioClip(const char* filePath)

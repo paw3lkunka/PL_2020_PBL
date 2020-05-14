@@ -20,6 +20,8 @@
 
 #include "Shader.hpp"
 
+enum class RenderType { Opaque, Transparent };
+
 /**
  * @brief Class encapsulating shader program and uniform variables
  *
@@ -37,7 +39,7 @@ public:
      * @param shader Shader to draw with
      * @param name name of the material
      */
-    Material(Shader* shader, const char* name, bool enableInstancing = false);
+    Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing = false);
     ~Material() = default;
 
     /**
@@ -49,6 +51,11 @@ public:
      * @brief Get whether material is instanced or not
      */
     bool isInstancingEnabled() { return enableInstancing; }
+
+    /**
+     * @brief Get the Material's Render Type 
+     */
+    RenderType getRenderType() { return renderType; }
 
     /**
      * @brief Performs matrix multiplication and sets the MVP matrix, should be used only during rendering
@@ -117,6 +124,7 @@ private:
     static unsigned int idCount;
     unsigned int ID;
     bool enableInstancing;
+    RenderType renderType;
     Shader* shader;
     std::string name;
 

@@ -3,6 +3,7 @@
 #include "Message.inl"
 #include "mesh/MeshQuad.hpp"
 #include "Shader.hpp"
+#include "Material.hpp"
 
 #include <algorithm>
 
@@ -26,7 +27,15 @@ void RendererModule::receiveMessage(Message msg)
                 // ? +++++ If packet was created, add it to the queue +++++
                 if (packet.second)
                 {
-                    renderQueue.push_back(&packet.first->second);
+                    switch(packet.first->second.material->getRenderType())
+                    {
+                        case RenderType::Opaque:
+                            opaqueQueue.push_back(&packet.first->second);
+                            break;
+                        case RenderType::Transparent:
+                            transparentQueue.push_back(&packet.first->second);
+                            break;
+                    }
                 }
             }
             else
@@ -34,7 +43,15 @@ void RendererModule::receiveMessage(Message msg)
                 // ? +++++ Create new packet for normal rendering +++++
                 normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
                 // ? +++++ Add packet to render queue +++++
-                renderQueue.push_back(&normalPackets.back());
+                switch(normalPackets.back().material->getRenderType())
+                {
+                    case RenderType::Opaque:
+                        opaqueQueue.push_back(&normalPackets.back());
+                        break;
+                    case RenderType::Transparent:
+                        transparentQueue.push_back(&normalPackets.back());
+                        break;
+                }
             }
             break;
         }
@@ -165,6 +182,10 @@ void RendererModule::render()
 {
     if (window != nullptr)
     {
+        // ? +++++ Clear the render packets +++++
+        normalPackets.clear();
+        instancedPackets.clear();
+
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
         glClear(createInfo.clearFlags);
 
@@ -193,14 +214,16 @@ void RendererModule::render()
         glm::mat4 VP = (*projectionMatrix) * (*viewMatrix);
 
         // ? +++++ Sort the render queue +++++
-        std::sort(renderQueue.begin(), renderQueue.end(), 
+        std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
-        // ? +++++ Execute (order 66) rendering loop +++++
-        while(!renderQueue.empty())
+        // ? +++++ Execute (order 66) opaque rendering loop +++++
+        // * Setup
+        glDisable(GL_BLEND);
+        while(!opaqueQueue.empty())
         {
-            renderQueue.front()->render(VP);
-            renderQueue.pop_front();
+            opaqueQueue.front()->render(VP);
+            opaqueQueue.pop_front();
         }
 
         // ? +++++ Render skybox with appropriate depth test function +++++
@@ -217,10 +240,22 @@ void RendererModule::render()
             glBindVertexArray(0);
         }
 
+        // ? +++++ Transparent rendering loop +++++
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        while(!transparentQueue.empty())
+        {
+            transparentQueue.front()->render(VP);
+            transparentQueue.pop_front();
+        }
+
+        // TODO:
+        // ! ----- Order Independent Transparency implementation -----
+        // ? +++++ 3D Transparency pass for OIT +++++
+
+        // ? +++++ 2D Compositing pass for OIT +++++
+
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
-
-        normalPackets.clear();
-        instancedPackets.clear();
     }
 }

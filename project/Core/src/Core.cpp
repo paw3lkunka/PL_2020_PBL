@@ -3,6 +3,8 @@
 #include "Components.inc"
 #include "Systems.inc"
 
+#include "Material.hpp"
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -113,10 +115,10 @@ int Core::init()
 
 
     std::cout << "Shaders compiled" << std::endl;
-    Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat");
+    Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat", RenderType::Opaque);
     unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
-    Material* unlitSkinnedMat = objectModule.newMaterial(unlitSkinned, "unlitSkinnedMat");
+    Material* unlitSkinnedMat = objectModule.newMaterial(unlitSkinned, "unlitSkinnedMat", RenderType::Opaque);
     unlitSkinnedMat->setVec4("color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     TextureCreateInfo texCreateInfo = {};
@@ -126,11 +128,12 @@ int Core::init()
     texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
-    Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat");
+    Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat", RenderType::Opaque);
     unlitTextureMat->setTexture("mainTex", texture);
 
-    Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", true);
+    Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Transparent, true);
     unlitInstancedMat->setTexture("mainTex", texture);
+    unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
 
     TextureCreateInfo skyboxCreateInfo = {};
     skyboxCreateInfo.generateMipmaps = true;
@@ -146,19 +149,19 @@ int Core::init()
                                 "Resources/Textures/skybox/py.png",
                                 "Resources/Textures/skybox/ny.png");
 
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat");
+    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
     skyboxMat->setCubemap("cubemap", cubemap);
 
-    Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat");
-    waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat", RenderType::Transparent);
+    waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
 
-    Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat");
+    Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
 
-    Material* riverBedMat = objectModule.newMaterial(unlitColor, "riverBedMat");
+    Material* riverBedMat = objectModule.newMaterial(unlitColor, "riverBedMat", RenderType::Opaque);
     riverBedMat->setVec4("color", glm::vec4(0.407f, 0.2f, 0.070f, 1.0f));
 
-    Material* riverBankMat = objectModule.newMaterial(unlitColor, "riverBankMat");
+    Material* riverBankMat = objectModule.newMaterial(unlitColor, "riverBankMat", RenderType::Opaque);
     riverBankMat->setVec4("color", glm::vec4(0.333f, 0.741f, 0.278f, 1.0f));
 
 #pragma endregion
