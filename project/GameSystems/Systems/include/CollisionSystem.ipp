@@ -9,6 +9,8 @@
 template<class T1, class T2>
 bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
+    //TODO get collider centre
+    //FIXME works wrong
     glm::vec4 axis = trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition(), 1.0f)
                      - trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition(), 1.0f);
 

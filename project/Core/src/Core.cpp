@@ -53,7 +53,7 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    
     window = glfwCreateWindow(windowWidth, windowHeight, "PBL", NULL, NULL);
     if (window == NULL)
 	{
@@ -99,7 +99,7 @@ int Core::init()
 
             Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
                 transform->setParent(&sceneModule.rootNode);
-                transform->getLocalPositionModifiable().y = 20;
+                transform->getLocalPositionModifiable().x = 50;
                 transform->getLocalScaleModifiable() *= 5;
 
             SphereCollider* collider;

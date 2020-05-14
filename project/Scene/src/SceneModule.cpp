@@ -21,18 +21,17 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
     if(dirty)
     {
 
-    #pragma region LTW
-
         local = glm::translate(local, transform.getLocalPosition());
         local = local * glm::toMat4(transform.getLocalRotation());
         local = glm::scale(local, transform.getLocalScale());
         
+        transform.localToWorldMatrix = parentsMatrix;
+        transform.worldToLocalMatrix = glm::inverse(transform.localToWorldMatrix);
+
         global = parentsMatrix * local;
-        
-        transform.localToWorldMatrix = global;
 
-    #pragma endregion
-
+/*
+TODO RETURN TO THIS IDEA
     #pragma region WTL
     
         glm::vec3 scale = transform.getLocalScale();
@@ -41,12 +40,8 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
         local = local * glm::toMat4(glm::inverse(transform.getLocalRotation()));
         local = glm::translate(local, -transform.getLocalPosition());
 
-        global = local * parentsMatrix;
-
-        transform.worldToLocalMatrix = global;
-
     #pragma endregion
-
+*/
         transform.dirty = false;
     }
     else

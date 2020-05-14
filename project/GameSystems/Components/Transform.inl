@@ -78,6 +78,11 @@ struct Transform : public Component
     inline const Transform* getParent() { return parent; }
 
     /**
+     * @brief Transformation Matrix in world space
+     */
+    glm::mat4 modelMatrix = glm::mat4(1);
+
+    /**
      * @brief Model matrix (local to world transform)
      */
     glm::mat4 localToWorldMatrix = glm::mat4(1);
@@ -99,10 +104,10 @@ struct Transform : public Component
     std::unordered_set<Transform*> children;
 
 private:
-    Transform* parent = nullptr;
-    glm::vec3 localPosition = {0,0,0};
-    glm::quat localRotation = {1,0,0,0};
-    glm::vec3 localScale = {1,1,1};
+    Transform* parent       = nullptr;
+    glm::vec3 localPosition = {0.0f, 0.0f, 0.0f};
+    glm::quat localRotation = {1.0f, 0.0f, 0.0f, 0.0f};
+    glm::vec3 localScale    = {1.0f, 1.0f, 1.0f};
 };
 
 #endif /* !TRANSFORM_HPP_ */
