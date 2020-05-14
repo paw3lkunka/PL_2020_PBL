@@ -17,7 +17,7 @@ class PhysicalBasedInputSystem : public System, public IMsgReceiver
         virtual ~PhysicalBasedInputSystem() = default;
 
         /**
-         * @brief should pe called after every cleanup
+         * @brief should be called after every update
          */
         void clearKeysets();
     protected:

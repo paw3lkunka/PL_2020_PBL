@@ -92,10 +92,10 @@ int Core::init()
             Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
 
             PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-                keymap->continuous[GLFW_KEY_UP   ].force = {  0.0f,  0.0f,  5.0f };
-                keymap->continuous[GLFW_KEY_DOWN ].force = {  0.0f,  0.0f, -5.0f };
-                keymap->continuous[GLFW_KEY_LEFT ].force = {  5.0f,  0.0f,  0.0f };
-                keymap->continuous[GLFW_KEY_RIGHT].force = { -5.0f,  0.0f,  0.0f };
+                keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
+                keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
+                keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
+                keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
 
             Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
                 transform->setParent(&sceneModule.rootNode);
@@ -116,8 +116,8 @@ int Core::init()
                 meshRenderer->mesh = mesh;
             
             Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                rigidbody->drag = 1;
-                rigidbody->angularDrag = 1;
+                rigidbody->drag = 10;
+                rigidbody->angularDrag = 10;
                 rigidbody->mass = 10;
                 rigidbody->ignoreGravity = true;
         }
@@ -221,6 +221,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
