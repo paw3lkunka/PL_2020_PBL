@@ -4,7 +4,7 @@
 #include <iostream>
 #endif
 
-#include "IModule.inl"
+#include "IMsgReceiver.inl"
 #include "Message.inl"
 
 MessageBus::MessageBus(int bufferSize)
@@ -13,7 +13,7 @@ MessageBus::MessageBus(int bufferSize)
 	messagesBuffer1.reserve(bufferSize);
 }
 
-void MessageBus::addReceiver(IModule* modulePtr)
+void MessageBus::addReceiver(IMsgReceiver* modulePtr)
 {
     modulesPointers.push_back(modulePtr);
 }

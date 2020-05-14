@@ -4,6 +4,10 @@
 #include "System.hpp"
 #include "IMsgReceiver.inl"
 
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 struct Transform;
 struct Paddle;
 class Message;
@@ -28,14 +32,14 @@ protected:
         /**
          * @brief Initializes processed entities, runs before first update
          */
-        virtual void start() {};
+        virtual void start();
 
         /**
          * @brief Contain logic of the system called in fixed time steps
          * called in Process() only when AssertEntity() returned true
          * should use class variables to access components
          */
-        virtual void fixedUpdate() {};
+        virtual void fixedUpdate() {}
 
         /**
          * @brief Contain logic of the system runned once per frame
@@ -44,6 +48,12 @@ protected:
          */
         virtual void frameUpdate();
 private:
+
+    glm::vec3 startPosition;
+    glm::quat startRotation;
+    glm::vec3 lastFramePosition;
+
+    glm::vec2 inputRaw = {0.0f,0.0f};
 
     Transform* transformPtr;
     Paddle* paddlePtr;

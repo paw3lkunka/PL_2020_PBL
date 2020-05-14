@@ -1,8 +1,8 @@
 {
     "Amounts": {
-        "components": 46,
+        "components": 48,
         "cubemaps": 1,
-        "entities": 21,
+        "entities": 23,
         "materials": 13,
         "meshes": 11,
         "shaders": 5,
@@ -45,8 +45,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -56,7 +56,7 @@
             "z": 5.0
         },
         "serializationID": 6,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component003": {
@@ -74,8 +74,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -85,7 +85,7 @@
             "z": 5.0
         },
         "serializationID": 10,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component005": {
@@ -103,8 +103,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -114,7 +114,7 @@
             "z": 5.0
         },
         "serializationID": 14,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component007": {
@@ -132,8 +132,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -143,7 +143,7 @@
             "z": 5.0
         },
         "serializationID": 18,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component009": {
@@ -161,8 +161,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -172,7 +172,7 @@
             "z": 5.0
         },
         "serializationID": 22,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component011": {
@@ -185,15 +185,15 @@
     "component012": {
         "entity id": 15,
         "localPosition": {
-            "x": 2.0,
+            "x": 0.0,
             "y": 0.0,
-            "z": -6.0
+            "z": 0.0
         },
         "localRotation": {
-            "w": -0.5,
-            "x": 0.5,
-            "y": -0.5,
-            "z": 0.5
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
         },
         "localScale": {
             "x": 1.0,
@@ -201,7 +201,7 @@
             "z": 1.0
         },
         "serializationID": 74,
-        "transform parentID": 86,
+        "transform parentID": 101,
         "type": "Transform"
     },
     "component013": {
@@ -243,7 +243,7 @@
     "component016": {
         "entity id": 17,
         "localPosition": {
-            "x": -7.0,
+            "x": -6.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -277,10 +277,10 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": 0.5,
-            "z": -0.5
+            "w": 0.5,
+            "x": 0.5,
+            "y": -0.5,
+            "z": 0.5
         },
         "localScale": {
             "x": 1.0,
@@ -302,12 +302,12 @@
         "entity id": 19,
         "localPosition": {
             "x": -13.0,
-            "y": -18.0,
+            "y": -37.0,
             "z": -100.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": -0.7071067690849304,
+            "x": 0.7071067690849304,
             "y": 0.0,
             "z": 0.0
         },
@@ -526,15 +526,15 @@
     "component037": {
         "entity id": 12,
         "localPosition": {
-            "x": -118.91500091552734,
-            "y": 38.32984161376953,
-            "z": -111.65171813964844
+            "x": -24.794483184814453,
+            "y": 43.96234130859375,
+            "z": -172.04701232910156
         },
         "localRotation": {
-            "w": 0.804481565952301,
-            "x": -0.14329999685287476,
-            "y": -0.5674996972084045,
-            "z": -0.10108710080385208
+            "w": -0.015016667544841766,
+            "x": 0.004605390597134829,
+            "y": 0.9559313058853149,
+            "z": 0.2931700348854065
         },
         "localScale": {
             "x": 1.0,
@@ -547,9 +547,9 @@
     },
     "component038": {
         "at": {
-            "x": 0.8841145634651184,
-            "y": -0.34529823064804077,
-            "z": -0.3148183822631836
+            "x": 0.02600947767496109,
+            "y": -0.5606391429901123,
+            "z": 0.8276517391204834
         },
         "entity id": 12,
         "gain": 1.0,
@@ -557,9 +557,9 @@
         "serializationID": 63,
         "type": "AudioListener",
         "up": {
-            "x": 0.32529085874557495,
-            "y": 0.938493013381958,
-            "z": -0.11583063006401062
+            "x": 0.017609745264053345,
+            "y": 0.8280602693557739,
+            "z": 0.5603624582290649
         }
     },
     "component039": {
@@ -692,6 +692,50 @@
         "rolloffFactor": 1.0,
         "serializationID": 72,
         "type": "AudioSource"
+    },
+    "component046": {
+        "entity id": 21,
+        "localPosition": {
+            "x": 3.0,
+            "y": 0.0,
+            "z": -6.0
+        },
+        "localRotation": {
+            "w": 0.7071067690849304,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.7071067690849304
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 101,
+        "transform parentID": 86,
+        "type": "Transform"
+    },
+    "component047": {
+        "entity id": 22,
+        "localPosition": {
+            "x": 0.0,
+            "y": -50.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": -0.7071067690849304,
+            "x": 0.7071067690849304,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 103,
+        "transform parentID": 0,
+        "type": "Transform"
     },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox/pz.png",
@@ -900,6 +944,22 @@
         "id": 14,
         "name": "sphereSound",
         "serializationID": 68
+    },
+    "entity021": {
+        "components": [
+            101
+        ],
+        "id": 21,
+        "name": "PaddleIndirect",
+        "serializationID": 99
+    },
+    "entity022": {
+        "components": [
+            103
+        ],
+        "id": 22,
+        "name": "Terrain",
+        "serializationID": 102
     },
     "material000": {
         "cubemaps": {},
@@ -1231,17 +1291,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.3354509770870209,
-                0.32529085874557495,
-                -0.8841145634651184,
+                -0.9995065331459045,
+                0.017609745264053345,
+                -0.02600947581231594,
                 0.0,
-                7.450580596923828e-09,
-                0.9384930729866028,
-                0.3452982008457184,
+                3.7252898543727042e-09,
+                0.8280602097511292,
+                0.5606390237808228,
                 0.0,
-                0.9420576691627502,
-                -0.11583063751459122,
-                0.314818412065506,
+                0.03141012787818909,
+                0.5603624582290649,
+                -0.8276515603065491,
                 0.0,
                 0.0,
                 0.0,

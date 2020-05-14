@@ -32,9 +32,9 @@ void ErrorLog(const char* log)
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 {
     glm::mat4 temp = glm::mat4(1);
+    temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.x), glm::vec3(1.0, 0.0, 0.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.y), glm::vec3(0.0, 1.0, 0.0));
-    temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     glm::quat quatFinal = glm::quat(temp);
     return quatFinal;
 }
@@ -90,7 +90,11 @@ int Core::init()
 
     if (updateScene)
     {
-        
+        auto entity = objectModule.getEntityPtrByName("Paddle");
+        auto paddle = objectModule.newEmptyComponent<Paddle>();
+        entity->addComponent(paddle);
+
+        paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
     }
 
 #pragma region Renderer
@@ -116,6 +120,9 @@ int Core::init()
     //gameSystemsModule.addSystem(&gravitySystem);
     //gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&paddleControlSystem);
+
+    messageBus.addReceiver(&paddleControlSystem);
 
 #pragma region AudioModule demo - initialization
     
@@ -171,6 +178,7 @@ int Core::mainLoop()
     sceneModule.updateTransforms();
     // * pointer for entity 
     Entity* e = objectModule.getEntityPtrByID(0u);
+    Transform* eTrans = e->getComponentPtr<Transform>();
 
     int entitiesSize = (*objectModule.getEntitiesVector()).size();
     // * list of entities names with \0 in between
@@ -239,24 +247,33 @@ int Core::mainLoop()
         if(ImGui::Combo("", &currentItem, entities.c_str()))
         {
             e = objectModule.getEntityPtrByID(currentItem);
-            rotation = glm::eulerAngles(e->getComponentPtr<Transform>()->getLocalRotation()) * 180.0f / glm::pi<float>();
+            eTrans = e->getComponentPtr<Transform>();
+            //rotation is quaternion in ZXY 
+            glm::quat rot = eTrans->getLocalRotation();
+            glm::vec4 worldRot = eTrans->localToWorldMatrix * glm::vec4(rot.x, rot.y, rot.z, rot.w);
+            glm::vec3 tempRot = glm::eulerAngles(glm::quat(worldRot.w, worldRot.x, worldRot.y, worldRot.z)) * 180.0f / glm::pi<float>();
+            //prescribing ZXY to XYZ
+            rotation = tempRot;
+            //rotation = glm::vec3(tempRot.y, tempRot.z, tempRot.x);
         }
 
         ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
         ImGui::Text("Transform:");
-        ImGui::DragFloat3("Position: ", (float*)&e->getComponentPtr<Transform>()->getLocalPositionModifiable(), 1.0f, -100.0f, 100.0f, "%.2f");
-        if(ImGui::DragFloat3("Rotation: ", (float*)&rotation, 1.0f, -360.0f, 360.0f, "%.1f"))
+        ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 1.0f, -100.0f, 100.0f, "%.2f");
+        if(ImGui::DragFloat3("World rotation: ", (float*)&rotation, 1.0f, -360.0f, 360.0f, "%.1f"))
         {
-            e->getComponentPtr<Transform>()->getLocalRotationModifiable() = eulerToQuaternion(rotation);
+            glm::quat worldQuat = eulerToQuaternion(rotation);
+            glm::vec4 rot = eTrans->worldToLocalMatrix * glm::normalize(glm::vec4(worldQuat.x, worldQuat.y, worldQuat.z, worldQuat.w));
+            eTrans->getLocalRotationModifiable() = glm::quat(rot.w, rot.x, rot.y, rot.z);   
         }
-        ImGui::DragFloat3("Scale: ", (float*)&e->getComponentPtr<Transform>()->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
-        if(e->getComponentPtr<Transform>()->getParent()->serializationID == 0)
+        ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
+        if(eTrans->getParent()->serializationID == 0)
         {
             ImGui::Text("Parent name: Root scene");
         }
         else
         {
-            ImGui::Text(("Parent name: " + std::string(e->getComponentPtr<Transform>()->getParent()->entityPtr->getName())).c_str());
+            ImGui::Text(("Parent name: " + std::string(eTrans->getParent()->entityPtr->getName())).c_str());
         }
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
@@ -317,3 +334,4 @@ CollisionDetectionSystem Core::collisionDetectionSystem;
 GravitySystem Core::gravitySystem;
 KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;
+PaddleControlSystem Core::paddleControlSystem;

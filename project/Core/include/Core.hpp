@@ -232,6 +232,8 @@ class Core
         static KinematicSystem kinematicSystem;
         //TODO documentation
         static SkeletonSystem skeletonSystem;
+        //TODO documentation
+        static PaddleControlSystem paddleControlSystem;
 
 #pragma endregion
 

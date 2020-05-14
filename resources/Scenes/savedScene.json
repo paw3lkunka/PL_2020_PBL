@@ -1,8 +1,8 @@
 {
     "Amounts": {
-        "components": 46,
+        "components": 49,
         "cubemaps": 1,
-        "entities": 21,
+        "entities": 23,
         "materials": 13,
         "meshes": 11,
         "shaders": 5,
@@ -45,8 +45,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -56,7 +56,7 @@
             "z": 5.0
         },
         "serializationID": 6,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component003": {
@@ -74,8 +74,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -85,7 +85,7 @@
             "z": 5.0
         },
         "serializationID": 10,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component005": {
@@ -103,8 +103,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -114,7 +114,7 @@
             "z": 5.0
         },
         "serializationID": 14,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component007": {
@@ -132,8 +132,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -143,7 +143,7 @@
             "z": 5.0
         },
         "serializationID": 18,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component009": {
@@ -161,8 +161,8 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
-            "x": -0.7071067690849304,
+            "w": 1.0,
+            "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -172,7 +172,7 @@
             "z": 5.0
         },
         "serializationID": 22,
-        "transform parentID": 0,
+        "transform parentID": 103,
         "type": "Transform"
     },
     "component011": {
@@ -185,14 +185,14 @@
     "component012": {
         "entity id": 15,
         "localPosition": {
-            "x": 2.0,
+            "x": 3.0,
             "y": 0.0,
-            "z": -6.0
+            "z": -7.0
         },
         "localRotation": {
-            "w": -0.5,
+            "w": 0.5,
             "x": 0.5,
-            "y": -0.5,
+            "y": 0.5,
             "z": 0.5
         },
         "localScale": {
@@ -201,7 +201,7 @@
             "z": 1.0
         },
         "serializationID": 74,
-        "transform parentID": 86,
+        "transform parentID": 101,
         "type": "Transform"
     },
     "component013": {
@@ -243,7 +243,7 @@
     "component016": {
         "entity id": 17,
         "localPosition": {
-            "x": -7.0,
+            "x": -6.0,
             "y": 0.0,
             "z": 0.0
         },
@@ -277,10 +277,10 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": 0.5,
-            "z": -0.5
+            "w": 0.5,
+            "x": 0.5,
+            "y": -0.5,
+            "z": 0.5
         },
         "localScale": {
             "x": 1.0,
@@ -301,15 +301,15 @@
     "component020": {
         "entity id": 19,
         "localPosition": {
-            "x": -21.0,
-            "y": -16.0,
+            "x": -13.0,
+            "y": -18.0,
             "z": -100.0
         },
         "localRotation": {
-            "w": -0.7071067690849304,
-            "x": 0.7071067690849304,
-            "y": 0.0,
-            "z": 0.0
+            "w": 0.029850952327251434,
+            "x": -5.7899980545043945,
+            "y": 0.962936282157898,
+            "z": -15.133478164672852
         },
         "localScale": {
             "x": 3.0,
@@ -526,15 +526,15 @@
     "component037": {
         "entity id": 12,
         "localPosition": {
-            "x": -122.59893798828125,
-            "y": 145.33021545410156,
-            "z": -16.363901138305664
+            "x": -93.97589111328125,
+            "y": 203.89251708984375,
+            "z": -333.0717468261719
         },
         "localRotation": {
-            "w": 0.8347102403640747,
-            "x": -0.229134202003479,
-            "y": -0.48289212584495544,
-            "z": -0.1325574815273285
+            "w": -0.19992750883102417,
+            "x": 0.07355901598930359,
+            "y": 0.9169504046440125,
+            "z": 0.33737215399742126
         },
         "localScale": {
             "x": 1.0,
@@ -547,9 +547,9 @@
     },
     "component038": {
         "at": {
-            "x": 0.7454031705856323,
-            "y": -0.5105433464050293,
-            "z": -0.42862528562545776
+            "x": 0.31701377034187317,
+            "y": -0.6481200456619263,
+            "z": 0.6924179196357727
         },
         "entity id": 12,
         "gain": 1.0,
@@ -557,9 +557,9 @@
         "serializationID": 63,
         "type": "AudioListener",
         "up": {
-            "x": 0.4425884485244751,
-            "y": 0.8598520755767822,
-            "z": -0.2544994056224823
+            "x": 0.26979994773864746,
+            "y": 0.7615382075309753,
+            "z": 0.5892941355705261
         }
     },
     "component039": {
@@ -693,6 +693,54 @@
         "serializationID": 72,
         "type": "AudioSource"
     },
+    "component046": {
+        "entity id": 21,
+        "localPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 101,
+        "transform parentID": 86,
+        "type": "Transform"
+    },
+    "component047": {
+        "entity id": 22,
+        "localPosition": {
+            "x": 0.0,
+            "y": -50.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": -0.7071067690849304,
+            "x": 0.7071067690849304,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 103,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component048": {
+        "entity id": 15,
+        "serializationID": 103
+    },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox/pz.png",
         "bottomPath": "Resources/Textures/skybox/ny.png",
@@ -766,7 +814,8 @@
     "entity006": {
         "components": [
             74,
-            76
+            76,
+            103
         ],
         "id": 15,
         "name": "Paddle",
@@ -900,6 +949,22 @@
         "id": 14,
         "name": "sphereSound",
         "serializationID": 68
+    },
+    "entity021": {
+        "components": [
+            101
+        ],
+        "id": 21,
+        "name": "PaddleIndirect",
+        "serializationID": 99
+    },
+    "entity022": {
+        "components": [
+            103
+        ],
+        "id": 22,
+        "name": "Terrain",
+        "serializationID": 102
     },
     "material000": {
         "cubemaps": {},
@@ -1231,17 +1296,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.4984874725341797,
-                0.44258835911750793,
-                -0.7454031109809875,
+                -0.9092362523078918,
+                0.26979994773864746,
+                -0.31701380014419556,
                 0.0,
-                -1.4901161193847656e-08,
-                0.8598520755767822,
-                0.5105432868003845,
+                -4.4703497792397684e-08,
+                0.7615382075309753,
+                0.6481201648712158,
                 0.0,
-                0.86689692735672,
-                -0.2544994056224823,
-                0.4286254346370697,
+                0.4162808954715729,
+                0.5892942547798157,
+                -0.6924181580543518,
                 0.0,
                 0.0,
                 0.0,
