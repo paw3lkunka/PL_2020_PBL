@@ -4,8 +4,6 @@
 #include "mesh/Mesh.hpp"
 #include "mesh/MeshDataStructures.inl"
 
-#include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <vector>
 
 /**
@@ -36,11 +34,13 @@ public:
     /**
      * @brief Render all the mesh instances
      */
-    void renderInstanced(int count);
+    void renderInstanced(int count, glm::mat4* instanceTransforms);
 
 private:
     GLuint vao, vbo, ebo;
+    GLuint instanceVbo;
     Bounds bounds;
+
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 };

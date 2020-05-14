@@ -48,7 +48,7 @@ public:
     /**
      * @brief Get whether material is instanced or not
      */
-    bool instancingEnabled() { return enableInstancing; }
+    bool isInstancingEnabled() { return enableInstancing; }
 
     /**
      * @brief Performs matrix multiplication and sets the MVP matrix, should be used only during rendering

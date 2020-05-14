@@ -39,6 +39,8 @@ private:
     void readCamera(std::string name);
     void readMeshRenderer(std::string name);
     void readSphereCollider(std::string name);
+    void readBoxCollider(std::string name);
+    void readRigidbody(std::string name);
 };
 
 #endif /* !SCENEREADER_HPP_ */

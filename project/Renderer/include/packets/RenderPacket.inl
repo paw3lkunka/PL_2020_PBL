@@ -13,7 +13,7 @@ struct RenderPacket
     RenderPacket() = default;
     virtual ~RenderPacket() = default;
 
-    virtual void render(glm::mat4& VP, unsigned int instanceBuffer = 0) = 0;
+    virtual void render(glm::mat4& VP) = 0;
 
     Mesh* mesh;
     Material* material;

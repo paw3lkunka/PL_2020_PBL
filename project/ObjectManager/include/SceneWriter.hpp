@@ -3,17 +3,10 @@
 
 #include <json.hpp>
 
+#include "ComponentsPreDeclarations.hxx"
+
 class ObjectModule;
 class ObjectContainer;
-class Component;
-struct Bone;
-struct Transform;
-struct AudioListener;
-struct AudioSource;
-struct Camera;
-struct Renderer;
-struct MeshRenderer;
-struct SphereCollider;
 class Material;
 class Texture;
 class Mesh;
@@ -70,6 +63,8 @@ private:
     void saveCamera(std::string name, Camera* componentPtr);
     void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
+    void saveBoxCollider(std::string name, BoxCollider* componentPtr);
+    void saveRigidbody(std::string name, Rigidbody* componentPtr);
 
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);

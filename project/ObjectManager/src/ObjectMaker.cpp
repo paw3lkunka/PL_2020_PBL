@@ -131,9 +131,9 @@ void ObjectMaker::newModel(const char* filePath)
     objModPtr->assetReader.loadMesh(filePath);
 }
 
-Material* ObjectMaker::newMaterial(Shader* shader, std::string name)
+Material* ObjectMaker::newMaterial(Shader* shader, std::string name, bool instancingEnabled)
 {
-    objContainer->materials.push_back(new Material(shader, name.c_str()));
+    objContainer->materials.push_back(new Material(shader, name.c_str(), instancingEnabled));
     return objContainer->materials[objContainer->materials.size() - 1];
 }
 

@@ -5,6 +5,9 @@
 #include "ISerializable.inl"
 #include "IFileSystem.inl"
 
+#include <glm/glm.hpp>
+#include <glad/glad.h>
+
 class Mesh : public IFileSystem, public ISerializable
 {
 public:
@@ -25,7 +28,7 @@ public:
     /**
      * @brief Virtual render function for use with instanced rendering
      */
-    virtual void renderInstanced(int count) {}
+    virtual void renderInstanced(int count, glm::mat4* instanceTransforms) {}
     
     /**
      * @brief Get the Mesh path

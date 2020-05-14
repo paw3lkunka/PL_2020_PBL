@@ -2,15 +2,12 @@
 #include "mesh/MeshDataStructures.inl"
 #include <iostream>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {
     this->vertices = vertices;
-    // std::cout << "BoneIDs:\n";
-    // for (int i = 0; i < 1000; i++)
-    // {
-    //     std::cout << this->vertices[i].boneIDs[0] << ' ' << this->vertices[i].boneIDs[1] << ' ' << this->vertices[i].boneIDs[2] << ' ' << this->vertices[i].boneIDs[3] << '\n';
-    // }
-    // std::cout << std::endl;
     this->bounds = bounds;
     this->indices = indices;
     this->bounds = bounds;

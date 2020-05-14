@@ -18,12 +18,13 @@ public:
 
     void setup();
     void render();
-    virtual void renderInstanced() {}
+    void renderInstanced(int count, glm::mat4* instanceTransforms) {}
 
-protected:
 private:
     GLuint vao, vbo, ebo;
+    GLuint instanceVbo;
     Bounds bounds;
+
     std::vector<VertexSkinned> vertices;
     std::vector<unsigned int> indices;
 };

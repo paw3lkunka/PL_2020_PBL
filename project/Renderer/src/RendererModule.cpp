@@ -18,7 +18,7 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
         {
             MeshRenderer* mr = msg.getValue<MeshRenderer*>();
-            if (mr->material->instancingEnabled())
+            if (mr->material->isInstancingEnabled())
             {
                 // ? +++++ Create new instanced packet or just add an instance matrix +++++
                 auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
@@ -159,31 +159,6 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
     }
-
-    // * ----- Make buffer for instanced transforms -----
-    glGenBuffers(1, &instanceTransformBuffer);
-
-    glBindBuffer(GL_ARRAY_BUFFER, instanceTransformBuffer);
-    std::size_t vec4Size = sizeof(glm::vec4);
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
-
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
-    
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
-
-    glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
-
-    glVertexAttribDivisor(2, 1);
-    glVertexAttribDivisor(3, 1);
-    glVertexAttribDivisor(4, 1);
-    glVertexAttribDivisor(5, 1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 }
 
 void RendererModule::render()
@@ -224,7 +199,7 @@ void RendererModule::render()
         // ? +++++ Execute (order 66) rendering loop +++++
         while(!renderQueue.empty())
         {
-            renderQueue.front()->render(VP, instanceTransformBuffer);
+            renderQueue.front()->render(VP);
             renderQueue.pop_front();
         }
 
@@ -244,5 +219,8 @@ void RendererModule::render()
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
+
+        normalPackets.clear();
+        instancedPackets.clear();
     }
 }

@@ -18,16 +18,11 @@ struct InstancedPacket : RenderPacket
     InstancedPacket() = default;
     virtual ~InstancedPacket() = default;
 
-    void render(glm::mat4& VP, unsigned int instanceBuffer)
+    void render(glm::mat4& VP)
     {
         material->use();
         // TODO: sending MVP instead of model matrices
-
-        // ? +++++ Setting instance transformation array +++++
-        glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer);
-        glBufferData(GL_ARRAY_BUFFER, instanceMatrices.size(), instanceMatrices.data(), GL_DYNAMIC_DRAW);
-
-        mesh->renderInstanced(instanceMatrices.size());
+        mesh->renderInstanced(instanceMatrices.size(), instanceMatrices.data());
     }
 
     std::vector<glm::mat4> instanceMatrices;

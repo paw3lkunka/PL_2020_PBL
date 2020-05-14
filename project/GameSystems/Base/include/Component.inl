@@ -3,6 +3,8 @@
 
 #include "ISerializable.inl"
 
+#include <string>
+
 class Entity;
 
 /**
@@ -17,5 +19,22 @@ struct Component : public ISerializable
      */
     Entity* entityPtr;
 };
+
+/**
+ * @brief Get name of entity containing given component
+ * 
+ * @param c - Reference to component
+ * @return const std::string - Name of entity
+ */
+const std::string Name(Component& c);
+
+/**
+ * @brief Get name of entity containing given component
+ * 
+ * @param c - Pointer to component
+ * @return const std::string - Name of entity
+ */
+const std::string Name(Component* c);
+
 
 #endif /* !COMPONENT_HPP_ */

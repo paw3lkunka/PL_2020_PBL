@@ -10,7 +10,7 @@ struct NormalPacket : RenderPacket
     NormalPacket() = default;
     virtual ~NormalPacket() = default;
 
-    void render(glm::mat4& VP, unsigned int instanceBuffer)
+    void render(glm::mat4& VP)
     {
         material->use();
         // TODO: switching between diferrent matrix usage

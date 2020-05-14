@@ -22,10 +22,11 @@ public:
     static void setup();
     
     virtual void render();
-    virtual void renderInstanced(int count);
+    virtual void renderInstanced(int count, glm::mat4* instanceTransforms);
 
 private:
     static GLuint vao, vbo;
+    static GLuint instanceVbo;
     static Bounds bounds;
     static float vertexData[20];
 };

@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.4 )
+cmake_minimum_required( VERSION 3.17 )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -46,15 +46,13 @@ set(ALSOFT_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(ALSOFT_TESTS OFF CACHE BOOL "" FORCE)
 
 # Enable Assimp modules
-set(ASSIMP_NO_EXPORT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
 
 set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_GLTF_IMPORTER ON CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_COLLADA_IMPORTER ON CACHE BOOL "" FORCE)
 
-set(ASSIMP_BUILD_GLTF_EXPORTER ON CACHE BOOL "" FORCE)
-
 # Disable Assimp modules
+set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AMF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_3DS_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AC_IMPORTER OFF CACHE BOOL "" FORCE)
@@ -101,25 +99,10 @@ set(ASSIMP_BUILD_MMD_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_STEP_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_M3D_IMPORTER OFF CACHE BOOL "" FORCE)
 
-set(ASSIMP_BUILD_3DS_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_ASSBIN_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_ASSXML_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_COLLADA_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_OBJ_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_OPENGEX_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_PLY_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_FBX_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_STL_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_X_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_X3D_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_3MF_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_ASSJSON_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_STEP_EXPORTER OFF CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_M3D_EXPORTER OFF CACHE BOOL "" FORCE)
-
 set(BUILD_DOCS OFF CACHE BOOL "" FORCE) #Assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
 
 add_subdirectory(libs/glad/)
 add_subdirectory(libs/glfw/)
@@ -131,9 +114,6 @@ add_subdirectory(libs/json/)
 #Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
-# target_compile_options(alsoft-config PUBLIC -w)
-# target_compile_options(makemhr PUBLIC -w)
-# target_compile_options(sofa-info PUBLIC -w)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -164,8 +144,10 @@ list(
 
 add_library(lib ${SOURCE_FILES} )
 
+
 include_directories( 
     project
+    project/Autogen/include
     project/Core/include
     project/GameSystems/Base/include
     project/GameSystems/Components
@@ -175,6 +157,8 @@ include_directories(
     project/Input/include
     project/MessageBus/include
     project/Renderer/include
+    project/Renderer/include/mesh
+    project/Renderer/include/packets
     project/Terminal/include
     project/Scene/include
     libs/stb

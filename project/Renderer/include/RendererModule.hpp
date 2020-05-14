@@ -79,6 +79,7 @@ private:
     glm::mat4* projectionMatrix, * viewMatrix;
     
     std::deque<RenderPacket*> renderQueue;
+    
     std::vector<NormalPacket> normalPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
