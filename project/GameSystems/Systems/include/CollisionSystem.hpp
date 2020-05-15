@@ -65,11 +65,15 @@ class CollisionSystem : public System
 //TODO DOCUMENTATION !!!
         template<class T1, class T2>
         void resolveCollsion(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
-        
+
+//TODO should it be here?
+
 //TODO DOCUMENTATION !!!
-        Projection1D axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld);
+        static Projection1D axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 //TODO DOCUMENTATION !!!
-        Projection1D axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld);
+        static Projection1D axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+//TODO DOCUMENTATION !!!
+        static glm::vec3 axisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 };
 
 #include "CollisionSystem.ipp"

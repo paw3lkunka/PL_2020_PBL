@@ -66,27 +66,30 @@ glm::vec3 CollisionSystem::collsion<SphereCollider,SphereCollider>(SphereCollide
 }
 */
 
-Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, glm::vec3 axis, glm::mat4& localToWorld)
+Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
-    glm::vec3 centreWS = static_cast<glm::vec3>(localToWorld * glm::vec4(sphere->center, 1.0f));
-    float centre1D = glm::dot(centreWS, axis);
+    //FIXME COLLIDER IGNORES SCALE
+    glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(sphere->center, 1.0f);
+    float centre1D = glm::length(axisProjection(centreWS, axisPoint1, axisPoint2));
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
 
-Projection1D CollisionSystem::axisProjection(BoxCollider* box, glm::vec3 axis, glm::mat4& localToWorld)
+Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
     Projection1D result = {INFINITY, -INFINITY};
-
-    for (auto point : box->vert)
-    {
-        float point1D = glm::dot(static_cast<glm::vec3>(localToWorld * point), axis);
-
-        result.start = glm::min(result.start, point1D);
-        result.end = glm::min(result.end, point1D);
-    }
+//TODO IMPLEMENT
 
     return result;
+}
+
+glm::vec3 CollisionSystem::axisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
+{
+    //URL: https://gamedev.stackexchange.com/questions/72528/how-can-i-project-a-3d-point-onto-a-3d-line
+    glm::vec3 AB = axisPoint2 - axisPoint1;
+    glm::vec3 AP = point - axisPoint1;
+
+    return axisPoint1 + glm::dot(AP,AB) / glm::dot(AB,AB) * AB;
 }
 
 /*
