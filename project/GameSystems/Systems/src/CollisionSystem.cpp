@@ -74,6 +74,8 @@ Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* 
     glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
     glm::vec3 proj0 = axisProjection(glm::zero<glm::vec3>(), axisPoint1, axisPoint2);
     float centre1D = glm::length(projCentre - proj0);
+    
+    std::cout << "CENTRE: 3D: " << centreWS.x << ", " << centreWS.y << ", " << centreWS.z << " 1D: " << centre1D << std::endl;
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 

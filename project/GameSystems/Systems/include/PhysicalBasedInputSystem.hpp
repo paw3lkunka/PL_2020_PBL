@@ -30,7 +30,7 @@ class PhysicalBasedInputSystem : public System, public IMsgReceiver
         Rigidbody* rigidbodyPtr;
 
         std::unordered_set<int> pressed;
-        std::unordered_set<int> repeated;
+        std::unordered_set<int> held;
 };
 
 #endif /* !PHYSICALBASEDINPUTSYSTEM_HPP_ */

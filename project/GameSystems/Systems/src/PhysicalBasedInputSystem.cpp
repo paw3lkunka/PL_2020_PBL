@@ -7,7 +7,6 @@
 void PhysicalBasedInputSystem::clearKeysets()
 {
     pressed.clear();
-    repeated.clear();
 }
 
 void PhysicalBasedInputSystem::receiveMessage(Message msg)
@@ -15,10 +14,12 @@ void PhysicalBasedInputSystem::receiveMessage(Message msg)
     if (msg.getEvent() == Event::KEY_PRESSED)
     {
         pressed.insert(msg.getValue<int>());
+        held.insert(msg.getValue<int>());
     }
-    else if (msg.getEvent() == Event::KEY_REPEAT)
+    else if (msg.getEvent() == Event::KEY_RELEASED)
     {
-        repeated.insert(msg.getValue<int>());
+        auto iterator = held.find(msg.getValue<int>());
+        held.erase(iterator);
     }
 }
 
@@ -40,18 +41,9 @@ void PhysicalBasedInputSystem::fixedUpdate()
             std::cout<<"impulse #1"<<std::endl;
         }
         catch(std::out_of_range){}
-        //FIXME - there is some tame between pressed, and first repeat,
-        //temporary fix - lag
-        /*
-        try
-        {
-            rigidbodyPtr->impulses.push_back(keymapPtr->continuous.at(keycode));
-            std::cout<<"impulse #2"<<std::endl;
-        }
-        catch(std::out_of_range){}*/
     }
 
-    for (int keycode: repeated)
+    for (int keycode: held)
     {
         try
         {

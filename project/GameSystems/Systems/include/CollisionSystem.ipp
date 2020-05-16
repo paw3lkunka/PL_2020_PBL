@@ -9,14 +9,17 @@
 template<class T1, class T2>
 bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
-    //TODO get collider centre
     //FIXME works wrong - this is not a correct SAT test implementation - this works only for sphere
     glm::vec4 glob1 = trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition() + coll1->center, 1.0f);
     glm::vec4 glob2 = trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f);
 
     Projection1D proj1 = axisProjection(coll1, trans1, glob1, glob2);
     Projection1D proj2 = axisProjection(coll2, trans2, glob1, glob2);    
-/*
+
+    if((proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start))
+    {
+    //This behemoth causes HUGE lags and make build not interactive,
+    //NEVER commit this uncomented.
     std::cout << '\n'
             << "SPHERE 1 ---------------------- " << '\n'
             << "Radius: " << coll1->radius << '\n'
@@ -32,8 +35,10 @@ bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transfor
             << "Collider centre (global): " << glob2.x << ", " << glob2.y << ", " << glob2.z << '\n'
             << "Axis projection: " << proj2.start << ", " << proj2.end << '\n'
             << std::endl;
-*/
-    return (proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start);
+        return true;
+    }
+
+    return (false);
 }
 
 template<class T>
@@ -63,6 +68,8 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
 {
     if(collsion(collider1, collider2, transformPtr, transform2))
     {
+        //HACK tmp app exit
+        GetCore().messageBus.sendMessage(Message(Event::KEY_PRESSED,GLFW_KEY_ESCAPE));
         //TODO TEMP DEBUG
         std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
         CollisionData data = {collider1, collider2};

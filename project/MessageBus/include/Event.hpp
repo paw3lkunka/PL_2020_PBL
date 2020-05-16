@@ -24,6 +24,7 @@ enum class Event : unsigned int
     // The key was released, DATA: int - GLFW keycode.
     KEY_RELEASED,
     // The key was held down until it repeated int - GLFW keycode.
+    // Remember of delay between KEY_PRESSED and first KEY_RELEASED.
     KEY_REPEAT,
     // The mouse button was pressed, DATA: int - GLFW mouse button.
     MOUSE_BUTTON_PRESSED,
