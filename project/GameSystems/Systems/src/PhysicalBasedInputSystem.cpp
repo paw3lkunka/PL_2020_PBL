@@ -40,12 +40,15 @@ void PhysicalBasedInputSystem::fixedUpdate()
             std::cout<<"impulse #1"<<std::endl;
         }
         catch(std::out_of_range){}
+        //FIXME - there is some tame between pressed, and first repeat,
+        //temporary fix - lag
+        /*
         try
         {
             rigidbodyPtr->impulses.push_back(keymapPtr->continuous.at(keycode));
             std::cout<<"impulse #2"<<std::endl;
         }
-        catch(std::out_of_range){}
+        catch(std::out_of_range){}*/
     }
 
     for (int keycode: repeated)

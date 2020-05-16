@@ -17,62 +17,119 @@ class BoxCollider;
 class SphereCollider;
 class Rigidbody;
 
-//TODO DOCUMENTATION !!!
+/**
+ * @brief System responsible for detecting and resolveing collisions.
+ * Produce impulses proceed by physic system.
+ */
 class CollisionSystem : public System
 {
-    public:
-        CollisionSystem() = default;
+public:
+    CollisionSystem() = default;
         virtual ~CollisionSystem() = default;
 
-//TODO DOCUMENTATION !!!
-        virtual void start();        
-//TODO DOCUMENTATION !!!
-        virtual bool assertEntity(Entity* entity);
-//TODO DOCUMENTATION !!!
-        virtual void fixedUpdate();
-        
-//TODO DOCUMENTATION !!!
-        Collider* colliderPtr;
-//TODO DOCUMENTATION !!!
-        Transform* transformPtr;
-//TODO DOCUMENTATION !!!
-        Rigidbody* rigidbodyPtr;
-//TODO DOCUMENTATION !!!
-        glm::vec3 separation;
     protected:
-    private:
-//TODO DOCUMENTATION !!!
+        virtual void start();        
+        virtual bool assertEntity(Entity* entity);
+        virtual void fixedUpdate();
+
+    private:    
+        Collider* colliderPtr;
+        Transform* transformPtr;
+        Rigidbody* rigidbodyPtr;
+
+        ///@brief Collection of colliders of all entities, which we can interact
         std::vector<Collider*> colliders;
-//TODO DOCUMENTATION !!!
+
+        ///@brief Collection of transforms of all entities, which we can interact
         std::vector<Transform*> transforms;
-//TODO DOCUMENTATION !!!
+
+        ///@brief Collection of rigidbodies of all entities, which we can interact
         std::vector<Rigidbody*> rigidbodies;
-//TODO DOCUMENTATION !!!
+        
+        ///@brief Collection of pairs of colliders actally intersecting triggers
         std::unordered_set<CollisionData,CollisionDataHasher,CollisionDataEquals> activeTriggers;
 
-//TODO DOCUMENTATION !!!
+        /**
+         * @brief Detect and resolve colision of curent entity, depending on real collider type.
+         * 
+         * @tparam T Final collider type.
+         * @param collider Pointer to collider.
+         */
         template<class T>
         void collisionOf(T* collider);
 
-//TODO DOCUMENTATION !!!
+        /**
+         * @brief Detect and resolve colision of two colliders, depending on them real types.
+         * 
+         * @tparam T1 Final type of first collider.
+         * @tparam T2 Final type of second collider.
+         * @param collider1 collider of currently parsed entity.
+         * @param collider2 collider with which collision we want to resolve.
+         * @param transform2 transform of currently parsed entity.
+         * @param rigidbody2 transform with which collision we want to resolve.
+         */
         template<class T1, class T2>
         void collisionWith(T1* collider1, T2* collider2, Transform* transform2, Rigidbody* rigidbody2);
 
-//TODO DOCUMENTATION !!!
+        /**
+         * @brief Detect colision between two entities.
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param of collider of first entity.
+         * @param with collider of second entity.
+         * @param ofT transform of first entity.
+         * @param withT transform of second entity.
+         * @return if collision was detected
+         */
         template<class T1, class T2>
         bool collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
 
-//TODO DOCUMENTATION !!!
+        /**
+         * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param body1 rigidbody of second entity.
+         * @param body2 rigidbody of second entity. 
+         * @param transform1 transform of first entity.
+         * @param transform2 transform of second entity.
+         */
         template<class T1, class T2>
         void resolveCollsion(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
 
 //TODO should it be here?
 
-//TODO DOCUMENTATION !!!
+        /**
+         * @brief Project box collider to 1D range in space of given line.
+         * 
+         * @param box box to project.
+         * @param transform transform of projected box.
+         * @param axisPoint1 first point defining aline.
+         * @param axisPoint2 second point defining aline.
+         * @return Projection1D 1D projection of box in line space.
+         */
         static Projection1D axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
-//TODO DOCUMENTATION !!!
+        
+        /**
+         * @brief Project sphere collider to 1D range in space of given line.
+         * 
+         * @param sphere sphere to project.
+         * @param transform transform of projected sphere.
+         * @param axisPoint1 first point defining aline.
+         * @param axisPoint2 second point defining aline.
+         * @return Projection1D 1D projection of sphere in line space.
+         */
         static Projection1D axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
-//TODO DOCUMENTATION !!!
+
+        /**
+         * @brief Project point onto given line.
+         * 
+         * @param point point to project.
+         * @param axisPoint1 first point defining aline.
+         * @param axisPoint2 second point defining aline.
+         * @return glm::vec3 projection of point on line.
+         */
         static glm::vec3 axisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 };
 

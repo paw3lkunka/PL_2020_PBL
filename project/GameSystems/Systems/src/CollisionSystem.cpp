@@ -38,7 +38,8 @@ void CollisionSystem::fixedUpdate()
     }
     else if( BoxCollider* box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
     {
-        collisionOf(box1);
+        //FIXME UNCMMENT
+        //collisionOf(box1);
     }  
 }
 
@@ -69,8 +70,10 @@ glm::vec3 CollisionSystem::collsion<SphereCollider,SphereCollider>(SphereCollide
 Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
     //FIXME COLLIDER IGNORES SCALE
-    glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(sphere->center, 1.0f);
-    float centre1D = glm::length(axisProjection(centreWS, axisPoint1, axisPoint2));
+    glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
+    glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
+    glm::vec3 proj0 = axisProjection(glm::zero<glm::vec3>(), axisPoint1, axisPoint2);
+    float centre1D = glm::length(projCentre - proj0);
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
