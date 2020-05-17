@@ -11,7 +11,9 @@
 
 struct BoxCollider : public Collider
 {
-    //TODO documentation
+    /**
+     * @brief Calculate all vertices coordinates (in model space), should ba called after parameters change  
+     */
     void calculateVert()    
     {
         vert[0] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
@@ -24,27 +26,50 @@ struct BoxCollider : public Collider
         vert[7] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
     }
 
-    //TODO documentation
+    /**
+     * @brief Construct a new Box Collider object
+     * State of object is nivalid, ans should be  
+     */
     BoxCollider() = default;
 
-    //TODO documentation
-    BoxCollider(glm::vec3 center, glm::vec3 size)
+    /**
+     * @brief Construct a new Box Collider object
+     * 
+     * @param size size of collider
+     * @param center centre of collider (in model space), default [0,0,0]
+     */
+    BoxCollider(glm::vec3 size, glm::vec3 center = {0.0f, 0.0f, 0.0f})
     {
         this->center = center;
         this->halfSize = size * 0.5f;
         calculateVert();
     }
     
-    //TODO documentation
-    BoxCollider(glm::vec3 center, float width, float height, float depth)
+    /**
+     * @brief Construct a new Box Collider object
+     * 
+     * @param width size of collider
+     * @param height size of collider
+     * @param depth size of collider
+     */
+    BoxCollider(float width, float height, float depth)    
     {
-        this->center = center;
+        this->center = {0.0f, 0.0f, 0.0f};
         this->halfSize = {width * 0.5f, height * 0.5f, depth * 0.5f};
         calculateVert();
     }
     
-    //TODO documentation
-    BoxCollider(float x, float y, float z, float width, float height, float depth)    
+    /**
+     * @brief Construct a new Box Collider object
+     * 
+     * @param width size of collider
+     * @param height size of collider
+     * @param depth size of collider
+     * @param x coordinate of collider centre (in model space)
+     * @param y coordinate of collider centre (in model space)
+     * @param z coordinate of collider centre (in model space)
+     */
+    BoxCollider(float width, float height, float depth, float x, float y, float z)    
     {
         this->center = {x,y,z};
         this->halfSize = {width * 0.5f, height * 0.5f, depth * 0.5f};
@@ -56,6 +81,7 @@ struct BoxCollider : public Collider
      * @brief Center of the collider
      */
     glm::vec3 center;
+
     /**
      * @brief Size of the collider, where:
      * x - width / 2, 
@@ -63,10 +89,12 @@ struct BoxCollider : public Collider
      * z - depth / 2
      */
     glm::vec3 halfSize;
+
     /**
      * @brief Vertices of bounding box.
      * x, y, z - carteian coordinates.
      * w - always 1.
+     * generated automatically by calculateVert() call.
      */
     glm::vec4 vert[8];
 };

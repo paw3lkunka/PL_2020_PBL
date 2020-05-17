@@ -38,8 +38,8 @@ void CollisionSystem::fixedUpdate()
     }
     else if( BoxCollider* box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
     {
-        //FIXME UNCMMENT
-        //collisionOf(box1);
+        //XXX should be commeneted, to use 'behemoth debug' - remove this note and debug before reqest
+        collisionOf(box1);
     }  
 }
 
@@ -73,9 +73,10 @@ Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* 
     glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
     glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
     glm::vec3 proj0 = axisProjection(glm::zero<glm::vec3>(), axisPoint1, axisPoint2);
-    float centre1D = glm::length(projCentre - proj0);
+    glm::vec3 diff = projCentre - proj0;
+    float centre1D = glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
     
-    std::cout << "CENTRE: 3D: " << centreWS.x << ", " << centreWS.y << ", " << centreWS.z << " 1D: " << centre1D << std::endl;
+    std::cout << "CENTRE: 3D: " << centreWS.x << ", " << centreWS.y << ", " << centreWS.z << " 1D: " << centre1D << "\n";
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
@@ -106,10 +107,10 @@ Vectors n1,2,3 explanation:
 */
 
 template<>
-void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
+void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereCollider* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
-    //FIXME ignores collider centre
-    glm::vec3 n1 = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition(), 1.0f) - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition(), 1.0f);
+    glm::vec3 n1 = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f)
+    - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider2->center, 1.0f);
 
     body1->velocity =
     (
@@ -128,19 +129,19 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(Rigidbody* 
 }
 
 template<>
-void CollisionSystem::resolveCollsion<SphereCollider,BoxCollider>(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
+void CollisionSystem::resolveCollsion<SphereCollider,BoxCollider>(SphereCollider* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
     //TODO implementation
 }
 
 template<>
-void CollisionSystem::resolveCollsion<BoxCollider,SphereCollider>(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
+void CollisionSystem::resolveCollsion<BoxCollider,SphereCollider>(BoxCollider* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
     //TODO implementation
 }
 
 template<>
-void CollisionSystem::resolveCollsion<BoxCollider,BoxCollider>(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
+void CollisionSystem::resolveCollsion<BoxCollider,BoxCollider>(BoxCollider* collider1, BoxCollider* collider2,  Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
     //TODO implementation
 }

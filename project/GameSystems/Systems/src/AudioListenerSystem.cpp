@@ -35,9 +35,8 @@ void AudioListenerSystem::fixedUpdate()
 
     if(transform)
     {
-        //TODO overkill
         glm::vec3 scale; // unused
-        glm::quat orientation; // unused
+        glm::quat orientation;
         glm::vec3 translation;
         glm::vec3 skew; // unused
         glm::vec4 perspective; // unused

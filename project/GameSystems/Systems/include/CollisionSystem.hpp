@@ -96,7 +96,7 @@ public:
          * @param transform2 transform of second entity.
          */
         template<class T1, class T2>
-        void resolveCollsion(Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
+        void resolveCollsion(T1* collider1, T2* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
 
 //TODO should it be here?
 

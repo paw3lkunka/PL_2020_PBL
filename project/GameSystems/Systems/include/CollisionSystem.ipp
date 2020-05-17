@@ -15,9 +15,7 @@ bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transfor
 
     Projection1D proj1 = axisProjection(coll1, trans1, glob1, glob2);
     Projection1D proj2 = axisProjection(coll2, trans2, glob1, glob2);    
-
-    if((proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start))
-    {
+/*
     //This behemoth causes HUGE lags and make build not interactive,
     //NEVER commit this uncomented.
     std::cout << '\n'
@@ -36,9 +34,9 @@ bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transfor
             << "Axis projection: " << proj2.start << ", " << proj2.end << '\n'
             << std::endl;
         return true;
-    }
+*/
 
-    return (false);
+    return (proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start);
 }
 
 template<class T>
@@ -55,9 +53,9 @@ void CollisionSystem::collisionOf(T* collider)
             collisionWith(collider, sphere2, transforms[i], rigidbodies[i]);
         }
         else if( BoxCollider* box2 = dynamic_cast<BoxCollider*>(colliders[i]) )
-        {     
-            //FIXME UNCOMMENT   
-            //collisionWith(collider, box2, transforms[i], rigidbodies[i]); 
+        {
+            //XXX should be commeneted, to use 'behemoth debug' - remove this note and debug before reqest
+            collisionWith(collider, box2, transforms[i], rigidbodies[i]); 
         } 
         
     }
@@ -68,8 +66,6 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
 {
     if(collsion(collider1, collider2, transformPtr, transform2))
     {
-        //HACK tmp app exit
-        GetCore().messageBus.sendMessage(Message(Event::KEY_PRESSED,GLFW_KEY_ESCAPE));
         //TODO TEMP DEBUG
         std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
         CollisionData data = {collider1, collider2};
@@ -79,7 +75,7 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
             case Collider::Type::DYNAMIC:
             case Collider::Type::KINEMATIC:
             {
-                resolveCollsion<T1,T2>(rigidbodyPtr, rigidbody2, transformPtr, transform2);
+                resolveCollsion(collider1, collider2, rigidbodyPtr, rigidbody2, transformPtr, transform2);
 
                 Message msg(Event::COLLSION_DETECT, data);
                 GetCore().messageBus.sendMessage(msg);

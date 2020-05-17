@@ -13,8 +13,9 @@ void PhysicalBasedInputSystem::receiveMessage(Message msg)
 {
     if (msg.getEvent() == Event::KEY_PRESSED)
     {
-        pressed.insert(msg.getValue<int>());
-        held.insert(msg.getValue<int>());
+        int keycode = msg.getValue<int>();
+        pressed.insert(keycode);
+        held.insert(keycode);
     }
     else if (msg.getEvent() == Event::KEY_RELEASED)
     {
@@ -38,7 +39,6 @@ void PhysicalBasedInputSystem::fixedUpdate()
         try
         {
             rigidbodyPtr->impulses.push_back(keymapPtr->single.at(keycode));
-            std::cout<<"impulse #1"<<std::endl;
         }
         catch(std::out_of_range){}
     }
@@ -48,7 +48,6 @@ void PhysicalBasedInputSystem::fixedUpdate()
         try
         {
             rigidbodyPtr->impulses.push_back(keymapPtr->continuous.at(keycode));
-            std::cout<<"impulse #3"<<std::endl;
         }
         catch(std::out_of_range){}
     }
