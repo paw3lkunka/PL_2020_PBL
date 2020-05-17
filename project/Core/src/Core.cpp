@@ -120,8 +120,6 @@ int Core::init()
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
 
-    messageBus.addReceiver(&paddleControlSystem);
-
 #pragma region AudioModule demo - initialization
     
     audioModule.init();

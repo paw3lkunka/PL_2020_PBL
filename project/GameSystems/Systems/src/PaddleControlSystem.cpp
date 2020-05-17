@@ -5,7 +5,7 @@
 #include "Core.hpp"
 #include "GamepadDataStructures.inl"
 
-#include <cmath>
+#include <math.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtx/string_cast.hpp>
@@ -19,6 +19,10 @@ bool PaddleControlSystem::assertEntity(Entity* entity)
 
 void PaddleControlSystem::frameUpdate()
 {
+    if(keyboardInput)
+    {
+        inputRaw = glm::mix(inputRaw, interpolationTarget, 0.1f);
+    }
     paddlePtr->position2D = glm::mix(paddlePtr->position2D, inputRaw, 0.1f);
 
     glm::vec3 newPos;
@@ -47,19 +51,21 @@ void PaddleControlSystem::receiveMessage(Message msg)
         case Event::KEY_PRESSED:
         {
             int key = msg.getValue<int>();
+            keyboardInput = true;
+            std::cout << "Paddle System: KEY_PRESSED\n";
             switch(key)
             {
                 case GLFW_KEY_UP:
-                    inputRaw.y += 1.0f;
+                    interpolationTarget.y += 1.0f;
                 break;
                 case GLFW_KEY_DOWN:
-                    inputRaw.y -= 1.0f;
+                    interpolationTarget.y -= 1.0f;
                 break;
                 case GLFW_KEY_LEFT:
-                    inputRaw.x -= 1.0f;
+                    interpolationTarget.x -= 1.0f;
                 break;
                 case GLFW_KEY_RIGHT:
-                    inputRaw.x += 1.0f;
+                    interpolationTarget.x += 1.0f;
                 break;
             }
         }
@@ -68,35 +74,38 @@ void PaddleControlSystem::receiveMessage(Message msg)
         case Event::KEY_RELEASED:
         {
             int key = msg.getValue<int>();
+            keyboardInput = true;
+            std::cout << "Paddle System: KEY_RELEASED\n";
             switch(key)
             {
                 case GLFW_KEY_UP:
-                    inputRaw.y += -1.0f;
+                    interpolationTarget.y += -1.0f;
                 break;
                 case GLFW_KEY_DOWN:
-                    inputRaw.y -= -1.0f;
+                    interpolationTarget.y -= -1.0f;
                 break;
                 case GLFW_KEY_LEFT:
-                    inputRaw.x -= -1.0f;
+                    interpolationTarget.x -= -1.0f;
                 break;
                 case GLFW_KEY_RIGHT:
-                    inputRaw.x += -1.0f;
+                    interpolationTarget.x += -1.0f;
                 break;
             }
         }
         break;
 
         case Event::GAMEPAD_AXIS_CHANGED:
-        auto data = msg.getValue<GamepadAxisData>();
-        switch(data.axisId)
-        {
-            case GLFW_GAMEPAD_AXIS_RIGHT_X:
-                inputRaw.x = data.axisState;
-            break;
-            case GLFW_GAMEPAD_AXIS_RIGHT_Y:
-                inputRaw.y = data.axisState * -1.0f;
-            break;
-        }
+            auto data = msg.getValue<GamepadAxisData>();
+            keyboardInput = false;
+            switch(data.axisId)
+            {
+                case GLFW_GAMEPAD_AXIS_RIGHT_X:
+                    inputRaw.x = std::clamp(data.axisState, -sqrtf(2)/ 2.0f, sqrtf(2) / 2.0f) / (sqrtf(2) / 2.0f);
+                break;
+                case GLFW_GAMEPAD_AXIS_RIGHT_Y:
+                    inputRaw.y = std::clamp(data.axisState, -sqrtf(2)/ 2.0f, sqrtf(2) / 2.0f) / (sqrtf(2) / 2.0f) * -1.0f;
+                break;
+            }
         break;
     }
 }

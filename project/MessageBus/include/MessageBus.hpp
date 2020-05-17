@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Message.inl"
-class IMsgReceiver;
+class IModule;
 
 /**
  * @brief Bus conecting modules and allowing them to comunicate bay sending and receiving messages 
@@ -24,7 +24,7 @@ class MessageBus
          * 
          * @param modulePtr - Pointer to recever object
          */
-        void addReceiver(IMsgReceiver* modulePtr);
+        void addReceiver(IModule* modulePtr);
 
         /**
          * @brief Send message to MessageBus buffer,
@@ -55,7 +55,7 @@ class MessageBus
         /**
          * @brief store pointers to receivers
          */
-        std::vector<IMsgReceiver*> modulesPointers;
+        std::vector<IModule*> modulesPointers;
 
         /**
          * @brief pointer to active buffer

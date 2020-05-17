@@ -53,7 +53,10 @@ private:
     glm::quat startRotation;
     glm::vec3 lastFramePosition;
 
-    glm::vec2 inputRaw = {0.0f,0.0f};
+    glm::vec2 inputRaw = {0.0f, 0.0f};
+    glm::vec2 interpolationTarget = {0.0f, 0.0f};
+
+    bool keyboardInput = true;
 
     Transform* transformPtr;
     Paddle* paddlePtr;
