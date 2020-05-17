@@ -5,6 +5,7 @@
 #include "Message.inl"
 #include "Core.hpp"
 
+#include <glm/gtx/string_cast.hpp>
 
 template<class T1, class T2>
 bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
@@ -21,16 +22,16 @@ bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transfor
     std::cout << '\n'
             << "SPHERE 1 ---------------------- " << '\n'
             << "Radius: " << coll1->radius << '\n'
-            << "local position: " << trans1->getLocalPosition().x << ", " << trans1->getLocalPosition().y << ", " << trans1->getLocalPosition().z << '\n'
-            << "Collider centre (local): " << coll1->center.x << ", " << coll1->center.y << ", " << coll1->center.z << '\n'
-            << "Collider centre (global): " << glob1.x << ", " << glob1.y << ", " << glob1.z << '\n'
+            << "local position: " << glm::to_string(trans1->getLocalPosition()) << '\n'
+            << "Collider centre (local): " << glm::to_string(coll1->center) << '\n'
+            << "Collider centre (global): " << glm::to_string(glob1) << '\n'
             << "Axis projection: " << proj1.start << ", " << proj1.end << '\n'
             << '\n'
             << "SPHERE 2 ---------------------- " << '\n'
             << "Radius: " << coll2->radius << '\n'
             << "local position: " << trans2->getLocalPosition().x << ", " << trans2->getLocalPosition().y << ", " << trans2->getLocalPosition().z << '\n'
-            << "Collider centre (local): " << coll2->center.x << ", " << coll2->center.y << ", " << coll2->center.z << '\n'
-            << "Collider centre (global): " << glob2.x << ", " << glob2.y << ", " << glob2.z << '\n'
+            << "Collider centre (local): " << glm::to_string(coll2->center) << '\n'
+            << "Collider centre (global): " << glm::to_string(glob2) << '\n'
             << "Axis projection: " << proj2.start << ", " << proj2.end << '\n'
             << std::endl;
         return true;

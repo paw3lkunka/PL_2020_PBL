@@ -6,6 +6,7 @@
 #include "Components.inc"
 
 #include <glm/gtc/epsilon.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "CollisionDataStructures.inl"
 
@@ -76,7 +77,6 @@ Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* 
     glm::vec3 diff = projCentre - proj0;
     float centre1D = glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
     
-    std::cout << "CENTRE: 3D: " << centreWS.x << ", " << centreWS.y << ", " << centreWS.z << " 1D: " << centre1D << "\n";
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
@@ -112,6 +112,8 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereColli
     glm::vec3 n1 = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f)
     - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider2->center, 1.0f);
 
+    n1 = glm::normalize(n1);
+
     body1->velocity =
     (
         body1->mass * body1->velocity 
@@ -126,6 +128,9 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereColli
         n1,
         glm::cross(n1, body1->angularVelocity) + glm::vec3(0.0f, body2->velocity.y, body2->velocity.z)
     );
+    std::cout << "n1" <<  glm::to_string(n1) << "\n"
+            << "AngV1:" <<  glm::to_string(body1->angularVelocity) << "\n"
+            << "AngV2: " << glm::to_string(body2->angularVelocity) << std::endl;
 }
 
 template<>

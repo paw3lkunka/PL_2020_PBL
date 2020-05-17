@@ -6,6 +6,8 @@
 #include "Entity.hpp"
 #include "Components.inc"
 
+#include <glm/gtx/string_cast.hpp>
+
 glm::vec3 PhysicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
 
 bool PhysicSystem::assertEntity(Entity* entity)
@@ -38,6 +40,25 @@ void PhysicSystem::fixedUpdate()
     rBodyPtr->velocity += acceleration * Core::FIXED_TIME_STEP_F;    
 
     glm::vec3 dragTorque = -0.5f * rBodyPtr->angularDrag * rBodyPtr->angularVelocity * glm::abs(rBodyPtr->angularDrag);
+
+    std::cout << "B------------------------------\n" 
+            << "AngDrag     " << rBodyPtr->angularDrag << '\n'
+            << "AngVelocity " << glm::to_string(rBodyPtr->angularVelocity) << '\n'
+            << "DragTorque  " << glm::to_string(dragTorque) << '\n'
+            << "E------------------------------\n" << std::endl;
+
+
+    if(glm::zero<glm::vec3>() != dragTorque)
+    {
+    std::cout << "Torque: " << glm::to_string(torque) << "\nDrag torque: " << glm::to_string(dragTorque) << std::endl;
+
+    }
+
+    if(std::isnan(dragTorque.x))
+    {
+        exit(666);
+    }
+
     torque += dragTorque;
 
     glm::vec3 angularAcceleration = rBodyPtr->momentOfInertia * torque;
