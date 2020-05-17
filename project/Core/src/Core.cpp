@@ -89,13 +89,10 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
+    
     if (updateScene)
     {
-        auto entity = objectModule.getEntityPtrByName("Paddle");
-        auto paddle = objectModule.newEmptyComponent<Paddle>();
-        entity->addComponent(paddle);
-
-        paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
+        
     }
 
 #pragma region Renderer
@@ -195,7 +192,8 @@ int Core::mainLoop()
     // * index for combo list
     int currentItem = 0;
     // * rotation in eulers
-    glm::vec3 rotation = glm::vec3(0);
+    glm::vec3 worldRotation = glm::vec3(0);
+    glm::vec3 localRotation = glm::vec3(0);
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -249,6 +247,7 @@ int Core::mainLoop()
         {
             e = objectModule.getEntityPtrByID(currentItem);
             eTrans = e->getComponentPtr<Transform>();
+        }
             //rotation is quaternion in ZXY 
             glm::quat worldRotDec = {1, 0, 0, 0};
             // I don't need this shit
@@ -256,25 +255,42 @@ int Core::mainLoop()
             glm::vec4 shit(1.0f);
             glm::decompose(eTrans->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
             glm::quat worldRot = worldRotDec * eTrans->getLocalRotation();
-            glm::vec3 tempRot = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
-            rotation = tempRot;
+            worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
+            localRotation = glm::eulerAngles(eTrans->getLocalRotation()) * 180.0f / glm::pi<float>();
             //rotation = glm::vec3(tempRot.x, tempRot.z, tempRot.y);
-        }
 
         ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
-        ImGui::Text("Transform:");
-        ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 1.0f, -100.0f, 100.0f, "%.2f");
-        if(ImGui::DragFloat3("World rotation: ", (float*)&rotation, 1.0f, -360.0f, 360.0f, "%.1f"))
+        ImGui::Text("Transform (local):");
+        ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+        if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
+        {
+            eTrans->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        }
+        ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
+        ImGui::Text("Transform (World):");
+        if(ImGui::DragFloat3("_Rotation: ", (float*)&worldRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
         {
             glm::quat worldRotDec = {1, 0, 0, 0};
             // I don't need this shit
             glm::vec3 shit3(1.0f);
             glm::vec4 shit(1.0f);
             glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
-            glm::quat rot = worldRotDec * eulerToQuaternion(rotation);
+            glm::quat rot = worldRotDec * eulerToQuaternion(worldRotation);
             eTrans->getLocalRotationModifiable() = rot;  
         }
-        ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
+
+        if(e->getComponentPtr<Paddle>() != nullptr)
+        {
+            ImGui::Text("Paddle: ");
+            Paddle* paddle = e->getComponentPtr<Paddle>();
+            ImGui::DragFloat3( "Max postition", (float*)&paddle->maxPos, 0.5f, -20.0f, 20.0f, "%.1f");
+            ImGui::DragFloat("Min speed", (float*)&paddle->minSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.01f, -20.0f, 20.0f);
+            ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.01f, -20.0f, 20.0f);
+            
+            
+        }
         if(eTrans->getParent()->serializationID == 0)
         {
             ImGui::Text("Parent name: Root scene");

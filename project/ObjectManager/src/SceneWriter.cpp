@@ -212,6 +212,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveRigidbody(name, temp);
         }
+        else if(Paddle* temp = dynamic_cast<Paddle*>(objContainerPtr->components[i]))
+        {
+            savePaddle(name, temp);
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
@@ -346,6 +350,18 @@ void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
     j[name]["drag"] = componentPtr->drag;
     j[name]["angularDrag"] = componentPtr->angularDrag;
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
+}
+
+void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
+{
+    j[name]["type"] = "Paddle";
+    j[name]["minSpeed"] = componentPtr->minSpeed;
+    j[name]["maxSpeed"] = componentPtr->maxSpeed;
+    j[name]["maxFrontRot"] = componentPtr->maxFrontRot;
+    j[name]["maxSideRot"] = componentPtr->maxSideRot;
+    j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
+    j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
+    j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)

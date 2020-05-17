@@ -86,6 +86,12 @@
     //     }
     // }
 
+    Entity* terrain = objectModule.newEntity(1, "Terrain");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->setParent(&sceneModule.rootNode);
+    }
+
     {
         auto entity = objectModule.getEntityPtrByName("Water");
 
@@ -93,9 +99,7 @@
             mr->material = waterMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
@@ -104,9 +108,7 @@
             mr->material = cliffsMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
@@ -115,9 +117,7 @@
             mr->material = riverBankMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
@@ -126,10 +126,7 @@
             mr->material = riverBankMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
@@ -138,9 +135,7 @@
             mr->material = riverBedMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     // {
@@ -303,39 +298,47 @@ objectModule.newEntity(2, "sampleSound");
     }
 
     objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
-        Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat");
-        paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Paddle");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = paddleMat;
 
-            auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
-                t->getLocalScaleModifiable() = {5, 5, 5};
-        }
+    Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+    }
 
-        Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat");
-        attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = attachMat;
+    Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat");
+    paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = paddleMat;
 
-            auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
-                t->getLocalScaleModifiable() = {5, 5, 5};
-        }
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(paddleIndirect->getComponentPtr<Transform>());
+
+        auto paddle = objectModule.newEmptyComponent<Paddle>();
+            paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
+            entity->addComponent(paddle);
+    }
+
+    Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat");
+    attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = attachMat;
+
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+    }
         
-        {
-            auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = paddleMat;
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = attachMat;
 
-            auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
-                t->getLocalScaleModifiable() = {5, 5, 5};
-        }
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+    }
 
         Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat");
         playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
@@ -345,9 +348,7 @@ objectModule.newEntity(2, "sampleSound");
                 mr->material = playerMat;
 
             auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
-                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0,0,90));
-                t->getLocalScaleModifiable() = {5, 5, 5};
+                t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
         }
 
         Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat");
@@ -358,7 +359,5 @@ objectModule.newEntity(2, "sampleSound");
                 mr->material = kayakMat;
 
             auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0f, -30.0f};
-                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270,0,0));
-                t->getLocalScaleModifiable() = {5, 5, 5};
+                t->setParent(&sceneModule.rootNode);
         }

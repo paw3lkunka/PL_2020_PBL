@@ -67,6 +67,7 @@ private:
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
     void saveBoxCollider(std::string name, BoxCollider* componentPtr);
     void saveRigidbody(std::string name, Rigidbody* componentPtr);
+    void savePaddle(std::string name, Paddle* componentPtr);
 
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);

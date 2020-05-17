@@ -289,6 +289,11 @@ void SceneReader::readComponents()
             std::cout << "BillboardRenderer" << std::endl;
             readBillboardRenderer(name);
         }
+        else if(componentType == "Paddle")
+        {
+            std::cout << "Paddle" << std::endl;
+            readPaddle(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -554,6 +559,22 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->ignoreGravity = j.at(name).at("ignoreGravity").get<bool>();
 
     assignToEntity(name, rigidbody);
+}
+
+void SceneReader::readPaddle(std::string name)
+{
+    auto paddle = objModulePtr->newEmptyComponent<Paddle>();
+    paddle->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    paddle->minSpeed = j.at(name).at("minSpeed").get<float>();
+    paddle->maxSpeed = j.at(name).at("maxSpeed").get<float>();
+    paddle->maxFrontRot = j.at(name).at("maxFrontRot").get<float>();
+    paddle->maxSideRot = j.at(name).at("maxSideRot").get<float>();
+    paddle->maxPos.x = j.at(name).at("maxPos").at("x").get<float>();
+    paddle->maxPos.y = j.at(name).at("maxPos").at("y").get<float>();
+    paddle->maxPos.z = j.at(name).at("maxPos").at("z").get<float>();
+    
+    assignToEntity(name, paddle);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
