@@ -1,6 +1,8 @@
 #include "LightSystem.hpp"
 
 #include "Entity.hpp"
+#include "Core.hpp"
+#include "Message.inl"
 
 bool LightSystem::assertEntity(Entity* entity)
 {
@@ -9,7 +11,8 @@ bool LightSystem::assertEntity(Entity* entity)
     return (transform != nullptr && light != nullptr);
 }
 
-void LightSystem::frameUpdate()
+void LightSystem::start()
 {
-
+    light->modelMatrix = &transform->modelMatrix;
+    GetCore().messageBus.sendMessage(Message(Event::RENDERER_ADD_LIGHT, light));
 }

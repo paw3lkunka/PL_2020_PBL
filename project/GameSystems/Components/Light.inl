@@ -3,12 +3,17 @@
 
 #include "Component.inl"
 
+#include <glm/glm.hpp>
+
 enum class LightType { Directional, Point, Spot };
 
 struct Light : public Component
 {
     Light() = default;
     virtual ~Light() = default;
+
+    // HACK: This is potentially unsafe
+    glm::mat4* modelMatrix;
 
     LightType lightType;
     float intensity;

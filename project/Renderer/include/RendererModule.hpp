@@ -3,6 +3,8 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
+#include "Light.inl"
+#include "Camera.inl"
 
 #include "packets/RenderPacket.inl"
 #include "packets/NormalPacket.inl"
@@ -70,27 +72,21 @@ private:
     Material* skyboxMaterial;
     // * Bone zone
     std::map<int, glm::mat4>* bones;
-    // * Instance buffer
-    unsigned int instanceTransformBuffer;
     // * UBO buffers
-    unsigned int viewProjectionBuffer, boneBuffer;
-    // * Dirty flags
-    bool projectionChanged = false, viewChanged = false;
-    // HACK: This is basically very unsafe
-    glm::mat4* projectionMatrix, * viewMatrix;
+    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer;
     
+    Camera* cameraMain;
+
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<RenderPacket*> transparentQueue;
+
+    Light* directionalLight;
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
-    std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ zie_t = mesh id << 32 | material id +++++
-
-    // * Framebuffers for OIT
-    unsigned int accum, revealage;
-    unsigned int accumTexture, revealageTexture;
+    std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ size_t = mesh id << 32 | material id +++++
 
     __attribute__((always_inline)) inline size_t key(unsigned int first, unsigned int second) { return (size_t) first << 32 | second; }
 };

@@ -12,7 +12,7 @@ public:
     virtual ~LightSystem() = default;
 
     virtual bool assertEntity(Entity* entity);
-    virtual void frameUpdate();
+    virtual void start();
 
 private:
     Transform* transform;

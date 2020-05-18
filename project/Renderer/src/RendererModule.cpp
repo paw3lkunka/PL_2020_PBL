@@ -53,13 +53,27 @@ void RendererModule::receiveMessage(Message msg)
             }
             break;
         }
-        case Event::RENDERER_SET_PROJECTION_MATRIX:
-            projectionChanged = true;
-            projectionMatrix = msg.getValue<glm::mat4*>(); // TODO: No need to set pointer every time
-            break;
-        case Event::RENDERER_SET_VIEW_MATRIX:
-            viewChanged = true;
-            viewMatrix = msg.getValue<glm::mat4*>(); // TODO: No need to set pointer every time
+        case Event::RENDERER_ADD_LIGHT:
+            {
+                Light* lightToAdd = msg.getValue<Light*>();
+                switch(lightToAdd->lightType)
+                {
+                    case LightType::Directional:
+                        directionalLight = lightToAdd;
+                        break;
+                    case LightType::Point:
+                        // TODO: Implement point lights
+                        std::cerr << "Point lights not yet implemented.\n";
+                        break;
+                    case LightType::Spot:
+                        // TODO: Implement spot lights
+                        std::cerr << "Spot lights not yet implemented.\n";
+                        break;
+                }
+                break;
+            }
+        case Event::RENDERER_SET_MAIN_CAMERA:
+            cameraMain = msg.getValue<Camera*>();
             break;
         case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:
             bones = msg.getValue<std::map<int, glm::mat4>*>();
@@ -97,13 +111,13 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    // * ===== Setup Uniform Buffer Object for vp matrices =====
-    glGenBuffers(1, &viewProjectionBuffer);
-    glBindBuffer(GL_UNIFORM_BUFFER, viewProjectionBuffer);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    // * ===== Setup Uniform Buffer Object for camera =====
+    glGenBuffers(1, &cameraBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4) + sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, viewProjectionBuffer, 0, 2 * sizeof(glm::mat4));
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraBuffer, 0, 2 * sizeof(glm::mat4) + sizeof(glm::vec4));
 
     // * ===== Setup Uniform Buffer Object for bone info =====
     glGenBuffers(1, &boneBuffer);
@@ -112,6 +126,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, boneBuffer, 0, VertexSkinned::MAX_BONES * sizeof(glm::mat4));
+
+    // * ===== Setup Uniform Buffer Object for directional light =====
+    glGenBuffers(1, &directionalLightBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, directionalLightBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 3, directionalLightBuffer, 0, 3 * sizeof(glm::vec4));
 
     // * ===== Generate mesh for skybox rendering =====
 
@@ -174,48 +196,6 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
     }
-
-    // * ===== Create framebuffers for OIT rendering =====
-    glGenFramebuffers(1, &accum);
-    glGenFramebuffers(1, &revealage);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, accum);
-    glGenTextures(1, &accumTexture);
-    glBindTexture(GL_TEXTURE_2D, accumTexture);
-
-    // TODO: Check how window rescaling works with this
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, Core::INIT_WINDOW_WIDTH, Core::INIT_WINDOW_HEIGHT, 0, GL_RGBA, GL_HALF_FLOAT, nullptr);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, accumTexture, 0);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        // TODO: Proper errors
-        std::cerr << "Failed to complete accum framebuffer for OIT\n";
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, revealage);
-    glGenTextures(1, &revealageTexture);
-    glBindTexture(GL_TEXTURE_2D, revealageTexture);
-
-    // TODO: Check how window rescaling works with this
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R, Core::INIT_WINDOW_WIDTH, Core::INIT_WINDOW_HEIGHT, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, revealageTexture, 0);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        // TODO: Proper errors
-        std::cerr << "Failed to complete revealage framebuffer for OIT\n";
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RendererModule::render()
@@ -230,17 +210,21 @@ void RendererModule::render()
         glClear(createInfo.clearFlags);
 
         // ? ++++++ Send projection matrices to UBO if needed +++++
-        glBindBuffer(GL_UNIFORM_BUFFER, viewProjectionBuffer);
-        if (projectionChanged)
-        {
-            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), projectionMatrix);
-            projectionChanged = false;
-        }
-        if (viewChanged)
-        {
-            glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), viewMatrix);
-            viewChanged = false;
-        }
+        glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
+
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &cameraMain->projectionMatrix);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &cameraMain->viewMatrix);
+
+        glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec3), &cameraMain->position);
+
+        // ? +++++ Send directional light data to UBO +++++
+        // if (directionalLight != nullptr)
+        // {
+        //     glBindBuffer(GL_UNIFORM_BUFFER, directionalLightBuffer);
+
+        //     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), directionalLight->modelMatrix)
+
+        // }
 
         // ? +++++ Send skinning data to ubo +++++
         glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
@@ -251,7 +235,7 @@ void RendererModule::render()
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         // ? +++++ Calculate the View-Projection matrix +++++
-        glm::mat4 VP = (*projectionMatrix) * (*viewMatrix);
+        glm::mat4 VP = cameraMain->projectionMatrix * cameraMain->viewMatrix;
 
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
@@ -271,7 +255,7 @@ void RendererModule::render()
         if (skyboxMaterial != nullptr)
         {
             glDepthFunc(GL_LEQUAL);
-            glm::mat4 viewStatic = glm::mat4(glm::mat3(*viewMatrix));
+            glm::mat4 viewStatic = glm::mat4(glm::mat3(cameraMain->viewMatrix));
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
             glBindVertexArray(skyboxVao);
@@ -288,12 +272,6 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
-
-        // TODO:
-        // ! ----- Order Independent Transparency implementation -----
-        // ? +++++ 3D Transparency pass for OIT +++++
-
-        // ? +++++ 2D Compositing pass for OIT +++++
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
