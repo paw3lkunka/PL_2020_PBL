@@ -7,7 +7,6 @@
 #include "Transform.inl"
 #include "Message.inl"
 
-Transform* CameraSystem::mainCameraTransform = nullptr;
 Camera* CameraSystem::mainCamera = nullptr;
 int CameraSystem::width = Core::INIT_WINDOW_WIDTH;
 int CameraSystem::height = Core::INIT_WINDOW_HEIGHT;
@@ -43,8 +42,8 @@ bool CameraSystem::setAsMain(Entity* entity)
             mainCamera->isMain = false;
         }
         cameraTmp->isMain = true;
-        mainCameraTransform = transformTmp;
         mainCamera = cameraTmp;
+        GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_MAIN_CAMERA, mainCamera));
         return true;
     }
     else
@@ -57,8 +56,7 @@ void CameraSystem::frameUpdate()
 {
     if (camera->isMain)
     {
-        // TODO: Check for projection change and set dirty flag accordingly
-        // * ===== Calculate and send projection matrix to renderer =====
+        // * ===== Calculate projection matrix =====
         if (camera->projectionChanged)
         {
             float aspect = (float)width / height;
@@ -82,13 +80,13 @@ void CameraSystem::frameUpdate()
                                                     camera->farPlane
                                                     );
                     break;
-            }            
-            GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_PROJECTION_MATRIX, &camera->projectionMatrix));
+            }
             camera->projectionChanged = false;
         }
 
-        // * ===== Calculate and send view matrix to renderer =====
+        // * ===== Calculate view matrix =====
         camera->viewMatrix = glm::inverse(transform->modelMatrix);
-        GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_VIEW_MATRIX, &camera->viewMatrix));
+        // * ===== Set camera world position =====
+        camera->position = glm::vec3(transform->modelMatrix[3]);
     }
 }

@@ -9,7 +9,6 @@
 
     #include "AudioListener.inl"
     #include "AudioSource.inl"
-    #include "BillboardRenderer.inl"
     #include "BoxCollider.inl"
     #include "Camera.inl"
     #include "Collider.inl"

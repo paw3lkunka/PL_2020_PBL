@@ -223,8 +223,6 @@ class Core
         //TODO documentation
         static MeshRendererSystem rendererSystem;
         //TODO documentation
-        static BillboardRendererSystem billboardSystem;
-        //TODO documentation
         static CollisionDetectionSystem collisionDetectionSystem;
         //TODO documentation
         static GravitySystem gravitySystem;

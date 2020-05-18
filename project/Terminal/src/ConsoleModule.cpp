@@ -9,6 +9,8 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "CollisionDataStructures.inl"
+#include "mesh/MeshCustom.hpp"
+#include "AudioFile.hpp"
 #include "Components.inc"
 #include "Systems.inc"
 #include <assimp/scene.h>
@@ -165,16 +167,8 @@ void ConsoleModule::receiveMessage(Message msg)
         //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;
 
-    case Event::RENDERER_ADD_BILLBOARD_TO_QUEUE:
-        //std::cout << "console here: RENDERER_ADD_BILLBOARD_TO_QUEUE.\n";
-        break;
-
-    case Event::RENDERER_SET_PROJECTION_MATRIX:
-        std::cout << "console here: RENDERER_SET_PROJECTION_MATRIX.\n";
-        break;
-
-    case Event::RENDERER_SET_VIEW_MATRIX:
-        //std::cout << "console here: RENDERER_SET_VIEW_MATRIX.\n";
+    case Event::RENDERER_SET_MAIN_CAMERA:
+        std::cout << "console here: RENDERER_SET_MAIN_CAMERA.\n";
         break;
 
     case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:

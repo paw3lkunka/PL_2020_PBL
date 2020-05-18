@@ -7,10 +7,11 @@ layout(location = 3) in vec2 texcoord;
 layout(location = 4) in ivec4 boneIDs;
 layout(location = 5) in vec4 weights;
 
-layout (std140, binding = 0) uniform Matrices
+layout (std140, binding = 0) uniform Camera
 {
     mat4 projection;
     mat4 view;
+    vec3 viewPos;
 };
 
 const int MAX_BONES = 128;
