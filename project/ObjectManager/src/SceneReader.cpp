@@ -595,7 +595,6 @@ void SceneReader::readTransformParents(std::string name)
         auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
         if(parentID != 0)
         {
-            std::cout << parentID << std::endl;
             auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
             trans->setParent(parentTrans);
         }

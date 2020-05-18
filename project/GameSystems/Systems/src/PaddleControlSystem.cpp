@@ -21,7 +21,7 @@ void PaddleControlSystem::frameUpdate()
 {
     if(keyboardInput)
     {
-        inputRaw = glm::mix(inputRaw, interpolationTarget, 0.1f);
+        inputRaw = glm::mix(inputRaw, interpolationTarget, 0.15f);
     }
     paddlePtr->position2D = glm::mix(paddlePtr->position2D, inputRaw, 0.1f);
 

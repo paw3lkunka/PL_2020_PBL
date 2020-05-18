@@ -234,6 +234,8 @@ class Core
         static SkeletonSystem skeletonSystem;
         //TODO documentation
         static PaddleControlSystem paddleControlSystem;
+        //TODO documentation
+        static PaddleIkSystem paddleIkSystem;
 
 #pragma endregion
 

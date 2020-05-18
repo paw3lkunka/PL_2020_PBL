@@ -117,8 +117,21 @@ int Core::init()
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
     //gameSystemsModule.addSystem(&kinematicSystem);
-    gameSystemsModule.addSystem(&skeletonSystem);
+    //gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
+
+    // ! IK system initialize
+    BoneAttachData leftData;
+    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+    leftData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_left");
+
+    BoneAttachData rightData;
+    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+    rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
+
+    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+    paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+    gameSystemsModule.addSystem(&paddleIkSystem);
 
 #pragma region AudioModule demo - initialization
     
@@ -281,11 +294,11 @@ int Core::mainLoop()
         {
             ImGui::Text("Paddle: ");
             Paddle* paddle = e->getComponentPtr<Paddle>();
-            ImGui::DragFloat3( "Max postition", (float*)&paddle->maxPos, 0.5f, -20.0f, 20.0f, "%.1f");
+            ImGui::DragFloat3( "Max postition", (float*)&paddle->maxPos, 0.05f, -20.0f, 20.0f, "%.2f");
             ImGui::DragFloat("Min speed", (float*)&paddle->minSpeed, 0.01f, 0.0f, 1.0f);
             ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
-            ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.01f, -20.0f, 20.0f);
-            ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.01f, -20.0f, 20.0f);
+            ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.5f, -90.0f, 90.0f);
+            ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.5f, -90.0f, 90.0f);
             
             
         }
@@ -357,3 +370,4 @@ GravitySystem Core::gravitySystem;
 KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
+PaddleIkSystem Core::paddleIkSystem;

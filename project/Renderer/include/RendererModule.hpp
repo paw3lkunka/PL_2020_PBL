@@ -59,7 +59,7 @@ private:
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial;
     // * Bone zone
-    std::map<int, glm::mat4>* bones;
+    std::map<int, glm::mat4>* bones = nullptr;
     // HACK: Or not? Discuss this.
     unsigned int billboardVao, billboardVbo, instancedVbo;
     unsigned int viewProjectionBuffer, boneBuffer;
