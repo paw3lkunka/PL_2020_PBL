@@ -4,13 +4,11 @@
 #include "mesh/MeshQuad.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include "Core.hpp"
 
 #include <algorithm>
 
 #include <glm/gtc/type_ptr.hpp>
-
-//TODO: TEMP STRING STREAM
-#include <sstream>
 
 void RendererModule::receiveMessage(Message msg)
 {
@@ -176,6 +174,48 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
     }
+
+    // * ===== Create framebuffers for OIT rendering =====
+    glGenFramebuffers(1, &accum);
+    glGenFramebuffers(1, &revealage);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, accum);
+    glGenTextures(1, &accumTexture);
+    glBindTexture(GL_TEXTURE_2D, accumTexture);
+
+    // TODO: Check how window rescaling works with this
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, Core::INIT_WINDOW_WIDTH, Core::INIT_WINDOW_HEIGHT, 0, GL_RGBA, GL_HALF_FLOAT, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, accumTexture, 0);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        // TODO: Proper errors
+        std::cerr << "Failed to complete accum framebuffer for OIT\n";
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, revealage);
+    glGenTextures(1, &revealageTexture);
+    glBindTexture(GL_TEXTURE_2D, revealageTexture);
+
+    // TODO: Check how window rescaling works with this
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R, Core::INIT_WINDOW_WIDTH, Core::INIT_WINDOW_HEIGHT, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, revealageTexture, 0);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        // TODO: Proper errors
+        std::cerr << "Failed to complete revealage framebuffer for OIT\n";
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RendererModule::render()

@@ -76,6 +76,7 @@ private:
     unsigned int viewProjectionBuffer, boneBuffer;
     // * Dirty flags
     bool projectionChanged = false, viewChanged = false;
+    // HACK: This is basically very unsafe
     glm::mat4* projectionMatrix, * viewMatrix;
     
     std::deque<RenderPacket*> opaqueQueue;
@@ -86,6 +87,10 @@ private:
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
     std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ zie_t = mesh id << 32 | material id +++++
+
+    // * Framebuffers for OIT
+    unsigned int accum, revealage;
+    unsigned int accumTexture, revealageTexture;
 
     __attribute__((always_inline)) inline size_t key(unsigned int first, unsigned int second) { return (size_t) first << 32 | second; }
 };
