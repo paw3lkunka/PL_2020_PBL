@@ -83,7 +83,7 @@ public:
          * @return if collision was detected
          */
         template<class T1, class T2>
-        bool collsion(T1* of, T2* with, Transform* ofT, Transform* withT);
+        bool detectCollsion(T1* of, T2* with, Transform* ofT, Transform* withT);
 
         /**
          * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
@@ -97,6 +97,34 @@ public:
          */
         template<class T1, class T2>
         void resolveCollsion(T1* collider1, T2* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
+
+        /**
+         * @brief find all axes needed to perform Separate Axes Theorem Test, and push them into vector.
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param collider1 collider of first entity.
+         * @param collider2 collider of second entity.
+         * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
+         */
+        template<class T1, class T2>
+        void findSATAxes(BoxCollider* , std::vector<glm::vec3>& axes);
+
+
+        /**
+         * @brief Perform Separate Axes Theorem Test, and returns result
+         *  
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param collider1 collider of first entity.
+         * @param collider2 collider of second entity.
+         * @param transform1 transform of first entity.
+         * @param transform2 transform of second entity.
+         * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
+         * @return if collision was detected
+         */
+        template<class T1, class T2>
+        bool SATTest(T1* collider1, T2* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
 
 //TODO should it be here?
 

@@ -45,14 +45,12 @@ void CollisionSystem::fixedUpdate()
 
 Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
-    //TODO admotation in documentatiaon, that colliders ignores local scale
     glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
     glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
     float centre1D = toLineSpace1D(projCentre, axisPoint1, axisPoint2);
 
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
-
 
 Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
@@ -96,13 +94,15 @@ float CollisionSystem::toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm:
 }
 
 /*
-Annotation for resolveCollsion()
-Vectors n1,2,3 explanation:
-    v - velocity of collider
-    n1 - vector betwen centre of colliders
-    n2 = v x n1 
-    n3 = n1 x n2
-*/
+ * * * * * * * * * * * * * * * * * * * * * * * * * 
+ *  Annotation for resolveCollsion()             *
+ *  Vectors n1,2,3 explanation:                  *
+ *      v - velocity of collider                 *
+ *      n1 - vector betwen centre of colliders   *
+ *      n2 = v x n1                              *
+ *      n3 = n1 x n2                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
 
 template<>
 void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereCollider* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)

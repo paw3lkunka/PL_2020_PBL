@@ -8,16 +8,17 @@
 #include <glm/gtx/string_cast.hpp>
 
 template<class T1, class T2>
-bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
+bool CollisionSystem::detectCollsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
     //FIXME works wrong - this is not a correct SAT test implementation - this works only for sphere
-    glm::vec4 glob1 = trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition() + coll1->center, 1.0f);
-    glm::vec4 glob2 = trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f);
+    // find sat axes
 
-    Projection1D proj1 = axisProjection(coll1, trans1, glob1, glob2);
-    Projection1D proj2 = axisProjection(coll2, trans2, glob1, glob2);
+    std::vector<glm::vec3> axes;
 
-    return (proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start);
+    axes.push_back(trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition() + coll1->center, 1.0f));
+    axes.push_back(trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f));
+
+    return SATTest(coll1, coll2, trans1, trans2, axes);
 }
 
 template<class T>
@@ -44,7 +45,7 @@ void CollisionSystem::collisionOf(T* collider)
 template<class T1, class T2>
 void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* transform2, Rigidbody* rigidbody2)
 {
-    if(collsion(collider1, collider2, transformPtr, transform2))
+    if(detectCollsion(collider1, collider2, transformPtr, transform2))
     {
         //TODO TEMP DEBUG
         std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
@@ -82,6 +83,23 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
             activeTriggers.erase(data);
         }
     }
+}
+
+template<class T1, class T2>
+bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes)
+{
+    int tests = axes.size() / 2;
+    for (int i = 0; i < tests; i += 2)
+    {        
+        Projection1D proj1 = axisProjection(collider1, transform1, axes[i], axes[i+1]);
+        Projection1D proj2 = axisProjection(collider2, transform2, axes[i], axes[i+1]);
+
+        if( !(proj1.start < proj2.start && proj1.end > proj2.start) && !(proj2.start < proj1.start && proj2.end > proj1.start) )
+        {
+            return false;
+        }
+    }
+    return true;    
 }
 
 #endif
