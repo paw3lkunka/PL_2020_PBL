@@ -193,8 +193,10 @@ class Core
         /// @brief stores all crucial objects
         ObjectModule objectModule;
 
-        //TODO Please, do something better here ;-;
-        // /// @brief safely close application, on ESC press
+        /**
+         * TODO Please, do something better here ;-;
+         * @brief safely close application, on ESC press
+         */
         class : public IModule
         {
         virtual void receiveMessage(Message msg)
@@ -214,22 +216,31 @@ class Core
     public:
         //TODO documentation
         static CameraSystem cameraSystem;
+
         //TODO documentation
         static CameraControlSystem cameraControlSystem;
+
         //TODO documentation
         static AudioSourceSystem audioSourceSystem;
+
         //TODO documentation
         static AudioListenerSystem audioListenerSystem;
+
         //TODO documentation
         static MeshRendererSystem rendererSystem;
+
         //TODO documentation
         static BillboardRendererSystem billboardSystem;
+
         //TODO documentation
         static CollisionSystem collisionDetectionSystem;
+
         //TODO documentation
         static PhysicalBasedInputSystem physicalBasedInputSystem;
+
         //TODO documentation
         static PhysicSystem physicSystem;
+
         //TODO documentation
         static SkeletonSystem skeletonSystem;
 

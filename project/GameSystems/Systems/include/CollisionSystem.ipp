@@ -15,27 +15,7 @@ bool CollisionSystem::collsion(T1* coll1, T2* coll2, Transform* trans1, Transfor
     glm::vec4 glob2 = trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f);
 
     Projection1D proj1 = axisProjection(coll1, trans1, glob1, glob2);
-    Projection1D proj2 = axisProjection(coll2, trans2, glob1, glob2);    
-/*
-    //This behemoth causes HUGE lags and make build not interactive,
-    //NEVER commit this uncomented.
-    std::cout << '\n'
-            << "SPHERE 1 ---------------------- " << '\n'
-            << "Radius: " << coll1->radius << '\n'
-            << "local position: " << glm::to_string(trans1->getLocalPosition()) << '\n'
-            << "Collider centre (local): " << glm::to_string(coll1->center) << '\n'
-            << "Collider centre (global): " << glm::to_string(glob1) << '\n'
-            << "Axis projection: " << proj1.start << ", " << proj1.end << '\n'
-            << '\n'
-            << "SPHERE 2 ---------------------- " << '\n'
-            << "Radius: " << coll2->radius << '\n'
-            << "local position: " << trans2->getLocalPosition().x << ", " << trans2->getLocalPosition().y << ", " << trans2->getLocalPosition().z << '\n'
-            << "Collider centre (local): " << glm::to_string(coll2->center) << '\n'
-            << "Collider centre (global): " << glm::to_string(glob2) << '\n'
-            << "Axis projection: " << proj2.start << ", " << proj2.end << '\n'
-            << std::endl;
-        return true;
-*/
+    Projection1D proj2 = axisProjection(coll2, trans2, glob1, glob2);
 
     return (proj1.start < proj2.start && proj1.end > proj2.start) || (proj2.start < proj1.start && proj2.end > proj1.start);
 }
@@ -55,7 +35,6 @@ void CollisionSystem::collisionOf(T* collider)
         }
         else if( BoxCollider* box2 = dynamic_cast<BoxCollider*>(colliders[i]) )
         {
-            //XXX should be commeneted, to use 'behemoth debug' - remove this note and debug before reqest
             collisionWith(collider, box2, transforms[i], rigidbodies[i]); 
         } 
         

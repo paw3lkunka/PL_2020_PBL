@@ -39,44 +39,17 @@ void CollisionSystem::fixedUpdate()
     }
     else if( BoxCollider* box1 = dynamic_cast<BoxCollider*>(colliderPtr) )
     {
-        //XXX should be commeneted, to use 'behemoth debug' - remove this note and debug before reqest
         collisionOf(box1);
     }  
 }
 
-/*
-//TODO probaby wont be used
-template<>
-glm::vec3 CollisionSystem::collsion<SphereCollider,SphereCollider>(SphereCollider* sphere1, SphereCollider* sphere2, Transform* transform1, Transform* transform2)
-{
-    glm::vec3 centre1 = transform1->localToWorldMatrix * glm::vec4(sphere1->center,1);
-    glm::vec3 centre2 = transform2->localToWorldMatrix * glm::vec4(sphere2->center,1);
-
-    float distance = glm::distance(centre1, centre2);
-    float radiiSum = sphere1->radius + sphere2->radius; 
-    float difference = radiiSum - distance;
-
-    if(difference > 0)
-    {
-        return glm::normalize(centre2 - centre1) * -difference;
-    }
-    else
-    {
-        return glm::zero<glm::vec3>();
-    }
-    
-}
-*/
-
 Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
-    //FIXME COLLIDER IGNORES SCALE
+    //TODO admotation in documentatiaon, that colliders ignores local scale
     glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
     glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
-    glm::vec3 proj0 = axisProjection(glm::zero<glm::vec3>(), axisPoint1, axisPoint2);
-    glm::vec3 diff = projCentre - proj0;
-    float centre1D = glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
-    
+    float centre1D = toLineSpace1D(projCentre, axisPoint1, axisPoint2);
+
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
@@ -84,7 +57,24 @@ Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* 
 Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
 {
     Projection1D result = {INFINITY, -INFINITY};
-//TODO IMPLEMENT
+
+    for (glm::vec4& vert : box->verts)
+    {
+        glm::vec3 vertWS = transform->localToWorldMatrix * vert;
+
+        glm::vec3 projVert = axisProjection(vertWS, axisPoint1, axisPoint2);
+        float centre1D = toLineSpace1D(projVert, axisPoint1, axisPoint2);
+
+        if (centre1D < result.start)
+        {
+            result.start = centre1D;
+        }
+        
+        if (centre1D > result.end)
+        {
+            result.end = centre1D;
+        }
+    }
 
     return result;
 }
@@ -98,7 +88,15 @@ glm::vec3 CollisionSystem::axisProjection(glm::vec3 point, glm::vec3 axisPoint1,
     return axisPoint1 + glm::dot(AP,AB) / glm::dot(AB,AB) * AB;
 }
 
+float CollisionSystem::toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
+{
+    glm::vec3 proj0 = axisProjection(glm::zero<glm::vec3>(), axisPoint1, axisPoint2);
+    glm::vec3 diff = point - proj0;
+    return glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
+}
+
 /*
+Annotation for resolveCollsion()
 Vectors n1,2,3 explanation:
     v - velocity of collider
     n1 - vector betwen centre of colliders
@@ -128,6 +126,7 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereColli
         n1,
         glm::cross(n1, body1->angularVelocity) + glm::vec3(0.0f, body2->velocity.y, body2->velocity.z)
     );
+
     std::cout << "n1" <<  glm::to_string(n1) << "\n"
             << "AngV1:" <<  glm::to_string(body1->angularVelocity) << "\n"
             << "AngV2: " << glm::to_string(body2->angularVelocity) << std::endl;

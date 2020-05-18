@@ -131,6 +131,16 @@ public:
          * @return glm::vec3 projection of point on line.
          */
         static glm::vec3 axisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+
+        /**
+         * @brief Transform 3D point to 1D line space coordinate.
+         * 
+         * @param point point to transform.
+         * @param axisPoint1 first point defining aline.
+         * @param axisPoint2 second point defining aline.
+         * @return float coordinate in line space.
+         */
+        static float toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 };
 
 #include "CollisionSystem.ipp"

@@ -7,6 +7,7 @@
 
 /**
  * @brief Box-shaped collider (cuboid)
+ * Important: colliders ignore local scale
  */
 
 struct BoxCollider : public Collider
@@ -16,14 +17,14 @@ struct BoxCollider : public Collider
      */
     void calculateVert()    
     {
-        vert[0] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
-        vert[1] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
-        vert[2] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
-        vert[3] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
-        vert[4] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
-        vert[5] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
-        vert[6] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
-        vert[7] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
+        verts[0] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
+        verts[1] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
+        verts[2] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
+        verts[3] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
+        verts[4] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
+        verts[5] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
+        verts[6] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
+        verts[7] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
     }
 
     /**
@@ -96,7 +97,7 @@ struct BoxCollider : public Collider
      * w - always 1.
      * generated automatically by calculateVert() call.
      */
-    glm::vec4 vert[8];
+    glm::vec4 verts[8];
 };
 
 #endif /* !BOXCOLLIDER_HPP_ */

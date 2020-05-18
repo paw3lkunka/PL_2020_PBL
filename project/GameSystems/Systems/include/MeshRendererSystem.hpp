@@ -15,9 +15,8 @@ public:
     MeshRendererSystem() = default;
     virtual ~MeshRendererSystem() = default;
 
-    //TODO documentation
+protected:
     virtual bool assertEntity(Entity* entity);
-    //TODO documentation
     virtual void frameUpdate();
 
 private:
