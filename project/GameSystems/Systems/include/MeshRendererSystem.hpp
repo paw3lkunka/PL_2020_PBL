@@ -1,8 +1,6 @@
 #ifndef _MESHRENDERERSYSTEM_HPP
 #define _MESHRENDERERSYSTEM_HPP
 
-#include <unordered_map>
-
 #include "System.hpp"
 #include "mesh/Mesh.hpp"
 #include "Material.hpp"

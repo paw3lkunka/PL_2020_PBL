@@ -88,7 +88,7 @@ void CameraSystem::frameUpdate()
         }
 
         // * ===== Calculate and send view matrix to renderer =====
-        camera->viewMatrix = glm::inverse(transform->localToWorldMatrix);
+        camera->viewMatrix = glm::inverse(transform->modelMatrix);
         GetCore().messageBus.sendMessage(Message(Event::RENDERER_SET_VIEW_MATRIX, &camera->viewMatrix));
     }
 }
