@@ -106,56 +106,6 @@ int Core::init()
     if (updateScene)
     {
         // ! Manual extension of scene, runned by -u param
-        {
-            Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
-                Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
-                rb001->mass = 10;
-                rb001->drag = 1;
-                rb001->angularDrag = 1;
-                rb001->ignoreGravity = true;
-                sphere001->addComponent(rb001);
-
-
-            Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
-                Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
-                rbSound->mass = 10;
-                rbSound->drag = 1;
-                rbSound->angularDrag = 1;
-                rbSound->ignoreGravity = true;
-                sphereSound->addComponent(rbSound);
-
-            Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
-
-            PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-                keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
-                keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
-                keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
-                keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
-
-            Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
-                transform->setParent(&sceneModule.rootNode);
-                transform->getLocalPositionModifiable().x = 50;
-                transform->getLocalScaleModifiable() *= 5;
-
-            SphereCollider* collider;
-                collider = objectModule.getEntityPtrByName("Camera")->detachComponent<SphereCollider>();
-                entity->addComponent(collider);
-
-            MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
-                Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
-                Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
-                    material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
-
-                meshRenderer->material = material;
-                meshRenderer->mesh = mesh;
-
-            Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                rigidbody->drag = 1;
-                rigidbody->angularDrag = 1;
-                rigidbody->mass = 10;
-                rigidbody->ignoreGravity = true;
-        }
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
@@ -186,11 +136,11 @@ int Core::init()
     // ! IK system initialize
     BoneAttachData leftData;
     leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_left");
+    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
     BoneAttachData rightData;
     rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
+    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
     Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
     //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());

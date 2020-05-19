@@ -122,13 +122,6 @@ public:
      */
     Material* getMaterialPtrByName(const char* name) {return objectContainer.getMaterialFromName(name); }
 
-    /**
-     * @brief Get the Bone Ptr By Name 
-     * 
-     * @param name of bone
-     * @return Bone* pointer or nullptr if can't find
-     */
-    Bone* getBonePtrByName(const char* name);
     
     /**
      * @brief Get the Animation Ptr By Name

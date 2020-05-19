@@ -15,7 +15,7 @@ class Bone;
 struct BoneAttachData
 {   
     ///@brief end bone
-    Bone* bone;
+    Entity* boneEntity;
     ///@brief entity with attach transform point
     Entity* attachEntityPtr;
 };

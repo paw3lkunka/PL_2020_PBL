@@ -1,7 +1,7 @@
 #include "SkeletonSystem.hpp"
 
 #include "Skeleton.inl"
-#include "Bone.inl"
+#include "Transform.inl"
 #include "Core.hpp"
 #include "Entity.hpp"
 
@@ -27,35 +27,21 @@ void SkeletonSystem::frameUpdate()
     processHierarchy(skeleton->rootBone);
 }
 
-void SkeletonSystem::processHierarchy(Bone* bone)
+void SkeletonSystem::processHierarchy(Entity* boneEntity)
 {
-    if (bone->parent != nullptr)
+    Transform* boneTransform = boneEntity->getComponentPtr<Transform>();
+
+    boneTransforms[boneEntity->getComponentPtr<Bone>()->boneID] = skeleton->globalInverseTransform * boneTransform->modelMatrix * boneEntity->getComponentPtr<Bone>()->offsetMatrix;
+
+    if(skeleton->animation != nullptr)
     {
-        if (skeleton->animation != nullptr)
-        {
-            bone->boneTransform = bone->parent->boneTransform * skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime); 
-        }
-        else
-        {
-            bone->boneTransform = bone->parent->boneTransform * bone->localBoneTransform;
-        }
-    }
-    else
-    {
-        if (skeleton->animation != nullptr)
-        {
-            bone->boneTransform = skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime);
-        }
-        else
-        {
-            bone->boneTransform = bone->localBoneTransform;
-        }
+        boneTransform->getLocalPositionModifiable() = skeleton->animation->getPositionLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
+        boneTransform->getLocalRotationModifiable() = skeleton->animation->getRotationLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
+        boneTransform->getLocalScaleModifiable() = skeleton->animation->getScaleLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
     }
 
-    boneTransforms[bone->boneID] = skeleton->globalInverseTransform * bone->boneTransform * bone->offsetMatrix;
-
-    for(auto child : bone->children)
+    for(auto child : boneEntity->getComponentPtr<Transform>()->children)
     {
-        processHierarchy(child);
+        processHierarchy(child->entityPtr);
     }
 }

@@ -6,6 +6,7 @@
     objectModule.newModel("Resources/Models/Riverbed.FBX");
     objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newModel("Resources/Models/Box.FBX");
+    objectModule.newModel("Resources/Models/House Dancing.fbx");
     objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
@@ -210,8 +211,8 @@
                 mr->material = unlitSkinnedMat;
 
             auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = { 30.0f, 0.0f, -25.0f };
-                t->getLocalScaleModifiable() = { 0.15f, 0.15f, 0.15f };
+                t->getLocalPositionModifiable() = { 130.0f, 0.0f, -25.0f };
+                t->getLocalScaleModifiable() = { 0.3f, 0.3f, 0.3f };
         }
     }
 
@@ -270,14 +271,15 @@
             t->setParent(terrain->getComponentPtr<Transform>());
     }
 
-    // {
-    //     auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
-    //     auto mr = entity->getComponentPtr<MeshRenderer>();
-    //         mr->material = unlitSkinnedMat;
+    {
+        auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = unlitSkinnedMat;
 
-    //     auto t = entity->getComponentPtr<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    // }
+        auto t = entity->getComponentPtr<Transform>();
+            t->getLocalPositionModifiable() = { 130.0f, 0.0f, -25.0f };
+                t->getLocalScaleModifiable() = { 0.3f, 0.3f, 0.3f };
+    }
 
     {
         auto entity = objectModule.getEntityPtrByName("Sphere001");
@@ -451,8 +453,9 @@ objectModule.newEntity(2, "sampleSound");
             so1->getIsLoopingModifiable() = true;
     }
 
+//Magda scope 19.05.2020
+{
     objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
-
     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -472,7 +475,9 @@ objectModule.newEntity(2, "sampleSound");
             t->setParent(paddleIndirect->getComponentPtr<Transform>());
 
         auto paddle = objectModule.newEmptyComponent<Paddle>();
-            paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
+            paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
+            paddle->maxFrontRot = -34.5f;
+            paddle->maxSideRot = 30.0f;
             entity->addComponent(paddle);
     }
 
@@ -498,31 +503,33 @@ objectModule.newEntity(2, "sampleSound");
             t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
     }
 
-        Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
-        playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Player");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = playerMat;
+    Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
+    playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Player");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = playerMat;
 
             auto t = entity->getComponentPtr<Transform>();
                 t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
                 t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
         }
 
-        Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
-        kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Kayak");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = kayakMat;
+    Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
+    kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Kayak");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = kayakMat;
 
-            auto t = entity->getComponentPtr<Transform>();
-                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
-                t->getLocalPositionModifiable() = glm::vec3(0, 0, -24);
-                t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
-                t->setParent(&sceneModule.rootNode);
-        }
+        auto t = entity->getComponentPtr<Transform>();
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+            t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
+            t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
+            t->setParent(&sceneModule.rootNode);
+    }
+}
+
 //Andrzej, pół fizyki
 {
     Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
@@ -560,7 +567,6 @@ objectModule.newEntity(2, "sampleSound");
 
             meshRenderer->material = material;
             meshRenderer->mesh = mesh;
-
         Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
             rigidbody->drag = 5;
             rigidbody->angularDrag = 5;
