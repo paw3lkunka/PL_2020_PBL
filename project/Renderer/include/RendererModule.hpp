@@ -56,20 +56,16 @@ public:
      * @brief Render current render queue
      */
     void render();
-    /**
-     * @brief Cleanup after frame rendering
-     */
-    void frameCleanup();
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
 
-    GLFWwindow* window;
+    GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
     // * Skybox variables
     unsigned int skyboxVao, skyboxVbo;
-    Material* skyboxMaterial;
+    Material* skyboxMaterial = nullptr;
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
@@ -81,6 +77,10 @@ private:
     std::deque<RenderPacket*> transparentQueue;
 
     Light* directionalLight = nullptr;
+    unsigned int depthMapFBO = 0;
+    unsigned int depthMap = 0;
+    // TODO: Move this to light properties
+    static constexpr int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;

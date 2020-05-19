@@ -31,6 +31,11 @@ void ErrorLog(const char* log)
     Core::instance->messageBus.sendMessage(Message(Event::DEBUG_ERROR_LOG, log));
 }
 
+GLFWwindow* Core::getWindowPtr()
+{
+    return window;
+}
+
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 {
     glm::mat4 temp = glm::mat4(1);
@@ -50,7 +55,7 @@ int Core::init()
 		return instance == this ? 3 : 4;
     }
     instance = this;
-    
+
     std::cout << "Henlo!" << std::endl;
     //TODO: GLFW Error callback
     
@@ -58,7 +63,7 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
+
     window = glfwCreateWindow(windowWidth, windowHeight, "PBL", NULL, NULL);
     if (window == NULL)
 	{
@@ -110,7 +115,7 @@ int Core::init()
                 rb001->ignoreGravity = true;
                 sphere001->addComponent(rb001);
 
-            
+
             Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
                 Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
                 rbSound->mass = 10;
@@ -141,10 +146,10 @@ int Core::init()
                 Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
                 Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
                     material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
-            
+
                 meshRenderer->material = material;
                 meshRenderer->mesh = mesh;
-            
+
             Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
                 rigidbody->drag = 1;
                 rigidbody->angularDrag = 1;
@@ -192,11 +197,12 @@ int Core::init()
     //gameSystemsModule.addSystem(&paddleIkSystem);
 
 #pragma region AudioModule demo - initialization
-    
+
     audioModule.init();
 
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
+    gameSystemsModule.addSystem(&lightSystem);
     
 #pragma endregion
 
@@ -427,3 +433,4 @@ PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
+LightSystem Core::lightSystem;
