@@ -1,5 +1,4 @@
-#pragma region Data Loading
-    
+#pragma region Data Loading    
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
@@ -89,6 +88,9 @@
     Entity* terrain = objectModule.newEntity(1, "Terrain");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+        t->getLocalPositionModifiable() = glm::vec3(0, -30, 0);
+        t->getLocalScaleModifiable() = glm::vec3(5, 5, 5);
         t->setParent(&sceneModule.rootNode);
     }
 
@@ -313,6 +315,8 @@ objectModule.newEntity(2, "sampleSound");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0, 90, 90));
+            t->getLocalPositionModifiable() = glm::vec3(3, 0, -5.5f);
     }
 
     Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
@@ -339,6 +343,7 @@ objectModule.newEntity(2, "sampleSound");
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
     }
         
     {
@@ -348,6 +353,7 @@ objectModule.newEntity(2, "sampleSound");
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
     }
 
         Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
@@ -359,6 +365,7 @@ objectModule.newEntity(2, "sampleSound");
 
             auto t = entity->getComponentPtr<Transform>();
                 t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
         }
 
         Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
@@ -369,6 +376,9 @@ objectModule.newEntity(2, "sampleSound");
                 mr->material = kayakMat;
 
             auto t = entity->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+                t->getLocalPositionModifiable() = glm::vec3(0, 0, -24);
+                t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
                 t->setParent(&sceneModule.rootNode);
         }
 //Andrzej, pół fizyki
