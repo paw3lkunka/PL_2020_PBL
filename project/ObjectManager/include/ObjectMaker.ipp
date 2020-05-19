@@ -1,6 +1,6 @@
 #include "ObjectMaker.hpp"
 #include "Entity.hpp"
-#include "MeshDataStructures.inl"
+#include "mesh/MeshDataStructures.inl"
 #include "Components.inc"
 #include <typeinfo>
 #include <string>

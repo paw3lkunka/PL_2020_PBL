@@ -3,9 +3,14 @@
 
 #include "IModule.inl"
 #include "MeshRenderer.inl"
-#include "BillboardRenderer.inl"
+#include "Light.inl"
+#include "Camera.inl"
 
-#include <queue>
+#include "packets/RenderPacket.inl"
+#include "packets/NormalPacket.inl"
+#include "packets/InstancedPacket.inl"
+
+#include <deque>
 #include <map>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -51,24 +56,39 @@ public:
      * @brief Render current render queue
      */
     void render();
+    /**
+     * @brief Cleanup after frame rendering
+     */
+    void frameCleanup();
 
 private:
+    static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
+    static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
+
     GLFWwindow* window;
     RendererModuleCreateInfo createInfo;
     // * Skybox variables
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial;
     // * Bone zone
-    std::map<int, glm::mat4>* bones;
-    // HACK: Or not? Discuss this.
-    unsigned int billboardVao, billboardVbo, instancedVbo;
-    unsigned int viewProjectionBuffer, boneBuffer;
-    bool projectionChanged = false, viewChanged = false;
-    glm::mat4* projectionMatrix, * viewMatrix;
-    std::queue<MeshRenderer*> renderQueue;
-    // HACK PLZ MAKE THIS POLYMORPHIC AS SOON AS YOU CAN
-    std::queue<BillboardRenderer*> billboardQueue;
+    std::map<int, glm::mat4>* bones = nullptr;
+    // * UBO buffers
+    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer;
     
+    Camera* cameraMain = nullptr;
+
+    std::deque<RenderPacket*> opaqueQueue;
+    std::deque<RenderPacket*> transparentQueue;
+
+    Light* directionalLight = nullptr;
+
+    // * Normal render packets collection
+    std::vector<NormalPacket> normalPackets;
+    // * Instanced render packet collection
+    // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
+    std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ size_t = mesh id << 32 | material id +++++
+
+    __attribute__((always_inline)) inline size_t key(unsigned int first, unsigned int second) { return (size_t) first << 32 | second; }
 };
 
 #endif // _RENDERERMODULE_HPP

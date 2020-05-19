@@ -7,6 +7,7 @@
 #include "ISerializable.inl"
 
 class Component;
+class SceneReader;
 
 /**
  * @brief Representation of all objects in games, technically a collection of Components
@@ -14,6 +15,7 @@ class Component;
  */
 class Entity : public ISerializable
 {
+    friend class SceneReader;
 public:
     /**
      * @brief Construct a new Entity object

@@ -41,6 +41,7 @@ public:
 protected:
 private:
 
+    static bool hasInstance;
     ///@brief pointer to composition parent
     ObjectModule* objModulePtr;
 
@@ -62,11 +63,11 @@ private:
     void saveAudioSource(std::string name, AudioSource* componentPtr);
     void saveCamera(std::string name, Camera* componentPtr);
     void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
-    void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
     void saveBoxCollider(std::string name, BoxCollider* componentPtr);
     void saveRigidbody(std::string name, Rigidbody* componentPtr);
     void savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr);
+    void savePaddle(std::string name, Paddle* componentPtr);
 
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);

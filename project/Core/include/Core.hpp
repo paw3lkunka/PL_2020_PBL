@@ -230,10 +230,7 @@ class Core
         static MeshRendererSystem rendererSystem;
 
         //TODO documentation
-        static BillboardRendererSystem billboardSystem;
-
-        //TODO documentation
-        static CollisionSystem collisionDetectionSystem;
+        static CollisionSystem collisionSystem;
 
         //TODO documentation
         static PhysicalBasedInputSystem physicalBasedInputSystem;
@@ -243,6 +240,12 @@ class Core
 
         //TODO documentation
         static SkeletonSystem skeletonSystem;
+
+        //TODO documentation
+        static PaddleControlSystem paddleControlSystem;
+
+        //TODO documentation
+        static PaddleIkSystem paddleIkSystem;
 
 #pragma endregion
 

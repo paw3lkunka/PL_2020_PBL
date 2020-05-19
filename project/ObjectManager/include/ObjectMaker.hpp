@@ -15,6 +15,7 @@ class Material;
 class Animation;
 class Bone;
 enum class FileType: unsigned int;
+enum class RenderType;
 struct Bounds;
 struct TextureCreateInfo;
 
@@ -120,7 +121,7 @@ public:
      * @param name name of material
      * @return Material* pointer to material
      */
-    Material* newMaterial(Shader* shader, std::string name);
+    Material* newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnalbed = false);
 
     // TODO niewchecmiesietobic dikuemntijcj
     Animation* newAnimation(Animation& animation, std::string path, std::string name);

@@ -20,8 +20,14 @@
 
 #include "Shader.hpp"
 
+enum class RenderType { Opaque, Transparent };
+
 /**
  * @brief Class encapsulating shader program and uniform variables
+ *
+ * @instancing To enable instanicing for this material, set the enableInstancing flag to true.
+ *   For instancing to work properly, the shader must have the attribute "instancedModel" enabled on location 5.
+ *   If the attribute doesn't exist, the material will display an error and fall back to normal rendering.
  */
 class Material: public ISerializable
 {
@@ -33,13 +39,43 @@ public:
      * @param shader Shader to draw with
      * @param name name of the material
      */
-    Material(Shader* shader, const char* name);
+    Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing = false);
     ~Material() = default;
 
     /**
      * @brief Sets all uniforms and binds appropriate shader program
      */
     void use();
+
+    /**
+     * @brief Get whether material is instanced or not
+     */
+    bool isInstancingEnabled() { return enableInstancing; }
+
+    /**
+     * @brief Get the Material's Render Type 
+     */
+    RenderType getRenderType() { return renderType; }
+
+    /**
+     * @brief Performs matrix multiplication and sets the MVP matrix, should be used only during rendering
+     * @details For performance reasons this function doesn't save the matrix but sends it immediately to the shader 
+     * @important Should be used only AFTER calling use on material
+     * 
+     * @param M The model matrix
+     * @param VP Premultiplied view and projection matrix
+     * @param name Uniform name, "MVP" by default
+     */
+    void setMVP(glm::mat4 M, glm::mat4 VP, std::string name = "MVP");
+    /**
+     * @brief Sets the model uniform in the shader once, should only be used during rendering.
+     * @details Usually passed only for use with special shader effects, otherwise use setMVP for performance
+     * @important Should be used only AFTER calling use on material
+     * 
+     * @param M The model matrix
+     * @param name Uniform name, "model" by default
+     */
+    void setModel(glm::mat4 M, std::string name = "model");
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);
@@ -65,6 +101,13 @@ public:
      * @return const char* name
      */
     const char* getName();
+    
+    /**
+     * @brief Get the id of material
+     * 
+     * @return unsigned int Material's ID
+     */
+    unsigned int getID() { return ID; }
 
     /// @brief Get int of given name
     int getInt(std::string name);
@@ -78,8 +121,10 @@ public:
     glm::mat4& getMat4(std::string name);
 
 private:
-    static int idCount;
-    int ID;
+    static unsigned int idCount;
+    unsigned int ID;
+    bool enableInstancing;
+    RenderType renderType;
     Shader* shader;
     std::string name;
 

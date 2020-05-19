@@ -4,8 +4,8 @@
 #include "IModule.inl"
 #include "AudioFile.hpp"
 #include "AssetStructers.inl"
-#include "MeshSkinned.hpp"
-#include "MeshCustom.hpp"
+#include "mesh/MeshSkinned.hpp"
+#include "mesh/MeshCustom.hpp"
 #include "Animation.hpp"
 #include "Bone.inl"
 

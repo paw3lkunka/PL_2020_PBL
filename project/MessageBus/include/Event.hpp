@@ -77,14 +77,10 @@ enum class Event : unsigned int
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_MESH_TO_QUEUE,
-    // HACK: Send skinned mesh renderer data, DATA: Pointer to skinned renderer
-    RENDERER_ADD_SKINNED_MESH_TO_QUEUE,
-    // HACK: Send billboard renderer data, DATA: Pointer to billboard renderer
-    RENDERER_ADD_BILLBOARD_TO_QUEUE,
-    // Send view matrix to renderer, DATA: Pointer to view matrix
-    RENDERER_SET_VIEW_MATRIX,
-    // Send projection matrix to renderer, DATA: Pointer to projection matrix
-    RENDERER_SET_PROJECTION_MATRIX,
+    // Send light data, DATA: Pointer to light object
+    RENDERER_ADD_LIGHT,
+    // Send main camera to renderer, DATA: Pointer to main camera
+    RENDERER_SET_MAIN_CAMERA,
     // Send pointer to bone transformations, DATA: Pointer to map of mat4s
     RENDERER_SET_BONE_TRANSFORMS_PTR,
 #pragma endregion
@@ -136,7 +132,7 @@ enum class Event : unsigned int
     AUDIO_FIRST = AUDIO_LISTENER_INIT,
     AUDIO_LAST = AUDIO_SOURCE_REWIND,
     RENDERER_FIRST = RENDERER_ADD_MESH_TO_QUEUE,
-    RENDERER_LAST = RENDERER_SET_PROJECTION_MATRIX,
+    RENDERER_LAST = RENDERER_SET_BONE_TRANSFORMS_PTR,
     RESOURCES_FIRST = LOAD_FILE,
     RESOURCES_LAST = SETUP_BONES,
     COLLISIONS_FIRST = COLLSION_DETECT,

@@ -10,6 +10,7 @@ class Texture;
 class Cubemap;
 class Material;
 enum class FileType: unsigned int;
+enum class RenderType;
 struct Bounds;
 struct TextureCreateInfo;
 class Message;
@@ -36,7 +37,7 @@ public:
      * @brief Construct a new Object Module object
      */
     ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this), sceneReader(this) {}
-    virtual ~ObjectModule() = default;
+    ~ObjectModule() = default;
 
     /**
      * @brief Get the Entities Vector object from container
@@ -87,7 +88,7 @@ public:
      * @param meshPath from file
      * @return MeshCustom* object if found, else throws FileNotFoundException
      */
-    MeshCustom* getMeshCustomFromPath(const char* meshPath) { return objectContainer.getMeshCustomFromPath(meshPath); }
+    MeshCustom* getMeshCustomPtrByPath(const char* meshPath) { return objectContainer.getMeshCustomFromPath(meshPath); }
 
     /**
      * @brief Get the Mesh Skinned From Path
@@ -95,7 +96,7 @@ public:
      * @param meshPath from model file
      * @return MeshSkinned* object if found, else throws FileNotFoundException
      */
-    MeshSkinned* getMeshSkinnedFromPath(const char* meshPath) { return objectContainer.getMeshSkinnedFromPath(meshPath); }
+    MeshSkinned* getMeshSkinnedPtrByPath(const char* meshPath) { return objectContainer.getMeshSkinnedFromPath(meshPath); }
     
     /**
      * @brief Get the Entity by ID
@@ -103,7 +104,7 @@ public:
      * @param entityID id of entity to find
      * @return Entity* entity pointer or nullptr if can't find
      */
-    Entity* getEntityFromID(unsigned int entityID) { return objectContainer.getEntityFromID(entityID); }
+    Entity* getEntityPtrByID(unsigned int entityID) { return objectContainer.getEntityFromID(entityID); }
 
     /**
      * @brief Get the Entity by name
@@ -111,19 +112,30 @@ public:
      * @param name of entity
      * @return Entity* pointer or nullptr if can't find
      */
-    Entity* getEntityFromName(const char* name) { return objectContainer.getEntityFromName(name); }
+    Entity* getEntityPtrByName(const char* name) { return objectContainer.getEntityFromName(name); }
 
     /**
-     * @brief Get the Material by name
+     * @brief Get the Material pointer by name
      * 
      * @param name of material
      * @return Material* pointer or nullptr if can't find
      */
-    Material* getMaterialFromName(const char* name) {return objectContainer.getMaterialFromName(name); }
+    Material* getMaterialPtrByName(const char* name) {return objectContainer.getMaterialFromName(name); }
 
-    // TODO documentation
+    /**
+     * @brief Get the Bone Ptr By Name 
+     * 
+     * @param name of bone
+     * @return Bone* pointer or nullptr if can't find
+     */
     Bone* getBonePtrByName(const char* name);
-    // TODO documentation
+    
+    /**
+     * @brief Get the Animation Ptr By Name
+     * 
+     * @param name of animation
+     * @return Animation* pointer or nullptr if can't find
+     */
     Animation* getAnimationPtrByName(const char* name);
 
 #pragma endregion
@@ -213,7 +225,7 @@ public:
      * @param shader pointer for initialization
      * @return Material* pointer to material
      */
-    Material* newMaterial(Shader* shader, std::string name);
+    Material* newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled = false);
 
     /**
      * @brief creating new audio clip and saving to map

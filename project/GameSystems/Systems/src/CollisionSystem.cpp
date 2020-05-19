@@ -4,7 +4,7 @@
 #include "Message.inl"
 #include "Entity.hpp"
 #include "Components.inc"
-#include "CollisionSystemHelperFunctions.inl"
+#include "CollisionSystemHelperFunctions.hpp"
 
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtx/string_cast.hpp>

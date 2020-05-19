@@ -19,6 +19,7 @@ struct Camera : public Component
     /// @brief Dirty flags
     bool projectionChanged = true;
 
+    glm::vec3 position;
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 };

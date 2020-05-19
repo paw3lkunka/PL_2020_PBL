@@ -6,6 +6,7 @@
 
 class AssetReader;
 class ObjectModule;
+struct Component;
 
 class SceneReader
 {
@@ -37,12 +38,15 @@ private:
     void readAudioSource(std::string name);
     void readAudioListener(std::string name);
     void readCamera(std::string name);
-    void readBillboardRenderer(std::string name);
     void readMeshRenderer(std::string name);
     void readSphereCollider(std::string name);
     void readBoxCollider(std::string name);
     void readRigidbody(std::string name);
     void readPhysicalInputKeymap(std::string name);
+    void readPaddle(std::string name);
+
+    void assignToEntity(std::string name, Component* component);
+    void readTransformParents(std::string name);
 };
 
 #endif /* !SCENEREADER_HPP_ */

@@ -16,6 +16,8 @@ public:
     CameraSystem() = default;
     virtual ~CameraSystem() = default;
 
+    static Camera* mainCamera;
+
     /**
      * @brief Recieve message callback from message bus
      * 
@@ -31,14 +33,6 @@ public:
      * @return false if entity was invalid
      */
     static bool setAsMain(Entity* entity);
-    /**
-     * @brief Transform of a camera with which we're rendering
-     */
-    static Transform* mainCameraTransform;
-    /**
-     * @brief Camera with which we're rendering
-     */
-    static Camera* mainCamera;
 
     /**
      * @brief Looks for entities with camera and transform components
@@ -53,9 +47,9 @@ public:
      */
     virtual void frameUpdate();
 
-
 private:
     static int width, height;
+    bool cameraChanged = true;
 
     Transform* transform;
     Camera* camera;

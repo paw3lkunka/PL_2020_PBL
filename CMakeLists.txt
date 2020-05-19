@@ -31,6 +31,10 @@ if(NOT EXISTS "libs/json/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/json/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/imgui/LICENSE.txt")
+    execute_process(COMMAND git submodule update --init "libs/imgui/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -117,9 +121,9 @@ target_compile_options(OpenAL PUBLIC -w)
 #FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
 # W wolnej chwili wartoby sprawdzić, o co tu chodzi.
 #                                                     ~ Andrzej
-target_compile_options(alsoft-config PUBLIC -w)
-target_compile_options(makemhr PUBLIC -w)
-target_compile_options(sofa-info PUBLIC -w)
+#target_compile_options(alsoft-config PUBLIC -w)
+#target_compile_options(makemhr PUBLIC -w)
+#target_compile_options(sofa-info PUBLIC -w)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -150,6 +154,33 @@ list(
 
 add_library(lib ${SOURCE_FILES} )
 
+#imgui
+set(IMGUI_SOURCES
+    "libs/imgui/imgui.cpp"
+    "libs/imgui/imgui_demo.cpp"
+    "libs/imgui/imgui_draw.cpp"
+    "libs/imgui/imgui_widgets.cpp"
+    "libs/imgui/examples/imgui_impl_glfw.cpp"
+    "libs/imgui/examples/imgui_impl_opengl3.cpp"
+)
+
+set(IMGUI_HEADERS
+    "libs/imgui/imconfig.h"
+    "libs/imgui/imgui.h"
+    "libs/imgui/imgui_internal.h"
+    "libs/imgui/imstb_rectpack.h"
+    "libs/imgui/imstb_textedit.h"
+    "libs/imgui/imstb_truetype.h"
+    "libs/imgui/examples/imgui_impl_glfw.h"
+    "libs/imgui/examples/imgui_impl_opengl3.h"
+)
+
+add_library(imgui
+    STATIC
+        ${IMGUI_SOURCES}
+        ${IMGUI_HEADERS}
+)
+
 
 include_directories( 
     project
@@ -163,6 +194,8 @@ include_directories(
     project/Input/include
     project/MessageBus/include
     project/Renderer/include
+    project/Renderer/include/mesh
+    project/Renderer/include/packets
     project/Terminal/include
     project/Scene/include
     libs/stb
@@ -172,6 +205,7 @@ include_directories(
     libs/glm/
     libs/openal-soft/include
     libs/json/single_include/nlohmann
+    libs/imgui/
     build/libs/assimp/include
 )
 
@@ -186,6 +220,7 @@ target_link_libraries(
         OpenAL
         assimp
         nlohmann_json::nlohmann_json
+        imgui
 )    
 
 file(GLOB resources "resources/*")
