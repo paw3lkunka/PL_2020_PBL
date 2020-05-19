@@ -224,13 +224,13 @@ void SceneReader::readMeshes()
         if(meshType == "MeshCustom")
         {
             objModulePtr->newModel(filePath.c_str());
-            auto mesh = objModulePtr->getMeshCustomFromPath(meshPath.c_str());
+            auto mesh = objModulePtr->getMeshCustomPtrByPath(meshPath.c_str());
             mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
         }
         else if(meshType == "MeshSkinned")
         {
             objModulePtr->newModel(filePath.c_str());
-            auto mesh = objModulePtr->getMeshSkinnedFromPath(meshPath.c_str());
+            auto mesh = objModulePtr->getMeshSkinnedPtrByPath(meshPath.c_str());
             mesh->serializationID = j.at(name).at("serializationID").get<unsigned int>();
         }
         else;
@@ -291,6 +291,26 @@ void SceneReader::readComponents()
             std::cout << "Light" << std::endl;
             readLight(name);
         }
+        else if(componentType == "PhysicalInputKeymap")
+        {
+            std::cout << "PhysicalInputKeymap" << std::endl;
+            readPhysicalInputKeymap(name);
+        }
+        else if(componentType == "Paddle")
+        {
+            std::cout << "Paddle" << std::endl;
+            readPaddle(name);
+        }
+    }
+
+    for(int i = 0; i < componentsAmount; ++i)
+    {
+        name = setName("component", i);
+        componentType = j.at(name).at("type").get<std::string>();
+        if(componentType == "Transform")
+        {
+            readTransformParents(name);
+        }
     }
 }
 
@@ -307,6 +327,7 @@ void SceneReader::readEntities()
         auto entityName = j.at(name).at("name").get<std::string>();
         auto entity = objModulePtr->newEntity(components.size(), entityName);
         entity->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+        entity->id = j.at(name).at("id").get<unsigned int>();
     }
 }
 
@@ -329,41 +350,24 @@ std::string SceneReader::setName(std::string name, int index)
 
 void SceneReader::readTransform(std::string name)
 {
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    auto component = objModulePtr->objectContainer.getComponentFromSerializationID(serializationID);
+    auto component = entity->getComponentPtr<Transform>();
     glm::vec3 tempVec;
     glm::quat tempRot;
     Transform* trans;
     if(component != nullptr)
     {
-        trans = dynamic_cast<Transform*>(component);
+        trans = component;
     }
     else
     {
         trans = objModulePtr->newEmptyComponent<Transform>();
-        trans->serializationID = serializationID;
-        try
-        {  
-            auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
-            if(parentID != 0)
-            {
-                auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
-                trans->setParent(parentTrans);
-            }
-            else
-            {
-                trans->setParent(&GetCore().sceneModule.rootNode);
-            }
-        }
-        catch(nlohmann::detail::out_of_range)
-        {
-            std::cout << "No parent transform for " << name << std::endl;
-        }
-
-        unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-        auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-        entity->addComponent(trans);
+        assignToEntity(name, trans);
     }
+    trans->serializationID = serializationID;
+
 
     tempVec.x = j.at(name).at("localPosition").at("x").get<float>();
     tempVec.y = j.at(name).at("localPosition").at("y").get<float>();
@@ -430,9 +434,7 @@ void SceneReader::readAudioSource(std::string name)
         aSource->getListenersModifiable().push_back(dynamic_cast<AudioListener*>(objModulePtr->objectContainer.getComponentFromSerializationID(listeners[i])));
     }
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(aSource);
+    assignToEntity(name, aSource);
 }
 
 void SceneReader::readAudioListener(std::string name)
@@ -454,9 +456,7 @@ void SceneReader::readAudioListener(std::string name)
     audioListener->getIsCurrentModifiable() = j.at(name).at("isCurrent").get<int>();
     audioListener->getGainModifiable() = j.at(name).at("gain").get<float>();
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(audioListener);
+    assignToEntity(name, audioListener);
 }
 
 void SceneReader::readCamera(std::string name)
@@ -471,20 +471,22 @@ void SceneReader::readCamera(std::string name)
     camera->projectionMode = CameraProjection(j.at(name).at("projectionMode").get<int>());
     camera->isMain = j.at(name).at("isMain").get<bool>();
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(camera);
+    assignToEntity(name, camera);
 }
 
 void SceneReader::readMeshRenderer(std::string name)
 {
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto component = entity->getComponentPtr<MeshRenderer>();
+
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    auto component = objModulePtr->objectContainer.getComponentFromSerializationID(serializationID);
     if(component != nullptr) // * if component exists (if was made by mesh processing)
     {
         auto renderer = dynamic_cast<MeshRenderer*>(component);
         unsigned int childID = j.at(name).at("material").get<unsigned int>();
         renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        renderer->serializationID = serializationID;
         return;
     }
     else // * if component was made by core
@@ -498,9 +500,7 @@ void SceneReader::readMeshRenderer(std::string name)
         childID = j.at(name).at("mesh").get<unsigned int>();
         renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
 
-        unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-        auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-        entity->addComponent(renderer);
+        assignToEntity(name, renderer);
     }
 }
 
@@ -518,9 +518,7 @@ void SceneReader::readSphereCollider(std::string name)
     sphereCollider->radius = j.at(name).at("radius").get<float>();
     sphereCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(sphereCollider);
+    assignToEntity(name, sphereCollider);
 }
 
 void SceneReader::readBoxCollider(std::string name)
@@ -538,13 +536,7 @@ void SceneReader::readBoxCollider(std::string name)
 
     boxCollider->calculateVert();
 
-    //TODO PODANIE O ZROBIENIE Z TEGO FUNKCJI
-    //ZDJĘCIE #1
-    //ZDJĘCIE #2
-    //ZDJĘCIE #3
-    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
-    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(boxCollider);
+    assignToEntity(name, boxCollider);
 }
 
 void SceneReader::readLight(std::string name)
@@ -586,7 +578,88 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();
     rigidbody->ignoreGravity = j.at(name).at("ignoreGravity").get<bool>();
 
+    assignToEntity(name, rigidbody);
+}
+
+void SceneReader::readPaddle(std::string name)
+{
+    auto paddle = objModulePtr->newEmptyComponent<Paddle>();
+    paddle->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    paddle->minSpeed = j.at(name).at("minSpeed").get<float>();
+    paddle->maxSpeed = j.at(name).at("maxSpeed").get<float>();
+    paddle->maxFrontRot = j.at(name).at("maxFrontRot").get<float>();
+    paddle->maxSideRot = j.at(name).at("maxSideRot").get<float>();
+    paddle->maxPos.x = j.at(name).at("maxPos").at("x").get<float>();
+    paddle->maxPos.y = j.at(name).at("maxPos").at("y").get<float>();
+    paddle->maxPos.z = j.at(name).at("maxPos").at("z").get<float>();
+
+    assignToEntity(name, paddle);
+}
+
+void SceneReader::assignToEntity(std::string name, Component* component)
+{
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    entity->addComponent(rigidbody);
+    entity->addComponent(component);
+}
+
+void SceneReader::readPhysicalInputKeymap(std::string name)
+{
+    auto keymap = objModulePtr->newEmptyComponent<PhysicalInputKeymap>();
+    keymap->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    int singleSize = j.at(name).at("single").at("size").get<int>();
+    int continuousSize = j.at(name).at("continuous").at("size").get<int>();
+
+    for (int i = 0; i < singleSize; i++)
+    {
+        int keycode = j.at(name).at("single").at("key " + std::to_string(i)).at("keycode").get<int>();
+        keymap->single[keycode].force.x = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("x").get<float>();
+        keymap->single[keycode].force.y = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("y").get<float>();
+        keymap->single[keycode].force.z = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("z").get<float>();
+        keymap->single[keycode].force.x = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("x").get<float>();
+        keymap->single[keycode].force.y = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("y").get<float>();
+        keymap->single[keycode].force.z = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("z").get<float>();
+    }
+
+    for (int i = 0; i < continuousSize; i++)
+    {
+        int keycode = j.at(name).at("continuous").at("key " + std::to_string(i)).at("keycode").get<int>();
+        keymap->continuous[keycode].force.x = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("x").get<float>();
+        keymap->continuous[keycode].force.y = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("y").get<float>();
+        keymap->continuous[keycode].force.z = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("z").get<float>();
+        keymap->continuous[keycode].force.x = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("x").get<float>();
+        keymap->continuous[keycode].force.y = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("y").get<float>();
+        keymap->continuous[keycode].force.z = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("z").get<float>();
+    }
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(keymap);
+}
+
+void SceneReader::readTransformParents(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    auto trans = entity->getComponentPtr<Transform>();
+    try
+    {
+        auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
+        if(parentID != 0)
+        {
+            auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
+            trans->setParent(parentTrans);
+        }
+        else
+        {
+            trans->setParent(&GetCore().sceneModule.rootNode);
+        }
+    }
+    catch(nlohmann::detail::out_of_range)
+    {
+        std::cout << "No parent transform for " << name << std::endl;
+    }
 }

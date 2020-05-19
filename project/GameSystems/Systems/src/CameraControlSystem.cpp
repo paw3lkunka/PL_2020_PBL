@@ -9,6 +9,7 @@
 #include "MouseDataStructures.inl"
 #include "Transform.inl"
 #include "Camera.inl"
+#include "Core.hpp"
 
 bool CameraControlSystem::assertEntity(Entity* entity)
 {
@@ -46,6 +47,9 @@ void CameraControlSystem::receiveMessage(Message msg)
                 case GLFW_KEY_LEFT_SHIFT:
                     speed *= 5.0f;
                     break;
+                case GLFW_KEY_C:
+                    usingMouse = !usingMouse;
+                    break;
             }
 
             break;
@@ -80,17 +84,40 @@ void CameraControlSystem::receiveMessage(Message msg)
 
         case Event::MOUSE_CURSOR_MOVED:
             {
-                CursorData cursorData = msg.getValue<CursorData>();
-                yaw += cursorData.xDelta * sensitivity;
-                pitch -= cursorData.yDelta * sensitivity;
-                if (pitch > 89.0f)
+                if(usingMouse)
                 {
-                    pitch = 89.0f;
+                    CursorData cursorData = msg.getValue<CursorData>();
+                    yaw += cursorData.xDelta * sensitivity;
+                    pitch -= cursorData.yDelta * sensitivity;
+                    if (pitch > 89.0f)
+                    {
+                        pitch = 89.0f;
+                    }
+                    else if (pitch < -89.0f)
+                    {
+                        pitch = -89.0f;
+                    }
                 }
-                else if (pitch < -89.0f)
-                {
-                    pitch = -89.0f;
-                }
+            }
+            break;
+
+        case Event::MOUSE_BUTTON_PRESSED:
+            switch (msg.getValue<int>())
+            {
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    glfwSetInputMode(GetCore().getWindowPtr(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                    usingMouse = !usingMouse;
+                    break;
+            }
+            break;
+
+        case Event::MOUSE_BUTTON_RELEASED:
+            switch (msg.getValue<int>())
+            {
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    glfwSetInputMode(GetCore().getWindowPtr(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    usingMouse = !usingMouse;
+                    break;
             }
             break;
     }

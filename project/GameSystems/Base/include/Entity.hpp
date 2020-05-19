@@ -7,6 +7,7 @@
 #include "ISerializable.inl"
 
 class Component;
+class SceneReader;
 
 /**
  * @brief Representation of all objects in games, technically a collection of Components
@@ -14,6 +15,7 @@ class Component;
  */
 class Entity : public ISerializable
 {
+    friend class SceneReader;
 public:
     /**
      * @brief Construct a new Entity object
@@ -29,6 +31,26 @@ public:
      * @param ptr 
      */
     void addComponent(Component* ptr);
+
+    /**
+     * @brief Delete connection between entity, and pointed component
+     * 
+     * @tparam T type of component (default: Component)
+     * @param ptr pointer to component to detach
+     * @return T* pointer to detached component, or nullptr if entity not contain this component
+     */
+    template<class T = Component>
+    T* detachComponent(T* ptr);
+    
+    /**
+     * @brief Delete connection between entity, and the n-th Component of given type
+     * 
+     * @tparam T type of component,
+     * @param n occurrence of component (default: 0)
+     * @return T* pointer to detached component, or nullptr if entity not contain this component
+     */
+    template<class T>
+    T* detachComponent(int n = 0);    
 
     /**
      * @brief Get the Id object

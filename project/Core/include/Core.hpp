@@ -94,9 +94,19 @@ class Core
 #pragma region setup
     public:       
         /**
-         * @brief Determines, if scene file should be updated during initialization 
+         * @brief Determines, if scene file should be updated during initialization.
          */
         bool updateScene = false;
+
+        /**
+         * @brief Creat scene from old_scene instead of loading file.
+         */
+        bool recreateScene = false;
+
+        /**
+         * @brief Path to scene file.
+         */
+        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
 #pragma endregion
 
 #pragma region Constants
@@ -193,8 +203,10 @@ class Core
         /// @brief stores all crucial objects
         ObjectModule objectModule;
 
-        //TODO Please, do something better here ;-;
-        // /// @brief safely close application, on ESC press
+        /**
+         * TODO Please, do something better here ;-;
+         * @brief safely close application, on ESC press
+         */
         class : public IModule
         {
         virtual void receiveMessage(Message msg)
@@ -210,28 +222,42 @@ class Core
 
 
 #pragma region Systems
-
+//TODO must be a better way, than static fields
     public:
         //TODO documentation
         static CameraSystem cameraSystem;
+
         //TODO documentation
         static CameraControlSystem cameraControlSystem;
+
         //TODO documentation
         static AudioSourceSystem audioSourceSystem;
+
         //TODO documentation
         static AudioListenerSystem audioListenerSystem;
+
         //TODO documentation
         static MeshRendererSystem rendererSystem;
+
         //TODO documentation
-        static CollisionDetectionSystem collisionDetectionSystem;
+        static CollisionSystem collisionSystem;
+
         //TODO documentation
-        static GravitySystem gravitySystem;
+        static PhysicalBasedInputSystem physicalBasedInputSystem;
+
         //TODO documentation
-        static KinematicSystem kinematicSystem;
+        static PhysicSystem physicSystem;
+
         //TODO documentation
         static SkeletonSystem skeletonSystem;
         //TODO documentation
         static LightSystem lightSystem;
+
+        //TODO documentation
+        static PaddleControlSystem paddleControlSystem;
+
+        //TODO documentation
+        static PaddleIkSystem paddleIkSystem;
 
 #pragma endregion
 

@@ -6,6 +6,7 @@
 
 class AssetReader;
 class ObjectModule;
+struct Component;
 
 class SceneReader
 {
@@ -42,6 +43,11 @@ private:
     void readBoxCollider(std::string name);
     void readRigidbody(std::string name);
     void readLight(std::string name);
+    void readPhysicalInputKeymap(std::string name);
+    void readPaddle(std::string name);
+
+    void assignToEntity(std::string name, Component* component);
+    void readTransformParents(std::string name);
 };
 
 #endif /* !SCENEREADER_HPP_ */

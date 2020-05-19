@@ -39,7 +39,7 @@ class AssetReader
     friend class ObjectMaker;
     friend class ObjectModule;
 public:
-
+    //TODO DOCUMENTATION
     AssetReader(ObjectModule* objModule);
     ~AssetReader() = default;
 

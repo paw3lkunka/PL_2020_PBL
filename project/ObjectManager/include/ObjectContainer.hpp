@@ -174,10 +174,10 @@ private:
      */
     std::unordered_map<std::string, Bone> bones;
     /**
-     * @brief Anitmations data collection
+     * @brief Animations data collection
      * @key path/animation_name
      */
-    // TODO Convert into unoredered map
+    // TODO Convert into unordered map
     std::map<std::string, Animation> animations;
 };
 

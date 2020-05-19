@@ -2,6 +2,7 @@
 #include "Components.inc"
 #include "ObjectModule.hpp"
 #include "ObjectContainer.hpp"
+#include "ObjectExceptions.inl"
 
 #include "Material.hpp"
 #include "Texture.hpp"
@@ -15,8 +16,15 @@
 #include <iomanip>
 #include <glm/gtc/type_ptr.hpp>
 
+bool SceneWriter::hasInstance = false;
+
 SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 {
+    if(hasInstance)
+    {
+        throw TooManyInstancesException("SceneWriter");
+    }
+    hasInstance = true;
     objModulePtr = objectModulePtr;
     objContainerPtr = &objectModulePtr->objectContainer;
 }
@@ -168,50 +176,49 @@ void SceneWriter::saveScene(const char* filePath)
 
         j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
         j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
-        if(dynamic_cast<Transform*>(objContainerPtr->components[i]))
+        if(Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
-            Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]);
             saveTransform(name, temp);
         }
-        else if(dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
+        else if(AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
-            AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]);
             saveAudioSource(name, temp);
         }
-        else if(dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
+        else if(AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
         {
-            AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]);
             saveAudioListener(name, temp);
         }
-        else if(dynamic_cast<Camera*>(objContainerPtr->components[i]))
+        else if(Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]))
         {
-            Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]);
             saveCamera(name, temp);
         }
-        else if(dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
+        else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
-            MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]);
             saveMeshRenderer(name, temp);
         }
-        else if(dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
+        else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
-            SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]);
             saveSphereCollider(name, temp);
         }
-        else if(dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
-        {   
-            BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]);
+        else if(BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
+        {
             saveBoxCollider(name, temp);
         }
-        else if(dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
+        else if(Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
         {
-            Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]);
             saveRigidbody(name, temp);
         }
-        else if(dynamic_cast<Light*>(objContainerPtr->components[i]))
+        else if(Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]))
         {
-            Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]);
             saveLight(name, temp);
+        }
+        else if(PhysicalInputKeymap* temp = dynamic_cast<PhysicalInputKeymap*>(objContainerPtr->components[i]))
+        {
+            savePhysicalInputKeymap(name, temp);
+        }
+        else if(Paddle* temp = dynamic_cast<Paddle*>(objContainerPtr->components[i]))
+        {
+            savePaddle(name, temp);
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
@@ -359,6 +366,58 @@ void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
     j[name]["drag"] = componentPtr->drag;
     j[name]["angularDrag"] = componentPtr->angularDrag;
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
+}
+
+void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr)
+{
+    j[name]["type"] = "PhysicalInputKeymap";
+
+    j[name]["single"]["size"] = keymapPtr->single.size();
+    j[name]["continuous"]["size"] = keymapPtr->continuous.size();
+
+    int i = 0;
+
+    for (auto& entry : keymapPtr->single)
+    {
+        j[name]["single"]["key " + std::to_string(i)]["keycode"] = entry.first;
+
+        j[name]["single"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        j[name]["single"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        j[name]["single"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+
+        j[name]["single"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        j[name]["single"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        j[name]["single"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        i++;
+    }
+
+    i = 0;
+
+    for (auto& entry : keymapPtr->continuous)
+    {
+        j[name]["continuous"]["key " + std::to_string(i)]["keycode"] = entry.first;
+
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        i++;
+    }
+}
+
+void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
+{
+    j[name]["type"] = "Paddle";
+    j[name]["minSpeed"] = componentPtr->minSpeed;
+    j[name]["maxSpeed"] = componentPtr->maxSpeed;
+    j[name]["maxFrontRot"] = componentPtr->maxFrontRot;
+    j[name]["maxSideRot"] = componentPtr->maxSideRot;
+    j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
+    j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
+    j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)

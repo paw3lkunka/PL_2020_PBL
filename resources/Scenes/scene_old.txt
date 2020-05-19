@@ -1,7 +1,5 @@
 #pragma region Data Loading
-    
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
-    objectModule.newModel("Resources/Models/House Dancing.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
     objectModule.newModel("Resources/Models/Right_bank.FBX");
@@ -11,7 +9,6 @@
     objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
-    
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 
@@ -161,9 +158,6 @@
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
     skyboxMat->setCubemap("cubemap", cubemap);
 
-    // Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat", RenderType::Transparent);
-    // waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
-
     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
 
@@ -198,7 +192,7 @@
 #pragma region Entities
 
     {
-        Entity* entity = objectModule.getEntityFromName("rocks_03");
+        Entity* entity = objectModule.getEntityPtrByName("rocks_03");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = simpleLitMat;
 
@@ -209,7 +203,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Alpha_Surface");
+        auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
         if(entity != nullptr)
         {
             auto mr = entity->getComponentPtr<MeshRenderer>();
@@ -221,75 +215,72 @@
         }
     }
 
+    Entity* terrain = objectModule.newEntity(1, "Terrain");
     {
-        auto entity = objectModule.getEntityFromName("Water");
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+        t->getLocalPositionModifiable() = glm::vec3(0, -30, 0);
+        t->getLocalScaleModifiable() = glm::vec3(5, 5, 5);
+        t->setParent(&sceneModule.rootNode);
+    }
+
+    {
+        auto entity = objectModule.getEntityPtrByName("Water");
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Cliffs");
+        auto entity = objectModule.getEntityPtrByName("Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = rocksMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Left_bank");
+        auto entity = objectModule.getEntityPtrByName("Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Right_bank");
+        auto entity = objectModule.getEntityPtrByName("Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
-            t->setParent(&sceneModule.rootNode);
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Riverbed");
+        auto entity = objectModule.getEntityPtrByName("Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = gravelMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {0.0f, -30.0f, 0.0f};
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(270, 0, 0));
-            t->getLocalScaleModifiable() = {5, 5, 5};
+            t->setParent(terrain->getComponentPtr<Transform>());
     }
 
-    {
-        auto entity = objectModule.getEntityFromName("Alpha_Joints");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = unlitSkinnedMat;
+    // {
+    //     auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+    //     auto mr = entity->getComponentPtr<MeshRenderer>();
+    //         mr->material = unlitSkinnedMat;
 
-        auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = { 30.0f, 0.0f, -25.0f };
-            t->getLocalScaleModifiable() = { 0.15f, 0.15f, 0.15f };
-    }
+    //     auto t = entity->getComponentPtr<Transform>();
+    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    // }
 
     {
-        auto entity = objectModule.getEntityFromName("Sphere001");
+        auto entity = objectModule.getEntityPtrByName("Sphere001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -305,7 +296,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityFromName("Box001");
+        auto entity = objectModule.getEntityPtrByName("Box001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -327,7 +318,7 @@
             l->color = {1.0f, 1.0f, 1.0f};
     }
 
-    objectModule.newEntity(2, "sphereInstanced1");
+    objectModule.newEntity(2, "cubeInstanced1");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 20.5f, 0.0f, 10.0f };
@@ -335,11 +326,11 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced2");
+    objectModule.newEntity(2, "cubeInstanced2");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
@@ -347,11 +338,11 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced3");
+    objectModule.newEntity(2, "cubeInstanced3");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
@@ -359,11 +350,11 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced4");
+    objectModule.newEntity(2, "cubeInstanced4");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
@@ -371,11 +362,11 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced5");
+    objectModule.newEntity(2, "cubeInstanced5");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
@@ -383,11 +374,11 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced6");
+    objectModule.newEntity(2, "cubeInstanced6");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
@@ -395,7 +386,7 @@
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/Box.FBX/Box001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
     }
 
@@ -419,10 +410,6 @@
             li->getPositionModifiable();
             li->getAtModifiable();
             li->getUpModifiable();
-
-        auto sc = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-            sc->type = Collider::Type::KINEMATIC;
-            sc->radius = 5;
     }
 
 #pragma endregion
@@ -431,7 +418,7 @@
 objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
         so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 0.1f;
@@ -453,13 +440,131 @@ objectModule.newEntity(2, "sampleSound");
             c->radius = 10;
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomFromPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
             mr->material = unlitInstancedMat;
 
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so1->getListenersModifiable().push_back(objectModule.getEntityFromName("Camera")->getComponentPtr<AudioListener>());
+            so1->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
             so1->getGainModifiable() = 100.5f;
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }
+
+    objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
+
+    Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0, 90, 90));
+            t->getLocalPositionModifiable() = glm::vec3(3, 0, -5.5f);
+    }
+
+    Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
+    paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = paddleMat;
+
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(paddleIndirect->getComponentPtr<Transform>());
+
+        auto paddle = objectModule.newEmptyComponent<Paddle>();
+            paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
+            entity->addComponent(paddle);
+    }
+
+    Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat", RenderType::Opaque);
+    attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = attachMat;
+
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
+    }
+
+    {
+        auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = attachMat;
+
+        auto t = entity->getComponentPtr<Transform>();
+            t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
+    }
+
+        Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
+        playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Player");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = playerMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
+        }
+
+        Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
+        kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Kayak");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = kayakMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+                t->getLocalPositionModifiable() = glm::vec3(0, 0, -24);
+                t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
+                t->setParent(&sceneModule.rootNode);
+        }
+//Andrzej, pół fizyki
+{
+    Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
+            Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
+            rb001->mass = 10;
+            rb001->drag = 5;
+            rb001->angularDrag = 5;
+            rb001->ignoreGravity = true;
+            sphere001->addComponent(rb001);
+
+        Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
+            Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
+            rbSound->mass = 10;
+            rbSound->drag = 5;
+            rbSound->angularDrag = 5;
+            rbSound->ignoreGravity = true;
+            sphereSound->addComponent(rbSound);
+        Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+        PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
+            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
+            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+        Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+            transform->setParent(&sceneModule.rootNode);
+            transform->getLocalPositionModifiable().x = 50;
+            transform->getLocalScaleModifiable() *= 5;
+        SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+            collider->radius = 5;
+        MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+                material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
+
+            meshRenderer->material = material;
+            meshRenderer->mesh = mesh;
+
+        Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rigidbody->drag = 5;
+            rigidbody->angularDrag = 5;
+            rigidbody->mass = 10;
+            rigidbody->ignoreGravity = true;
+
+}

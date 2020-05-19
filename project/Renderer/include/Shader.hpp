@@ -36,6 +36,7 @@ public:
      * @param geometryShader String with code contents of geometry shader
      */
     Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr);
+
     Shader() = default;
     /**
      * @brief Destroy the Shader object

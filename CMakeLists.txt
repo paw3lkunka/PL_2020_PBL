@@ -31,6 +31,10 @@ if(NOT EXISTS "libs/json/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/json/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/imgui/LICENSE.txt")
+    execute_process(COMMAND git submodule update --init "libs/imgui/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -49,10 +53,8 @@ set(ALSOFT_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
 
 set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_COLLADA_IMPORTER ON CACHE BOOL "" FORCE)
 
 # Disable Assimp modules
-set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AMF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_3DS_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AC_IMPORTER OFF CACHE BOOL "" FORCE)
@@ -61,7 +63,9 @@ set(ASSIMP_BUILD_ASSBIN_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_B3D_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_BVH_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_DXF_IMPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_COLLADA_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_CSM_IMPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_HMP_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_IRRMESH_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_IRR_IMPORTER OFF CACHE BOOL "" FORCE)
@@ -114,6 +118,12 @@ add_subdirectory(libs/json/)
 #Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
+#FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
+# W wolnej chwili wartoby sprawdzić, o co tu chodzi.
+#                                                     ~ Andrzej
+#target_compile_options(alsoft-config PUBLIC -w)
+#target_compile_options(makemhr PUBLIC -w)
+#target_compile_options(sofa-info PUBLIC -w)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -144,6 +154,33 @@ list(
 
 add_library(lib ${SOURCE_FILES} )
 
+#imgui
+set(IMGUI_SOURCES
+    "libs/imgui/imgui.cpp"
+    "libs/imgui/imgui_demo.cpp"
+    "libs/imgui/imgui_draw.cpp"
+    "libs/imgui/imgui_widgets.cpp"
+    "libs/imgui/examples/imgui_impl_glfw.cpp"
+    "libs/imgui/examples/imgui_impl_opengl3.cpp"
+)
+
+set(IMGUI_HEADERS
+    "libs/imgui/imconfig.h"
+    "libs/imgui/imgui.h"
+    "libs/imgui/imgui_internal.h"
+    "libs/imgui/imstb_rectpack.h"
+    "libs/imgui/imstb_textedit.h"
+    "libs/imgui/imstb_truetype.h"
+    "libs/imgui/examples/imgui_impl_glfw.h"
+    "libs/imgui/examples/imgui_impl_opengl3.h"
+)
+
+add_library(imgui
+    STATIC
+        ${IMGUI_SOURCES}
+        ${IMGUI_HEADERS}
+)
+
 
 include_directories( 
     project
@@ -168,6 +205,7 @@ include_directories(
     libs/glm/
     libs/openal-soft/include
     libs/json/single_include/nlohmann
+    libs/imgui/
     build/libs/assimp/include
 )
 
@@ -182,6 +220,7 @@ target_link_libraries(
         OpenAL
         assimp
         nlohmann_json::nlohmann_json
+        imgui
 )    
 
 file(GLOB resources "resources/*")

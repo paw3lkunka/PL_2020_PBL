@@ -1,5 +1,7 @@
 #include "Core.hpp"
-
+#include "imgui.h"
+#include "examples/imgui_impl_opengl3.h"
+#include "examples/imgui_impl_glfw.h"
 #include "Components.inc"
 #include "Systems.inc"
 
@@ -29,6 +31,11 @@ void ErrorLog(const char* log)
     Core::instance->messageBus.sendMessage(Message(Event::DEBUG_ERROR_LOG, log));
 }
 
+GLFWwindow* Core::getWindowPtr()
+{
+    return window;
+}
+
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 {
     glm::mat4 temp = glm::mat4(1);
@@ -36,6 +43,7 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
     temp = glm::rotate(temp, glm::radians(eulerAngles.y), glm::vec3(0.0, 1.0, 0.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     glm::quat quatFinal = glm::quat(temp);
+
     return quatFinal;
 }
 
@@ -47,7 +55,7 @@ int Core::init()
 		return instance == this ? 3 : 4;
     }
     instance = this;
-    
+
     std::cout << "Henlo!" << std::endl;
     //TODO: GLFW Error callback
     
@@ -64,6 +72,7 @@ int Core::init()
 		return 1;
 	}
 	glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -85,11 +94,69 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    objectModule.readScene("Resources/Scenes/mainScene.json");
+    if (recreateScene)
+    {
+        #include "../../resources/Scenes/scene_old.txt"
+    }
+    else
+    {
+        objectModule.readScene(sceneFilePath);
+    }
 
     if (updateScene)
     {
-        
+        // ! Manual extension of scene, runned by -u param
+        {
+            Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
+                Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
+                rb001->mass = 10;
+                rb001->drag = 1;
+                rb001->angularDrag = 1;
+                rb001->ignoreGravity = true;
+                sphere001->addComponent(rb001);
+
+
+            Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
+                Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
+                rbSound->mass = 10;
+                rbSound->drag = 1;
+                rbSound->angularDrag = 1;
+                rbSound->ignoreGravity = true;
+                sphereSound->addComponent(rbSound);
+
+            Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+
+            PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+                keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
+                keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
+                keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
+                keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+
+            Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+                transform->setParent(&sceneModule.rootNode);
+                transform->getLocalPositionModifiable().x = 50;
+                transform->getLocalScaleModifiable() *= 5;
+
+            SphereCollider* collider;
+                collider = objectModule.getEntityPtrByName("Camera")->detachComponent<SphereCollider>();
+                entity->addComponent(collider);
+
+            MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+                Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
+                Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+                    material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
+
+                meshRenderer->material = material;
+                meshRenderer->mesh = mesh;
+
+            Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                rigidbody->drag = 1;
+                rigidbody->angularDrag = 1;
+                rigidbody->mass = 10;
+                rigidbody->ignoreGravity = true;
+        }
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer
@@ -103,20 +170,34 @@ int Core::init()
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
+    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionDetectionSystem);
-    //gameSystemsModule.addSystem(&gravitySystem);
-    //gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&paddleControlSystem);
+
+    // ! IK system initialize
+    BoneAttachData leftData;
+    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+    leftData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_left");
+
+    BoneAttachData rightData;
+    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+    rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
+
+    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+    //gameSystemsModule.addSystem(&paddleIkSystem);
 
 #pragma region AudioModule demo - initialization
-    
+
     audioModule.init();
 
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -127,13 +208,24 @@ int Core::init()
 
 #pragma region Camera
     // ! Finding main camera
-    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
+    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
 
     gameSystemsModule.addSystem(&cameraSystem);
 
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
+
+    // ! IMGUI initialize
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    // ? Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 430");
+    // ? Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
 
     // Everything is ok.
     return 0;
@@ -150,14 +242,33 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sphereSound")->getComponentPtr<AudioSource>()));
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
+    // * pointer for entity
+    Entity* e = objectModule.getEntityPtrByID(0u);
+    Transform* eTrans = e->getComponentPtr<Transform>();
 
+    int entitiesSize = (*objectModule.getEntitiesVector()).size();
+    // * list of entities names with \0 in between
+    std::string entities;
+    for(int i = 0; i < entitiesSize; ++i)
+    {
+        entities += "ID ";
+        entities += std::to_string(i);
+        entities += " Name: ";
+        entities += objectModule.getEntityPtrByID(i)->getName();
+        entities += char(0);
+    }
+    // * index for combo list
+    int currentItem = 0;
+    // * rotation in eulers
+    glm::vec3 worldRotation = glm::vec3(0);
+    glm::vec3 localRotation = glm::vec3(0);
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -175,6 +286,11 @@ int Core::mainLoop()
             glfwPollEvents();
             inputModule.captureControllersInput();
         
+        // ? ++++ IMGUI NEW FRAME ++++
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         // ? +++++ FIXED UPDATE LOOP +++++
 
         while(lag >= FIXED_TIME_STEP)
@@ -188,6 +304,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
@@ -200,6 +317,64 @@ int Core::mainLoop()
         // TODO: Should transform update be here also?
         messageBus.notify();
 
+        // ? +++++ IMGUI WINDOW ++++
+        ImGui::Begin("Edit window");
+        if(ImGui::Combo("", &currentItem, entities.c_str()))
+        {
+            e = objectModule.getEntityPtrByID(currentItem);
+            eTrans = e->getComponentPtr<Transform>();
+            //rotation is quaternion in ZXY
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat worldRot = worldRotDec * eTrans->getLocalRotation();
+            worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
+            localRotation = glm::eulerAngles(eTrans->getLocalRotation()) * 180.0f / glm::pi<float>();
+            //rotation = glm::vec3(tempRot.x, tempRot.z, tempRot.y);
+        }
+
+        ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
+        ImGui::Text("Transform (local):");
+        ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+        if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
+        {
+            eTrans->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        }
+        ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
+        ImGui::Text("Transform (World):");
+        if(ImGui::DragFloat3("_Rotation: ", (float*)&worldRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
+        {
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat rot = worldRotDec * eulerToQuaternion(worldRotation);
+            eTrans->getLocalRotationModifiable() = rot;
+        }
+
+        if(e->getComponentPtr<Paddle>() != nullptr)
+        {
+            ImGui::Text("Paddle: ");
+            Paddle* paddle = e->getComponentPtr<Paddle>();
+            ImGui::DragFloat3( "Max postition", (float*)&paddle->maxPos, 0.05f, -20.0f, 20.0f, "%.2f");
+            ImGui::DragFloat("Min speed", (float*)&paddle->minSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.5f, -90.0f, 90.0f);
+            ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.5f, -90.0f, 90.0f);
+        }
+        if(eTrans->getParent()->serializationID == 0)
+        {
+            ImGui::Text("Parent name: Root scene");
+        }
+        else
+        {
+            ImGui::Text(("Parent name: " + std::string(eTrans->getParent()->entityPtr->getName())).c_str());
+        }
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
         // ? +++++ RENDER CURRENT FRAME +++++
 
         rendererModule.render();
@@ -226,6 +401,11 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    //! IMGUI CLEANUP
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
@@ -247,8 +427,10 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionDetectionSystem Core::collisionDetectionSystem;
-GravitySystem Core::gravitySystem;
-KinematicSystem Core::kinematicSystem;
+CollisionSystem Core::collisionSystem;
+PhysicalBasedInputSystem Core::physicalBasedInputSystem;
+PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
+PaddleControlSystem Core::paddleControlSystem;
+PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
