@@ -89,8 +89,14 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    //objectModule.readScene("Resources/Scenes/mainScene.json");
-    #include "../../resources/Scenes/scene_old.txt"
+    if (recreateScene)
+    {
+        #include "../../resources/Scenes/scene_old.txt"
+    }
+    else
+    {
+        objectModule.readScene(sceneFilePath);
+    }
 
     if (updateScene)
     {

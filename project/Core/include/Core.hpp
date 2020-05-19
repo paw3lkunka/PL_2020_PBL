@@ -94,9 +94,19 @@ class Core
 #pragma region setup
     public:       
         /**
-         * @brief Determines, if scene file should be updated during initialization 
+         * @brief Determines, if scene file should be updated during initialization.
          */
         bool updateScene = false;
+
+        /**
+         * @brief Creat scene from old_scene instead of loading file.
+         */
+        bool recreateScene = false;
+
+        /**
+         * @brief Path to scene file.
+         */
+        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
 #pragma endregion
 
 #pragma region Constants
