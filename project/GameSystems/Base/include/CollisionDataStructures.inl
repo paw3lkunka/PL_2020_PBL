@@ -8,30 +8,15 @@
 #include "Collider.inl"
 
 /**
- * @brief Data structure for collision event
+ * @brief Data structure for collision and trigger events
  * 
  */
-struct __attribute__((packed)) CollisionData
+struct CollisionData
 {
-    /// @brief Collider for which collision was resolved
+    /// @brief Collider which interacted with other
     Collider* cause;
-    /// @brief Collider with which collision was resolved
+    /// @brief Collider which was entered
     Collider* target;
-    //TODO should be removed / changed after phisic collisions implementation
-    /// @brief Separation vector for 'cause' collider
-    glm::vec3 separation;
-};
-
-/**
- * @brief Data structure for trigger events
- * 
- */
-struct TriggerData
-{
-    /// @brief Collider which interacted with trigger
-    Collider* cause;
-    /// @brief Trigger
-    Collider* trigger;
 };
 
 /**
@@ -43,21 +28,32 @@ struct Projection1D
     float end;
 };
 
-inline bool operator == (TriggerData a, TriggerData b) { return a.cause == b.cause && a.trigger == b.trigger; }
+//TODO documentation
+struct SATTestResult
+{
+//TODO documentation
+    bool collisionDetected;
+//TODO documentation
+    glm::vec3 collisionCentre;
+//TODO documentation
+    glm::vec3 collisionNormal;
+};
 
-class TriggerDataHasher
+inline bool operator == (CollisionData a, CollisionData b) { return a.cause == b.cause && a.target == b.target; }
+
+class CollisionDataHasher
 {
     public:
-        size_t operator () (const TriggerData& td) const
+        size_t operator () (const CollisionData& td) const
         {
-            return (std::hash<Collider*>()(td.cause) + 1147499) ^ (std::hash<Collider*>()(td.trigger) + 2000029);
+            return (std::hash<Collider*>()(td.cause) + 1147499) ^ (std::hash<Collider*>()(td.target) + 2000029);
         }
 };
 
-class TriggerDataEquals
+class CollisionDataEquals
 {
     public:
-        bool operator () (const TriggerData& t1, const TriggerData& t2) const
+        bool operator () (const CollisionData& t1, const CollisionData& t2) const
         {
             return t1 == t2;
         }

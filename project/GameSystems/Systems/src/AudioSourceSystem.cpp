@@ -29,7 +29,7 @@ void AudioSourceSystem::fixedUpdate()
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
     }
-
+    //
     glm::vec3 scale; // unused
     glm::quat orientation;
     glm::vec3 translation;

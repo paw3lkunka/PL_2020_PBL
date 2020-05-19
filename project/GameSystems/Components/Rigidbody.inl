@@ -17,14 +17,18 @@ struct Rigidbody : public Component
     Rigidbody() = default;
     virtual ~Rigidbody() = default;
 
-    // ! serialized
+    // ? serialized
 
     ///@brief Mass of the rigidbody
     float mass;
 
     ///@brief Moment of interia of Rigidbody
     glm::mat3 momentOfInertia;
-
+/*
+TODO implement this
+    ///@brief Inverted moment of interia of Rigidbody
+    glm::mat3 invertedMomentOfInertia;
+*/
     ///@brief Drag of the rigidbody
     float drag;
 
@@ -34,7 +38,7 @@ struct Rigidbody : public Component
     ///@brief determines, if gravity affects this body
     bool ignoreGravity = false;
 
-    // ! unserialized
+    // ? unserialized
 
     ///@brief Stores all impulses - cleared on the end of frame
     std::vector<Impulse> impulses;

@@ -1,6 +1,8 @@
 #!/bin/sh
 mkdir build
 cd build 
-rm -r *
-rm -r .cmake
+if [$1 = "clear"]; then
+    rm -r *
+    rm -r .cmake
+fi
 cmake -G "MinGW Makefiles" ..

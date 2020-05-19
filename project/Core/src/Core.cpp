@@ -58,7 +58,7 @@ int Core::init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    
     window = glfwCreateWindow(windowWidth, windowHeight, "PBL", NULL, NULL);
     if (window == NULL)
 	{
@@ -89,12 +89,69 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    objectModule.readScene("Resources/Scenes/mainScene.json");
+    if (recreateScene)
+    {
+        #include "../../resources/Scenes/scene_old.txt"
+    }
+    else
+    {
+        objectModule.readScene(sceneFilePath);
+    }
 
-    
     if (updateScene)
     {
-        
+        // ! Manual extension of scene, runned by -u param
+        {
+            Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
+                Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
+                rb001->mass = 10;
+                rb001->drag = 1;
+                rb001->angularDrag = 1;
+                rb001->ignoreGravity = true;
+                sphere001->addComponent(rb001);
+
+            
+            Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
+                Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
+                rbSound->mass = 10;
+                rbSound->drag = 1;
+                rbSound->angularDrag = 1;
+                rbSound->ignoreGravity = true;
+                sphereSound->addComponent(rbSound);
+
+            Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+
+            PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+                keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
+                keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
+                keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
+                keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+
+            Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+                transform->setParent(&sceneModule.rootNode);
+                transform->getLocalPositionModifiable().x = 50;
+                transform->getLocalScaleModifiable() *= 5;
+
+            SphereCollider* collider;
+                collider = objectModule.getEntityPtrByName("Camera")->detachComponent<SphereCollider>();
+                entity->addComponent(collider);
+
+            MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+                Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
+                Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+                    material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
+            
+                meshRenderer->material = material;
+                meshRenderer->mesh = mesh;
+            
+            Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                rigidbody->drag = 1;
+                rigidbody->angularDrag = 1;
+                rigidbody->mass = 10;
+                rigidbody->ignoreGravity = true;
+        }
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer
@@ -115,9 +172,9 @@ int Core::init()
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionDetectionSystem);
-    //gameSystemsModule.addSystem(&gravitySystem);
-    gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
 
@@ -181,12 +238,12 @@ int Core::mainLoop()
 #pragma region AudioModule demo
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion  
+#pragma endregion
 
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
-    // * pointer for entity 
+    // * pointer for entity
     Entity* e = objectModule.getEntityPtrByID(0u);
     Transform* eTrans = e->getComponentPtr<Transform>();
 
@@ -241,6 +298,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
@@ -259,7 +317,7 @@ int Core::mainLoop()
         {
             e = objectModule.getEntityPtrByID(currentItem);
             eTrans = e->getComponentPtr<Transform>();
-            //rotation is quaternion in ZXY 
+            //rotation is quaternion in ZXY
             glm::quat worldRotDec = {1, 0, 0, 0};
             // I don't need this shit
             glm::vec3 shit3(1.0f);
@@ -288,7 +346,7 @@ int Core::mainLoop()
             glm::vec4 shit(1.0f);
             glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
             glm::quat rot = worldRotDec * eulerToQuaternion(worldRotation);
-            eTrans->getLocalRotationModifiable() = rot;  
+            eTrans->getLocalRotationModifiable() = rot;
         }
 
         if(e->getComponentPtr<Paddle>() != nullptr)
@@ -300,8 +358,6 @@ int Core::mainLoop()
             ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
             ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.5f, -90.0f, 90.0f);
             ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.5f, -90.0f, 90.0f);
-            
-            
         }
         if(eTrans->getParent()->serializationID == 0)
         {
@@ -365,9 +421,9 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionDetectionSystem Core::collisionDetectionSystem;
-GravitySystem Core::gravitySystem;
-KinematicSystem Core::kinematicSystem;
+CollisionSystem Core::collisionSystem;
+PhysicalBasedInputSystem Core::physicalBasedInputSystem;
+PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
