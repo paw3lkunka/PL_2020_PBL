@@ -5,7 +5,7 @@
 #include <glm/mat4x4.hpp>
 
 class Animation;
-struct Bone;
+class Entity;
 
 
 struct Skeleton : public Component
@@ -13,7 +13,7 @@ struct Skeleton : public Component
     Skeleton() = default;
     virtual ~Skeleton() = default;
 
-    Bone* rootBone;
+    Entity* rootBone;
     Animation* animation;
 
     glm::mat4 globalInverseTransform;

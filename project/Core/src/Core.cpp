@@ -91,8 +91,6 @@ int Core::init()
     // ! Scene loading
     //objectModule.readScene("Resources/Scenes/mainScene.json");
     #include "../../resources/Scenes/scene_old.txt"
-
-    objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
     
     if (updateScene)
     {

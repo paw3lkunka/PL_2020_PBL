@@ -70,7 +70,7 @@ private:
 
     // TODO: Documentation
     bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
-    Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
+    Entity* processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
     Animation* processAnimations(const aiScene* scene, std::string path);
     Mesh* createMesh(aiMesh* node, std::string path);
 

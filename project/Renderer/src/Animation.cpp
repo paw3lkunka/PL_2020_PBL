@@ -37,9 +37,9 @@ glm::mat4 Animation::getAnimTransformLerp(unsigned int boneID, double time)
     if (animNode != animationNodes.end())
     {
         // * ----- Requested node found, interpolate the animation -----
-        glm::vec3 lerpPos = getPositionLerp(animNode->second, time);
-        glm::quat lerpRot = getRotationLerp(animNode->second, time);
-        glm::vec3 lerpScl = getScaleLerp(animNode->second, time);
+        glm::vec3 lerpPos = getPositionLerp(boneID, time);
+        glm::quat lerpRot = getRotationLerp(boneID, time);
+        glm::vec3 lerpScl = getScaleLerp(boneID, time);
 
         result = glm::translate(result, lerpPos);
         result = result * glm::toMat4(lerpRot);
@@ -49,8 +49,13 @@ glm::mat4 Animation::getAnimTransformLerp(unsigned int boneID, double time)
     return result;
 }
 
-glm::vec3 Animation::getPositionLerp(AnimationNode &node, double time)
+glm::vec3 Animation::getPositionLerp(unsigned int boneID, double time)
 {
+    auto node = animationNodes.find(boneID)->second;
+    while(time > node.animationLength)
+    {
+        time -= node.animationLength;
+    }
     for (size_t i = 0; i < node.positions.size() - 1; i++)
     {
         if (time <= node.positions[i].first)
@@ -63,8 +68,13 @@ glm::vec3 Animation::getPositionLerp(AnimationNode &node, double time)
     return glm::vec3(1.0f);
 }
 
-glm::quat Animation::getRotationLerp(AnimationNode &node, double time)
+glm::quat Animation::getRotationLerp(unsigned int boneID, double time)
 {
+    auto node = animationNodes.find(boneID)->second;
+    while(time > node.animationLength)
+    {
+        time -= node.animationLength;
+    }
     for (size_t i = 0; i < node.rotations.size() - 1; i++)
     {
         if (time <= node.rotations[i].first)
@@ -77,8 +87,13 @@ glm::quat Animation::getRotationLerp(AnimationNode &node, double time)
     return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
-glm::vec3 Animation::getScaleLerp(AnimationNode &node, double time)
+glm::vec3 Animation::getScaleLerp(unsigned int boneID, double time)
 {
+    auto node = animationNodes.find(boneID)->second;
+    while(time > node.animationLength)
+    {
+        time -= node.animationLength;
+    }
     for (size_t i = 0; i < node.scales.size() - 1; i++)
     {
         if (time <= node.scales[i].first)

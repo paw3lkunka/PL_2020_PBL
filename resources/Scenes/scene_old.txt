@@ -7,6 +7,7 @@
     objectModule.newModel("Resources/Models/Riverbed.FBX");
     objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newModel("Resources/Models/Box.FBX");
+    objectModule.newModel("Resources/Models/House Dancing.fbx");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
 
@@ -75,17 +76,17 @@
 
 #pragma region Entities
 
-    // {
-    //     auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
-    //     if(entity != nullptr)
-    //     {
-    //         auto mr = entity->getComponentPtr<MeshRenderer>();
-    //             mr->material = unlitSkinnedMat;
+    {
+        auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
+        if(entity != nullptr)
+        {
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = unlitSkinnedMat;
 
-    //         auto t = entity->getComponentPtr<Transform>();
-    //             t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    //     }
-    // }
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+        }
+    }
     Entity* terrain = objectModule.newEntity(1, "Terrain");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -138,14 +139,14 @@
             t->setParent(terrain->getComponentPtr<Transform>());
     }
 
-    // {
-    //     auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
-    //     auto mr = entity->getComponentPtr<MeshRenderer>();
-    //         mr->material = unlitSkinnedMat;
+    {
+        auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+        auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = unlitSkinnedMat;
 
-    //     auto t = entity->getComponentPtr<Transform>();
-    //         t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
-    // }
+        auto t = entity->getComponentPtr<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+    }
 
     {
         auto entity = objectModule.getEntityPtrByName("Sphere001");
@@ -313,6 +314,7 @@ objectModule.newEntity(2, "sampleSound");
 
 //Magda scope 19.05.2020
 {
+    objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();

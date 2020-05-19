@@ -123,15 +123,15 @@ bool AssetReader::loadMesh(std::string path)
         processNode(scene->mRootNode, scene, path);
 
         // * ----- Process and create bones -----
-        Bone* rootBone = processBone(scene->mRootNode, scene, path);
+        Entity* rootBone = processBone(scene->mRootNode, scene, path);
 
         if(rootBone != nullptr)
         {
             // * ----- Process animations -----
             Animation* animation = processAnimations(scene, path);
             // * ----- Create skeleton object and bind root node -----
-            std::size_t foundIndex = rootBone->boneName.find_last_of("/\\");
-            objectModulePtr->newEntity(1, rootBone->boneName.substr(foundIndex + 1) + std::string("_skeleton"));
+            std::size_t foundIndex = rootBone->getComponentPtr<Bone>()->boneName.find_last_of("/\\");
+            objectModulePtr->newEntity(1, rootBone->getComponentPtr<Bone>()->boneName.substr(foundIndex + 1) + std::string("_skeleton"));
             auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
             s->animation = animation;
             s->globalInverseTransform = globalInverseTransform;
@@ -194,7 +194,7 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     return true;
 }
 
-Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
+Entity* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
     std::string filename = path.substr(path.find_last_of("\\/") + 1);
@@ -226,17 +226,17 @@ Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string p
         // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
         for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            Bone* childBone = processBone(node->mChildren[i], scene, path, t);
+            processBone(node->mChildren[i], scene, path, t);
         }
-        return e->getComponentPtr<Bone>();
+        return e;
     }
     else
     {
         // * ----- Otherwise return nullptr -----
-        Bone* rootBone = nullptr;
+        Entity* rootBone = nullptr;
         for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            Bone* bonePtr = processBone(node->mChildren[i], scene, path, nullptr);
+            Entity* bonePtr = processBone(node->mChildren[i], scene, path, nullptr);
             if (bonePtr != nullptr)
             {
                 rootBone = bonePtr;
@@ -261,6 +261,7 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
                 std::string filename = path.substr(path.find_last_of("\\/") + 1);
                 unsigned int nodeBoneID = objectModulePtr->getEntityPtrByName((filename + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->getComponentPtr<Bone>()->boneID;
                 newAnim.addNode(nodeBoneID);
+                newAnim.findAnimNode(nodeBoneID)->animationLength = scene->mAnimations[i]->mDuration;
 
                 for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++)
                 {
