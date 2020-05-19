@@ -8,9 +8,17 @@ int main( int argc, char * argv[] )
 
     for (int i = 1; i < argc; i++)
     {
-        if( std::strcmp(argv[i], "-u") == 0 )
+        if( std::strcmp(argv[i], "-u") == 0 || std::strcmp(argv[i], "--update") == 0 )
         {
             core.updateScene = true;
+        }
+        else if( std::strcmp(argv[i], "-r") == 0 || std::strcmp(argv[i], "--recreate") == 0 )
+        {
+            core.recreateScene = true;
+        }
+        else if( std::strcmp(argv[i], "-f") == 0 || std::strcmp(argv[i], "--file") == 0 )
+        {
+            core.sceneFilePath = argv[++i];
         }
         else
         {
