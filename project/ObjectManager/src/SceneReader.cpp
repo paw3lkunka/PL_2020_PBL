@@ -286,6 +286,11 @@ void SceneReader::readComponents()
             std::cout << "Rigidbody" << std::endl;
             readRigidbody(name);
         }
+        else if(componentType == "Light")
+        {
+            std::cout << "Light" << std::endl;
+            readLight(name);
+        }
         else if(componentType == "PhysicalInputKeymap")
         {
             std::cout << "PhysicalInputKeymap" << std::endl;
@@ -534,6 +539,30 @@ void SceneReader::readBoxCollider(std::string name)
     assignToEntity(name, boxCollider);
 }
 
+void SceneReader::readLight(std::string name)
+{
+    auto light = objModulePtr->newEmptyComponent<Light>();
+    light->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    light->lightType = (LightType)j.at(name).at("lightType").get<int>();
+    light->intensity = j.at(name).at("intensity").get<float>();
+    light->color.r = j.at(name).at("color").at("r").get<float>();
+    light->color.g = j.at(name).at("color").at("g").get<float>();
+    light->color.b = j.at(name).at("color").at("b").get<float>();
+    if (light->lightType == LightType::Point || light->lightType == LightType::Spot)
+    {
+        light->range = j.at(name).at("range").get<float>();
+        if (light->lightType == LightType::Spot)
+        {
+            light->angle = j.at(name).at("angle").get<float>();
+        }
+    }
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(light);
+}
+
 void SceneReader::readRigidbody(std::string name)
 {
     auto rigidbody = objModulePtr->newEmptyComponent<Rigidbody>();
@@ -588,18 +617,18 @@ void SceneReader::readPhysicalInputKeymap(std::string name)
         int keycode = j.at(name).at("single").at("key " + std::to_string(i)).at("keycode").get<int>();
         keymap->single[keycode].force.x = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("x").get<float>();
         keymap->single[keycode].force.y = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("y").get<float>();
-        keymap->single[keycode].force.z = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("z").get<float>();        
+        keymap->single[keycode].force.z = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("z").get<float>();
         keymap->single[keycode].force.x = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("x").get<float>();
         keymap->single[keycode].force.y = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("y").get<float>();
         keymap->single[keycode].force.z = j.at(name).at("single").at("key " + std::to_string(i)).at("force").at("z").get<float>();
     }
-    
+
     for (int i = 0; i < continuousSize; i++)
     {
         int keycode = j.at(name).at("continuous").at("key " + std::to_string(i)).at("keycode").get<int>();
         keymap->continuous[keycode].force.x = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("x").get<float>();
         keymap->continuous[keycode].force.y = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("y").get<float>();
-        keymap->continuous[keycode].force.z = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("z").get<float>();        
+        keymap->continuous[keycode].force.z = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("z").get<float>();
         keymap->continuous[keycode].force.x = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("x").get<float>();
         keymap->continuous[keycode].force.y = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("y").get<float>();
         keymap->continuous[keycode].force.z = j.at(name).at("continuous").at("key " + std::to_string(i)).at("force").at("z").get<float>();

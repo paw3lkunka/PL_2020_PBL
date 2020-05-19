@@ -201,6 +201,24 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
     }
+
+
+    // * ===== Create framebuffer for depth map =====
+    glGenFramebuffers(1, &depthMapFBO);
+
+    glGenTextures(1, &depthMap);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RendererModule::render()
@@ -211,29 +229,31 @@ void RendererModule::render()
         // !IMGUI RENDER
         ImGui::Render();
 
-        // ? +++++ Clear the buffers selected in options (createInfo) +++++
-        glClear(createInfo.clearFlags);
-
         // ? ++++++ Send projection matrices to UBO if needed +++++
         glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &cameraMain->projectionMatrix);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &cameraMain->viewMatrix);
 
-        glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec3), &cameraMain->position);
+        glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec4), &cameraMain->position);
 
         // ? +++++ Send directional light data to UBO +++++
-        // if (directionalLight != nullptr)
-        // {
-        //     glBindBuffer(GL_UNIFORM_BUFFER, directionalLightBuffer);
-
-        //     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), directionalLight->modelMatrix)
-
-        // }
-
-        if(bones != nullptr)
+        if (directionalLight != nullptr)
         {
-            // ? +++++ Send skinning data to ubo +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, directionalLightBuffer);
+
+            glm::vec3 direction = glm::vec3((*directionalLight->modelMatrix)[2]);
+            glm::vec4 color = glm::vec4(directionalLight->color, directionalLight->intensity);
+            glm::vec4 ambient = glm::vec4(0.1f, 0.1f, 0.1f, 0.1f);
+
+            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), &direction);
+            glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), sizeof(glm::vec4), &color);
+            glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(glm::vec4), &ambient);
+        }
+
+        // ? +++++ Send skinning data to ubo +++++
+        if (bones != nullptr)
+        {
             glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
             for(auto &bone : *bones)
             {
@@ -241,7 +261,7 @@ void RendererModule::render()
             }
             glBindBuffer(GL_UNIFORM_BUFFER, 0);
         }
-        
+
 
         // ? +++++ Calculate the View-Projection matrix +++++
         glm::mat4 VP = cameraMain->projectionMatrix * cameraMain->viewMatrix;
@@ -250,9 +270,21 @@ void RendererModule::render()
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
+        // ? +++++ Render depth buffer for shadow mapping +++++
+        // glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+        // glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        
+        // glClear(GL_DEPTH_BUFFER_BIT);
+        // for(auto packet : opaqueQueue)
+        // {
+        //     packet->render(VP);
+        // }
+
+        // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
         // ? +++++ Execute (order 66) opaque rendering loop +++++
-        // * Setup
-        glDisable(GL_BLEND);
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
+        glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
             opaqueQueue.front()->render(VP);
@@ -269,11 +301,12 @@ void RendererModule::render()
             skyboxMaterial->use();
             glBindVertexArray(skyboxVao);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-            glDepthFunc(GL_LESS);
             glBindVertexArray(0);
+            glDepthFunc(GL_LESS);
         }
 
         // ? +++++ Transparent rendering loop +++++
+        // TODO: SORT THIS
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         while(!transparentQueue.empty())
@@ -281,6 +314,8 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+        glDisable(GL_BLEND);
+
         //TODO Remove if it became useless
         // !IMGUI RENDER
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

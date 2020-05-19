@@ -20,8 +20,9 @@ uniform mat4 MVP;
 
 void main() 
 {
-	FragPos = vec3(model * vec4(position, 1.0f));
+	FragPos = vec3(model * vec4(position, 1.0));
 	Normal = mat3(transpose(inverse(model))) * normal;
 	Texcoord = texcoord;
-	gl_Position = MVP * vec4(position, 1.0f);
+
+	gl_Position = MVP * vec4(position, 1.0);
 }

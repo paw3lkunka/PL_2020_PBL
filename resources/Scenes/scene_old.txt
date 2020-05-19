@@ -7,6 +7,7 @@
     objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newModel("Resources/Models/Box.FBX");
     objectModule.newModel("Resources/Models/House Dancing.fbx");
+    objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
 
@@ -20,6 +21,7 @@
     
     auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
+    auto simpleLitShader = objectModule.newShader("Resources/Shaders/SimpleLit/SimpleLit.vert", "Resources/Shaders/SimpleLit/SimpleLit.frag");
 
     std::cout << "Shaders compiled" << std::endl;
     Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat", RenderType::Opaque);
@@ -34,6 +36,104 @@
     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
     texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    auto rocks3Diffuse = objectModule.newTexture("Resources/Models/Rocks/diffuse.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    auto rocks3Specular = objectModule.newTexture("Resources/Models/Rocks/specular.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    auto rocks3Normal = objectModule.newTexture("Resources/Models/Rocks/normal.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grass01/diffuse.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto grass1Specular = objectModule.newTexture("Resources/Textures/grass01/specular.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto grass1Normal = objectModule.newTexture("Resources/Textures/grass01/normal.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/gravel01/diffuse.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto gravel1Specular = objectModule.newTexture("Resources/Textures/gravel01/specular.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto gravel1Normal = objectModule.newTexture("Resources/Textures/gravel01/normal.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rocks01/diffuse.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rocks01/specular.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto rocks1Normal = objectModule.newTexture("Resources/Textures/rocks01/normal.tga", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto water1Diffuse = objectModule.newTexture("Resources/Textures/water01/diffuse.png", texCreateInfo);
+
+    texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+    auto water1Specular = objectModule.newTexture("Resources/Textures/water01/specular.png", texCreateInfo);
 
     Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat", RenderType::Opaque);
     unlitTextureMat->setTexture("mainTex", texture);
@@ -59,9 +159,6 @@
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
     skyboxMat->setCubemap("cubemap", cubemap);
 
-    Material* waterMat = objectModule.newMaterial(unlitColor, "waterMat", RenderType::Transparent);
-    waterMat->setVec4("color", glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
-
     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
 
@@ -71,9 +168,40 @@
     Material* riverBankMat = objectModule.newMaterial(unlitColor, "riverBankMat", RenderType::Opaque);
     riverBankMat->setVec4("color", glm::vec4(0.333f, 0.741f, 0.278f, 1.0f));
 
+    Material* simpleLitMat = objectModule.newMaterial(simpleLitShader, "simpleLitMat", RenderType::Opaque);
+    simpleLitMat->setTexture("diffuse", rocks3Diffuse);
+    simpleLitMat->setTexture("specular", rocks3Specular);
+
+    Material* grassMat = objectModule.newMaterial(simpleLitShader, "grassMat", RenderType::Opaque);
+    grassMat->setTexture("diffuse", grass1Diffuse);
+    grassMat->setTexture("specular", grass1Specular);
+
+    Material* gravelMat = objectModule.newMaterial(simpleLitShader, "gravelMat", RenderType::Opaque);
+    gravelMat->setTexture("diffuse", gravel1Diffuse);
+    gravelMat->setTexture("specular", gravel1Specular);
+
+    Material* rocksMat = objectModule.newMaterial(simpleLitShader, "rocksMat", RenderType::Opaque);
+    rocksMat->setTexture("diffuse", rocks1Diffuse);
+    rocksMat->setTexture("specular", rocks1Specular); 
+
+    Material* waterMat = objectModule.newMaterial(simpleLitShader, "waterMat", RenderType::Transparent);
+    waterMat->setTexture("diffuse", water1Diffuse);
+    waterMat->setTexture("specular", water1Specular);
+
 #pragma endregion
 
 #pragma region Entities
+
+    {
+        Entity* entity = objectModule.getEntityPtrByName("rocks_03");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = simpleLitMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = { 0.0f, 5.0f, 50.0f };
+                t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+                t->getLocalScaleModifiable() = { 0.25f, 0.25f, 0.25f };
+    }
 
     {
         auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
@@ -83,9 +211,11 @@
                 mr->material = unlitSkinnedMat;
 
             auto t = entity->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+                t->getLocalPositionModifiable() = { 130.0f, 0.0f, -25.0f };
+                t->getLocalScaleModifiable() = { 0.3f, 0.3f, 0.3f };
         }
     }
+
     Entity* terrain = objectModule.newEntity(1, "Terrain");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -108,7 +238,7 @@
     {
         auto entity = objectModule.getEntityPtrByName("Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = cliffsMat;
+            mr->material = rocksMat;
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(terrain->getComponentPtr<Transform>());
@@ -117,7 +247,7 @@
     {
         auto entity = objectModule.getEntityPtrByName("Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = riverBankMat;
+            mr->material = grassMat;
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(terrain->getComponentPtr<Transform>());
@@ -126,7 +256,7 @@
     {
         auto entity = objectModule.getEntityPtrByName("Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = riverBankMat;
+            mr->material = grassMat;
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(terrain->getComponentPtr<Transform>());
@@ -135,7 +265,7 @@
     {
         auto entity = objectModule.getEntityPtrByName("Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = riverBedMat;
+            mr->material = gravelMat;
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(terrain->getComponentPtr<Transform>());
@@ -147,7 +277,8 @@
             mr->material = unlitSkinnedMat;
 
         auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, 0.0f, -25.0f };
+            t->getLocalPositionModifiable() = { 130.0f, 0.0f, -25.0f };
+                t->getLocalScaleModifiable() = { 0.3f, 0.3f, 0.3f };
     }
 
     {
@@ -175,6 +306,18 @@
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "directionalLight");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(25.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+            t->setParent(&sceneModule.rootNode);
+
+        auto l = objectModule.newEmptyComponentForLastEntity<Light>();
+            l->lightType = LightType::Directional;
+            l->intensity = 1.0f;
+            l->color = {1.0f, 1.0f, 1.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced1");
@@ -332,7 +475,9 @@ objectModule.newEntity(2, "sampleSound");
             t->setParent(paddleIndirect->getComponentPtr<Transform>());
 
         auto paddle = objectModule.newEmptyComponent<Paddle>();
-            paddle->maxPos = glm::vec3(10.0f, 1.0f, 5.0f);
+            paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
+            paddle->maxFrontRot = -34.5f;
+            paddle->maxSideRot = 30.0f;
             entity->addComponent(paddle);
     }
 
@@ -347,7 +492,7 @@ objectModule.newEntity(2, "sampleSound");
             t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
             t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
     }
-        
+
     {
         auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
         auto mr = entity->getComponentPtr<MeshRenderer>();
@@ -379,7 +524,7 @@ objectModule.newEntity(2, "sampleSound");
 
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
-            t->getLocalPositionModifiable() = glm::vec3(0, 0, -24);
+            t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
             t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
             t->setParent(&sceneModule.rootNode);
     }
