@@ -5,6 +5,8 @@
 #include "Components.inc"
 #include "Systems.inc"
 
+#include "Material.hpp"
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -113,7 +115,6 @@ int Core::init()
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&billboardSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
     //gameSystemsModule.addSystem(&kinematicSystem);
@@ -364,7 +365,6 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-BillboardRendererSystem Core::billboardSystem;
 CollisionDetectionSystem Core::collisionDetectionSystem;
 GravitySystem Core::gravitySystem;
 KinematicSystem Core::kinematicSystem;

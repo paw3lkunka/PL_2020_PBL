@@ -1,11 +1,7 @@
 #ifndef SKINNEDMESH_HPP_
 #define SKINNEDMESH_HPP_
 
-#include "Mesh.inl"
-#include "MeshDataStructures.inl"
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "mesh/Mesh.hpp"
 
 #include <vector>
 
@@ -22,12 +18,13 @@ public:
 
     void setup();
     void render();
-    virtual void renderInstanced() {}
+    void renderInstanced(int count, glm::mat4* instanceTransforms) {}
 
-protected:
 private:
     GLuint vao, vbo, ebo;
+    GLuint instanceVbo;
     Bounds bounds;
+
     std::vector<VertexSkinned> vertices;
     std::vector<unsigned int> indices;
 };

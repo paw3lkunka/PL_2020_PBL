@@ -10,6 +10,7 @@ class Texture;
 class Cubemap;
 class Material;
 enum class FileType: unsigned int;
+enum class RenderType;
 struct Bounds;
 struct TextureCreateInfo;
 class Message;
@@ -224,7 +225,7 @@ public:
      * @param shader pointer for initialization
      * @return Material* pointer to material
      */
-    Material* newMaterial(Shader* shader, std::string name);
+    Material* newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled = false);
 
     /**
      * @brief creating new audio clip and saving to map

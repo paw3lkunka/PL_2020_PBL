@@ -63,7 +63,6 @@ private:
     void saveAudioSource(std::string name, AudioSource* componentPtr);
     void saveCamera(std::string name, Camera* componentPtr);
     void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
-    void saveBillboardRenderer(std::string name, BillboardRenderer* componentPtr);
     void saveSphereCollider(std::string name, SphereCollider* componentPtr);
     void saveBoxCollider(std::string name, BoxCollider* componentPtr);
     void saveRigidbody(std::string name, Rigidbody* componentPtr);

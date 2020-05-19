@@ -2,7 +2,6 @@
 
 layout (location = 0) in vec3 position;
 layout (location = 3) in vec2 texcoord;
-layout (location = 5) in mat4 instanceModel; // Assigns up to index 5
 
 layout (std140, binding = 0) uniform Camera
 {
@@ -11,10 +10,13 @@ layout (std140, binding = 0) uniform Camera
     vec3 viewPos;
 };
 
+uniform mat4 model;
+uniform mat4 MVP;
+
 out vec2 uv;
 
 void main()
 {
-    gl_Position = projection * view * instanceModel * vec4(position, 1.0);
     uv = texcoord;
+    gl_Position = MVP * vec4(position, 1.0);
 }

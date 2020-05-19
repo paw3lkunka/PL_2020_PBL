@@ -2,6 +2,8 @@
 #define _MESHRENDERERSYSTEM_HPP
 
 #include "System.hpp"
+#include "mesh/Mesh.hpp"
+#include "Material.hpp"
 
 struct MeshRenderer;
 struct Transform;

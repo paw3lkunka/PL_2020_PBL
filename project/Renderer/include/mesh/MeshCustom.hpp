@@ -1,11 +1,9 @@
 #ifndef _MESHCUSTOM_HPP
 #define _MESHCUSTOM_HPP
 
-#include "Mesh.inl"
-#include "MeshDataStructures.inl"
+#include "mesh/Mesh.hpp"
+#include "mesh/MeshDataStructures.inl"
 
-#include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <vector>
 
 /**
@@ -33,12 +31,16 @@ public:
      * @brief Bind buffers and render normally
      */
     void render();
-
-    virtual void renderInstanced() {}
+    /**
+     * @brief Render all the mesh instances
+     */
+    void renderInstanced(int count, glm::mat4* instanceTransforms);
 
 private:
     GLuint vao, vbo, ebo;
+    GLuint instanceVbo;
     Bounds bounds;
+
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 };
