@@ -215,15 +215,15 @@ void ConsoleModule::receiveMessage(Message msg)
         
     case Event::TRIGGER_ENTER:
     {
-        auto tData = msg.getValue<TriggerData>();
-        std::cout << "Trigger: " << Name(tData.trigger) << " was entered by: " << Name(tData.cause) << std::endl;
+        auto tData = msg.getValue<CollisionData>();
+        std::cout << "Trigger: " << Name(tData.target) << " was entered by: " << Name(tData.cause) << std::endl;
     }
         break;
         
     case Event::TRIGGER_EXIT:
     {
-        auto tData = msg.getValue<TriggerData>();
-        std::cout << "Trigger: " << Name(tData.trigger) << " was exited by: " << Name(tData.cause) << std::endl;
+        auto tData = msg.getValue<CollisionData>();
+        std::cout << "Trigger: " << Name(tData.target) << " was exited by: " << Name(tData.cause) << std::endl;
     }
         break;
 

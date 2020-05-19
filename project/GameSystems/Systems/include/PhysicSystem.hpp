@@ -3,6 +3,8 @@
 
 #include "System.hpp"
 
+#include <glm/glm.hpp>
+
 class Transform;
 class Rigidbody;
 
@@ -10,12 +12,13 @@ class Rigidbody;
  * @brief Calculate speed and position of rigidbody depending on forces, and current speed
  * 
  */
-class KinematicSystem : public System
+class PhysicSystem : public System
 {
     public:
+        static glm::vec3 G_CONST;
 
-        KinematicSystem() = default;
-        virtual ~KinematicSystem() = default;
+        PhysicSystem() = default;
+        virtual ~PhysicSystem() = default;
 
     protected:
         virtual bool assertEntity(Entity* entity);
@@ -24,7 +27,6 @@ class KinematicSystem : public System
     private:
         Transform* transformPtr;
         Rigidbody* rBodyPtr;
-
 };
 
 #endif /* !KINEMATICSYSTEM_HPP_ */

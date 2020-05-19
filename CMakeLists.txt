@@ -53,10 +53,8 @@ set(ALSOFT_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
 
 set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
-set(ASSIMP_BUILD_COLLADA_IMPORTER ON CACHE BOOL "" FORCE)
 
 # Disable Assimp modules
-set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AMF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_3DS_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_AC_IMPORTER OFF CACHE BOOL "" FORCE)
@@ -65,7 +63,9 @@ set(ASSIMP_BUILD_ASSBIN_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_B3D_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_BVH_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_DXF_IMPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_COLLADA_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_CSM_IMPORTER OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_HMP_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_IRRMESH_IMPORTER OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_IRR_IMPORTER OFF CACHE BOOL "" FORCE)
@@ -118,6 +118,12 @@ add_subdirectory(libs/json/)
 #Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
+#FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
+# W wolnej chwili wartoby sprawdzić, o co tu chodzi.
+#                                                     ~ Andrzej
+#target_compile_options(alsoft-config PUBLIC -w)
+#target_compile_options(makemhr PUBLIC -w)
+#target_compile_options(sofa-info PUBLIC -w)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)

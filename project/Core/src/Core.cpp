@@ -89,12 +89,19 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    //objectModule.readScene("Resources/Scenes/mainScene.json");
-    #include "../../resources/Scenes/scene_old.txt"
-    
+    if (recreateScene)
+    {
+        #include "../../resources/Scenes/scene_old.txt"
+    }
+    else
+    {
+        objectModule.readScene(sceneFilePath);
+    }
+
     if (updateScene)
     {
-        
+        // ! Manual extension of scene, runned by -u param
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer
@@ -115,9 +122,9 @@ int Core::init()
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionDetectionSystem);
-    //gameSystemsModule.addSystem(&gravitySystem);
-    gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
 
@@ -181,12 +188,12 @@ int Core::mainLoop()
 #pragma region AudioModule demo
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion  
+#pragma endregion
 
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
-    // * pointer for entity 
+    // * pointer for entity
     Entity* e = objectModule.getEntityPtrByID(0u);
     Transform* eTrans = e->getComponentPtr<Transform>();
 
@@ -241,6 +248,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
             lag -= FIXED_TIME_STEP;
@@ -259,7 +267,7 @@ int Core::mainLoop()
         {
             e = objectModule.getEntityPtrByID(currentItem);
             eTrans = e->getComponentPtr<Transform>();
-            //rotation is quaternion in ZXY 
+            //rotation is quaternion in ZXY
             glm::quat worldRotDec = {1, 0, 0, 0};
             // I don't need this shit
             glm::vec3 shit3(1.0f);
@@ -288,7 +296,7 @@ int Core::mainLoop()
             glm::vec4 shit(1.0f);
             glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
             glm::quat rot = worldRotDec * eulerToQuaternion(worldRotation);
-            eTrans->getLocalRotationModifiable() = rot;  
+            eTrans->getLocalRotationModifiable() = rot;
         }
 
         if(e->getComponentPtr<Paddle>() != nullptr)
@@ -300,8 +308,6 @@ int Core::mainLoop()
             ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
             ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.5f, -90.0f, 90.0f);
             ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.5f, -90.0f, 90.0f);
-            
-            
         }
         if(eTrans->getParent()->serializationID == 0)
         {
@@ -365,9 +371,9 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionDetectionSystem Core::collisionDetectionSystem;
-GravitySystem Core::gravitySystem;
-KinematicSystem Core::kinematicSystem;
+CollisionSystem Core::collisionSystem;
+PhysicalBasedInputSystem Core::physicalBasedInputSystem;
+PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;

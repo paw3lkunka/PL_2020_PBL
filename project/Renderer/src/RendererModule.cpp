@@ -211,7 +211,6 @@ void RendererModule::render()
         // !IMGUI RENDER
         ImGui::Render();
 
-
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
         glClear(createInfo.clearFlags);
 

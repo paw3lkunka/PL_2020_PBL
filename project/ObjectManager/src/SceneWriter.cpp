@@ -208,6 +208,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveRigidbody(name, temp);
         }
+        else if(PhysicalInputKeymap* temp = dynamic_cast<PhysicalInputKeymap*>(objContainerPtr->components[i]))
+        {
+            savePhysicalInputKeymap(name, temp);
+        }
         else if(Paddle* temp = dynamic_cast<Paddle*>(objContainerPtr->components[i]))
         {
             savePaddle(name, temp);
@@ -340,6 +344,46 @@ void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
     j[name]["drag"] = componentPtr->drag;
     j[name]["angularDrag"] = componentPtr->angularDrag;
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
+}
+
+void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr)
+{
+    j[name]["type"] = "PhysicalInputKeymap";
+
+    j[name]["single"]["size"] = keymapPtr->single.size();
+    j[name]["continuous"]["size"] = keymapPtr->continuous.size();
+
+    int i = 0;
+
+    for (auto& entry : keymapPtr->single)
+    {
+        j[name]["single"]["key " + std::to_string(i)]["keycode"] = entry.first;
+
+        j[name]["single"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        j[name]["single"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        j[name]["single"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+        
+        j[name]["single"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        j[name]["single"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        j[name]["single"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        i++;
+    }
+    
+    i = 0;
+
+    for (auto& entry : keymapPtr->continuous)
+    {
+        j[name]["continuous"]["key " + std::to_string(i)]["keycode"] = entry.first;
+
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        j[name]["continuous"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+        
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        j[name]["continuous"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        i++;
+    }
 }
 
 void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)

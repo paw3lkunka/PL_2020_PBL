@@ -1,5 +1,4 @@
 #pragma region Data Loading
-    
     objectModule.newModel("Resources/Models/unit_sphere.fbx");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
@@ -90,6 +89,9 @@
     Entity* terrain = objectModule.newEntity(1, "Terrain");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+        t->getLocalPositionModifiable() = glm::vec3(0, -30, 0);
+        t->getLocalScaleModifiable() = glm::vec3(5, 5, 5);
         t->setParent(&sceneModule.rootNode);
     }
 
@@ -175,7 +177,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced1");
+    objectModule.newEntity(2, "cubeInstanced1");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 20.5f, 0.0f, 10.0f };
@@ -187,7 +189,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced2");
+    objectModule.newEntity(2, "cubeInstanced2");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
@@ -199,7 +201,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced3");
+    objectModule.newEntity(2, "cubeInstanced3");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
@@ -211,7 +213,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced4");
+    objectModule.newEntity(2, "cubeInstanced4");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
@@ -223,7 +225,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced5");
+    objectModule.newEntity(2, "cubeInstanced5");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
@@ -235,7 +237,7 @@
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "sphereInstanced6");
+    objectModule.newEntity(2, "cubeInstanced6");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
@@ -267,10 +269,6 @@
             li->getPositionModifiable();
             li->getAtModifiable();
             li->getUpModifiable();
-
-        auto sc = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-            sc->type = Collider::Type::KINEMATIC;
-            sc->radius = 5;
     }
 
 #pragma endregion
@@ -319,6 +317,8 @@ objectModule.newEntity(2, "sampleSound");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0, 90, 90));
+            t->getLocalPositionModifiable() = glm::vec3(3, 0, -5.5f);
     }
 
     Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
@@ -345,6 +345,7 @@ objectModule.newEntity(2, "sampleSound");
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
     }
         
     {
@@ -354,6 +355,7 @@ objectModule.newEntity(2, "sampleSound");
 
         auto t = entity->getComponentPtr<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Paddle")->getComponentPtr<Transform>());
+            t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
     }
 
     Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
@@ -363,9 +365,10 @@ objectModule.newEntity(2, "sampleSound");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = playerMat;
 
-        auto t = entity->getComponentPtr<Transform>();
-            t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
-    }
+            auto t = entity->getComponentPtr<Transform>();
+                t->setParent(objectModule.getEntityPtrByName("Kayak")->getComponentPtr<Transform>());
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
+        }
 
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
     kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
@@ -375,6 +378,54 @@ objectModule.newEntity(2, "sampleSound");
             mr->material = kayakMat;
 
         auto t = entity->getComponentPtr<Transform>();
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+            t->getLocalPositionModifiable() = glm::vec3(0, 0, -24);
+            t->getLocalScaleModifiable() = glm::vec3(2, 2, 2);
             t->setParent(&sceneModule.rootNode);
     }
+}
+
+//Andrzej, pół fizyki
+{
+    Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
+            Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
+            rb001->mass = 10;
+            rb001->drag = 5;
+            rb001->angularDrag = 5;
+            rb001->ignoreGravity = true;
+            sphere001->addComponent(rb001);
+
+        Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
+            Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
+            rbSound->mass = 10;
+            rbSound->drag = 5;
+            rbSound->angularDrag = 5;
+            rbSound->ignoreGravity = true;
+            sphereSound->addComponent(rbSound);
+        Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+        PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
+            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
+            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+        Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+            transform->setParent(&sceneModule.rootNode);
+            transform->getLocalPositionModifiable().x = 50;
+            transform->getLocalScaleModifiable() *= 5;
+        SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+            collider->radius = 5;
+        MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+                material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
+
+            meshRenderer->material = material;
+            meshRenderer->mesh = mesh;
+        Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rigidbody->drag = 5;
+            rigidbody->angularDrag = 5;
+            rigidbody->mass = 10;
+            rigidbody->ignoreGravity = true;
+
 }

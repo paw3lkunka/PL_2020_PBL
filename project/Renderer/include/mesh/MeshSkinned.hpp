@@ -16,8 +16,11 @@ public:
     MeshSkinned() = default;
     ~MeshSkinned() = default;
 
+    //TODO Documentation
     void setup();
+    //TODO Documentation
     void render();
+    //TODO Documentation
     void renderInstanced(int count, glm::mat4* instanceTransforms) {}
 
 private:

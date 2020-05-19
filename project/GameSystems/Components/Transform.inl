@@ -106,10 +106,10 @@ struct Transform : public Component
     std::unordered_set<Transform*> children;
 
 private:
-    Transform* parent = nullptr;
-    glm::vec3 localPosition = {0,0,0};
-    glm::quat localRotation = {1,0,0,0};
-    glm::vec3 localScale = {1,1,1};
+    Transform* parent       = nullptr;
+    glm::vec3 localPosition = {0.0f, 0.0f, 0.0f};
+    glm::quat localRotation = {1.0f, 0.0f, 0.0f, 0.0f};
+    glm::vec3 localScale    = {1.0f, 1.0f, 1.0f};
 };
 
 #endif /* !TRANSFORM_HPP_ */
