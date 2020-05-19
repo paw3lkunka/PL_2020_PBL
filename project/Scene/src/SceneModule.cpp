@@ -20,7 +20,6 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
 
     if(dirty)
     {
-
         local = glm::translate(local, transform.getLocalPosition());
         local = local * glm::toMat4(transform.getLocalRotation());
         local = glm::scale(local, transform.getLocalScale());

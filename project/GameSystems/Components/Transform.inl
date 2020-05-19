@@ -62,7 +62,7 @@ struct Transform : public Component
      */
     void setParent(Transform* newParent)
     {
-        if(parent)
+        if(parent != nullptr)
         {
             parent->children.erase(this);
         }

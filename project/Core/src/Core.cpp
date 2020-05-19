@@ -1,5 +1,7 @@
 #include "Core.hpp"
-
+#include "imgui.h"
+#include "examples/imgui_impl_opengl3.h"
+#include "examples/imgui_impl_glfw.h"
 #include "Components.inc"
 #include "Systems.inc"
 
@@ -36,6 +38,7 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
     temp = glm::rotate(temp, glm::radians(eulerAngles.y), glm::vec3(0.0, 1.0, 0.0));
     temp = glm::rotate(temp, glm::radians(eulerAngles.z), glm::vec3(0.0, 0.0, 1.0));
     glm::quat quatFinal = glm::quat(temp);
+
     return quatFinal;
 }
 
@@ -64,6 +67,7 @@ int Core::init()
 		return 1;
 	}
 	glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -87,6 +91,7 @@ int Core::init()
     // ! Scene loading
     objectModule.readScene("Resources/Scenes/mainScene.json");
 
+    
     if (updateScene)
     {
         
@@ -103,7 +108,7 @@ int Core::init()
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialFromName("skyboxMat"));
+    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
     
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
@@ -112,8 +117,22 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
-    //gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&kinematicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&paddleControlSystem);
+
+    // ! IK system initialize
+    BoneAttachData leftData;
+    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+    leftData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_left");
+
+    BoneAttachData rightData;
+    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+    rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
+
+    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+    //gameSystemsModule.addSystem(&paddleIkSystem);
 
 #pragma region AudioModule demo - initialization
     
@@ -126,13 +145,24 @@ int Core::init()
 
 #pragma region Camera
     // ! Finding main camera
-    CameraSystem::setAsMain(objectModule.getEntityFromName("Camera"));
+    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
 
     gameSystemsModule.addSystem(&cameraSystem);
 
 #pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
+
+    // ! IMGUI initialize
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    // ? Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 430");
+    // ? Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
 
     // Everything is ok.
     return 0;
@@ -149,14 +179,33 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityFromName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+#pragma endregion  
 
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
+    // * pointer for entity 
+    Entity* e = objectModule.getEntityPtrByID(0u);
+    Transform* eTrans = e->getComponentPtr<Transform>();
 
+    int entitiesSize = (*objectModule.getEntitiesVector()).size();
+    // * list of entities names with \0 in between
+    std::string entities;
+    for(int i = 0; i < entitiesSize; ++i)
+    {
+        entities += "ID ";
+        entities += std::to_string(i);
+        entities += " Name: ";
+        entities += objectModule.getEntityPtrByID(i)->getName();
+        entities += char(0);
+    }
+    // * index for combo list
+    int currentItem = 0;
+    // * rotation in eulers
+    glm::vec3 worldRotation = glm::vec3(0);
+    glm::vec3 localRotation = glm::vec3(0);
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -174,6 +223,11 @@ int Core::mainLoop()
             glfwPollEvents();
             inputModule.captureControllersInput();
         
+        // ? ++++ IMGUI NEW FRAME ++++
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         // ? +++++ FIXED UPDATE LOOP +++++
 
         while(lag >= FIXED_TIME_STEP)
@@ -199,6 +253,66 @@ int Core::mainLoop()
         // TODO: Should transform update be here also?
         messageBus.notify();
 
+        // ? +++++ IMGUI WINDOW ++++
+        ImGui::Begin("Edit window");
+        if(ImGui::Combo("", &currentItem, entities.c_str()))
+        {
+            e = objectModule.getEntityPtrByID(currentItem);
+            eTrans = e->getComponentPtr<Transform>();
+            //rotation is quaternion in ZXY 
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat worldRot = worldRotDec * eTrans->getLocalRotation();
+            worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
+            localRotation = glm::eulerAngles(eTrans->getLocalRotation()) * 180.0f / glm::pi<float>();
+            //rotation = glm::vec3(tempRot.x, tempRot.z, tempRot.y);
+        }
+
+        ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
+        ImGui::Text("Transform (local):");
+        ImGui::DragFloat3("Position: ", (float*)&eTrans->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+        if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
+        {
+            eTrans->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        }
+        ImGui::DragFloat3("Scale: ", (float*)&eTrans->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
+        ImGui::Text("Transform (World):");
+        if(ImGui::DragFloat3("_Rotation: ", (float*)&worldRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
+        {
+            glm::quat worldRotDec = {1, 0, 0, 0};
+            // I don't need this shit
+            glm::vec3 shit3(1.0f);
+            glm::vec4 shit(1.0f);
+            glm::decompose(eTrans->worldToLocalMatrix, shit3, worldRotDec, shit3, shit3, shit);
+            glm::quat rot = worldRotDec * eulerToQuaternion(worldRotation);
+            eTrans->getLocalRotationModifiable() = rot;  
+        }
+
+        if(e->getComponentPtr<Paddle>() != nullptr)
+        {
+            ImGui::Text("Paddle: ");
+            Paddle* paddle = e->getComponentPtr<Paddle>();
+            ImGui::DragFloat3( "Max postition", (float*)&paddle->maxPos, 0.05f, -20.0f, 20.0f, "%.2f");
+            ImGui::DragFloat("Min speed", (float*)&paddle->minSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max speed", (float*)&paddle->maxSpeed, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Max front rotation ", (float*)&paddle->maxFrontRot, 0.5f, -90.0f, 90.0f);
+            ImGui::DragFloat("Max side rotation ", (float*)&paddle->maxSideRot, 0.5f, -90.0f, 90.0f);
+            
+            
+        }
+        if(eTrans->getParent()->serializationID == 0)
+        {
+            ImGui::Text("Parent name: Root scene");
+        }
+        else
+        {
+            ImGui::Text(("Parent name: " + std::string(eTrans->getParent()->entityPtr->getName())).c_str());
+        }
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
         // ? +++++ RENDER CURRENT FRAME +++++
 
         rendererModule.render();
@@ -225,6 +339,11 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    //! IMGUI CLEANUP
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
@@ -250,3 +369,5 @@ CollisionDetectionSystem Core::collisionDetectionSystem;
 GravitySystem Core::gravitySystem;
 KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;
+PaddleControlSystem Core::paddleControlSystem;
+PaddleIkSystem Core::paddleIkSystem;

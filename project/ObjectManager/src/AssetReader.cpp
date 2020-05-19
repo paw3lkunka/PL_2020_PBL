@@ -124,18 +124,18 @@ bool AssetReader::loadMesh(std::string path)
         // * ----- Process and create bones -----
         Bone* rootBone = processBone(scene->mRootNode, scene, path);
 
-        // * ----- Process animations -----
-        Animation* animation = processAnimations(scene, path);
-        if (animation != nullptr)
+        if(rootBone != nullptr)
         {
+            // * ----- Process animations -----
+            Animation* animation = processAnimations(scene, path);
             // * ----- Create skeleton object and bind root node -----
-            objectModulePtr->newEntity(1, scene->mRootNode->mName.C_Str() + std::string("_skeleton"));
+            std::size_t foundIndex = rootBone->boneName.find_last_of("/\\");
+            objectModulePtr->newEntity(1, rootBone->boneName.substr(foundIndex + 1) + std::string("_skeleton"));
             auto s = objectModulePtr->newEmptyComponentForLastEntity<Skeleton>();
             s->animation = animation;
             s->globalInverseTransform = globalInverseTransform;
             s->rootBone = rootBone;
-        }
-
+        }   
     }
 
     return true;
@@ -203,7 +203,8 @@ Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string p
         // * ----- If bone of the same name as node is found, fill additional bone data -----
         bone->localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
         bone->parent = parent;
-
+        
+        std::cout << "Bone: " << path + "/" +  node->mName.C_Str() << std::endl;
         // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
         for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
@@ -335,6 +336,7 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
                             aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
 
             objectModulePtr->objectMaker.newBone(boneToAdd, path, mesh->mBones[i]->mName.C_Str());
+
         }
         else
         {

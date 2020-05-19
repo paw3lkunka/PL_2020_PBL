@@ -44,7 +44,7 @@ void CollisionDetectionSystem::collisionWith(T1* collider1, T2* collider2, Trans
 {
     if(collsion(collider1, collider2, transformPtr, transform2))
     {
-        std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
+        //std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
         switch (collider2->type)
         {
         case Collider::Type::DYNAMIC:

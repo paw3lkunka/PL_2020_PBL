@@ -8,6 +8,11 @@
 
 #include <algorithm>
 
+#include "imgui.h"
+#include "examples/imgui_impl_opengl3.h"
+
+//TODO: TEMP STRING STREAM
+#include <sstream>
 #include <glm/gtc/type_ptr.hpp>
 
 void RendererModule::receiveMessage(Message msg)
@@ -202,6 +207,9 @@ void RendererModule::render()
 {
     if (window != nullptr)
     {
+        //TODO Remove if it became useless
+        // !IMGUI RENDER
+        ImGui::Render();
         // ? +++++ Clear the render packets +++++
         normalPackets.clear();
         instancedPackets.clear();
@@ -226,13 +234,17 @@ void RendererModule::render()
 
         // }
 
-        // ? +++++ Send skinning data to ubo +++++
-        glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
-        for(auto &bone : *bones)
+        if(bones != nullptr)
         {
-            glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+            // ? +++++ Send skinning data to ubo +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+            for(auto &bone : *bones)
+            {
+                glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+            }
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
         }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        
 
         // ? +++++ Calculate the View-Projection matrix +++++
         glm::mat4 VP = cameraMain->projectionMatrix * cameraMain->viewMatrix;
@@ -272,6 +284,9 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+        //TODO Remove if it became useless
+        // !IMGUI RENDER
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);

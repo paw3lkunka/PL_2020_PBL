@@ -31,6 +31,10 @@ if(NOT EXISTS "libs/json/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/json/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/imgui/LICENSE.txt")
+    execute_process(COMMAND git submodule update --init "libs/imgui/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -144,6 +148,33 @@ list(
 
 add_library(lib ${SOURCE_FILES} )
 
+#imgui
+set(IMGUI_SOURCES
+    "libs/imgui/imgui.cpp"
+    "libs/imgui/imgui_demo.cpp"
+    "libs/imgui/imgui_draw.cpp"
+    "libs/imgui/imgui_widgets.cpp"
+    "libs/imgui/examples/imgui_impl_glfw.cpp"
+    "libs/imgui/examples/imgui_impl_opengl3.cpp"
+)
+
+set(IMGUI_HEADERS
+    "libs/imgui/imconfig.h"
+    "libs/imgui/imgui.h"
+    "libs/imgui/imgui_internal.h"
+    "libs/imgui/imstb_rectpack.h"
+    "libs/imgui/imstb_textedit.h"
+    "libs/imgui/imstb_truetype.h"
+    "libs/imgui/examples/imgui_impl_glfw.h"
+    "libs/imgui/examples/imgui_impl_opengl3.h"
+)
+
+add_library(imgui
+    STATIC
+        ${IMGUI_SOURCES}
+        ${IMGUI_HEADERS}
+)
+
 
 include_directories( 
     project
@@ -168,6 +199,7 @@ include_directories(
     libs/glm/
     libs/openal-soft/include
     libs/json/single_include/nlohmann
+    libs/imgui/
     build/libs/assimp/include
 )
 
@@ -182,6 +214,7 @@ target_link_libraries(
         OpenAL
         assimp
         nlohmann_json::nlohmann_json
+        imgui
 )    
 
 file(GLOB resources "resources/*")

@@ -55,6 +55,8 @@ private:
     float yaw = 0.0f;
     float pitch = 0.0f;
 
+    bool usingMouse = true;
+
     Transform* transform;
     Camera* camera;
 };
