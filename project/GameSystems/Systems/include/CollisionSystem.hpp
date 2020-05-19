@@ -100,15 +100,15 @@ public:
 
         /**
          * @brief find all axes needed to perform Separate Axes Theorem Test, and push them into vector.
+         * Important: does nothing for SphereCollider, so colission sphere vs sphere needs special treat.
          * 
-         * @tparam T1 Final type of first entity's collider.
-         * @tparam T2 Final type of second entity's collider.
-         * @param collider1 collider of first entity.
-         * @param collider2 collider of second entity.
+         * @tparam T Final type of collider.
+         * @param collider collider of entity.
+         * @param transform transform of entity.
          * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
          */
-        template<class T1, class T2>
-        void findSATAxes(BoxCollider* , std::vector<glm::vec3>& axes);
+        template<class T>
+        void findSATAxes(T* collider, Transform* transform, std::vector<glm::vec3>& axes);
 
 
         /**

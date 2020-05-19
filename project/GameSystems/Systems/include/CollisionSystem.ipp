@@ -7,16 +7,13 @@
 
 #include <glm/gtx/string_cast.hpp>
 
-template<class T1, class T2>
+template<class T1, class T2>    // for T1 == T2 == Sphere collider specialization was defined.
 bool CollisionSystem::detectCollsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
-    //FIXME works wrong - this is not a correct SAT test implementation - this works only for sphere
-    // find sat axes
-
     std::vector<glm::vec3> axes;
 
-    axes.push_back(trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition() + coll1->center, 1.0f));
-    axes.push_back(trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f));
+    findSATAxes(coll1, trans1, axes);
+    findSATAxes(coll2, trans2, axes);
 
     return SATTest(coll1, coll2, trans1, trans2, axes);
 }

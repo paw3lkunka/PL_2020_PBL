@@ -93,6 +93,39 @@ float CollisionSystem::toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm:
     return glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
 }
 
+template<>  // Specialization only for this case
+bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereCollider* coll1, SphereCollider* coll2, Transform* trans1, Transform* trans2)
+{
+    std::vector<glm::vec3> axes;
+
+    axes.push_back(trans1->localToWorldMatrix * glm::vec4(trans1->getLocalPosition() + coll1->center, 1.0f));
+    axes.push_back(trans2->localToWorldMatrix * glm::vec4(trans2->getLocalPosition() + coll2->center, 1.0f));
+
+    return SATTest(coll1, coll2, trans1, trans2, axes);
+}
+
+template<>
+void CollisionSystem::findSATAxes<SphereCollider>(SphereCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
+{
+    return; // Yes, this function should be empty.
+}
+
+template<>
+void CollisionSystem::findSATAxes<BoxCollider>(BoxCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
+{
+    // Local X
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[0]));
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[1]));
+
+    // Local Y
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[0]));
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[4]));
+
+    // Local Z
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[0]));
+    axes.push_back(transform->localToWorldMatrix * (glm::vec4(transform->getLocalPosition(), 0.0f) + collider->verts[3]));
+}
+
 /*
  * * * * * * * * * * * * * * * * * * * * * * * * * 
  *  Annotation for resolveCollsion()             *

@@ -14,17 +14,17 @@ struct BoxCollider : public Collider
 {
     /**
      * @brief Calculate all vertices coordinates (in model space), should ba called after parameters change  
-     */
+     */    
     void calculateVert()    
     {
-        verts[0] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
-        verts[1] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
+        verts[0] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
+        verts[1] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
         verts[2] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
-        verts[3] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
-        verts[4] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
-        verts[5] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
-        verts[6] = glm::vec4( center.x + halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
-        verts[7] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z, 1 );
+        verts[3] = glm::vec4( center.x - halfSize.x, center.y - halfSize.y, center.z + halfSize.z, 1 );
+        verts[4] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
+        verts[5] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z - halfSize.z, 1 );
+        verts[6] = glm::vec4( center.x + halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
+        verts[7] = glm::vec4( center.x - halfSize.x, center.y + halfSize.y, center.z + halfSize.z, 1 );
     }
 
     /**
@@ -96,8 +96,24 @@ struct BoxCollider : public Collider
      * x, y, z - carteian coordinates.
      * w - always 1.
      * generated automatically by calculateVert() call.
+     * Diagram in BoxCollider.inl file.
      */
     glm::vec4 verts[8];
+
+    /*
+     * * * * * * * * * * * * * * * *
+     *  Vertices indexes diagram:  *
+     *     7--------6              *
+     *    /|       /|              *
+     *   / |      / |              *
+     *  4--------5  |              *
+     *  |  3-----|--2       y  z   *
+     *  | /      | /        | /    *
+     *  |/       |/         |/__ x *
+     *  0--------1                 *
+     * * * * * * * * * * * * * * * *
+     */
+
 };
 
 #endif /* !BOXCOLLIDER_HPP_ */
