@@ -4,6 +4,7 @@
 #include "Message.inl"
 #include "Entity.hpp"
 #include "Components.inc"
+#include "CollisionSystemHelperFunctions.inl"
 
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -43,16 +44,21 @@ void CollisionSystem::fixedUpdate()
     }  
 }
 
-Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
+Projection1D CollisionSystem::axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[])
 {
     glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
     glm::vec3 projCentre = axisProjection(centreWS, axisPoint1, axisPoint2);
     float centre1D = toLineSpace1D(projCentre, axisPoint1, axisPoint2);
 
+    glm::vec3 projectionEdgeOffset = glm::normalize(axisPoint2 - axisPoint1) * sphere->radius;
+
+    projBuffer[0] = projCentre - projectionEdgeOffset;
+    projBuffer[1] = projCentre + projectionEdgeOffset;
+
     return {centre1D - sphere->radius, centre1D + sphere->radius};
 }
 
-Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2)
+Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[])
 {
     Projection1D result = {INFINITY, -INFINITY};
 
@@ -66,11 +72,13 @@ Projection1D CollisionSystem::axisProjection(BoxCollider* box, Transform* transf
         if (centre1D < result.start)
         {
             result.start = centre1D;
+            projBuffer[0] = vertWS;
         }
         
         if (centre1D > result.end)
         {
             result.end = centre1D;
+            projBuffer[1] = vertWS;
         }
     }
 
@@ -147,8 +155,7 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereColli
 
     body1->velocity =
     (
-        body1->mass * body1->velocity 
-        + body2->mass * body2->velocity
+        body1->mass * body1->velocity + body2->mass * body2->velocity
         + body2->mass * glm::e<float>() * ( body2->velocity - body1->velocity)
     )
     / ( body1->mass + body2->mass );
@@ -180,5 +187,19 @@ void CollisionSystem::resolveCollsion<BoxCollider,SphereCollider>(BoxCollider* c
 template<>
 void CollisionSystem::resolveCollsion<BoxCollider,BoxCollider>(BoxCollider* collider1, BoxCollider* collider2,  Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
-    //TODO implementation
+    glm::vec3 n1 = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f)
+    - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider2->center, 1.0f);
+
+    //TODO unfinished
+
+    glm::vec3 r1;
+    glm::vec3 r2;
+
+    glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
+
+    body1->velocity = body1->velocity + jImpulse * testResult.collisionNormal / body1->mass;
+    //TODO I^-1 chould be pre computed
+    body1->angularVelocity = body1->velocity + glm::inverse(body1->momentOfInertia) * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
+
+
 }

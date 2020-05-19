@@ -33,9 +33,15 @@ public:
         virtual void fixedUpdate();
 
     private:    
+        ///@brief component pointer 
         Collider* colliderPtr;
+        ///@brief component pointer 
         Transform* transformPtr;
+        ///@brief component pointer 
         Rigidbody* rigidbodyPtr;
+        
+        ///@brief Store result of last SAT test
+        SATTestResult testResult;
 
         ///@brief Collection of colliders of all entities, which we can interact
         std::vector<Collider*> colliders;
@@ -121,10 +127,36 @@ public:
          * @param transform1 transform of first entity.
          * @param transform2 transform of second entity.
          * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
-         * @return if collision was detected
+         * @return If test detected collision.
          */
         template<class T1, class T2>
         bool SATTest(T1* collider1, T2* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
+
+        /**
+         * @brief Returns collision normal vector;
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @param collider1 collider of first entity.
+         * @param collider2 collider of second entity.
+         * @param transform1 transform of first entity.
+         * @param transform2 transform of second entity.
+         * @return glm::vec3 collision normal
+         */
+        template<class T>
+        glm::vec3 collisionNormal(T* collider1, SphereCollider* collider2, Transform* transform1, Transform* transform2);
+
+        /**
+         * @brief Returns collision normal vector;
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @param collider1 collider of first entity.
+         * @param collider2 collider of second entity.
+         * @param transform1 transform of first entity.
+         * @param transform2 transform of second entity.
+         * @return glm::vec3 collision normal
+         */
+        template<class T>
+        glm::vec3 collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2);
 
 //TODO should it be here?
 
@@ -135,9 +167,10 @@ public:
          * @param transform transform of projected box.
          * @param axisPoint1 first point defining aline.
          * @param axisPoint2 second point defining aline.
+         * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
          * @return Projection1D 1D projection of box in line space.
          */
-        static Projection1D axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+        static Projection1D axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
         
         /**
          * @brief Project sphere collider to 1D range in space of given line.
@@ -146,9 +179,10 @@ public:
          * @param transform transform of projected sphere.
          * @param axisPoint1 first point defining aline.
          * @param axisPoint2 second point defining aline.
+         * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
          * @return Projection1D 1D projection of sphere in line space.
          */
-        static Projection1D axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+        static Projection1D axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
 
         /**
          * @brief Project point onto given line.

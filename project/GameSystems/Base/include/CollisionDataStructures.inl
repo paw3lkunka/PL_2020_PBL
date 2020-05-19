@@ -28,6 +28,17 @@ struct Projection1D
     float end;
 };
 
+//TODO documentation
+struct SATTestResult
+{
+//TODO documentation
+    bool collisionDetected;
+//TODO documentation
+    glm::vec3 collisionCentre;
+//TODO documentation
+    glm::vec3 collisionNormal;
+};
+
 inline bool operator == (CollisionData a, CollisionData b) { return a.cause == b.cause && a.target == b.target; }
 
 class CollisionDataHasher

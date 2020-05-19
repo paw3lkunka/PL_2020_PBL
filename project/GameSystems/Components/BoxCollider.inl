@@ -102,7 +102,7 @@ struct BoxCollider : public Collider
 
     /*
      * * * * * * * * * * * * * * * *
-     *  Vertices indexes diagram:  *
+     *  Vertex indices diagram:    *
      *     7--------6              *
      *    /|       /|              *
      *   / |      / |              *
