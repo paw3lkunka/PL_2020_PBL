@@ -286,6 +286,11 @@ void SceneReader::readComponents()
             std::cout << "Rigidbody" << std::endl;
             readRigidbody(name);
         }
+        else if(componentType == "Light")
+        {
+            std::cout << "Light" << std::endl;
+            readLight(name);
+        }
     }
 }
 
@@ -540,6 +545,30 @@ void SceneReader::readBoxCollider(std::string name)
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
     entity->addComponent(boxCollider);
+}
+
+void SceneReader::readLight(std::string name)
+{
+    auto light = objModulePtr->newEmptyComponent<Light>();
+    light->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    light->lightType = (LightType)j.at(name).at("lightType").get<int>();
+    light->intensity = j.at(name).at("intensity").get<float>();
+    light->color.r = j.at(name).at("color").at("r").get<float>();
+    light->color.g = j.at(name).at("color").at("g").get<float>();
+    light->color.b = j.at(name).at("color").at("b").get<float>();
+    if (light->lightType == LightType::Point || light->lightType == LightType::Spot)
+    {
+        light->range = j.at(name).at("range").get<float>();
+        if (light->lightType == LightType::Spot)
+        {
+            light->angle = j.at(name).at("angle").get<float>();
+        }
+    }
+
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    entity->addComponent(light);
 }
 
 void SceneReader::readRigidbody(std::string name)

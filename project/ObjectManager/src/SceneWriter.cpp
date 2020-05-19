@@ -208,6 +208,11 @@ void SceneWriter::saveScene(const char* filePath)
             Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]);
             saveRigidbody(name, temp);
         }
+        else if(dynamic_cast<Light*>(objContainerPtr->components[i]))
+        {
+            Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]);
+            saveLight(name, temp);
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
@@ -324,6 +329,24 @@ void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
     j[name]["halfSize"]["x"] = componentPtr->halfSize.x;
     j[name]["halfSize"]["y"] = componentPtr->halfSize.y;
     j[name]["halfSize"]["z"] = componentPtr->halfSize.z;
+}
+
+void SceneWriter::saveLight(std::string name, Light* componentPtr)
+{
+    j[name]["type"] = "Light";
+    j[name]["lightType"] = componentPtr->lightType;
+    j[name]["intensity"] = componentPtr->intensity;
+    j[name]["color"]["r"] = componentPtr->color.r;
+    j[name]["color"]["g"] = componentPtr->color.g;
+    j[name]["color"]["b"] = componentPtr->color.b;
+    if (componentPtr->lightType == LightType::Point || componentPtr->lightType == LightType::Spot)
+    {
+        j[name]["range"] = componentPtr->range;
+        if (componentPtr->lightType == LightType::Spot)
+        {
+            j[name]["angle"] = componentPtr->angle;
+        }
+    }
 }
 
 void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)

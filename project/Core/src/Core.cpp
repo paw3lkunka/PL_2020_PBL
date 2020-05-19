@@ -121,6 +121,7 @@ int Core::init()
 
     gameSystemsModule.addSystem(&audioListenerSystem);
     gameSystemsModule.addSystem(&audioSourceSystem);
+    gameSystemsModule.addSystem(&lightSystem);
     
 #pragma endregion
 
@@ -250,3 +251,4 @@ CollisionDetectionSystem Core::collisionDetectionSystem;
 GravitySystem Core::gravitySystem;
 KinematicSystem Core::kinematicSystem;
 SkeletonSystem Core::skeletonSystem;
+LightSystem Core::lightSystem;

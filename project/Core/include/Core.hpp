@@ -230,6 +230,8 @@ class Core
         static KinematicSystem kinematicSystem;
         //TODO documentation
         static SkeletonSystem skeletonSystem;
+        //TODO documentation
+        static LightSystem lightSystem;
 
 #pragma endregion
 
