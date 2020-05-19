@@ -117,8 +117,8 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&collisionDetectionSystem);
     //gameSystemsModule.addSystem(&gravitySystem);
-    //gameSystemsModule.addSystem(&kinematicSystem);
-    //gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&kinematicSystem);
+    gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
 
     // ! IK system initialize
@@ -131,8 +131,8 @@ int Core::init()
     rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
 
     Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-    paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-    gameSystemsModule.addSystem(&paddleIkSystem);
+    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+    //gameSystemsModule.addSystem(&paddleIkSystem);
 
 #pragma region AudioModule demo - initialization
     
@@ -259,7 +259,6 @@ int Core::mainLoop()
         {
             e = objectModule.getEntityPtrByID(currentItem);
             eTrans = e->getComponentPtr<Transform>();
-        }
             //rotation is quaternion in ZXY 
             glm::quat worldRotDec = {1, 0, 0, 0};
             // I don't need this shit
@@ -270,6 +269,7 @@ int Core::mainLoop()
             worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
             localRotation = glm::eulerAngles(eTrans->getLocalRotation()) * 180.0f / glm::pi<float>();
             //rotation = glm::vec3(tempRot.x, tempRot.z, tempRot.y);
+        }
 
         ImGui::Text(("Entity: " + std::string(e->getName())).c_str());
         ImGui::Text("Transform (local):");

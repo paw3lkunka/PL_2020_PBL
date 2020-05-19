@@ -275,9 +275,6 @@ void RendererModule::render()
             glDepthFunc(GL_LESS);
             glBindVertexArray(0);
         }
-        //TODO Remove if it became useless
-        // !IMGUI RENDER
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Transparent rendering loop +++++
         glEnable(GL_BLEND);
@@ -287,6 +284,9 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+        //TODO Remove if it became useless
+        // !IMGUI RENDER
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);

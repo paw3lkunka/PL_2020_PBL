@@ -71,16 +71,16 @@ private:
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial;
     // * Bone zone
-    std::map<int, glm::mat4>* bones;
+    std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
     unsigned int cameraBuffer, boneBuffer, directionalLightBuffer;
     
-    Camera* cameraMain;
+    Camera* cameraMain = nullptr;
 
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<RenderPacket*> transparentQueue;
 
-    Light* directionalLight;
+    Light* directionalLight = nullptr;
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;

@@ -192,7 +192,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveCamera(name, temp);
         }
-        else if(dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
+        else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
             saveMeshRenderer(name, temp);
         }
