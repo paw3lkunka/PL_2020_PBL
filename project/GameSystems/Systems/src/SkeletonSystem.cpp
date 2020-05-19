@@ -29,33 +29,34 @@ void SkeletonSystem::frameUpdate()
 
 void SkeletonSystem::processHierarchy(Bone* bone)
 {
-    if (bone->parent != nullptr)
-    {
-        if (skeleton->animation != nullptr)
-        {
-            bone->boneTransform = bone->parent->boneTransform * skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime); 
-        }
-        else
-        {
-            bone->boneTransform = bone->parent->boneTransform * bone->localBoneTransform;
-        }
-    }
-    else
-    {
-        if (skeleton->animation != nullptr)
-        {
-            bone->boneTransform = skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime);
-        }
-        else
-        {
-            bone->boneTransform = bone->localBoneTransform;
-        }
-    }
+    //TODO get back to it
+    // if (bone->parent != nullptr)
+    // {
+    //     if (skeleton->animation != nullptr)
+    //     {
+    //         bone->boneTransform = bone->parent->boneTransform * skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime); 
+    //     }
+    //     else
+    //     {
+    //         bone->boneTransform = bone->parent->boneTransform * bone->localBoneTransform;
+    //     }
+    // }
+    // else
+    // {
+    //     if (skeleton->animation != nullptr)
+    //     {
+    //         bone->boneTransform = skeleton->animation->getAnimTransformLerp(bone->boneID, animationTime);
+    //     }
+    //     else
+    //     {
+    //         bone->boneTransform = bone->localBoneTransform;
+    //     }
+    // }
 
-    boneTransforms[bone->boneID] = skeleton->globalInverseTransform * bone->boneTransform * bone->offsetMatrix;
+    // boneTransforms[bone->boneID] = skeleton->globalInverseTransform * bone->boneTransform * bone->offsetMatrix;
 
-    for(auto child : bone->children)
-    {
-        processHierarchy(child);
-    }
+    // for(auto child : bone->children)
+    // {
+    //     processHierarchy(child);
+    // }
 }

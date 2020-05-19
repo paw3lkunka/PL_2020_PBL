@@ -89,8 +89,10 @@ int Core::init()
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
-    objectModule.readScene("Resources/Scenes/mainScene.json");
+    //objectModule.readScene("Resources/Scenes/mainScene.json");
+    #include "../../resources/Scenes/scene_old.txt"
 
+    objectModule.newModel("Resources/Models/kajak_wjoslo_plastus.FBX");
     
     if (updateScene)
     {
@@ -124,11 +126,11 @@ int Core::init()
     // ! IK system initialize
     BoneAttachData leftData;
     leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_left");
+    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
     BoneAttachData rightData;
     rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.bone = objectModule.getBonePtrByName("Resources/Models/kajak_wjoslo_plastus.FBX/End_right");
+    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
     Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
     //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());

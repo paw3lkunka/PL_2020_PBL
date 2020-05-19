@@ -125,8 +125,6 @@ public:
 
     // TODO niewchecmiesietobic dikuemntijcj
     Animation* newAnimation(Animation& animation, std::string path, std::string name);
-    // TODO niewchecmiesietobic dikuemntijcj
-    Bone* newBone(Bone& bone, std::string path, std::string name);
 
 protected:
 private:

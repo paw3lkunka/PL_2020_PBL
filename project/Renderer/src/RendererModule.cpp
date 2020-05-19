@@ -210,9 +210,7 @@ void RendererModule::render()
         //TODO Remove if it became useless
         // !IMGUI RENDER
         ImGui::Render();
-        // ? +++++ Clear the render packets +++++
-        normalPackets.clear();
-        instancedPackets.clear();
+
 
         // ? +++++ Clear the buffers selected in options (createInfo) +++++
         glClear(createInfo.clearFlags);
@@ -290,5 +288,9 @@ void RendererModule::render()
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
+
+        // ? +++++ Clear the render packets +++++
+        normalPackets.clear();
+        instancedPackets.clear();
     }
 }

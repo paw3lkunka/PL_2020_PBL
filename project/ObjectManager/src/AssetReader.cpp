@@ -27,6 +27,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 bool AssetReader::hasInstance = false;
+unsigned int AssetReader::bonesAmount = 0;
 
 AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
 {
@@ -148,7 +149,7 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
         // * ----- Create new entity with provided name -----
-        objectModulePtr->newEntity(2, node->mName.C_Str());
+        Entity* e = objectModulePtr->newEntity(2, node->mName.C_Str());
 
         // * ----- Create transform and set parent -----
         nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
@@ -179,8 +180,9 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
         // ! and mesh renderer system is not equipped to handle this
 
         // * ----- Create mesh renderer and add created mesh -----
-        auto mr = objectModulePtr->newEmptyComponentForLastEntity<MeshRenderer>();
+        auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
             mr->mesh = newMesh;
+        e->addComponent(mr);
     }
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
@@ -192,29 +194,41 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     return true;
 }
 
-Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent)
+Bone* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
+    std::string filename = path.substr(path.find_last_of("\\/") + 1);
+    Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + node->mName.C_Str()).c_str() );
 
-    Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + node->mName.C_Str()).c_str());
-
-    if (bone != nullptr)
+    if (e != nullptr)
     {
-        // * ----- If bone of the same name as node is found, fill additional bone data -----
-        bone->localBoneTransform = aiMatrixToGlmMat4(node->mTransformation);
-        bone->parent = parent;
+        Transform* t = objectModulePtr->newEmptyComponent<Transform>();
         
-        std::cout << "Bone: " << path + "/" +  node->mName.C_Str() << std::endl;
+        // * ----- If bone of the same name as node is found, fill additional bone data -----
+        glm::quat rotation;
+        glm::vec3 position, scale, shit;
+        glm::vec4 shit4;
+        glm::decompose(aiMatrixToGlmMat4(node->mTransformation), scale, rotation, position, shit, shit4);
+        t->getLocalPositionModifiable() = position;
+        t->getLocalRotationModifiable() = rotation;
+        t->getLocalScaleModifiable() = scale;
+        if(parent != nullptr)
+        {
+            t->setParent(parent);
+        }
+        else
+        {
+            t->setParent(&GetCore().sceneModule.rootNode);
+        }
+        e->addComponent(t);
+        
+        std::cout << "Bone: " << filename + "/" +  node->mName.C_Str() << std::endl;
         // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
         for (unsigned int i = 0; i < node->mNumChildren; ++i)
         {
-            Bone* childBone = processBone(node->mChildren[i], scene, path, bone);
-            if (childBone != nullptr)
-            {
-                bone->children.push_back(childBone);
-            }
+            Bone* childBone = processBone(node->mChildren[i], scene, path, t);
         }
-        return bone;
+        return e->getComponentPtr<Bone>();
     }
     else
     {
@@ -244,7 +258,8 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
             
             for (size_t j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
             {
-                unsigned int nodeBoneID = objectModulePtr->getBonePtrByName((path + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->boneID;
+                std::string filename = path.substr(path.find_last_of("\\/") + 1);
+                unsigned int nodeBoneID = objectModulePtr->getEntityPtrByName((filename + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->getComponentPtr<Bone>()->boneID;
                 newAnim.addNode(nodeBoneID);
 
                 for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumPositionKeys; k++)
@@ -317,30 +332,30 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
         }
     }
 
+    std::string filename = path.substr(path.find_last_of("\\/") + 1);
     // ? ----- Loading optional data: bones, boneWeights, boneIDs -----
     for (size_t i = 0; i < mesh->mNumBones; i++)
     {
         // * Author note: each loop inserts one bone into global map of bones and then saves all the weights and bone ids
         // * by vertex id to local map. The bone id is created from the size of the map to ensure uniqueness of the id,
         // * because this is the only way to map vertex to bone.
-        unsigned int globalBoneIndex = objectModulePtr->objectContainer.getBoneCount();
+        unsigned int globalBoneIndex = bonesAmount;
 
         // XXX: I'm not sure if the insert will just do nothing if the key already exists (and that's what I want it to do) 
         // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models   
-
-        Bone* bone = objectModulePtr->getBonePtrByName((path + "/" + mesh->mBones[i]->mName.C_Str()).c_str());
-        if (bone == nullptr)
+        Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + mesh->mBones[i]->mName.C_Str()).c_str() );
+        if (e == nullptr)
         {
-            Bone boneToAdd( globalBoneIndex,
-                            path + "/" + mesh->mBones[i]->mName.C_Str(),
-                            aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix));
-
-            objectModulePtr->objectMaker.newBone(boneToAdd, path, mesh->mBones[i]->mName.C_Str());
-
+            Entity* ent = objectModulePtr->newEntity(2, filename + "/" + mesh->mBones[i]->mName.C_Str());
+            Bone* bone = objectModulePtr->newEmptyComponentForLastEntity<Bone>();
+                bone->boneID = globalBoneIndex;
+                bone->boneName = filename + "/" + mesh->mBones[i]->mName.C_Str();
+                bone->offsetMatrix = aiMatrixToGlmMat4(mesh->mBones[i]->mOffsetMatrix);
+            bonesAmount++;
         }
         else
         {
-            globalBoneIndex = bone->boneID;
+            globalBoneIndex = e->getComponentPtr<Bone>()->boneID;
         }
         
 

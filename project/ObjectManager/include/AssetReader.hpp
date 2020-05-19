@@ -53,6 +53,8 @@ private:
 
     static bool hasInstance;
 
+    static unsigned int bonesAmount;
+
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
     std::unordered_map<std::string, std::string> shaders;
@@ -68,7 +70,7 @@ private:
 
     // TODO: Documentation
     bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
-    Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Bone* parent = nullptr);
+    Bone* processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
     Animation* processAnimations(const aiScene* scene, std::string path);
     Mesh* createMesh(aiMesh* node, std::string path);
 

@@ -25,11 +25,11 @@ void PaddleIkSystem::frameUpdate()
 
 void PaddleIkSystem::processAttach(BoneAttachData data)
 {
-    Bone* end = data.bone;
-    Transform* endTransform = data.attachEntityPtr->getComponentPtr<Transform>();
-    glm::mat4 localTrans = glm::mat4(1.0f);
-    localTrans = glm::translate(localTrans, endTransform->getLocalPosition());
-    localTrans = localTrans * glm::toMat4(endTransform->getLocalRotation());
-    localTrans = glm::scale(localTrans, endTransform->getLocalScale());
-    end->localBoneTransform = endTransform->localToWorldMatrix * localTrans;
+    // Bone* end = data.bone;
+    // Transform* endTransform = data.attachEntityPtr->getComponentPtr<Transform>();
+    // glm::mat4 localTrans = glm::mat4(1.0f);
+    // localTrans = glm::translate(localTrans, endTransform->getLocalPosition());
+    // localTrans = localTrans * glm::toMat4(endTransform->getLocalRotation());
+    // localTrans = glm::scale(localTrans, endTransform->getLocalScale());
+    // end->localBoneTransform = endTransform->localToWorldMatrix * localTrans;
 }
