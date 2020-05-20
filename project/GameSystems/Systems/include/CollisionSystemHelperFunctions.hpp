@@ -5,6 +5,55 @@
 
 #include "Rigidbody.inl"
 
+class BoxCollider;
+class Transform;
+class SphereCollider;
+class Projection1D;
+
+/**
+ * @brief Project box collider to 1D range in space of given line.
+ * 
+ * @param box box to project.
+ * @param transform transform of projected box.
+ * @param axisPoint1 first point defining aline.
+ * @param axisPoint2 second point defining aline.
+ * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
+ * @return Projection1D 1D projection of box in line space.
+ */
+Projection1D AxisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
+
+/**
+ * @brief Project sphere collider to 1D range in space of given line.
+ * 
+ * @param sphere sphere to project.
+ * @param transform transform of projected sphere.
+ * @param axisPoint1 first point defining aline.
+ * @param axisPoint2 second point defining aline.
+ * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
+ * @return Projection1D 1D projection of sphere in line space.
+ */
+Projection1D AxisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
+
+/**
+ * @brief Project point onto given line.
+ * 
+ * @param point point to project.
+ * @param axisPoint1 first point defining aline.
+ * @param axisPoint2 second point defining aline.
+ * @return glm::vec3 projection of point on line.
+ */
+glm::vec3 AxisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+
+/**
+ * @brief Transform 3D point to 1D line space coordinate.
+ * 
+ * @param point point to transform.
+ * @param axisPoint1 first point defining aline.
+ * @param axisPoint2 second point defining aline.
+ * @return float coordinate in line space.
+ */
+float ToLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
+
 //http://jonathanbosson.github.io/reports/TNM085_group5.pdf
 
 /**
