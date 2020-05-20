@@ -11,7 +11,7 @@ fi
 
 if [[ $_cpp1 -ne $_cpp2 ]]; then
     echo "Number of cpp files was changed. Reconfiguring CMake." 
-    #./config.sh
+    ./config.sh
 fi
 cd build
 make -j 12
