@@ -157,17 +157,6 @@ void ObjectModule::newAudioClip(const char* filePath)
 
 #pragma region ObjectContainer wrapper
 
-Bone* ObjectModule::getBonePtrByName(const char* name)
-{
-    try
-    {
-        return objectContainer.getBonePtrByName(name);
-    }
-    catch(const std::out_of_range& e)
-    {
-        return nullptr;
-    }
-}
 
 Animation* ObjectModule::getAnimationPtrByName(const char* name)
 {

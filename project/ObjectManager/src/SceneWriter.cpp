@@ -208,6 +208,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveRigidbody(name, temp);
         }
+        else if(Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]))
+        {
+            saveLight(name, temp);
+        }
         else if(PhysicalInputKeymap* temp = dynamic_cast<PhysicalInputKeymap*>(objContainerPtr->components[i]))
         {
             savePhysicalInputKeymap(name, temp);
@@ -219,6 +223,10 @@ void SceneWriter::saveScene(const char* filePath)
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
+        }
+        else if(dynamic_cast<Bone*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Bone";
         }
     }
 
@@ -334,6 +342,24 @@ void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
     j[name]["halfSize"]["z"] = componentPtr->halfSize.z;
 }
 
+void SceneWriter::saveLight(std::string name, Light* componentPtr)
+{
+    j[name]["type"] = "Light";
+    j[name]["lightType"] = componentPtr->lightType;
+    j[name]["intensity"] = componentPtr->intensity;
+    j[name]["color"]["r"] = componentPtr->color.r;
+    j[name]["color"]["g"] = componentPtr->color.g;
+    j[name]["color"]["b"] = componentPtr->color.b;
+    if (componentPtr->lightType == LightType::Point || componentPtr->lightType == LightType::Spot)
+    {
+        j[name]["range"] = componentPtr->range;
+        if (componentPtr->lightType == LightType::Spot)
+        {
+            j[name]["angle"] = componentPtr->angle;
+        }
+    }
+}
+
 void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
 {
     j[name]["type"] = "Rigidbody";
@@ -362,13 +388,13 @@ void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap*
         j[name]["single"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
         j[name]["single"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
         j[name]["single"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
-        
+
         j[name]["single"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
         j[name]["single"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
         j[name]["single"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
         i++;
     }
-    
+
     i = 0;
 
     for (auto& entry : keymapPtr->continuous)
@@ -378,7 +404,7 @@ void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap*
         j[name]["continuous"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
         j[name]["continuous"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
         j[name]["continuous"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
-        
+
         j[name]["continuous"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
         j[name]["continuous"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
         j[name]["continuous"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;

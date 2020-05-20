@@ -250,6 +250,8 @@ class Core
 
         //TODO documentation
         static SkeletonSystem skeletonSystem;
+        //TODO documentation
+        static LightSystem lightSystem;
 
         //TODO documentation
         static PaddleControlSystem paddleControlSystem;

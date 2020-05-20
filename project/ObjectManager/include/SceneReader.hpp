@@ -42,6 +42,7 @@ private:
     void readSphereCollider(std::string name);
     void readBoxCollider(std::string name);
     void readRigidbody(std::string name);
+    void readLight(std::string name);
     void readPhysicalInputKeymap(std::string name);
     void readPaddle(std::string name);
 

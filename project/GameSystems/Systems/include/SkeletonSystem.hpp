@@ -7,7 +7,7 @@
 #include <glm/mat4x4.hpp>
 
 struct Skeleton;
-struct Bone;
+struct Transform;
 
 class SkeletonSystem : public System
 {
@@ -44,7 +44,7 @@ public:
     void frameUpdate();
     
 private:
-    void processHierarchy(Bone* bone);
+    void processHierarchy(Entity* boneEntity);
     
     std::map<int, glm::mat4> boneTransforms;
     double animationTime;

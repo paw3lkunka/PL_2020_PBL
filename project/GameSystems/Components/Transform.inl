@@ -66,7 +66,6 @@ struct Transform : public Component
         {
             parent->children.erase(this);
         }
-
         newParent->children.insert(this);
         parent = newParent;
     }

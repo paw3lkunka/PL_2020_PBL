@@ -34,6 +34,8 @@ struct AnimationNode
     std::vector<std::pair<double, glm::vec3>> positions;
     std::vector<std::pair<double, glm::quat>> rotations;
     std::vector<std::pair<double, glm::vec3>> scales;
+
+    double animationLength;
 };
 
 
@@ -49,10 +51,11 @@ public:
     void addScaleKey(unsigned int boneID, double time, glm::vec3 scale);
     glm::mat4 getAnimTransformLerp(unsigned int boneID, double time);
     AnimationNode* findAnimNode(unsigned int boneID);
+    
+    glm::vec3 getPositionLerp(unsigned int boneID, double time);
+    glm::quat getRotationLerp(unsigned int boneID, double time);
+    glm::vec3 getScaleLerp(unsigned int boneID, double time);
 private:
-    glm::vec3 getPositionLerp(AnimationNode &node, double time);
-    glm::quat getRotationLerp(AnimationNode &node, double time);
-    glm::vec3 getScaleLerp(AnimationNode &node, double time);
 
     std::unordered_map<unsigned int, AnimationNode> animationNodes;
 };

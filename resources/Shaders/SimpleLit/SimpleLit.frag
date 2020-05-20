@@ -2,6 +2,13 @@
 
 out vec4 FragColor;
 
+layout (std140, binding = 0) uniform Camera
+{
+    mat4 projection;
+    mat4 view;
+    vec3 viewPos;
+};
+
 struct DirectionalLight
 {
 	vec3 direction;
@@ -9,7 +16,7 @@ struct DirectionalLight
     vec4 ambient; // rgb - color; a - intensity
 };
 
-layout (std140, binding = 3) uniform DirectionalLight
+layout (std140, binding = 3) uniform Directional
 {
     DirectionalLight directionalLight;
 };
@@ -38,24 +45,25 @@ void main()
 // Directional light ------------------------------------------------------------------------
 	result += calcDirectionalLight(directionalLight, norm, viewDir);
 
-	FragColor = vec4(result, 1.0f);
+	FragColor = vec4(result, 0.5); // vec4(viewDir, 0.5f);//
 }
 
 
 vec3 calcDirectionalLight(DirectionalLight directionalLight, vec3 norm, vec3 viewDir)
 {
 	// Ambient
-	vec3 directionalAmbient = directionalLight.ambient * texture(diffuse, Texcoord).rgb;
+	vec3 directionalAmbient = directionalLight.ambient.rgb * texture(diffuse, Texcoord).rgb;
 
 	// Diffuse
-	vec3 lightDir = normalize(-directionalLight.direction);
+	vec3 lightDir = normalize(-directionalLight.direction.xyz);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 directionalDiffuse = directionalLight.color * diff * texture(diffuse, Texcoord).rgb;
+	vec3 directionalDiffuse = directionalLight.color.rgb * diff * texture(diffuse, Texcoord).rgb;
 
 	// Specular
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
-	vec3 directionalSpecular = directionalLight.color * spec * texture(specular, Texcoord).rgb;
+	// TODO: Temp 0.5f shininess!!!!!!!!!
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 4.0);
+	vec3 directionalSpecular = directionalLight.color.rgb * spec * texture(specular, Texcoord).rgb;
 
 	return directionalAmbient + directionalDiffuse + directionalSpecular;
 }

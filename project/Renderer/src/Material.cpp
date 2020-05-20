@@ -69,61 +69,68 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
 
 void Material::use()
 {
-    shader->use();
-
-    // TODO: Handle view and projection by UBO
-    
-    // * ===== Texture samplers =====
-    int i = 0;
-    for(std::pair<std::string, Texture*> texture : textures)
+    if (shader != nullptr)
     {
-        if (texture.second != nullptr)
+        shader->use();
+
+        // TODO: Handle view and projection by UBO
+        
+        // * ===== Texture samplers =====
+        int i = 0;
+        for(std::pair<std::string, Texture*> texture : textures)
         {
-            texture.second->bind(i);
-            shader->setInt(texture.first, i);
-            ++i;
+            if (texture.second != nullptr)
+            {
+                texture.second->bind(i);
+                shader->setInt(texture.first, i);
+                ++i;
+            }
+        }
+        
+        // * ===== Cubemap samplers =====
+        for(auto cubemap : cubemaps)
+        {
+            if (cubemap.second != nullptr)
+            {
+                cubemap.second->bind(i);
+                shader->setInt(cubemap.first, i);
+                ++i;
+            }
+        }
+
+        // * ===== Ints =====
+        for(auto var : ints)
+        {
+            shader->setInt(var.first, var.second);
+        }
+
+        // * ===== Floats =====
+        for(auto var : floats)
+        {
+            shader->setFloat(var.first, var.second);
+        }
+        
+        // * ===== Vec3s =====
+        for(auto var : vec3s)
+        {
+            shader->setVec3(var.first, var.second);
+        }
+
+        // * ===== Vec4s =====
+        for(auto var : vec4s)
+        {
+            shader->setVec4(var.first, var.second);
+        }
+
+        // * ===== Mat4s =====
+        for(auto var : mat4s)
+        {
+            shader->setMat4(var.first, var.second);
         }
     }
-    
-    // * ===== Cubemap samplers =====
-    for(auto cubemap : cubemaps)
+    else
     {
-        if (cubemap.second != nullptr)
-        {
-            cubemap.second->bind(i);
-            shader->setInt(cubemap.first, i);
-            ++i;
-        }
-    }
-
-    // * ===== Ints =====
-    for(auto var : ints)
-    {
-        shader->setInt(var.first, var.second);
-    }
-
-    // * ===== Floats =====
-    for(auto var : floats)
-    {
-        shader->setFloat(var.first, var.second);
-    }
-    
-    // * ===== Vec3s =====
-    for(auto var : vec3s)
-    {
-        shader->setVec3(var.first, var.second);
-    }
-
-    // * ===== Vec4s =====
-    for(auto var : vec4s)
-    {
-        shader->setVec4(var.first, var.second);
-    }
-
-    // * ===== Mat4s =====
-    for(auto var : mat4s)
-    {
-        shader->setMat4(var.first, var.second);
+        std::cerr << "Material " << name << " has no shader!\n";
     }
 }
 

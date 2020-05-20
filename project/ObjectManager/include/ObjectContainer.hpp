@@ -139,9 +139,6 @@ public:
     Material* getMaterialFromName(const char* name);
 
     // TODO documentation 
-    Bone* getBonePtrByName(const char* name);
-    unsigned int getBoneCount();
-    // TODO documentation 
     std::unordered_map<std::string, Bone>::iterator getBoneIterByName(const char* name);
     // TODO documentation
     Animation* getAnimationPtrByName(const char* name);
@@ -168,11 +165,7 @@ private:
     std::vector<Cubemap*> cubemaps;
     ///@brief materials constainer.
     std::vector<Material*> materials;
-    /**
-     * @brief Bones data collection
-     * @key path/bone_name
-     */
-    std::unordered_map<std::string, Bone> bones;
+    
     /**
      * @brief Animations data collection
      * @key path/animation_name

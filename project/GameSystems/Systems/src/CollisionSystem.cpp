@@ -100,7 +100,7 @@ float CollisionSystem::toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm:
     glm::vec3 diff = point - proj0;
     return glm::length(diff) * glm::sign(glm::dot(diff, axisPoint2 - axisPoint1));
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>  // Specialization only for this case
 bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereCollider* coll1, SphereCollider* coll2, Transform* trans1, Transform* trans2)
 {
@@ -111,13 +111,13 @@ bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereColli
 
     return SATTest(coll1, coll2, trans1, trans2, axes);
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::findSATAxes<SphereCollider>(SphereCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
 {
     return; // Yes, this function should be empty.
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::findSATAxes<BoxCollider>(BoxCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
 {
@@ -144,7 +144,7 @@ void CollisionSystem::findSATAxes<BoxCollider>(BoxCollider* collider, Transform*
  *      n3 = n1 x n2                             *
  * * * * * * * * * * * * * * * * * * * * * * * * *
  */
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereCollider* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
@@ -171,19 +171,19 @@ void CollisionSystem::resolveCollsion<SphereCollider,SphereCollider>(SphereColli
             << "AngV1:" <<  glm::to_string(body1->angularVelocity) << "\n"
             << "AngV2: " << glm::to_string(body2->angularVelocity) << std::endl;
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::resolveCollsion<SphereCollider,BoxCollider>(SphereCollider* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
     //TODO implementation
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::resolveCollsion<BoxCollider,SphereCollider>(BoxCollider* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
     //TODO implementation
 }
-
+//TODO A może tak przeciążenie funkcji?
 template<>
 void CollisionSystem::resolveCollsion<BoxCollider,BoxCollider>(BoxCollider* collider1, BoxCollider* collider2,  Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {

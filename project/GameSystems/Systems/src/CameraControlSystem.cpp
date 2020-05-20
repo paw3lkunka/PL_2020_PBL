@@ -9,6 +9,7 @@
 #include "MouseDataStructures.inl"
 #include "Transform.inl"
 #include "Camera.inl"
+#include "Core.hpp"
 
 bool CameraControlSystem::assertEntity(Entity* entity)
 {
@@ -97,6 +98,26 @@ void CameraControlSystem::receiveMessage(Message msg)
                         pitch = -89.0f;
                     }
                 }
+            }
+            break;
+
+        case Event::MOUSE_BUTTON_PRESSED:
+            switch (msg.getValue<int>())
+            {
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    glfwSetInputMode(GetCore().getWindowPtr(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                    usingMouse = !usingMouse;
+                    break;
+            }
+            break;
+
+        case Event::MOUSE_BUTTON_RELEASED:
+            switch (msg.getValue<int>())
+            {
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    glfwSetInputMode(GetCore().getWindowPtr(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    usingMouse = !usingMouse;
+                    break;
             }
             break;
     }
