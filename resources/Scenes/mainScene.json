@@ -2923,7 +2923,7 @@
             141
         ],
         "id": 8,
-        "name": "House Dancing.fbx/mixamorig:Hips",
+        "name": "House Dancing.FBX/mixamorig:Hips",
         "serializationID": 31
     },
     "entity009": {
@@ -2932,7 +2932,7 @@
             142
         ],
         "id": 9,
-        "name": "House Dancing.fbx/mixamorig:Spine",
+        "name": "House Dancing.FBX/mixamorig:Spine",
         "serializationID": 33
     },
     "entity010": {
@@ -2941,7 +2941,7 @@
             143
         ],
         "id": 10,
-        "name": "House Dancing.fbx/mixamorig:Spine1",
+        "name": "House Dancing.FBX/mixamorig:Spine1",
         "serializationID": 35
     },
     "entity011": {
@@ -2950,7 +2950,7 @@
             144
         ],
         "id": 11,
-        "name": "House Dancing.fbx/mixamorig:Spine2",
+        "name": "House Dancing.FBX/mixamorig:Spine2",
         "serializationID": 37
     },
     "entity012": {
@@ -2959,7 +2959,7 @@
             145
         ],
         "id": 12,
-        "name": "House Dancing.fbx/mixamorig:Neck",
+        "name": "House Dancing.FBX/mixamorig:Neck",
         "serializationID": 39
     },
     "entity013": {
@@ -2968,7 +2968,7 @@
             146
         ],
         "id": 13,
-        "name": "House Dancing.fbx/mixamorig:Head",
+        "name": "House Dancing.FBX/mixamorig:Head",
         "serializationID": 41
     },
     "entity014": {
@@ -2977,7 +2977,7 @@
             147
         ],
         "id": 14,
-        "name": "House Dancing.fbx/mixamorig:LeftShoulder",
+        "name": "House Dancing.FBX/mixamorig:LeftShoulder",
         "serializationID": 43
     },
     "entity015": {
@@ -2986,7 +2986,7 @@
             148
         ],
         "id": 15,
-        "name": "House Dancing.fbx/mixamorig:LeftArm",
+        "name": "House Dancing.FBX/mixamorig:LeftArm",
         "serializationID": 45
     },
     "entity016": {
@@ -2995,7 +2995,7 @@
             149
         ],
         "id": 16,
-        "name": "House Dancing.fbx/mixamorig:LeftForeArm",
+        "name": "House Dancing.FBX/mixamorig:LeftForeArm",
         "serializationID": 47
     },
     "entity017": {
@@ -3004,7 +3004,7 @@
             150
         ],
         "id": 17,
-        "name": "House Dancing.fbx/mixamorig:LeftHand",
+        "name": "House Dancing.FBX/mixamorig:LeftHand",
         "serializationID": 49
     },
     "entity018": {
@@ -3013,7 +3013,7 @@
             151
         ],
         "id": 18,
-        "name": "House Dancing.fbx/mixamorig:LeftHandMiddle1",
+        "name": "House Dancing.FBX/mixamorig:LeftHandMiddle1",
         "serializationID": 51
     },
     "entity019": {
@@ -3022,7 +3022,7 @@
             152
         ],
         "id": 19,
-        "name": "House Dancing.fbx/mixamorig:LeftHandMiddle2",
+        "name": "House Dancing.FBX/mixamorig:LeftHandMiddle2",
         "serializationID": 53
     },
     "entity020": {
@@ -3031,7 +3031,7 @@
             153
         ],
         "id": 20,
-        "name": "House Dancing.fbx/mixamorig:LeftHandMiddle3",
+        "name": "House Dancing.FBX/mixamorig:LeftHandMiddle3",
         "serializationID": 55
     },
     "entity021": {
@@ -3040,7 +3040,7 @@
             154
         ],
         "id": 21,
-        "name": "House Dancing.fbx/mixamorig:LeftHandThumb1",
+        "name": "House Dancing.FBX/mixamorig:LeftHandThumb1",
         "serializationID": 57
     },
     "entity022": {
@@ -3049,7 +3049,7 @@
             155
         ],
         "id": 22,
-        "name": "House Dancing.fbx/mixamorig:LeftHandThumb2",
+        "name": "House Dancing.FBX/mixamorig:LeftHandThumb2",
         "serializationID": 59
     },
     "entity023": {
@@ -3058,7 +3058,7 @@
             156
         ],
         "id": 23,
-        "name": "House Dancing.fbx/mixamorig:LeftHandThumb3",
+        "name": "House Dancing.FBX/mixamorig:LeftHandThumb3",
         "serializationID": 61
     },
     "entity024": {
@@ -3067,7 +3067,7 @@
             157
         ],
         "id": 24,
-        "name": "House Dancing.fbx/mixamorig:LeftHandIndex1",
+        "name": "House Dancing.FBX/mixamorig:LeftHandIndex1",
         "serializationID": 63
     },
     "entity025": {
@@ -3076,7 +3076,7 @@
             158
         ],
         "id": 25,
-        "name": "House Dancing.fbx/mixamorig:LeftHandIndex2",
+        "name": "House Dancing.FBX/mixamorig:LeftHandIndex2",
         "serializationID": 65
     },
     "entity026": {
@@ -3085,7 +3085,7 @@
             159
         ],
         "id": 26,
-        "name": "House Dancing.fbx/mixamorig:LeftHandIndex3",
+        "name": "House Dancing.FBX/mixamorig:LeftHandIndex3",
         "serializationID": 67
     },
     "entity027": {
@@ -3094,7 +3094,7 @@
             160
         ],
         "id": 27,
-        "name": "House Dancing.fbx/mixamorig:LeftHandRing1",
+        "name": "House Dancing.FBX/mixamorig:LeftHandRing1",
         "serializationID": 69
     },
     "entity028": {
@@ -3103,7 +3103,7 @@
             161
         ],
         "id": 28,
-        "name": "House Dancing.fbx/mixamorig:LeftHandRing2",
+        "name": "House Dancing.FBX/mixamorig:LeftHandRing2",
         "serializationID": 71
     },
     "entity029": {
@@ -3112,7 +3112,7 @@
             162
         ],
         "id": 29,
-        "name": "House Dancing.fbx/mixamorig:LeftHandRing3",
+        "name": "House Dancing.FBX/mixamorig:LeftHandRing3",
         "serializationID": 73
     },
     "entity030": {
@@ -3121,7 +3121,7 @@
             163
         ],
         "id": 30,
-        "name": "House Dancing.fbx/mixamorig:LeftHandPinky1",
+        "name": "House Dancing.FBX/mixamorig:LeftHandPinky1",
         "serializationID": 75
     },
     "entity031": {
@@ -3130,7 +3130,7 @@
             164
         ],
         "id": 31,
-        "name": "House Dancing.fbx/mixamorig:LeftHandPinky2",
+        "name": "House Dancing.FBX/mixamorig:LeftHandPinky2",
         "serializationID": 77
     },
     "entity032": {
@@ -3139,7 +3139,7 @@
             165
         ],
         "id": 32,
-        "name": "House Dancing.fbx/mixamorig:LeftHandPinky3",
+        "name": "House Dancing.FBX/mixamorig:LeftHandPinky3",
         "serializationID": 79
     },
     "entity033": {
@@ -3148,7 +3148,7 @@
             166
         ],
         "id": 33,
-        "name": "House Dancing.fbx/mixamorig:RightShoulder",
+        "name": "House Dancing.FBX/mixamorig:RightShoulder",
         "serializationID": 81
     },
     "entity034": {
@@ -3157,7 +3157,7 @@
             167
         ],
         "id": 34,
-        "name": "House Dancing.fbx/mixamorig:RightArm",
+        "name": "House Dancing.FBX/mixamorig:RightArm",
         "serializationID": 83
     },
     "entity035": {
@@ -3166,7 +3166,7 @@
             168
         ],
         "id": 35,
-        "name": "House Dancing.fbx/mixamorig:RightForeArm",
+        "name": "House Dancing.FBX/mixamorig:RightForeArm",
         "serializationID": 85
     },
     "entity036": {
@@ -3175,7 +3175,7 @@
             169
         ],
         "id": 36,
-        "name": "House Dancing.fbx/mixamorig:RightHand",
+        "name": "House Dancing.FBX/mixamorig:RightHand",
         "serializationID": 87
     },
     "entity037": {
@@ -3184,7 +3184,7 @@
             170
         ],
         "id": 37,
-        "name": "House Dancing.fbx/mixamorig:RightHandMiddle1",
+        "name": "House Dancing.FBX/mixamorig:RightHandMiddle1",
         "serializationID": 89
     },
     "entity038": {
@@ -3193,7 +3193,7 @@
             171
         ],
         "id": 38,
-        "name": "House Dancing.fbx/mixamorig:RightHandMiddle2",
+        "name": "House Dancing.FBX/mixamorig:RightHandMiddle2",
         "serializationID": 91
     },
     "entity039": {
@@ -3202,7 +3202,7 @@
             172
         ],
         "id": 39,
-        "name": "House Dancing.fbx/mixamorig:RightHandMiddle3",
+        "name": "House Dancing.FBX/mixamorig:RightHandMiddle3",
         "serializationID": 93
     },
     "entity040": {
@@ -3211,7 +3211,7 @@
             173
         ],
         "id": 40,
-        "name": "House Dancing.fbx/mixamorig:RightHandThumb1",
+        "name": "House Dancing.FBX/mixamorig:RightHandThumb1",
         "serializationID": 95
     },
     "entity041": {
@@ -3220,7 +3220,7 @@
             174
         ],
         "id": 41,
-        "name": "House Dancing.fbx/mixamorig:RightHandThumb2",
+        "name": "House Dancing.FBX/mixamorig:RightHandThumb2",
         "serializationID": 97
     },
     "entity042": {
@@ -3229,7 +3229,7 @@
             175
         ],
         "id": 42,
-        "name": "House Dancing.fbx/mixamorig:RightHandThumb3",
+        "name": "House Dancing.FBX/mixamorig:RightHandThumb3",
         "serializationID": 99
     },
     "entity043": {
@@ -3238,7 +3238,7 @@
             176
         ],
         "id": 43,
-        "name": "House Dancing.fbx/mixamorig:RightHandIndex1",
+        "name": "House Dancing.FBX/mixamorig:RightHandIndex1",
         "serializationID": 101
     },
     "entity044": {
@@ -3247,7 +3247,7 @@
             177
         ],
         "id": 44,
-        "name": "House Dancing.fbx/mixamorig:RightHandIndex2",
+        "name": "House Dancing.FBX/mixamorig:RightHandIndex2",
         "serializationID": 103
     },
     "entity045": {
@@ -3256,7 +3256,7 @@
             178
         ],
         "id": 45,
-        "name": "House Dancing.fbx/mixamorig:RightHandIndex3",
+        "name": "House Dancing.FBX/mixamorig:RightHandIndex3",
         "serializationID": 105
     },
     "entity046": {
@@ -3265,7 +3265,7 @@
             179
         ],
         "id": 46,
-        "name": "House Dancing.fbx/mixamorig:RightHandRing1",
+        "name": "House Dancing.FBX/mixamorig:RightHandRing1",
         "serializationID": 107
     },
     "entity047": {
@@ -3274,7 +3274,7 @@
             180
         ],
         "id": 47,
-        "name": "House Dancing.fbx/mixamorig:RightHandRing2",
+        "name": "House Dancing.FBX/mixamorig:RightHandRing2",
         "serializationID": 109
     },
     "entity048": {
@@ -3283,7 +3283,7 @@
             181
         ],
         "id": 48,
-        "name": "House Dancing.fbx/mixamorig:RightHandRing3",
+        "name": "House Dancing.FBX/mixamorig:RightHandRing3",
         "serializationID": 111
     },
     "entity049": {
@@ -3292,7 +3292,7 @@
             182
         ],
         "id": 49,
-        "name": "House Dancing.fbx/mixamorig:RightHandPinky1",
+        "name": "House Dancing.FBX/mixamorig:RightHandPinky1",
         "serializationID": 113
     },
     "entity050": {
@@ -3301,7 +3301,7 @@
             183
         ],
         "id": 50,
-        "name": "House Dancing.fbx/mixamorig:RightHandPinky2",
+        "name": "House Dancing.FBX/mixamorig:RightHandPinky2",
         "serializationID": 115
     },
     "entity051": {
@@ -3310,7 +3310,7 @@
             184
         ],
         "id": 51,
-        "name": "House Dancing.fbx/mixamorig:RightHandPinky3",
+        "name": "House Dancing.FBX/mixamorig:RightHandPinky3",
         "serializationID": 117
     },
     "entity052": {
@@ -3319,7 +3319,7 @@
             185
         ],
         "id": 52,
-        "name": "House Dancing.fbx/mixamorig:RightUpLeg",
+        "name": "House Dancing.FBX/mixamorig:RightUpLeg",
         "serializationID": 119
     },
     "entity053": {
@@ -3328,7 +3328,7 @@
             186
         ],
         "id": 53,
-        "name": "House Dancing.fbx/mixamorig:RightLeg",
+        "name": "House Dancing.FBX/mixamorig:RightLeg",
         "serializationID": 121
     },
     "entity054": {
@@ -3337,7 +3337,7 @@
             187
         ],
         "id": 54,
-        "name": "House Dancing.fbx/mixamorig:RightFoot",
+        "name": "House Dancing.FBX/mixamorig:RightFoot",
         "serializationID": 123
     },
     "entity055": {
@@ -3346,7 +3346,7 @@
             188
         ],
         "id": 55,
-        "name": "House Dancing.fbx/mixamorig:RightToeBase",
+        "name": "House Dancing.FBX/mixamorig:RightToeBase",
         "serializationID": 125
     },
     "entity056": {
@@ -3355,7 +3355,7 @@
             189
         ],
         "id": 56,
-        "name": "House Dancing.fbx/mixamorig:LeftUpLeg",
+        "name": "House Dancing.FBX/mixamorig:LeftUpLeg",
         "serializationID": 127
     },
     "entity057": {
@@ -3364,7 +3364,7 @@
             190
         ],
         "id": 57,
-        "name": "House Dancing.fbx/mixamorig:LeftLeg",
+        "name": "House Dancing.FBX/mixamorig:LeftLeg",
         "serializationID": 129
     },
     "entity058": {
@@ -3373,7 +3373,7 @@
             191
         ],
         "id": 58,
-        "name": "House Dancing.fbx/mixamorig:LeftFoot",
+        "name": "House Dancing.FBX/mixamorig:LeftFoot",
         "serializationID": 131
     },
     "entity059": {
@@ -3382,7 +3382,7 @@
             192
         ],
         "id": 59,
-        "name": "House Dancing.fbx/mixamorig:LeftToeBase",
+        "name": "House Dancing.FBX/mixamorig:LeftToeBase",
         "serializationID": 133
     },
     "entity060": {
@@ -5360,8 +5360,8 @@
         }
     },
     "mesh000": {
-        "filePath": "Resources/Models/unit_sphere.fbx",
-        "meshPath": "Resources/Models/unit_sphere.fbx/Sphere001",
+        "filePath": "Resources/Models/unit_sphere.FBX",
+        "meshPath": "Resources/Models/unit_sphere.FBX/Sphere001",
         "serializationID": 3,
         "type": "MeshCustom"
     },
@@ -5402,14 +5402,14 @@
         "type": "MeshCustom"
     },
     "mesh007": {
-        "filePath": "Resources/Models/House Dancing.fbx",
-        "meshPath": "Resources/Models/House Dancing.fbx/Alpha_Surface",
+        "filePath": "Resources/Models/House Dancing.FBX",
+        "meshPath": "Resources/Models/House Dancing.FBX/Alpha_Surface",
         "serializationID": 135,
         "type": "MeshSkinned"
     },
     "mesh008": {
-        "filePath": "Resources/Models/House Dancing.fbx",
-        "meshPath": "Resources/Models/House Dancing.fbx/Alpha_Joints",
+        "filePath": "Resources/Models/House Dancing.FBX",
+        "meshPath": "Resources/Models/House Dancing.FBX/Alpha_Joints",
         "serializationID": 139,
         "type": "MeshSkinned"
     },
