@@ -4441,7 +4441,7 @@
             ]
         },
         "name": "simpleLitMat",
-        "renderingType": 0,
+        "renderingType": 1,
         "serializationID": 229,
         "shaderSerializationID": 204,
         "textures": {

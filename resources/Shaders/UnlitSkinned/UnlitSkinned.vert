@@ -25,6 +25,7 @@ out vec3 normal0;
 out vec3 worldPos0;
 
 uniform mat4 model;
+uniform mat4 MVP;
 
 void main()
 {
@@ -34,7 +35,7 @@ void main()
     boneTransform += finalTransform[boneIDs[3]] * weights[3];
 
     vec4 posLocal = boneTransform * vec4(position, 1.0);
-    gl_Position = projection * view * model * posLocal;
+    gl_Position = MVP * posLocal;
 
     uv0 = texcoord;
     vec4 normalLocal = boneTransform * vec4(normal, 0.0);

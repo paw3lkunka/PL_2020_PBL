@@ -5,6 +5,7 @@
 #include "Shader.hpp"
 #include "Material.hpp"
 #include "Core.hpp"
+#include "DistanceComparer.hpp"
 
 #include <algorithm>
 
@@ -36,7 +37,7 @@ void RendererModule::receiveMessage(Message msg)
                             opaqueQueue.push_back(&packet.first->second);
                             break;
                         case RenderType::Transparent:
-                            transparentQueue.push_back(&packet.first->second);
+                            std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
                             break;
                     }
                 }
@@ -309,6 +310,8 @@ void RendererModule::render()
         // TODO: SORT THIS
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->position));
+
         while(!transparentQueue.empty())
         {
             transparentQueue.front()->render(VP);
