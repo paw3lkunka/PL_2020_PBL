@@ -1,12 +1,12 @@
 #pragma region Data Loading
-    objectModule.newModel("Resources/Models/unit_sphere.fbx");
+    objectModule.newModel("Resources/Models/unit_sphere.FBX");
     objectModule.newModel("Resources/Models/Cliffs.FBX");
     objectModule.newModel("Resources/Models/Left_bank.FBX");
     objectModule.newModel("Resources/Models/Right_bank.FBX");
     objectModule.newModel("Resources/Models/Riverbed.FBX");
     objectModule.newModel("Resources/Models/Water.FBX");
     objectModule.newModel("Resources/Models/Box.FBX");
-    objectModule.newModel("Resources/Models/House Dancing.fbx");
+    objectModule.newModel("Resources/Models/House Dancing.FBX");
     objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
     objectModule.newAudioClip("Resources/Audios/sample.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
@@ -442,7 +442,7 @@ objectModule.newEntity(2, "sampleSound");
             c->radius = 10;
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
             mr->material = unlitInstancedMat;
 
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
@@ -560,7 +560,7 @@ objectModule.newEntity(2, "sampleSound");
         SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
             collider->radius = 5;
         MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.fbx/Sphere001");
+            MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
             Shader* shader = objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr();
             Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
                 material->setVec4("color", glm::vec4(0.2f, 0.1f, 0.3f, 1.0f));
