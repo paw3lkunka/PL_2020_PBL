@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/components.sh)
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/systems.sh)
+execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/countcpp.sh -s)
 
 # Eventually clone submodules
 if(NOT EXISTS "libs/assimp/CMakeLists.txt")
