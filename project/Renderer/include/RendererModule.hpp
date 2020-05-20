@@ -74,7 +74,7 @@ private:
     Camera* cameraMain = nullptr;
 
     std::deque<RenderPacket*> opaqueQueue;
-    std::deque<RenderPacket*> transparentQueue;
+    std::deque<NormalPacket*> transparentQueue;
 
     Light* directionalLight = nullptr;
     unsigned int depthMapFBO = 0;
