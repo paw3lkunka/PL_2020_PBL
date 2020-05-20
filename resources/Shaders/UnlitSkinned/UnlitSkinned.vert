@@ -24,6 +24,7 @@ out vec2 uv0;
 out vec3 normal0;
 out vec3 worldPos0;
 
+uniform mat4 model;
 uniform mat4 MVP;
 
 void main()

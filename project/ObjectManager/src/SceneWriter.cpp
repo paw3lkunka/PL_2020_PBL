@@ -224,6 +224,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "Skeleton";
         }
+        else if(dynamic_cast<Bone*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Bone";
+        }
     }
 
     std::ofstream file(filePath);
