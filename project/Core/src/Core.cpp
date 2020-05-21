@@ -144,7 +144,7 @@ int Core::init()
                 rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
 
             auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-                bc->halfSize = {3.0f, 3.0f, 3.0f};
+                bc->halfSize = {0.5f, 0.5f, 0.5f};
                 bc->calculateVert();
         }
         

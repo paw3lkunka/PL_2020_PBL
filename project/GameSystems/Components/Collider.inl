@@ -6,7 +6,6 @@
 
 /**
  * @brief Colliders base struct
- * Important: colliders ignore local scale
  */
 struct Collider : public Component
 {

@@ -7,7 +7,6 @@
 
 /**
  * @brief Box-shaped collider (cuboid)
- * Important: colliders ignore local scale
  */
 
 struct BoxCollider : public Collider

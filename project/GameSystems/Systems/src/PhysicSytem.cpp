@@ -44,6 +44,7 @@ void PhysicSystem::fixedUpdate()
 
     //TODO VELOCITY W AUDIO
 
+    //TODO czy skala nie zniszczy efektu?
     transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
     transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
