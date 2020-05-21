@@ -4,12 +4,17 @@
 class ISerializable
 {
 public:
-    ISerializable() 
+    ISerializable(bool makeSerializable = true) 
     {
         static unsigned int nextID = 0;
-        serializationID = nextID++;
+        serialized = makeSerializable;
+        if (makeSerializable)
+        {
+            serializationID = nextID++;
+        }
     }
     unsigned int serializationID;
+    bool serialized;
 
     virtual ~ISerializable() = default;
     

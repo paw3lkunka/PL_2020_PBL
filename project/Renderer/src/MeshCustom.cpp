@@ -76,7 +76,7 @@ void MeshCustom::render()
 void MeshCustom::renderInstanced(int count, glm::mat4* instanceTransforms)
 {
     glBindBuffer(GL_ARRAY_BUFFER, instanceVbo);
-    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), instanceTransforms, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), instanceTransforms, GL_STATIC_DRAW);
     glBindVertexArray(vao);
     glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, count);
     glBindVertexArray(0);

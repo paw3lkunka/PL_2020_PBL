@@ -29,15 +29,6 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
     objContainerPtr = &objectModulePtr->objectContainer;
 }
 
-SceneWriter::~SceneWriter()
-{
-    delete objModulePtr;
-    objModulePtr = nullptr;
-    
-    delete objContainerPtr;
-    objContainerPtr = nullptr;
-}
-
 void SceneWriter::saveScene(const char* filePath)
 {
     std::string name;
@@ -560,6 +551,9 @@ void SceneWriter::saveCubemap(std::string name, Cubemap* assetPtr)
     j[name]["topPath"] = assetPtr->topPath;
     j[name]["bottomPath"] = assetPtr->bottomPath;
     j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    j[name]["creationInfo"]["format"] = assetPtr->info.format;
+    j[name]["creationInfo"]["width"] = assetPtr->info.width;
+    j[name]["creationInfo"]["height"] = assetPtr->info.height;
     j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
     j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
     j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;

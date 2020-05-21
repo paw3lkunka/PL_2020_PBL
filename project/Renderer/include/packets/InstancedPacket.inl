@@ -25,6 +25,12 @@ struct InstancedPacket : RenderPacket
         mesh->renderInstanced(instanceMatrices.size(), instanceMatrices.data());
     }
 
+    void renderWithShader(Shader* shader, glm::mat4& VP)
+    {
+        shader->use();
+        mesh->renderInstanced(instanceMatrices.size(), instanceMatrices.data());
+    }
+
     std::vector<glm::mat4> instanceMatrices;
 };
 

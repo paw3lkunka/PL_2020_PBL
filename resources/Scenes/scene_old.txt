@@ -149,12 +149,12 @@
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
 
     auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox/nz.png", 
-                                "Resources/Textures/skybox/nx.png", 
-                                "Resources/Textures/skybox/px.png",
-                                "Resources/Textures/skybox/pz.png",
-                                "Resources/Textures/skybox/py.png",
-                                "Resources/Textures/skybox/ny.png");
+                                "Resources/Textures/skybox_02/nz.png", 
+                                "Resources/Textures/skybox_02/nx.png", 
+                                "Resources/Textures/skybox_02/px.png",
+                                "Resources/Textures/skybox_02/pz.png",
+                                "Resources/Textures/skybox_02/py.png",
+                                "Resources/Textures/skybox_02/ny.png");
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
     skyboxMat->setCubemap("cubemap", cubemap);

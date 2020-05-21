@@ -24,7 +24,7 @@ public:
      * @brief Pure virtual render function for use with various render calls 
      */
     virtual void render() = 0;
-    
+
     /**
      * @brief Virtual render function for use with instanced rendering
      */

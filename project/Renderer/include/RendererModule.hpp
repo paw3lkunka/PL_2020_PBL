@@ -37,7 +37,7 @@ class RendererModule : public IModule
 {
 public:
     RendererModule() = default;
-    virtual ~RendererModule() = default;
+    virtual ~RendererModule();
     
     /**
      * @brief Handles renderer message bus events
@@ -60,6 +60,8 @@ public:
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
+    const char* depthVertexCode = "#version 430 core\nlayout(location=0) in vec3 position;\nuniform mat4 MVP;\nvoid main() {gl_Position = MVP * vec4(position, 1.0);}";
+    const char* depthFragmentCode = "#version 430 core\nvoid main() {}";
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
@@ -69,7 +71,7 @@ private:
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
-    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer;
+    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer;
     
     Camera* cameraMain = nullptr;
 
@@ -79,8 +81,9 @@ private:
     Light* directionalLight = nullptr;
     unsigned int depthMapFBO = 0;
     unsigned int depthMap = 0;
+    Shader* simpleDepth;
     // TODO: Move this to light properties
-    static constexpr int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+    static constexpr int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
