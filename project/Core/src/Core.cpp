@@ -4,6 +4,7 @@
 #include "examples/imgui_impl_glfw.h"
 #include "Components.inc"
 #include "Systems.inc"
+#include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
 
@@ -106,6 +107,47 @@ int Core::init()
     if (updateScene)
     {
         // ! Manual extension of scene, runned by -u param
+        objectModule.newEntity(4, "TestBox");
+        {
+            //I fix
+            {
+                auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+                    auto* rb1 = o1->getComponentPtr<Rigidbody>();
+                    auto* sc1 = o1->getComponentPtr<SphereCollider>();
+                    rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
+                    
+                auto* o2 = objectModule.getEntityPtrByName("Sphere001");
+                    auto* rb2 = o2->getComponentPtr<Rigidbody>();
+                    auto* sc2 = o2->getComponentPtr<SphereCollider>();
+                    rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
+                    
+                auto* o3 = objectModule.getEntityPtrByName("sphereSound");
+                    auto* rb3 = o3->getComponentPtr<Rigidbody>();
+                    auto* sc3 = o3->getComponentPtr<SphereCollider>();
+                    rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
+            }
+
+            auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+                t->getLocalPositionModifiable() = {0.0f, 0.0, 50.0f};
+                t->getLocalScaleModifiable() = {6.0f, 6.0f, 6.0f};
+                t->setParent(&sceneModule.rootNode);
+
+            auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+                mr->material = objectModule.getMaterialPtrByName("simpleLitMat");
+
+            auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                rb->angularDrag = 2;
+                rb->drag = 2;
+                rb->ignoreGravity = true;
+                rb->mass = 5;
+                rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
+
+            auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                bc->halfSize = {3.0f, 3.0f, 3.0f};
+                bc->calculateVert();
+        }
+        
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
