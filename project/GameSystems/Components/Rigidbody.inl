@@ -1,7 +1,7 @@
 #ifndef RIGIDBODY_INL_
 #define RIGIDBODY_INL_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <vector>
 #include <glm/glm.hpp>

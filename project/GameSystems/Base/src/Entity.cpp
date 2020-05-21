@@ -1,6 +1,6 @@
 #include "Entity.hpp"
 
-#include "Component.inl"
+#include "Component.hpp"
 #include "System.hpp"
 
 Entity::Entity(int id, int bufferSize, std::string name)

@@ -1,7 +1,7 @@
 #ifndef _MESHRENDERER_INL
 #define _MESHRENDERER_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 #include "Material.hpp"
 #include "mesh/Mesh.hpp"
 

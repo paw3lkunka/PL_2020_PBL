@@ -128,7 +128,7 @@ int Core::init()
             }
 
             auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                t->getLocalPositionModifiable() = {0.0f, 0.0, 50.0f};
+                t->getLocalPositionModifiable() = {-50.0f, 0.0, 0.0f};
                 t->getLocalScaleModifiable() = {6.0f, 6.0f, 6.0f};
                 t->setParent(&sceneModule.rootNode);
 

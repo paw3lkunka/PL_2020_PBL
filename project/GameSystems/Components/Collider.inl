@@ -1,7 +1,7 @@
 #ifndef COLLIDER_HPP_
 #define COLLIDER_HPP_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 
 /**

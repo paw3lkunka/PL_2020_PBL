@@ -1,7 +1,7 @@
 #ifndef TRANSFORM_HPP_
 #define TRANSFORM_HPP_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <unordered_set>
 

@@ -46,7 +46,7 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
     if(detectCollsion(collider1, collider2, transformPtr, transform2))
     {
         //TODO TEMP DEBUG
-        std::cout << "Collision detected - type: " << (int)collider2->type << std::endl;
+        std::cout << "Collision detected between " << Name(collider1) << " and " << Name(collider2) << " - type: " << (int)collider2->type << std::endl;
         CollisionData data = {collider1, collider2};
 
         switch (collider2->type)
@@ -99,8 +99,8 @@ void CollisionSystem::resolveCollsion(T* collider1, SphereCollider* collider2, R
 template<class T>
 void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 r1 = testResult.collisionCentre - static_cast<glm::vec3>( transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider1->center, 1.0f) );
-    glm::vec3 r2 = testResult.collisionCentre - static_cast<glm::vec3>( transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f) );
+    glm::vec3 r1 = testResult.collisionCentre - static_cast<glm::vec3>( transform1->modelMatrix * glm::vec4(collider1->center, 1.0f) );
+    glm::vec3 r2 = testResult.collisionCentre - static_cast<glm::vec3>( transform2->modelMatrix * glm::vec4(collider2->center, 1.0f) );
 
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
@@ -163,16 +163,16 @@ bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform
 template<class T>
 glm::vec3 CollisionSystem::collisionNormal(T* collider1, SphereCollider* collider2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 vector = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f)
-            - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider1->center, 1.0f); 
+    glm::vec3 vector = transform2->modelMatrix * glm::vec4(collider2->center, 1.0f)
+            - transform1->modelMatrix * glm::vec4(collider1->center, 1.0f); 
     return glm::normalize(vector);
 }
 
 template<class T>
 glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 centralVector = transform2->localToWorldMatrix * glm::vec4(transform2->getLocalPosition() + collider2->center, 1.0f)
-        - transform1->localToWorldMatrix * glm::vec4(transform1->getLocalPosition() + collider1->center, 1.0f); 
+    glm::vec3 centralVector = transform2->modelMatrix * glm::vec4(collider2->center, 1.0f)
+        - transform1->modelMatrix * glm::vec4(collider1->center, 1.0f); 
 
     glm::vec3 potentialNormals[]
     {

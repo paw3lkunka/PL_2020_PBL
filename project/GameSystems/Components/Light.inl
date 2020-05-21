@@ -1,7 +1,7 @@
 #ifndef _LIGHT_INL
 #define _LIGHT_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <glm/glm.hpp>
 

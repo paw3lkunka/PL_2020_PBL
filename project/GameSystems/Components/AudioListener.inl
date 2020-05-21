@@ -5,7 +5,7 @@
 #include <AL/alc.h>
 #include <glm/vec3.hpp>
 
-#include "Component.inl"
+#include "Component.hpp"
 
 struct AudioListener : public Component
 {

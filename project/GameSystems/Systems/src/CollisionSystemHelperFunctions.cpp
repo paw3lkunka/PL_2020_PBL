@@ -7,7 +7,7 @@
 
 Projection1D AxisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[])
 {
-    glm::vec3 centreWS = transform->localToWorldMatrix * glm::vec4(transform->getLocalPosition() + sphere->center, 1.0f);
+    glm::vec3 centreWS = transform->modelMatrix * glm::vec4(sphere->center, 1.0f);
     glm::vec3 projCentre = AxisProjection(centreWS, axisPoint1, axisPoint2);
     float centre1D = ToLineSpace1D(projCentre, axisPoint1, axisPoint2);
 
@@ -25,7 +25,7 @@ Projection1D AxisProjection(BoxCollider* box, Transform* transform, glm::vec3 ax
 
     for (glm::vec4& vert : box->verts)
     {
-        glm::vec3 vertWS = transform->localToWorldMatrix * vert;
+        glm::vec3 vertWS = transform->modelMatrix * vert;
 
         glm::vec3 projVert = AxisProjection(vertWS, axisPoint1, axisPoint2);
         float centre1D = ToLineSpace1D(projVert, axisPoint1, axisPoint2);
