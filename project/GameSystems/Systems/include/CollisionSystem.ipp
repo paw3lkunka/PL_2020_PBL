@@ -87,13 +87,15 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
 template<class T>
 void CollisionSystem::resolveCollsion(T* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3& normal = testResult.collisionNormal;
     glm::vec3 momentum1 = body1->mass * body1->velocity;
     glm::vec3 momentum2 = body2->mass * body2->velocity;
 
-    body1->velocity = ( momentum1 + momentum2 + body2->mass * glm::e<float>() * ( body2->velocity - body1->velocity) ) / ( body1->mass + body2->mass );
+    glm::vec3 reaction = ( momentum1 + momentum2 + body2->mass * glm::e<float>() * ( body2->velocity - body1->velocity) ) / ( body1->mass + body2->mass );
+    reaction = glm::sign(testResult.collisionNormal) * glm::abs(reaction);
+    glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
 
-    body1->angularVelocity = glm::cross(normal, glm::cross(normal, body1->angularVelocity) + glm::vec3(0.0f, body2->velocity.y, body2->velocity.z) );
+    body1->velocity =  reaction;// glm::max(reaction, penetration);
+    body1->angularVelocity = glm::cross(testResult.collisionNormal, glm::cross(testResult.collisionNormal, body1->angularVelocity) + glm::vec3(0.0f, body2->velocity.y, body2->velocity.z) );
 }
 
 template<class T>
@@ -104,7 +106,10 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
 
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
-    body1->velocity = body1->velocity + jImpulse * testResult.collisionNormal / body1->mass;
+    glm::vec3 reaction = testResult.collisionNormal * glm::abs(body1->velocity + jImpulse / body1->mass);
+    glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
+
+    body1->velocity = glm::max(reaction, penetration);
     //TODO I^-1 chould be pre computed
     body1->angularVelocity = body1->velocity + glm::inverse(body1->momentOfInertia) * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
 }
@@ -133,11 +138,13 @@ bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform
         if (proj1.start < proj2.start && proj1.end > proj2.start)
         {
             centres.push_back(proj1Buffer[END(i)] - proj2Buffer[START(i)]);
+            testResult.penetration = proj1.end - proj2.start;
         }
         // 2.start, 1.start, 2.end, 1.end
         else if (proj2.start < proj1.start && proj2.end > proj1.start)
         {
             centres.push_back(proj2Buffer[END(i)] - proj1Buffer[START(i)]);
+            testResult.penetration = proj2.end - proj1.start;
         }
         else
         {
@@ -163,33 +170,42 @@ bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform
 template<class T>
 glm::vec3 CollisionSystem::collisionNormal(T* collider1, SphereCollider* collider2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 vector = transform2->modelMatrix * glm::vec4(collider2->center, 1.0f)
-            - transform1->modelMatrix * glm::vec4(collider1->center, 1.0f); 
+    glm::vec3 vector = transform1->modelMatrix * glm::vec4(collider1->center, 1.0f)
+            - transform2->modelMatrix * glm::vec4(collider2->center, 1.0f); 
     return glm::normalize(vector);
 }
 
 template<class T>
 glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 centralVector = transform2->modelMatrix * glm::vec4(collider2->center, 1.0f)
-        - transform1->modelMatrix * glm::vec4(collider1->center, 1.0f); 
+    glm::vec3 vector = transform1->modelMatrix * glm::vec4(collider1->center, 1.0f)
+            - transform2->modelMatrix * glm::vec4(collider2->center, 1.0f); 
+    
+    glm::quat rotation;
+    {
+        glm::vec4 temp4;
+        glm::vec3 temp3;
+        glm::decompose(transform2->modelMatrix, temp3, rotation, temp3, temp3, temp4);
+    }
 
+    glm::mat4 rotMatrix = glm::toMat4(rotation);
+
+    std::cout << " Vector: " << glm::to_string(vector) << std::endl;
     glm::vec3 potentialNormals[]
     {
-        collider2->verts[1] - collider2->verts[0], // locall x
-        collider2->verts[0] - collider2->verts[1], // locall -x
-        collider2->verts[4] - collider2->verts[0], // locall y
-        collider2->verts[0] - collider2->verts[4], // locall -y
-        collider2->verts[3] - collider2->verts[0], // locall z
-        collider2->verts[0] - collider2->verts[3]  // locall -z
+        rotMatrix * glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f), // locall x
+        rotMatrix * glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f), // locall y
+        rotMatrix * glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f), // locall z
     };
+
 
     float angle = INFINITY;
     int normalIndex = -1;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 3; i++)
     {
-        float dot = glm::dot(centralVector, potentialNormals[i]);
+    std::cout << " pot " << i << ": " << glm::to_string(potentialNormals[i]) << std::endl;
+        float dot = glm::dot(vector, potentialNormals[i]);
         if (dot < angle)
         {
             normalIndex = i;
@@ -197,6 +213,7 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
         }
     }
 
+    std::cout << "Return: " << glm::to_string(glm::normalize(potentialNormals[normalIndex])) << std::endl;
     return glm::normalize(potentialNormals[normalIndex]);
 }
 

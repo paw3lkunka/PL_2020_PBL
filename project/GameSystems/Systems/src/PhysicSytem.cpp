@@ -14,18 +14,29 @@ bool PhysicSystem::assertEntity(Entity* entity)
 {
     transformPtr = entity->getComponentPtr<Transform>();
     rBodyPtr = entity->getComponentPtr<Rigidbody>();
+    colliderPtr = entity->getComponentPtr<Collider>();
     return transformPtr && rBodyPtr;
 }
 
 void PhysicSystem::fixedUpdate()
 {
-    glm::vec3 force = {0,0,0};
-    glm::vec3 torque = {0,0,0};
+    force = {0,0,0};
+    torque = {0,0,0};
 
-    for (Impulse& impuse : rBodyPtr->impulses)
+    if( auto* sphere = dynamic_cast<SphereCollider*>(colliderPtr) )
     {
-        force += impuse.force;
-        torque += glm::cross(impuse.point, impuse.force);
+        for (Impulse& impulse : rBodyPtr->impulses)
+            applyImpulse(impulse, sphere);
+    }
+    else if( auto* box = dynamic_cast<BoxCollider*>(colliderPtr) )
+    {
+        for (Impulse& impulse : rBodyPtr->impulses)
+            applyImpulse(impulse, box, transformPtr);
+    }
+    else
+    {
+        for (Impulse& impulse : rBodyPtr->impulses)
+            applyImpulse(impulse);
     }
 
     if (!rBodyPtr->ignoreGravity)
@@ -49,4 +60,24 @@ void PhysicSystem::fixedUpdate()
     transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
     rBodyPtr->impulses.clear();
+}
+
+void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
+{
+    
+    force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
+    torque += glm::cross(impulse.point, impulse.force);
+}
+
+void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform)
+{
+    force += impulse.force;
+    //TODO implement
+    //force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
+    //torque += glm::cross(impulse.point, impulse.force);
+}
+
+void PhysicSystem::applyImpulse(Impulse impulse)
+{
+    force += impulse.force;
 }

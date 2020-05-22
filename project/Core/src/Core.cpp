@@ -140,7 +140,7 @@ int Core::init()
                 rb->angularDrag = 2;
                 rb->drag = 2;
                 rb->ignoreGravity = true;
-                rb->mass = 5;
+                rb->mass = 50;
                 rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
 
             auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
