@@ -8,7 +8,7 @@
     objectModule.newModel("Resources/Models/Box.FBX");
     objectModule.newModel("Resources/Models/House Dancing.FBX");
     objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
-    objectModule.newAudioClip("Resources/Audios/sample.wav");
+    objectModule.newAudioClip("Resources/Audios/shingeki.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
@@ -421,9 +421,9 @@ objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+        so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.1f;
+        so3->getGainModifiable() = 2.0f;
         so3->getIsLoopingModifiable() = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -448,7 +448,7 @@ objectModule.newEntity(2, "sampleSound");
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
             so1->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getGainModifiable() = 100.5f;
+            so1->getGainModifiable() = 1.5f;
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }

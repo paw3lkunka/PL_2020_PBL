@@ -432,7 +432,10 @@ void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
     childrenMap.clear();
     for(auto t : assetPtr->textures)
     {
-        childrenMap[t.first] = t.second->serializationID;
+        if (t.second != nullptr)
+        {
+            childrenMap[t.first] = t.second->serializationID;
+        }
     }
     j[name]["textures"] = childrenMap;
 
