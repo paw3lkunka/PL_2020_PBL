@@ -141,13 +141,13 @@ void EditorModule::drawTransform(Transform* transformPtr)
         glm::vec3 shit3(1.0f);
         glm::vec4 shit(1.0f);
         glm::quat worldRotDec = {1, 0, 0, 0};
-        glm::decompose(transformPtr->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
+        glm::decompose(transformPtr->parentMatrix, shit3, worldRotDec, shit3, shit3, shit);
 
         glm::quat worldRot = worldRotDec * transformPtr->getLocalRotation();
         
-        glm::vec3 worldPos = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
+        glm::vec3 worldPos = transformPtr->parentMatrix * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
         glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
-        glm::vec3 worldScale = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalScale(), 1.0f);
+        glm::vec3 worldScale = transformPtr->parentMatrix * glm::vec4(transformPtr->getLocalScale(), 1.0f);
         
         ImGui::Text( ("Position: " + formatVec3(worldPos)).c_str() );
         ImGui::SameLine();

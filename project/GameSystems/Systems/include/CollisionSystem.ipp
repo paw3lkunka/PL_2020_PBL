@@ -197,6 +197,8 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
         rotMatrix = glm::toMat4(rotation);
     }
 
+    //TODO: counting in model space seems to be more optimal way
+
     glm::vec3 possibles[6] // Normalized
     {
         rotMatrix * glm::vec4(  1.0f,  0.0f,  0.0f,  0.0f ),
@@ -210,7 +212,7 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
     float cos = -INFINITY;
     int index = -1;
 
-    std::cout << "Cent: " << glm::to_string(vector) << std::endl;
+    std::cout << "Cent ': " << glm::to_string(vector) << std::endl;
 
     for (int i = 0; i < 6; i++)
     {

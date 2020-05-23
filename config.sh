@@ -1,4 +1,5 @@
 #!/bin/sh
+
 mkdir -p build
 cd build 
 if [ "$1" = "clear" ]; then

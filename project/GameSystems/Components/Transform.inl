@@ -77,22 +77,30 @@ struct Transform : public Component
     inline const Transform* getParent() { return parent; }
 
     /**
-     * @brief All transformation in world space.
-     * localToWorldMatrix * localMatrix
+     * @brief  Transformation from model space to world space.
+     * parentMatrix * localMatrix
      */
     glm::mat4 modelMatrix = glm::mat4(1);
 
+//TODO: should it be geter?
     /**
-     * @brief Transformation from local space to world space.
-     * THIS IS NOT A MODEL MATRIX!
+     * @brief Transformation from parent space to world space.
+     * parent->modelMatrix
      */
-    glm::mat4 localToWorldMatrix = glm::mat4(1);
-    
+    glm::mat4 parentMatrix = glm::mat4(1);
+
     /**
-     * @brief Transformation from world space to local space
-     * localToWorldMatrix^-1
+     * @brief Transformation from world space to model space
+     * modelMatrix^-1
      */
-    glm::mat4 worldToLocalMatrix = glm::mat4(1);
+    glm::mat4 toModelMatrix = glm::mat4(1);
+
+//TODO: should it be geter?
+    /**
+     * @brief Transformation from world space to parent space
+     * parentMatrix^-1
+     */
+    glm::mat4 toParentMatrix = glm::mat4(1);
 
     /**
      * @brief Signalize, if local parameters was changed.

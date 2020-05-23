@@ -7,6 +7,7 @@
 #include "Components.inc"
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/vec_swizzle.hpp> 
 
 glm::vec3 PhysicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
 
@@ -56,7 +57,7 @@ void PhysicSystem::fixedUpdate()
     //TODO VELOCITY W AUDIO
 
     //TODO czy skala nie zniszczy efektu?
-    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->worldToLocalMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
+    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->toParentMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
     transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
     rBodyPtr->impulses.clear();
@@ -64,17 +65,16 @@ void PhysicSystem::fixedUpdate()
 
 void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
 {
-    
     force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
     torque += glm::cross(impulse.point, impulse.force);
 }
 
 void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform)
 {
-    force += impulse.force;
-    //TODO implement
-    //force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
-    //torque += glm::cross(impulse.point, impulse.force);
+    glm::vec3 msForce = transform->toModelMatrix * glm::vec4(impulse.force, 0.0f);
+    msForce = msForce * collider->halfSize / (collider->halfSize + impulse.point);
+    force += glm::xyz(transform->modelMatrix * glm::vec4(msForce, 0.0f));
+    torque += glm::cross(impulse.point, impulse.force);
 }
 
 void PhysicSystem::applyImpulse(Impulse impulse)

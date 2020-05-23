@@ -31,5 +31,5 @@ void PaddleIkSystem::processAttach(BoneAttachData data)
     // localTrans = glm::translate(localTrans, endTransform->getLocalPosition());
     // localTrans = localTrans * glm::toMat4(endTransform->getLocalRotation());
     // localTrans = glm::scale(localTrans, endTransform->getLocalScale());
-    // end->localBoneTransform = endTransform->localToWorldMatrix * localTrans;
+    // end->localBoneTransform = endTransform->parentMatrix * localTrans;
 }

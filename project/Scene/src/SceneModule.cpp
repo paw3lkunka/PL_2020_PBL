@@ -12,6 +12,7 @@ void SceneModule::updateTransforms()
     process(rootNode, glm::mat4(1), false);
 }
 
+//TODO: Is this mat 4 parameter necessery?
 void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool dirty)
 {
     dirty |= transform.dirty;
@@ -24,10 +25,12 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
         local = local * glm::toMat4(transform.getLocalRotation());
         local = glm::scale(local, transform.getLocalScale());
         
-        transform.localToWorldMatrix = parentsMatrix;
+        transform.parentMatrix = parentsMatrix;
         //TODO may be computed in more optimal way
-        transform.worldToLocalMatrix = glm::inverse(parentsMatrix);
+        transform.toParentMatrix = glm::inverse(parentsMatrix);
         transform.modelMatrix = parentsMatrix * local;
+        //TODO may be computed in more optimal way
+        transform.toModelMatrix = glm::inverse(transform.modelMatrix);
         transform.dirty = false;
     }
     
