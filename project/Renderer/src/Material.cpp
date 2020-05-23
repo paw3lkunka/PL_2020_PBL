@@ -74,8 +74,20 @@ void Material::use()
         shader->use();
 
         // TODO: Handle view and projection by UBO
-        
+
         int i = 0;
+        // * ===== Texture samplers =====
+        for(std::pair<std::string, Texture*> texture : textures)
+        {
+            if (texture.second != nullptr)
+            {
+                texture.second->bind(i);
+                shader->setInt(texture.first, i);
+                ++i;
+            }
+        }
+
+        
         // * ===== Cubemap samplers =====
         for(std::pair<std::string, Cubemap*> cubemap : cubemaps)
         {
@@ -84,18 +96,6 @@ void Material::use()
                 cubemap.second->bind(i);
                 shader->setInt(cubemap.first, i);
                 ++i;
-            }
-        }
-
-        int j = 0;
-        // * ===== Texture samplers =====
-        for(std::pair<std::string, Texture*> texture : textures)
-        {
-            if (texture.second != nullptr)
-            {
-                texture.second->bind(j);
-                shader->setInt(texture.first, j);
-                ++j;
             }
         }
 

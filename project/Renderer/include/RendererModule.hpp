@@ -60,8 +60,14 @@ public:
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
-    const char* depthVertexCode = "#version 430 core\nlayout(location=0) in vec3 position;\nuniform mat4 MVP;\nvoid main() {gl_Position = MVP * vec4(position, 1.0);}";
-    const char* depthFragmentCode = "#version 430 core\nvoid main() {}";
+
+    // ? +++++ Built in shaders +++++
+    const char* depthVertexCode = 
+    "#version 430 core\nlayout(location=0) in vec3 position;\nuniform mat4 MVP;\nvoid main() {gl_Position = MVP * vec4(position, 1.0);}";
+    const char* depthFragmentCode = 
+    "#version 430 core\nvoid main() {}";
+    const char* internalErrorFragmentCode = 
+    "#version 430 core\nout vec4 FragColor;\nvoid main() { FragColor = vec4(1.0, 0.0, 1.0, 1.0); }";
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
@@ -81,7 +87,9 @@ private:
     Light* directionalLight = nullptr;
     unsigned int depthMapFBO = 0;
     unsigned int depthMap = 0;
-    Shader* simpleDepth;
+    Shader* simpleDepth,* internalShaderError;
+    Texture* directionalDepth;
+    Material* internalErrorMat;
     // TODO: Move this to light properties
     static constexpr int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 

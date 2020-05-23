@@ -16,7 +16,10 @@
 
 RendererModule::~RendererModule()
 {
-    //delete simpleDepth;
+    delete internalErrorMat;
+    delete internalShaderError;
+    delete simpleDepth;
+    delete directionalDepth;
 }
 
 void RendererModule::receiveMessage(Message msg)
@@ -26,21 +29,39 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
         {
             MeshRenderer* mr = msg.getValue<MeshRenderer*>();
-            if (mr->material->isInstancingEnabled())
+            if (mr->material != nullptr)
             {
-                // ? +++++ Create new instanced packet or just add an instance matrix +++++
-                auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
-                packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
-                // ? +++++ If packet was created, add it to the queue +++++
-                if (packet.second)
+                if (mr->material->isInstancingEnabled())
                 {
-                    switch(packet.first->second.material->getRenderType())
+                    // ? +++++ Create new instanced packet or just add an instance matrix +++++
+                    auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
+                    packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
+                    // ? +++++ If packet was created, add it to the queue +++++
+                    if (packet.second)
+                    {
+                        switch(packet.first->second.material->getRenderType())
+                        {
+                            case RenderType::Opaque:
+                                opaqueQueue.push_back(&packet.first->second);
+                                break;
+                            case RenderType::Transparent:
+                                std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    // ? +++++ Create new packet for normal rendering +++++
+                    normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
+                    // ? +++++ Add packet to render queue +++++
+                    switch(normalPackets.back().material->getRenderType())
                     {
                         case RenderType::Opaque:
-                            opaqueQueue.push_back(&packet.first->second);
+                            opaqueQueue.push_back(&normalPackets.back());
                             break;
                         case RenderType::Transparent:
-                            std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
+                            transparentQueue.push_back(&normalPackets.back());
                             break;
                     }
                 }
@@ -48,18 +69,10 @@ void RendererModule::receiveMessage(Message msg)
             else
             {
                 // ? +++++ Create new packet for normal rendering +++++
-                normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
-                // ? +++++ Add packet to render queue +++++
-                switch(normalPackets.back().material->getRenderType())
-                {
-                    case RenderType::Opaque:
-                        opaqueQueue.push_back(&normalPackets.back());
-                        break;
-                    case RenderType::Transparent:
-                        transparentQueue.push_back(&normalPackets.back());
-                        break;
-                }
+                normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
+                opaqueQueue.push_back(&normalPackets.back());
             }
+            
             break;
         }
         case Event::RENDERER_ADD_LIGHT:
@@ -121,6 +134,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     }
 
     simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
+    internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
+    internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque);
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -220,18 +235,29 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     // * ===== Create framebuffer for depth map =====
     glGenFramebuffers(1, &depthMapFBO);
 
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    TextureCreateInfo depthCreateInfo = {};
+    depthCreateInfo.format = GL_DEPTH_COMPONENT;
+    depthCreateInfo.generateMipmaps = false;
+    depthCreateInfo.height = SHADOW_HEIGHT;
+    depthCreateInfo.width = SHADOW_WIDTH;
+    depthCreateInfo.type = GL_FLOAT;
+    depthCreateInfo.minFilter = GL_NEAREST;
+    depthCreateInfo.magFilter = GL_NEAREST;
+    depthCreateInfo.wrapMode = GL_CLAMP_TO_BORDER;
+    directionalDepth = new Texture(nullptr, depthCreateInfo, "");
+
+    // glGenTextures(1, &depthMap);
+    // glBindTexture(GL_TEXTURE_2D, depthMap);
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, , , 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    // float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -332,9 +358,8 @@ void RendererModule::render()
         glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
-            glActiveTexture(GL_TEXTURE15);
-            glBindTexture(GL_TEXTURE_2D, depthMap);
-            opaqueQueue.front()->material->getShaderPtr()->setInt("directionalShadowMap", 15);
+            // TODO: More elegant way of assigning shadow depth map
+            opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
         }
@@ -360,6 +385,7 @@ void RendererModule::render()
 
         while(!transparentQueue.empty())
         {
+            transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }

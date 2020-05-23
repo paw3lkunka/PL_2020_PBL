@@ -16,6 +16,7 @@ struct TextureCreateInfo
     bool generateMipmaps;
     int width, height;
     GLenum format, wrapMode, minFilter, magFilter;
+    GLenum type = GL_UNSIGNED_BYTE;
 };
 
 /**
@@ -46,9 +47,15 @@ public:
      * @param textureUnit Texture unit to set
      */
     void bind(int textureUnit);
+    /**
+     * @brief Get the the texture ID
+     * 
+     * @return unsigned int texture's ID
+     */
+    unsigned int getId();
 
 private:
-    GLuint id;
+    unsigned int id;
     TextureCreateInfo info;
     unsigned char* data;
 };
