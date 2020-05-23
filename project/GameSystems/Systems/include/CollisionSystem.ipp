@@ -178,43 +178,53 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, SphereCollider* collide
 template<class T>
 glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 vector = transform1->modelMatrix * glm::vec4(collider1->center, 1.0f)
-            - transform2->modelMatrix * glm::vec4(collider2->center, 1.0f); 
-    
-    glm::quat rotation;
+    glm::vec3 vector = glm::normalize
+    (
+        transform1->modelMatrix * glm::vec4(collider1->center, 1.0f)
+        - transform2->modelMatrix * glm::vec4(collider2->center, 1.0f)
+    );
+
+    glm::mat4 rotMatrix;
     {
-        glm::vec4 temp4;
-        glm::vec3 temp3;
-        glm::decompose(transform2->modelMatrix, temp3, rotation, temp3, temp3, temp4);
+        glm::quat rotation;
+        union
+        {
+            glm::vec3 v3;
+            glm::vec4 v4;
+        } tmp;
+
+        glm::decompose(transform1->modelMatrix, tmp.v3, rotation, tmp.v3, tmp.v3, tmp.v4);
+        rotMatrix = glm::toMat4(rotation);
     }
 
-    glm::mat4 rotMatrix = glm::toMat4(rotation);
-
-    std::cout << " Vector: " << glm::to_string(vector) << std::endl;
-    glm::vec3 potentialNormals[]
+    glm::vec3 possibles[6] // Normalized
     {
-        rotMatrix * glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f), // locall x
-        rotMatrix * glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f), // locall y
-        rotMatrix * glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f), // locall z
+        rotMatrix * glm::vec4(  1.0f,  0.0f,  0.0f,  0.0f ),
+        rotMatrix * glm::vec4( -1.0f,  0.0f,  0.0f,  0.0f ),
+        rotMatrix * glm::vec4(  0.0f,  1.0f,  0.0f,  0.0f ),
+        rotMatrix * glm::vec4(  0.0f, -1.0f,  0.0f,  0.0f ),
+        rotMatrix * glm::vec4(  0.0f,  0.0f,  1.0f,  0.0f ),
+        rotMatrix * glm::vec4(  0.0f,  0.0f, -1.0f,  0.0f ),
     };
 
+    float cos = -INFINITY;
+    int index = -1;
 
-    float angle = INFINITY;
-    int normalIndex = -1;
+    std::cout << "Cent: " << glm::to_string(vector) << std::endl;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 6; i++)
     {
-    std::cout << " pot " << i << ": " << glm::to_string(potentialNormals[i]) << std::endl;
-        float dot = glm::dot(vector, potentialNormals[i]);
-        if (dot < angle)
+        float dot = glm::dot(vector, possibles[i]);
+        if (dot > cos)
         {
-            normalIndex = i;
-            angle = dot;
+            cos = dot;
+            index = i;
         }
+        std::cout << "pot: " << glm::to_string(possibles[i]) << std::endl;
     }
 
-    std::cout << "Return: " << glm::to_string(glm::normalize(potentialNormals[normalIndex])) << std::endl;
-    return glm::normalize(potentialNormals[normalIndex]);
+    std::cout << "Return: " << glm::to_string(possibles[index]) << std::endl;
+    return possibles[index];
 }
 
 #endif

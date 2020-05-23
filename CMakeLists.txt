@@ -116,16 +116,6 @@ add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
 
-#Disables library warnings
-target_compile_options(assimp PUBLIC -w)
-target_compile_options(OpenAL PUBLIC -w)
-#FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
-# W wolnej chwili wartoby sprawdzić, o co tu chodzi.
-#                                                     ~ Andrzej
-#target_compile_options(alsoft-config PUBLIC -w)
-#target_compile_options(makemhr PUBLIC -w)
-#target_compile_options(sofa-info PUBLIC -w)
-
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
@@ -222,7 +212,18 @@ target_link_libraries(
         assimp
         nlohmann_json::nlohmann_json
         imgui
-)    
+)
+
+#Disables library warnings
+target_compile_options(lib PUBLIC -Wno-volatile)
+target_compile_options(assimp PUBLIC -w)
+target_compile_options(OpenAL PUBLIC -w)
+#FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
+# W wolnej chwili wartoby sprawdzić, o co tu chodzi.
+#                                                     ~ Andrzej
+target_compile_options(alsoft-config PUBLIC -w)
+target_compile_options(makemhr PUBLIC -w)
+target_compile_options(sofa-info PUBLIC -w)
 
 file(GLOB resources "resources/*")
 file(COPY ${resources} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Resources")

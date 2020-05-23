@@ -107,25 +107,36 @@ int Core::init()
     if (updateScene)
     {
         // ! Manual extension of scene, runned by -u param
+
+        {
+            auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+                auto* map = pbit->getComponentPtr<PhysicalInputKeymap>();
+                    Impulse up = {glm::vec3(0.0f, 50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
+                    Impulse down = {glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
+                    map->continuous.emplace(GLFW_KEY_Z, up);
+                    map->continuous.emplace(GLFW_KEY_X, down);
+        }
+
+        //I fix
+        {
+            auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+                auto* rb1 = o1->getComponentPtr<Rigidbody>();
+                auto* sc1 = o1->getComponentPtr<SphereCollider>();
+                rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
+                
+            auto* o2 = objectModule.getEntityPtrByName("Sphere001");
+                auto* rb2 = o2->getComponentPtr<Rigidbody>();
+                auto* sc2 = o2->getComponentPtr<SphereCollider>();
+                rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
+                
+            auto* o3 = objectModule.getEntityPtrByName("sphereSound");
+                auto* rb3 = o3->getComponentPtr<Rigidbody>();
+                auto* sc3 = o3->getComponentPtr<SphereCollider>();
+                rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
+        }
+
         objectModule.newEntity(4, "TestBox");
         {
-            //I fix
-            {
-                auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-                    auto* rb1 = o1->getComponentPtr<Rigidbody>();
-                    auto* sc1 = o1->getComponentPtr<SphereCollider>();
-                    rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
-                    
-                auto* o2 = objectModule.getEntityPtrByName("Sphere001");
-                    auto* rb2 = o2->getComponentPtr<Rigidbody>();
-                    auto* sc2 = o2->getComponentPtr<SphereCollider>();
-                    rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
-                    
-                auto* o3 = objectModule.getEntityPtrByName("sphereSound");
-                    auto* rb3 = o3->getComponentPtr<Rigidbody>();
-                    auto* sc3 = o3->getComponentPtr<SphereCollider>();
-                    rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
-            }
 
             auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
                 t->getLocalPositionModifiable() = {-50.0f, 0.0, 0.0f};
