@@ -7,6 +7,7 @@
 #include "Core.hpp"
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/vec_swizzle.hpp> 
 
 template<class T1, class T2>    // for T1 == T2 == Sphere collider specialization was defined.
 bool CollisionSystem::detectCollsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
@@ -95,14 +96,14 @@ void CollisionSystem::resolveCollsion(T* collider1, SphereCollider* collider2, R
     glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
 
     body1->velocity =  reaction;// glm::max(reaction, penetration);
-    body1->angularVelocity = glm::cross(testResult.collisionNormal, glm::cross(testResult.collisionNormal, body1->angularVelocity) + glm::vec3(0.0f, body2->velocity.y, body2->velocity.z) );
+    body1->angularVelocity = glm::cross( -testResult.collisionNormal, glm::cross( -testResult.collisionNormal, body1->angularVelocity) + body2->velocity );
 }
 
 template<class T>
 void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2)
 {
-    glm::vec3 r1 = testResult.collisionCentre - static_cast<glm::vec3>( transform1->modelMatrix * glm::vec4(collider1->center, 1.0f) );
-    glm::vec3 r2 = testResult.collisionCentre - static_cast<glm::vec3>( transform2->modelMatrix * glm::vec4(collider2->center, 1.0f) );
+    glm::vec3 r1 = testResult.collisionCentre - glm::xyz( transform1->modelMatrix * glm::vec4(collider1->center, 1.0f) );
+    glm::vec3 r2 = testResult.collisionCentre - glm::xyz( transform2->modelMatrix * glm::vec4(collider2->center, 1.0f) );
 
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
