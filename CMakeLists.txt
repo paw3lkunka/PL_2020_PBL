@@ -3,6 +3,7 @@ cmake_minimum_required( VERSION 3.17 )
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/components.sh)
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/systems.sh)
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/countcpp.sh -s)
@@ -127,6 +128,7 @@ aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
 aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
 aux_source_directory( project/Scene/src                     SCENE_SRC)
+aux_source_directory( project/Editor/src                    EDITOR_SRC)
 
 list( 
     APPEND SOURCE_FILES
@@ -141,6 +143,7 @@ list(
         ${RENDERER_SRC}
         ${TERMIANL_SRC}
         ${SCENE_SRC}
+        ${EDITOR_SRC}
 )
 
 add_library(lib ${SOURCE_FILES} )
@@ -189,6 +192,7 @@ include_directories(
     project/Renderer/include/packets
     project/Terminal/include
     project/Scene/include
+    project/Editor/include
     libs/stb
     libs/glad/include
     libs/glfw/include
@@ -204,26 +208,29 @@ add_executable( PBL project/main.cpp )
 
 target_link_libraries( 
     PBL
-        lib
-        glad
-        glfw
-        glm
-        OpenAL
-        assimp
-        nlohmann_json::nlohmann_json
-        imgui
+    PUBLIC lib
+    PUBLIC glad
+    PUBLIC glfw
+    PUBLIC glm
+    PUBLIC OpenAL
+    PUBLIC assimp
+    PUBLIC nlohmann_json::nlohmann_json
+    PUBLIC imgui
 )
 
-#Disables library warnings
 target_compile_options(lib PUBLIC -Wno-volatile)
+
+#Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
+target_compile_options(glm INTERFACE -Wno-volatile)
 #FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
 # W wolnej chwili wartoby sprawdzić, o co tu chodzi.
 #                                                     ~ Andrzej
 target_compile_options(alsoft-config PUBLIC -w)
 target_compile_options(makemhr PUBLIC -w)
 target_compile_options(sofa-info PUBLIC -w)
+
 
 file(GLOB resources "resources/*")
 file(COPY ${resources} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Resources")

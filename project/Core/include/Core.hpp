@@ -28,6 +28,7 @@
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
+#include "EditorModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -202,6 +203,9 @@ class Core
         
         /// @brief stores all crucial objects
         ObjectModule objectModule;
+
+        ///@brief shows imgui editor
+        EditorModule editorModule;
 
         /**
          * TODO Please, do something better here ;-;
