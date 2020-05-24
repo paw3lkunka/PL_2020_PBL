@@ -27,10 +27,14 @@ struct BoxCollider : public Collider
     }
 
     /**
-     * @brief Construct a new Box Collider object
-     * State of object is nivalid, ans should be  
+     * @brief Construct a new Box Collider object of size 1x1x1.
      */
-    BoxCollider() = default;
+    BoxCollider()
+    {
+        this->center   = {0.0f, 0.0f, 0.0f};
+        this->halfSize = {0.5f, 0.5f, 0.5f};
+        calculateVert();
+    }
 
     /**
      * @brief Construct a new Box Collider object
@@ -69,7 +73,7 @@ struct BoxCollider : public Collider
      * @param y coordinate of collider centre (in model space)
      * @param z coordinate of collider centre (in model space)
      */
-    BoxCollider(float width, float height, float depth, float x, float y, float z)    
+    BoxCollider(float width, float height, float depth, float x, float y, float z)
     {
         this->center = {x,y,z};
         this->halfSize = {width * 0.5f, height * 0.5f, depth * 0.5f};

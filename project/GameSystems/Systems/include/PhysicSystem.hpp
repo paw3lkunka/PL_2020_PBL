@@ -10,7 +10,6 @@ class Impulse;
 
 /**
  * @brief Calculate speed and position of rigidbody depending on forces, and current speed
- * 
  */
 class PhysicSystem : public System
 {
@@ -25,23 +24,40 @@ class PhysicSystem : public System
         virtual void fixedUpdate();
 
     private:
-    //TODO DOCUMENTATION
+        /// @brief Pointer to Transform component - REQUIRED.
         Transform* transformPtr;
-    //TODO DOCUMENTATION
+        /// @brief Pointer to Rigidbody component - REQUIRED.
         Rigidbody* rBodyPtr;
-    //TODO DOCUMENTATION
+        /// @brief Pointer to Collider component - OPTIONAL.
         Collider* colliderPtr;
 
-    //TODO DOCUMENTATION
+        /// @brief Force acting on object in this iteration.
         glm::vec3 force;
-    //TODO DOCUMENTATION
+        /// @brief Torque acting on object in this iteration.
         glm::vec3 torque;
 
-    //TODO DOCUMENTATION
+        /**
+         * @brief Apply impulse in appropiate way to spherical object.
+         *
+         * @param impulse - Impulse to apply.
+         * @param collider - Collider object.
+         */
         void applyImpulse(Impulse impulse, SphereCollider* collider);
-    //TODO DOCUMENTATION
+
+        /**
+         * @brief Apply impulse in appropiate way to cuboidal object.
+         *
+         * @param impulse - Impulse to apply.
+         * @param collider - Collider object.
+         * @param transform - Transformation of object.
+         */
         void applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform);
-    //TODO DOCUMENTATION
+
+        /**
+         * @brief Apply impulse in appropiate way to material point.
+         *
+         * @param impulse - Impulse to apply.
+         */
         void applyImpulse(Impulse impulse);
 };
 

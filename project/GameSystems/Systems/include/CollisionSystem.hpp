@@ -160,7 +160,6 @@ public:
         template<class T>
         glm::vec3 collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2);
 
-//TODO should it be here?
 };
 
 #include "CollisionSystem.ipp"

@@ -86,7 +86,6 @@ struct Transform : public Component
     /**
      * @brief Object rotation in world space.
      */
-//TODO not implemented yet
     const inline glm::quat& getWorldRotation() const { return worldRotation; }
 
     /**
@@ -130,7 +129,7 @@ private:
 //unserialized
     glm::mat4 modelMatrix   = glm::mat4(1);
     glm::mat4 toModelMatrix = glm::mat4(1);
-    glm::quat worldRotation = {0.0f, 0.0f, 0.0f, 0.0f};
+    glm::quat worldRotation = {1.0f, 0.0f, 0.0f, 0.0f};
 };
 
 #endif /* !TRANSFORM_HPP_ */

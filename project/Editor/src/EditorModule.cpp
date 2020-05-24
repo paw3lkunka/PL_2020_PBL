@@ -137,14 +137,7 @@ void EditorModule::drawTransform(Transform* transformPtr)
     ImGui::NewLine();
     ImGui::Text("World Transform: ");
     {
-        // Decomposition
-        glm::vec3 shit3(1.0f);
-        glm::vec4 shit(1.0f);
-        glm::quat worldRotDec = {1, 0, 0, 0};
-        //TODO OPTIMIZE
-        glm::decompose(transformPtr->getParentMatrix(), shit3, worldRotDec, shit3, shit3, shit);
-
-        glm::quat worldRot = worldRotDec * transformPtr->getLocalRotation();
+        glm::quat worldRot = transformPtr->getWorldRotation() * transformPtr->getLocalRotation();
         
         glm::vec3 worldPos = transformPtr->getParentMatrix() * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
         glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();

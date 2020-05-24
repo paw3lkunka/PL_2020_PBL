@@ -35,26 +35,19 @@ void AudioListenerSystem::fixedUpdate()
 
     if(transform)
     {
-        glm::vec3 scale; // unused
-        glm::quat orientation;
-        glm::vec3 translation;
-        glm::vec3 skew; // unused
-        glm::vec4 perspective; // unused
-        //TODO OPTIMIZE
-        glm::decompose(transform->getModelMatrix(), scale, orientation, translation, skew, perspective);
-
-        if(audioListener->getPosition() != translation)
+        auto position = static_cast<glm::vec3>(transform->modelMatrix[3]);
+        if(audioListener->getPosition() != position)
         {
-            audioListener->getPositionModifiable() = translation;
+            audioListener->getPositionModifiable() = position;
         }
 
-        auto at = glm::normalize( static_cast<glm::vec3>( glm::toMat4(orientation) * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) ) );
+        auto at = (-1.0f) * glm::normalize( static_cast<glm::vec3>(transform->modelMatrix[2]) );
         if(audioListener->getAt() != at)
         {
             audioListener->getAtModifiable() = at;
         }
 
-        auto up = glm::normalize( static_cast<glm::vec3>( glm::toMat4(orientation) * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) ) );
+        auto up = glm::normalize( static_cast<glm::vec3>(transform->modelMatrix[1]) );
         if(audioListener->getUp() != up)
         {
             audioListener->getUpModifiable() = up;

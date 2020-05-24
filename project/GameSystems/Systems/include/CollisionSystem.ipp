@@ -111,8 +111,7 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
     //glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
 
     body1->velocity = reaction;
-    //TODO I^-1 chould be pre computed
-    body1->angularVelocity = body1->velocity + glm::inverse(body1->momentOfInertia) * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
+    body1->angularVelocity = body1->velocity + body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
 }
 
 template<class T1, class T2>
@@ -187,18 +186,7 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
         - transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f)
     );
 
-    glm::mat4 rotMatrix;
-    {
-        glm::quat rotation;
-        union
-        {
-            glm::vec3 v3;
-            glm::vec4 v4;
-        } tmp;
-        //TODO OPTIMIZE
-        glm::decompose(transform1->getModelMatrix(), tmp.v3, rotation, tmp.v3, tmp.v3, tmp.v4);
-        rotMatrix = glm::toMat4(rotation);
-    }
+    glm::mat4 rotMatrix = glm::toMat4(transform1->getWorldRotation());
 
     //TODO: counting in model space seems to be more optimal way
 
