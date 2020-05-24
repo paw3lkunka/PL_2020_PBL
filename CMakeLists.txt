@@ -37,6 +37,10 @@ if(NOT EXISTS "libs/imgui/LICENSE.txt")
     execute_process(COMMAND git submodule update --init "libs/imgui/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/freetype2/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/freetype2/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -116,6 +120,7 @@ add_subdirectory(libs/glm/)
 add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
+add_subdirectory(libs/freetype2/)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -175,7 +180,6 @@ add_library(imgui
         ${IMGUI_HEADERS}
 )
 
-
 include_directories( 
     project
     project/Autogen/include
@@ -201,6 +205,7 @@ include_directories(
     libs/openal-soft/include
     libs/json/single_include/nlohmann
     libs/imgui/
+    libs/freetype2/include
     build/libs/assimp/include
 )
 
@@ -216,6 +221,7 @@ target_link_libraries(
     PUBLIC assimp
     PUBLIC nlohmann_json::nlohmann_json
     PUBLIC imgui
+    PUBLIC freetype
 )
 
 target_compile_options(lib PUBLIC -Wno-volatile)

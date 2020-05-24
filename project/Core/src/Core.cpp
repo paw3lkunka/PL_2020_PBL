@@ -6,6 +6,9 @@
 
 #include "Material.hpp"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H 
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
