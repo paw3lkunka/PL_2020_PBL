@@ -107,10 +107,10 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
 
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
-    glm::vec3 reaction = testResult.collisionNormal * glm::abs(body1->velocity + jImpulse / body1->mass);
-    glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
+    glm::vec3 reaction = body1->velocity + jImpulse / body1->mass;
+    //glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
 
-    body1->velocity = glm::max(reaction, penetration);
+    body1->velocity = reaction;
     //TODO I^-1 chould be pre computed
     body1->angularVelocity = body1->velocity + glm::inverse(body1->momentOfInertia) * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
 }
@@ -213,8 +213,6 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
     float cos = -INFINITY;
     int index = -1;
 
-    std::cout << "Cent ': " << glm::to_string(vector) << std::endl;
-
     for (int i = 0; i < 6; i++)
     {
         float dot = glm::dot(vector, possibles[i]);
@@ -223,10 +221,8 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
             cos = dot;
             index = i;
         }
-        std::cout << "pot: " << glm::to_string(possibles[i]) << std::endl;
     }
-
-    std::cout << "Return: " << glm::to_string(possibles[index]) << std::endl;
+    
     return possibles[index];
 }
 
