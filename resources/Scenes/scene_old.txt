@@ -49,25 +49,27 @@
 
     auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png", texCreateInfo);
 
-    auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
+    auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
 
-    auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
+    auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
 
     auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_diff_2k.png", texCreateInfo);
 
-    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
+    auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
 
-    auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_rough_ao_2k.png", texCreateInfo);
+    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_rough_ao_2k.png", texCreateInfo);
 
     auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rock/rock_04_diff_2k.png", texCreateInfo);
 
-    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
+    auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
 
-    auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_rough_2k.png", texCreateInfo);
+    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_rough_2k.png", texCreateInfo);
 
-    auto water1Diffuse = objectModule.newTexture("Resources/Textures/water01/diffuse.png", texCreateInfo);
+    auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 
-    auto water1Specular = objectModule.newTexture("Resources/Textures/water01/specular.png", texCreateInfo);
+    auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
+
+    auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
 
     auto barrel1Diffuse = objectModule.newTexture("Resources/Models/RadioactiveBarrel/Barrel_01_Radiation_8-bit_Diffuse.png", texCreateInfo);
     auto barrel1Normal = objectModule.newTexture("Resources/Models/RadioactiveBarrel/Barrel_01_Radiation_8-bit_Normal.png", texCreateInfo);
@@ -130,9 +132,10 @@
     rocksMat->setTexture("normal", rocks1Normal);
     rocksMat->setTexture("occRouMet", rocks1Specular); 
 
-    Material* waterMat = objectModule.newMaterial(simpleLitShader, "waterMat", RenderType::Transparent);
+    Material* waterMat = objectModule.newMaterial(standardPbrShader, "waterMat", RenderType::Transparent);
     waterMat->setTexture("diffuse", water1Diffuse);
-    waterMat->setTexture("specular", water1Specular);
+    waterMat->setTexture("normal", water1Normal);
+    waterMat->setTexture("occRouMet", water1OccRouSpec);
 
 #pragma endregion
 

@@ -6,8 +6,8 @@
 
 unsigned int Material::idCount = 0;
 
-Material::Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing)
-    : shader(shader), name(name), enableInstancing(enableInstancing), renderType(renderType)
+Material::Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing, bool serialize)
+    : ISerializable(serialize), shader(shader), name(name), enableInstancing(enableInstancing), renderType(renderType)
 {
     // Set material ID on construction
     ID = idCount;
@@ -153,10 +153,10 @@ void Material::setTexture(std::string name, Texture* value)
     {
         texturesIter->second = value;
     }
-    else
-    {
-        std::cerr << "Uniform not found: " << name << std::endl;
-    }
+    // else
+    // {
+    //     std::cerr << "Uniform not found: " << name << std::endl;
+    // }
 }
 
 void Material::setCubemap(std::string name, Cubemap* value)

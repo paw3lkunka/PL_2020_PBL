@@ -646,7 +646,9 @@ void SceneReader::readTransformParents(std::string name)
 {
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    std::cout << "EntityID: " << entityID << '\t';
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    std::cout << "SerializationID: " << serializationID << '\n';
     auto trans = entity->getComponentPtr<Transform>();
     try
     {

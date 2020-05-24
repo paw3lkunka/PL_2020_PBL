@@ -135,7 +135,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
     internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
-    internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque);
+    internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -241,8 +241,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     depthCreateInfo.height = SHADOW_HEIGHT;
     depthCreateInfo.width = SHADOW_WIDTH;
     depthCreateInfo.type = GL_FLOAT;
-    depthCreateInfo.minFilter = GL_NEAREST;
-    depthCreateInfo.magFilter = GL_NEAREST;
+    depthCreateInfo.minFilter = GL_LINEAR;
+    depthCreateInfo.magFilter = GL_LINEAR;
     depthCreateInfo.wrapMode = GL_CLAMP_TO_BORDER;
     directionalDepth = new Texture(nullptr, depthCreateInfo, "");
 
@@ -287,7 +287,7 @@ void RendererModule::render()
             // ? ++++++ Send directional light matrices to UBO +++++
             glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
-            glm::mat4 directionalProjMat = glm::ortho(-1024.0f, 1024.0f, -1024.0f, 1024.0f, 2000.0f, -2000.0f);
+            glm::mat4 directionalProjMat = glm::ortho(-512.0f, 512.0f, -512.0f, 512.0f, 2000.0f, -2000.0f);
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &directionalProjMat);
             glm::mat4 directionalViewMat = glm::inverse(*directionalLight->modelMatrix);
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &directionalViewMat);
@@ -358,7 +358,6 @@ void RendererModule::render()
         glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
-            // TODO: More elegant way of assigning shadow depth map
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();

@@ -35,6 +35,17 @@ in vec4 FragPosLightSpace;
 
 // Shader constants
 const float PI = 3.14159265359;
+const vec2 jitter[9] = {
+	vec2(0.1, 0.2),
+	vec2(-0.3, 0.15),
+	vec2(-0.25, -0.3),
+	vec2(0.05, -0.35),
+	vec2(0.15, 0.2),
+	vec2(0.12, 0.22),
+	vec2(0.2, -0.15),
+	vec2(-0.2, 0.1),
+	vec2(0.4, -0.3)
+};
 
 // Global shader variables
 vec3 N, V, F0, albedo;
@@ -76,18 +87,6 @@ void main()
 
 // Directional light ------------------------------------------------------------------------
 	Lo += calcDirectionalLight(directionalLight);
-	
-// Point light ---------------------------------------------------------------------------------
-	// for (int i = 0; i < NR_POINT_LIGHTS; i++)
-	// {
-	// 	Lo += calcPointLight(pointLights[i]);
-	// }
-	
-// Spot light -----------------------------------------------------------------------------------
-	// for (int i = 0; i < NR_SPOT_LIGHTS; i++)
-	// {
-	// 	Lo += calcSpotLight(spotLights[i]);
-	// }
 
 // Makeshift ambient lightning
 	vec3 ambient = vec3(0.01, 0.01, 0.01) * albedo;// * ao;//directionalLight.ambient.rgb * albedo * ao;
@@ -98,7 +97,8 @@ void main()
 // Gamma correction
 	color = pow(color, vec3(1.0f / 2.2f));
 
-	FragColor = vec4(color, 1.0f);
+	// TODO: Better alpha sampling
+	FragColor = vec4(color, texture(diffuse, Texcoord).a);
 }
 
 vec3 calcDirectionalLight(DirectionalLight light)
@@ -127,8 +127,6 @@ vec3 calcDirectionalLight(DirectionalLight light)
     // Calculate shadow
     float shadow = calcShadow(FragPosLightSpace, L);
 
-	//return vec3(radiance * NdotL);
-    //(1.0 - shadow) *
 	return (1.0 - shadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
 }
 
@@ -143,21 +141,23 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
-	//float bias = max(0.0005 * (1.0 - dot(Normal, lightDir)), 0.0005);
-	float bias = 0.0005;
+	float bias = 0.0005 * tan(acos(dot(Normal, lightDir)));
+	bias = clamp(bias, 0.0, 0.01);
+	//float bias = 0.0005;
     //float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(directionalShadowMap, 0);
-	for(int x = -1; x <= 1; ++x)
+	for(int x = -2; x <= 2; ++x)
 	{
-		for(int y = -1; y <= 1; ++y)
+		for(int y = -2; y <= 2; ++y)
 		{
-			float pcfDepth = texture(directionalShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+			// TODO: better shadow filtering
+			float pcfDepth = texture(directionalShadowMap, projCoords.xy + (vec2(x, y) + jitter[int(mod((x+2) + ((y+2)*5), 8))]) * texelSize).r; 
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}    
 	}
-	shadow /= 9.0;
+	shadow /= 25.0;
 
 	if(projCoords.z > 1.0)
         shadow = 0.0;
