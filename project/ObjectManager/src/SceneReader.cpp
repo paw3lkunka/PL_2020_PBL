@@ -301,6 +301,16 @@ void SceneReader::readComponents()
             std::cout << "Paddle" << std::endl;
             readPaddle(name);
         }
+        else if(componentType == "Bone")
+        {
+            std::cout << "Bone" << std::endl;
+            readBone(name);
+        }
+        else if(componentType == "Skeleton")
+        {
+            std::cout << "Skeleton" << std::endl;
+            readSkeleton(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -595,6 +605,24 @@ void SceneReader::readPaddle(std::string name)
     paddle->maxPos.z = j.at(name).at("maxPos").at("z").get<float>();
 
     assignToEntity(name, paddle);
+}
+
+void SceneReader::readBone(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    auto component = entity->getComponentPtr<Bone>();
+    component->serializationID = serializationID;
+}
+
+void SceneReader::readSkeleton(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    auto component = entity->getComponentPtr<Skeleton>();
+    component->serializationID = serializationID;
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
