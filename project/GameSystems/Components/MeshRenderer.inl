@@ -10,6 +10,7 @@ struct MeshRenderer : public Component
     MeshRenderer() = default;
     virtual ~MeshRenderer() = default;
 
+    //TODO may this be pointer?
     glm::mat4 modelMatrix;
     
     Material* material;

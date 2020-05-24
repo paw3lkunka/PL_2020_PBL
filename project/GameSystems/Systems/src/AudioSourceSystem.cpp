@@ -35,7 +35,8 @@ void AudioSourceSystem::fixedUpdate()
     glm::vec3 translation;
     glm::vec3 skew; // unused
     glm::vec4 perspective; // unused
-    glm::decompose(transform->modelMatrix, scale, orientation, translation, skew, perspective);
+    //TODO OPTIMIZE
+    glm::decompose(transform->getModelMatrix(), scale, orientation, translation, skew, perspective);
 
     if(transform)
     {

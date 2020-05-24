@@ -13,7 +13,7 @@ struct Light : public Component
     virtual ~Light() = default;
 
     // HACK: This is potentially unsafe
-    glm::mat4* modelMatrix;
+    glm::mat4 const* modelMatrix;
 
     LightType lightType;
     float intensity;

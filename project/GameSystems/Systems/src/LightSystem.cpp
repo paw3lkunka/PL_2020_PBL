@@ -13,6 +13,6 @@ bool LightSystem::assertEntity(Entity* entity)
 
 void LightSystem::start()
 {
-    light->modelMatrix = &transform->modelMatrix;
+    light->modelMatrix = &transform->getModelMatrix();
     GetCore().messageBus.sendMessage(Message(Event::RENDERER_ADD_LIGHT, light));
 }

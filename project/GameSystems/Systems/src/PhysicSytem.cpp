@@ -57,7 +57,7 @@ void PhysicSystem::fixedUpdate()
     //TODO VELOCITY W AUDIO
 
     //TODO czy skala nie zniszczy efektu?
-    transformPtr->getLocalPositionModifiable() += static_cast<glm::vec3>(transformPtr->toParentMatrix * glm::vec4(rBodyPtr->velocity, 0.0f));
+    transformPtr->getLocalPositionModifiable() += glm::xyz(transformPtr->getToParentMatrix() * glm::vec4(rBodyPtr->velocity, 0.0f));
     transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
 
     rBodyPtr->impulses.clear();
@@ -72,10 +72,10 @@ void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
 
 void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform)
 {
-    glm::vec3 msForce = transform->toModelMatrix * glm::vec4(impulse.force, 0.0f);
+    glm::vec3 msForce = transform->getToModelMatrix() * glm::vec4(impulse.force, 0.0f);
     msForce = msForce * collider->halfSize / (collider->halfSize + impulse.point);
     //TODO check this
-    force += glm::xyz(transform->modelMatrix * glm::vec4(msForce, 0.0f));
+    force += glm::xyz(transform->getModelMatrix() * glm::vec4(msForce, 0.0f));
     torque += glm::cross(impulse.point, impulse.force);
 }
 

@@ -31,7 +31,7 @@ void SkeletonSystem::processHierarchy(Entity* boneEntity)
 {
     Transform* boneTransform = boneEntity->getComponentPtr<Transform>();
 
-    boneTransforms[boneEntity->getComponentPtr<Bone>()->boneID] = skeleton->globalInverseTransform * boneTransform->modelMatrix * boneEntity->getComponentPtr<Bone>()->offsetMatrix;
+    boneTransforms[boneEntity->getComponentPtr<Bone>()->boneID] = skeleton->globalInverseTransform * boneTransform->getModelMatrix() * boneEntity->getComponentPtr<Bone>()->offsetMatrix;
 
     if(skeleton->animation != nullptr)
     {

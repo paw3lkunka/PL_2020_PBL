@@ -7,13 +7,18 @@
 
 void SceneModule::receiveMessage(Message msg) {}
 
+SceneModule::SceneModule()
+{
+    rootNode.setParent(&preRootNode);
+}
+
 void SceneModule::updateTransforms()
 {
-    process(rootNode, glm::mat4(1), false);
+    process(rootNode, false);
 }
 
 //TODO: Is this mat 4 parameter necessery?
-void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool dirty)
+void SceneModule::process(Transform& transform, bool dirty)
 {
     dirty |= transform.dirty;
         
@@ -25,10 +30,7 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
         local = local * glm::toMat4(transform.getLocalRotation());
         local = glm::scale(local, transform.getLocalScale());
         
-        transform.parentMatrix = parentsMatrix;
-        //TODO may be computed in more optimal way
-        transform.toParentMatrix = glm::inverse(parentsMatrix);
-        transform.modelMatrix = parentsMatrix * local;
+        transform.modelMatrix = transform.getParentMatrix() * local;
         //TODO may be computed in more optimal way
         transform.toModelMatrix = glm::inverse(transform.modelMatrix);
         transform.dirty = false;
@@ -37,6 +39,6 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
 
     for(Transform* t : transform.children)
     {
-        process(*t, transform.modelMatrix, dirty);
+        process(*t, dirty);
     }
 }
