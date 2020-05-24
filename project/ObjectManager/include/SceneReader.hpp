@@ -45,6 +45,8 @@ private:
     void readLight(std::string name);
     void readPhysicalInputKeymap(std::string name);
     void readPaddle(std::string name);
+    void readBone(std::string name);
+    void readSkeleton(std::string name);
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);
