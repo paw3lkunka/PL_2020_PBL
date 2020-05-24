@@ -29,19 +29,13 @@ void AudioSourceSystem::fixedUpdate()
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
     }
-    //
-    glm::vec3 scale; // unused
-    glm::quat orientation;
-    glm::vec3 translation;
-    glm::vec3 skew; // unused
-    glm::vec4 perspective; // unused
-    glm::decompose(transform->modelMatrix, scale, orientation, translation, skew, perspective);
 
     if(transform)
     {
-        if(audioSource->getPosition() != translation)
+        auto position = static_cast<glm::vec3>(transform->modelMatrix[3]);
+        if(audioSource->getPosition() != position)
         {
-            audioSource->getPositionModifiable() = translation;
+            audioSource->getPositionModifiable() = position;
         }
     }
 
