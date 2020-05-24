@@ -96,7 +96,7 @@ int Core::init()
     // ! Scene loading
     if (recreateScene)
     {
-        #include "../../resources/Scenes/scene_old.txt"
+        #include "../../resources/Scenes/scene_old.icpp"
     }
     else
     {
@@ -106,59 +106,6 @@ int Core::init()
     if (updateScene)
     {
         // ! Manual extension of scene, runned by -u param
-
-        //Adding y axis
-        {
-            auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-                auto* map = pbit->getComponentPtr<PhysicalInputKeymap>();
-                    Impulse up = {glm::vec3(0.0f, 50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                    Impulse down = {glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                    map->continuous.emplace(GLFW_KEY_Z, up);
-                    map->continuous.emplace(GLFW_KEY_X, down);
-        }
-
-        //I fix
-        {
-            auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-                auto* rb1 = o1->getComponentPtr<Rigidbody>();
-                auto* sc1 = o1->getComponentPtr<SphereCollider>();
-                rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
-                
-            auto* o2 = objectModule.getEntityPtrByName("Sphere001");
-                auto* rb2 = o2->getComponentPtr<Rigidbody>();
-                auto* sc2 = o2->getComponentPtr<SphereCollider>();
-                rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
-                
-            auto* o3 = objectModule.getEntityPtrByName("sphereSound");
-                auto* rb3 = o3->getComponentPtr<Rigidbody>();
-                auto* sc3 = o3->getComponentPtr<SphereCollider>();
-                rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
-        }
-
-        objectModule.newEntity(4, "TestBox");
-        {
-
-            auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                t->getLocalPositionModifiable() = {-50.0f, 0.0, 0.0f};
-                t->getLocalScaleModifiable() = {6.0f, 6.0f, 6.0f};
-                t->setParent(&sceneModule.rootNode);
-
-            auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-                mr->material = objectModule.getMaterialPtrByName("simpleLitMat");
-
-            auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                rb->angularDrag = 2;
-                rb->drag = 2;
-                rb->ignoreGravity = true;
-                rb->mass = 5;
-                rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
-
-            auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-                bc->halfSize = {0.5f, 0.5f, 0.5f};
-                bc->calculateVert();
-        }
-        
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 

@@ -69,13 +69,13 @@ struct Transform : public Component
      * @brief Transformation from parent space to world space.
      * parent->modelMatrix
      */
-    const inline glm::mat4& getParentMatrix() const { return toModelMatrix; }
+    const inline glm::mat4& getParentMatrix() const { return parent->modelMatrix; }
 
     /**
      * @brief Transformation from world space to model space.
      * modelMatrix^-1
      */
-    const inline glm::mat4& getToModelMatrix() const { return parent->modelMatrix; }
+    const inline glm::mat4& getToModelMatrix() const { return toModelMatrix; }
 
     /**
      * @brief Transformation from world space to parent space.
