@@ -11,9 +11,15 @@ layout (std140, binding = 0) uniform Camera
     vec3 viewPos;
 };
 
+layout (std140, binding = 4) uniform ShadowMapping
+{
+	mat4 directionalLightMatrix;
+};
+
 out vec3 FragPos;
 out vec3 Normal;
 out vec2 Texcoord;
+out vec4 FragPosLightSpace;
 
 uniform mat4 model;
 uniform mat4 MVP;
@@ -23,6 +29,7 @@ void main()
 	FragPos = vec3(model * vec4(position, 1.0));
 	Normal = mat3(transpose(inverse(model))) * normal;
 	Texcoord = texcoord;
+	FragPosLightSpace = directionalLightMatrix * vec4(FragPos, 1.0);
 
 	gl_Position = MVP * vec4(position, 1.0);
 }

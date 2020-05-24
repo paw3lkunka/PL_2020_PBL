@@ -8,7 +8,9 @@
     objectModule.newModel("Resources/Models/Box.FBX");
     objectModule.newModel("Resources/Models/House Dancing.FBX");
     objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
-    objectModule.newAudioClip("Resources/Audios/sample.wav");
+    objectModule.newModel("Resources/Models/RadioactiveBarrel/Barrel_01.FBX");
+    objectModule.newModel("Resources/Models/test_riverbed.FBX");
+    objectModule.newAudioClip("Resources/Audios/shingeki.wav");
     objectModule.newAudioClip("Resources/Audios/test.wav");
 
     auto unlitColor = objectModule.newShader("Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
@@ -23,6 +25,8 @@
 
     auto simpleLitShader = objectModule.newShader("Resources/Shaders/SimpleLit/SimpleLit.vert", "Resources/Shaders/SimpleLit/SimpleLit.frag");
 
+    auto standardPbrShader = objectModule.newShader("Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
+
     std::cout << "Shaders compiled" << std::endl;
     Material* unlitColorMat = objectModule.newMaterial(unlitColor, "unlitColorMat", RenderType::Opaque);
     unlitColorMat->setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -34,106 +38,47 @@
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
     texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    texCreateInfo.wrapMode = GL_REPEAT;
     auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto rocks3Diffuse = objectModule.newTexture("Resources/Models/Rocks/diffuse.tga", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto rocks3Specular = objectModule.newTexture("Resources/Models/Rocks/specular.tga", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
     auto rocks3Normal = objectModule.newTexture("Resources/Models/Rocks/normal.tga", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grass01/diffuse.tga", texCreateInfo);
+    auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto grass1Specular = objectModule.newTexture("Resources/Textures/grass01/specular.tga", texCreateInfo);
+    auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto grass1Normal = objectModule.newTexture("Resources/Textures/grass01/normal.tga", texCreateInfo);
+    auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/gravel01/diffuse.tga", texCreateInfo);
+    auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_diff_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto gravel1Specular = objectModule.newTexture("Resources/Textures/gravel01/specular.tga", texCreateInfo);
+    auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto gravel1Normal = objectModule.newTexture("Resources/Textures/gravel01/normal.tga", texCreateInfo);
+    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_rough_ao_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rocks01/diffuse.tga", texCreateInfo);
+    auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rock/rock_04_diff_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rocks01/specular.tga", texCreateInfo);
+    auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto rocks1Normal = objectModule.newTexture("Resources/Textures/rocks01/normal.tga", texCreateInfo);
+    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_rough_2k.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto water1Diffuse = objectModule.newTexture("Resources/Textures/water01/diffuse.png", texCreateInfo);
+    auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 
-    texCreateInfo = {};
-    texCreateInfo.generateMipmaps = true;
-    texCreateInfo.magFilter = GL_LINEAR;
-    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-    texCreateInfo.wrapMode = GL_REPEAT;
-    auto water1Specular = objectModule.newTexture("Resources/Textures/water01/specular.png", texCreateInfo);
+    auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
+
+    auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
+
+    auto barrel1Diffuse = objectModule.newTexture("Resources/Models/RadioactiveBarrel/Barrel_01_Radiation_8-bit_Diffuse.png", texCreateInfo);
+    auto barrel1Normal = objectModule.newTexture("Resources/Models/RadioactiveBarrel/Barrel_01_Radiation_8-bit_Normal.png", texCreateInfo);
+    auto barrel1OccRouMet = objectModule.newTexture("Resources/Models/RadioactiveBarrel/Barrel_01_Radiation_8-bit_OcclusionRoughnessMetallic.png", texCreateInfo);
+
+    Material* barrel1Mat = objectModule.newMaterial(standardPbrShader, "barrel1Mat", RenderType::Opaque);
+    barrel1Mat->setTexture("diffuse", barrel1Diffuse);
+    barrel1Mat->setTexture("normal", barrel1Normal);
+    barrel1Mat->setTexture("occRouMet", barrel1OccRouMet);
 
     Material* unlitTextureMat = objectModule.newMaterial(unlitTexture, "unlitTextureMat", RenderType::Opaque);
     unlitTextureMat->setTexture("mainTex", texture);
@@ -149,12 +94,12 @@
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
 
     auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox/nz.png", 
-                                "Resources/Textures/skybox/nx.png", 
-                                "Resources/Textures/skybox/px.png",
-                                "Resources/Textures/skybox/pz.png",
-                                "Resources/Textures/skybox/py.png",
-                                "Resources/Textures/skybox/ny.png");
+                                "Resources/Textures/skybox_02/nz.png", 
+                                "Resources/Textures/skybox_02/nx.png", 
+                                "Resources/Textures/skybox_02/px.png",
+                                "Resources/Textures/skybox_02/pz.png",
+                                "Resources/Textures/skybox_02/py.png",
+                                "Resources/Textures/skybox_02/ny.png");
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
     skyboxMat->setCubemap("cubemap", cubemap);
@@ -172,25 +117,44 @@
     simpleLitMat->setTexture("diffuse", rocks3Diffuse);
     simpleLitMat->setTexture("specular", rocks3Specular);
 
-    Material* grassMat = objectModule.newMaterial(simpleLitShader, "grassMat", RenderType::Opaque);
+    Material* grassMat = objectModule.newMaterial(standardPbrShader, "grassMat", RenderType::Opaque);
     grassMat->setTexture("diffuse", grass1Diffuse);
-    grassMat->setTexture("specular", grass1Specular);
+    grassMat->setTexture("normal", grass1Normal);
+    grassMat->setTexture("occRouMet", grass1Specular);
 
-    Material* gravelMat = objectModule.newMaterial(simpleLitShader, "gravelMat", RenderType::Opaque);
+    Material* gravelMat = objectModule.newMaterial(standardPbrShader, "gravelMat", RenderType::Opaque);
     gravelMat->setTexture("diffuse", gravel1Diffuse);
-    gravelMat->setTexture("specular", gravel1Specular);
+    gravelMat->setTexture("normal", gravel1Normal);
+    gravelMat->setTexture("occRouMet", gravel1Specular);
 
-    Material* rocksMat = objectModule.newMaterial(simpleLitShader, "rocksMat", RenderType::Opaque);
+    Material* rocksMat = objectModule.newMaterial(standardPbrShader, "rocksMat", RenderType::Opaque);
     rocksMat->setTexture("diffuse", rocks1Diffuse);
-    rocksMat->setTexture("specular", rocks1Specular); 
+    rocksMat->setTexture("normal", rocks1Normal);
+    rocksMat->setTexture("occRouMet", rocks1Specular); 
 
-    Material* waterMat = objectModule.newMaterial(simpleLitShader, "waterMat", RenderType::Transparent);
+    Material* waterMat = objectModule.newMaterial(standardPbrShader, "waterMat", RenderType::Transparent);
     waterMat->setTexture("diffuse", water1Diffuse);
-    waterMat->setTexture("specular", water1Specular);
+    waterMat->setTexture("normal", water1Normal);
+    waterMat->setTexture("occRouMet", water1OccRouSpec);
 
 #pragma endregion
 
 #pragma region Entities
+
+    {
+        Entity* entity = objectModule.getEntityPtrByName("barrel_biohazard");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = barrel1Mat;
+
+        auto t = entity->getComponentPtr<Transform>();
+            t->getLocalScaleModifiable() = { 0.25f, 0.25f, 0.25f };
+    }
+
+    {
+        Entity* entity = objectModule.getEntityPtrByName("test_riverbed");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = grassMat;
+    }
 
     {
         Entity* entity = objectModule.getEntityPtrByName("rocks_03");
@@ -311,7 +275,8 @@
     objectModule.newEntity(2, "directionalLight");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(25.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+            t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(190.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
+            t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(45.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
             t->setParent(&sceneModule.rootNode);
 
         auto l = objectModule.newEmptyComponentForLastEntity<Light>();
@@ -421,9 +386,9 @@ objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/sample.wav");
+        so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.1f;
+        so3->getGainModifiable() = 2.0f;
         so3->getIsLoopingModifiable() = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -448,7 +413,7 @@ objectModule.newEntity(2, "sampleSound");
         auto so1 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
             so1->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
             so1->getClipsModifiable().push_back("Resources/Audios/test.wav");
-            so1->getGainModifiable() = 100.5f;
+            so1->getGainModifiable() = 1.5f;
             so1->getIsRelativeModifiable() = false;
             so1->getIsLoopingModifiable() = true;
     }

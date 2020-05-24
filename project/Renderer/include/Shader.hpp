@@ -35,7 +35,7 @@ public:
      * @param fragmentShaderCode String with code contents of fragment shader
      * @param geometryShader String with code contents of geometry shader
      */
-    Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr);
+    Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr, bool serialize = true);
 
     Shader() = default;
     /**
@@ -71,6 +71,23 @@ public:
 	void setVec4(const std::string& name, const glm::vec4& vec) const;
     //TODO documentation
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
+
+    //TODO documentation
+    void setBool(const char* name, bool value) const;
+    //TODO documentation
+	void setInt(const char* name, int value) const;
+    //TODO documentation
+	void setFloat(const char* name, float value) const;
+    //TODO documentation
+	void setVec3(const char* name, float x, float y, float z) const;
+    //TODO documentation
+	void setVec3(const char* name, const glm::vec3& vec) const;
+    //TODO documentation
+	void setVec4(const char* name, float x, float y, float z, float w) const;
+    //TODO documentation
+	void setVec4(const char* name, const glm::vec4& vec) const;
+    //TODO documentation
+	void setMat4(const char* name, const glm::mat4& mat) const;
 
     unsigned int ID;
 

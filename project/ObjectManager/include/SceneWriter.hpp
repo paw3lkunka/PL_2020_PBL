@@ -29,7 +29,7 @@ public:
     /**
      * @brief Destroy the Scene Writer object
      */
-    ~SceneWriter();
+    ~SceneWriter() = default;
 
     /**
      * @brief saving scene to file

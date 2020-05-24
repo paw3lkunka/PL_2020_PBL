@@ -1,7 +1,8 @@
 #include "Texture.hpp"
 #include <iostream>
 
-Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath) : IFileSystem(filePath), data(data), info(createInfo)
+Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath)
+    : IFileSystem(filePath), data(data), info(createInfo)
 {
     init(); 
 }
@@ -11,7 +12,7 @@ void Texture::init()
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, info.format, info.width, info.height, 0, info.format, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, info.format, info.width, info.height, 0, info.format, info.type, data);
     if (info.generateMipmaps)
     {
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -19,6 +20,11 @@ void Texture::init()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, info.wrapMode);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, info.wrapMode);
+    if (info.wrapMode == GL_CLAMP_TO_BORDER)
+    {
+        float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, info.minFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, info.magFilter);
@@ -28,4 +34,9 @@ void Texture::bind(int textureUnit)
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_2D, id);
+}
+
+unsigned int Texture::getId()
+{
+    return id;
 }
