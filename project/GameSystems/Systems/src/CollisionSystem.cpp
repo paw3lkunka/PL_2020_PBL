@@ -49,29 +49,7 @@ bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereColli
 {
     std::vector<glm::vec3> axes;
 
-    axes.push_back(trans1->getModelMatrix() * glm::vec4(coll1->center, 1.0f));
-    axes.push_back(trans2->getModelMatrix() * glm::vec4(coll2->center, 1.0f));
+    findSATAxes(coll1, coll2, trans1, trans2, axes);
 
     return SATTest(coll1, coll2, trans1, trans2, axes);
-}
-
-void CollisionSystem::findSATAxes(SphereCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
-{
-    return; // Yes, this function should be empty.
-}
-
-void CollisionSystem::findSATAxes(BoxCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
-{
-    glm::vec4 centre = glm::vec4(collider->center, 1.0f);
-    // Local X
-    axes.push_back(transform->getModelMatrix() * centre);
-    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(1,0,0,0)));
-
-    // Local Y
-    axes.push_back(transform->getModelMatrix() * centre);
-    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(0,1,0,0)));
-
-    // Local Z
-    axes.push_back(transform->getModelMatrix() * centre);
-    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(0,0,1,0)));
 }

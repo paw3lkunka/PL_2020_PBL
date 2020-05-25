@@ -33,13 +33,13 @@ Projection1D AxisProjection(BoxCollider* box, Transform* transform, glm::vec3 ax
         if (centre1D < result.start)
         {
             result.start = centre1D;
-            projBuffer[0] = vertWS;
+            projBuffer[0] = projVert;
         }
         
         if (centre1D > result.end)
         {
             result.end = centre1D;
-            projBuffer[1] = vertWS;
+            projBuffer[1] = projVert;
         }
     }
 

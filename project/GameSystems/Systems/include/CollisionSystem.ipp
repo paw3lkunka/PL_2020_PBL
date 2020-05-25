@@ -9,13 +9,13 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/vec_swizzle.hpp> 
 
-template<class T1, class T2>    // for T1 == T2 == Sphere collider specialization was defined.
+template<class T1, class T2> // if T1 == T2 == SphereCollider, it is specialization in CollisionSystem.cpp
 bool CollisionSystem::detectCollsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
     std::vector<glm::vec3> axes;
 
-    findSATAxes(coll1, trans1, axes);
-    findSATAxes(coll2, trans2, axes);
+    findSATAxes(coll1, coll2, trans1, trans2, axes);
+    findSATAxes(coll2, coll1, trans2, trans1, axes);
 
     return SATTest(coll1, coll2, trans1, trans2, axes);
 }
@@ -218,6 +218,31 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
     std::cout << "world space normal " << glm::to_string(glm::normalize(normal)) << std::endl;
     
     return glm::normalize(normal);
+}
+
+template<class T>
+void CollisionSystem::findSATAxes(SphereCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes)
+{
+    axes.push_back(transform1->getModelMatrix() * glm::vec4(collider1->center, 1.0f));
+    axes.push_back(transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f));
+}
+
+template<class T>
+void CollisionSystem::findSATAxes(BoxCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes)
+{
+    glm::vec4 centre = glm::vec4(collider1->center, 1.0f);
+
+    // Local X
+    axes.push_back(transform1->getModelMatrix() * centre);
+    axes.push_back(transform1->getModelMatrix() * (centre + glm::vec4(1,0,0,0)));
+    
+    // Local Y
+    axes.push_back(transform1->getModelMatrix() * centre);
+    axes.push_back(transform1->getModelMatrix() * (centre + glm::vec4(0,1,0,0)));
+
+    // Local Z
+    axes.push_back(transform1->getModelMatrix() * centre);
+    axes.push_back(transform1->getModelMatrix() * (centre + glm::vec4(0,0,1,0)));
 }
 
 #endif
