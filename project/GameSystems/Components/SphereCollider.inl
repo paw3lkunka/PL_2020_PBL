@@ -8,7 +8,6 @@
 
 /**
  * @brief Sphere-shaped collider
- * Important: colliders ignore local scale
  */
 struct SphereCollider : public Collider
 {

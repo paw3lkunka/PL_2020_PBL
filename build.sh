@@ -1,4 +1,5 @@
 #!/bin/sh
+
 _file="$(dirname "$0")/misc/cpp_files_count"
 touch $_file
 

@@ -12,6 +12,7 @@ class SceneModule : IModule
 {
     public:
         Transform rootNode;
+        SceneModule();
         virtual ~SceneModule() = default;
 
         /**
@@ -27,7 +28,8 @@ class SceneModule : IModule
         void updateTransforms();
 
     private:
-        void process(Transform& transform, glm::mat4 parent, bool dirty);
+        void process(Transform& transform, bool dirty);        
+        Transform preRootNode;
 };
 
 #endif /* !SCENEMODULE_HPP_ */

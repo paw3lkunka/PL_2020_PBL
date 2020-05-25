@@ -6,7 +6,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Component.inl"
+#include "Component.hpp"
 
 struct AudioSource : public Component
 {

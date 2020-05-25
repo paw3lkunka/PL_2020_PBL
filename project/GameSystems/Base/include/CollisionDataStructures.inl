@@ -28,15 +28,28 @@ struct Projection1D
     float end;
 };
 
-//TODO documentation
+/**
+ * @brief Data structure storeing all results of SAT test.
+ */
 struct SATTestResult
 {
-//TODO documentation
+    /**
+     * @brief Inform if collision was detected (SAT test passed).
+     */
     bool collisionDetected;
-//TODO documentation
+    /**
+     * @brief Center of colliders intersection, depending on colliders final type. 
+     */
     glm::vec3 collisionCentre;
-//TODO documentation
+    /**
+     * @brief Normal vector of collision, determine reaction force direction.  
+     */
     glm::vec3 collisionNormal;
+    /**
+     * @brief Width of colliders intersection in axis of collision normal.
+     * Penetration vector can be calculates as collisionNormal * penetration.
+     */
+    float penetration;
 };
 
 inline bool operator == (CollisionData a, CollisionData b) { return a.cause == b.cause && a.target == b.target; }

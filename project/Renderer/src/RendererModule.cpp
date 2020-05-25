@@ -280,16 +280,20 @@ void RendererModule::render()
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
         {
-            directionalLight->modelMatrix->operator[](3).x = cameraMain->position.x;
-            directionalLight->modelMatrix->operator[](3).y = cameraMain->position.y;
-            directionalLight->modelMatrix->operator[](3).z = cameraMain->position.z;
+            // I made copy instead of sneaky modification of matrix in transform.
+            // That was super unsafe, and now i see, that encapsulating matrices inside transform was a good idea.
+            //                                                                                  ~ Andrzej
+            glm::mat4 lightMatrix = *directionalLight->modelMatrix;
+            lightMatrix[3].x = cameraMain->position.x;
+            lightMatrix[3].y = cameraMain->position.y;
+            lightMatrix[3].z = cameraMain->position.z;
 
             // ? ++++++ Send directional light matrices to UBO +++++
             glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
             glm::mat4 directionalProjMat = glm::ortho(-512.0f, 512.0f, -512.0f, 512.0f, 2000.0f, -2000.0f);
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &directionalProjMat);
-            glm::mat4 directionalViewMat = glm::inverse(*directionalLight->modelMatrix);
+            glm::mat4 directionalViewMat = glm::inverse(lightMatrix);
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &directionalViewMat);
 
             // ? +++++ Calculate the View-Projection matrix +++++

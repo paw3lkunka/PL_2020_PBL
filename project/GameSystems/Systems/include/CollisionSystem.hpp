@@ -94,16 +94,19 @@ public:
         /**
          * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
          * 
-         * @tparam T1 Final type of first entity's collider.
-         * @tparam T2 Final type of second entity's collider.
+         * @tparam T Final type of first entity's collider.
          * @param body1 rigidbody of second entity.
          * @param body2 rigidbody of second entity. 
          * @param transform1 transform of first entity.
          * @param transform2 transform of second entity.
          */
-        template<class T1, class T2>
-        void resolveCollsion(T1* collider1, T2* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
+        template<class T>
+        void resolveCollsion(T* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
+        
+        template<class T>
+        void resolveCollsion(T* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
 
+//TODO documentation update
         /**
          * @brief find all axes needed to perform Separate Axes Theorem Test, and push them into vector.
          * Important: does nothing for SphereCollider, so colission sphere vs sphere needs special treat.
@@ -114,7 +117,9 @@ public:
          * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
          */
         template<class T>
-        void findSATAxes(T* collider, Transform* transform, std::vector<glm::vec3>& axes);
+        void findSATAxes(SphereCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
+        template<class T>
+        void findSATAxes(BoxCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
 
 
         /**
@@ -158,51 +163,6 @@ public:
         template<class T>
         glm::vec3 collisionNormal(T* collider1, BoxCollider* collider2, Transform* transform1, Transform* transform2);
 
-//TODO should it be here?
-
-        /**
-         * @brief Project box collider to 1D range in space of given line.
-         * 
-         * @param box box to project.
-         * @param transform transform of projected box.
-         * @param axisPoint1 first point defining aline.
-         * @param axisPoint2 second point defining aline.
-         * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
-         * @return Projection1D 1D projection of box in line space.
-         */
-        static Projection1D axisProjection(BoxCollider* box, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
-        
-        /**
-         * @brief Project sphere collider to 1D range in space of given line.
-         * 
-         * @param sphere sphere to project.
-         * @param transform transform of projected sphere.
-         * @param axisPoint1 first point defining aline.
-         * @param axisPoint2 second point defining aline.
-         * @param projBuffer pointer to two element vec3 array, where coordinates of beginnign and end point of projection will be saved.
-         * @return Projection1D 1D projection of sphere in line space.
-         */
-        static Projection1D axisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[]);
-
-        /**
-         * @brief Project point onto given line.
-         * 
-         * @param point point to project.
-         * @param axisPoint1 first point defining aline.
-         * @param axisPoint2 second point defining aline.
-         * @return glm::vec3 projection of point on line.
-         */
-        static glm::vec3 axisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
-
-        /**
-         * @brief Transform 3D point to 1D line space coordinate.
-         * 
-         * @param point point to transform.
-         * @param axisPoint1 first point defining aline.
-         * @param axisPoint2 second point defining aline.
-         * @return float coordinate in line space.
-         */
-        static float toLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 };
 
 #include "CollisionSystem.ipp"

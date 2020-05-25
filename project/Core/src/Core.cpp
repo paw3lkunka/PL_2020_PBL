@@ -3,6 +3,7 @@
 
 #include "Components.inc"
 #include "Systems.inc"
+#include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
 
@@ -71,7 +72,7 @@ int Core::init()
 		return 1;
 	}
 	glfwMakeContextCurrent(window);
-    //glfwSwapInterval(0);
+    glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -95,16 +96,47 @@ int Core::init()
     // ! Scene loading
     if (recreateScene)
     {
-        #include "../../resources/Scenes/scene_old.txt"
+        // ? -r
+        #include "../../resources/Scenes/scene_old.icpp"
     }
     else
     {
+        // ? none, or -f
         objectModule.readScene(sceneFilePath);
     }
 
     if (updateScene)
     {
-        // ! Manual extension of scene, runned by -u param
+        // ? -u
+        // ! Manual extension of scene.
+        {
+            auto* ent = objectModule.newEntity(5, "PhysicSurface");
+                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable().y = -35;
+                    t->getLocalScaleModifiable() = {300, 50, 150};
+                    t->setParent(&sceneModule.rootNode);
+
+                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    bc->type = Collider::Type::KINEMATIC;
+
+                auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                    rb->mass = 5000;
+                    rb->ignoreGravity = true;
+                    rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
+                    rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);
+
+                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                    mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+                    mr->material = objectModule
+                        .newMaterial
+                        (
+                            objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr(),
+                            "Surface",
+                            RenderType::Transparent
+                        );
+                        mr->material->setVec4("color", glm::vec4(0.15f, 0.8f, 0.3f, 0.2f));
+        }
+
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 

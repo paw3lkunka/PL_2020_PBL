@@ -204,12 +204,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::COLLSION_DETECT:
-        {/*
-            CollisionData data = msg.getValue<CollisionData>();
-            std::cout << data.cause << " collided with " << data.target << " separation vector: (" 
-                << data.separation.x << ", " 
-                << data.separation.y << ", "  
-                << data.separation.z << ")." << std::endl; */
+        {
         }
         break;
         
@@ -229,7 +224,6 @@ void ConsoleModule::receiveMessage(Message msg)
 
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
-        std::cout << "WARNING: Specific console response not implemented:" << std::endl;
         break;
     }
 }

@@ -1,18 +1,22 @@
 #ifndef TRANSFORM_HPP_
 #define TRANSFORM_HPP_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <unordered_set>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+class SceneModule;
+
 /**
  * @brief Struct that defines local transform of the object and its model matrix
  */
 struct Transform : public Component
 {
+    friend SceneModule;
+
     Transform() = default;
     virtual ~Transform() = default;
 
@@ -54,6 +58,35 @@ struct Transform : public Component
      * @return  glm::vec3& 
      */
     inline glm::vec3 &getLocalScaleModifiable() { dirty = true; return localScale; }
+    
+    /**
+     * @brief  Transformation from model space to world space.
+     * parentMatrix * localMatrix
+     */
+    const inline glm::mat4& getModelMatrix() const { return modelMatrix; }
+
+    /**
+     * @brief Transformation from parent space to world space.
+     * parent->modelMatrix
+     */
+    const inline glm::mat4& getParentMatrix() const { return parent->modelMatrix; }
+
+    /**
+     * @brief Transformation from world space to model space.
+     * modelMatrix^-1
+     */
+    const inline glm::mat4& getToModelMatrix() const { return toModelMatrix; }
+
+    /**
+     * @brief Transformation from world space to parent space.
+     * parentMatrix^-1
+     */
+    const inline glm::mat4& getToParentMatrix() const { return parent->toModelMatrix; }
+
+    /**
+     * @brief Object rotation in world space.
+     */
+    const inline glm::quat& getWorldRotation() const { return worldRotation; }
 
     /**
      * @brief Set transfroms parent, as two-way pointer connection.
@@ -77,24 +110,6 @@ struct Transform : public Component
     inline const Transform* getParent() { return parent; }
 
     /**
-     * @brief All transformation in world space.
-     * localToWorldMatrix * localMatrix
-     */
-    glm::mat4 modelMatrix = glm::mat4(1);
-
-    /**
-     * @brief Transformation from local space to world space.
-     * THIS IS NOT A MODEL MATRIX!
-     */
-    glm::mat4 localToWorldMatrix = glm::mat4(1);
-    
-    /**
-     * @brief Transformation from world space to local space
-     * localToWorldMatrix^-1
-     */
-    glm::mat4 worldToLocalMatrix = glm::mat4(1);
-
-    /**
      * @brief Signalize, if local parameters was changed.
      * system chaning localPosition, localRotation or localScale should also set it true.
      */
@@ -106,10 +121,15 @@ struct Transform : public Component
     std::unordered_set<Transform*> children;
 
 private:
+//serialized
     Transform* parent       = nullptr;
     glm::vec3 localPosition = {0.0f, 0.0f, 0.0f};
     glm::quat localRotation = {1.0f, 0.0f, 0.0f, 0.0f};
     glm::vec3 localScale    = {1.0f, 1.0f, 1.0f};
+//unserialized
+    glm::mat4 modelMatrix   = glm::mat4(1);
+    glm::mat4 toModelMatrix = glm::mat4(1);
+    glm::quat worldRotation = {1.0f, 0.0f, 0.0f, 0.0f};
 };
 
 #endif /* !TRANSFORM_HPP_ */

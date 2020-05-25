@@ -586,6 +586,7 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->momentOfInertia[0][0] = j.at(name).at("momentOfInertia").at("0,0").get<float>();
     rigidbody->momentOfInertia[1][1] = j.at(name).at("momentOfInertia").at("1,1").get<float>();
     rigidbody->momentOfInertia[2][2] = j.at(name).at("momentOfInertia").at("2,2").get<float>();
+    rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
 
     rigidbody->drag = j.at(name).at("drag").get<float>();
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();

@@ -155,7 +155,7 @@ class Core
         int mainLoop();
 
         /**
-         * @brief Safely dispose all dependencies 
+         * @brief Safely dispose all dependencies
          */
         void cleanup();
 

@@ -1,7 +1,7 @@
 #ifndef PADDLE_INL_
 #define PADDLE_INL_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 /**
  * @brief Paddle component.

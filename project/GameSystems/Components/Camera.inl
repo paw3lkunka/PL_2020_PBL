@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Component.inl"
+#include "Component.hpp"
 
 enum class CameraProjection { Perspective, Orthographic };
 
