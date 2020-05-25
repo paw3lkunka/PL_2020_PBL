@@ -4,10 +4,13 @@
 class ISerializable
 {
 public:
-    ISerializable() 
+    ISerializable(bool makeSerializable = true) 
     {
         static unsigned int nextID = 0;
-        serializationID = nextID++;
+        if (makeSerializable)
+        {
+            serializationID = nextID++;
+        }
     }
     unsigned int serializationID;
 

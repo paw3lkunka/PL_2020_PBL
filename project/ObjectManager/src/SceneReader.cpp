@@ -107,9 +107,12 @@ void SceneReader::readCubemaps()
         backPath = j.at(name).at("backPath").get<std::string>();
 
         texCreateInfo.generateMipmaps = j.at(name).at("creationInfo").at("generateMipmaps").get<bool>();
-        texCreateInfo.magFilter = GLenum(j.at(name).at("creationInfo").at("magFilter").get<int>());
-        texCreateInfo.minFilter = GLenum(j.at(name).at("creationInfo").at("minFilter").get<int>());
-        texCreateInfo.wrapMode = GLenum(j.at(name).at("creationInfo").at("wrapMode").get<int>());
+        texCreateInfo.format = GLenum(j.at(name).at("creationInfo").at("format").get<unsigned int>());
+        texCreateInfo.width = j.at(name).at("creationInfo").at("width").get<int>();
+        texCreateInfo.height = j.at(name).at("creationInfo").at("height").get<int>();
+        texCreateInfo.magFilter = GLenum(j.at(name).at("creationInfo").at("magFilter").get<unsigned int>());
+        texCreateInfo.minFilter = GLenum(j.at(name).at("creationInfo").at("minFilter").get<unsigned int>());
+        texCreateInfo.wrapMode = GLenum(j.at(name).at("creationInfo").at("wrapMode").get<unsigned int>());
 
         auto cubemap = objModulePtr->newCubemap(texCreateInfo, frontPath.c_str(), leftPath.c_str(), rightPath.c_str(), backPath.c_str(), topPath.c_str(), bottomPath.c_str());
         cubemap->serializationID = j.at(name).at("serializationID").get<unsigned int>();
@@ -672,7 +675,9 @@ void SceneReader::readTransformParents(std::string name)
 {
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    std::cout << "EntityID: " << entityID << '\t';
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    std::cout << "SerializationID: " << serializationID << '\n';
     auto trans = entity->getComponentPtr<Transform>();
     try
     {

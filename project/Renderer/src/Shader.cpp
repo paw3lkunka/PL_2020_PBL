@@ -34,7 +34,41 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode)
+void Shader::setBool(const char* name, bool value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name), (int)value);
+}
+void Shader::setInt(const char* name, int value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name), value);
+}
+void Shader::setFloat(const char* name, float value) const
+{
+	glUniform1f(glGetUniformLocation(ID, name), value);
+}
+void Shader::setVec3(const char* name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(ID, name), x, y, z);
+}
+void Shader::setVec3(const char* name, const glm::vec3& vec) const
+{
+	glUniform3f(glGetUniformLocation(ID, name), vec.x, vec.y, vec.z);
+}
+void Shader::setVec4(const char* name, float x, float y, float z, float w) const
+{
+	glUniform4f(glGetUniformLocation(ID, name), x, y, z, w);
+}
+void Shader::setVec4(const char* name, const glm::vec4& vec) const
+{
+	glUniform4f(glGetUniformLocation(ID, name), vec.x, vec.y, vec.z, vec.w);
+}
+void Shader::setMat4(const char* name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
+}
+
+Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode, bool serialize) 
+    : ISerializable(serialize)
 {
     // * Shader compilation ==============================================
     unsigned int vertex, fragment, geometry;
