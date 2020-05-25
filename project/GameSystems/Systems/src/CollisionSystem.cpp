@@ -62,15 +62,16 @@ void CollisionSystem::findSATAxes(SphereCollider* collider, Transform* transform
 
 void CollisionSystem::findSATAxes(BoxCollider* collider, Transform* transform, std::vector<glm::vec3>& axes)
 {
+    glm::vec4 centre = glm::vec4(collider->center, 1.0f);
     // Local X
-    axes.push_back(transform->getModelMatrix() * collider->verts[0]);
-    axes.push_back(transform->getModelMatrix() * collider->verts[1]);
+    axes.push_back(transform->getModelMatrix() * centre);
+    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(1,0,0,0)));
 
     // Local Y
-    axes.push_back(transform->getModelMatrix() * collider->verts[0]);
-    axes.push_back(transform->getModelMatrix() * collider->verts[4]);
+    axes.push_back(transform->getModelMatrix() * centre);
+    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(0,1,0,0)));
 
     // Local Z
-    axes.push_back(transform->getModelMatrix() * collider->verts[0]);
-    axes.push_back(transform->getModelMatrix() * collider->verts[3]);
+    axes.push_back(transform->getModelMatrix() * centre);
+    axes.push_back(transform->getModelMatrix() * (centre + glm::vec4(0,0,1,0)));
 }

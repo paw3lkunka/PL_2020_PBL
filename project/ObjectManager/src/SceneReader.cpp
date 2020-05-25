@@ -677,12 +677,9 @@ void SceneReader::readTransformParents(std::string name)
     try
     {
         auto parentID = j.at(name).at("transform parentID").get<unsigned int>();
-        std::cout << Name(trans) << ", parent id: " << parentID << std::endl;
         if(parentID != 0)
         {
             auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
-            auto psdvdsvrans = dynamic_cast<MeshRenderer*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
-            std::cout << typeid(*objModulePtr->objectContainer.getComponentFromSerializationID(parentID)).name();
             trans->setParent(parentTrans);
         }
         else

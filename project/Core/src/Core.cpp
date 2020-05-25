@@ -112,7 +112,7 @@ int Core::init()
         {
             auto* ent = objectModule.newEntity(5, "PhysicSurface");
                 auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable().y = -30;
+                    t->getLocalPositionModifiable().y = -35;
                     t->getLocalScaleModifiable() = {300, 50, 150};
                     t->setParent(&sceneModule.rootNode);
 
