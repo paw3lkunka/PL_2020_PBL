@@ -502,7 +502,7 @@ objectModule.newEntity(2, "sampleSound");
             rb001->mass = 10;
             rb001->drag = 5;
             rb001->angularDrag = 5;
-            rb001->ignoreGravity = false;
+            rb001->ignoreGravity = true;
             sphere001->addComponent(rb001);
 
         Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
@@ -510,7 +510,7 @@ objectModule.newEntity(2, "sampleSound");
             rbSound->mass = 10;
             rbSound->drag = 5;
             rbSound->angularDrag = 5;
-            rbSound->ignoreGravity = false;
+            rbSound->ignoreGravity = true;
             sphereSound->addComponent(rbSound);
         Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
@@ -536,7 +536,7 @@ objectModule.newEntity(2, "sampleSound");
             rigidbody->drag = 5;
             rigidbody->angularDrag = 5;
             rigidbody->mass = 10;
-            rigidbody->ignoreGravity = false;
+            rigidbody->ignoreGravity = true;
 
 }
 
@@ -580,7 +580,7 @@ objectModule.newEntity(2, "sampleSound");
         auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
             rb->angularDrag = 2;
             rb->drag = 2;
-            rb->ignoreGravity = false;
+            rb->ignoreGravity = true;
             rb->mass = 5;
             rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
