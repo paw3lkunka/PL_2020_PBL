@@ -137,7 +137,7 @@ void EditorModule::drawTransform(Transform* transformPtr)
     ImGui::NewLine();
     ImGui::Text("World Transform: ");
     {
-        glm::quat worldRot = transformPtr->getWorldRotation() * transformPtr->getLocalRotation();
+        glm::quat worldRot = transformPtr->getWorldRotation();
         
         glm::vec3 worldPos = transformPtr->getParentMatrix() * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
         glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
