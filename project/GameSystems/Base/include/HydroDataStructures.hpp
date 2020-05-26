@@ -6,7 +6,21 @@
 
 struct Rigidbody;
 
-struct TriangleData
+/// @brief Structure containing single vertex data for Hydro-related calculations
+struct HydroVertexData
+{
+    /// @brief Index in order to form clockwise triangles
+    int index;
+
+    /// @brief Distance to surface in Y axis for this vertex
+    float distanceToSurface;
+
+    /// @brief Model position of this specific vertex
+    glm::vec3 modelPosition;
+};
+
+/// @brief Structure containing single triangle data for Hydro-related calculations
+struct HydroTriangleData
 {
     /**
      * @brief Construct a new Triangle Data object
@@ -17,10 +31,10 @@ struct TriangleData
      * @param bodyRB - Rigidbody of the body triangle belongs to
      * @param timeSinceStart - Time since start of current calculations
      */
-    TriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart);
+    HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart);
 
     /// @brief Default destructor
-    virtual ~TriangleData() = default;
+    virtual ~HydroTriangleData() = default;
 
     /// @brief The corners of this triangle in global coordinates
     glm::vec3 corners[3];
@@ -53,7 +67,7 @@ struct TriangleData
 };
 
 /// @brief Data that belongs to one triangle in the original body mesh and is needed to calculate the slamming force
-struct SlammingForceData 
+struct HydroSlammingForceData 
 {
     /// @brief The area of the original triangles - calculate once in the beginning because always the same
     float originalArea;
@@ -70,7 +84,7 @@ struct SlammingForceData
 };
 
 /**
- * @brief Collection of necessary methods made for calculating hydrodynamic and hydrostatic forces
+ * @brief Collection of necessary methods and constant values made for calculating hydrodynamic and hydrostatic forces
  * 
  * It was based on articles by Jacques Kerner, a senior software engineer at Avalanche Studios.
  * 
@@ -81,79 +95,83 @@ struct SlammingForceData
  * http://www.gamasutra.com/view/news/263237/Water_interaction_model_for_boats_in_video_games_Part_2.php
  * 
  */
-struct HydroMath
+namespace HydroForces
 {
 #pragma region Densities Constants
     
     /// @brief Clean water density
-    static constexpr float RHO_WATER = 1000.0f;
+    constexpr float RHO_WATER = 1000.0f;
     
     /// @brief Ocean water density
-    static constexpr float RHO_OCEAN_WATER = 1027.0f;
+    constexpr float RHO_OCEAN_WATER = 1027.0f;
     
     /// @brief Sunflower oil density
-    static constexpr float RHO_SUNFLOWER_OIL = 920.0f;
+    constexpr float RHO_SUNFLOWER_OIL = 920.0f;
     
     /// @brief Milk density
-    static constexpr float RHO_MILK = 1035.0f;
+    constexpr float RHO_MILK = 1035.0f;
     
     /// @brief Air density
-    static constexpr float RHO_AIR = 1.225f;
+    constexpr float RHO_AIR = 1.225f;
     
     /// @brief Helium density
-    static constexpr float RHO_HELIUM = 0.164f;
+    constexpr float RHO_HELIUM = 0.164f;
     
     /// @brief Gold density
-    static constexpr float RHO_GOLD = 19300.0f;
+    constexpr float RHO_GOLD = 19300.0f;
 
 #pragma endregion // Densities Constants
 
-#pragma region Neglected Dynamic Coefficients
+#pragma region Other Dynamic Coefficients
 
     /// @brief Drag coefficient for plate perpendicular to fluid flow
-    static constexpr float C_D_PERPENDICULAR = 1.28f;
+    constexpr float C_D_PERPENDICULAR = 1.28f;
 
     /// @brief Viscosity depends on the temperature, this is for 20 celsius degrees
-    static constexpr float VISCOSITY_FACTOR = 0.000001f; // or 0.00001002f
+    constexpr float VISCOSITY_FACTOR = 0.000001f; // or 0.00001002f
+
+    /**
+     * @brief Coefficient of air resistance (drag coefficient)
+     * 
+     * Between 0.6 and 1.1 for all boats, so have to estimate
+     */
+    constexpr float C_r = 0.8f;
 
 #pragma endregion // Neglected Dynamic Coefficients
 
 #pragma region Pressure Drag Coefficients
 
     /// @brief Linear coefficient for Pressure Drag Force
-    static constexpr float C_PD1 = 10.0f;
+    constexpr float C_PD1 = 10.0f;
 
     /// @brief Quadratic coefficient for Pressure Drag Force
-    static constexpr float C_PD2 = 10.0f;
+    constexpr float C_PD2 = 10.0f;
     
     /// @brief Falloff power for Pressure Drag Force, should be smaller than (0, 1)
-    static constexpr float f_P = 0.5f;
+    constexpr float f_P = 0.5f;
 
 #pragma endregion // Pressure Drag Coefficients
 
 #pragma region Suction Drag
 
     /// @brief Linear coefficient for Suction Drag Force
-    static constexpr float C_SD1 = 10.0f;
+    constexpr float C_SD1 = 10.0f;
     
     /// @brief Quadratic coefficient for Suction Drag Force
-    static constexpr float C_SD2 = 10.0f;
+    constexpr float C_SD2 = 10.0f;
     
     /// @brief Falloff power for Pressure Drag Force, should be smaller than (0, 1)
-    static constexpr float f_S = 0.5f;
+    constexpr float f_S = 0.5f;
 
 #pragma endregion // Suction Drag
 
 #pragma region Slamming Force
 
     /// @brief Power-up for a slamming force
-    static constexpr float p = 2.0f;
-    
-    /// @brief Maximal witnessed acceleration during the fall
-    static float acc_max;
+    constexpr float p = 2.0f;
     
     /// @brief Cheat used to make slamming force prettier
-    static constexpr float slammingCheat = 1.0f;
+    constexpr float slammingCheat = 1.0f;
 
 #pragma endregion // Slamming Force
 
@@ -174,7 +192,7 @@ struct HydroMath
      * @param triangleCenter - Position of triangle center in world space
      * @return glm::vec3 - Triangle velocity
      */
-    static glm::vec3 GetTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter);
+    glm::vec3 getTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter);
 
     /**
      * @brief Calculate the area of a triangle with three coordinates
@@ -186,7 +204,7 @@ struct HydroMath
      * @param p2 - Third triangle vertex position in world space
      * @return float - Triangle area
      */
-    static float GetTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
+    float getTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
 
 #pragma endregion // Triangles Methods
 
@@ -209,7 +227,7 @@ struct HydroMath
      * @param triangleData - Triangle of the body to calculate force for
      * @return glm::vec3 - Buoyancy force for a triangle
      */
-    static glm::vec3 BuoyancyForce(float rho, TriangleData triangleData);
+    glm::vec3 buoyancyForce(float rho, HydroTriangleData triangleData);
 
 #pragma region Main Resistance Forces
 
@@ -228,7 +246,7 @@ struct HydroMath
      * @param length - Length of the submerged body
      * @return float 
      */
-    static float ResistanceCoefficient(float rho, float velocity, float length);
+    float resistanceCoefficient(float rho, float velocity, float length);
 
     /**
      * @brief Viscous Water Resistance (Frictional Drag) for triangle
@@ -246,7 +264,7 @@ struct HydroMath
      * @param Cf - Coefficient of frictional resistance
      * @return glm::vec3 - Viscous fluid resistance force
      */
-    static glm::vec3 ViscousWaterResistanceForce(float rho, TriangleData triangleData, float Cf);
+    glm::vec3 viscousWaterResistanceForce(float rho, HydroTriangleData triangleData, float Cf);
 
     /**
      * @brief Pressure Drag Force for triangle
@@ -258,7 +276,7 @@ struct HydroMath
      * @param triangleData Data of the triangle to calculate resistance for
      * @return glm::vec3 - Pressure Drag Force
      */
-    static glm::vec3 PressureDragForce(TriangleData triangleData);
+    glm::vec3 pressureDragForce(HydroTriangleData triangleData);
 
     /**
      * @brief Slamming Force (Water Entry Force)
@@ -271,9 +289,10 @@ struct HydroMath
      * @param triangleData - Data for triangle we calculate force for
      * @param bodyArea - Area of the floating body
      * @param bodyMass - Mass of the floating body
+     * @param acc_max - Max acceleration for slamming force changed withing a method
      * @return glm::vec3 - Slamming Force
      */
-    static glm::vec3 SlammingForce(SlammingForceData slammingData, TriangleData triangleData, float bodyArea, float bodyMass);
+    glm::vec3 slammingForce(HydroSlammingForceData slammingData, HydroTriangleData triangleData, float bodyArea, float bodyMass, float* acc_max);
 
 #pragma endregion // Main Resistance Forces
 
@@ -295,7 +314,7 @@ struct HydroMath
      * @param C_air - Coefficient of air resistance (drag coefficient)
      * @return glm::vec3 - Air resistance force
      */
-    static glm::vec3 AirResistanceForce(float rho, TriangleData triangleData, float C_air);
+    glm::vec3 airResistanceForce(float rho, HydroTriangleData triangleData, float C_air);
 
     /**
      * @brief Calculate the wave drifting force so the body can float with the waves
@@ -314,7 +333,7 @@ struct HydroMath
      * @param normal - Normal to the triangle surface 
      * @return glm::vec3 - Wave drifting force
      */
-    static glm::vec3 CalculateWaveDriftingForce(float rho, float area, glm::vec3 normal);
+    glm::vec3 waveDriftingForce(float rho, float area, glm::vec3 normal);
 
 #pragma endregion // Additional Forces
 
@@ -327,7 +346,38 @@ struct HydroMath
      * @returns glm::vec3 - If force is valid
      * @returns glm::vec3(0,0,0) - If force invalid  
      */
-    static glm::vec3 CheckForceIsValid(glm::vec3 force, std::string forceName);
-};
+    glm::vec3 checkForceIsValid(glm::vec3 force, std::string forceName);
+} // namespace HydroForces
+
+namespace HydroWaves
+{
+    /**
+     * @brief Get the Wave Height in a specific point
+     * 
+     * @param hydroSurface - Hydro surface to calculate point height for
+     * @param position 
+     * @param timeSinceStart 
+     * @return float 
+     */
+    float getWaveHeight(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart);
+
+    /**
+     * @brief Get the Distance To Wave 
+     * 
+     * @param hydroSurface 
+     * @param position 
+     * @param timeSinceStart 
+     * @return float 
+     */
+    float getDistanceToWave(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart);
+
+
+} // namespace HydroWaves
+
+namespace HydroMesh
+{
+    
+} // namespace HydroMesh
+
 
 #endif /* !HYDRODATASTRUCTURES_INL_ */

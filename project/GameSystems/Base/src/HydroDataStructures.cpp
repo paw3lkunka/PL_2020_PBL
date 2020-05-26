@@ -5,7 +5,7 @@
 #include "Rigidbody.inl"
 #include "PhysicSystem.hpp"
 
-TriangleData::TriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart)
+HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart)
 {
     corners[0] = p0;
     corners[1] = p1;
@@ -17,24 +17,18 @@ TriangleData::TriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody b
 
     normal = glm::normalize( glm::cross(p1 - p0, p2 - p0) );
 
-    area = HydroMath::GetTriangleArea(p0, p1, p2);
+    area = HydroForces::getTriangleArea(p0, p1, p2);
 
-    velocity = HydroMath::GetTriangleVelocity(bodyRB, center);
+    velocity = HydroForces::getTriangleVelocity(bodyRB, center);
 
     velocityDirection = glm::normalize(velocity);
 
     cosTheta = glm::dot(velocityDirection, normal);
 }
 
-#pragma region Slamming Force
-
-float HydroMath::acc_max = 0.0f;
-
-#pragma endregion // Slamming Force
-
 #pragma region Triangles Methods
 
-glm::vec3 HydroMath::GetTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter)
+glm::vec3 HydroForces::getTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter)
 {
     glm::vec3 r_BA = triangleCenter - static_cast<glm::vec3>( bodyRB.entityPtr->getComponentPtr<Transform>()->modelMatrix[3] );
     glm::vec3 v_A = bodyRB.velocity + glm::cross(bodyRB.angularVelocity, r_BA);
@@ -42,7 +36,7 @@ glm::vec3 HydroMath::GetTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCen
     return v_A;
 }
 
-float HydroMath::GetTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
+float HydroForces::getTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
 {
     float a = glm::distance(p0, p1);
     float c = glm::distance(p2, p0);
@@ -53,20 +47,20 @@ float HydroMath::GetTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
 
 #pragma endregion // Triangles Methods
 
-glm::vec3 HydroMath::BuoyancyForce(float rho, TriangleData triangleData)
+glm::vec3 HydroForces::buoyancyForce(float rho, HydroTriangleData triangleData)
 {
     glm::vec3 buoyancyForce = rho * PhysicSystem::G_CONST.y * triangleData.distanceToSurface * triangleData.area * triangleData.normal;
     buoyancyForce.x = 0.0f;
     buoyancyForce.z = 0.0f;
     
-    buoyancyForce = CheckForceIsValid(buoyancyForce, "Buoyancy");
+    buoyancyForce = checkForceIsValid(buoyancyForce, "Buoyancy");
 
     return buoyancyForce;
 }
 
 #pragma region Main Resistance Forces
 
-float HydroMath::ResistanceCoefficient(float rho, float velocity, float length)
+float HydroForces::resistanceCoefficient(float rho, float velocity, float length)
 {
     float Rn = (velocity * length) / VISCOSITY_FACTOR;
     float Cf = 0.075f / powf( ( logf(Rn) - 2.0f ), 2.0f );
@@ -74,7 +68,7 @@ float HydroMath::ResistanceCoefficient(float rho, float velocity, float length)
     return Cf;
 }
 
-glm::vec3 HydroMath::ViscousWaterResistanceForce(float rho, TriangleData triangleData, float Cf)
+glm::vec3 HydroForces::viscousWaterResistanceForce(float rho, HydroTriangleData triangleData, float Cf)
 {
     glm::vec3 A = triangleData.velocity;
     glm::vec3 B = triangleData.normal;
@@ -88,12 +82,12 @@ glm::vec3 HydroMath::ViscousWaterResistanceForce(float rho, TriangleData triangl
     glm::vec3 v_f_vec = glm::length(A) * tangentialDirection;
     
     glm::vec3 viscousWaterResistanceForce = 0.5f * rho * glm::length(v_f_vec) * v_f_vec * triangleData.area * Cf;
-    viscousWaterResistanceForce = CheckForceIsValid(viscousWaterResistanceForce, "Viscous Water Resistance");
+    viscousWaterResistanceForce = checkForceIsValid(viscousWaterResistanceForce, "Viscous Water Resistance");
     
     return viscousWaterResistanceForce;
 }
 
-glm::vec3 HydroMath::PressureDragForce(TriangleData triangleData)
+glm::vec3 HydroForces::pressureDragForce(HydroTriangleData triangleData)
 {
     glm::vec3 pressureDragForce(0.0f);
     
@@ -106,11 +100,11 @@ glm::vec3 HydroMath::PressureDragForce(TriangleData triangleData)
         pressureDragForce = (C_SD1 + C_SD2) * triangleData.area * powf( abs(triangleData.cosTheta), f_S ) * triangleData.normal;
     }
 
-    pressureDragForce = CheckForceIsValid(pressureDragForce, "Pressure drag");
+    pressureDragForce = checkForceIsValid(pressureDragForce, "Pressure drag");
     return pressureDragForce;
 }
 
-glm::vec3 HydroMath::SlammingForce(SlammingForceData slammingData, TriangleData triangleData, float bodyArea, float bodyMass)
+glm::vec3 HydroForces::slammingForce(HydroSlammingForceData slammingData, HydroTriangleData triangleData, float bodyArea, float bodyMass, float* acc_max)
 {
     //Add slamming if the normal is in the same direction as the velocity (the triangle is not receding from the water)
     //Also make sure thea area is not 0, which it sometimes is for some reason
@@ -141,17 +135,17 @@ glm::vec3 HydroMath::SlammingForce(SlammingForceData slammingData, TriangleData 
     // S - total surface area of the entire body
     glm::vec3 F_stop = bodyMass * triangleData.velocity * ((2.0f * triangleData.area) / bodyArea);
     
-    if(acc_max < acc)
+    if(*acc_max < acc)
     {
-        acc_max = acc;
+        *acc_max = acc;
     }
     
-    glm::vec3 slammingForce = powf( glm::clamp(acc / acc_max, 0.0f, 1.0f), p ) * triangleData.cosTheta * F_stop * slammingCheat;
+    glm::vec3 slammingForce = powf( glm::clamp(acc / *acc_max, 0.0f, 1.0f), p ) * triangleData.cosTheta * F_stop * slammingCheat;
     
     //The force acts in the opposite direction
     slammingForce *= -1.0f;
     
-    slammingForce = CheckForceIsValid(slammingForce, "Slamming");
+    slammingForce = checkForceIsValid(slammingForce, "Slamming");
     return slammingForce;
 }
 
@@ -159,7 +153,7 @@ glm::vec3 HydroMath::SlammingForce(SlammingForceData slammingData, TriangleData 
 
 #pragma region Additional Forces
 
-glm::vec3 HydroMath::AirResistanceForce(float rho, TriangleData triangleData, float C_air)
+glm::vec3 HydroForces::airResistanceForce(float rho, HydroTriangleData triangleData, float C_air)
 {
     //Only add air resistance if normal is pointing in the same direction as the velocity
     if (triangleData.cosTheta < 0.0f)
@@ -172,12 +166,12 @@ glm::vec3 HydroMath::AirResistanceForce(float rho, TriangleData triangleData, fl
     
     //Act in the opposite side of the velocity
     airResistanceForce *= -1.0f;
-    airResistanceForce = CheckForceIsValid(airResistanceForce, "Air resistance");
+    airResistanceForce = checkForceIsValid(airResistanceForce, "Air resistance");
     
     return airResistanceForce;
 }
 
-glm::vec3 HydroMath::CalculateWaveDriftingForce(float rho, float area, glm::vec3 normal)
+glm::vec3 HydroForces::waveDriftingForce(float rho, float area, glm::vec3 normal)
 {
     glm::vec3 waveDriftingForce = 0.5f * rho * PhysicSystem::G_CONST.y * area * area * normal;
     waveDriftingForce.y = 0.0f;
@@ -187,7 +181,7 @@ glm::vec3 HydroMath::CalculateWaveDriftingForce(float rho, float area, glm::vec3
 
 #pragma endregion // Additional Forces
 
-glm::vec3 HydroMath::CheckForceIsValid(glm::vec3 force, std::string forceName)
+glm::vec3 HydroForces::checkForceIsValid(glm::vec3 force, std::string forceName)
 {
     if (glm::isnan(force.x + force.y + force.z))
     {
@@ -195,4 +189,15 @@ glm::vec3 HydroMath::CheckForceIsValid(glm::vec3 force, std::string forceName)
     }
 
     return force;
+}
+
+float HydroWaves::getWaveHeight(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart)
+{
+    // TODO: Better waves soon XD
+    return 0.0f;
+}
+
+float HydroWaves::getDistanceToWave(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart)
+{
+    return position.y - getWaveHeight(hydroSurface, position, timeSinceStart);
 }

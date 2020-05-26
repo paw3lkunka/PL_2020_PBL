@@ -196,7 +196,7 @@ int Core::mainLoop()
 
         // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
 
-            double currentFrameStart = glfwGetTime();
+            currentFrameStart = glfwGetTime();
             double lastFrameTime = currentFrameStart - previousFrameStart;
 
             lag += lastFrameTime;
@@ -252,6 +252,11 @@ void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     windowHeight = height;
     GetCore().getMessageBus().sendMessage(Message(Event::WINDOW_RESIZED, glm::ivec2(width, height)));
     GetCore().getMessageBus().notify();
+}
+
+double Core::getCurrentFrameStart()
+{
+    return currentFrameStart;
 }
 
 MessageBus& Core::getMessageBus()

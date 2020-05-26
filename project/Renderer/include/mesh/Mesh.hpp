@@ -44,6 +44,20 @@ public:
      */
     unsigned int getID() { return ID; }
 
+    /**
+     * @brief Get the Vertices vector
+     * 
+     * @return std::vector<Vertex> 
+     */
+    virtual std::vector<Vertex> getVertices() { return std::vector<Vertex>(); }
+
+    /**
+     * @brief Get the Indices vector
+     * 
+     * @return std::vector<unsigned int> 
+     */
+    virtual std::vector<unsigned int> getIndices() { return std::vector<unsigned int>(); }
+
 private:
     static unsigned int idcount;
     unsigned int ID;
