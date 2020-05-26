@@ -47,7 +47,7 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
     if(detectCollsion(collider1, collider2, transformPtr, transform2))
     {
         //TODO TEMP DEBUG
-        std::cout << "Collision detected between " << Name(collider1) << " and " << Name(collider2) << " - type: " << (int)collider2->type << std::endl;
+        //std::cout << "Collision detected between " << Name(collider1) << " and " << Name(collider2) << " - type: " << (int)collider2->type << std::endl;
         CollisionData data = {collider1, collider2};
 
         switch (collider2->type)
@@ -104,6 +104,8 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
 {
     glm::vec3 r1 = testResult.collisionCentre - glm::xyz( transform1->getModelMatrix() * glm::vec4(collider1->center, 1.0f) );
     glm::vec3 r2 = testResult.collisionCentre - glm::xyz( transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f) );
+    r1 = glm::normalize(r1);
+    r2 = glm::normalize(r2);
 /*
     std::cout << "Centre 1: " << glm::to_string(glm::xyz( transform1->getModelMatrix() * glm::vec4(collider1->center, 1.0f) ) ) << '\n'
               << "Centre 2: " << glm::to_string(glm::xyz( transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f) ) ) << '\n' 
@@ -113,12 +115,18 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
 */
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
-    std::cout << "Normal: " << glm::to_string(testResult.collisionNormal) << std::endl;
-    std::cout << "Mass:   " <<  body1->mass << std::endl;
-    std::cout << "Old V: " << glm::to_string(body1->velocity) << std::endl;
+    //std::cout << "Normal: " << glm::to_string(testResult.collisionNormal) << std::endl;
+    //std::cout << "Mass:   " <<  body1->mass << std::endl;
+    //std::cout << "Old V: " << glm::to_string(body1->velocity) << std::endl;
     //FIXME trochę eksperymentu
-    body1->velocity += glm::abs(jImpulse) * testResult.collisionNormal / body1->mass;
-    std::cout << "New V: " << glm::to_string(body1->velocity) << std::endl;
+    glm::vec3 vel = glm::abs(jImpulse) * (testResult.collisionNormal / body1->mass);
+    std::cout << "abs Jimpulse: " << glm::to_string(glm::abs(jImpulse)) << '\n';
+    std::cout << "collision normal: " << glm::to_string(testResult.collisionNormal) << '\n';
+    std::cout << "body1 mass: " << body1->mass << '\n';
+    body1->velocity += vel;
+    //std::cout << "Applied velocity: " << vel.x << ' ' << vel.y << ' ' << vel.z << '\n';
+    //body1->velocity += glm::vec3(0.0f, 1.0f, 0.0f);
+    //std::cout << "New V: " << glm::to_string(body1->velocity) << std::endl;
     body1->angularVelocity += body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
 }
 
