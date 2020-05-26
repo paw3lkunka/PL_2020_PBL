@@ -14,6 +14,7 @@ struct RenderPacket
     virtual ~RenderPacket() = default;
 
     virtual void render(glm::mat4& VP) = 0;
+    virtual void renderWithShader(Shader* shader, glm::mat4& VP) = 0;
 
     Mesh* mesh;
     Material* material;

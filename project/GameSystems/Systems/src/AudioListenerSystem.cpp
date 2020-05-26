@@ -1,6 +1,7 @@
 #include "AudioListenerSystem.hpp"
 
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/vec_swizzle.hpp>
 
 #include "Core.hpp"
 #include "Event.hpp"
@@ -35,19 +36,19 @@ void AudioListenerSystem::fixedUpdate()
 
     if(transform)
     {
-        auto position = static_cast<glm::vec3>(transform->modelMatrix[3]);
+        auto position = glm::xyz(transform->getModelMatrix()[3]);
         if(audioListener->getPosition() != position)
         {
             audioListener->getPositionModifiable() = position;
         }
 
-        auto at = (-1.0f) * glm::normalize( static_cast<glm::vec3>(transform->modelMatrix[2]) );
+        auto at = (-1.0f) * glm::normalize( glm::xyz(transform->getModelMatrix()[2]) );
         if(audioListener->getAt() != at)
         {
             audioListener->getAtModifiable() = at;
         }
 
-        auto up = glm::normalize( static_cast<glm::vec3>(transform->modelMatrix[1]) );
+        auto up = glm::normalize( glm::xyz(transform->getModelMatrix()[1]) );
         if(audioListener->getUp() != up)
         {
             audioListener->getUpModifiable() = up;

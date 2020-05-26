@@ -19,6 +19,15 @@ struct NormalPacket : RenderPacket
         mesh->render();
     }
 
+    void renderWithShader(Shader* shader, glm::mat4& VP)
+    {
+        shader->use();
+        glm::mat4 MVP = VP * modelMatrix;
+        shader->setMat4("model", modelMatrix);
+        shader->setMat4("MVP", MVP);
+        mesh->render();
+    }
+
     glm::mat4 modelMatrix;
 };
 

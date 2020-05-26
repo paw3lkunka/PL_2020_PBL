@@ -85,8 +85,9 @@ void CameraSystem::frameUpdate()
         }
 
         // * ===== Calculate view matrix =====
-        camera->viewMatrix = glm::inverse(transform->modelMatrix);
+        camera->viewMatrix = transform->getToModelMatrix();
         // * ===== Set camera world position =====
-        camera->position = glm::vec3(transform->modelMatrix[3]);
+        //TODO Shoult this be method?
+        camera->position = glm::vec3(transform->getModelMatrix()[3]);
     }
 }

@@ -1,7 +1,7 @@
 #ifndef RIGIDBODY_INL_
 #define RIGIDBODY_INL_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -24,11 +24,10 @@ struct Rigidbody : public Component
 
     ///@brief Moment of interia of Rigidbody
     glm::mat3 momentOfInertia;
-/*
-TODO implement this
+
     ///@brief Inverted moment of interia of Rigidbody
     glm::mat3 invertedMomentOfInertia;
-*/
+
     ///@brief Drag of the rigidbody
     float drag;
 

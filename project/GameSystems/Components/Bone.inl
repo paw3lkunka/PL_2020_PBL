@@ -5,7 +5,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "Component.inl"
+#include "Component.hpp"
 
 /**
  * @brief Holds bone data used in skinning and animation

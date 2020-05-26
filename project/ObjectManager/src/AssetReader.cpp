@@ -319,7 +319,7 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
         // * ----- Base data: position, normal, tangent -----
         positions.push_back( {mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z} );
         normals.push_back( {mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z} );
-        tangents.push_back( {mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z} );
+        tangents.push_back( {mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z} );
 
         // * ----- Optional data: texcoords -----
         // TODO: Support more than one uv channel
@@ -520,6 +520,7 @@ void displayGlmMat4Decomposed(glm::mat4 mat)
     glm::vec3 position, scale, skew;
     glm::vec4 perspective;
     glm::quat rotation;
+    //TODO, can we omit decompose?
     glm::decompose(mat, scale, rotation, position, skew, perspective);
     glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
     std::cout << "Position: " << position.x << ' ' << position.y << ' ' << position.z << '\n';

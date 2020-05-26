@@ -39,7 +39,7 @@ public:
      * @param shader Shader to draw with
      * @param name name of the material
      */
-    Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing = false);
+    Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing = false, bool serialize = true);
     ~Material() = default;
 
     /**

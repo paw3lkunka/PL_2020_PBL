@@ -12,9 +12,15 @@
 #include "imgui.h"
 #include "examples/imgui_impl_opengl3.h"
 
-//TODO: TEMP STRING STREAM
-#include <sstream>
 #include <glm/gtc/type_ptr.hpp>
+
+RendererModule::~RendererModule()
+{
+    delete internalErrorMat;
+    delete internalShaderError;
+    delete simpleDepth;
+    delete directionalDepth;
+}
 
 void RendererModule::receiveMessage(Message msg)
 {
@@ -23,21 +29,39 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_MESH_TO_QUEUE:
         {
             MeshRenderer* mr = msg.getValue<MeshRenderer*>();
-            if (mr->material->isInstancingEnabled())
+            if (mr->material != nullptr)
             {
-                // ? +++++ Create new instanced packet or just add an instance matrix +++++
-                auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
-                packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
-                // ? +++++ If packet was created, add it to the queue +++++
-                if (packet.second)
+                if (mr->material->isInstancingEnabled())
                 {
-                    switch(packet.first->second.material->getRenderType())
+                    // ? +++++ Create new instanced packet or just add an instance matrix +++++
+                    auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
+                    packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
+                    // ? +++++ If packet was created, add it to the queue +++++
+                    if (packet.second)
+                    {
+                        switch(packet.first->second.material->getRenderType())
+                        {
+                            case RenderType::Opaque:
+                                opaqueQueue.push_back(&packet.first->second);
+                                break;
+                            case RenderType::Transparent:
+                                std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    // ? +++++ Create new packet for normal rendering +++++
+                    normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
+                    // ? +++++ Add packet to render queue +++++
+                    switch(normalPackets.back().material->getRenderType())
                     {
                         case RenderType::Opaque:
-                            opaqueQueue.push_back(&packet.first->second);
+                            opaqueQueue.push_back(&normalPackets.back());
                             break;
                         case RenderType::Transparent:
-                            std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
+                            transparentQueue.push_back(&normalPackets.back());
                             break;
                     }
                 }
@@ -45,18 +69,10 @@ void RendererModule::receiveMessage(Message msg)
             else
             {
                 // ? +++++ Create new packet for normal rendering +++++
-                normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
-                // ? +++++ Add packet to render queue +++++
-                switch(normalPackets.back().material->getRenderType())
-                {
-                    case RenderType::Opaque:
-                        opaqueQueue.push_back(&normalPackets.back());
-                        break;
-                    case RenderType::Transparent:
-                        transparentQueue.push_back(&normalPackets.back());
-                        break;
-                }
+                normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
+                opaqueQueue.push_back(&normalPackets.back());
             }
+            
             break;
         }
         case Event::RENDERER_ADD_LIGHT:
@@ -117,6 +133,10 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
+    simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
+    internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
+    internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
+
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
@@ -140,6 +160,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 3, directionalLightBuffer, 0, 3 * sizeof(glm::vec4));
+
+    // * ===== Setup Uniform Buffer Object for shadow mapping =====
+    glGenBuffers(1, &shadowMappingBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, shadowMappingBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 4, shadowMappingBuffer, 0, sizeof(glm::mat4));
 
     // * ===== Generate mesh for skybox rendering =====
 
@@ -207,16 +235,29 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     // * ===== Create framebuffer for depth map =====
     glGenFramebuffers(1, &depthMapFBO);
 
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    TextureCreateInfo depthCreateInfo = {};
+    depthCreateInfo.format = GL_DEPTH_COMPONENT;
+    depthCreateInfo.generateMipmaps = false;
+    depthCreateInfo.height = SHADOW_HEIGHT;
+    depthCreateInfo.width = SHADOW_WIDTH;
+    depthCreateInfo.type = GL_FLOAT;
+    depthCreateInfo.minFilter = GL_LINEAR;
+    depthCreateInfo.magFilter = GL_LINEAR;
+    depthCreateInfo.wrapMode = GL_CLAMP_TO_BORDER;
+    directionalDepth = new Texture(nullptr, depthCreateInfo, "");
+
+    // glGenTextures(1, &depthMap);
+    // glBindTexture(GL_TEXTURE_2D, depthMap);
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, , , 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    // float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -230,7 +271,71 @@ void RendererModule::render()
         // !IMGUI RENDER
         ImGui::Render();
 
-        // ? ++++++ Send projection matrices to UBO if needed +++++
+        glm::mat4 VP = glm::mat4(1.0f);
+
+        // ? +++++ Sort the render queue +++++
+        std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
+            [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
+
+        // ? +++++ Shadow mapping section +++++
+        if (directionalLight != nullptr)
+        {
+            // I made copy instead of sneaky modification of matrix in transform.
+            // That was super unsafe, and now i see, that encapsulating matrices inside transform was a good idea.
+            //                                                                                  ~ Andrzej
+            glm::mat4 lightMatrix = *directionalLight->modelMatrix;
+            lightMatrix[3].x = cameraMain->position.x;
+            lightMatrix[3].y = cameraMain->position.y;
+            lightMatrix[3].z = cameraMain->position.z;
+
+            // ? ++++++ Send directional light matrices to UBO +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
+
+            glm::mat4 directionalProjMat = glm::ortho(-512.0f, 512.0f, -512.0f, 512.0f, 2000.0f, -2000.0f);
+            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &directionalProjMat);
+            glm::mat4 directionalViewMat = glm::inverse(lightMatrix);
+            glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &directionalViewMat);
+
+            // ? +++++ Calculate the View-Projection matrix +++++
+            VP = directionalProjMat * directionalViewMat;
+
+            // ? +++++ Send light view matrix to shadow mapping buffer +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, shadowMappingBuffer);
+
+            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &VP);
+
+            // ? +++++ Render depth buffer for shadow mapping +++++
+            glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+            glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+
+            //glCullFace(GL_FRONT);
+            glDisable(GL_CULL_FACE);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            for(auto packet : opaqueQueue)
+            {
+                packet->renderWithShader(simpleDepth, VP);
+            }
+            glEnable(GL_CULL_FACE);
+            //glCullFace(GL_BACK);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+
+        // ? +++++ Send skinning data to ubo +++++
+        if (bones != nullptr)
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
+            for(auto &bone : *bones)
+            {
+                glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
+            }
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        }
+
+        // ? +++++ Calculate the View-Projection matrix +++++
+        VP = cameraMain->projectionMatrix * cameraMain->viewMatrix;
+
+        // ? ++++++ Send camera matrices to UBO +++++
         glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &cameraMain->projectionMatrix);
@@ -252,42 +357,12 @@ void RendererModule::render()
             glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(glm::vec4), &ambient);
         }
 
-        // ? +++++ Send skinning data to ubo +++++
-        if (bones != nullptr)
-        {
-            glBindBuffer(GL_UNIFORM_BUFFER, boneBuffer);
-            for(auto &bone : *bones)
-            {
-                glBufferSubData(GL_UNIFORM_BUFFER, bone.first * sizeof(glm::mat4), sizeof(glm::mat4), &bone.second);
-            }
-            glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        }
-
-
-        // ? +++++ Calculate the View-Projection matrix +++++
-        glm::mat4 VP = cameraMain->projectionMatrix * cameraMain->viewMatrix;
-
-        // ? +++++ Sort the render queue +++++
-        std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
-            [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
-
-        // ? +++++ Render depth buffer for shadow mapping +++++
-        // glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        // glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-        
-        // glClear(GL_DEPTH_BUFFER_BIT);
-        // for(auto packet : opaqueQueue)
-        // {
-        //     packet->render(VP);
-        // }
-
-        // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         // ? +++++ Execute (order 66) opaque rendering loop +++++
         glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
+            opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
         }
@@ -298,22 +373,22 @@ void RendererModule::render()
         {
             glDepthFunc(GL_LEQUAL);
             glm::mat4 viewStatic = glm::mat4(glm::mat3(cameraMain->viewMatrix));
+            glBindVertexArray(skyboxVao);
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
-            glBindVertexArray(skyboxVao);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
             glDepthFunc(GL_LESS);
         }
 
         // ? +++++ Transparent rendering loop +++++
-        // TODO: SORT THIS
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->position));
 
         while(!transparentQueue.empty())
         {
+            transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }

@@ -7,12 +7,17 @@
 
 void SceneModule::receiveMessage(Message msg) {}
 
-void SceneModule::updateTransforms()
+SceneModule::SceneModule()
 {
-    process(rootNode, glm::mat4(1), false);
+    rootNode.setParent(&preRootNode);
 }
 
-void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool dirty)
+void SceneModule::updateTransforms()
+{
+    process(rootNode, false);
+}
+
+void SceneModule::process(Transform& transform, bool dirty)
 {
     dirty |= transform.dirty;
         
@@ -20,20 +25,20 @@ void SceneModule::process(Transform& transform, glm::mat4 parentsMatrix, bool di
 
     if(dirty)
     {
-        local = glm::translate(local, transform.getLocalPosition());
-        local = local * glm::toMat4(transform.getLocalRotation());
-        local = glm::scale(local, transform.getLocalScale());
+        local = glm::translate(local, transform.localPosition);
+        local = local * glm::toMat4(transform.localRotation);
+        local = glm::scale(local, transform.localScale);
         
-        transform.localToWorldMatrix = parentsMatrix;
+        transform.worldRotation = transform.localRotation * transform.parent->worldRotation;
+        transform.modelMatrix = transform.getParentMatrix() * local;
         //TODO may be computed in more optimal way
-        transform.worldToLocalMatrix = glm::inverse(parentsMatrix);
-        transform.modelMatrix = parentsMatrix * local;
+        transform.toModelMatrix = glm::inverse(transform.modelMatrix);
         transform.dirty = false;
     }
     
 
     for(Transform* t : transform.children)
     {
-        process(*t, transform.modelMatrix, dirty);
+        process(*t, dirty);
     }
 }

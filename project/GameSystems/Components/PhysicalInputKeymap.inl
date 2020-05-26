@@ -1,7 +1,7 @@
 #ifndef PHYSICALINPUTKEYMAP_INL
 #define PHYSICALINPUTKEYMAP_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 #include <unordered_map>
 #include <unordered_set>
 #include <glm/glm.hpp>

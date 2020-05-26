@@ -64,7 +64,7 @@ void MeshQuad::renderInstanced(int count, glm::mat4* instanceTransforms)
 {
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, instanceVbo);
-    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), instanceTransforms, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), instanceTransforms, GL_STATIC_DRAW);
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, count);
     glBindVertexArray(0);
 }

@@ -1,5 +1,6 @@
 #!/bin/sh
-mkdir build
+
+mkdir -p build
 cd build 
 if [ "$1" = "clear" ]; then
     rm -r *
