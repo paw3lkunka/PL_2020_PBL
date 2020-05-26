@@ -120,14 +120,26 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
     //std::cout << "Old V: " << glm::to_string(body1->velocity) << std::endl;
     //FIXME trochę eksperymentu
     glm::vec3 vel = glm::length(jImpulse) * (testResult.collisionNormal / body1->mass);
-    std::cout << "abs Jimpulse: " << glm::to_string(glm::abs(jImpulse)) << '\n';
-    std::cout << "collision normal: " << glm::to_string(testResult.collisionNormal) << '\n';
-    std::cout << "body1 mass: " << body1->mass << '\n';
+    //std::cout << "abs Jimpulse: " << glm::to_string(glm::abs(jImpulse)) << '\n';
+    //std::cout << "collision normal: " << glm::to_string(testResult.collisionNormal) << '\n';
+    //std::cout << "body1 mass: " << body1->mass << '\n';
     body1->velocity += vel;
     //std::cout << "Applied velocity: " << vel.x << ' ' << vel.y << ' ' << vel.z << '\n';
     //body1->velocity += glm::vec3(0.0f, 1.0f, 0.0f);
     //std::cout << "New V: " << glm::to_string(body1->velocity) << std::endl;
-    body1->angularVelocity += body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal);
+    //std::cout << "avelo1: " << glm::to_string(body1->angularVelocity) << std::endl;
+    body1->angularVelocity += glm::zyx(body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal));
+    /*
+    std::cout << "  I^-1: " << glm::to_string(body1->invertedMomentOfInertia) << '\n'
+              << "    r1: " << glm::to_string(r1) << '\n'
+              << "     j: " << glm::to_string(jImpulse) << '\n'
+              << "r1 x j: " << glm::to_string(glm::cross(r1, jImpulse)) << '\n'
+              << "normal: " << glm::to_string(testResult.collisionNormal) << '\n'
+              << "cr * n: " << glm::to_string( glm::cross(r1, jImpulse) * testResult.collisionNormal) << '\n'
+              << "   all: " << glm::to_string(body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal)) << '\n'
+              << "avelo2: " << glm::to_string(body1->angularVelocity) << '\n'
+              << "-----------------------------------------------------" << std::endl;
+              */
 }
 
 template<class T1, class T2>
