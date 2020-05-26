@@ -6,9 +6,6 @@
 
 #include "Material.hpp"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H 
-
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -107,6 +104,7 @@ int Core::init()
 
     if (updateScene)
     {
+        objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
         // ! Manual extension of scene, runned by -u param
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }

@@ -134,6 +134,7 @@ aux_source_directory( project/Renderer/src                  RENDERER_SRC)
 aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
 aux_source_directory( project/Scene/src                     SCENE_SRC)
 aux_source_directory( project/Editor/src                    EDITOR_SRC)
+aux_source_directory( project/UI/src                        UI_SRC)
 
 list( 
     APPEND SOURCE_FILES
@@ -149,6 +150,7 @@ list(
         ${TERMIANL_SRC}
         ${SCENE_SRC}
         ${EDITOR_SRC}
+        ${UI_SRC}
 )
 
 add_library(lib ${SOURCE_FILES} )
@@ -197,6 +199,7 @@ include_directories(
     project/Terminal/include
     project/Scene/include
     project/Editor/include
+    project/UI/include
     libs/stb
     libs/glad/include
     libs/glfw/include

@@ -227,6 +227,13 @@ public:
      */
     void newAudioClip(const char* filePath);
 
+    /**
+     * @brief Create new font and save to map
+     * 
+     * @param filePath path to font file
+     */
+    Font* newFont(const char* filePath, unsigned int size, std::string name);
+
 #pragma endregion
 
 private:    

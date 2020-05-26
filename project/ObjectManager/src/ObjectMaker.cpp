@@ -9,6 +9,7 @@
 #include "Texture.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
+#include "Font.hpp"
 #include "Components.inc"
 #include "AssetStructers.inl"
 
@@ -141,4 +142,26 @@ Animation* ObjectMaker::newAnimation(Animation& animation, std::string path, std
 {
     objContainer->animations[path + "/" + name] = animation;
     return &objContainer->animations[path + "/" + name];
+}
+
+Font* ObjectMaker::newFont(const char* filePath, unsigned int size, std::string name)
+{
+    FT_Library ftLib;
+    if (FT_Init_FreeType(&ftLib))
+    {
+        throw AssetLoadingException("Font: freetype library failed to initialize");
+    }
+    FT_Face face;
+    if (FT_New_Face(ftLib, filePath, 0, &face))
+    {
+        throw AssetLoadingException("Font: freetype font face not created");
+    }
+    FT_Set_Pixel_Sizes(face, 0, size);
+
+    objContainer->fonts.push_back(new Font(face, std::string(filePath), name, size));
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(ftLib);
+
+    return objContainer->fonts[objContainer->fonts.size() - 1];
 }

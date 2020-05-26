@@ -17,6 +17,7 @@ class MeshCustom;
 class Texture;
 class Cubemap;
 class Material;
+class Font;
 
 class ObjectMaker;
 class ObjectModule;
@@ -130,6 +131,7 @@ public:
      * @return Material* pointer or nullptr if can't find
      */
     Material* getMaterialFromSerializationID(unsigned int serializationID);
+    
     /**
      * @brief Get the Material by name
      * 
@@ -137,6 +139,14 @@ public:
      * @return Material* pointer or nullptr if can't find
      */
     Material* getMaterialFromName(const char* name);
+
+    /**
+     * @brief Get the Font by SerializationID
+     * 
+     * @param serializationID of font
+     * @return Font* pointer or nullptr if not found
+     */
+    Font* getFontFromSerializationID(unsigned int serializationID);
 
     // TODO documentation 
     std::unordered_map<std::string, Bone>::iterator getBoneIterByName(const char* name);
@@ -161,11 +171,13 @@ private:
     std::vector<Mesh*> meshes;
     /// @brief texture container. 
     std::vector<Texture*> textures;
-    ///@brief cubemaps constainer.
+    ///@brief cubemaps container.
     std::vector<Cubemap*> cubemaps;
-    ///@brief materials constainer.
+    ///@brief materials container.
     std::vector<Material*> materials;
-    
+    ///@brief fonts container
+    std::vector<Font*> fonts;
+
     /**
      * @brief Animations data collection
      * @key path/animation_name

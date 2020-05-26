@@ -26,6 +26,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 
+#include <glad/glad.h>
+
 bool AssetReader::hasInstance = false;
 unsigned int AssetReader::bonesAmount = 0;
 

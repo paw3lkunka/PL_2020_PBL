@@ -23,9 +23,8 @@ constexpr GLsizei NAME_BUF_SIZE = 32;
 
 /**
  * @brief Shader class, responsible for compiling shaders and creating shader programs
- * 
  */
-class Shader: public ISerializable
+class Shader : public ISerializable
 {
 public:
     /**

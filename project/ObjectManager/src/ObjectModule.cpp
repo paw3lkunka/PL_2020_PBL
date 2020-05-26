@@ -6,6 +6,7 @@
 #include "Texture.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
+#include "Font.hpp"
 #include "AssetStructers.inl"
 #include "Message.inl"
 #include "Core.hpp"
@@ -151,6 +152,18 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType
 void ObjectModule::newAudioClip(const char* filePath)
 {
     assetReader.loadAudioClip(filePath);
+}
+
+Font* ObjectModule::newFont(const char* filePath, unsigned int size, std::string name)
+{
+    for(auto f : objectContainer.fonts)
+    {
+        if(compareStrings(f->getFontPath(), filePath))
+        {
+            return f;
+        }
+    }
+    return objectMaker.newFont(filePath, size, name);
 }
 
 #pragma endregion
