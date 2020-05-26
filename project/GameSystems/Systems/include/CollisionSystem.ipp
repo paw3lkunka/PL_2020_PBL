@@ -119,7 +119,7 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
     //std::cout << "Mass:   " <<  body1->mass << std::endl;
     //std::cout << "Old V: " << glm::to_string(body1->velocity) << std::endl;
     //FIXME trochę eksperymentu
-    glm::vec3 vel = glm::abs(jImpulse) * (testResult.collisionNormal / body1->mass);
+    glm::vec3 vel = glm::length(jImpulse) * (testResult.collisionNormal / body1->mass);
     std::cout << "abs Jimpulse: " << glm::to_string(glm::abs(jImpulse)) << '\n';
     std::cout << "collision normal: " << glm::to_string(testResult.collisionNormal) << '\n';
     std::cout << "body1 mass: " << body1->mass << '\n';
