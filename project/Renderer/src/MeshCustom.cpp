@@ -82,12 +82,12 @@ void MeshCustom::renderInstanced(int count, glm::mat4* instanceTransforms)
     glBindVertexArray(0);
 }
 
-std::vector<Vertex> MeshCustom::getVertices() 
+std::vector<Vertex>* MeshCustom::getVertices() 
 { 
-    return vertices;
+    return &vertices;
 }
 
-std::vector<unsigned int> MeshCustom::getIndices() 
+std::vector<unsigned int>* MeshCustom::getIndices() 
 { 
-    return indices;
+    return &indices;
 }

@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
+#include <glm/glm.hpp>
 
 #include "System.hpp"
 
@@ -12,6 +14,7 @@ struct HydroBody;
 struct Transform;
 struct Rigidbody;
 struct MeshRenderer;
+struct HydroVertexData;
 struct HydroTriangleData;
 
 class HydroBodySystem : public System

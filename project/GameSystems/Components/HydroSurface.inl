@@ -1,7 +1,9 @@
 #ifndef _HYDROSURFACE_INL
 #define _HYDROSURFACE_INL
 
-struct HydroSurface
+#include "Component.hpp"
+
+struct HydroSurface : public Component
 {
     //bool isMoving;
 

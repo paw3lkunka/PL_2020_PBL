@@ -270,6 +270,8 @@ class Core
         //TODO documentation
         static PaddleIkSystem paddleIkSystem;
 
+        static HydroBodySystem hydroBodySystem;
+
 #pragma endregion
 
         /**
@@ -286,7 +288,7 @@ class Core
         static Core* instance;
         GLFWwindow* window; 
 
-        double currentFrameStart
+        double currentFrameStart;
 
 };
 

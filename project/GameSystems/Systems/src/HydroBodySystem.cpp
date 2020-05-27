@@ -53,19 +53,21 @@ void HydroBodySystem::fixedUpdate()
     }
 
     //Add forces to the part of the boat that's above the water
+    /*
     if (aboveSurfaceTriangleData.size() > 0)
     {
         addAboveSurfaceForces();
     }
+    */
 }
 
 void HydroBodySystem::addUnderSurfaceForces()
 {
     float Cf = HydroForces::resistanceCoefficient
     (
-        HydroForces::RHO_WATER,
+        0.02f,
         glm::length(rigidbody->velocity),
-        abs(maxSubmergedZ - minSubmergedZ)
+        fabs(maxSubmergedZ - minSubmergedZ)
     );
 
 
@@ -78,16 +80,16 @@ void HydroBodySystem::addUnderSurfaceForces()
     for (auto it = underSurfaceTriangleData.begin(); it != underSurfaceTriangleData.end(); it++)
     {
         //Calculate the forces
-        glm::vec3 forceToAdd = glm::vec3(0.0f);
+        glm::vec3 forceToAdd(0.0f);
 
         //Force 1 - The hydrostatic force (buoyancy)
-        forceToAdd += HydroForces::buoyancyForce(HydroForces::RHO_WATER, *it);
+        forceToAdd += HydroForces::buoyancyForce(0.02f, *it); // HydroForces::RHO_WATER
 
         //Force 2 - Viscous Water Resistance
-        forceToAdd += HydroForces::viscousWaterResistanceForce(HydroForces::RHO_WATER, *it, Cf);
+        forceToAdd += HydroForces::viscousWaterResistanceForce(0.02f, *it, Cf);
 
         //Force 3 - Pressure drag
-        forceToAdd += HydroForces::pressureDragForce(*it);
+        //forceToAdd += HydroForces::pressureDragForce(*it);
 
         //Force 4 - Slamming force
 
@@ -101,7 +103,7 @@ void HydroBodySystem::addUnderSurfaceForces()
         */
 
         //Force 5 - Wave drifting force
-        forceToAdd += HydroForces::waveDriftingForce(HydroForces::RHO_WATER, it->area, it->normal);
+        //forceToAdd += HydroForces::waveDriftingForce(0.02f, it->area, it->normal);
 
         //Add the forces to the boat
         Impulse impulse;
@@ -174,12 +176,13 @@ void HydroBodySystem::generateUnderSurfaceMesh()
     timeSinceStart = static_cast<float>( GetCore().getCurrentFrameStart() );
 
     //Find all the distances to water once because some triangles share vertices, so reuse
-    for(auto it = meshRenderer->mesh->getVertices().begin(); it != meshRenderer->mesh->getVertices().end(); it++)
+    for(auto it = meshRenderer->mesh->getVertices()->begin(); it != meshRenderer->mesh->getVertices()->end(); it++)
     {
         //The coordinate should be in global position
-        glm::vec3 globalPos = static_cast<glm::vec3>( transform->modelMatrix * glm::vec4(it->position, 1.0f) );
+        glm::vec3 globalPos = static_cast<glm::vec3>( transform->getModelMatrix() * glm::vec4(it->position, 1.0f) );
         bodyVerticesGlobal.push_back(globalPos);
-        bodyDistancesToSurface.push_back( HydroWaves::getDistanceToWave(*hydroBody->hydroSurface, globalPos, timeSinceStart) );
+        // TODO: Make HydroSurface great again
+        bodyDistancesToSurface.push_back( HydroWaves::getDistanceToWave(HydroSurface(), globalPos, timeSinceStart) );
     }
 
     //Add the triangles
@@ -192,16 +195,15 @@ void HydroBodySystem::addTriangles()
 
     //Loop through all the triangles (3 vertices at a time = 1 triangle)
     int triangleCounter = 0;
-    for(auto it = meshRenderer->mesh->getIndices().begin(); it != meshRenderer->mesh->getIndices().end(); it += 3)
-    //while (i < (meshRenderer->mesh->getIndices().size() / 3))
+    for(auto it = meshRenderer->mesh->getIndices()->begin(); it != meshRenderer->mesh->getIndices()->end(); it += 3, triangleCounter += 1)
     {
         //Loop through the 3 vertices
         for (int x = 0; x < 3; x++)
         {
             //Save the data we need
-            vertexData[x].distanceToSurface = bodyDistancesToSurface[*it];
+            vertexData[x].distanceToSurface = bodyDistancesToSurface[*(it + x)];
             vertexData[x].index = x;
-            vertexData[x].modelPosition = bodyVerticesGlobal[*it];
+            vertexData[x].modelPosition = bodyVerticesGlobal[*(it + x)];
         }
 
         //All vertices are above the water
@@ -278,8 +280,6 @@ void HydroBodySystem::addTriangles()
                 addTrianglesTwoVerticesAboveSurface(vertexData, triangleCounter);
             }
         }
-
-        triangleCounter += 1;
     }
 }
 
@@ -354,6 +354,7 @@ void HydroBodySystem::addTrianglesOneVertexAboveSurface(std::vector<HydroVertexD
     aboveSurfaceTriangleData.push_back(HydroTriangleData(I_M, H, I_L, *rigidbody, timeSinceStart));
 
     //Calculate the total submerged area
+    // FIXME: Triangle area for M, I_L, L vertices is nan always...
     float totalArea = HydroForces::getTriangleArea(M, I_M, I_L) + HydroForces::getTriangleArea(M, I_L, L);
 
     // TODO: Bring slamming force back to life

@@ -110,31 +110,7 @@ int Core::init()
         // ? -u
         // ! Manual extension of scene.
         {
-            auto* ent = objectModule.newEntity(5, "PhysicSurface");
-                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable().y = -35;
-                    t->getLocalScaleModifiable() = {300, 50, 150};
-                    t->setParent(&sceneModule.rootNode);
-
-                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-                    bc->type = Collider::Type::KINEMATIC;
-
-                auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                    rb->mass = 5000;
-                    rb->ignoreGravity = true;
-                    rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
-                    rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-                    mr->material = objectModule
-                        .newMaterial
-                        (
-                            objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr(),
-                            "Surface",
-                            RenderType::Transparent
-                        );
-                        mr->material->setVec4("color", glm::vec4(0.15f, 0.8f, 0.3f, 0.2f));
+            
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -155,6 +131,12 @@ int Core::init()
     
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
+
+#pragma region Hydro
+
+    gameSystemsModule.addSystem(&hydroBodySystem);
+
+#pragma endregion // Hydro
 
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -328,3 +310,4 @@ SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
+HydroBodySystem Core::hydroBodySystem;

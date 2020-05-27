@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 struct Rigidbody;
+struct HydroSurface;
 
 /// @brief Structure containing single vertex data for Hydro-related calculations
 struct HydroVertexData
@@ -128,7 +129,7 @@ namespace HydroForces
     constexpr float C_D_PERPENDICULAR = 1.28f;
 
     /// @brief Viscosity depends on the temperature, this is for 20 celsius degrees
-    constexpr float VISCOSITY_FACTOR = 0.000001f; // or 0.00001002f
+    constexpr float VISCOSITY_FACTOR = 0.00001002f; // or 0.000001f
 
     /**
      * @brief Coefficient of air resistance (drag coefficient)

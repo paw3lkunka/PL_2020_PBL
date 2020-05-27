@@ -4,6 +4,7 @@
 #include "Entity.hpp"
 #include "Rigidbody.inl"
 #include "PhysicSystem.hpp"
+#include "HydroSurface.inl"
 
 HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart)
 {
@@ -13,7 +14,7 @@ HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, R
 
     center = (p0 + p1 + p2) / 3.0f;
 
-    distanceToSurface = abs(1.0f); // TODO: proper function
+    distanceToSurface = fabs(center.y); // TODO: proper function
 
     normal = glm::normalize( glm::cross(p1 - p0, p2 - p0) );
 
@@ -30,7 +31,7 @@ HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, R
 
 glm::vec3 HydroForces::getTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter)
 {
-    glm::vec3 r_BA = triangleCenter - static_cast<glm::vec3>( bodyRB.entityPtr->getComponentPtr<Transform>()->modelMatrix[3] );
+    glm::vec3 r_BA = triangleCenter - static_cast<glm::vec3>( bodyRB.entityPtr->getComponentPtr<Transform>()->getModelMatrix()[3] );
     glm::vec3 v_A = bodyRB.velocity + glm::cross(bodyRB.angularVelocity, r_BA);
 
     return v_A;
@@ -40,7 +41,7 @@ float HydroForces::getTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
 {
     float a = glm::distance(p0, p1);
     float c = glm::distance(p2, p0);
-    float area = ( a * c * sinf( acosf( glm::dot(p1 - p0, p2 - p0) ) ) ) / 2.0f;
+    float area = ( a * c * sinf( acosf( glm::dot( glm::normalize(p1 - p0), glm::normalize(p2 - p0) ) ) ) ) / 2.0f;
     
     return area;
 }
@@ -49,7 +50,7 @@ float HydroForces::getTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
 
 glm::vec3 HydroForces::buoyancyForce(float rho, HydroTriangleData triangleData)
 {
-    glm::vec3 buoyancyForce = rho * PhysicSystem::G_CONST.y * triangleData.distanceToSurface * triangleData.area * triangleData.normal;
+    glm::vec3 buoyancyForce = rho * (-PhysicSystem::G_CONST.y) * triangleData.distanceToSurface * triangleData.area * triangleData.normal;
     buoyancyForce.x = 0.0f;
     buoyancyForce.z = 0.0f;
     
@@ -97,7 +98,7 @@ glm::vec3 HydroForces::pressureDragForce(HydroTriangleData triangleData)
     }
     else
     {
-        pressureDragForce = (C_SD1 + C_SD2) * triangleData.area * powf( abs(triangleData.cosTheta), f_S ) * triangleData.normal;
+        pressureDragForce = (C_SD1 + C_SD2) * triangleData.area * powf( fabs(triangleData.cosTheta), f_S ) * triangleData.normal;
     }
 
     pressureDragForce = checkForceIsValid(pressureDragForce, "Pressure drag");
@@ -176,6 +177,7 @@ glm::vec3 HydroForces::waveDriftingForce(float rho, float area, glm::vec3 normal
     glm::vec3 waveDriftingForce = 0.5f * rho * PhysicSystem::G_CONST.y * area * area * normal;
     waveDriftingForce.y = 0.0f;
     
+    waveDriftingForce = checkForceIsValid(waveDriftingForce, "Wave drifting force");
     return waveDriftingForce;
 }
 
@@ -194,7 +196,7 @@ glm::vec3 HydroForces::checkForceIsValid(glm::vec3 force, std::string forceName)
 float HydroWaves::getWaveHeight(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart)
 {
     // TODO: Better waves soon XD
-    return 0.0f;
+    return (-24.0f);
 }
 
 float HydroWaves::getDistanceToWave(HydroSurface hydroSurface, glm::vec3 position, float timeSinceStart)

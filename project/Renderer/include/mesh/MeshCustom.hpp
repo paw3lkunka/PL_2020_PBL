@@ -41,14 +41,14 @@ public:
      * 
      * @return std::vector<Vertex> 
      */
-    virtual std::vector<Vertex> getVertices();
+    virtual std::vector<Vertex>* getVertices();
 
     /**
      * @brief Get the Indices vector
      * 
      * @return std::vector<unsigned int> 
      */
-    virtual std::vector<unsigned int> getIndices();
+    virtual std::vector<unsigned int>* getIndices();
 
 private:
     GLuint vao, vbo, ebo;
