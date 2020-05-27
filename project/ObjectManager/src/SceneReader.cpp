@@ -546,6 +546,8 @@ void SceneReader::readBoxCollider(std::string name)
     boxCollider->halfSize.x = j.at(name).at("halfSize").at("x").get<float>();
     boxCollider->halfSize.y = j.at(name).at("halfSize").at("y").get<float>();
     boxCollider->halfSize.z = j.at(name).at("halfSize").at("z").get<float>();
+    
+    boxCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
     boxCollider->calculateVert();
 

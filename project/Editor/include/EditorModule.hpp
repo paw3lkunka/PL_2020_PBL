@@ -59,7 +59,7 @@ private:
 
     //HACK: Maybe other solution?
     ///@brief list of sorting types, according to enum class (the same order as in enum class)
-    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0";
+    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0";
     ///@brief index of current sorting type
     int enumValue;
 
@@ -68,6 +68,7 @@ private:
     void drawPaddle(Paddle* paddlePtr);
     void drawBone(Bone* bonePtr);
     void drawLight(Light* lightPtr);
+    void drawRigidbody(Rigidbody* rBodyPtr);
 
     // ! Helper functions
     /**

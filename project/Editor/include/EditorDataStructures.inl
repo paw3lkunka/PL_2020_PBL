@@ -11,6 +11,7 @@ enum class SortingType : unsigned int
     TRANSFORM_WITHOUT_BONES,
     PADDLE,
     BONES,
+    RIGIDBODIES,
 };
 
 #endif /* !EDITORDATASTRUCTURES_INL_ */
