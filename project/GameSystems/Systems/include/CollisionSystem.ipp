@@ -46,8 +46,6 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
 {
     if(detectCollsion(collider1, collider2, transformPtr, transform2))
     {
-        //TODO TEMP DEBUG
-        //std::cout << "Collision detected between " << Name(collider1) << " and " << Name(collider2) << " - type: " << (int)collider2->type << std::endl;
         CollisionData data = {collider1, collider2};
 
         switch (collider2->type)
@@ -95,7 +93,7 @@ void CollisionSystem::resolveCollsion(T* collider1, SphereCollider* collider2, R
     reaction = glm::sign(testResult.collisionNormal) * glm::abs(reaction);
     glm::vec3 penetration = testResult.collisionNormal * testResult.penetration;
 
-    body1->velocity =  reaction;// glm::max(reaction, penetration);
+    body1->velocity =  reaction;
     body1->angularVelocity = glm::cross( -testResult.collisionNormal, glm::cross( -testResult.collisionNormal, body1->angularVelocity) + body2->velocity );
 }
 
@@ -106,40 +104,11 @@ void CollisionSystem::resolveCollsion(T* collider1, BoxCollider* collider2, Rigi
     glm::vec3 r2 = testResult.collisionCentre - glm::xyz( transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f) );
     r1 = glm::normalize(r1);
     r2 = glm::normalize(r2);
-/*
-    std::cout << "Centre 1: " << glm::to_string(glm::xyz( transform1->getModelMatrix() * glm::vec4(collider1->center, 1.0f) ) ) << '\n'
-              << "Centre 2: " << glm::to_string(glm::xyz( transform2->getModelMatrix() * glm::vec4(collider2->center, 1.0f) ) ) << '\n' 
-              << "Centre c: " << glm::to_string(testResult.collisionCentre) << '\n' 
-              << "vec1c r1: " << glm::to_string(r1) << '\n' 
-              << "vec2c r2: " << glm::to_string(r2) << std::endl; 
-*/
+
     glm::vec3 jImpulse = JImpulse(body1, body2, r1, r2, testResult.collisionNormal);
 
-    //std::cout << "Normal: " << glm::to_string(testResult.collisionNormal) << std::endl;
-    //std::cout << "Mass:   " <<  body1->mass << std::endl;
-    //std::cout << "Old V: " << glm::to_string(body1->velocity) << std::endl;
-    //FIXME trochę eksperymentu
-    glm::vec3 vel = glm::length(jImpulse) * (testResult.collisionNormal / body1->mass);
-    //std::cout << "abs Jimpulse: " << glm::to_string(glm::abs(jImpulse)) << '\n';
-    //std::cout << "collision normal: " << glm::to_string(testResult.collisionNormal) << '\n';
-    //std::cout << "body1 mass: " << body1->mass << '\n';
-    body1->velocity += vel;
-    //std::cout << "Applied velocity: " << vel.x << ' ' << vel.y << ' ' << vel.z << '\n';
-    //body1->velocity += glm::vec3(0.0f, 1.0f, 0.0f);
-    //std::cout << "New V: " << glm::to_string(body1->velocity) << std::endl;
-    //std::cout << "avelo1: " << glm::to_string(body1->angularVelocity) << std::endl;
+    body1->velocity += glm::length(jImpulse) * (testResult.collisionNormal / body1->mass);;
     body1->angularVelocity += glm::zyx(body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal));
-    /*
-    std::cout << "  I^-1: " << glm::to_string(body1->invertedMomentOfInertia) << '\n'
-              << "    r1: " << glm::to_string(r1) << '\n'
-              << "     j: " << glm::to_string(jImpulse) << '\n'
-              << "r1 x j: " << glm::to_string(glm::cross(r1, jImpulse)) << '\n'
-              << "normal: " << glm::to_string(testResult.collisionNormal) << '\n'
-              << "cr * n: " << glm::to_string( glm::cross(r1, jImpulse) * testResult.collisionNormal) << '\n'
-              << "   all: " << glm::to_string(body1->invertedMomentOfInertia * ( glm::cross(r1, jImpulse) * testResult.collisionNormal)) << '\n'
-              << "avelo2: " << glm::to_string(body1->angularVelocity) << '\n'
-              << "-----------------------------------------------------" << std::endl;
-              */
 }
 
 template<class T1, class T2>
@@ -167,13 +136,11 @@ bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform
         if (proj1.start < proj2.start && proj1.end > proj2.start)
         {
             centres.push_back( (proj1Buffer[END(i)] + proj2Buffer[START(i)]) * 0.5f );
-            //std::cout << "sc" << i << ": "<<glm::to_string(centres.back())<<std::endl;
         }
         // 2.start, 1.start, 2.end, 1.end
         else if (proj2.start < proj1.start && proj2.end > proj1.start)
         {
             centres.push_back( (proj2Buffer[END(i)] + proj1Buffer[START(i)]) * 0.5f );
-            //std::cout << "sc" << i << ": "<<glm::to_string(centres.back())<<std::endl;
         }
         else
         {
@@ -195,15 +162,6 @@ bool CollisionSystem::SATTest(T1* collider1, T2* collider2, Transform* transform
     glm::vec3 penetrationBuffer[4];
     Projection1D proj1 = AxisProjection(collider1, transform1, transform2->getModelMatrix()[3], glm::xyz(transform2->getModelMatrix()[3]) + testResult.collisionNormal, penetrationBuffer);
     Projection1D proj2 = AxisProjection(collider2, transform2, transform2->getModelMatrix()[3], glm::xyz(transform2->getModelMatrix()[3]) + testResult.collisionNormal, penetrationBuffer + 2);
-    // testResult.penetration = std::abs(std::max(proj1.start, proj2.start) - std::min(proj1.end, proj2.end));
-    // std::cout << "POINTS: " << glm::to_string(penetrationBuffer[0]) << "\n"
-    //           << "        " << glm::to_string(penetrationBuffer[1]) << "\n"
-    //           << "        " << glm::to_string(penetrationBuffer[2]) << "\n"
-    //           << "        " << glm::to_string(penetrationBuffer[3]) << "\n"
-    //           << "PROJECT: " << (proj1.start) << "\n"
-    //           << "         " << (proj1.end) << "\n"
-    //           << "         " << (proj2.start) << "\n"
-    //           << "         " << (proj2.end) << "\n" << std::endl;
 
     return true;
     #undef START
@@ -238,10 +196,7 @@ glm::vec3 CollisionSystem::collisionNormal(T* collider1, BoxCollider* collider2,
 
     glm::vec3 normal(0.0f, 0.0f, 0.0f);
     normal[index] = std::copysign(1.0f, vector[index]);
-    //std::cout << "model space central " << glm::to_string(vector) << std::endl;
-    //std::cout << "model space normal " << glm::to_string(normal) << std::endl;
     normal = transform2->getModelMatrix() * glm::vec4(normal, 0.0f);
-    //std::cout << "world space normal " << glm::to_string(glm::normalize(normal)) << std::endl;
     
     return glm::normalize(normal);
 }

@@ -13,7 +13,6 @@
 #endif
 
 // * Other libs
-#include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

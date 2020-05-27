@@ -54,28 +54,27 @@ glm::vec3 AxisProjection(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPo
  */
 float ToLineSpace1D(glm::vec3 point, glm::vec3 axisPoint1, glm::vec3 axisPoint2);
 
-//http://jonathanbosson.github.io/reports/TNM085_group5.pdf
-
 /**
  * @brief Return relative velocity between the two colliding points of the object.
  * 
- * @param rBody1 first colliding object
- * @param rBody2 second colliding object
- * @param r1 vector from first object centre to collision point
- * @param r2 vector from first object centre to collision point
- * @param collisionNormal normal vector of collision
- * @return glm::vec3 relative velocity between the two colliding points
+ * @param rBody1 first colliding object.
+ * @param rBody2 second colliding object.
+ * @param r1 vector from first object centre to collision point.
+ * @param r2 vector from first object centre to collision point.
+ * @param collisionNormal normal vector of collision.
+ * @return glm::vec3 relative velocity between the two colliding points.
  */
 glm::vec3 RelativeVelocity(Rigidbody* rBody1, Rigidbody* rBody2, const glm::vec3& r1, const glm::vec3& r2, const glm::vec3& collisionNormal);
+
 /**
  * @brief Calculate j Impuls, details here: http://jonathanbosson.github.io/reports/TNM085_group5.pdf
  * 
- * @param rBody1 first colliding object
- * @param rBody2 second colliding object
- * @param r1 vector from first object centre to collision point
- * @param r2 vector from first object centre to collision point
- * @param collisionNormal normal vector of collision
- * @return glm::vec3 relative velocity between the two colliding points
+ * @param rBody1 first colliding object.
+ * @param rBody2 second colliding object.
+ * @param r1 vector from first object centre to collision point.
+ * @param r2 vector from first object centre to collision point.
+ * @param collisionNormal normal vector of collision.
+ * @return glm::vec3 relative velocity between the two colliding points.
  */
 glm::vec3 JImpulse(Rigidbody* rBody1, Rigidbody* rBody2, const glm::vec3& r1, const glm::vec3& r2, const glm::vec3& collisionNormal);
 
