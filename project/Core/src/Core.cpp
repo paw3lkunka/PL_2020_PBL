@@ -120,7 +120,7 @@ int Core::init()
                     bc->type = Collider::Type::KINEMATIC;
 
                 auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-                    rb->mass = 5000;
+                    rb->mass = 2000.0f;
                     rb->ignoreGravity = true;
                     rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
                     rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);

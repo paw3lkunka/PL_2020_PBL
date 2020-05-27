@@ -99,6 +99,14 @@ void EditorModule::drawEditor()
             drawBone(temp);
         }
     }
+    
+    if(Rigidbody* temp = entityPtr->getComponentPtr<Rigidbody>())
+    {
+        if(ImGui::CollapsingHeader("Rigidbody"))
+        {
+            drawRigidbody(temp);
+        }
+    }
 
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -182,6 +190,16 @@ void EditorModule::drawLight(Light* lightPtr)
     ImGui::DragFloat("Intensity: ", &lightPtr->intensity, 1.0f, 0.0f, 100.0f, "%.2f");
 }
 
+void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
+{
+    ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
+    ImGui::DragFloat("Mass", &rBodyPtr->mass);
+    ImGui::DragFloat("Drag", &rBodyPtr->drag);
+    ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+    ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
+    ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -212,6 +230,12 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::PADDLE:
                 if(temp->getComponentPtr<Paddle>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::RIGIDBODIES:
+                if(temp->getComponentPtr<Rigidbody>() == nullptr)
                 {
                     continue;
                 }
