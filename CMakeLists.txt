@@ -227,9 +227,9 @@ target_compile_options(glm INTERFACE -Wno-volatile)
 #FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
 # W wolnej chwili wartoby sprawdzić, o co tu chodzi.
 #                                                     ~ Andrzej
-target_compile_options(alsoft-config PUBLIC -w)
-target_compile_options(makemhr PUBLIC -w)
-target_compile_options(sofa-info PUBLIC -w)
+#target_compile_options(alsoft-config PUBLIC -w)
+#target_compile_options(makemhr PUBLIC -w)
+#target_compile_options(sofa-info PUBLIC -w)
 
 
 file(GLOB resources "resources/*")
