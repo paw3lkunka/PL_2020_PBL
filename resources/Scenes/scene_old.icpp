@@ -589,6 +589,24 @@ objectModule.newEntity(2, "sampleSound");
     }
 }
 
+// PawelKunka - 2020-05-27 - 11:36
+//Added Rigidbody and HydroBody to the Kayak entity so it now floats 
+{
+    auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
+        rigidbody->mass = 60.0f;
+        rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
+        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
+        rigidbody->drag = 3.0f;
+        rigidbody->angularDrag = 1.0f;
+        rigidbody->ignoreGravity = false;
+    
+    auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+    
+    auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+        kayakPtr->addComponent(hydroBody);
+        kayakPtr->addComponent(rigidbody);
+}
+
 // Surface - Andrzej 27.05
 {
     auto* ent = objectModule.newEntity(5, "PhysicSurface");

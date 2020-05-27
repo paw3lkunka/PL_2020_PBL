@@ -81,3 +81,13 @@ void MeshCustom::renderInstanced(int count, glm::mat4* instanceTransforms)
     glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, count);
     glBindVertexArray(0);
 }
+
+std::vector<Vertex>* MeshCustom::getVertices() 
+{ 
+    return &vertices;
+}
+
+std::vector<unsigned int>* MeshCustom::getIndices() 
+{ 
+    return &indices;
+}

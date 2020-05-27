@@ -132,6 +132,12 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
+#pragma region Hydro
+
+    gameSystemsModule.addSystem(&hydroBodySystem);
+
+#pragma endregion // Hydro
+
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&collisionSystem);
@@ -204,7 +210,7 @@ int Core::mainLoop()
 
         // ? +++++ FIXED UPDATE TIME MANAGEMENT +++++
 
-            double currentFrameStart = glfwGetTime();
+            currentFrameStart = glfwGetTime();
             double lastFrameTime = currentFrameStart - previousFrameStart;
 
             lag += lastFrameTime;
@@ -262,6 +268,11 @@ void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     GetCore().getMessageBus().notify();
 }
 
+double Core::getCurrentFrameStart()
+{
+    return currentFrameStart;
+}
+
 MessageBus& Core::getMessageBus()
 {
     return messageBus;
@@ -299,3 +310,4 @@ SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
+HydroBodySystem Core::hydroBodySystem;

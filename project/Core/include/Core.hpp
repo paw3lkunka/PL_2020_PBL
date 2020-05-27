@@ -176,6 +176,13 @@ class Core
          * @return GLFWwindow&*
          */
         GLFWwindow* getWindowPtr();
+
+        /**
+         * @brief Get the Current Frame Start time in seconds
+         * 
+         * @return double 
+         */
+        double getCurrentFrameStart();
 #pragma endregion
 
 #pragma region Modules
@@ -263,6 +270,8 @@ class Core
         //TODO documentation
         static PaddleIkSystem paddleIkSystem;
 
+        static HydroBodySystem hydroBodySystem;
+
 #pragma endregion
 
         /**
@@ -278,6 +287,8 @@ class Core
     private:
         static Core* instance;
         GLFWwindow* window; 
+
+        double currentFrameStart;
 
 };
 
