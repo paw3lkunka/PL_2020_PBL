@@ -1,5 +1,5 @@
-#ifndef _MESHQUAD_HPP
-#define _MESHQUAD_HPP
+#ifndef _UIQUAD_HPP
+#define _UIQUAD_HPP
 
 #include "mesh/Mesh.hpp"
 
@@ -7,24 +7,19 @@
 #include <glad/glad.h>
 
 /**
- * @brief Class encapsulating standard quad rendering
- *  Used mainly for instanced rendering
+ * @brief 2d quad class for ui rendering
  */
-class MeshQuad : public Mesh
+class UiQuad : public Mesh
 {
 public:
-    MeshQuad(bool serialize = false);
-    virtual ~MeshQuad() = default;
+    UiQuad(bool serialize = false);
+    virtual ~UiQuad() = default;
 
     /**
      * @brief Creates buffers and fills them with data
      */
     static void setup();
-    /**
-     * @brief Create buffers for use with ui rendering
-     */
-    static void setupUI();
-    
+
     virtual void render();
     virtual void renderInstanced(int count, glm::mat4* instanceTransforms);
 
@@ -33,7 +28,7 @@ private:
     static GLuint vao, vbo;
     static GLuint instanceVbo;
     static Bounds bounds;
-    static float vertexData[20];
+    static float vertexData[16];
 };
 
-#endif // _MESHQUAD_HPP
+#endif // _UIQUAD_HPP

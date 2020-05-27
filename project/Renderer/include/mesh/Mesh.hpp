@@ -18,7 +18,7 @@ public:
      * @param meshFilePath 
      * @param meshPath 
      */
-    Mesh(std::string meshFilePath, std::string meshPath);
+    Mesh(std::string meshFilePath, std::string meshPath, bool serialize = true);
 
     /**
      * @brief Pure virtual render function for use with various render calls 

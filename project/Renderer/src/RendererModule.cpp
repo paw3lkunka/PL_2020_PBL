@@ -6,6 +6,7 @@
 #include "Material.hpp"
 #include "Core.hpp"
 #include "DistanceComparer.hpp"
+#include "UiRenderer.inl"
 
 #include <algorithm>
 
@@ -75,25 +76,30 @@ void RendererModule::receiveMessage(Message msg)
             
             break;
         }
+        case Event::RENDERER_ADD_UI_TO_QUEUE:
+        {
+            UiRenderer* uiElementToAdd = msg.getValue<UiRenderer*>();
+            break;
+        }
         case Event::RENDERER_ADD_LIGHT:
+        {
+            Light* lightToAdd = msg.getValue<Light*>();
+            switch(lightToAdd->lightType)
             {
-                Light* lightToAdd = msg.getValue<Light*>();
-                switch(lightToAdd->lightType)
-                {
-                    case LightType::Directional:
-                        directionalLight = lightToAdd;
-                        break;
-                    case LightType::Point:
-                        // TODO: Implement point lights
-                        std::cerr << "Point lights not yet implemented.\n";
-                        break;
-                    case LightType::Spot:
-                        // TODO: Implement spot lights
-                        std::cerr << "Spot lights not yet implemented.\n";
-                        break;
-                }
-                break;
+                case LightType::Directional:
+                    directionalLight = lightToAdd;
+                    break;
+                case LightType::Point:
+                    // TODO: Implement point lights
+                    std::cerr << "Point lights not yet implemented.\n";
+                    break;
+                case LightType::Spot:
+                    // TODO: Implement spot lights
+                    std::cerr << "Spot lights not yet implemented.\n";
+                    break;
             }
+            break;
+        }
         case Event::RENDERER_SET_MAIN_CAMERA:
             cameraMain = msg.getValue<Camera*>();
             break;
@@ -111,6 +117,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
     instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
+    uiPackets.reserve(DRAW_CALL_UI_ALLOCATION);
 
     if (createInfo.cullFace)
     {

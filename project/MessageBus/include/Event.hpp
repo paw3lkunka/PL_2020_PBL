@@ -77,6 +77,8 @@ enum class Event : unsigned int
 #pragma region RENDERER
     // Send mesh renderer data, DATA: Pointer to mesh renderer
     RENDERER_ADD_MESH_TO_QUEUE,
+    // Send Ui renderer data, DATA: Pointer to ui renderer
+    RENDERER_ADD_UI_TO_QUEUE,
     // Send light data, DATA: Pointer to light object
     RENDERER_ADD_LIGHT,
     // Send main camera to renderer, DATA: Pointer to main camera

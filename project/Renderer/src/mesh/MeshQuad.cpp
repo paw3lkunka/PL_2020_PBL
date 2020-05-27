@@ -1,5 +1,6 @@
 #include "mesh/MeshQuad.hpp"
 
+bool MeshQuad::initialized = false;
 GLuint MeshQuad::vao = 0;
 GLuint MeshQuad::vbo = 0;
 
@@ -14,6 +15,15 @@ float MeshQuad::vertexData[20] = {
     -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
     0.5f, 0.5f, 0.0f, 1.0f, 1.0f
 };
+
+MeshQuad::MeshQuad(bool serialize) : Mesh("", "", serialize)
+{
+    if (!initialized)
+    {
+        setup();
+        initialized = true;
+    }
+}
 
 void MeshQuad::setup()
 {
