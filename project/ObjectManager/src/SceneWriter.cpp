@@ -333,6 +333,7 @@ void SceneWriter::saveSphereCollider(std::string name, SphereCollider* component
 void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
 {
     j[name]["type"] = "BoxCollider";
+    j[name]["colliderType"] = componentPtr->type;
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
     j[name]["center"]["z"] = componentPtr->center.z;

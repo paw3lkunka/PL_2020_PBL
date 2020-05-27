@@ -110,7 +110,7 @@ int Core::init()
         // ? -u
         // ! Manual extension of scene.
         {
-            
+            //Some code here
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
