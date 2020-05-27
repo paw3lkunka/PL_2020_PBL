@@ -8,16 +8,36 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/vec_swizzle.hpp> 
+#include <glm/gtx/component_wise.hpp>
 
 template<class T1, class T2> // if T1 == T2 == SphereCollider, it is specialization in CollisionSystem.cpp
 bool CollisionSystem::detectCollsion(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
 {
+    // Wide phase
+    if (!quickDetectCollision(coll1, coll2, trans1, trans2))
+    {
+        return false;
+    }
+
+    // Narrow phase
     std::vector<glm::vec3> axes;
 
     findSATAxes(coll1, coll2, trans1, trans2, axes);
     findSATAxes(coll2, coll1, trans2, trans1, axes);
 
     return SATTest(coll1, coll2, trans1, trans2, axes);
+}
+
+template<class T1, class T2>
+bool CollisionSystem::quickDetectCollision(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2)
+{
+    glm::vec3 wsCentre1 = trans1->getModelMatrix() * glm::vec4(coll1->center, 1.0f);
+    glm::vec3 wsCentre2 = trans2->getModelMatrix() * glm::vec4(coll2->center, 1.0f);
+    
+    float radius1 = glm::compMax( trans1->getModelMatrix() * glm::vec4(glm::vec3(BoundingSphereRadius(coll1)), 1.0f) );
+    float radius2 = glm::compMax( trans2->getModelMatrix() * glm::vec4(glm::vec3(BoundingSphereRadius(coll2)), 1.0f) );
+
+    return glm::distance(wsCentre1, wsCentre2) < radius1 + radius2;
 }
 
 template<class T>
@@ -72,7 +92,7 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
         }   
     }
     else if(collider2->type == Collider::Type::TRIGGER)
-    {   
+    {
         CollisionData data = {collider1, collider2};
         if(activeTriggers.find(data) != activeTriggers.end())
         {

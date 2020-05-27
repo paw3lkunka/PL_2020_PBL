@@ -5,10 +5,26 @@
 
 #include "Rigidbody.inl"
 
+class SphereCollider;
 class BoxCollider;
 class Transform;
-class SphereCollider;
 class Projection1D;
+
+/**
+ * @brief Reurns radius of bounding sphere.
+ * 
+ * @param box Pointer to collider object.
+ * @return float In this case: radius of sphere.
+ */
+float BoundingSphereRadius(SphereCollider* sphere);
+
+/**
+ * @brief Reurns radius of bounding sphere.
+ * 
+ * @param box Pointer to collider object.
+ * @return float In this case: distance from centre to vertex.
+ */
+float BoundingSphereRadius(BoxCollider* box);
 
 /**
  * @brief Project box collider to 1D range in space of given line.

@@ -223,7 +223,7 @@ class Core
             {
                 if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
                 {
-                        instance->close();
+                    instance->close();
                 }
             }
         } tmpExit;
@@ -260,6 +260,7 @@ class Core
 
         //TODO documentation
         static SkeletonSystem skeletonSystem;
+
         //TODO documentation
         static LightSystem lightSystem;
 
@@ -269,6 +270,7 @@ class Core
         //TODO documentation
         static PaddleIkSystem paddleIkSystem;
 
+        //TODO documentation
         static HydroBodySystem hydroBodySystem;
 
 #pragma endregion

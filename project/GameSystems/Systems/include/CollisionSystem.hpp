@@ -92,6 +92,20 @@ public:
         bool detectCollsion(T1* of, T2* with, Transform* ofT, Transform* withT);
 
         /**
+         * @brief Wide phase of collision detection, perform quick test basing on bounding spheres.
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param coll1 collider of first entity.
+         * @param coll2 collider of second entity.
+         * @param trans1 transform of first entity.
+         * @param trans2 transform of second entity.
+         * @return if collision was detected
+         */
+        template<class T1, class T2>
+        bool quickDetectCollision(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2);
+
+        /**
          * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
          * 
          * @tparam T Final type of first entity's collider.
