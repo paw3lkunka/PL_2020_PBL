@@ -99,7 +99,7 @@ private:
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
     // * Ui rendet packets collection
-    std::vector<UiPackets> uiPackets;
+    std::vector<UiPacket> uiPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
     std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ size_t = mesh id << 32 | material id +++++

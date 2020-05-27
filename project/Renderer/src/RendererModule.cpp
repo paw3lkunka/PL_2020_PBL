@@ -79,6 +79,8 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_UI_TO_QUEUE:
         {
             UiRenderer* uiElementToAdd = msg.getValue<UiRenderer*>();
+            uiPackets.push_back(UiPacket(&uiElementToAdd->mesh, uiElementToAdd->material, uiElementToAdd->modelMatrix));
+            uiQueue.push_back(&uiPackets.back());
             break;
         }
         case Event::RENDERER_ADD_LIGHT:
@@ -395,6 +397,20 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+
+        // ? +++++ Overlay UI rendering loop +++++
+        // Get screen ortho projection
+        glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
+        
+        while(!uiQueue.empty())
+        {
+            static int temp = 0;
+            temp %= 127;
+            int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
+            uiQueue.front()->render(orthoScreen, character);
+            uiQueue.pop_front();
+        }
+
         glDisable(GL_BLEND);
 
         //TODO Remove if it became useless

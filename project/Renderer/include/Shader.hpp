@@ -70,6 +70,8 @@ public:
 	void setVec4(const std::string& name, const glm::vec4& vec) const;
     //TODO documentation
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
+    //TODO documentation
+	void setMat3(const std::string& name, const glm::mat3& mat) const;
 
     //TODO documentation
     void setBool(const char* name, bool value) const;
@@ -87,6 +89,8 @@ public:
 	void setVec4(const char* name, const glm::vec4& vec) const;
     //TODO documentation
 	void setMat4(const char* name, const glm::mat4& mat) const;
+    //TODO documentation
+	void setMat3(const char* name, const glm::mat3& mat) const;
 
     unsigned int ID;
 

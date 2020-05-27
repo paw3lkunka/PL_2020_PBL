@@ -7,6 +7,7 @@
 
 #include "Bone.inl"
 #include "Animation.hpp"
+#include "Font.hpp"
 
 class Entity;
 class Component;
@@ -17,7 +18,6 @@ class MeshCustom;
 class Texture;
 class Cubemap;
 class Material;
-class Font;
 
 class ObjectMaker;
 class ObjectModule;
@@ -152,6 +152,8 @@ public:
     std::unordered_map<std::string, Bone>::iterator getBoneIterByName(const char* name);
     // TODO documentation
     Animation* getAnimationPtrByName(const char* name);
+    // TODO documentation
+    Font* getFontPtrByName(const char* name);
 
 protected:
 private:

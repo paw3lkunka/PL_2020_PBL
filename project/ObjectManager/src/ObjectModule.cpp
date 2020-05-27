@@ -183,4 +183,9 @@ Animation* ObjectModule::getAnimationPtrByName(const char* name)
     }
 }
 
+Font* ObjectModule::getFontPtrByName(const char* name)
+{
+    return objectContainer.getFontPtrByName(name);
+}
+
 #pragma endregion

@@ -104,7 +104,21 @@ int Core::init()
 
     if (updateScene)
     {
-        objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+        auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+        auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+        auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
+        uiMaterial->setVec3("textColor", {1.0f, 1.0f, 1.0f});
+        objectModule.newEntity(2, "UiTest");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalScaleModifiable() = {1.0f, 1.0f};
+
+            uiModule.rootNodes.push_back(rt);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                ui->material = uiMaterial;
+
+        }
         // ! Manual extension of scene, runned by -u param
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
@@ -132,6 +146,7 @@ int Core::init()
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
+    gameSystemsModule.addSystem(&uiRendererSystem);
 
     // ! IK system initialize
     BoneAttachData leftData;
@@ -221,6 +236,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            uiModule.updateRectTransforms();
             physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
@@ -292,3 +308,4 @@ SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
+UiRendererSystem Core::uiRendererSystem;

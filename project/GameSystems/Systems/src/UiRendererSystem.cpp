@@ -9,7 +9,7 @@
 bool UiRendererSystem::assertEntity(Entity* entity)
 {
     uiRenderer = entity->getComponentPtr<UiRenderer>();
-    rectTransform = entity->getComponentPtr<Transform>();
+    rectTransform = entity->getComponentPtr<RectTransform>();
     return (uiRenderer != nullptr && rectTransform != nullptr);
 }
 

@@ -131,6 +131,9 @@ public:
      */
     Animation* getAnimationPtrByName(const char* name);
 
+    // TODO documentation
+    Font* getFontPtrByName(const char* name);
+
 #pragma endregion
 
 #pragma region ObjectMaker Wrapper

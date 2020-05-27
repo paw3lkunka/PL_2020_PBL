@@ -7,13 +7,16 @@
 
 struct UiRenderer : public Component
 {
-    UiRenderer() = default;
+    UiRenderer()
+    {
+        mesh = UiQuad(false);
+    }
     virtual ~UiRenderer() = default;
 
     glm::mat3 modelMatrix;
 
     Material* material;
-    Mesh* mesh;
+    UiQuad mesh;
 };
 
 #endif // _UIRENDERER_INL

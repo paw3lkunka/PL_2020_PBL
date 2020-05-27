@@ -247,3 +247,17 @@ Animation* ObjectContainer::getAnimationPtrByName(const char* name)
 {
     return &animations.at(name);
 }
+
+Font* ObjectContainer::getFontPtrByName(const char* name)
+{
+    Font* font = nullptr;
+    for(auto var : fonts)
+    {
+        if (objModule->compareStrings(var->getName(), name))
+        {
+            font = var;
+            break;
+        }
+    }
+    return font;
+}

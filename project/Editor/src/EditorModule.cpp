@@ -100,6 +100,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
+    {
+        if(ImGui::CollapsingHeader("RectTransform"))
+        {
+            drawRectTransform(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -164,6 +172,46 @@ void EditorModule::drawTransform(Transform* transformPtr)
     {
         ImGui::Text(("Parent name: " + std::string(transformPtr->getParent()->entityPtr->getName())).c_str());
     }
+}
+
+void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
+{
+    //* transform variables
+
+    ImGui::Text("Local transform:");
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 0.01f, -100.0f, 100.0f, "%.2f");
+    ImGui::DragFloat("Rotation: ", (float*)&rectTransformPtr->getLocalRotationModifiable(), 0.01f, 0.0f, 360.0f, "%.1f");
+    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getLocalScaleModifiable(), 0.1f, -100.0f, 100.0f, "%.2f");
+    // ImGui::NewLine();
+    // ImGui::Text("World Transform: ");
+    // {
+    //     // Decomposition
+    //     glm::vec3 shit3(1.0f);
+    //     glm::vec4 shit(1.0f);
+    //     glm::quat worldRotDec = {1, 0, 0, 0};
+    //     glm::decompose(transformPtr->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
+
+    //     glm::quat worldRot = worldRotDec * transformPtr->getLocalRotation();
+        
+    //     glm::vec3 worldPos = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
+    //     glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
+    //     glm::vec3 worldScale = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalScale(), 1.0f);
+        
+    //     ImGui::Text( ("Position: " + formatVec3(worldPos)).c_str() );
+    //     ImGui::SameLine();
+    //     ImGui::Text( ("Rotation: " + formatVec3(worldRotation)).c_str() );
+    //     ImGui::SameLine();
+    //     ImGui::Text( ("Scale: " + formatVec3(worldScale)).c_str() );
+    // }
+    // ImGui::NewLine();
+    // if(transformPtr->getParent()->serializationID == 0)
+    // {
+    //     ImGui::Text("Parent name: Root scene");
+    // }
+    // else
+    // {
+    //     ImGui::Text(("Parent name: " + std::string(transformPtr->getParent()->entityPtr->getName())).c_str());
+    // }
 }
 
 void EditorModule::drawPaddle(Paddle* paddlePtr)
