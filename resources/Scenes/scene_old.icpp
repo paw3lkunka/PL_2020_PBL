@@ -589,7 +589,7 @@ objectModule.newEntity(2, "sampleSound");
     }
 }
 
-// Surface
+// Surface - Andrzej 27.05
 {
     auto* ent = objectModule.newEntity(5, "PhysicSurface");
         auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
