@@ -177,41 +177,15 @@ void EditorModule::drawTransform(Transform* transformPtr)
 void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
 {
     //* transform variables
-
+    static float rotation = 0;
     ImGui::Text("Local transform:");
-    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 0.01f, -100.0f, 100.0f, "%.2f");
-    ImGui::DragFloat("Rotation: ", (float*)&rectTransformPtr->getLocalRotationModifiable(), 0.01f, 0.0f, 360.0f, "%.1f");
-    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getLocalScaleModifiable(), 0.1f, -100.0f, 100.0f, "%.2f");
-    // ImGui::NewLine();
-    // ImGui::Text("World Transform: ");
-    // {
-    //     // Decomposition
-    //     glm::vec3 shit3(1.0f);
-    //     glm::vec4 shit(1.0f);
-    //     glm::quat worldRotDec = {1, 0, 0, 0};
-    //     glm::decompose(transformPtr->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
-
-    //     glm::quat worldRot = worldRotDec * transformPtr->getLocalRotation();
-        
-    //     glm::vec3 worldPos = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
-    //     glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
-    //     glm::vec3 worldScale = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalScale(), 1.0f);
-        
-    //     ImGui::Text( ("Position: " + formatVec3(worldPos)).c_str() );
-    //     ImGui::SameLine();
-    //     ImGui::Text( ("Rotation: " + formatVec3(worldRotation)).c_str() );
-    //     ImGui::SameLine();
-    //     ImGui::Text( ("Scale: " + formatVec3(worldScale)).c_str() );
-    // }
-    // ImGui::NewLine();
-    // if(transformPtr->getParent()->serializationID == 0)
-    // {
-    //     ImGui::Text("Parent name: Root scene");
-    // }
-    // else
-    // {
-    //     ImGui::Text(("Parent name: " + std::string(transformPtr->getParent()->entityPtr->getName())).c_str());
-    // }
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
+    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+    
+    rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }
 
 void EditorModule::drawPaddle(Paddle* paddlePtr)

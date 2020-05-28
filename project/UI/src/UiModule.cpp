@@ -1,6 +1,7 @@
 #include "UiModule.hpp"
 
 #include "Message.inl"
+#include "Core.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -18,11 +19,11 @@ void UiModule::updateRectTransforms()
 {
     for(auto var : rootNodes)
     {
-        process(var, glm::mat3(1.0f), false);
+        process(var, nullptr, false);
     }
 }
 
-void UiModule::process(RectTransform* transform, glm::mat3 parent, bool dirty)
+void UiModule::process(RectTransform* transform, RectTransform* parent, bool dirty)
 {
     dirty |= transform->dirty;
 
@@ -30,8 +31,20 @@ void UiModule::process(RectTransform* transform, glm::mat3 parent, bool dirty)
 
     if (dirty)
     {
-        local[2][0] = transform->getLocalPosition().x;
-        local[2][1] = transform->getLocalPosition().y;
+        glm::vec2 parentSize = glm::vec2(1.0f);
+        glm::mat3 parentMatrix = glm::mat3(1.0f);
+        if (parent == nullptr)
+        {
+            parentSize.x = GetCore().windowWidth;
+            parentSize.y = GetCore().windowHeight;
+        }
+        else
+        {
+            parentMatrix = parent->modelMatrix;
+            parentSize = parent->getSize();
+        }
+        local[2][0] = transform->getAnchor().x * parentSize.x + transform->getLocalPosition().x - transform->getOrigin().x * transform->getSize().x;
+        local[2][1] = transform->getAnchor().y * parentSize.y + transform->getLocalPosition().y - transform->getOrigin().y * transform->getSize().y;
         
         glm::mat2 rotation = glm::mat2(1.0f);
         float sin = glm::sin(transform->getLocalRotation());
@@ -42,8 +55,8 @@ void UiModule::process(RectTransform* transform, glm::mat3 parent, bool dirty)
         rotation[1][1] = cos;
 
         glm::mat2 scale = glm::mat2(1.0f);
-        scale[0][0] = transform->getLocalScale().x;
-        scale[1][1] = transform->getLocalScale().y;
+        scale[0][0] = transform->getSize().x;
+        scale[1][1] = transform->getSize().y;
 
         glm::mat2 rotScl = rotation * scale;
 
@@ -52,12 +65,12 @@ void UiModule::process(RectTransform* transform, glm::mat3 parent, bool dirty)
         local[1][0] = rotScl[1][0];
         local[1][1] = rotScl[1][1];
 
-        transform->modelMatrix = parent * local;
+        transform->modelMatrix = parentMatrix * local;
         transform->dirty = false;
     }
     
     for(auto t : transform->children)
     {
-        process(t, transform->modelMatrix, dirty);
+        process(t, transform, dirty);
     }
 }

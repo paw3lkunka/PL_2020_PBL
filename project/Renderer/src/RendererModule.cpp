@@ -401,7 +401,8 @@ void RendererModule::render()
         // ? +++++ Overlay UI rendering loop +++++
         // Get screen ortho projection
         glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
-        
+
+        glDisable(GL_DEPTH_TEST);
         while(!uiQueue.empty())
         {
             //static int temp = 0;
@@ -410,7 +411,7 @@ void RendererModule::render()
             uiQueue.front()->render(orthoScreen);
             uiQueue.pop_front();
         }
-
+        glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
         //TODO Remove if it became useless

@@ -40,7 +40,7 @@ public:
     std::vector<RectTransform*> rootNodes;
 
 private:
-    void process(RectTransform* transform, glm::mat3 parent, bool dirty);
+    void process(RectTransform* transform, RectTransform* parent, bool dirty);
 };
 
 #endif // _UIMODULE_HPP

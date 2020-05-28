@@ -49,6 +49,12 @@ struct RectTransform : public Component
     inline const float &getLocalRotation() { return localRotation; }
 
     /**
+     * @brief Get read-only reference to Local Rotation.
+     * @return const floatt& 
+     */
+    inline const float getLocalRotationDegrees() { return glm::degrees(localRotation); }
+
+    /**
      * @brief Get modifiable reference to Local Rotation.
      * Automatically sets dirty flag, use getLocalRotation for read only ops;
      * @return float& 
@@ -59,14 +65,14 @@ struct RectTransform : public Component
      * @brief Get read-only reference to Local Scale.
      * @return const glm::vec2& 
      */
-    inline const glm::vec2 &getLocalScale() { return localScale; }
+    inline const glm::vec2 &getSize() { return size; }
     
     /**
      * @brief Get modifiable reference to Local Scale.
      * Automatically set dirty flag, use getLocalScale for read only ops; 
      * @return  glm::vec2& 
      */
-    inline glm::vec2 &getLocalScaleModifiable() { dirty = true; return localScale; }
+    inline glm::vec2 &getSizeModifiable() { dirty = true; return size; }
 
     /**
      * @brief Get read-only reference to Local Scale.
@@ -121,7 +127,7 @@ private:
     glm::vec2 anchor = {0.0f, 0.0f};
     glm::vec2 localPosition = {0.0f, 0.0f};
     float localRotation = 0.0f;
-    glm::vec2 localScale = {0.0f, 0.0f};
+    glm::vec2 size = {0.0f, 0.0f};
 };
 
 #endif // _RECTTRANSFORM_INL

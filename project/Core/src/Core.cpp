@@ -122,7 +122,7 @@ int Core::init()
         objectModule.newEntity(2, "UiTest");
         {
             rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rootRect->getLocalScaleModifiable() = {1.0f, 1.0f};
+            rootRect->getSizeModifiable() = {1.0f, 1.0f};
 
             uiModule.rootNodes.push_back(rootRect);
 
@@ -134,7 +134,7 @@ int Core::init()
         objectModule.newEntity(2, "UiTest2");
         {
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                rt->getLocalScaleModifiable() = {0.5f, 0.5f};
+                rt->getSizeModifiable() = {0.5f, 0.5f};
                 rt->setParent(rootRect);
 
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
