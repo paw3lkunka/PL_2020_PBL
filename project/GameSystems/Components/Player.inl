@@ -8,7 +8,10 @@
  */
 struct Player : public Component
 {
-    bool isHidden = false;
+    /**
+     * @brief Store number of activated hideouts, can be interpreted as bool.
+     */
+    int isHidden = 0;
     bool isDetected = false;
 };
 
