@@ -105,15 +105,37 @@ int Core::init()
     if (updateScene)
     {
         auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+        TextureCreateInfo info = {};
+        info.format = GL_RGBA;
+        info.generateMipmaps = false;
+        info.magFilter = GL_LINEAR;
+        info.minFilter = GL_LINEAR;
+        info.wrapMode = GL_CLAMP_TO_EDGE;
+        auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
         auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
         auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
-        uiMaterial->setVec3("textColor", {1.0f, 1.0f, 1.0f});
+        uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
+        uiMaterial->setTexture("sprite", buttonTest);
+        auto textMaterial = objectModule.newMaterial(uiShader, "TextMaterial", RenderType::Transparent);
+        textMaterial->setVec4("color", {1.0f, 0.0f, 0.0f, 1.0f});
+        RectTransform* rootRect;
         objectModule.newEntity(2, "UiTest");
         {
-            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                rt->getLocalScaleModifiable() = {1.0f, 1.0f};
+            rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rootRect->getLocalScaleModifiable() = {1.0f, 1.0f};
 
-            uiModule.rootNodes.push_back(rt);
+            uiModule.rootNodes.push_back(rootRect);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                ui->material = uiMaterial;
+
+        }
+
+        objectModule.newEntity(2, "UiTest2");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalScaleModifiable() = {0.5f, 0.5f};
+                rt->setParent(rootRect);
 
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                 ui->material = uiMaterial;

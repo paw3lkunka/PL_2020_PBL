@@ -2,12 +2,12 @@
 
 noperspective in vec2 uv;
 
-out vec4 color;
+out vec4 frag_color;
 
-uniform sampler2D text;
-uniform vec3 textColor;
+uniform sampler2D sprite;
+uniform vec4 color;
 
 void main()
 {
-    color = vec4(textColor, texture(text, uv).r);
+    frag_color = texture(sprite, uv) * color;
 }

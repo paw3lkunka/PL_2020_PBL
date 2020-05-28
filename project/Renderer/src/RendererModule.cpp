@@ -404,10 +404,10 @@ void RendererModule::render()
         
         while(!uiQueue.empty())
         {
-            static int temp = 0;
-            temp %= 127;
-            int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
-            uiQueue.front()->render(orthoScreen, character);
+            //static int temp = 0;
+            //temp %= 127;
+            //int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
+            uiQueue.front()->render(orthoScreen);
             uiQueue.pop_front();
         }
 
