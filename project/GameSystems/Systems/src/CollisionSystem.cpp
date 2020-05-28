@@ -47,6 +47,16 @@ void CollisionSystem::fixedUpdate()
 template<>  // Specialization only for this case
 bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereCollider* coll1, SphereCollider* coll2, Transform* trans1, Transform* trans2)
 {
+    // Wide phase
+    if (!quickDetectCollision(coll1, coll2, trans1, trans2))
+    {
+        std::cout << "WidePhase: NO." << std::endl;
+        return false;
+    }
+        std::cout << "WidePhase: YES." << std::endl;
+    
+    //NArrow phase
+    //TODO Could be optimized
     std::vector<glm::vec3> axes;
 
     findSATAxes(coll1, coll2, trans1, trans2, axes);

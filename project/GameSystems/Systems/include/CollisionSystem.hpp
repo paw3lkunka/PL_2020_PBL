@@ -92,6 +92,20 @@ public:
         bool detectCollsion(T1* of, T2* with, Transform* ofT, Transform* withT);
 
         /**
+         * @brief Wide phase of collision detection, perform quick test basing on bounding spheres.
+         * 
+         * @tparam T1 Final type of first entity's collider.
+         * @tparam T2 Final type of second entity's collider.
+         * @param coll1 collider of first entity.
+         * @param coll2 collider of second entity.
+         * @param trans1 transform of first entity.
+         * @param trans2 transform of second entity.
+         * @return if collision was detected
+         */
+        template<class T1, class T2>
+        bool quickDetectCollision(T1* coll1, T2* coll2, Transform* trans1, Transform* trans2);
+
+        /**
          * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
          * 
          * @tparam T Final type of first entity's collider.
@@ -103,21 +117,41 @@ public:
         template<class T>
         void resolveCollsion(T* collider1, SphereCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
         
+        /**
+         * @brief Detect colision between two entities. In effect, first rigidbody gains collision impulse.
+         * 
+         * @tparam T Final type of first entity's collider.
+         * @param body1 rigidbody of second entity.
+         * @param body2 rigidbody of second entity. 
+         * @param transform1 transform of first entity.
+         * @param transform2 transform of second entity.
+         */
         template<class T>
         void resolveCollsion(T* collider1, BoxCollider* collider2, Rigidbody* body1, Rigidbody* body2, Transform* transform1, Transform* transform2);
 
-//TODO documentation update
         /**
-         * @brief find all axes needed to perform Separate Axes Theorem Test, and push them into vector.
-         * Important: does nothing for SphereCollider, so colission sphere vs sphere needs special treat.
+         * @brief Find all axes needed to perform Separate Axes Theorem Test, and push them into vector. 
          * 
-         * @tparam T Final type of collider.
-         * @param collider collider of entity.
-         * @param transform transform of entity.
+         * @tparam T Final type of second collider.
+         * @param collider1 first entity's collider.
+         * @param collider2 second entity's collider.
+         * @param transform1 first entity's transform.
+         * @param transform2 second entity's transform.
          * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
          */
         template<class T>
         void findSATAxes(SphereCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
+
+        /**
+         * @brief Find all axes needed to perform Separate Axes Theorem Test, and push them into vector. 
+         * 
+         * @tparam T Final type of second collider.
+         * @param collider1 first entity's collider.
+         * @param collider2 second entity's collider.
+         * @param transform1 first entity's transform.
+         * @param transform2 second entity's transform.
+         * @param axes vector of axes defines as pairs of points - even indexes represents first points, odd - second points.
+         */
         template<class T>
         void findSATAxes(BoxCollider* collider1, T* collider2, Transform* transform1, Transform* transform2, std::vector<glm::vec3>& axes);
 

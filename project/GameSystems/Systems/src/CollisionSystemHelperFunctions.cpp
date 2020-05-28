@@ -2,9 +2,21 @@
 
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/vec_swizzle.hpp>
 
 #include "Components.inc"
 #include "CollisionDataStructures.inl"
+
+
+float BoundingSphereRadius(SphereCollider* sphere)  
+{
+    return sphere->radius;
+}
+
+float BoundingSphereRadius(BoxCollider* box)
+{
+    return glm::length(glm::xyz(box->verts[0]) - box->center);
+}
 
 Projection1D AxisProjection(SphereCollider* sphere, Transform* transform, glm::vec3 axisPoint1, glm::vec3 axisPoint2, glm::vec3 projBuffer[])
 {
@@ -77,6 +89,5 @@ glm::vec3 JImpulse(Rigidbody* rBody1, Rigidbody* rBody2, const glm::vec3& r1, co
         + collisionNormal * ( glm::cross( rBody1->invertedMomentOfInertia * glm::cross(r1, collisionNormal), r1 ))
         + collisionNormal * ( glm::cross( rBody2->invertedMomentOfInertia * glm::cross(r2, collisionNormal), r2 ))
     );
-    std::cout << "Jimpulse: " << glm::to_string(res) << std::endl;
     return res;
 }
