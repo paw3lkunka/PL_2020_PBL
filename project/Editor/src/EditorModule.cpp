@@ -4,6 +4,8 @@
 #include <examples/imgui_impl_glfw.h>
 #include <glm/gtx/string_cast.hpp>
 
+#include "MomentOfInertia.hpp"
+
 #include <sstream>
 #include <iomanip>
 
@@ -193,7 +195,22 @@ void EditorModule::drawLight(Light* lightPtr)
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
     ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
-    ImGui::DragFloat("Mass", &rBodyPtr->mass);
+    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
+    {
+        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
+        {
+            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
+        {
+            //TODO implement solid or hollow
+            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+    }
     ImGui::DragFloat("Drag", &rBodyPtr->drag);
     ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
