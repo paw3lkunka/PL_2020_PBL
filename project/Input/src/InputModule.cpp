@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Event.hpp"
+#include "Event.inl"
 #include "Message.inl"
 #include "Core.hpp"
 #include "MouseDataStructures.inl"

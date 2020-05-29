@@ -187,7 +187,7 @@ void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
     ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
-    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Size: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
     
     rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }

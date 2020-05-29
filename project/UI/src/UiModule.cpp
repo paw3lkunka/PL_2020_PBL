@@ -45,6 +45,9 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         }
         local[2][0] = transform->getAnchor().x * parentSize.x + transform->getLocalPosition().x - transform->getOrigin().x * transform->getSize().x;
         local[2][1] = transform->getAnchor().y * parentSize.y + transform->getLocalPosition().y - transform->getOrigin().y * transform->getSize().y;
+
+        transform->screenPosition.x = local[2][0];
+        transform->screenPosition.y = local[2][1];
         
         glm::mat2 rotation = glm::mat2(1.0f);
         float sin = glm::sin(transform->getLocalRotation());

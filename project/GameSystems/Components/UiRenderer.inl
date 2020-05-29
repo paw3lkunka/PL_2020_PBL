@@ -1,7 +1,7 @@
 #ifndef _UIRENDERER_INL
 #define _UIRENDERER_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 #include "Material.hpp"
 #include "mesh/UiQuad.hpp"
 

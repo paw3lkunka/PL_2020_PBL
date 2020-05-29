@@ -1,7 +1,7 @@
 #ifndef _RECTTRANSFORM_INL
 #define _RECTTRANSFORM_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 
 #include <glm/glm.hpp>
 #include <unordered_set>
@@ -121,11 +121,19 @@ struct RectTransform : public Component
      */
     std::unordered_set<RectTransform*> children;
 
+    ///@brief friendship declaration for UiModule to setting up screen Position
+    friend class UiModule;
+    /**
+     * @brief counted on screen position
+     */
+    inline const glm::vec2 getScreenPosition() { return screenPosition; }
+
 private:
     RectTransform* parent = nullptr;
     glm::vec2 origin = {0.0f, 0.0f};
     glm::vec2 anchor = {0.0f, 0.0f};
     glm::vec2 localPosition = {0.0f, 0.0f};
+    glm::vec2 screenPosition = {0.0f, 0.0f};
     float localRotation = 0.0f;
     glm::vec2 size = {0.0f, 0.0f};
 };

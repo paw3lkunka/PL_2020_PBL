@@ -137,15 +137,21 @@ int Core::init()
 
             }
 
-            objectModule.newEntity(2, "UiTest2");
+            objectModule.newEntity(3, "ButtonTest");
             {
                 auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
                     rt->getSizeModifiable() = {0.5f, 0.5f};
-                    rt->setParent(rootRect);
+                    uiModule.rootNodes.push_back(rt);
 
                 auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                    ui->material = uiMaterial;
-
+                    auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+                    buttMaterial->setTexture("sprite", buttonTest);
+                    buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+                    ui->material = buttMaterial;
+                
+                auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+                    butt->baseColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+                    butt->highlightedColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
             }
         }
 
@@ -182,6 +188,7 @@ int Core::init()
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
+    gameSystemsModule.addSystem(&uiButtonSystem);
 
     // ! IK system initialize
     BoneAttachData leftData;
@@ -233,8 +240,8 @@ int Core::mainLoop()
         gameSystemsModule.run(System::START);
 
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
@@ -350,3 +357,4 @@ PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
+UiButtonSystem Core::uiButtonSystem;

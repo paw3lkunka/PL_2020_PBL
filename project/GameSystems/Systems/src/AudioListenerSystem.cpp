@@ -4,7 +4,7 @@
 #include <glm/gtx/vec_swizzle.hpp>
 
 #include "Core.hpp"
-#include "Event.hpp"
+#include "Event.inl"
 #include "Message.inl"
 
 #include "Entity.hpp"
