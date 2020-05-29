@@ -22,7 +22,7 @@ echo "#define $_guardian1" >> $_file1
 echo "#ifndef $_guardian2" >> $_file2
 echo "#define $_guardian2" >> $_file2
 echo >> $_file1
-echo "#include \"Component.inl\"" >> $_file1
+echo "#include \"Component.hpp\"" >> $_file1
 echo | tee -a $_file1 >> $_file2
 
 for _header in $_path/*

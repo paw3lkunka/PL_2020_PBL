@@ -1,12 +1,11 @@
 #ifndef COLLIDER_HPP_
 #define COLLIDER_HPP_
 
-#include "Component.inl"
+#include "Component.hpp"
 
 
 /**
  * @brief Colliders base struct
- * Important: colliders ignore local scale
  */
 struct Collider : public Component
 {

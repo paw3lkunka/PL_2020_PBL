@@ -4,7 +4,7 @@
 #include "ObjectExceptions.inl"
 
 #include "Entity.hpp"
-#include "Component.inl"
+#include "Component.hpp"
 #include "Shader.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"

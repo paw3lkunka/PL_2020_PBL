@@ -5,6 +5,8 @@
 #include "Message.inl"
 #include "Entity.hpp"
 
+#include <glm/gtx/vec_swizzle.hpp>
+
 #include "AudioSource.inl"
 #include "Transform.inl"
 #include "Rigidbody.inl"
@@ -32,7 +34,7 @@ void AudioSourceSystem::fixedUpdate()
 
     if(transform)
     {
-        auto position = static_cast<glm::vec3>(transform->modelMatrix[3]);
+        auto position = glm::xyz(transform->getModelMatrix()[3]);
         if(audioSource->getPosition() != position)
         {
             audioSource->getPositionModifiable() = position;

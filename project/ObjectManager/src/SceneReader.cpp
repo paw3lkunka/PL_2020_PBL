@@ -330,6 +330,16 @@ void SceneReader::readComponents()
             std::cout << "Skeleton" << std::endl;
             readSkeleton(name);
         }
+        else if(componentType == "HydroBody")
+        {
+            std::cout << "HydroBody" << std::endl;
+            readHydroBody(name);
+        }
+        else if(componentType == "HydroSurface")
+        {
+            std::cout << "HydroSurface" << std::endl;
+            readHydroSurface(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -562,6 +572,8 @@ void SceneReader::readBoxCollider(std::string name)
     boxCollider->halfSize.x = j.at(name).at("halfSize").at("x").get<float>();
     boxCollider->halfSize.y = j.at(name).at("halfSize").at("y").get<float>();
     boxCollider->halfSize.z = j.at(name).at("halfSize").at("z").get<float>();
+    
+    boxCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
     boxCollider->calculateVert();
 
@@ -602,6 +614,7 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->momentOfInertia[0][0] = j.at(name).at("momentOfInertia").at("0,0").get<float>();
     rigidbody->momentOfInertia[1][1] = j.at(name).at("momentOfInertia").at("1,1").get<float>();
     rigidbody->momentOfInertia[2][2] = j.at(name).at("momentOfInertia").at("2,2").get<float>();
+    rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
 
     rigidbody->drag = j.at(name).at("drag").get<float>();
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();
@@ -642,6 +655,22 @@ void SceneReader::readSkeleton(std::string name)
     auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
     auto component = entity->getComponentPtr<Skeleton>();
     component->serializationID = serializationID;
+}
+
+void SceneReader::readHydroBody(std::string name)
+{
+    auto hydroBody = objModulePtr->newEmptyComponent<HydroBody>();
+    hydroBody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hydroBody);
+}
+
+void SceneReader::readHydroSurface(std::string name)
+{
+    auto hydroSurface = objModulePtr->newEmptyComponent<HydroSurface>();
+    hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hydroSurface);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)

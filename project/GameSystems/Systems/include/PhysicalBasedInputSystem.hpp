@@ -9,7 +9,9 @@
 class Rigidbody;
 class PhysicalInputKeymap;
 
-    //TODO DOCUMENTATION
+/**
+ * @brief System responsible for applying physical impulses, as reaction to input events.
+ */
 class PhysicalBasedInputSystem : public System, public IMsgReceiver
 {
     public:
@@ -29,7 +31,9 @@ class PhysicalBasedInputSystem : public System, public IMsgReceiver
         PhysicalInputKeymap* keymapPtr;
         Rigidbody* rigidbodyPtr;
 
+        /// @brief store keys pressed exactly in last frame
         std::unordered_set<int> pressed;
+        /// @brief store keys pressed some frames before, and still held down
         std::unordered_set<int> held;
 };
 

@@ -13,7 +13,6 @@
 #endif
 
 // * Other libs
-#include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -156,7 +155,7 @@ class Core
         int mainLoop();
 
         /**
-         * @brief Safely dispose all dependencies 
+         * @brief Safely dispose all dependencies
          */
         void cleanup();
 
@@ -177,6 +176,13 @@ class Core
          * @return GLFWwindow&*
          */
         GLFWwindow* getWindowPtr();
+
+        /**
+         * @brief Get the Current Frame Start time in seconds
+         * 
+         * @return double 
+         */
+        double getCurrentFrameStart();
 #pragma endregion
 
 #pragma region Modules
@@ -221,7 +227,7 @@ class Core
             {
                 if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
                 {
-                        instance->close();
+                    instance->close();
                 }
             }
         } tmpExit;
@@ -271,6 +277,9 @@ class Core
         //TODO documentation
         static UiRendererSystem uiRendererSystem;
 
+        //TODO documentation
+        static HydroBodySystem hydroBodySystem;
+
 #pragma endregion
 
         /**
@@ -286,6 +295,8 @@ class Core
     private:
         static Core* instance;
         GLFWwindow* window; 
+
+        double currentFrameStart;
 
 };
 

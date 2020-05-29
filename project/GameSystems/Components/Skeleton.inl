@@ -1,7 +1,7 @@
 #ifndef _SKELETON_INL
 #define _SKELETON_INL
 
-#include "Component.inl"
+#include "Component.hpp"
 #include <glm/mat4x4.hpp>
 
 class Animation;

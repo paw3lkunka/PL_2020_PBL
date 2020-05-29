@@ -4,6 +4,8 @@
 #include <examples/imgui_impl_glfw.h>
 #include <glm/gtx/string_cast.hpp>
 
+#include "MomentOfInertia.hpp"
+
 #include <sstream>
 #include <iomanip>
 
@@ -99,6 +101,14 @@ void EditorModule::drawEditor()
             drawBone(temp);
         }
     }
+    
+    if(Rigidbody* temp = entityPtr->getComponentPtr<Rigidbody>())
+    {
+        if(ImGui::CollapsingHeader("Rigidbody"))
+        {
+            drawRigidbody(temp);
+        }
+    }
 
     if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
     {
@@ -145,17 +155,11 @@ void EditorModule::drawTransform(Transform* transformPtr)
     ImGui::NewLine();
     ImGui::Text("World Transform: ");
     {
-        // Decomposition
-        glm::vec3 shit3(1.0f);
-        glm::vec4 shit(1.0f);
-        glm::quat worldRotDec = {1, 0, 0, 0};
-        glm::decompose(transformPtr->localToWorldMatrix, shit3, worldRotDec, shit3, shit3, shit);
-
-        glm::quat worldRot = worldRotDec * transformPtr->getLocalRotation();
+        glm::quat worldRot = transformPtr->getWorldRotation();
         
-        glm::vec3 worldPos = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
+        glm::vec3 worldPos = transformPtr->getParentMatrix() * glm::vec4(transformPtr->getLocalPosition(), 1.0f);
         glm::vec3 worldRotation = glm::eulerAngles(worldRot) * 180.0f / glm::pi<float>();
-        glm::vec3 worldScale = transformPtr->localToWorldMatrix * glm::vec4(transformPtr->getLocalScale(), 1.0f);
+        glm::vec3 worldScale = transformPtr->getParentMatrix() * glm::vec4(transformPtr->getLocalScale(), 1.0f);
         
         ImGui::Text( ("Position: " + formatVec3(worldPos)).c_str() );
         ImGui::SameLine();
@@ -210,6 +214,31 @@ void EditorModule::drawLight(Light* lightPtr)
     ImGui::DragFloat("Intensity: ", &lightPtr->intensity, 1.0f, 0.0f, 100.0f, "%.2f");
 }
 
+void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
+{
+    ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
+    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
+    {
+        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
+        {
+            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
+        {
+            //TODO implement solid or hollow
+            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+    }
+    ImGui::DragFloat("Drag", &rBodyPtr->drag);
+    ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+    ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
+    ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -240,6 +269,12 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::PADDLE:
                 if(temp->getComponentPtr<Paddle>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::RIGIDBODIES:
+                if(temp->getComponentPtr<Rigidbody>() == nullptr)
                 {
                     continue;
                 }

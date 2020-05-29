@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <vector>
 
 class Mesh : public IFileSystem, public ISerializable
 {
@@ -43,6 +44,20 @@ public:
      * @return unsigned int Mesh ID
      */
     unsigned int getID() { return ID; }
+
+    /**
+     * @brief Get the Vertices vector
+     * 
+     * @return std::vector<Vertex> 
+     */
+    virtual std::vector<Vertex>* getVertices() { return nullptr; }
+
+    /**
+     * @brief Get the Indices vector
+     * 
+     * @return std::vector<unsigned int> 
+     */
+    virtual std::vector<unsigned int>* getIndices() { return nullptr; }
 
 private:
     static unsigned int idcount;

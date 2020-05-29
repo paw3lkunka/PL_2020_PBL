@@ -44,5 +44,6 @@
 #Auto-generated files
 project/Autogen/
 misc/cpp_files_count
+resources/Scenes/savedScene.json
 
 

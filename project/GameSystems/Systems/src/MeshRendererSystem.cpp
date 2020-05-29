@@ -15,6 +15,6 @@ bool MeshRendererSystem::assertEntity(Entity* entity)
 
 void MeshRendererSystem::frameUpdate()
 {
-    meshRenderer->modelMatrix = transform->modelMatrix;
+    meshRenderer->modelMatrix = transform->getModelMatrix();
     GetCore().messageBus.sendMessage(Message(Event::RENDERER_ADD_MESH_TO_QUEUE, meshRenderer));
 }

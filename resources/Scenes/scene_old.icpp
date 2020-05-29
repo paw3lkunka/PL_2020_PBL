@@ -500,17 +500,17 @@ objectModule.newEntity(2, "sampleSound");
     Entity* sphere001 = objectModule.getEntityPtrByName("Sphere001");
             Rigidbody* rb001 = objectModule.newEmptyComponent<Rigidbody>();
             rb001->mass = 10;
-            rb001->drag = 5;
+            rb001->drag = 10;
             rb001->angularDrag = 5;
-            rb001->ignoreGravity = true;
+            rb001->ignoreGravity = false;
             sphere001->addComponent(rb001);
 
         Entity* sphereSound = objectModule.getEntityPtrByName("sphereSound");
             Rigidbody* rbSound = objectModule.newEmptyComponent<Rigidbody>();
             rbSound->mass = 10;
             rbSound->drag = 5;
-            rbSound->angularDrag = 5;
-            rbSound->ignoreGravity = true;
+            rbSound->angularDrag = 10;
+            rbSound->ignoreGravity = false;
             sphereSound->addComponent(rbSound);
         Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
@@ -538,4 +538,97 @@ objectModule.newEntity(2, "sampleSound");
             rigidbody->mass = 10;
             rigidbody->ignoreGravity = true;
 
+}
+
+// Box, and some fixes
+{
+    //Adding y axis
+    {
+        auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+            auto* map = pbit->getComponentPtr<PhysicalInputKeymap>();
+                Impulse up = {glm::vec3(0.0f, 50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
+                Impulse down = {glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
+                map->continuous.emplace(GLFW_KEY_Z, up);
+                map->continuous.emplace(GLFW_KEY_X, down);
+    }
+    //I fix
+    {
+        auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+            auto* rb1 = o1->getComponentPtr<Rigidbody>();
+            auto* sc1 = o1->getComponentPtr<SphereCollider>();
+            rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
+            
+        auto* o2 = objectModule.getEntityPtrByName("Sphere001");
+            auto* rb2 = o2->getComponentPtr<Rigidbody>();
+            auto* sc2 = o2->getComponentPtr<SphereCollider>();
+            rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
+            
+        auto* o3 = objectModule.getEntityPtrByName("sphereSound");
+            auto* rb3 = o3->getComponentPtr<Rigidbody>();
+            auto* sc3 = o3->getComponentPtr<SphereCollider>();
+            rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
+    }
+    objectModule.newEntity(4, "TestBox");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {-50.0f, 0.0, 0.0f};
+            t->getLocalScaleModifiable() = {6.0f, 6.0f, 6.0f};
+            t->setParent(&sceneModule.rootNode);
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = objectModule.getMaterialPtrByName("simpleLitMat");
+        auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->angularDrag = 2;
+            rb->drag = 10;
+            rb->ignoreGravity = false;
+            rb->mass = 10;
+            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
+            bc->calculateVert();
+    }
+}
+
+// PawelKunka - 2020-05-27 - 11:36
+//Added Rigidbody and HydroBody to the Kayak entity so it now floats 
+{
+    auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
+        rigidbody->mass = 60.0f;
+        rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
+        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
+        rigidbody->drag = 3.0f;
+        rigidbody->angularDrag = 1.0f;
+        rigidbody->ignoreGravity = false;
+    
+    auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+    
+    auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+        kayakPtr->addComponent(hydroBody);
+        kayakPtr->addComponent(rigidbody);
+}
+
+// Surface - Andrzej 27.05
+{
+    auto* ent = objectModule.newEntity(5, "PhysicSurface");
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable().y = -35;
+            t->getLocalScaleModifiable() = {300, 50, 150};
+            t->setParent(&sceneModule.rootNode);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->type = Collider::Type::KINEMATIC;
+        auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 2000.0f;
+            rb->ignoreGravity = true;
+            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
+            rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = objectModule
+                .newMaterial
+                (
+                    objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr(),
+                    "Surface",
+                    RenderType::Transparent
+                );
+                mr->material->setVec4("color", glm::vec4(0.15f, 0.8f, 0.3f, 0.2f));
 }

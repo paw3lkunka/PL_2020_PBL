@@ -40,11 +40,11 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::KEY_PRESSED:
-        std::cout << "console here: KEY_PRESSED. code: " << msg.getValue<int>() << std::endl;
+        //std::cout << "console here: KEY_PRESSED. code: " << msg.getValue<int>() << std::endl;
         break;
     
     case Event::KEY_RELEASED:
-        std::cout << "console here: KEY_RELEASED. code: " << msg.getValue<int>() << std::endl;
+        //std::cout << "console here: KEY_RELEASED. code: " << msg.getValue<int>() << std::endl;
         break;
     
     case Event::KEY_REPEAT:
@@ -53,11 +53,11 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
     
     case Event::MOUSE_BUTTON_PRESSED:
-        std::cout << "console here: MOUSE_BUTTON_PRESSED. code: " << msg.getValue<int>() << std::endl;
+        //std::cout << "console here: MOUSE_BUTTON_PRESSED. code: " << msg.getValue<int>() << std::endl;
         break;
 
     case Event::MOUSE_BUTTON_RELEASED:
-        std::cout << "console here: MOUSE_BUTTON_RELEASED. code: " << msg.getValue<int>() << std::endl;
+        //std::cout << "console here: MOUSE_BUTTON_RELEASED. code: " << msg.getValue<int>() << std::endl;
         break;
         
     case Event::MOUSE_CURSOR_MOVED:
@@ -75,8 +75,8 @@ void ConsoleModule::receiveMessage(Message msg)
     
     case Event::MOUSE_SCROLL_MOVED:
     {
-        ScrollData sData = msg.getValue<ScrollData>();
-        std::cout << "console here: MOUSE_SCROLL_MOVED. " << (sData.axis ? "Vertical" : "Horizontal") << " scroll: " << sData.offset << std::endl;
+        //ScrollData sData = msg.getValue<ScrollData>();
+        //std::cout << "console here: MOUSE_SCROLL_MOVED. " << (sData.axis ? "Vertical" : "Horizontal") << " scroll: " << sData.offset << std::endl;
     }
         break;
 
@@ -208,12 +208,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::COLLSION_DETECT:
-        {/*
-            CollisionData data = msg.getValue<CollisionData>();
-            std::cout << data.cause << " collided with " << data.target << " separation vector: (" 
-                << data.separation.x << ", " 
-                << data.separation.y << ", "  
-                << data.separation.z << ")." << std::endl; */
+        {
         }
         break;
         
@@ -233,7 +228,6 @@ void ConsoleModule::receiveMessage(Message msg)
 
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
-        std::cout << "WARNING: Specific console response not implemented:" << std::endl;
         break;
     }
 }
