@@ -110,6 +110,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
+    {
+        if(ImGui::CollapsingHeader("RectTransform"))
+        {
+            drawRectTransform(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -168,6 +176,20 @@ void EditorModule::drawTransform(Transform* transformPtr)
     {
         ImGui::Text(("Parent name: " + std::string(transformPtr->getParent()->entityPtr->getName())).c_str());
     }
+}
+
+void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
+{
+    //* transform variables
+    static float rotation = 0;
+    ImGui::Text("Local transform:");
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
+    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+    
+    rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }
 
 void EditorModule::drawPaddle(Paddle* paddlePtr)

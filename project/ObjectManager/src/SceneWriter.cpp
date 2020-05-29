@@ -11,6 +11,7 @@
 #include "mesh/MeshSkinned.hpp"
 #include "Shader.hpp"
 #include "Entity.hpp"
+#include "Font.hpp"
 
 #include <fstream>
 #include <iomanip>
@@ -39,6 +40,7 @@ void SceneWriter::saveScene(const char* filePath)
     j["Amounts"]["meshes"] = objContainerPtr->meshes.size();
     j["Amounts"]["textures"] = objContainerPtr->textures.size();
     j["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
+    j["Amounts"]["fonts"] = objContainerPtr->fonts.size();
     
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
     {
@@ -148,6 +150,23 @@ void SceneWriter::saveScene(const char* filePath)
             name = "cubemap" + std::to_string(i);
         }
         saveCubemap(name, objContainerPtr->cubemaps[i]);
+    }
+
+    for(int i = 0; i < objContainerPtr->fonts.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "font00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "font0" + std::to_string(i);
+        }
+        else
+        {
+            name = "font" + std::to_string(i);
+        }
+        saveFont(name, objContainerPtr->fonts[i]);
     }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
@@ -569,4 +588,11 @@ void SceneWriter::saveCubemap(std::string name, Cubemap* assetPtr)
     j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
     j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
     j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+}
+
+void SceneWriter::saveFont(std::string name, Font* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["fontPath"] = assetPtr->getFontPath();
+    j[name]["size"] = assetPtr->getSize();
 }

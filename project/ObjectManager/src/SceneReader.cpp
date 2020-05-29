@@ -5,6 +5,7 @@
 #include "Core.hpp"
 #include "Collider.inl"
 #include "Camera.inl"
+#include "Font.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -88,6 +89,21 @@ void SceneReader::readTextures()
         tex->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     }
 
+}
+
+void SceneReader::readFonts()
+{
+    std::string name = "";
+    int fontsAmount = j.at("Amounts").at("fonts").get<int>();
+    for (int i = 0; i < fontsAmount; i++)
+    {
+        name = setName("font", i);
+        std::string fontPath = j.at(name).at("fontPath").get<std::string>();
+        unsigned int size = j.at(name).at("size").get<unsigned int>();
+        Font* font = objModulePtr->newFont(fontPath.c_str(), size, name);
+        font->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    }
+    
 }
 
 void SceneReader::readCubemaps()

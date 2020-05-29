@@ -131,6 +131,9 @@ public:
      */
     Animation* getAnimationPtrByName(const char* name);
 
+    // TODO documentation
+    Font* getFontPtrByName(const char* name);
+
 #pragma endregion
 
 #pragma region ObjectMaker Wrapper
@@ -226,6 +229,13 @@ public:
      * @param filePath to audio file
      */
     void newAudioClip(const char* filePath);
+
+    /**
+     * @brief Create new font and save to map
+     * 
+     * @param filePath path to font file
+     */
+    Font* newFont(const char* filePath, unsigned int size, std::string name);
 
 #pragma endregion
 

@@ -65,6 +65,7 @@ private:
 
     // ! Component drawing functions
     void drawTransform(Transform* transformPtr);
+    void drawRectTransform(RectTransform* rectTransformPtr);
     void drawPaddle(Paddle* paddlePtr);
     void drawBone(Bone* bonePtr);
     void drawLight(Light* lightPtr);

@@ -107,10 +107,46 @@ int Core::init()
 
     if (updateScene)
     {
+        // ! Manual extension of scene, run by -u param
         // ? -u
-        // ! Manual extension of scene.
         {
-            //Some code here
+            auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+            TextureCreateInfo info = {};
+            info.format = GL_RGBA;
+            info.generateMipmaps = false;
+            info.magFilter = GL_LINEAR;
+            info.minFilter = GL_LINEAR;
+            info.wrapMode = GL_CLAMP_TO_EDGE;
+            auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+            auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+            auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
+            uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
+            uiMaterial->setTexture("sprite", buttonTest);
+            auto textMaterial = objectModule.newMaterial(uiShader, "TextMaterial", RenderType::Transparent);
+            textMaterial->setVec4("color", {1.0f, 0.0f, 0.0f, 1.0f});
+            RectTransform* rootRect;
+            objectModule.newEntity(2, "UiTest");
+            {
+                rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {1.0f, 1.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = uiMaterial;
+
+            }
+
+            objectModule.newEntity(2, "UiTest2");
+            {
+                auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    rt->getSizeModifiable() = {0.5f, 0.5f};
+                    rt->setParent(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = uiMaterial;
+
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -145,6 +181,7 @@ int Core::init()
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
+    gameSystemsModule.addSystem(&uiRendererSystem);
 
     // ! IK system initialize
     BoneAttachData leftData;
@@ -234,6 +271,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            uiModule.updateRectTransforms();
             physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
@@ -310,4 +348,5 @@ SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
+UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
