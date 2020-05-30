@@ -334,7 +334,10 @@ void SceneWriter::saveCamera(std::string name, Camera* componentPtr)
 void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
 {
     j[name]["type"] = "MeshRenderer";
-    j[name]["material"] = componentPtr->material->serializationID;
+    if(componentPtr->material != nullptr)
+    {
+        j[name]["material"] = componentPtr->material->serializationID;
+    }
     j[name]["mesh"] = componentPtr->mesh->serializationID;
     
 }
