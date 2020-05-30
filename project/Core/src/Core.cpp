@@ -97,7 +97,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
