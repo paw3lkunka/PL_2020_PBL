@@ -143,8 +143,8 @@ void InputModule::mouseButtonsCallback(GLFWwindow* window, int button, int actio
 
 void InputModule::cursorCallback(GLFWwindow* window, double xPos, double yPos)
 {
-    static int xOld = 0;
-    static int yOld = 0;
+    static double xOld = 0;
+    static double yOld = 0;
 
     auto data = CursorData
     {
@@ -154,13 +154,7 @@ void InputModule::cursorCallback(GLFWwindow* window, double xPos, double yPos)
         static_cast<float>(xPos - xOld),
         static_cast<float>(yPos - yOld)
     };
-    
-    if(lastCursorMove > 1)
-    {
-        data.xDelta = 0;
-        data.yDelta = 0;
-    }
-    
+
     GetCore().getMessageBus().sendMessage(Message(Event::MOUSE_CURSOR_MOVED, data));
 
     xOld = xPos;
