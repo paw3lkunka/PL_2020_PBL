@@ -1,0 +1,127 @@
+auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
+auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
+
+TextureCreateInfo texCreateInfo = {};
+    texCreateInfo.generateMipmaps = true;
+    texCreateInfo.magFilter = GL_LINEAR;
+    texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    texCreateInfo.wrapMode = GL_REPEAT;
+auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
+
+objectModule.newModel("Resources/Models/Box.FBX");
+
+TextureCreateInfo skyboxCreateInfo = {};
+    skyboxCreateInfo.generateMipmaps = true;
+    skyboxCreateInfo.magFilter = GL_LINEAR;
+    skyboxCreateInfo.minFilter = GL_LINEAR;
+    skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
+
+    auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
+                                "Resources/Textures/skybox_02/nz.png", 
+                                "Resources/Textures/skybox_02/nx.png", 
+                                "Resources/Textures/skybox_02/px.png",
+                                "Resources/Textures/skybox_02/pz.png",
+                                "Resources/Textures/skybox_02/py.png",
+                                "Resources/Textures/skybox_02/ny.png");
+
+    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
+    skyboxMat->setCubemap("cubemap", cubemap);
+
+    Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
+    unlitInstancedMat->setTexture("mainTex", texture);
+    unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
+
+    objectModule.newEntity(4, "Camera");
+    {
+        auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
+            c->farPlane = 10000.0f;
+            c->nearPlane = 0.1f;
+            c->fieldOfView = 80.0f;
+            c->projectionMode = CameraProjection::Perspective;
+
+        
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+            t->setParent(&sceneModule.rootNode);
+
+        auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+            li->getIsCurrentModifiable() = true;
+            li->getGainModifiable() = 1.0f;
+            li->getVelocityModifiable();
+            li->getPositionModifiable();
+            li->getAtModifiable();
+            li->getUpModifiable();
+    }
+
+    objectModule.newEntity(2, "cubeInstanced1");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 20.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "cubeInstanced2");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "cubeInstanced3");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "cubeInstanced4");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "cubeInstanced5");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }
+
+    objectModule.newEntity(2, "cubeInstanced6");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
+            t->getLocalScaleModifiable() *= 10;
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+    }

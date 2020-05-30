@@ -523,8 +523,15 @@ void SceneReader::readMeshRenderer(std::string name)
     if(component != nullptr) // * if component exists (if was made by mesh processing)
     {
         auto renderer = dynamic_cast<MeshRenderer*>(component);
-        unsigned int childID = j.at(name).at("material").get<unsigned int>();
-        renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        try
+        {
+            unsigned int childID = j.at(name).at("material").get<unsigned int>();
+            renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        }
+        catch(nlohmann::detail::out_of_range)
+        {
+            renderer->material = nullptr;
+        }
         renderer->serializationID = serializationID;
         return;
     }
