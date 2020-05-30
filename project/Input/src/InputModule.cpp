@@ -104,6 +104,12 @@ void InputModule::controllersInitialDetection()
 
 void InputModule::keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // ! ----- Quick fix for function buttons crashing the application -----
+    if (action == GLFW_KEY_UNKNOWN || key == GLFW_KEY_UNKNOWN)
+    {
+        return;
+    }
+
     Event event;
     switch(action)
     {
