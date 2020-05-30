@@ -5,9 +5,17 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <iostream>
+
 void UiModule::receiveMessage(Message msg)
 {
-
+    switch (msg.getEvent())
+    {
+        case Event::WINDOW_RESIZED:
+            std::cout << "WINDOW RESIZED, RECALCULATING UI\n";
+            updateRectTransforms(true);
+            break;
+    }
 }
 
 void UiModule::init()
@@ -15,11 +23,11 @@ void UiModule::init()
     
 }
 
-void UiModule::updateRectTransforms()
+void UiModule::updateRectTransforms(bool windowResized)
 {
     for(auto var : rootNodes)
     {
-        process(var, nullptr, false);
+        process(var, nullptr, windowResized);
     }
 }
 
@@ -28,6 +36,7 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
     dirty |= transform->dirty;
 
     glm::mat3 local(1.0f);
+    //glm::mat3 noScaleTransform(1.0f);
 
     if (dirty)
     {
@@ -56,6 +65,8 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         rotation[0][1] = -sin;
         rotation[1][0] = sin;
         rotation[1][1] = cos;
+
+        //noScaleTransform = glm::mat3(rotation) * local;
 
         glm::mat2 scale = glm::mat2(1.0f);
         scale[0][0] = transform->getSize().x;

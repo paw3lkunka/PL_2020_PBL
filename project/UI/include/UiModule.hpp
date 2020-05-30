@@ -11,16 +11,14 @@
 
 class Message;
 
-class UiModule : IModule
+class UiModule : public IModule
 {
 public:
     UiModule() = default;
     virtual ~UiModule() = default;
 
     /**
-     * @brief Message reciever, unused at the moment
-     * 
-     * @param msg 
+     * @brief Message reciever, checks if the window was resized
      */
     virtual void receiveMessage(Message msg);
 
@@ -32,7 +30,7 @@ public:
     /**
      * @brief Traverse the graphs of rect transforms
      */
-    void updateRectTransforms();
+    void updateRectTransforms(bool windowResized = false);
 
     /**
      * @brief Vector of rect transform roots

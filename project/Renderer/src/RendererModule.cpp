@@ -428,5 +428,6 @@ void RendererModule::render()
         // ? +++++ Clear the render packets +++++
         normalPackets.clear();
         instancedPackets.clear();
+        uiPackets.clear();
     }
 }

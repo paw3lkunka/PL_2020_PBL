@@ -91,6 +91,7 @@ int Core::init()
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
+    messageBus.addReceiver( &uiModule );
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
@@ -122,37 +123,103 @@ int Core::init()
             auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
             uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
             uiMaterial->setTexture("sprite", buttonTest);
+            auto uiMaterial2 = objectModule.newMaterial(uiShader, "UiStandardMat2", RenderType::Transparent);
+            uiMaterial2->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            uiMaterial2->setTexture("sprite", buttonTest);
+
+            auto redUI = objectModule.newMaterial(uiShader, "redUI", RenderType::Transparent);
+            redUI->setVec4("color", {1.0f, 0.0f, 0.0f, 0.5f});
+            redUI->setTexture("sprite", buttonTest);
+            auto blueUI = objectModule.newMaterial(uiShader, "blueUI", RenderType::Transparent);
+            blueUI->setVec4("color", {0.0f, 0.0f, 1.0f, 0.5f});
+            blueUI->setTexture("sprite", buttonTest);
+            auto greenUI = objectModule.newMaterial(uiShader, "greenUI", RenderType::Transparent);
+            greenUI->setVec4("color", {0.0f, 1.0f, 0.0f, 0.5f});
+            greenUI->setTexture("sprite", buttonTest);
+
             auto textMaterial = objectModule.newMaterial(uiShader, "TextMaterial", RenderType::Transparent);
             textMaterial->setVec4("color", {1.0f, 0.0f, 0.0f, 1.0f});
             RectTransform* rootRect;
-            objectModule.newEntity(2, "UiTest");
+            objectModule.newEntity(2, "UiTest_leftBottomAnchor");
             {
                 rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                rootRect->getSizeModifiable() = {1.0f, 1.0f};
+                rootRect->getSizeModifiable() = {1024.0f, 256.0f};
+                rootRect->getLocalPositionModifiable() = {512.0f, 128.0f};
+                rootRect->getAnchorModifiable() = {0.0f, 0.0f};
 
                 uiModule.rootNodes.push_back(rootRect);
 
                 auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                     ui->material = uiMaterial;
-
             }
 
-            objectModule.newEntity(3, "ButtonTest");
+            objectModule.newEntity(2, "UiTest2");
             {
-                auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                    rt->getSizeModifiable() = {0.5f, 0.5f};
-                    uiModule.rootNodes.push_back(rt);
+                auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rect->getSizeModifiable() = {0.5f, 0.5f};
+                rect->getLocalPositionModifiable() = {0.0f, 0.0f};
+                rect->getAnchorModifiable() = {0.0f, 0.0f};
+                rect->setParent(rootRect);
 
                 auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                    auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
-                    buttMaterial->setTexture("sprite", buttonTest);
-                    buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
-                    ui->material = buttMaterial;
-                
-                auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
-                    butt->baseColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-                    butt->highlightedColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
+                    ui->material = uiMaterial2;
             }
+
+            objectModule.newEntity(2, "UiTest_rightBottomAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {1024.0f, 256.0f};
+                rootRect->getLocalPositionModifiable() = {-512.0f, 128.0f};
+                rootRect->getAnchorModifiable() = {1.0f, 0.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = redUI;
+            }
+
+            objectModule.newEntity(2, "UiTest_leftTopAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {1024.0f, 256.0f};
+                rootRect->getLocalPositionModifiable() = {512.0f, -128.0f};
+                rootRect->getAnchorModifiable() = {0.0f, 1.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = blueUI;
+            }
+
+            objectModule.newEntity(2, "UiTest_rightTopAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {1024.0f, 256.0f};
+                rootRect->getLocalPositionModifiable() = {-512.0f, -128.0f};
+                rootRect->getAnchorModifiable() = {1.0f, 1.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = greenUI;
+            }
+
+            // objectModule.newEntity(3, "ButtonTest");
+            // {
+            //     auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            //         rt->getSizeModifiable() = {0.5f, 0.5f};
+            //         uiModule.rootNodes.push_back(rt);
+
+            //     auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            //         auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+            //         buttMaterial->setTexture("sprite", buttonTest);
+            //         buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            //         ui->material = buttMaterial;
+                
+            //     auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+            //         butt->baseColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+            //         butt->highlightedColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
+            // }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -188,7 +255,7 @@ int Core::init()
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
-    gameSystemsModule.addSystem(&uiButtonSystem);
+    //gameSystemsModule.addSystem(&uiButtonSystem);
 
     // ! IK system initialize
     BoneAttachData leftData;
