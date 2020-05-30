@@ -132,6 +132,7 @@ aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
 aux_source_directory( project/Renderer/src/mesh             RENDERER_MESH_SRC)
+aux_source_directory( project/Renderer/src/packets          RENDERER_PACKETS_SRC)
 aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
 aux_source_directory( project/Scene/src                     SCENE_SRC)
 aux_source_directory( project/Editor/src                    EDITOR_SRC)
@@ -149,6 +150,7 @@ list(
         ${MESSAGE_BUS_SRC}
         ${RENDERER_SRC}
         ${RENDERER_MESH_SRC}
+        ${RENDERER_PACKETS_SRC}
         ${TERMIANL_SRC}
         ${SCENE_SRC}
         ${EDITOR_SRC}
