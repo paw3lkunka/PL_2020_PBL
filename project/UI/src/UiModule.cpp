@@ -20,7 +20,7 @@ void UiModule::receiveMessage(Message msg)
 
 void UiModule::init()
 {
-    
+    updateRectTransforms(true);
 }
 
 void UiModule::updateRectTransforms(bool windowResized)
@@ -44,16 +44,17 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         glm::mat3 parentMatrix = glm::mat3(1.0f);
         if (parent == nullptr)
         {
-            parentSize.x = GetCore().windowWidth;
-            parentSize.y = GetCore().windowHeight;
+            parentSize.x = Core::windowWidth;
+            parentSize.y = Core::windowHeight;
         }
         else
         {
             parentMatrix = parent->modelMatrix;
             parentSize = parent->getSize();
         }
-        local[2][0] = transform->getAnchor().x * parentSize.x + transform->getLocalPosition().x - transform->getOrigin().x * transform->getSize().x;
-        local[2][1] = transform->getAnchor().y * parentSize.y + transform->getLocalPosition().y - transform->getOrigin().y * transform->getSize().y;
+        //TODO  origin motherfucker
+        local[2][0] = transform->getAnchor().x * parentSize.x + transform->getLocalPosition().x ;//- transform->getOrigin().x * transform->getSize().x;
+        local[2][1] = transform->getAnchor().y * parentSize.y + transform->getLocalPosition().y ;//- transform->getOrigin().y * transform->getSize().y;
 
         transform->screenPosition.x = local[2][0];
         transform->screenPosition.y = local[2][1];

@@ -14,22 +14,35 @@ bool UiButtonSystem::assertEntity(Entity* entity)
 
 void UiButtonSystem::start()
 {
-    rendererPtr->material->setVec4("color", buttonPtr->baseColor);
+    lastFrameColor = buttonPtr->baseColor;
+    rendererPtr->material->setVec4("color", lastFrameColor);
 }
 
 void UiButtonSystem::frameUpdate()
 {
-    rendererPtr->material->setVec4("color", buttonPtr->baseColor);
     glm::ivec2 buttonPos = rectTransformPtr->getScreenPosition();
     glm::ivec2 buttonSize = rectTransformPtr->getSize();
-    if( mouseButtonClicked   
-        && lastCursorData.xPos > (buttonPos.x - (buttonSize.x / 2.0f))
+    // * check if mouse pointer is in button
+    if( lastCursorData.xPos > (buttonPos.x - (buttonSize.x / 2.0f))
         && lastCursorData.xPos < (buttonPos.x + (buttonSize.x / 2.0f))
         && Core::windowHeight - lastCursorData.yPos > (buttonPos.y - (buttonSize.y / 2.0f))
         && Core::windowHeight - lastCursorData.yPos < (buttonPos.y + (buttonSize.y / 2.0f)))
     {
-        rendererPtr->material->setVec4("color", buttonPtr->highlightedColor);
+        if(mouseButtonClicked) //* if mouse clicked over button, send event and change color for on click
+        {
+            lastFrameColor = glm::mix(lastFrameColor, buttonPtr->onClickColor, lerpFactor);
+            //GetCore().messageBus.sendMessage(Message<Button*>(buttonPtr->onClickEvent, buttonPtr));
+        }
+        else //* if is over button, change color to highlited
+        {
+            lastFrameColor = glm::mix(lastFrameColor, buttonPtr->highlightedColor, lerpFactor);
+        }
     }
+    else //* if mouse is not over button, change to base color
+    {
+        lastFrameColor = glm::mix(lastFrameColor, buttonPtr->baseColor, lerpFactor);
+    }
+    rendererPtr->material->setVec4("color", lastFrameColor);
 }
 
 void UiButtonSystem::receiveMessage(Message msg)

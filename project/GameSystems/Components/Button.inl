@@ -14,6 +14,7 @@ struct Button : public Component
     glm::vec4 baseColor;
     glm::vec4 highlightedColor;
     glm::vec4 inactiveColor;
+    glm::vec4 onClickColor;
     Event onClickEvent;
 };
 

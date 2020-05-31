@@ -37,7 +37,7 @@ public:
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate() {};
+    virtual void fixedUpdate() {}
 
     /**
      * @brief Contain logic of the system runned once per frame
@@ -53,6 +53,9 @@ private:
     RectTransform* rectTransformPtr;
     CursorData lastCursorData;
     bool mouseButtonClicked = false;
+
+    glm::vec4 lastFrameColor;
+    float lerpFactor = 0.05f;
 };
 
 #endif /* !UIBUTTONSYSTEM_HPP_ */

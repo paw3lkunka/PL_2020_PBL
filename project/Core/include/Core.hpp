@@ -119,7 +119,7 @@ class Core
         static constexpr int INIT_WINDOW_WIDTH = 1280;
         
         /// @brief defines window hight.
-        static constexpr int INIT_WINDOW_HEIGHT = 920;
+        static constexpr int INIT_WINDOW_HEIGHT = 800;
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;

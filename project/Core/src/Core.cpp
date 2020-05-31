@@ -98,8 +98,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        //#include "../../resources/Scenes/scene_old.icpp"
-        #include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -205,22 +205,24 @@ int Core::init()
                     ui->material = greenUI;
             }
 
-            // objectModule.newEntity(3, "ButtonTest");
-            // {
-            //     auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            //         rt->getSizeModifiable() = {0.5f, 0.5f};
-            //         uiModule.rootNodes.push_back(rt);
+            objectModule.newEntity(3, "ButtonTest");
+            {
+                auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    rt->getSizeModifiable() = {0.5f, 0.5f};
+                    uiModule.rootNodes.push_back(rt);
 
-            //     auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            //         auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
-            //         buttMaterial->setTexture("sprite", buttonTest);
-            //         buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
-            //         ui->material = buttMaterial;
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+                    buttMaterial->setTexture("sprite", buttonTest);
+                    buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+                    ui->material = buttMaterial;
                 
-            //     auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
-            //         butt->baseColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-            //         butt->highlightedColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
-            // }
+                auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+                    butt->baseColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+                    butt->highlightedColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.5f);
+                    butt->onClickColor = glm::vec4(0.0f, 0.0f, 1.0f, 0.5f);
+                    //butt->onClickEvent = Event::
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -256,7 +258,7 @@ int Core::init()
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
-    //gameSystemsModule.addSystem(&uiButtonSystem);
+    gameSystemsModule.addSystem(&uiButtonSystem);
 
     // ! IK system initialize
     BoneAttachData leftData;
@@ -291,6 +293,8 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    uiModule.init();
+
     // ! IMGUI initialize
     editorModule.init(window);
     // Everything is ok.
@@ -303,10 +307,6 @@ int Core::mainLoop()
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
 
-    // ! ----- START SYSTEM FUNCTION -----
-    
-        gameSystemsModule.run(System::START);
-
 #pragma region AudioModule demo
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
         //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
@@ -315,7 +315,13 @@ int Core::mainLoop()
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
+    uiModule.updateRectTransforms();
     editorModule.setup();
+
+    // ! ----- START SYSTEM FUNCTION -----
+    
+    gameSystemsModule.run(System::START);
+
     //Main loop
     while (!glfwWindowShouldClose(window))
     {

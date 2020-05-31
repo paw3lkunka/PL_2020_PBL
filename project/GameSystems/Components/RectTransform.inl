@@ -74,18 +74,19 @@ struct RectTransform : public Component
      */
     inline glm::vec2 &getSizeModifiable() { dirty = true; return size; }
 
-    /**
-     * @brief Get read-only reference to Local Scale.
-     * @return const glm::vec2& 
-     */
-    inline const glm::vec2 &getOrigin() { return origin; }
+    //TODO  ORIGIN MOTHERFUCKER
+    // /**
+    //  * @brief Get read-only reference to Local Scale.
+    //  * @return const glm::vec2& 
+    //  */
+    // inline const glm::vec2 &getOrigin() { return origin; }
     
-    /**
-     * @brief Get modifiable reference to Local Scale.
-     * Automatically set dirty flag, use getLocalScale for read only ops; 
-     * @return  glm::vec2& 
-     */
-    inline glm::vec2 &getOriginModifiable() { dirty = true; return origin; }
+    // /**
+    //  * @brief Get modifiable reference to Local Scale.
+    //  * Automatically set dirty flag, use getLocalScale for read only ops; 
+    //  * @return  glm::vec2& 
+    //  */
+    // inline glm::vec2 &getOriginModifiable() { dirty = true; return origin; }
 
     /**
      * @brief Get read-only reference to Local Scale.
@@ -130,7 +131,7 @@ struct RectTransform : public Component
 
 private:
     RectTransform* parent = nullptr;
-    glm::vec2 origin = {0.0f, 0.0f};
+    //glm::vec2 origin = {0.0f, 0.0f};
     glm::vec2 anchor = {0.0f, 0.0f};
     glm::vec2 localPosition = {0.0f, 0.0f};
     glm::vec2 screenPosition = {0.0f, 0.0f};
