@@ -30,8 +30,7 @@ public:
     /**
      * @brief Initializes processed entities, runs before first update
      */
-    virtual void start();
-
+    virtual void start() {}
     /**
      * @brief Contain logic of the system called in fixed time steps
      * called in Process() only when AssertEntity() returned true
@@ -54,7 +53,7 @@ private:
     CursorData lastCursorData;
     bool mouseButtonClicked = false;
 
-    glm::vec4 lastFrameColor;
+    
     float lerpFactor = 0.05f;
 };
 
