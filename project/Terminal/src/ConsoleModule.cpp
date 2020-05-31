@@ -53,7 +53,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
     
     case Event::MOUSE_BUTTON_PRESSED:
-        //std::cout << "console here: MOUSE_BUTTON_PRESSED. code: " << msg.getValue<int>() << std::endl;
+        std::cout << "console here: MOUSE_BUTTON_PRESSED. code: " << msg.getValue<int>() << std::endl;
         break;
 
     case Event::MOUSE_BUTTON_RELEASED:

@@ -15,6 +15,9 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
+//unsigned int lastShaderID = std::numeric_limits<unsigned int>::max();
+
 RendererModule::~RendererModule()
 {
     delete internalErrorMat;
@@ -371,6 +374,7 @@ void RendererModule::render()
         glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
+            // TODO: Send directional light shadow map via ubo
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
@@ -428,5 +432,6 @@ void RendererModule::render()
         // ? +++++ Clear the render packets +++++
         normalPackets.clear();
         instancedPackets.clear();
+        uiPackets.clear();
     }
 }

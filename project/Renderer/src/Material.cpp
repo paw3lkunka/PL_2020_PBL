@@ -69,9 +69,15 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
 
 void Material::use()
 {
+    static unsigned int lastShaderID = 0;
+
     if (shader != nullptr)
     {
-        shader->use();
+        if (lastShaderID != shader->ID)
+        {
+            lastShaderID = shader->ID;
+            shader->use();
+        }
 
         // TODO: Handle view and projection by UBO
 

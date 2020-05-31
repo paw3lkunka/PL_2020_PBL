@@ -69,7 +69,7 @@ enum class Event : unsigned int
 
 #pragma region WINDOW
 
-    // Notify about window resize and send values, DATA: glm::ivec2 windowHeight and windowWidth
+    // Notify about window resize and send values, DATA: glm::ivec2 windowWidth and windowHeight
     WINDOW_RESIZED,
 
 #pragma endregion
@@ -122,6 +122,12 @@ enum class Event : unsigned int
     TRIGGER_ENTER,
     // DYNAMIC collider escaped TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
     TRIGGER_EXIT,
+#pragma endregion
+
+#pragma region UI Events
+    #pragma region Button
+        
+    #pragma endregion
 #pragma endregion
 
     // used to define ranges of values

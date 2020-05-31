@@ -118,8 +118,8 @@ class Core
         /// @brief defines initial window width.
         static constexpr int INIT_WINDOW_WIDTH = 1280;
         
-        /// @brief defines initial window hight.
-        static constexpr int INIT_WINDOW_HEIGHT = 920;
+        /// @brief defines window hight.
+        static constexpr int INIT_WINDOW_HEIGHT = 800;
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
@@ -280,6 +280,9 @@ class Core
         //TODO documentation
         static HydroBodySystem hydroBodySystem;
 
+        //TODO documentation
+        static UiButtonSystem uiButtonSystem;
+
 #pragma endregion
 
         /**
@@ -290,7 +293,8 @@ class Core
          * @param height resized window height provided by callback
          */
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-        static int windowWidth, windowHeight;
+        static int windowWidth;
+        static int windowHeight;
 
     private:
         static Core* instance;

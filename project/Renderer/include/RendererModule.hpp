@@ -6,10 +6,9 @@
 #include "Light.inl"
 #include "Camera.inl"
 
-#include "packets/RenderPacket.inl"
-#include "packets/NormalPacket.inl"
-#include "packets/InstancedPacket.inl"
-#include "packets/UiPacket.inl"
+#include "NormalPacket.hpp"
+#include "InstancedPacket.hpp"
+#include "UiPacket.hpp"
 
 #include <deque>
 #include <map>
@@ -57,6 +56,10 @@ public:
      * @brief Render current render queue
      */
     void render();
+
+    // * Material switching optimization
+    static unsigned int lastMatID;
+    //static unsigned int lastShaderID;
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;

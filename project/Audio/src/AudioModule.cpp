@@ -2,7 +2,7 @@
 
 #include "Core.hpp"
 
-#include "Event.hpp"
+#include "Event.inl"
 #include "Message.inl"
 #include "MessageBus.hpp"
 

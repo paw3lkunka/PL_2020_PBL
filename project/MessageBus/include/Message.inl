@@ -2,7 +2,7 @@
 #define MESSANGE_HPP_
 
 #include <exception>
-#include "Event.hpp"
+#include "Event.inl"
 
 /**
  * @brief Thrown by Message constructor when additional data are to big, to fit in buffer 

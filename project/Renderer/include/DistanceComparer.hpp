@@ -1,7 +1,7 @@
 #ifndef DISTANCECOMPARER_HPP_
 #define DISTANCECOMPARER_HPP_
 
-#include "NormalPacket.inl"
+#include "NormalPacket.hpp"
 #include <glm/glm.hpp>
 
 /**
