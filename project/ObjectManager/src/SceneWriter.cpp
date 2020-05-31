@@ -227,6 +227,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "HydroSurface";
         }
+        else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
+        {
+            saveHydroAccelerator(name, temp);
+        }
     }
 
     std::ofstream file(filePath);
@@ -422,6 +426,12 @@ void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
     j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
     j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
     j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
+}
+
+void SceneWriter::saveHydroAccelerator(std::string name, HydroAccelerator* componentPtr)
+{
+    j[name]["type"] = "HydroAccelerator";
+    j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)

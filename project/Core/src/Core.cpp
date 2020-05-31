@@ -110,7 +110,25 @@ int Core::init()
         // ? -u
         // ! Manual extension of scene.
         {
-            //Some code here
+            /*
+            auto boxCollider = objectModule.newEmptyComponent<BoxCollider>();
+                boxCollider->type = Collider::Type::TRIGGER;
+            
+            auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+                kayakPtr->addComponent(boxCollider);
+            */
+            auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+                kayakPtr->getComponentPtr<Transform>()->getLocalScaleModifiable() = glm::vec3(0.08f, 0.08f, 0.08f);
+                kayakPtr->getComponentPtr<Rigidbody>()->ignoreGravity = false;
+
+            //auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+
+            auto hydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
+                hydroAccelerator->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+            
+            auto paddlePtr = objectModule.getEntityPtrByName("Paddle");
+                //paddlePtr->addComponent(hydroBody);
+                paddlePtr->addComponent(hydroAccelerator);
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");

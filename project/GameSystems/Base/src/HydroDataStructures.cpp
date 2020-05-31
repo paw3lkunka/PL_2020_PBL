@@ -6,7 +6,7 @@
 #include "PhysicSystem.hpp"
 #include "HydroSurface.inl"
 
-HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart)
+HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 modelTranslation, glm::vec3 bodyVelocity, glm::vec3 bodyAngularVelocity, float timeSinceStart)
 {
     corners[0] = p0;
     corners[1] = p1;
@@ -20,7 +20,7 @@ HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, R
 
     area = HydroForces::getTriangleArea(p0, p1, p2);
 
-    velocity = HydroForces::getTriangleVelocity(bodyRB, center);
+    velocity = HydroForces::getTriangleVelocity(modelTranslation, bodyVelocity, bodyAngularVelocity, center);
 
     velocityDirection = glm::normalize(velocity);
 
@@ -29,10 +29,10 @@ HydroTriangleData::HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, R
 
 #pragma region Triangles Methods
 
-glm::vec3 HydroForces::getTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter)
+glm::vec3 HydroForces::getTriangleVelocity(glm::vec3 modelTranslation, glm::vec3 bodyVelocity, glm::vec3 bodyAngularVelocity, glm::vec3 triangleCenter)
 {
-    glm::vec3 r_BA = triangleCenter - static_cast<glm::vec3>( bodyRB.entityPtr->getComponentPtr<Transform>()->getModelMatrix()[3] );
-    glm::vec3 v_A = bodyRB.velocity + glm::cross(bodyRB.angularVelocity, r_BA);
+    glm::vec3 r_BA = triangleCenter - modelTranslation;
+    glm::vec3 v_A = bodyVelocity + glm::cross(bodyAngularVelocity, r_BA);
 
     return v_A;
 }

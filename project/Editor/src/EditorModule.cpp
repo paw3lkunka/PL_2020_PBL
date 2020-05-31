@@ -255,7 +255,8 @@ unsigned int EditorModule::getEntityIdFromCombo(int chosenField)
         id++;
     }
     size_t begPos = temp.find_first_of(" ");
-    size_t endPos = temp.find_first_of("N");
+    size_t endPos = temp.find_first_of("N") - 1;
+
     std::string idString = temp.substr(begPos + 1, endPos - begPos);
 
     return std::stoi(idString);
