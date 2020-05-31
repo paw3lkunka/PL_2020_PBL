@@ -6,6 +6,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "ModelsPaths.inl"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -110,7 +111,55 @@ int Core::init()
         // ? -u
         // ! Manual extension of scene.
         {
-            //Some code here
+            auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
+            {
+                auto* kayak = objectModule.newEmptyComponent<Kayak>();
+                pbit->addComponent(kayak);
+            }
+
+            
+            auto* rushesMat = objectModule.newMaterial
+            (
+                objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr(),
+                "RushesMat",
+                RenderType::Transparent
+            );
+                rushesMat->setVec4("color", {0.0f, 0.6f, 0.2f, 0.7f });
+
+            auto* hideout1 = objectModule.newEntity(4,"Hideout1");
+            {
+                auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    tr->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
+                    tr->getLocalScaleModifiable() = {20.0f, 10.0f, 20.0f};
+                    tr->setParent(&sceneModule.rootNode);
+
+                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    bc->type = Collider::Type::TRIGGER;
+
+                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+                    mr->material = rushesMat;
+
+                auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+            }
+            
+            auto* hideout2 = objectModule.newEntity(4,"Hideout2");
+            {
+                auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    tr->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
+                    tr->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
+                    tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
+                    tr->setParent(&sceneModule.rootNode);
+
+                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    bc->type = Collider::Type::TRIGGER;
+
+                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+                    mr->material = rushesMat;
+
+                auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -132,20 +181,6 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
-#pragma region Hydro
-
-    gameSystemsModule.addSystem(&hydroBodySystem);
-
-#pragma endregion // Hydro
-
-    gameSystemsModule.addSystem(&rendererSystem);
-    gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionSystem);
-    gameSystemsModule.addSystem(&physicalBasedInputSystem);
-    gameSystemsModule.addSystem(&physicSystem);
-    gameSystemsModule.addSystem(&skeletonSystem);
-    gameSystemsModule.addSystem(&paddleControlSystem);
-
     // ! IK system initialize
     BoneAttachData leftData;
     leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
@@ -163,17 +198,11 @@ int Core::init()
 
     audioModule.init();
 
-    gameSystemsModule.addSystem(&audioListenerSystem);
-    gameSystemsModule.addSystem(&audioSourceSystem);
-    gameSystemsModule.addSystem(&lightSystem);
-    
 #pragma endregion
 
 #pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-    gameSystemsModule.addSystem(&cameraSystem);
 
 #pragma endregion
 
@@ -181,6 +210,25 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+
+#pragma regnon attach systems 
+
+    gameSystemsModule.addSystem(&hydroBodySystem);
+    gameSystemsModule.addSystem(&hideoutSystem);
+    gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&cameraControlSystem);
+    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    gameSystemsModule.addSystem(&physicSystem);
+    gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&paddleControlSystem);
+    gameSystemsModule.addSystem(&audioListenerSystem);
+    gameSystemsModule.addSystem(&audioSourceSystem);
+    gameSystemsModule.addSystem(&lightSystem);
+    gameSystemsModule.addSystem(&cameraSystem);
+
+#pragma endregion
+
     // Everything is ok.
     return 0;
 }
@@ -204,6 +252,8 @@ int Core::mainLoop()
 
     sceneModule.updateTransforms();
     editorModule.setup();
+
+    hideoutSystem.init();
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -234,6 +284,7 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            hideoutSystem.clean();
             physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
@@ -311,3 +362,4 @@ PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 HydroBodySystem Core::hydroBodySystem;
+HideoutSystem Core::hideoutSystem;

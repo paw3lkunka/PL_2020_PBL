@@ -7,7 +7,7 @@
 #include <vector>
 
 class Hideout;
-class Player;
+class Kayak;
 class CollisionData;
 
 class HideoutSystem : public System, public IMsgReceiver
@@ -19,11 +19,12 @@ class HideoutSystem : public System, public IMsgReceiver
         virtual bool assertEntity(Entity* entity);
         virtual void receiveMessage(Message msg);
         virtual void fixedUpdate();
-        virtual void start();
+        void init();
+        void clean();
     protected:
     private:
         Hideout* hideoutPtr;
-        Player* playerPtr;
+        Kayak* playerPtr;
         std::vector<Message> messages;
 };
 

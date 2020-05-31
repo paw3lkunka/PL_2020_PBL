@@ -6,7 +6,7 @@
 /**
  * @brief This structure stores current state of player current state.
  */
-struct Player : public Component
+struct Kayak : public Component
 {
     /**
      * @brief Store number of activated hideouts, can be interpreted as bool.

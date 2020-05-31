@@ -110,6 +110,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Kayak* temp = entityPtr->getComponentPtr<Kayak>())
+    {
+        if(ImGui::CollapsingHeader("Kayak"))
+        {
+            drawKayak(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -217,6 +225,12 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 }
 
+void EditorModule::drawKayak(Kayak* playerPtr)
+{
+    ImGui::Text(playerPtr->isDetected ? "Detected," : "Not detected,");
+    ImGui::Text(playerPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", playerPtr->isHidden);
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -253,6 +267,13 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::RIGIDBODIES:
                 if(temp->getComponentPtr<Rigidbody>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            break;
+            case SortingType::PLAYER:
+                if(temp->getComponentPtr<Kayak>() == nullptr)
                 {
                     continue;
                 }

@@ -272,6 +272,9 @@ class Core
 
         //TODO documentation
         static HydroBodySystem hydroBodySystem;
+        
+        //TODO documentation
+        static HideoutSystem hideoutSystem;
 
 #pragma endregion
 

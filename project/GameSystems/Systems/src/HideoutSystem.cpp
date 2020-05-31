@@ -22,19 +22,24 @@ void HideoutSystem::receiveMessage(Message msg)
     }
 }
 
-void HideoutSystem::start()
+void HideoutSystem::init()
 {
     for (Entity& e : *GetCore().gameSystemsModule.entities)
     {
-        playerPtr = e.getComponentPtr<Player>();
+        playerPtr = e.getComponentPtr<Kayak>();
 
         if (playerPtr)
         {
-            break;
+            return;
         }
     }
-    std::cerr << "Player Component not found!";
+    std::cerr << "Kayak Component not found!";
     exit(-1);
+}
+
+void HideoutSystem::clean()
+{
+    messages.clear();
 }
 
 void HideoutSystem::fixedUpdate()
