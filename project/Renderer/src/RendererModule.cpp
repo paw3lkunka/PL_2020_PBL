@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "examples/imgui_impl_opengl3.h"
 
+#include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
@@ -39,42 +40,19 @@ void RendererModule::receiveMessage(Message msg)
                 {
                     // ? +++++ Create new instanced packet or just add an instance matrix +++++
                     auto packet = instancedPackets.insert({key(mr->mesh->getID(), mr->material->getID()), InstancedPacket(mr->mesh, mr->material)});
-                    packet.first->second.instanceMatrices.push_back(mr->modelMatrix);
-                    // ? +++++ If packet was created, add it to the queue +++++
-                    if (packet.second)
-                    {
-                        switch(packet.first->second.material->getRenderType())
-                        {
-                            case RenderType::Opaque:
-                                opaqueQueue.push_back(&packet.first->second);
-                                break;
-                            case RenderType::Transparent:
-                                std::cerr << "Instancing is not allowed for transparent materials!" << std::endl;
-                                break;
-                        }
-                    }
+                    packet.first->second.instanceMatrices.push_back(&mr->modelMatrix);
+                    packet.first->second.instanceOccluded.push_back(true);
                 }
                 else
                 {
                     // ? +++++ Create new packet for normal rendering +++++
                     normalPackets.push_back(NormalPacket(mr->mesh, mr->material, mr->modelMatrix));
-                    // ? +++++ Add packet to render queue +++++
-                    switch(normalPackets.back().material->getRenderType())
-                    {
-                        case RenderType::Opaque:
-                            opaqueQueue.push_back(&normalPackets.back());
-                            break;
-                        case RenderType::Transparent:
-                            transparentQueue.push_back(&normalPackets.back());
-                            break;
-                    }
                 }
             }
             else
             {
                 // ? +++++ Create new packet for normal rendering +++++
                 normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
-                opaqueQueue.push_back(&normalPackets.back());
             }
             
             break;
@@ -285,10 +263,6 @@ void RendererModule::render()
 
         glm::mat4 VP = glm::mat4(1.0f);
 
-        // ? +++++ Sort the render queue +++++
-        std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
-            [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
-
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
         {
@@ -296,9 +270,9 @@ void RendererModule::render()
             // That was super unsafe, and now i see, that encapsulating matrices inside transform was a good idea.
             //                                                                                  ~ Andrzej
             glm::mat4 lightMatrix = *directionalLight->modelMatrix;
-            lightMatrix[3].x = cameraMain->position.x;
-            lightMatrix[3].y = cameraMain->position.y;
-            lightMatrix[3].z = cameraMain->position.z;
+            lightMatrix[3].x = cameraMain->getFrustum().position.x;
+            lightMatrix[3].y = cameraMain->getFrustum().position.y;
+            lightMatrix[3].z = cameraMain->getFrustum().position.z;
 
             // ? ++++++ Send directional light matrices to UBO +++++
             glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
@@ -323,10 +297,24 @@ void RendererModule::render()
             //glCullFace(GL_FRONT);
             glDisable(GL_CULL_FACE);
             glClear(GL_DEPTH_BUFFER_BIT);
-            for(auto packet : opaqueQueue)
+
+            // TODO: Culling for directional light shadow mapping
+            // * ===== Normal unordered packets shadow mapping =====
+            for(auto& packet : normalPackets)
             {
-                packet->renderWithShader(simpleDepth, VP);
+                // TODO: Transparent shadows
+                if (packet.material->getRenderType() == RenderType::Opaque)
+                {
+                    packet.render(VP);
+                }
             }
+
+            // * ===== Instantiated packets shadow mapping =====
+            for(auto ipacket : instancedPackets)
+            {
+                ipacket.second.render(VP);
+            }
+
             glEnable(GL_CULL_FACE);
             //glCullFace(GL_BACK);
 
@@ -353,7 +341,7 @@ void RendererModule::render()
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &cameraMain->projectionMatrix);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &cameraMain->viewMatrix);
 
-        glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec4), &cameraMain->position);
+        glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec4), &cameraMain->getFrustum().position);
 
         // ? +++++ Send directional light data to UBO +++++
         if (directionalLight != nullptr)
@@ -368,6 +356,54 @@ void RendererModule::render()
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), sizeof(glm::vec4), &color);
             glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(glm::vec4), &ambient);
         }
+
+        // ? +++++ Perform frustum culling +++++
+
+        calculateFrustumPlanes();
+
+        // * ===== Normal packets =====
+        for(auto& packet : normalPackets)
+        {
+            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            {
+                switch(packet.material->getRenderType())
+                {
+                    case RenderType::Opaque:
+                        opaqueQueue.push_back(&packet);
+                        break;
+                    case RenderType::Transparent:
+                        transparentQueue.push_back(&packet);
+                        break;
+                }
+            }
+        }
+
+        // * ===== Instanced packets =====
+        for(auto& packet : instancedPackets)
+        {
+            int i = 0;
+            bool wholePacketOccluded = true;
+            for(auto matrix : packet.second.instanceMatrices)
+            {
+                if (objectInFrustum(packet.second.mesh->bounds, *matrix))
+                {
+                    packet.second.instanceOccluded[i] = false;
+                    wholePacketOccluded = false;
+                }
+                i++;
+            }
+
+            if (!wholePacketOccluded)
+            {
+                opaqueQueue.push_back(&(packet.second));
+            }
+        }
+
+        std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
+
+        // ? +++++ Sort the render queue +++++
+        std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
+            [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
         // ? +++++ Execute (order 66) opaque rendering loop +++++
         glViewport(0, 0, Core::windowWidth, Core::windowHeight);
@@ -397,7 +433,7 @@ void RendererModule::render()
         // ? +++++ Transparent rendering loop +++++
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->position));
+        std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->getFrustum().position));
 
         while(!transparentQueue.empty())
         {
@@ -434,4 +470,116 @@ void RendererModule::render()
         instancedPackets.clear();
         uiPackets.clear();
     }
+}
+
+void RendererModule::calculateFrustumPlanes()
+{
+    const ViewFrustum& frustum = cameraMain->getFrustum();
+
+    glm::vec3 nearCenter = frustum.position + frustum.front * frustum.nearDist;
+    glm::vec3 farCenter = frustum.position + frustum.front * frustum.farDist;
+
+    glm::vec3 aux, point, normal;
+
+    // std::cout << "==================================================================================\n";
+
+    frustumPlanes[NEARP][NORMAL] = frustum.front;
+    frustumPlanes[NEARP][POINT] = nearCenter;
+    // std::cout << "Wektor((" << -frustum.front.x << ", " << -frustum.front.y << ", " << -frustum.front.z << "))\n(" 
+    // << nearCenter.x << ", " << nearCenter.y << ", " << nearCenter.z << ")\n";
+
+    frustumPlanes[FARP][NORMAL] = -frustum.front;
+    frustumPlanes[FARP][POINT] = farCenter;
+    // std::cout << "Wektor((" << frustum.front.x << ", " << frustum.front.y << ", " << frustum.front.z << "))\n(" 
+    // << farCenter.x << ", " << farCenter.y << ", " << farCenter.z << ")\n";
+
+    point = nearCenter + frustum.up * frustum.Hnear / 2.0f;
+    //std::cout << "POINT: " << glm::to_string(point) << '\n';
+    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
+    aux = point - frustum.position;
+    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
+    aux = glm::normalize(aux);
+    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
+    normal = glm::cross(frustum.right, aux);
+    frustumPlanes[TOP][NORMAL] = normal;
+    frustumPlanes[TOP][POINT] = point;
+    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
+    // << point.x << ", " << point.y << ", " << point.z << ")\n";
+
+    point = nearCenter - frustum.up * frustum.Hnear / 2.0f;
+    //std::cout << "POINT: " << glm::to_string(point) << '\n';
+    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
+    aux = point - frustum.position;
+    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
+    aux = glm::normalize(aux);
+    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
+    normal = -glm::cross(frustum.right, aux);
+    frustumPlanes[BOTTOM][NORMAL] = normal;
+    frustumPlanes[BOTTOM][POINT] = point;
+    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
+    // << point.x << ", " << point.y << ", " << point.z << ")\n";
+
+    point = nearCenter - frustum.right * frustum.Wnear / 2.0f;
+    aux = point - frustum.position;
+    aux = glm::normalize(aux);
+    normal = glm::cross(frustum.up, aux);
+    frustumPlanes[LEFT][NORMAL] = normal;
+    frustumPlanes[LEFT][POINT] = point;
+    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
+    // << point.x << ", " << point.y << ", " << point.z << ")\n";
+
+    point = nearCenter + frustum.right * frustum.Wnear / 2.0f;
+    aux = point - frustum.position;
+    aux = glm::normalize(aux);
+    normal = -glm::cross(frustum.up, aux);
+    frustumPlanes[RIGHT][NORMAL] = normal;
+    frustumPlanes[RIGHT][POINT] = point;
+    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
+    // << point.x << ", " << point.y << ", " << point.z << ")\n";
+}
+
+bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
+{
+    bool result = false;
+
+    int out, in;
+    // ? +++++ Check for each frustum plane +++++
+    for (size_t i = 0; i < 6; i++)
+    {
+        // Reset counters
+        out = 0;
+        in = 0;
+        for (size_t j = 0; j < 8 && (in == 0 || out == 0); j++)
+        {
+            // ? +++++ Check if corner is outside or inside +++++
+            //glm::vec3 normalNormalized = glm::normalize(frustumPlanes[i][NORMAL]);
+            //std::cout << "Normal: " << glm::to_string(frustumPlanes[i][NORMAL]) << '\n';
+            //std::cout << "Normal normalized: " << glm::to_string(normalNormalized) << '\n';
+            if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], glm::vec4(meshBounds.getPoint(j), 1.0f) * modelMatrix) < 0.0f)
+            {
+                out++;
+            }
+            else
+            {
+                in++;
+            }
+        }
+        
+        // ? +++++ If all corners are out +++++
+        if (!in)
+        {
+            return false;
+        }
+        // ? +++++ If some corners are in +++++
+        else
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+float RendererModule::pointToPlaneDistance2(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point)
+{
+    return glm::dot(point - pointOnPlane, planeNormal);
 }

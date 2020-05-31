@@ -323,12 +323,11 @@ void SceneWriter::saveAudioSource(std::string name, AudioSource* componentPtr)
 void SceneWriter::saveCamera(std::string name, Camera* componentPtr)
 {
     j[name]["type"] = "Camera";
-    j[name]["projectionMode"] = componentPtr->projectionMode;
+    j[name]["projectionMode"] = componentPtr->getProjectionMode();
     j[name]["isMain"] = componentPtr->isMain;
-    j[name]["fieldOfView"] = componentPtr->fieldOfView;
-    j[name]["orthographicSize"] = componentPtr->orthographicSize;
-    j[name]["nearPlane"] = componentPtr->nearPlane;
-    j[name]["farPlane"] = componentPtr->farPlane;
+    j[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
+    j[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
+    j[name]["farPlane"] = componentPtr->getFrustum().farPlane;
 }
 
 void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)

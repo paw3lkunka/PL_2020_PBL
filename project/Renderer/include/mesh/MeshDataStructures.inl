@@ -39,6 +39,31 @@ struct VertexSkinned
  */
 struct Bounds
 {
+    glm::vec3 getPoint(int i)
+    {
+        switch(i)
+        {
+            case 0:
+                return minBound;
+            case 1:
+                return {minBound.x, minBound.y, maxBound.z};
+            case 2:
+                return {minBound.x, maxBound.y, minBound.z};
+            case 3:
+                return {maxBound.x, minBound.y, minBound.z};
+            case 4:
+                return maxBound;
+            case 5:
+                return {maxBound.x, maxBound.y, minBound.z};
+            case 6:
+                return {maxBound.x, minBound.y, maxBound.z};
+            case 7:
+                return {minBound.x, maxBound.y, maxBound.z};
+            default:
+                return {0.0f, 0.0f, 0.0f};
+        }
+    }
+
     glm::vec3 minBound;
     glm::vec3 maxBound;
 };

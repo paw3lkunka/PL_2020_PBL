@@ -74,6 +74,10 @@ private:
     const char* internalErrorFragmentCode = 
     "#version 430 core\nout vec4 FragColor;\nvoid main() { FragColor = vec4(1.0, 0.0, 1.0, 1.0); }";
 
+    void calculateFrustumPlanes();
+    bool objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix);
+    float pointToPlaneDistance2(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point);
+
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
     // * Skybox variables
@@ -85,6 +89,9 @@ private:
     unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer;
     
     Camera* cameraMain = nullptr;
+    enum { TOP = 0, BOTTOM, LEFT, RIGHT, NEARP, FARP };
+    enum { NORMAL = 0, POINT };
+    glm::vec3 frustumPlanes[6][2];
 
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<NormalPacket*> transparentQueue;
@@ -101,7 +108,7 @@ private:
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
-    // * Ui rendet packets collection
+    // * Ui render packets collection
     std::vector<UiPacket> uiPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair

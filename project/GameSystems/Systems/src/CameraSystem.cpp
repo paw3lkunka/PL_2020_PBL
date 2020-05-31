@@ -7,19 +7,18 @@
 #include "Transform.inl"
 #include "Message.inl"
 
+#include <glm/gtx/string_cast.hpp>
+
 Camera* CameraSystem::mainCamera = nullptr;
-int CameraSystem::width = Core::INIT_WINDOW_WIDTH;
-int CameraSystem::height = Core::INIT_WINDOW_HEIGHT;
 
 void CameraSystem::receiveMessage(Message msg)
 {
     switch (msg.getEvent())
     {
         case Event::WINDOW_RESIZED:
-            mainCamera->projectionChanged = true;
             glm::ivec2 window = msg.getValue<glm::ivec2>();
-            width = window.x;
-            height = window.y;
+            mainCamera->projectionChanged = true;
+            mainCamera->getFrustumModifiable().aspectRatio = (float)window.x / (float)window.y;
             break;
     }
 }
@@ -59,35 +58,58 @@ void CameraSystem::frameUpdate()
         // * ===== Calculate projection matrix =====
         if (camera->projectionChanged)
         {
-            float aspect = (float)width / height;
-            switch (camera->projectionMode)
+            ViewFrustum& frustum = camera->getFrustumModifiable();
+
+            switch (camera->getProjectionMode())
             {
                 case CameraProjection::Perspective:
                     camera->projectionMatrix = glm::perspective(
-                                                    glm::radians(camera->fieldOfView),
-                                                    aspect,
-                                                    camera->nearPlane,
-                                                    camera->farPlane
+                                                    glm::radians(frustum.fieldOfView),
+                                                    frustum.aspectRatio,
+                                                    frustum.nearPlane,
+                                                    frustum.farPlane
                                                     );
                     break;
+                // ! ----- Warning! Othographic projection is untested and may produce undefined behaviour ----- !
                 case CameraProjection::Orthographic:
                     camera->projectionMatrix = glm::ortho(
-                                                    -camera->orthographicSize * aspect,
-                                                    camera->orthographicSize * aspect,
-                                                    -camera->orthographicSize,
-                                                    camera->orthographicSize,
-                                                    camera->nearPlane,
-                                                    camera->farPlane
+                                                    -frustum.orthographicSize * frustum.aspectRatio,
+                                                    frustum.orthographicSize * frustum.aspectRatio,
+                                                    -frustum.orthographicSize,
+                                                    frustum.orthographicSize,
+                                                    frustum.nearPlane,
+                                                    frustum.farPlane
                                                     );
                     break;
             }
-            camera->projectionChanged = false;
+
+            // * ===== Calculate frustum properties used for frustum culling =====
+            
+            float tang = glm::tan(frustum.fieldOfView / 2.0f);
+            frustum.Hnear = 2.0f * tang * frustum.nearDist;
+            frustum.Wnear = frustum.Hnear * frustum.aspectRatio;
+
+            frustum.Hfar = 2.0f * tang * frustum.farDist;
+            frustum.Wfar = frustum.Hfar * frustum.aspectRatio;
         }
 
         // * ===== Calculate view matrix =====
         camera->viewMatrix = transform->getToModelMatrix();
-        // * ===== Set camera world position =====
-        //TODO Shoult this be method?
-        camera->position = glm::vec3(transform->getModelMatrix()[3]);
+        // * ===== Update camera frustum =====
+        static int aaa = 0;
+        ViewFrustum& frustum = camera->getFrustumModifiable();
+        frustum.position = glm::vec3(transform->getModelMatrix()[3]);
+            // std::cout << "Cam pos: " << glm::to_string(frustum.position) << '\n';
+        frustum.front = -glm::normalize(glm::vec3(transform->getModelMatrix()[2]));
+            // std::cout << "Cam front: " << glm::to_string(glm::vec3(transform->getModelMatrix()[2])) << '\n';
+            // std::cout << "Cam front normalized: " << glm::to_string(frustum.front) << '\n';
+        frustum.up = glm::normalize(glm::vec3(transform->getModelMatrix()[1]));
+            // std::cout << "Cam up: " << glm::to_string(glm::vec3(transform->getModelMatrix()[1])) << '\n';
+            // std::cout << "Cam up normalized: " << glm::to_string(frustum.up) << '\n';
+        frustum.right = glm::normalize(glm::vec3(transform->getModelMatrix()[0]));
+            // std::cout << "Cam right: " << glm::to_string(glm::vec3(transform->getModelMatrix()[0])) << '\n';
+            // std::cout << "Cam right normalized: " << glm::to_string(frustum.right) << '\n';
+        
+        camera->projectionChanged = false;
     }
 }

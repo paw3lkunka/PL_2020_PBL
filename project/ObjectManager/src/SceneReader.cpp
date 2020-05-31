@@ -503,11 +503,12 @@ void SceneReader::readCamera(std::string name)
     auto camera = objModulePtr->newEmptyComponent<Camera>();
     camera->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
-    camera->farPlane = j.at(name).at("farPlane").get<float>();
-    camera->fieldOfView = j.at(name).at("fieldOfView").get<float>();
-    camera->nearPlane = j.at(name).at("nearPlane").get<float>();
-    camera->orthographicSize = j.at(name).at("orthographicSize").get<float>();
-    camera->projectionMode = CameraProjection(j.at(name).at("projectionMode").get<int>());
+    ViewFrustum& frustum = camera->getFrustumModifiable();
+    frustum.farPlane = j.at(name).at("farPlane").get<float>();
+    frustum.fieldOfView = j.at(name).at("fieldOfView").get<float>();
+    frustum.nearPlane = j.at(name).at("nearPlane").get<float>();
+    frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+    camera->getProjectionModeModifiable() = CameraProjection(j.at(name).at("projectionMode").get<int>());
     camera->isMain = j.at(name).at("isMain").get<bool>();
 
     assignToEntity(name, camera);
