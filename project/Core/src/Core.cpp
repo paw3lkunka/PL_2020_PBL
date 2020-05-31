@@ -92,6 +92,7 @@ int Core::init()
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
+    messageBus.addReceiver( &uiModule );
     messageBus.addReceiver( &tmpExit );
 
     // ! Scene loading
@@ -99,6 +100,7 @@ int Core::init()
     {
         // ? -r
         #include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -108,8 +110,8 @@ int Core::init()
 
     if (updateScene)
     {
+        // ! Manual extension of scene
         // ? -u
-        // ! Manual extension of scene.
         {
             auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
             {
@@ -208,6 +210,8 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    uiModule.init();
+
     // ! IMGUI initialize
     editorModule.init(window);
 
@@ -226,6 +230,8 @@ int Core::init()
     gameSystemsModule.addSystem(&audioSourceSystem);
     gameSystemsModule.addSystem(&lightSystem);
     gameSystemsModule.addSystem(&cameraSystem);
+    gameSystemsModule.addSystem(&uiRendererSystem);
+    gameSystemsModule.addSystem(&uiButtonSystem);
 
 #pragma endregion
 
@@ -239,21 +245,22 @@ int Core::mainLoop()
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
 
-    // ! ----- START SYSTEM FUNCTION -----
-    
-        gameSystemsModule.run(System::START);
-
 #pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
+    uiModule.updateRectTransforms();
     editorModule.setup();
 
     hideoutSystem.init();
+
+    // ! ----- START SYSTEM FUNCTION -----
+
+    gameSystemsModule.run(System::START);
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -284,6 +291,8 @@ int Core::mainLoop()
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
+            uiModule.updateRectTransforms();
+
             hideoutSystem.clean();
             physicalBasedInputSystem.clearKeysets();
 
@@ -361,5 +370,7 @@ SkeletonSystem Core::skeletonSystem;
 PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
+UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
+UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;

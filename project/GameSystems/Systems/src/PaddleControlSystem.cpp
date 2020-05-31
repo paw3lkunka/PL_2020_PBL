@@ -52,7 +52,6 @@ void PaddleControlSystem::receiveMessage(Message msg)
         {
             int key = msg.getValue<int>();
             keyboardInput = true;
-            std::cout << "Paddle System: KEY_PRESSED\n";
             switch(key)
             {
                 case GLFW_KEY_UP:
@@ -75,7 +74,6 @@ void PaddleControlSystem::receiveMessage(Message msg)
         {
             int key = msg.getValue<int>();
             keyboardInput = true;
-            std::cout << "Paddle System: KEY_RELEASED\n";
             switch(key)
             {
                 case GLFW_KEY_UP:

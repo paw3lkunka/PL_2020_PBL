@@ -12,6 +12,7 @@ class Texture;
 class Mesh;
 class Cubemap;
 class Shader;
+class Font;
 
 /**
  * @brief Scene saver to file class
@@ -76,6 +77,7 @@ private:
     void saveMesh(std::string name, Mesh* assetPtr);
     void saveShader(std::string name, Shader* assetPtr);
     void saveCubemap(std::string name, Cubemap* assetPtr);
+    void saveFont(std::string name, Font* assetPtr);
 };
 
 #endif /* !SCENEWRITER_HPP_ */

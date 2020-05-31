@@ -64,8 +64,8 @@ void EditorModule::drawEditor()
         if(ImGui::Combo("", &enumValue, sortingTypesList))
         {
             sortEntities(SortingType(enumValue));
-            entityPtr = objectModule->getEntityPtrByID(getEntityIdFromCombo(currentItem));
             currentItem = 0;
+            entityPtr = objectModule->getEntityPtrByID(getEntityIdFromCombo(currentItem));
         }
     ImGui::EndChild();
 
@@ -115,6 +115,14 @@ void EditorModule::drawEditor()
         if(ImGui::CollapsingHeader("Kayak"))
         {
             drawKayak(temp);
+        }
+    }
+
+    if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
+    {
+        if(ImGui::CollapsingHeader("RectTransform"))
+        {
+            drawRectTransform(temp);
         }
     }
 
@@ -176,6 +184,20 @@ void EditorModule::drawTransform(Transform* transformPtr)
     {
         ImGui::Text(("Parent name: " + std::string(transformPtr->getParent()->entityPtr->getName())).c_str());
     }
+}
+
+void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
+{
+    //* transform variables
+    static float rotation = 0;
+    ImGui::Text("Local transform:");
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    //ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
+    ImGui::DragFloat2("Size: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+
+    rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }
 
 void EditorModule::drawPaddle(Paddle* paddlePtr)
@@ -281,6 +303,15 @@ void EditorModule::sortEntities(SortingType sortingType)
         }
         insertEntityToList(i);
     }
+
+    if(entities.size() == 0)
+    {
+        for(int i = 0; i < entitiesSize; ++i)
+        {
+            insertEntityToList(i);
+            enumValue = 0;
+        }
+    }
 }
 
 unsigned int EditorModule::getEntityIdFromCombo(int chosenField)
@@ -293,9 +324,8 @@ unsigned int EditorModule::getEntityIdFromCombo(int chosenField)
         id++;
     }
     size_t begPos = temp.find_first_of(" ");
-    size_t endPos = temp.find_first_of("N");
+    size_t endPos = temp.find_first_of("N") - 1;
     std::string idString = temp.substr(begPos + 1, endPos - begPos);
-
     return std::stoi(idString);
 }
 

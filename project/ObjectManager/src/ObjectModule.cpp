@@ -6,6 +6,7 @@
 #include "Texture.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
+#include "Font.hpp"
 #include "AssetStructers.inl"
 #include "Message.inl"
 #include "Core.hpp"
@@ -153,6 +154,18 @@ void ObjectModule::newAudioClip(const char* filePath)
     assetReader.loadAudioClip(filePath);
 }
 
+Font* ObjectModule::newFont(const char* filePath, unsigned int size, std::string name)
+{
+    for(auto f : objectContainer.fonts)
+    {
+        if(compareStrings(f->getFontPath(), filePath))
+        {
+            return f;
+        }
+    }
+    return objectMaker.newFont(filePath, size, name);
+}
+
 #pragma endregion
 
 #pragma region ObjectContainer wrapper
@@ -168,6 +181,11 @@ Animation* ObjectModule::getAnimationPtrByName(const char* name)
     {
         return nullptr;
     }
+}
+
+Font* ObjectModule::getFontPtrByName(const char* name)
+{
+    return objectContainer.getFontPtrByName(name);
 }
 
 #pragma endregion

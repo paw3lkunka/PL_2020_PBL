@@ -9,7 +9,6 @@
 #include "Animation.hpp"
 #include "Bone.inl"
 
-
 #include <unordered_map>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>

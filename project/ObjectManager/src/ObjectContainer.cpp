@@ -9,6 +9,7 @@
 #include "Cubemap.hpp"
 #include "Material.hpp"
 #include "Transform.inl"
+#include "Font.hpp"
 #include "mesh/Mesh.hpp"
 #include "mesh/MeshCustom.hpp"
 #include "mesh/MeshSkinned.hpp"
@@ -29,6 +30,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     textures.reserve(50);
     cubemaps.reserve(10);
     materials.reserve(30);
+    fonts.reserve(16);
 }
 
 ObjectContainer::~ObjectContainer()
@@ -76,6 +78,13 @@ ObjectContainer::~ObjectContainer()
         c = nullptr;
     }
     cubemaps.clear();
+
+    for(auto f : fonts)
+    {
+        delete f;
+        f = nullptr;
+    }
+    fonts.clear();
 }
 
 MeshCustom* ObjectContainer::getMeshCustomFromPath(const char* meshPath)
@@ -222,7 +231,33 @@ Material* ObjectContainer::getMaterialFromName(const char* name)
     return nullptr;
 }
 
+Font* ObjectContainer::getFontFromSerializationID(unsigned int serializationID)
+{
+    for(auto f : fonts)
+    {
+        if(f->serializationID == serializationID)
+        {
+            return f;
+        }
+    }
+    return nullptr;
+}
+
 Animation* ObjectContainer::getAnimationPtrByName(const char* name)
 {
     return &animations.at(name);
+}
+
+Font* ObjectContainer::getFontPtrByName(const char* name)
+{
+    Font* font = nullptr;
+    for(auto var : fonts)
+    {
+        if (objModule->compareStrings(var->getName(), name))
+        {
+            font = var;
+            break;
+        }
+    }
+    return font;
 }

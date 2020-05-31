@@ -37,6 +37,10 @@ if(NOT EXISTS "libs/imgui/LICENSE.txt")
     execute_process(COMMAND git submodule update --init "libs/imgui/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/freetype2/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/freetype2/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -116,6 +120,7 @@ add_subdirectory(libs/glm/)
 add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
+add_subdirectory(libs/freetype2/)
 
 aux_source_directory( project                               PROJECT_SRC)
 aux_source_directory( project/Core/src                      CORE_SRC)
@@ -126,9 +131,12 @@ aux_source_directory( project/ObjectManager/src             OBJECTS_SRC)
 aux_source_directory( project/Input/src                     INPUT_SRC)
 aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
 aux_source_directory( project/Renderer/src                  RENDERER_SRC)
+aux_source_directory( project/Renderer/src/mesh             RENDERER_MESH_SRC)
+aux_source_directory( project/Renderer/src/packets          RENDERER_PACKETS_SRC)
 aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
 aux_source_directory( project/Scene/src                     SCENE_SRC)
 aux_source_directory( project/Editor/src                    EDITOR_SRC)
+aux_source_directory( project/UI/src                        UI_SRC)
 
 list( 
     APPEND SOURCE_FILES
@@ -141,9 +149,12 @@ list(
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
         ${RENDERER_SRC}
+        ${RENDERER_MESH_SRC}
+        ${RENDERER_PACKETS_SRC}
         ${TERMIANL_SRC}
         ${SCENE_SRC}
         ${EDITOR_SRC}
+        ${UI_SRC}
 )
 
 add_library(lib ${SOURCE_FILES} )
@@ -175,7 +186,6 @@ add_library(imgui
         ${IMGUI_HEADERS}
 )
 
-
 include_directories( 
     project
     project/Autogen/include
@@ -193,6 +203,7 @@ include_directories(
     project/Terminal/include
     project/Scene/include
     project/Editor/include
+    project/UI/include
     libs/stb
     libs/glad/include
     libs/glfw/include
@@ -201,6 +212,7 @@ include_directories(
     libs/openal-soft/include
     libs/json/single_include/nlohmann
     libs/imgui/
+    libs/freetype2/include
     build/libs/assimp/include
 )
 
@@ -216,6 +228,7 @@ target_link_libraries(
     PUBLIC assimp
     PUBLIC nlohmann_json::nlohmann_json
     PUBLIC imgui
+    PUBLIC freetype
 )
 
 target_compile_options(lib PUBLIC -Wno-volatile)

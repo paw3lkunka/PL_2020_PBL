@@ -6,6 +6,7 @@
 #include "Material.hpp"
 #include "Core.hpp"
 #include "DistanceComparer.hpp"
+#include "UiRenderer.inl"
 
 #include <algorithm>
 
@@ -13,6 +14,9 @@
 #include "examples/imgui_impl_opengl3.h"
 
 #include <glm/gtc/type_ptr.hpp>
+
+unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
+//unsigned int lastShaderID = std::numeric_limits<unsigned int>::max();
 
 RendererModule::~RendererModule()
 {
@@ -75,25 +79,32 @@ void RendererModule::receiveMessage(Message msg)
             
             break;
         }
+        case Event::RENDERER_ADD_UI_TO_QUEUE:
+        {
+            UiRenderer* uiElementToAdd = msg.getValue<UiRenderer*>();
+            uiPackets.push_back(UiPacket(&uiElementToAdd->mesh, uiElementToAdd->material, uiElementToAdd->modelMatrix));
+            uiQueue.push_back(&uiPackets.back());
+            break;
+        }
         case Event::RENDERER_ADD_LIGHT:
+        {
+            Light* lightToAdd = msg.getValue<Light*>();
+            switch(lightToAdd->lightType)
             {
-                Light* lightToAdd = msg.getValue<Light*>();
-                switch(lightToAdd->lightType)
-                {
-                    case LightType::Directional:
-                        directionalLight = lightToAdd;
-                        break;
-                    case LightType::Point:
-                        // TODO: Implement point lights
-                        std::cerr << "Point lights not yet implemented.\n";
-                        break;
-                    case LightType::Spot:
-                        // TODO: Implement spot lights
-                        std::cerr << "Spot lights not yet implemented.\n";
-                        break;
-                }
-                break;
+                case LightType::Directional:
+                    directionalLight = lightToAdd;
+                    break;
+                case LightType::Point:
+                    // TODO: Implement point lights
+                    std::cerr << "Point lights not yet implemented.\n";
+                    break;
+                case LightType::Spot:
+                    // TODO: Implement spot lights
+                    std::cerr << "Spot lights not yet implemented.\n";
+                    break;
             }
+            break;
+        }
         case Event::RENDERER_SET_MAIN_CAMERA:
             cameraMain = msg.getValue<Camera*>();
             break;
@@ -111,6 +122,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
     instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
+    uiPackets.reserve(DRAW_CALL_UI_ALLOCATION);
 
     if (createInfo.cullFace)
     {
@@ -362,6 +374,7 @@ void RendererModule::render()
         glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
+            // TODO: Send directional light shadow map via ubo
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
@@ -392,6 +405,21 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+
+        // ? +++++ Overlay UI rendering loop +++++
+        // Get screen ortho projection
+        glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
+
+        glDisable(GL_DEPTH_TEST);
+        while(!uiQueue.empty())
+        {
+            //static int temp = 0;
+            //temp %= 127;
+            //int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
+            uiQueue.front()->render(orthoScreen);
+            uiQueue.pop_front();
+        }
+        glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
         //TODO Remove if it became useless
@@ -404,5 +432,6 @@ void RendererModule::render()
         // ? +++++ Clear the render packets +++++
         normalPackets.clear();
         instancedPackets.clear();
+        uiPackets.clear();
     }
 }

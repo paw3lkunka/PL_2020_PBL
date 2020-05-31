@@ -28,6 +28,7 @@
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
+#include "UiModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -117,8 +118,8 @@ class Core
         /// @brief defines initial window width.
         static constexpr int INIT_WINDOW_WIDTH = 1280;
         
-        /// @brief defines initial window hight.
-        static constexpr int INIT_WINDOW_HEIGHT = 920;
+        /// @brief defines window hight.
+        static constexpr int INIT_WINDOW_HEIGHT = 800;
 
         /// @brief frame-independent time between updates in seconds.
         static constexpr double FIXED_TIME_STEP = 1.0 / 60.0;
@@ -213,6 +214,9 @@ class Core
         ///@brief shows imgui editor
         EditorModule editorModule;
 
+        ///@brief ui graph
+        UiModule uiModule;
+
         /**
          * TODO Please, do something better here ;-;
          * @brief safely close application, on ESC press
@@ -260,7 +264,7 @@ class Core
 
         //TODO documentation
         static SkeletonSystem skeletonSystem;
-
+        
         //TODO documentation
         static LightSystem lightSystem;
 
@@ -271,10 +275,16 @@ class Core
         static PaddleIkSystem paddleIkSystem;
 
         //TODO documentation
+        static UiRendererSystem uiRendererSystem;
+
+        //TODO documentation
         static HydroBodySystem hydroBodySystem;
         
         //TODO documentation
         static HideoutSystem hideoutSystem;
+
+        //TODO documentation
+        static UiButtonSystem uiButtonSystem;
 
 #pragma endregion
 
@@ -286,7 +296,8 @@ class Core
          * @param height resized window height provided by callback
          */
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-        static int windowWidth, windowHeight;
+        static int windowWidth;
+        static int windowHeight;
 
     private:
         static Core* instance;
