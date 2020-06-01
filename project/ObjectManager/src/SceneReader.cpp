@@ -340,6 +340,16 @@ void SceneReader::readComponents()
             std::cout << "HydroSurface" << std::endl;
             readHydroSurface(name);
         }
+        else if(componentType == "Kayak")
+        {
+            std::cout << "Kayak" << std::endl;
+            readKayak(name);
+        }
+        else if(componentType == "Hideout")
+        {
+            std::cout << "Hideout" << std::endl;
+            readHideout(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -678,6 +688,22 @@ void SceneReader::readHydroSurface(std::string name)
     hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     assignToEntity(name, hydroSurface);
+}
+
+void SceneReader::readKayak(std::string name)
+{
+    auto kayak = objModulePtr->newEmptyComponent<Kayak>();
+    kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, kayak);
+}
+
+void SceneReader::readHideout(std::string name)
+{
+    auto hideout = objModulePtr->newEmptyComponent<Hideout>();
+    hideout->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hideout);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)

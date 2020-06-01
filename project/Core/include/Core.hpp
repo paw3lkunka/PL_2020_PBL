@@ -279,6 +279,9 @@ class Core
 
         //TODO documentation
         static HydroBodySystem hydroBodySystem;
+        
+        //TODO documentation
+        static HideoutSystem hideoutSystem;
 
         //TODO documentation
         static UiButtonSystem uiButtonSystem;

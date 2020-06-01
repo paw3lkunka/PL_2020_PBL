@@ -110,6 +110,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Kayak* temp = entityPtr->getComponentPtr<Kayak>())
+    {
+        if(ImGui::CollapsingHeader("Kayak"))
+        {
+            drawKayak(temp);
+        }
+    }
+
     if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
     {
         if(ImGui::CollapsingHeader("RectTransform"))
@@ -188,7 +196,7 @@ void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
     ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
     ImGui::DragFloat2("Size: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
-    
+
     rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }
 
@@ -239,6 +247,12 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 }
 
+void EditorModule::drawKayak(Kayak* playerPtr)
+{
+    ImGui::Text(playerPtr->isDetected ? "Detected," : "Not detected,");
+    ImGui::Text(playerPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", playerPtr->isHidden);
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -275,6 +289,13 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::RIGIDBODIES:
                 if(temp->getComponentPtr<Rigidbody>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            break;
+            case SortingType::PLAYER:
+                if(temp->getComponentPtr<Kayak>() == nullptr)
                 {
                     continue;
                 }
