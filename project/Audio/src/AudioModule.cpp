@@ -89,11 +89,11 @@ void AudioModule::receiveMessage(Message msg)
     }
     catch(AudioContextLevelException e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(AudioDeviceLevelException e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -112,7 +112,7 @@ void AudioModule::init()
     }
     catch(AudioDeviceLevelException& e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -143,7 +143,7 @@ void AudioModule::unloadScene()
     }
     catch(AudioDeviceLevelException& e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -164,7 +164,7 @@ void AudioModule::cleanup()
     }
     catch(AudioDeviceLevelException& e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -523,8 +523,8 @@ void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
     else
     {
         std::stringstream message;
-        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.";
-        throw AudioDeviceLevelException(message.str().c_str());
+        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.\n";
+        throw AudioDeviceLevelException(message.str());
     }
 }
 

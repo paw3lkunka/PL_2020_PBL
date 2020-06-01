@@ -75,6 +75,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
+    GetCore().audioModule.cleanup();
     objectContainer.unloadScene();
     // ! removing all associations for scene root node
     GetCore().sceneModule.unloadScene();
@@ -98,6 +99,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     rendererCreateInfo.wireframeMode = false;
     GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo, getMaterialPtrByName("skyboxMat"));
 
+    GetCore().audioModule.init();
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
 

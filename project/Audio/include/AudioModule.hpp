@@ -23,22 +23,22 @@ class AudioSource;
 
 struct AudioDeviceLevelException : public std::exception
 {
-    const char* message;
+    std::string message;
 
-    AudioDeviceLevelException(const char* errorMessage)
+    AudioDeviceLevelException(std::string errorMessage)
     {
         message = errorMessage;
     }
 
-    const char* what()
+    const char* what() const noexcept
     {
-        return message;
+        return message.c_str();
     }
 };
 
 struct AudioContextLevelException : public AudioDeviceLevelException
 {
-    AudioContextLevelException(const char* errorMessage) 
+    AudioContextLevelException(std::string errorMessage) 
     : AudioDeviceLevelException(errorMessage)
     {}
 };
