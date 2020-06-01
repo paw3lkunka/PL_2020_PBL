@@ -14,6 +14,7 @@ class Cubemap;
 class Material;
 class Animation;
 class Bone;
+class Font;
 enum class FileType: unsigned int;
 enum class RenderType;
 struct Bounds;
@@ -123,8 +124,25 @@ public:
      */
     Material* newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnalbed = false);
 
-    // TODO niewchecmiesietobic dikuemntijcj
+    /**
+     * @brief Create new animation and return pointer to its object
+     * 
+     * @param animation animation to process
+     * @param path path to file
+     * @param name animation name
+     * @return Animation* pointer to created object
+     */
     Animation* newAnimation(Animation& animation, std::string path, std::string name);
+
+    /**
+     * @brief Create new font object and return pointer to it
+     * 
+     * @param filePath path to font asset
+     * @param size size of the font to generate
+     * @param name name of the font
+     * @return Font* ponter to font
+     */
+    Font* newFont(const char* filePath, unsigned int size, std::string name);
 
 protected:
 private:

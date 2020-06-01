@@ -28,6 +28,7 @@
 #include "AudioModule.hpp"
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
+#include "UiModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -213,6 +214,9 @@ class Core
         ///@brief shows imgui editor
         EditorModule editorModule;
 
+        ///@brief ui graph
+        UiModule uiModule;
+
         /**
          * TODO Please, do something better here ;-;
          * @brief safely close application, on ESC press
@@ -260,7 +264,7 @@ class Core
 
         //TODO documentation
         static SkeletonSystem skeletonSystem;
-
+        
         //TODO documentation
         static LightSystem lightSystem;
 
@@ -269,6 +273,9 @@ class Core
 
         //TODO documentation
         static PaddleIkSystem paddleIkSystem;
+
+        //TODO documentation
+        static UiRendererSystem uiRendererSystem;
 
         //TODO documentation
         static HydroBodySystem hydroBodySystem;

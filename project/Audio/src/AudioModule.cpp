@@ -118,7 +118,7 @@ void AudioModule::init()
     {}
 }
 
-void AudioModule::cleanup()
+void AudioModule::unloadScene()
 {
     try
     {
@@ -131,16 +131,29 @@ void AudioModule::cleanup()
 
         for(auto it = contexts.begin(); it != contexts.end(); it++)
         {
-            //alcDestroyContext(*it);
+            alcDestroyContext(*it);
             alcCheckErrors();
         }
-
 
         for(auto it = clips.begin(); it != clips.end(); it++)
         {
             alDeleteBuffers(1, &(it->second));
             alCheckErrors();
         }
+    }
+    catch(AudioDeviceLevelException& e)
+    {
+        ErrorLog( e.what() );
+    }
+    catch(const std::exception& e)
+    {}
+}
+
+void AudioModule::cleanup()
+{
+    try
+    {
+        unloadScene();
 
         // Disconnect from connected device
         auto closeDeviceStatus = alcCloseDevice(device);

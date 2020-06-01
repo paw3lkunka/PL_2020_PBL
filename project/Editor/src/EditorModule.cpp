@@ -4,6 +4,8 @@
 #include <examples/imgui_impl_glfw.h>
 #include <glm/gtx/string_cast.hpp>
 
+#include "MomentOfInertia.hpp"
+
 #include <sstream>
 #include <iomanip>
 
@@ -108,6 +110,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
+    {
+        if(ImGui::CollapsingHeader("RectTransform"))
+        {
+            drawRectTransform(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -168,6 +178,20 @@ void EditorModule::drawTransform(Transform* transformPtr)
     }
 }
 
+void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
+{
+    //* transform variables
+    static float rotation = 0;
+    ImGui::Text("Local transform:");
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
+    ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
+    ImGui::DragFloat2("Scale: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+    
+    rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
+}
+
 void EditorModule::drawPaddle(Paddle* paddlePtr)
 {
     ImGui::DragFloat3( "Max postition", (float*)&paddlePtr->maxPos, 0.05f, -20.0f, 20.0f, "%.2f");
@@ -193,7 +217,22 @@ void EditorModule::drawLight(Light* lightPtr)
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
     ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
-    ImGui::DragFloat("Mass", &rBodyPtr->mass);
+    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
+    {
+        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
+        {
+            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
+        {
+            //TODO implement solid or hollow
+            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
+            rBodyPtr->momentOfInertia = I;
+            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
+        }
+    }
     ImGui::DragFloat("Drag", &rBodyPtr->drag);
     ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());

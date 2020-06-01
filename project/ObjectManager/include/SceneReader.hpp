@@ -28,6 +28,7 @@ private:
     void readCubemaps();
     void readMaterials();
     void readMeshes();
+    void readFonts();
     void readComponents();
     void readEntities();
 

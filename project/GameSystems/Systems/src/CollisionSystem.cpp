@@ -50,10 +50,8 @@ bool CollisionSystem::detectCollsion<SphereCollider, SphereCollider>(SphereColli
     // Wide phase
     if (!quickDetectCollision(coll1, coll2, trans1, trans2))
     {
-        std::cout << "WidePhase: NO." << std::endl;
         return false;
     }
-        std::cout << "WidePhase: YES." << std::endl;
     
     //NArrow phase
     //TODO Could be optimized

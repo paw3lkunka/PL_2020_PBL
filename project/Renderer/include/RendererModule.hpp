@@ -9,6 +9,7 @@
 #include "packets/RenderPacket.inl"
 #include "packets/NormalPacket.inl"
 #include "packets/InstancedPacket.inl"
+#include "packets/UiPacket.inl"
 
 #include <deque>
 #include <map>
@@ -59,6 +60,7 @@ public:
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
+    static constexpr unsigned int DRAW_CALL_UI_ALLOCATION = 256;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
 
     // ? +++++ Built in shaders +++++
@@ -83,6 +85,7 @@ private:
 
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<NormalPacket*> transparentQueue;
+    std::deque<UiPacket*> uiQueue;
 
     Light* directionalLight = nullptr;
     unsigned int depthMapFBO = 0;
@@ -95,6 +98,8 @@ private:
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
+    // * Ui rendet packets collection
+    std::vector<UiPacket> uiPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
     std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ size_t = mesh id << 32 | material id +++++
