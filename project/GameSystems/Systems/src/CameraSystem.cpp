@@ -96,7 +96,6 @@ void CameraSystem::frameUpdate()
         // * ===== Calculate view matrix =====
         camera->viewMatrix = transform->getToModelMatrix();
         // * ===== Update camera frustum =====
-        static int aaa = 0;
         ViewFrustum& frustum = camera->getFrustumModifiable();
         frustum.position = glm::vec3(transform->getModelMatrix()[3]);
             // std::cout << "Cam pos: " << glm::to_string(frustum.position) << '\n';

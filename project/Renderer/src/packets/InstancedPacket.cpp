@@ -26,7 +26,7 @@ void InstancedPacket::render(glm::mat4& VP)
         }
     }
 
-    mesh->renderInstanced(instanceMatrices.size(), instanceMatricesUnculled.data());
+    mesh->renderInstanced(instanceMatricesUnculled.size(), instanceMatricesUnculled.data());
     
     instanceMatricesUnculled.clear();
 }

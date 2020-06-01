@@ -383,13 +383,15 @@ void RendererModule::render()
             calculateFrustumPlanes();
             calculateFrustumPoints();
         }
-
-        drawFrustum(VP);
+        else
+        {
+            drawFrustum(VP);
+        }
 
         // * ===== Normal packets =====
         for(auto& packet : normalPackets)
         {
-            drawBounds(packet.mesh->bounds, *internalErrorMat, packet.modelMatrix, VP);
+            //drawBounds(packet.mesh->bounds, *internalErrorMat, packet.modelMatrix, VP);
             if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 switch(packet.material->getRenderType())
@@ -411,7 +413,7 @@ void RendererModule::render()
             bool wholePacketOccluded = true;
             for(auto matrix : packet.second.instanceMatrices)
             {
-                drawBounds(packet.second.mesh->bounds, *internalErrorMat, *matrix, VP);
+                //drawBounds(packet.second.mesh->bounds, *internalErrorMat, *matrix, VP);
                 if (objectInFrustum(packet.second.mesh->bounds, *matrix))
                 {
                     packet.second.instanceOccluded[i] = false;
@@ -525,7 +527,7 @@ void RendererModule::calculateFrustumPlanes()
     //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
     //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
-    normal = -glm::normalize(glm::cross(frustum.right, aux));
+    normal = glm::normalize(glm::cross(aux, frustum.right));
     frustumPlanes[TOP][NORMAL] = normal;
     frustumPlanes[TOP][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -539,7 +541,7 @@ void RendererModule::calculateFrustumPlanes()
     aux = glm::normalize(aux);
     //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
     //normal = -glm::cross(frustum.right, aux);
-    normal = -glm::normalize(glm::cross(aux, frustum.right));
+    normal = glm::normalize(glm::cross(frustum.right, aux));
     frustumPlanes[BOTTOM][NORMAL] = normal;
     frustumPlanes[BOTTOM][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -548,7 +550,7 @@ void RendererModule::calculateFrustumPlanes()
     point = nearCenter - frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
     aux = glm::normalize(aux);
-    normal = -glm::normalize(glm::cross(frustum.up, aux));
+    normal = glm::normalize(glm::cross(aux, frustum.up));
     frustumPlanes[LEFT][NORMAL] = normal;
     frustumPlanes[LEFT][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -558,7 +560,7 @@ void RendererModule::calculateFrustumPlanes()
     aux = point - frustum.position;
     aux = glm::normalize(aux);
     // normal = -glm::cross(frustum.up, aux);
-    normal = -glm::normalize(glm::cross(aux, frustum.up));
+    normal = glm::normalize(glm::cross(frustum.up, aux));
     frustumPlanes[RIGHT][NORMAL] = normal;
     frustumPlanes[RIGHT][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -583,7 +585,7 @@ bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
             //std::cout << "Normal: " << glm::to_string(frustumPlanes[i][NORMAL]) << '\n';
             //std::cout << "Normal normalized: " << glm::to_string(normalNormalized) << '\n';
             //if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], meshBounds.getPoint(j)) < 0.0f)
-            if (pointToPlaneDistance(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], glm::vec4(meshBounds.getPoint(j), 1.0f) * modelMatrix) < 0.0f)
+            if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], modelMatrix * glm::vec4(meshBounds.getPoint(j), 1.0f)) < 0.0f)
             {
                 out++;
             }
