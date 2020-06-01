@@ -4,7 +4,7 @@
 #include "Component.hpp"
 
 /**
- * @brief 
+ * @brief Marks object as an hideout, to works properli collider if type: trigger is required.
  */
 struct Hideout : public Component
 {

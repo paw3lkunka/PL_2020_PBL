@@ -10,6 +10,9 @@ class Hideout;
 class Kayak;
 class CollisionData;
 
+/**
+ * @brief Detects if kayak is hidden. 
+ */
 class HideoutSystem : public System, public IMsgReceiver
 {
     public:
@@ -19,7 +22,13 @@ class HideoutSystem : public System, public IMsgReceiver
         virtual bool assertEntity(Entity* entity);
         virtual void receiveMessage(Message msg);
         virtual void fixedUpdate();
+        /**
+         * @brief Finds Kayak object, and sets internal pointer.
+         */
         void init();
+        /**
+         * @brief Should be called on end of fixed update.
+         */
         void clean();
     protected:
     private:
