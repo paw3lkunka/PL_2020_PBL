@@ -89,6 +89,12 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_SET_BONE_TRANSFORMS_PTR:
             bones = msg.getValue<std::map<int, glm::mat4>*>();
             break;
+        case Event::KEY_PRESSED:
+            if (msg.getValue<int>() == GLFW_KEY_F)
+            {
+                frustumCullingEnabled = !frustumCullingEnabled;
+            }
+            break;
     }
 }
 
@@ -159,6 +165,17 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 4, shadowMappingBuffer, 0, sizeof(glm::mat4));
 
+    // * ===== Setup buffer for simple gizmo rendering =====
+    glGenVertexArrays(1, &gizmoVao);
+    glGenBuffers(1, &gizmoVbo);
+
+    glBindVertexArray(gizmoVao);
+    glBindBuffer(GL_ARRAY_BUFFER, gizmoVbo);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+
+    glBindVertexArray(0);
     // * ===== Generate mesh for skybox rendering =====
 
     if (skyboxMaterial != nullptr)
@@ -358,12 +375,21 @@ void RendererModule::render()
         }
 
         // ? +++++ Perform frustum culling +++++
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
+        glClear(createInfo.clearFlags);
 
-        calculateFrustumPlanes();
+        if (frustumCullingEnabled)
+        {
+            calculateFrustumPlanes();
+            calculateFrustumPoints();
+        }
+
+        drawFrustum(VP);
 
         // * ===== Normal packets =====
         for(auto& packet : normalPackets)
         {
+            drawBounds(packet.mesh->bounds, *internalErrorMat, packet.modelMatrix, VP);
             if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 switch(packet.material->getRenderType())
@@ -385,6 +411,7 @@ void RendererModule::render()
             bool wholePacketOccluded = true;
             for(auto matrix : packet.second.instanceMatrices)
             {
+                drawBounds(packet.second.mesh->bounds, *internalErrorMat, *matrix, VP);
                 if (objectInFrustum(packet.second.mesh->bounds, *matrix))
                 {
                     packet.second.instanceOccluded[i] = false;
@@ -406,8 +433,6 @@ void RendererModule::render()
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
         // ? +++++ Execute (order 66) opaque rendering loop +++++
-        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
-        glClear(createInfo.clearFlags);
         while(!opaqueQueue.empty())
         {
             // TODO: Send directional light shadow map via ubo
@@ -500,7 +525,7 @@ void RendererModule::calculateFrustumPlanes()
     //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
     //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
-    normal = glm::cross(frustum.right, aux);
+    normal = -glm::normalize(glm::cross(frustum.right, aux));
     frustumPlanes[TOP][NORMAL] = normal;
     frustumPlanes[TOP][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -513,7 +538,8 @@ void RendererModule::calculateFrustumPlanes()
     //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
     //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
-    normal = -glm::cross(frustum.right, aux);
+    //normal = -glm::cross(frustum.right, aux);
+    normal = -glm::normalize(glm::cross(aux, frustum.right));
     frustumPlanes[BOTTOM][NORMAL] = normal;
     frustumPlanes[BOTTOM][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -522,7 +548,7 @@ void RendererModule::calculateFrustumPlanes()
     point = nearCenter - frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
     aux = glm::normalize(aux);
-    normal = glm::cross(frustum.up, aux);
+    normal = -glm::normalize(glm::cross(frustum.up, aux));
     frustumPlanes[LEFT][NORMAL] = normal;
     frustumPlanes[LEFT][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -531,7 +557,8 @@ void RendererModule::calculateFrustumPlanes()
     point = nearCenter + frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
     aux = glm::normalize(aux);
-    normal = -glm::cross(frustum.up, aux);
+    // normal = -glm::cross(frustum.up, aux);
+    normal = -glm::normalize(glm::cross(aux, frustum.up));
     frustumPlanes[RIGHT][NORMAL] = normal;
     frustumPlanes[RIGHT][POINT] = point;
     // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
@@ -555,7 +582,8 @@ bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
             //glm::vec3 normalNormalized = glm::normalize(frustumPlanes[i][NORMAL]);
             //std::cout << "Normal: " << glm::to_string(frustumPlanes[i][NORMAL]) << '\n';
             //std::cout << "Normal normalized: " << glm::to_string(normalNormalized) << '\n';
-            if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], glm::vec4(meshBounds.getPoint(j), 1.0f) * modelMatrix) < 0.0f)
+            //if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], meshBounds.getPoint(j)) < 0.0f)
+            if (pointToPlaneDistance(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], glm::vec4(meshBounds.getPoint(j), 1.0f) * modelMatrix) < 0.0f)
             {
                 out++;
             }
@@ -582,4 +610,109 @@ bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
 float RendererModule::pointToPlaneDistance2(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point)
 {
     return glm::dot(point - pointOnPlane, planeNormal);
+}
+
+float RendererModule::pointToPlaneDistance(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point)
+{
+    float D = planeNormal.x * (-pointOnPlane.x) + planeNormal.y * (-pointOnPlane.y) + planeNormal.z * (-pointOnPlane.z);
+    return planeNormal.x * point.x + planeNormal.y * point.y + planeNormal.z * point.z + D;
+}
+
+void RendererModule::drawBounds(Bounds& bounds, Material& material, glm::mat4& model, glm::mat4& VP)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    glm::vec3 vertices[] = {
+        bounds.getPoint(7),
+        bounds.getPoint(4),
+        bounds.getPoint(1),
+        bounds.getPoint(6),
+        bounds.getPoint(3),
+        bounds.getPoint(4),
+        bounds.getPoint(5),
+        bounds.getPoint(7),
+        bounds.getPoint(2),
+        bounds.getPoint(1),
+        bounds.getPoint(0),
+        bounds.getPoint(3),
+        bounds.getPoint(2),
+        bounds.getPoint(5),
+    };
+
+    glBindVertexArray(gizmoVao);
+    glBindBuffer(GL_ARRAY_BUFFER, gizmoVbo);
+    glBufferData(GL_ARRAY_BUFFER, 14 * sizeof(glm::vec3), vertices, GL_STATIC_DRAW);
+
+    if (material.getID() != RendererModule::lastMatID)
+    {
+        material.use();
+        RendererModule::lastMatID = material.getID();
+    }
+    material.setMVP(model, VP);
+    material.setModel(model);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 14);
+
+    glBindVertexArray(0);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void RendererModule::drawFrustum(glm::mat4& VP)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glDisable(GL_CULL_FACE);
+
+    glm::vec3 vertices[] = {
+        frustumPoints[7],
+        frustumPoints[4],
+        frustumPoints[1],
+        frustumPoints[6],
+        frustumPoints[3],
+        frustumPoints[4],
+        frustumPoints[5],
+        frustumPoints[7],
+        frustumPoints[2],
+        frustumPoints[1],
+        frustumPoints[0],
+        frustumPoints[3],
+        frustumPoints[2],
+        frustumPoints[5],
+    };
+
+    glBindVertexArray(gizmoVao);
+    glBindBuffer(GL_ARRAY_BUFFER, gizmoVbo);
+    glBufferData(GL_ARRAY_BUFFER, 14 * sizeof(glm::vec3), vertices, GL_STATIC_DRAW);
+
+    if (internalErrorMat->getID() != RendererModule::lastMatID)
+    {
+        internalErrorMat->use();
+        RendererModule::lastMatID = internalErrorMat->getID();
+    }
+    glm::mat4 identity = glm::mat4(1.0f);
+    internalErrorMat->setMVP(identity, VP);
+    internalErrorMat->setModel(identity);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 14);
+
+    glBindVertexArray(0);
+
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void RendererModule::calculateFrustumPoints()
+{
+    const ViewFrustum& frustum = cameraMain->getFrustum();
+
+    glm::vec3 nearCenter = frustum.position + frustum.front * frustum.nearDist;
+    glm::vec3 farCenter = frustum.position + frustum.front * frustum.farDist;
+
+    // =============== Z axis =========== Y axis ============================= X axis =========================
+    frustumPoints[0] = nearCenter - (frustum.up * frustum.Hnear/2.0f) - (frustum.right * frustum.Wnear/2.0f); // -1, -1, -1
+    frustumPoints[1] = farCenter - (frustum.up * frustum.Hfar/2.0f) - (frustum.right * frustum.Wfar/2.0f); // -1, -1, 1
+    frustumPoints[2] = nearCenter + (frustum.up * frustum.Hnear/2.0f) - (frustum.right * frustum.Wnear/2.0f); // -1, 1, -1
+    frustumPoints[3] = nearCenter - (frustum.up * frustum.Hnear/2.0f) + (frustum.right * frustum.Wnear/2.0f); // 1, -1, -1
+    frustumPoints[4] = farCenter + (frustum.up * frustum.Hfar/2.0f) + (frustum.right * frustum.Wfar/2.0f); // 1, 1, 1
+    frustumPoints[5] = nearCenter + (frustum.up * frustum.Hnear/2.0f) + (frustum.right * frustum.Wnear/2.0f); // 1, 1, -1
+    frustumPoints[6] = farCenter - (frustum.up * frustum.Hfar/2.0f) + (frustum.right * frustum.Wfar/2.0f); // 1, -1, 1
+    frustumPoints[7] = farCenter + (frustum.up * frustum.Hfar/2.0f) - (frustum.right * frustum.Wfar/2.0f); // -1, 1, 1
 }

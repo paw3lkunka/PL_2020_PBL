@@ -85,7 +85,7 @@ void CameraSystem::frameUpdate()
 
             // * ===== Calculate frustum properties used for frustum culling =====
             
-            float tang = glm::tan(frustum.fieldOfView / 2.0f);
+            float tang = glm::tan(glm::radians(frustum.fieldOfView / 2.0f));
             frustum.Hnear = 2.0f * tang * frustum.nearDist;
             frustum.Wnear = frustum.Hnear * frustum.aspectRatio;
 

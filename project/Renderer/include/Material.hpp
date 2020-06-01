@@ -66,7 +66,7 @@ public:
      * @param VP Premultiplied view and projection matrix
      * @param name Uniform name, "MVP" by default
      */
-    void setMVP(glm::mat4 M, glm::mat4 VP, std::string name = "MVP");
+    void setMVP(const glm::mat4& M, const glm::mat4& VP, std::string name = "MVP");
     /**
      * @brief Sets the model uniform in the shader once, should only be used during rendering.
      * @details Usually passed only for use with special shader effects, otherwise use setMVP for performance
@@ -75,7 +75,7 @@ public:
      * @param M The model matrix
      * @param name Uniform name, "model" by default
      */
-    void setModel(glm::mat4 M, std::string name = "model");
+    void setModel(const glm::mat4& M, std::string name = "model");
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);

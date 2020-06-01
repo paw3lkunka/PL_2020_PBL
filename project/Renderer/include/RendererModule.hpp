@@ -75,8 +75,12 @@ private:
     "#version 430 core\nout vec4 FragColor;\nvoid main() { FragColor = vec4(1.0, 0.0, 1.0, 1.0); }";
 
     void calculateFrustumPlanes();
+    void calculateFrustumPoints();
     bool objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix);
     float pointToPlaneDistance2(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point);
+    float pointToPlaneDistance(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point);
+    void drawBounds(Bounds& bounds, Material& material, glm::mat4& model, glm::mat4& VP);
+    void drawFrustum(glm::mat4& VP);
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
@@ -92,6 +96,10 @@ private:
     enum { TOP = 0, BOTTOM, LEFT, RIGHT, NEARP, FARP };
     enum { NORMAL = 0, POINT };
     glm::vec3 frustumPlanes[6][2];
+    glm::vec3 frustumPoints[8];
+    bool frustumCullingEnabled = true;
+
+    unsigned int gizmoVao, gizmoVbo;
 
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<NormalPacket*> transparentQueue;

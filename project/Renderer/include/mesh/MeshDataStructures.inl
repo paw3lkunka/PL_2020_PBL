@@ -44,21 +44,21 @@ struct Bounds
         switch(i)
         {
             case 0:
-                return minBound;
+                return minBound; // -1, -1, -1
             case 1:
-                return {minBound.x, minBound.y, maxBound.z};
+                return {minBound.x, minBound.y, maxBound.z}; // -1, -1, 1
             case 2:
-                return {minBound.x, maxBound.y, minBound.z};
+                return {minBound.x, maxBound.y, minBound.z}; // -1, 1, -1
             case 3:
-                return {maxBound.x, minBound.y, minBound.z};
+                return {maxBound.x, minBound.y, minBound.z}; // 1, -1, -1
             case 4:
-                return maxBound;
+                return maxBound; // 1, 1, 1
             case 5:
-                return {maxBound.x, maxBound.y, minBound.z};
+                return {maxBound.x, maxBound.y, minBound.z}; // 1, 1, -1
             case 6:
-                return {maxBound.x, minBound.y, maxBound.z};
+                return {maxBound.x, minBound.y, maxBound.z}; // 1, -1, 1
             case 7:
-                return {minBound.x, maxBound.y, maxBound.z};
+                return {minBound.x, maxBound.y, maxBound.z}; // -1, 1, 1
             default:
                 return {0.0f, 0.0f, 0.0f};
         }
