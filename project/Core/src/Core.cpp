@@ -6,6 +6,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "ScenesPaths.inl"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -98,13 +99,14 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
         // ? none, or -f
-        //objectModule.readScene(sceneFilePath);
+        objectModule.readScene(sceneFilePath);
     }
 
     if (updateScene)

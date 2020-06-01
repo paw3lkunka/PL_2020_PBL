@@ -230,6 +230,18 @@ void SceneWriter::saveScene(const char* filePath)
         {
             savePaddle(name, temp);
         }
+        else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
+        {
+            saveUiRenderer(name, temp);
+        }
+        else if(Button* temp = dynamic_cast<Button*>(objContainerPtr->components[i]))
+        {
+            saveButton(name, temp);
+        }
+        else if(RectTransform* temp = dynamic_cast<RectTransform*>(objContainerPtr->components[i]))
+        {
+            saveRectTransform(name, temp);
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
@@ -444,6 +456,62 @@ void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
     j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
     j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
     j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
+}
+
+void SceneWriter::saveUiRenderer(std::string name, UiRenderer* componentPtr)
+{
+    j[name]["type"] = "UiRenderer";
+    j[name]["material"] = componentPtr->material->serializationID;
+}
+
+void SceneWriter::saveRectTransform(std::string name, RectTransform* componentPtr)
+{
+    j[name]["type"] = "RectTransform";
+    j[name]["anchor"]["x"] = componentPtr->getAnchor().x;
+    j[name]["anchor"]["y"] = componentPtr->getAnchor().y;
+    j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
+    j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
+    j[name]["size"]["x"] = componentPtr->getSize().x;
+    j[name]["size"]["y"] = componentPtr->getSize().y;
+    j[name]["rotation"] = componentPtr->getLocalRotation();
+    if(componentPtr->getParent() != nullptr)
+    {
+        j[name]["parent"] = componentPtr->getParent()->serializationID;
+    }
+}
+
+void SceneWriter::saveButton(std::string name, Button* componentPtr)
+{
+    j[name]["type"] = "Button";
+    j[name]["isActive"] = componentPtr->isActive;
+    j[name]["baseColor"]["r"] = componentPtr->baseColor.r;
+    j[name]["baseColor"]["g"] = componentPtr->baseColor.g;
+    j[name]["baseColor"]["b"] = componentPtr->baseColor.b;
+    j[name]["baseColor"]["a"] = componentPtr->baseColor.a;
+
+    j[name]["inactiveColor"]["r"] = componentPtr->inactiveColor.r;
+    j[name]["inactiveColor"]["g"] = componentPtr->inactiveColor.g;
+    j[name]["inactiveColor"]["b"] = componentPtr->inactiveColor.b;
+    j[name]["inactiveColor"]["a"] = componentPtr->inactiveColor.a;
+
+    j[name]["highlightedColor"]["r"] = componentPtr->highlightedColor.r;
+    j[name]["highlightedColor"]["g"] = componentPtr->highlightedColor.g;
+    j[name]["highlightedColor"]["b"] = componentPtr->highlightedColor.b;
+    j[name]["highlightedColor"]["a"] = componentPtr->highlightedColor.a;
+
+    j[name]["onClickColor"]["r"] = componentPtr->onClickColor.r;
+    j[name]["onClickColor"]["g"] = componentPtr->onClickColor.g;
+    j[name]["onClickColor"]["b"] = componentPtr->onClickColor.b;
+    j[name]["onClickColor"]["a"] = componentPtr->onClickColor.a;
+
+
+    //FIXME: I Hate myself, it won't work biatch
+    // std::vector<std::pair<unsigned int, unsigned char*>> messages;
+    // for(auto e : componentPtr->onClickEvents)
+    // {
+    //     messages.push_back(std::pair<unsigned int, unsigned char*>(e.getEvent(), e.getValue());
+    // }
+    // j[name]["onClickEvents"] = messages;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)

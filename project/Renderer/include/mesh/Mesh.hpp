@@ -2,7 +2,7 @@
 #define _MESH_HPP
 
 #include "mesh/MeshDataStructures.inl"
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 #include "IFileSystem.inl"
 
 #include <glm/glm.hpp>

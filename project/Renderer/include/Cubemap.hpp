@@ -1,7 +1,7 @@
 #ifndef _CUBEMAP_HPP
 #define _CUBEMAP_HPP
 
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 #include "Texture.hpp"
 
 /**

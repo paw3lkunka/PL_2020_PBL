@@ -42,3 +42,12 @@ void SceneModule::process(Transform& transform, bool dirty)
         process(*t, dirty);
     }
 }
+
+void SceneModule::unloadScene()
+{
+    for(auto child : rootNode.children)
+    {
+        child = nullptr;
+    }
+    rootNode.children.clear();
+}

@@ -70,6 +70,9 @@ private:
     void saveLight(std::string name, Light* componentPtr);
     void savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr);
     void savePaddle(std::string name, Paddle* componentPtr);
+    void saveUiRenderer(std::string name, UiRenderer* componentPtr);
+    void saveRectTransform(std::string name, RectTransform* componentPtr);
+    void saveButton(std::string name, Button* componentPtr);
 
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);

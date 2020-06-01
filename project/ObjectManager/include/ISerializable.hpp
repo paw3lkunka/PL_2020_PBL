@@ -1,12 +1,14 @@
 #ifndef ISERIALIZABLE_INL_
 #define ISERIALIZABLE_INL_
 
+class ObjectModule;
+
 class ISerializable
 {
+    friend class ObjectModule;
 public:
     ISerializable(bool makeSerializable = true) 
     {
-        static unsigned int nextID = 0;
         if (makeSerializable)
         {
             serializationID = nextID++;
@@ -15,7 +17,8 @@ public:
     unsigned int serializationID;
 
     virtual ~ISerializable() = default;
-    
+private:
+    static unsigned int nextID;
 };
 
 #endif /* !ISERIALIZABLE_INL_ */

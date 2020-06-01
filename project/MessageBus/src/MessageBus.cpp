@@ -42,10 +42,16 @@ void MessageBus::notify()
 
     for(auto ptr : modulesPointers)
     {
-        for (auto msg : *inactiveBuffer)
-        {
-            ptr->receiveMessage(msg);
-        }
+		for(int i = 0; i < inactiveBuffer->size(); ++i)
+		{
+			ptr->receiveMessage((*inactiveBuffer)[i]);
+		}
     }
     inactiveBuffer->clear();
+}
+
+void MessageBus::clearBuffers()
+{
+	activeBuffer->clear();
+	inactiveBuffer->clear();
 }
