@@ -276,9 +276,6 @@ class Core
 
         //TODO documentation
         static UiRendererSystem uiRendererSystem;
-
-        //TODO documentation
-        static HydroBodySystem hydroBodySystem;
         
         //TODO documentation
         static HideoutSystem hideoutSystem;

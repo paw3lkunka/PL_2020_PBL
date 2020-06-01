@@ -238,14 +238,6 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "Bone";
         }
-        else if(dynamic_cast<HydroBody*>(objContainerPtr->components[i]))
-        {
-            j[name]["type"] = "HydroBody";
-        }
-        else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
-        {
-            j[name]["type"] = "HydroSurface";
-        }
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Kayak";

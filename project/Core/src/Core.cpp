@@ -169,7 +169,6 @@ int Core::init()
 
 #pragma regnon attach systems 
 
-    gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -323,6 +322,5 @@ PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
-HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
