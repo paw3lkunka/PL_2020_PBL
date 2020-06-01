@@ -2059,6 +2059,7 @@
         }
     },
     "component148": {
+        "autoPlay": true,
         "clips": [
             "Resources/Audios/shingeki.wav"
         ],
@@ -2150,6 +2151,7 @@
         "type": "MeshRenderer"
     },
     "component153": {
+        "autoPlay": false,
         "clips": [
             "Resources/Audios/test.wav"
         ],
@@ -2973,10 +2975,10 @@
         "type": "BoxCollider"
     },
     "component206": {
-        "angularDrag": 1.0,
+        "angularDrag": 3.0,
         "drag": 3.0,
         "entity id": 94,
-        "ignoreGravity": false,
+        "ignoreGravity": true,
         "mass": 60.0,
         "momentOfInertia": {
             "0,0": 40625.0,

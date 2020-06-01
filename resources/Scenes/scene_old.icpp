@@ -390,6 +390,7 @@ objectModule.newEntity(2, "sampleSound");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 2.0f;
         so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };

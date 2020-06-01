@@ -455,6 +455,7 @@ void SceneReader::readAudioSource(std::string name)
     aSource->getPitchModifiable() = j.at(name).at("pitch").get<float>();
     aSource->getReferenceDistanceModifiable() = j.at(name).at("referenceDistance").get<float>();
     aSource->getRolloffFactorModifiable() = j.at(name).at("rolloffFactor").get<float>();
+    aSource->autoPlay = j.at(name).at("autoPlay").get<bool>();
 
     glm::vec3 tempVec;
     tempVec.x = j.at(name).at("direction").at("x");

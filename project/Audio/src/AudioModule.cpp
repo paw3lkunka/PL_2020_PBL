@@ -625,7 +625,6 @@ void AudioModule::audioListenerSetAsCurrentHelper(AudioListener* audioListenerPt
 
 void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 {
-    std::cout << "Update buffers" << std::endl;
     ALboolean buffersReady = true;
     std::vector<ALuint> buffers = {};
     
@@ -684,6 +683,10 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 
         audioSourcePtr->currentQueue = buffers;
         audioSourcePtr->getDirtyModifiable() &= ~(1 << 19);
+        if(audioSourcePtr->autoPlay)
+        {
+            GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr));
+        }
     }
 }
 

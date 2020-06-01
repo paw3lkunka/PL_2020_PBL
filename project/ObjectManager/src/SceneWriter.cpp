@@ -319,6 +319,7 @@ void SceneWriter::saveAudioSource(std::string name, AudioSource* componentPtr)
     j[name]["maxGain"] = componentPtr->getMaxGain();
     j[name]["referenceDistance"] = componentPtr->getReferenceDistance();
     j[name]["rolloffFactor"] = componentPtr->getRolloffFactor();
+    j[name]["autoPlay"] = componentPtr->autoPlay;
     if(componentPtr->getMaxDistance() != std::numeric_limits<float>::infinity())
     {
         j[name]["maxDistance"] = componentPtr->getMaxDistance();
