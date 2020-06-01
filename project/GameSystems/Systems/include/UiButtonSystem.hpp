@@ -36,14 +36,14 @@ public:
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate() {}
+    virtual void fixedUpdate();
 
     /**
      * @brief Contain logic of the system runned once per frame
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void frameUpdate();
+    virtual void frameUpdate() {}
 
 protected:
 private:

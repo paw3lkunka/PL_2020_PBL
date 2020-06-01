@@ -98,8 +98,6 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
     GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo, getMaterialPtrByName("skyboxMat"));
-
-    GetCore().audioModule.init();
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
 
@@ -108,6 +106,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().sceneModule.updateTransforms();
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
+    GetCore().audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }

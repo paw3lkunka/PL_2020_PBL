@@ -106,6 +106,7 @@ class AudioModule : public IModule
         /// @brief Vector of all contexts existing on the device. Used for cleanup.
         std::vector<ALCcontext*> contexts = {};
 
+        std::vector<AudioSource*> sources = {};
         /**
          * @brief Pointer to currently processed AudioListener
          * 

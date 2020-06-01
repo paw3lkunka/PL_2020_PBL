@@ -18,6 +18,9 @@ void AudioModule::receiveMessage(Message msg)
     {
         switch (msg.getEvent())
         {
+        case Event::AUDIO_SOURCE_INIT:
+            sources.push_back(msg.getValue<AudioSource*>());
+        break;
         case Event::AUDIO_LISTENER_INIT:
         {
             auto audioListenerPtr = msg.getValue<AudioListener*>();
@@ -122,6 +125,34 @@ void AudioModule::unloadScene()
 {
     try
     {
+        for(auto src : sources)
+        {
+            for(auto name : src->names)
+            {
+                alcMakeContextCurrent(name.first->context);
+                alSourcePlay(name.second);
+                alSourceStop(name.second);
+                alSourcei(name.second, AL_LOOPING, 0);
+                ALuint* buffers = new ALuint;
+                alSourceUnqueueBuffers(name.second, 1, buffers);
+                alCheckErrors();
+                alSourcei(name.second, AL_BUFFER, 0);
+                alCheckErrors();
+                alDeleteSources(1, &name.second);
+                alCheckErrors();
+                delete buffers;
+                alcPushCurrentContextChangesToDevice();
+            }
+            for(auto clip : src->getClips())
+            {
+                auto iter = clips.find(clip);
+                if(iter != clips.end())
+                {
+                    alDeleteBuffers(1, &iter->second);
+                    alCheckErrors();
+                }
+            }
+        }
         // Release and destroy the context
         auto releaseContextStatus = alcMakeContextCurrent(nullptr);
         if(releaseContextStatus == ALC_FALSE)
@@ -134,12 +165,6 @@ void AudioModule::unloadScene()
             alcDestroyContext(*it);
             alcCheckErrors();
         }
-
-        for(auto it = clips.begin(); it != clips.end(); it++)
-        {
-            alDeleteBuffers(1, &(it->second));
-            alCheckErrors();
-        }
     }
     catch(AudioDeviceLevelException& e)
     {
@@ -149,6 +174,7 @@ void AudioModule::unloadScene()
     {}
     contexts.clear();
     clips.clear();
+    sources.clear();
     queueCounters.clear();
 }
 
@@ -164,7 +190,6 @@ void AudioModule::cleanup()
         {
             alcCheckErrors();
         }
-        device = nullptr;
     }
     catch(AudioDeviceLevelException& e)
     {
@@ -600,6 +625,7 @@ void AudioModule::audioListenerSetAsCurrentHelper(AudioListener* audioListenerPt
 
 void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 {
+    std::cout << "Update buffers" << std::endl;
     ALboolean buffersReady = true;
     std::vector<ALuint> buffers = {};
     

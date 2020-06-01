@@ -13,6 +13,8 @@ struct Button : public Component
 
     ///@brief isActive flag - if button can trigger an event
     bool isActive = true;
+    ///@brief isClicked flag - checks if button is clicked by user
+    bool isClicked = false;
     ///@brief base color of the active button
     glm::vec4 baseColor;
     ///@brief color of inactive button
