@@ -246,6 +246,14 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "HydroSurface";
         }
+        else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Kayak";
+        }
+        else if(dynamic_cast<Hideout*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Hideout";
+        }
     }
 
     std::ofstream file(filePath);

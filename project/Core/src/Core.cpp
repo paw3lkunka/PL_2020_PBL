@@ -113,55 +113,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-            {
-                auto* kayak = objectModule.newEmptyComponent<Kayak>();
-                pbit->addComponent(kayak);
-            }
-
-            
-            auto* rushesMat = objectModule.newMaterial
-            (
-                objectModule.getMaterialPtrByName("unlitColorMat")->getShaderPtr(),
-                "RushesMat",
-                RenderType::Transparent
-            );
-                rushesMat->setVec4("color", {0.0f, 0.6f, 0.2f, 0.7f });
-
-            auto* hideout1 = objectModule.newEntity(4,"Hideout1");
-            {
-                auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    tr->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
-                    tr->getLocalScaleModifiable() = {20.0f, 10.0f, 20.0f};
-                    tr->setParent(&sceneModule.rootNode);
-
-                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-                    bc->type = Collider::Type::TRIGGER;
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
-                    mr->material = rushesMat;
-
-                auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
-            }
-            
-            auto* hideout2 = objectModule.newEntity(4,"Hideout2");
-            {
-                auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    tr->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
-                    tr->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
-                    tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
-                    tr->setParent(&sceneModule.rootNode);
-
-                auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-                    bc->type = Collider::Type::TRIGGER;
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
-                    mr->material = rushesMat;
-
-                auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
-            }
+            //Code...
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
