@@ -50,6 +50,7 @@ private:
     void readSkeleton(std::string name);
     void readHydroBody(std::string name);
     void readHydroSurface(std::string name);
+    void readHydroAccelerator(std::string name);
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);

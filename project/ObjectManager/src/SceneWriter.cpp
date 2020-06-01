@@ -258,6 +258,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "HydroSurface";
         }
+        else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
+        {
+            saveHydroAccelerator(name, temp);
+        }
     }
 
     std::ofstream file(filePath);
@@ -512,6 +516,12 @@ void SceneWriter::saveButton(std::string name, Button* componentPtr)
     //     messages.push_back(std::pair<unsigned int, unsigned char*>(e.getEvent(), e.getValue());
     // }
     // j[name]["onClickEvents"] = messages;
+}
+
+void SceneWriter::saveHydroAccelerator(std::string name, HydroAccelerator* componentPtr)
+{
+    j[name]["type"] = "HydroAccelerator";
+    j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
 }
 
 void SceneWriter::saveMaterial(std::string name, Material* assetPtr)

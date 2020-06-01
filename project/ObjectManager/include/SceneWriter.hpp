@@ -73,6 +73,7 @@ private:
     void saveUiRenderer(std::string name, UiRenderer* componentPtr);
     void saveRectTransform(std::string name, RectTransform* componentPtr);
     void saveButton(std::string name, Button* componentPtr);
+    void saveHydroAccelerator(std::string name, HydroAccelerator* componentPtr);
 
     ///@brief saving assets
     void saveMaterial(std::string name, Material* assetPtr);

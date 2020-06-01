@@ -80,6 +80,14 @@ class AudioModule : public IModule
         void init();
 
         /**
+         * @brief Unloads current scene
+         * 
+         * Release all the contexts.
+         * Release all buffers.
+         */
+        void unloadScene();
+
+        /**
          * @brief Clean up AudioModule
          * 
          * Stop processing and delete the context.
