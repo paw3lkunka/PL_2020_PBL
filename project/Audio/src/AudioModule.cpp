@@ -147,6 +147,9 @@ void AudioModule::unloadScene()
     }
     catch(const std::exception& e)
     {}
+    contexts.clear();
+    clips.clear();
+    queueCounters.clear();
 }
 
 void AudioModule::cleanup()
@@ -161,6 +164,7 @@ void AudioModule::cleanup()
         {
             alcCheckErrors();
         }
+        device = nullptr;
     }
     catch(AudioDeviceLevelException& e)
     {
