@@ -59,6 +59,11 @@ public:
      */
     virtual std::vector<unsigned int>* getIndices() { return nullptr; }
 
+    /**
+     * @brief Bounds of the mesh
+     */
+    Bounds bounds;
+
 private:
     static unsigned int idcount;
     unsigned int ID;

@@ -141,13 +141,13 @@ void Material::use()
     }
 }
 
-void Material::setMVP(glm::mat4 M, glm::mat4 VP, std::string name)
+void Material::setMVP(const glm::mat4& M, const glm::mat4& VP, std::string name)
 {
-    M = VP * M;
-    shader->setMat4(name, M);
+    glm::mat4 model = VP * M;
+    shader->setMat4(name, model);
 }
 
-void Material::setModel(glm::mat4 M, std::string name)
+void Material::setModel(const glm::mat4& M, std::string name)
 {
     shader->setMat4(name, M);
 }
