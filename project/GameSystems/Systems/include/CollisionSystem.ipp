@@ -82,6 +82,7 @@ void CollisionSystem::collisionWith(T1* collider1, T2* collider2, Transform* tra
 
             case Collider::Type::TRIGGER:
             {
+                std::cout << "TRIGGER ENTERED: " << std::endl;
                 if(activeTriggers.find(data) == activeTriggers.end())
                 {
                     GetCore().messageBus.sendMessage( Message(Event::TRIGGER_ENTER, data) );

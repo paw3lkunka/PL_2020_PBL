@@ -58,7 +58,7 @@ private:
     ///@brief json object - parser to json
     nlohmann::json j;
 
-    ///@brief saving components
+    // ? saving components
     void saveTransform(std::string name, Transform* componentPtr);
     void saveAudioListener(std::string name, AudioListener* componentPtr);
     void saveAudioSource(std::string name, AudioSource* componentPtr);
@@ -75,7 +75,7 @@ private:
     void saveButton(std::string name, Button* componentPtr);
     void saveHydroAccelerator(std::string name, HydroAccelerator* componentPtr);
 
-    ///@brief saving assets
+    // ? saving assets
     void saveMaterial(std::string name, Material* assetPtr);
     void saveTexture(std::string name, Texture* assetPtr);
     void saveMesh(std::string name, Mesh* assetPtr);

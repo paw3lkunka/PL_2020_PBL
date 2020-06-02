@@ -345,6 +345,16 @@ void SceneReader::readComponents()
             std::cout << "HydroAccelerator" << std::endl;
             readHydroAccelerator(name);
         }
+        else if(componentType == "Kayak")
+        {
+            std::cout << "Kayak" << std::endl;
+            readKayak(name);
+        }
+        else if(componentType == "Hideout")
+        {
+            std::cout << "Hideout" << std::endl;
+            readHideout(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -693,6 +703,22 @@ void SceneReader::readHydroAccelerator(std::string name)
     hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j.at(name).at("rigidbody").get<unsigned int>() ) );
 
     assignToEntity(name, hydroAccelerator);
+}
+
+void SceneReader::readKayak(std::string name)
+{
+    auto kayak = objModulePtr->newEmptyComponent<Kayak>();
+    kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, kayak);
+}
+
+void SceneReader::readHideout(std::string name)
+{
+    auto hideout = objModulePtr->newEmptyComponent<Hideout>();
+    hideout->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hideout);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
