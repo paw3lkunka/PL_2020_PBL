@@ -340,6 +340,11 @@ void SceneReader::readComponents()
             std::cout << "HydroSurface" << std::endl;
             readHydroSurface(name);
         }
+        else if(componentType == "HydroAccelerator")
+        {
+            std::cout << "HydroAccelerator" << std::endl;
+            readHydroAccelerator(name);
+        }
         else if(componentType == "Kayak")
         {
             std::cout << "Kayak" << std::endl;
@@ -460,6 +465,7 @@ void SceneReader::readAudioSource(std::string name)
     aSource->getPitchModifiable() = j.at(name).at("pitch").get<float>();
     aSource->getReferenceDistanceModifiable() = j.at(name).at("referenceDistance").get<float>();
     aSource->getRolloffFactorModifiable() = j.at(name).at("rolloffFactor").get<float>();
+    aSource->autoPlay = j.at(name).at("autoPlay").get<bool>();
 
     glm::vec3 tempVec;
     tempVec.x = j.at(name).at("direction").at("x");
@@ -688,6 +694,15 @@ void SceneReader::readHydroSurface(std::string name)
     hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     assignToEntity(name, hydroSurface);
+}
+
+void SceneReader::readHydroAccelerator(std::string name)
+{
+    auto hydroAccelerator = objModulePtr->newEmptyComponent<HydroAccelerator>();
+    hydroAccelerator->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j.at(name).at("rigidbody").get<unsigned int>() ) );
+
+    assignToEntity(name, hydroAccelerator);
 }
 
 void SceneReader::readKayak(std::string name)

@@ -16,7 +16,7 @@
 
 #include "Texture.hpp"
 #include "Cubemap.hpp"
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 
 #include "Shader.hpp"
 

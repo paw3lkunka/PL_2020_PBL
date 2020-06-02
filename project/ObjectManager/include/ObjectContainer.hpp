@@ -155,6 +155,11 @@ public:
     // TODO documentation
     Font* getFontPtrByName(const char* name);
 
+    /**
+     * @brief Removes all components and entities from scene
+     */
+    void unloadScene();
+
 protected:
 private:
     ///@brief object module pointer

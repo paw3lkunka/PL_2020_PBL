@@ -390,6 +390,7 @@ objectModule.newEntity(2, "sampleSound");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 2.0f;
         so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
@@ -597,8 +598,8 @@ objectModule.newEntity(2, "sampleSound");
         rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
         rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
         rigidbody->drag = 3.0f;
-        rigidbody->angularDrag = 1.0f;
-        rigidbody->ignoreGravity = false;
+        rigidbody->angularDrag = 3.0f;
+        rigidbody->ignoreGravity = true;
     
     auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
     

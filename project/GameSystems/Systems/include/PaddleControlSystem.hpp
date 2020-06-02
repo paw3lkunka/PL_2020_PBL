@@ -10,6 +10,7 @@
 
 struct Transform;
 struct Paddle;
+struct HydroAccelerator;
 class Message;
 
 class PaddleControlSystem : public System, public IMsgReceiver
@@ -39,14 +40,14 @@ protected:
          * called in Process() only when AssertEntity() returned true
          * should use class variables to access components
          */
-        virtual void fixedUpdate() {}
+        virtual void fixedUpdate();
 
         /**
          * @brief Contain logic of the system runned once per frame
          * called in Process() only when AssertEntity() returned true
          * should use class variables to access components
          */
-        virtual void frameUpdate();
+        virtual void frameUpdate() {}
 private:
 
     glm::vec3 startPosition;
@@ -59,6 +60,7 @@ private:
     bool keyboardInput = true;
 
     Transform* transformPtr;
+    HydroAccelerator* hydroAcceleratorPtr;
     Paddle* paddlePtr;
 };
 

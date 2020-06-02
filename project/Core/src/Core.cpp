@@ -6,6 +6,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
 
 Core* Core::instance = nullptr;
@@ -99,7 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -167,7 +169,7 @@ int Core::init()
     // ! IMGUI initialize
     editorModule.init(window);
 
-#pragma regnon attach systems 
+#pragma regnon attach systems
 
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);

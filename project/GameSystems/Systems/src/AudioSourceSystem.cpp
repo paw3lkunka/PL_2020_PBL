@@ -25,7 +25,13 @@ bool AudioSourceSystem::assertEntity(Entity* entity)
     return true;
 }
 
-void AudioSourceSystem::fixedUpdate()
+void AudioSourceSystem::start()
+{
+    audioSource->getDirtyModifiable() = (1 << 20);
+    GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_INIT, audioSource));
+}
+
+void AudioSourceSystem::frameUpdate()
 {
     if(audioSource->getDirty() & (1 << 20))
     {

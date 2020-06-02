@@ -1,0 +1,113 @@
+objectModule.newAudioClip("Resources/Audios/river.wav");
+objectModule.newEntity(4, "Camera");
+{
+    auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
+        c->farPlane = 10000.0f;
+        c->nearPlane = 0.1f;
+        c->fieldOfView = 80.0f;
+        c->projectionMode = CameraProjection::Perspective;
+
+    
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+
+    auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+        li->getIsCurrentModifiable() = true;
+        li->getGainModifiable() = 1.0f;
+        li->getVelocityModifiable();
+        li->getPositionModifiable();
+        li->getAtModifiable();
+        li->getUpModifiable();
+}
+
+objectModule.newEntity(2, "RiverFlow");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
+        so3->getClipsModifiable().push_back("Resources/Audios/river.wav");
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 2.0f;
+        so3->getIsLoopingModifiable() = true;
+}
+
+{
+    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+    TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+    auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
+    uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
+    uiMaterial->setTexture("sprite", buttonTest);
+    auto uiMaterial2 = objectModule.newMaterial(uiShader, "UiStandardMat2", RenderType::Transparent);
+    uiMaterial2->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+    uiMaterial2->setTexture("sprite", buttonTest);
+
+
+    auto textMaterial = objectModule.newMaterial(uiShader, "TextMaterial", RenderType::Transparent);
+    textMaterial->setVec4("color", {1.0f, 0.0f, 0.0f, 1.0f});
+    objectModule.newEntity(2, "Ui_Menu_Background");
+    {
+        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rt->getAnchorModifiable() = {0.5f, 0.5f};
+            rt->getSizeModifiable() = {1920, 1080};
+            uiModule.rootNodes.push_back(rt);
+
+        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
+            mat->setTexture("sprite", buttonTest);
+            mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
+            ui->material = mat;
+    }
+
+    objectModule.newEntity(3, "Sound_On");
+    {
+        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rt->getLocalPositionModifiable() = {200, 350};
+            rt->getSizeModifiable() = {300.0f, 150.0f};
+            uiModule.rootNodes.push_back(rt);
+
+        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+            buttMaterial->setTexture("sprite", buttonTest);
+            buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            ui->material = buttMaterial;
+        
+        auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+            butt->baseColor = glm::vec4(0.125f, 0.592f, 0.192f, 0.7f);
+            butt->inactiveColor = glm::vec4(0.411f, 0.588f, 0.435f, 0.7f);
+            butt->highlightedColor = glm::vec4(0.239f, 0.858f, 0.329f, 0.7f);
+            butt->onClickColor = glm::vec4(0.094f, 0.486f, 0.149f, 0.7f);
+            butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+    }
+
+    objectModule.newEntity(3, "Sound_Off");
+    {
+        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rt->getLocalPositionModifiable() = {700, 350};
+            rt->getSizeModifiable() = {300.0f, 150.0f};
+            uiModule.rootNodes.push_back(rt);
+
+        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat_2", RenderType::Transparent);
+            buttMaterial->setTexture("sprite", buttonTest);
+            buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            ui->material = buttMaterial;
+        
+        auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+            butt->baseColor = glm::vec4(0.823f, 0.176f, 0.227f, 0.7f);
+            butt->inactiveColor = glm::vec4(0.698f, 0.360f, 0.388f, 0.7f);
+            butt->highlightedColor = glm::vec4(0.901f, 0.337f, 0.384f, 0.7f);
+            butt->onClickColor = glm::vec4(0.552f, 0.086f, 0.121f, 0.7f);
+            butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+            butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::gameScene));
+    }
+}

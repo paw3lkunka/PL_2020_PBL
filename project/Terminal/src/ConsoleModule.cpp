@@ -182,8 +182,11 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::WINDOW_RESIZED:
         std::cout << "console here: WINDOW_RESIZED. Width: " << msg.getValue<glm::ivec2>().x << " Height: " << msg.getValue<glm::ivec2>().y << '\n';
         break;
-
+    case Event::AUDIO_SOURCE_INIT:
+        std::cout << "console here: AUDIO_SOURCE_INIT\n";
+        break;
     case Event::AUDIO_LISTENER_INIT:
+        std::cout << "console here: AUDIO_LISTENER_INIT\n";
         break;
 
     case Event::AUDIO_LISTENER_UPDATE:
@@ -196,9 +199,11 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::AUDIO_SOURCE_PLAY:
+        std::cout << "console here: AUDIO_SOURCE_PLAY\n";
         break;
 
     case Event::AUDIO_SOURCE_STOP:
+        std::cout << "console here: AUDIO_SOURCE_STOP\n";
         break;
 
     case Event::AUDIO_SOURCE_PAUSE:
