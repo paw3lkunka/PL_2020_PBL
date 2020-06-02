@@ -33,7 +33,6 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 
 void SceneWriter::saveScene(const char* filePath)
 {
-    std::string name;
     j["Amounts"]["entities"] = objContainerPtr->entities.size();
     j["Amounts"]["shaders"] = objContainerPtr->shaders.size();
     j["Amounts"]["materials"] = objContainerPtr->materials.size();
@@ -82,7 +81,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "shader" + std::to_string(i);
         }
-        saveShader(name, objContainerPtr->shaders[i]);
+        saveShader(objContainerPtr->shaders[i]);
     }
 
     for(int i = 0; i < objContainerPtr->materials.size(); ++i)
@@ -99,7 +98,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "material" + std::to_string(i);
         }
-        saveMaterial(name, objContainerPtr->materials[i]);
+        saveMaterial(objContainerPtr->materials[i]);
     }
 
     for(int i = 0; i < objContainerPtr->meshes.size(); ++i)
@@ -116,7 +115,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "mesh" + std::to_string(i);
         }
-        saveMesh(name, objContainerPtr->meshes[i]);
+        saveMesh(objContainerPtr->meshes[i]);
     }
 
     for(int i = 0; i < objContainerPtr->textures.size(); ++i)
@@ -133,7 +132,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "texture" + std::to_string(i);
         }
-        saveTexture(name, objContainerPtr->textures[i]);
+        saveTexture(objContainerPtr->textures[i]);
     }
 
     for(int i = 0; i < objContainerPtr->cubemaps.size(); ++i)
@@ -150,7 +149,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "cubemap" + std::to_string(i);
         }
-        saveCubemap(name, objContainerPtr->cubemaps[i]);
+        saveCubemap(objContainerPtr->cubemaps[i]);
     }
 
     for(int i = 0; i < objContainerPtr->fonts.size(); ++i)
@@ -167,7 +166,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "font" + std::to_string(i);
         }
-        saveFont(name, objContainerPtr->fonts[i]);
+        saveFont(objContainerPtr->fonts[i]);
     }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
@@ -189,59 +188,59 @@ void SceneWriter::saveScene(const char* filePath)
         j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
         if(Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
-            saveTransform(name, temp);
+            saveTransform(temp);
         }
         else if(AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
-            saveAudioSource(name, temp);
+            saveAudioSource(temp);
         }
         else if(AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
         {
-            saveAudioListener(name, temp);
+            saveAudioListener(temp);
         }
         else if(Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]))
         {
-            saveCamera(name, temp);
+            saveCamera(temp);
         }
         else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
-            saveMeshRenderer(name, temp);
+            saveMeshRenderer(temp);
         }
         else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
-            saveSphereCollider(name, temp);
+            saveSphereCollider(temp);
         }
         else if(BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
         {
-            saveBoxCollider(name, temp);
+            saveBoxCollider(temp);
         }
         else if(Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
         {
-            saveRigidbody(name, temp);
+            saveRigidbody(temp);
         }
         else if(Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]))
         {
-            saveLight(name, temp);
+            saveLight(temp);
         }
         else if(PhysicalInputKeymap* temp = dynamic_cast<PhysicalInputKeymap*>(objContainerPtr->components[i]))
         {
-            savePhysicalInputKeymap(name, temp);
+            savePhysicalInputKeymap(temp);
         }
         else if(Paddle* temp = dynamic_cast<Paddle*>(objContainerPtr->components[i]))
         {
-            savePaddle(name, temp);
+            savePaddle(temp);
         }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
-            saveUiRenderer(name, temp);
+            saveUiRenderer(temp);
         }
         else if(Button* temp = dynamic_cast<Button*>(objContainerPtr->components[i]))
         {
-            saveButton(name, temp);
+            saveButton(temp);
         }
         else if(RectTransform* temp = dynamic_cast<RectTransform*>(objContainerPtr->components[i]))
         {
-            saveRectTransform(name, temp);
+            saveRectTransform(temp);
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
@@ -261,7 +260,7 @@ void SceneWriter::saveScene(const char* filePath)
         }
         else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
         {
-            saveHydroAccelerator(name, temp);
+            saveHydroAccelerator(temp);
         }
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
@@ -287,13 +286,16 @@ void SceneWriter::saveTransform(Transform* componentPtr)
     j[name]["type"] = "Transform";
     if(componentPtr->getParent() != nullptr)
         j[name]["transform parentID"] = componentPtr->getParent()->serializationID;
+
     j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
     j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
     j[name]["localPosition"]["z"] = componentPtr->getLocalPosition().z;
+
     j[name]["localRotation"]["x"] = componentPtr->getLocalRotation().x;
     j[name]["localRotation"]["y"] = componentPtr->getLocalRotation().y;
     j[name]["localRotation"]["z"] = componentPtr->getLocalRotation().z;
     j[name]["localRotation"]["w"] = componentPtr->getLocalRotation().w;
+
     j[name]["localScale"]["x"] = componentPtr->getLocalScale().x;
     j[name]["localScale"]["y"] = componentPtr->getLocalScale().y;
     j[name]["localScale"]["z"] = componentPtr->getLocalScale().z;
@@ -481,13 +483,18 @@ void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
 void SceneWriter::saveRectTransform(RectTransform* componentPtr)
 {
     j[name]["type"] = "RectTransform";
+
     j[name]["anchor"]["x"] = componentPtr->getAnchor().x;
     j[name]["anchor"]["y"] = componentPtr->getAnchor().y;
+
     j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
     j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
-    j[name]["size"]["x"] = componentPtr->getSize().x;
-    j[name]["size"]["y"] = componentPtr->getSize().y;
+
+    j[name]["rectSize"]["x"] = componentPtr->getSize().x;
+    j[name]["rectSize"]["y"] = componentPtr->getSize().y;
+
     j[name]["rotation"] = componentPtr->getLocalRotation();
+
     if(componentPtr->getParent() != nullptr)
     {
         j[name]["parent"] = componentPtr->getParent()->serializationID;
@@ -693,19 +700,20 @@ void SceneWriter::saveFont(Font* assetPtr)
 #pragma endregion
 
 #pragma region Events
+
 void SceneWriter::saveMessage(std::string msgName, Message msg)
 {
-    j[name]["onClickEvents"][msgName]["event"] = msg.getEvent();
+    j[name]["onClickEvents"][msgName.c_str()]["event"] = msg.getEvent();
     switch(msg.getEvent())
     {
         case Event::AUDIO_SOURCE_PLAY:
-            j[name]["onClickEvents"][msgName]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::AUDIO_SOURCE_STOP:
-            j[name]["onClickEvents"][msgName]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::LOAD_SCENE:
-            j[name]["onClickEvents"][msgName]["scene"] = msg.getValue<const char*>();
+            j[name]["onClickEvents"][msgName.c_str()]["scene"] = msg.getValue<const char*>();
         break;
     }
 }

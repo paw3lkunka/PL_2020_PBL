@@ -100,14 +100,9 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-<<<<<<< HEAD
-        //#include "../../resources/Scenes/scene_old.icpp"
-        #include "../../resources/Scenes/testScene.icpp"
-=======
         #include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
->>>>>>> 3594fcdb4a33ca125c2225601bf0e59fe8d40f8a
     }
     else
     {

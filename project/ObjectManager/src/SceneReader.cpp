@@ -757,13 +757,16 @@ void SceneReader::readRectTransform(std::string name)
     auto rectTransform = objModulePtr->newEmptyComponent<RectTransform>();
     rectTransform->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
-    rectTransform->getAnchorModifiable().x = j.at(name).at("anchor").at("x");
-    rectTransform->getAnchorModifiable().y = j.at(name).at("anchor").at("y");
-    rectTransform->getLocalPositionModifiable().x = j.at(name).at("localPosition").at("x");
-    rectTransform->getLocalPositionModifiable().y = j.at(name).at("localPosition").at("y");
-    rectTransform->getSize().x = j.at(name).at("size").at("x");
-    rectTransform->getSize().y = j.at(name).at("size").at("y");
-    rectTransform->getLocalRotationModifiable() = j.at(name).at("rotation");
+    rectTransform->getAnchorModifiable().x = j.at(name).at("anchor").at("x").get<float>();
+    rectTransform->getAnchorModifiable().y = j.at(name).at("anchor").at("y").get<float>();
+    
+    rectTransform->getLocalPositionModifiable().x = j.at(name).at("localPosition").at("x").get<float>();
+    rectTransform->getLocalPositionModifiable().y = j.at(name).at("localPosition").at("y").get<float>();
+
+    rectTransform->getSizeModifiable().x = j.at(name).at("rectSize").at("x").get<float>();
+    rectTransform->getSizeModifiable().y = j.at(name).at("rectSize").at("y").get<float>();
+
+    rectTransform->getLocalRotationModifiable() = j.at(name).at("rotation").get<float>();
     assignToEntity(name, rectTransform);
 }
 
@@ -771,27 +774,27 @@ void SceneReader::readButton(std::string name)
 {
     auto button = objModulePtr->newEmptyComponent<Button>();
     button->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    button->isActive = j.at(name).at("isActive");
+    button->isActive = j.at(name).at("isActive").get<bool>();
 
-    button->baseColor.r = j.at(name).at("baseColor").at("r");
-    button->baseColor.g = j.at(name).at("baseColor").at("g");
-    button->baseColor.b = j.at(name).at("baseColor").at("b");
-    button->baseColor.a = j.at(name).at("baseColor").at("a");
+    button->baseColor.r = j.at(name).at("baseColor").at("r").get<float>();
+    button->baseColor.g = j.at(name).at("baseColor").at("g").get<float>();
+    button->baseColor.b = j.at(name).at("baseColor").at("b").get<float>();
+    button->baseColor.a = j.at(name).at("baseColor").at("a").get<float>();
 
-    button->inactiveColor.r = j.at(name).at("inactiveColor").at("r");
-    button->inactiveColor.g = j.at(name).at("inactiveColor").at("g");
-    button->inactiveColor.b = j.at(name).at("inactiveColor").at("b");
-    button->inactiveColor.a = j.at(name).at("inactiveColor").at("a");
+    button->inactiveColor.r = j.at(name).at("inactiveColor").at("r").get<float>();
+    button->inactiveColor.g = j.at(name).at("inactiveColor").at("g").get<float>();
+    button->inactiveColor.b = j.at(name).at("inactiveColor").at("b").get<float>();
+    button->inactiveColor.a = j.at(name).at("inactiveColor").at("a").get<float>();
 
-    button->highlightedColor.r = j.at(name).at("highlightedColor").at("r");
-    button->highlightedColor.g = j.at(name).at("highlightedColor").at("g");
-    button->highlightedColor.b = j.at(name).at("highlightedColor").at("b");
-    button->highlightedColor.a = j.at(name).at("highlightedColor").at("a");
+    button->highlightedColor.r = j.at(name).at("highlightedColor").at("r").get<float>();
+    button->highlightedColor.g = j.at(name).at("highlightedColor").at("g").get<float>();
+    button->highlightedColor.b = j.at(name).at("highlightedColor").at("b").get<float>();
+    button->highlightedColor.a = j.at(name).at("highlightedColor").at("a").get<float>();
 
-    button->onClickColor.r = j.at(name).at("onClickColor").at("r");
-    button->onClickColor.g = j.at(name).at("onClickColor").at("g");
-    button->onClickColor.b = j.at(name).at("onClickColor").at("b");
-    button->onClickColor.a = j.at(name).at("onClickColor").at("a");
+    button->onClickColor.r = j.at(name).at("onClickColor").at("r").get<float>();
+    button->onClickColor.g = j.at(name).at("onClickColor").at("g").get<float>();
+    button->onClickColor.b = j.at(name).at("onClickColor").at("b").get<float>();
+    button->onClickColor.a = j.at(name).at("onClickColor").at("a").get<float>();
 
     readButtonEvents(name, button);
     assignToEntity(name, button);
@@ -901,7 +904,7 @@ void SceneReader::readButtonEvents(std::string name, Button* buttonPtr)
             case Event::AUDIO_SOURCE_PLAY:
             {
                 unsigned int id = j.at(name).at("onClickEvents").at(msgName).at("audioSource").get<unsigned int>();
-                AudioSource* source = objModulePtr->objectContainer.getComponentFromSerializationID(id);
+                AudioSource* source = dynamic_cast<AudioSource*>(objModulePtr->objectContainer.getComponentFromSerializationID(id));
                 buttonPtr->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY, source));
             }
             break;
@@ -909,14 +912,14 @@ void SceneReader::readButtonEvents(std::string name, Button* buttonPtr)
             case Event::AUDIO_SOURCE_STOP:
             {
                 unsigned int id = j.at(name).at("onClickEvents").at(msgName).at("audioSource").get<unsigned int>();
-                AudioSource* source = objModulePtr->objectContainer.getComponentFromSerializationID(id);
+                AudioSource* source = dynamic_cast<AudioSource*>(objModulePtr->objectContainer.getComponentFromSerializationID(id));
                 buttonPtr->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, source));
             }
             break;
 
             case Event::LOAD_SCENE:
             {
-                std::string scene = j.at(name).at("onClickEvents").at(msgName).at("scene").get<const char *>();
+                std::string scene = j.at(name).at("onClickEvents").at(msgName).at("scene").get<std::string>();
                 buttonPtr->onClickEvents.push_back(Message(Event::LOAD_SCENE, scene.c_str()));
             }
             break;

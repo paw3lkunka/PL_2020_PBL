@@ -7,6 +7,7 @@
 class AssetReader;
 class ObjectModule;
 struct Component;
+struct Button;
 
 class SceneReader
 {

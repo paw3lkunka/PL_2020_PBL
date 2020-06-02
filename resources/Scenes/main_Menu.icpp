@@ -2,10 +2,12 @@ objectModule.newAudioClip("Resources/Audios/river.wav");
 objectModule.newEntity(4, "Camera");
 {
     auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
-        c->farPlane = 10000.0f;
-        c->nearPlane = 0.1f;
-        c->fieldOfView = 80.0f;
-        c->projectionMode = CameraProjection::Perspective;
+        ViewFrustum& frustum = c->getFrustumModifiable();
+            frustum.farPlane = 2500.0f;
+            frustum.nearPlane = 0.1f;
+            frustum.fieldOfView = 80.0f;
+            frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+        c->getProjectionModeModifiable() = CameraProjection::Perspective;
 
     
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
