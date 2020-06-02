@@ -33,7 +33,7 @@ class HideoutSystem : public System, public IMsgReceiver
     protected:
     private:
         Hideout* hideoutPtr;
-        Kayak* playerPtr;
+        Kayak* kayakPtr;
         std::vector<Message> messages;
 };
 
