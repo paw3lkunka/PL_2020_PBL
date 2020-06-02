@@ -78,6 +78,13 @@ public:
      */
     void readScene(std::string path);
 
+    /**
+     * @brief unloading current scene and loading new
+     * 
+     * @param newScenePath path to new scene
+     */
+    void unloadSceneAndLoadNew(std::string newScenePath);
+
 #pragma endregion
 
 #pragma region ObjectContainer Wrapper

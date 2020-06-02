@@ -49,3 +49,9 @@ void MessageBus::notify()
     }
     inactiveBuffer->clear();
 }
+
+void MessageBus::clearBuffers()
+{
+	activeBuffer->clear();
+	inactiveBuffer->clear();
+}

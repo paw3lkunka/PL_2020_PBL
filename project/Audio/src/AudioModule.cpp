@@ -18,6 +18,9 @@ void AudioModule::receiveMessage(Message msg)
     {
         switch (msg.getEvent())
         {
+        case Event::AUDIO_SOURCE_INIT:
+            sources.push_back(msg.getValue<AudioSource*>());
+        break;
         case Event::AUDIO_LISTENER_INIT:
         {
             auto audioListenerPtr = msg.getValue<AudioListener*>();
@@ -89,11 +92,11 @@ void AudioModule::receiveMessage(Message msg)
     }
     catch(AudioContextLevelException e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(AudioDeviceLevelException e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -112,16 +115,44 @@ void AudioModule::init()
     }
     catch(AudioDeviceLevelException& e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
 }
 
-void AudioModule::cleanup()
+void AudioModule::unloadScene()
 {
     try
     {
+        for(auto src : sources)
+        {
+            for(auto name : src->names)
+            {
+                alcMakeContextCurrent(name.first->context);
+                alSourcePlay(name.second);
+                alSourceStop(name.second);
+                alSourcei(name.second, AL_LOOPING, 0);
+                ALuint* buffers = new ALuint;
+                alSourceUnqueueBuffers(name.second, 1, buffers);
+                alCheckErrors();
+                alSourcei(name.second, AL_BUFFER, 0);
+                alCheckErrors();
+                alDeleteSources(1, &name.second);
+                alCheckErrors();
+                delete buffers;
+                alcPushCurrentContextChangesToDevice();
+            }
+            for(auto clip : src->getClips())
+            {
+                auto iter = clips.find(clip);
+                if(iter != clips.end())
+                {
+                    alDeleteBuffers(1, &iter->second);
+                    alCheckErrors();
+                }
+            }
+        }
         // Release and destroy the context
         auto releaseContextStatus = alcMakeContextCurrent(nullptr);
         if(releaseContextStatus == ALC_FALSE)
@@ -131,16 +162,27 @@ void AudioModule::cleanup()
 
         for(auto it = contexts.begin(); it != contexts.end(); it++)
         {
-            //alcDestroyContext(*it);
+            alcDestroyContext(*it);
             alcCheckErrors();
         }
+    }
+    catch(AudioDeviceLevelException& e)
+    {
+        std::cerr << e.what();
+    }
+    catch(const std::exception& e)
+    {}
+    contexts.clear();
+    clips.clear();
+    sources.clear();
+    queueCounters.clear();
+}
 
-
-        for(auto it = clips.begin(); it != clips.end(); it++)
-        {
-            alDeleteBuffers(1, &(it->second));
-            alCheckErrors();
-        }
+void AudioModule::cleanup()
+{
+    try
+    {
+        unloadScene();
 
         // Disconnect from connected device
         auto closeDeviceStatus = alcCloseDevice(device);
@@ -151,7 +193,7 @@ void AudioModule::cleanup()
     }
     catch(AudioDeviceLevelException& e)
     {
-        ErrorLog( e.what() );
+        std::cerr << e.what();
     }
     catch(const std::exception& e)
     {}
@@ -510,8 +552,8 @@ void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
     else
     {
         std::stringstream message;
-        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.";
-        throw AudioDeviceLevelException(message.str().c_str());
+        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.\n";
+        throw AudioDeviceLevelException(message.str());
     }
 }
 
@@ -641,6 +683,10 @@ void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
 
         audioSourcePtr->currentQueue = buffers;
         audioSourcePtr->getDirtyModifiable() &= ~(1 << 19);
+        if(audioSourcePtr->autoPlay)
+        {
+            GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr));
+        }
     }
 }
 

@@ -101,6 +101,7 @@ struct Transform : public Component
         }
         newParent->children.insert(this);
         parent = newParent;
+        dirty = true;
     }
 
     /**

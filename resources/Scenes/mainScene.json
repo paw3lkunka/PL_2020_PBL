@@ -830,7 +830,7 @@
             "z": 0.06161297857761383
         },
         "localScale": {
-            "x": 0.9999999403953552,
+            "x": 1.0,
             "y": 1.0,
             "z": 0.9999999403953552
         },
@@ -940,7 +940,7 @@
             "z": -0.042935147881507874
         },
         "localScale": {
-            "x": 0.9999999403953552,
+            "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
@@ -1160,7 +1160,7 @@
             "z": -0.14109034836292267
         },
         "localScale": {
-            "x": 0.9999999403953552,
+            "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
@@ -1316,7 +1316,7 @@
         "localScale": {
             "x": 1.0,
             "y": 1.0,
-            "z": 0.9999999403953552
+            "z": 1.0
         },
         "serializationID": 177,
         "transform parentID": 170,
@@ -1441,16 +1441,10 @@
         },
         "localRotation": {
             "w": 0.9948955178260803,
-            "x": 5.3506248043344584e-11,
-            "y": -0.012202154844999313,
-            "z": 0.1001698300242424
-        },
-        "localScale": {
             "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 183,
         "transform parentID": 170,
         "type": "Transform"
     },
@@ -1556,7 +1550,7 @@
             "z": 0.0585470087826252
         },
         "localScale": {
-            "x": 0.9999999403953552,
+            "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
@@ -2012,7 +2006,7 @@
         "entity id": 73,
         "farPlane": 10000.0,
         "fieldOfView": 80.0,
-        "isMain": true,
+        "isMain": false,
         "nearPlane": 0.10000000149011612,
         "orthographicSize": 0.0,
         "projectionMode": 0,
@@ -2059,6 +2053,7 @@
         }
     },
     "component148": {
+        "autoPlay": true,
         "clips": [
             "Resources/Audios/shingeki.wav"
         ],
@@ -2150,6 +2145,7 @@
         "type": "MeshRenderer"
     },
     "component153": {
+        "autoPlay": false,
         "clips": [
             "Resources/Audios/test.wav"
         ],
@@ -2973,10 +2969,10 @@
         "type": "BoxCollider"
     },
     "component206": {
-        "angularDrag": 1.0,
+        "angularDrag": 3.0,
         "drag": 3.0,
         "entity id": 94,
-        "ignoreGravity": false,
+        "ignoreGravity": true,
         "mass": 60.0,
         "momentOfInertia": {
             "0,0": 40625.0,
@@ -4612,22 +4608,22 @@
                 0.0
             ],
             "viewStatic": [
-                5.960465188081798e-08,
-                -0.0,
-                -1.0,
-                0.0,
-                -0.0,
-                1.0,
-                -0.0,
-                0.0,
-                1.0,
-                -0.0,
-                5.960465188081798e-08,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
         "name": "skyboxMat",

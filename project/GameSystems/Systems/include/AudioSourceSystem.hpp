@@ -13,18 +13,19 @@ struct Rigidbody;
 
 class AudioSourceSystem : public System
 {
-    public:
-        AudioSourceSystem() = default;
-        virtual ~AudioSourceSystem() = default;
+public:
+    AudioSourceSystem() = default;
+    virtual ~AudioSourceSystem() = default;
 
-        virtual bool assertEntity(Entity* entity);
-        virtual void fixedUpdate();
+    virtual bool assertEntity(Entity* entity);
+    virtual void start();
+    virtual void frameUpdate();
 
-    protected:
-    private:
-        AudioSource* audioSource;
-        Transform* transform;
-        Rigidbody* rigidbody;
+protected:
+private:
+    AudioSource* audioSource;
+    Transform* transform;
+    Rigidbody* rigidbody;
 };
 
 #endif /* !AUDIOSOURCESYSTEM_HPP_ */

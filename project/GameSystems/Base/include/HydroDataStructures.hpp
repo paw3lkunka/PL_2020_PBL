@@ -26,13 +26,15 @@ struct HydroTriangleData
     /**
      * @brief Construct a new Triangle Data object
      * 
+     * @param modelTranslation - Transposition of the model
      * @param p0 - First vertex of the triangle
      * @param p1 - Second vertex of the triangle
      * @param p2 - Third vertex of the triangle
-     * @param bodyRB - Rigidbody of the body triangle belongs to
+     * @param bodyVelocity - Linear velocity of the whole body
+     * @param bodyAngularVelocity - Angular velocity of the whole body
      * @param timeSinceStart - Time since start of current calculations
      */
-    HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, Rigidbody bodyRB, float timeSinceStart);
+    HydroTriangleData(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 modelTranslation, glm::vec3 bodyVelocity, glm::vec3 bodyAngularVelocity, float timeSinceStart);
 
     /// @brief Default destructor
     virtual ~HydroTriangleData() = default;
@@ -189,11 +191,13 @@ namespace HydroForces
      * omega_B - angular velocity in point B
      * r_BA - vector between A and B
      * 
-     * @param bodyRB - Rigid body of floating body
+     * @param modelTranslation - Transposition of the model
+     * @param bodyVelocity - Linear velocity of the whole body
+     * @param bodyAngularVelocity - Angular velocity of the whole body
      * @param triangleCenter - Position of triangle center in world space
      * @return glm::vec3 - Triangle velocity
      */
-    glm::vec3 getTriangleVelocity(Rigidbody bodyRB, glm::vec3 triangleCenter);
+    glm::vec3 getTriangleVelocity(glm::vec3 modelTranslation, glm::vec3 bodyVelocity, glm::vec3 bodyAngularVelocity, glm::vec3 triangleCenter);
 
     /**
      * @brief Calculate the area of a triangle with three coordinates

@@ -26,14 +26,16 @@ bool AudioListenerSystem::assertEntity(Entity* entity)
     rigidbody = entity->getComponentPtr<Rigidbody>();
     return true;
 }
-
-void AudioListenerSystem::fixedUpdate()
+void AudioListenerSystem::start()
 {
     if(audioListener->context == nullptr)
     {
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_LISTENER_INIT, audioListener) );
     }
+}
 
+void AudioListenerSystem::frameUpdate()
+{
     if(transform)
     {
         auto position = glm::xyz(transform->getModelMatrix()[3]);
