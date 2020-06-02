@@ -1,10 +1,10 @@
 {
     "Amounts": {
-        "components": 212,
+        "components": 221,
         "cubemaps": 1,
-        "entities": 100,
+        "entities": 102,
         "fonts": 0,
-        "materials": 20,
+        "materials": 21,
         "meshes": 17,
         "shaders": 7,
         "textures": 19
@@ -3052,6 +3052,111 @@
         "serializationID": 376,
         "type": "MeshRenderer"
     },
+    "component212": {
+        "entity id": 97,
+        "serializationID": 378,
+        "type": "Kayak"
+    },
+    "component213": {
+        "entity id": 100,
+        "localPosition": {
+            "x": 50.0,
+            "y": 0.0,
+            "z": -50.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 20.0,
+            "y": 10.0,
+            "z": 20.0
+        },
+        "serializationID": 381,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component214": {
+        "center": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "colliderType": 2,
+        "entity id": 100,
+        "halfSize": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+        },
+        "serializationID": 382,
+        "type": "BoxCollider"
+    },
+    "component215": {
+        "entity id": 100,
+        "material": 379,
+        "mesh": 28,
+        "serializationID": 383,
+        "type": "MeshRenderer"
+    },
+    "component216": {
+        "entity id": 100,
+        "serializationID": 384,
+        "type": "Hideout"
+    },
+    "component217": {
+        "entity id": 101,
+        "localPosition": {
+            "x": 50.0,
+            "y": 0.0,
+            "z": -50.0
+        },
+        "localRotation": {
+            "w": 0.9238795042037964,
+            "x": 0.0,
+            "y": 0.3826834559440613,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 10.0,
+            "y": 20.0,
+            "z": 10.0
+        },
+        "serializationID": 386,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component218": {
+        "center": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "colliderType": 2,
+        "entity id": 101,
+        "halfSize": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+        },
+        "serializationID": 387,
+        "type": "BoxCollider"
+    },
+    "component219": {
+        "entity id": 101,
+        "material": 379,
+        "mesh": 28,
+        "serializationID": 388,
+        "type": "MeshRenderer"
+    },
+    "component220": {
+        "entity id": 101,
+        "serializationID": 389,
+        "type": "Hideout"
+    },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox_02/pz.png",
         "bottomPath": "Resources/Textures/skybox_02/ny.png",
@@ -3954,7 +4059,8 @@
             360,
             361,
             362,
-            364
+            364,
+            378
         ],
         "id": 97,
         "name": "PhisicBasedInputTest",
@@ -3981,6 +4087,28 @@
         "id": 99,
         "name": "PhysicSurface",
         "serializationID": 372
+    },
+    "entity100": {
+        "components": [
+            381,
+            382,
+            383,
+            384
+        ],
+        "id": 100,
+        "name": "Hideout1",
+        "serializationID": 380
+    },
+    "entity101": {
+        "components": [
+            386,
+            387,
+            388,
+            389
+        ],
+        "id": 101,
+        "name": "Hideout2",
+        "serializationID": 385
     },
     "material000": {
         "cubemaps": {},
@@ -5934,6 +6062,88 @@
                 0.15000000596046448,
                 0.800000011920929,
                 0.30000001192092896
+            ]
+        }
+    },
+    "material020": {
+        "cubemaps": {},
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "RushesMat",
+        "renderingType": 1,
+        "serializationID": 379,
+        "shaderSerializationID": 208,
+        "textures": {},
+        "vec3s": {
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "color": [
+                0.699999988079071,
+                0.0,
+                0.6000000238418579,
+                0.20000000298023224
             ]
         }
     },

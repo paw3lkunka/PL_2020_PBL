@@ -12,6 +12,7 @@
 #include "Core.hpp"
 
 #include "CameraSystem.hpp"
+#include "HideoutSystem.hpp"
 
 #include <assimp/scene.h>
 #include <assimp/anim.h>
@@ -107,6 +108,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
     GetCore().audioModule.init();
+    Core::hideoutSystem.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }
