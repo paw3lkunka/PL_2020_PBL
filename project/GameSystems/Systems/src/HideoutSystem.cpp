@@ -8,14 +8,14 @@
 
 bool HideoutSystem::assertEntity(Entity* entity)
 {
-    return hideoutPtr = entity->getComponentPtr<Hideout>();
+    return kayakPtr && (hideoutPtr = entity->getComponentPtr<Hideout>());
 }
 
 void HideoutSystem::receiveMessage(Message msg)
 {
     if (msg.getEvent() == Event::TRIGGER_ENTER || msg.getEvent() == Event::TRIGGER_EXIT)
     {
-        if (msg.getValue<CollisionData>().cause->entityPtr == playerPtr->entityPtr)
+        if (kayakPtr && msg.getValue<CollisionData>().cause->entityPtr == kayakPtr->entityPtr)
         {
             messages.push_back(msg);
         }
@@ -26,15 +26,14 @@ void HideoutSystem::init()
 {
     for (Entity& e : *GetCore().gameSystemsModule.entities)
     {
-        playerPtr = e.getComponentPtr<Kayak>();
+        kayakPtr = e.getComponentPtr<Kayak>();
 
-        if (playerPtr)
+        if (kayakPtr)
         {
             return;
         }
     }
-    std::cerr << "Kayak Component not found!";
-    exit(-1);
+    std::cerr << "Kayak Component not found! Hideout system wouldn't be working!\n";
 }
 
 void HideoutSystem::clean()
@@ -51,10 +50,10 @@ void HideoutSystem::fixedUpdate()
             switch (msg.getEvent())
             {
             case Event::TRIGGER_ENTER:
-                playerPtr->isHidden++;
+                kayakPtr->isHidden++;
                 break;
             case Event::TRIGGER_EXIT:
-                playerPtr->isHidden--;
+                kayakPtr->isHidden--;
                 break;
             }
         }
