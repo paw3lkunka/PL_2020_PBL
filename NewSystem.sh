@@ -12,6 +12,7 @@ echo -e "#ifndef "$_className"_hpp_sh
 
 #include \"System.hpp\"
 
+//TODO documentation
 class "$_className" : public System
 {
 public:

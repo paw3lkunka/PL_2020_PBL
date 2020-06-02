@@ -8,6 +8,7 @@ echo -n > $_file
 echo -e "#ifndef "$_className"_inl_sh
 #define "$_className"_inl_sh
 
+//TODO documentation
 struct "$_className"
 {
     //fields
