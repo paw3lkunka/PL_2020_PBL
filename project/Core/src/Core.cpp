@@ -210,8 +210,6 @@ int Core::mainLoop()
     uiModule.updateRectTransforms();
     editorModule.setup();
 
-    hideoutSystem.init();
-
     // ! ----- START SYSTEM FUNCTION -----
 
     gameSystemsModule.run(System::START);

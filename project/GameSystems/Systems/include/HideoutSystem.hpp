@@ -23,17 +23,12 @@ class HideoutSystem : public System, public IMsgReceiver
         virtual void receiveMessage(Message msg);
         virtual void fixedUpdate();
         /**
-         * @brief Finds Kayak object, and sets internal pointer.
-         */
-        void init();
-        /**
          * @brief Should be called on end of fixed update.
          */
         void clean();
     protected:
     private:
         Hideout* hideoutPtr;
-        Kayak* kayakPtr;
         std::vector<Message> messages;
 };
 
