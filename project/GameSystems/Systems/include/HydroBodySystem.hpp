@@ -11,6 +11,7 @@
 class Entity;
 
 struct HydroBody;
+struct HydroAccelerator;
 struct Transform;
 struct Rigidbody;
 struct MeshRenderer;
@@ -29,9 +30,14 @@ class HydroBodySystem : public System
     protected:
     private:
         HydroBody* hydroBody;
+        HydroAccelerator* hydroAccelerator;
         Transform* transform;
         Rigidbody* rigidbody;
         MeshRenderer* meshRenderer;
+
+        glm::vec3 modelTranslation;
+        glm::vec3 modelVelocity;
+        glm::vec3 modelAngularVelocity;
 
         // TODO: Modify and document these
         std::vector<unsigned int> indexOfOriginalTriangle;

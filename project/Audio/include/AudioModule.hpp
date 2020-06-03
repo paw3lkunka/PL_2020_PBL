@@ -23,22 +23,22 @@ class AudioSource;
 
 struct AudioDeviceLevelException : public std::exception
 {
-    const char* message;
+    std::string message;
 
-    AudioDeviceLevelException(const char* errorMessage)
+    AudioDeviceLevelException(std::string errorMessage)
     {
         message = errorMessage;
     }
 
-    const char* what()
+    const char* what() const noexcept
     {
-        return message;
+        return message.c_str();
     }
 };
 
 struct AudioContextLevelException : public AudioDeviceLevelException
 {
-    AudioContextLevelException(const char* errorMessage) 
+    AudioContextLevelException(std::string errorMessage) 
     : AudioDeviceLevelException(errorMessage)
     {}
 };
@@ -80,6 +80,14 @@ class AudioModule : public IModule
         void init();
 
         /**
+         * @brief Unloads current scene
+         * 
+         * Release all the contexts.
+         * Release all buffers.
+         */
+        void unloadScene();
+
+        /**
          * @brief Clean up AudioModule
          * 
          * Stop processing and delete the context.
@@ -98,6 +106,7 @@ class AudioModule : public IModule
         /// @brief Vector of all contexts existing on the device. Used for cleanup.
         std::vector<ALCcontext*> contexts = {};
 
+        std::vector<AudioSource*> sources = {};
         /**
          * @brief Pointer to currently processed AudioListener
          * 

@@ -17,9 +17,10 @@ class AudioListenerSystem : public System
     public:
         AudioListenerSystem() = default;
         virtual ~AudioListenerSystem() = default;
-
         virtual bool assertEntity(Entity* entity);
-        virtual void fixedUpdate();
+        
+        virtual void start();
+        virtual void frameUpdate();
 
     protected:
     private:

@@ -9,7 +9,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 
 struct Character
 {

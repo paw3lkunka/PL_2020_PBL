@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 #include "IFileSystem.inl"
 
 class SceneWriter;

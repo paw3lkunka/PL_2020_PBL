@@ -531,6 +531,9 @@ struct AudioSource : public Component
      */
     inline ALfloat& getByteOffsetModifiable() { dirty |= (1 << 18); return byteOffset; }
 
+    //HACK: temporary shit, i guess?
+    bool autoPlay = false;
+
     private:
 
         ALuint dirty = (1 << 20);

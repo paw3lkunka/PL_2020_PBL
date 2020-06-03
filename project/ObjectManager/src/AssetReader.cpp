@@ -106,7 +106,7 @@ bool AssetReader::loadShader(std::string path)
 bool AssetReader::loadMesh(std::string path)
 {
     // ? +++++ Load the assimp scene from provided path +++++
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes);
     
     // Check for assimp errors and display them
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

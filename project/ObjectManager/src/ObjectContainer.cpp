@@ -261,3 +261,14 @@ Font* ObjectContainer::getFontPtrByName(const char* name)
     }
     return font;
 }
+
+void ObjectContainer::unloadScene()
+{
+    for(int i = components.size() - 1; i > 0; --i)
+    {
+        delete components[i];
+        components[i] = nullptr;
+    }
+    components.clear();
+    entities.clear();
+}

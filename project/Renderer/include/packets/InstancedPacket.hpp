@@ -18,7 +18,9 @@ struct InstancedPacket : RenderPacket
     void render(glm::mat4& VP);
     void renderWithShader(Shader* shader, glm::mat4& VP);
 
-    std::vector<glm::mat4> instanceMatrices;
+    std::vector<glm::mat4> instanceMatricesUnculled;
+    std::vector<glm::mat4*> instanceMatrices;
+    std::vector<bool> instanceOccluded;
 };
 
 #endif // _INSTANCEDPACKET_INL
