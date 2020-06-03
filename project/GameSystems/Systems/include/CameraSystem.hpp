@@ -48,7 +48,6 @@ public:
     virtual void frameUpdate();
 
 private:
-    static int width, height;
     bool cameraChanged = true;
 
     Transform* transform;

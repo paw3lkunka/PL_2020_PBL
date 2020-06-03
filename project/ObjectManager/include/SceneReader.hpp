@@ -7,6 +7,7 @@
 class AssetReader;
 class ObjectModule;
 struct Component;
+struct Button;
 
 class SceneReader
 {
@@ -53,9 +54,14 @@ private:
     void readHydroAccelerator(std::string name);
     void readKayak(std::string name);
     void readHideout(std::string name);
+    void readUiRenderer(std::string name);
+    void readRectTransform(std::string name);
+    void readButton(std::string name);
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);
+    void readRectTransformParents(std::string name);
+    void readButtonEvents(std::string name, Button* buttonPtr);
 };
 
 #endif /* !SCENEREADER_HPP_ */

@@ -12,6 +12,7 @@
 #include "Shader.hpp"
 #include "Entity.hpp"
 #include "Font.hpp"
+#include "Message.inl"
 
 #include <fstream>
 #include <iomanip>
@@ -32,7 +33,6 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 
 void SceneWriter::saveScene(const char* filePath)
 {
-    std::string name;
     j["Amounts"]["entities"] = objContainerPtr->entities.size();
     j["Amounts"]["shaders"] = objContainerPtr->shaders.size();
     j["Amounts"]["materials"] = objContainerPtr->materials.size();
@@ -81,7 +81,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "shader" + std::to_string(i);
         }
-        saveShader(name, objContainerPtr->shaders[i]);
+        saveShader(objContainerPtr->shaders[i]);
     }
 
     for(int i = 0; i < objContainerPtr->materials.size(); ++i)
@@ -98,7 +98,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "material" + std::to_string(i);
         }
-        saveMaterial(name, objContainerPtr->materials[i]);
+        saveMaterial(objContainerPtr->materials[i]);
     }
 
     for(int i = 0; i < objContainerPtr->meshes.size(); ++i)
@@ -115,7 +115,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "mesh" + std::to_string(i);
         }
-        saveMesh(name, objContainerPtr->meshes[i]);
+        saveMesh(objContainerPtr->meshes[i]);
     }
 
     for(int i = 0; i < objContainerPtr->textures.size(); ++i)
@@ -132,7 +132,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "texture" + std::to_string(i);
         }
-        saveTexture(name, objContainerPtr->textures[i]);
+        saveTexture(objContainerPtr->textures[i]);
     }
 
     for(int i = 0; i < objContainerPtr->cubemaps.size(); ++i)
@@ -149,7 +149,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "cubemap" + std::to_string(i);
         }
-        saveCubemap(name, objContainerPtr->cubemaps[i]);
+        saveCubemap(objContainerPtr->cubemaps[i]);
     }
 
     for(int i = 0; i < objContainerPtr->fonts.size(); ++i)
@@ -166,7 +166,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "font" + std::to_string(i);
         }
-        saveFont(name, objContainerPtr->fonts[i]);
+        saveFont(objContainerPtr->fonts[i]);
     }
 
     for( int i = 0; i < objContainerPtr->components.size(); ++i)
@@ -188,59 +188,59 @@ void SceneWriter::saveScene(const char* filePath)
         j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
         if(Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
-            saveTransform(name, temp);
+            saveTransform(temp);
         }
         else if(AudioSource* temp = dynamic_cast<AudioSource*>(objContainerPtr->components[i]))
         {
-            saveAudioSource(name, temp);
+            saveAudioSource(temp);
         }
         else if(AudioListener* temp = dynamic_cast<AudioListener*>(objContainerPtr->components[i]))
         {
-            saveAudioListener(name, temp);
+            saveAudioListener(temp);
         }
         else if(Camera* temp = dynamic_cast<Camera*>(objContainerPtr->components[i]))
         {
-            saveCamera(name, temp);
+            saveCamera(temp);
         }
         else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
-            saveMeshRenderer(name, temp);
+            saveMeshRenderer(temp);
         }
         else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
-            saveSphereCollider(name, temp);
+            saveSphereCollider(temp);
         }
         else if(BoxCollider* temp = dynamic_cast<BoxCollider*>(objContainerPtr->components[i]))
         {
-            saveBoxCollider(name, temp);
+            saveBoxCollider(temp);
         }
         else if(Rigidbody* temp = dynamic_cast<Rigidbody*>(objContainerPtr->components[i]))
         {
-            saveRigidbody(name, temp);
+            saveRigidbody(temp);
         }
         else if(Light* temp = dynamic_cast<Light*>(objContainerPtr->components[i]))
         {
-            saveLight(name, temp);
+            saveLight(temp);
         }
         else if(PhysicalInputKeymap* temp = dynamic_cast<PhysicalInputKeymap*>(objContainerPtr->components[i]))
         {
-            savePhysicalInputKeymap(name, temp);
+            savePhysicalInputKeymap(temp);
         }
         else if(Paddle* temp = dynamic_cast<Paddle*>(objContainerPtr->components[i]))
         {
-            savePaddle(name, temp);
+            savePaddle(temp);
         }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
-            saveUiRenderer(name, temp);
+            saveUiRenderer(temp);
         }
         else if(Button* temp = dynamic_cast<Button*>(objContainerPtr->components[i]))
         {
-            saveButton(name, temp);
+            saveButton(temp);
         }
         else if(RectTransform* temp = dynamic_cast<RectTransform*>(objContainerPtr->components[i]))
         {
-            saveRectTransform(name, temp);
+            saveRectTransform(temp);
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
@@ -260,7 +260,7 @@ void SceneWriter::saveScene(const char* filePath)
         }
         else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
         {
-            saveHydroAccelerator(name, temp);
+            saveHydroAccelerator(temp);
         }
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
@@ -280,24 +280,28 @@ void SceneWriter::saveScene(const char* filePath)
     file.close();
 }
 
-void SceneWriter::saveTransform(std::string name, Transform* componentPtr)
+#pragma region Components
+void SceneWriter::saveTransform(Transform* componentPtr)
 {
     j[name]["type"] = "Transform";
     if(componentPtr->getParent() != nullptr)
         j[name]["transform parentID"] = componentPtr->getParent()->serializationID;
+
     j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
     j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
     j[name]["localPosition"]["z"] = componentPtr->getLocalPosition().z;
+
     j[name]["localRotation"]["x"] = componentPtr->getLocalRotation().x;
     j[name]["localRotation"]["y"] = componentPtr->getLocalRotation().y;
     j[name]["localRotation"]["z"] = componentPtr->getLocalRotation().z;
     j[name]["localRotation"]["w"] = componentPtr->getLocalRotation().w;
+
     j[name]["localScale"]["x"] = componentPtr->getLocalScale().x;
     j[name]["localScale"]["y"] = componentPtr->getLocalScale().y;
     j[name]["localScale"]["z"] = componentPtr->getLocalScale().z;
 }
 
-void SceneWriter::saveAudioListener(std::string name, AudioListener* componentPtr)
+void SceneWriter::saveAudioListener(AudioListener* componentPtr)
 {
     j[name]["type"] = "AudioListener";
     j[name]["gain"] = componentPtr->getGain();
@@ -310,7 +314,7 @@ void SceneWriter::saveAudioListener(std::string name, AudioListener* componentPt
     j[name]["isCurrent"] = componentPtr->getIsCurrent();
 }
 
-void SceneWriter::saveAudioSource(std::string name, AudioSource* componentPtr)
+void SceneWriter::saveAudioSource(AudioSource* componentPtr)
 {
     j[name]["type"] = "AudioSource";
     childrenID.clear();
@@ -345,18 +349,17 @@ void SceneWriter::saveAudioSource(std::string name, AudioSource* componentPtr)
     j[name]["coneOuterGain"] = componentPtr->getConeOuterGain();
 }
 
-void SceneWriter::saveCamera(std::string name, Camera* componentPtr)
+void SceneWriter::saveCamera(Camera* componentPtr)
 {
     j[name]["type"] = "Camera";
-    j[name]["projectionMode"] = componentPtr->projectionMode;
+    j[name]["projectionMode"] = componentPtr->getProjectionMode();
     j[name]["isMain"] = componentPtr->isMain;
-    j[name]["fieldOfView"] = componentPtr->fieldOfView;
-    j[name]["orthographicSize"] = componentPtr->orthographicSize;
-    j[name]["nearPlane"] = componentPtr->nearPlane;
-    j[name]["farPlane"] = componentPtr->farPlane;
+    j[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
+    j[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
+    j[name]["farPlane"] = componentPtr->getFrustum().farPlane;
 }
 
-void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
+void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
 {
     j[name]["type"] = "MeshRenderer";
     if(componentPtr->material != nullptr)
@@ -367,7 +370,7 @@ void SceneWriter::saveMeshRenderer(std::string name, MeshRenderer* componentPtr)
     
 }
 
-void SceneWriter::saveSphereCollider(std::string name, SphereCollider* componentPtr)
+void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 {
     j[name]["type"] = "SphereCollider";
     j[name]["colliderType"] = componentPtr->type;
@@ -377,7 +380,7 @@ void SceneWriter::saveSphereCollider(std::string name, SphereCollider* component
     j[name]["center"]["z"] = componentPtr->center.z;
 }
 
-void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
+void SceneWriter::saveBoxCollider(BoxCollider* componentPtr)
 {
     j[name]["type"] = "BoxCollider";
     j[name]["colliderType"] = componentPtr->type;
@@ -389,7 +392,7 @@ void SceneWriter::saveBoxCollider(std::string name, BoxCollider* componentPtr)
     j[name]["halfSize"]["z"] = componentPtr->halfSize.z;
 }
 
-void SceneWriter::saveLight(std::string name, Light* componentPtr)
+void SceneWriter::saveLight(Light* componentPtr)
 {
     j[name]["type"] = "Light";
     j[name]["lightType"] = componentPtr->lightType;
@@ -407,7 +410,7 @@ void SceneWriter::saveLight(std::string name, Light* componentPtr)
     }
 }
 
-void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
+void SceneWriter::saveRigidbody(Rigidbody* componentPtr)
 {
     j[name]["type"] = "Rigidbody";
     j[name]["mass"] = componentPtr->mass;
@@ -419,7 +422,7 @@ void SceneWriter::saveRigidbody(std::string name, Rigidbody* componentPtr)
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
 }
 
-void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr)
+void SceneWriter::savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr)
 {
     j[name]["type"] = "PhysicalInputKeymap";
 
@@ -459,7 +462,7 @@ void SceneWriter::savePhysicalInputKeymap(std::string name, PhysicalInputKeymap*
     }
 }
 
-void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
+void SceneWriter::savePaddle(Paddle* componentPtr)
 {
     j[name]["type"] = "Paddle";
     j[name]["minSpeed"] = componentPtr->minSpeed;
@@ -471,29 +474,34 @@ void SceneWriter::savePaddle(std::string name, Paddle* componentPtr)
     j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
 }
 
-void SceneWriter::saveUiRenderer(std::string name, UiRenderer* componentPtr)
+void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
 {
     j[name]["type"] = "UiRenderer";
     j[name]["material"] = componentPtr->material->serializationID;
 }
 
-void SceneWriter::saveRectTransform(std::string name, RectTransform* componentPtr)
+void SceneWriter::saveRectTransform(RectTransform* componentPtr)
 {
     j[name]["type"] = "RectTransform";
+
     j[name]["anchor"]["x"] = componentPtr->getAnchor().x;
     j[name]["anchor"]["y"] = componentPtr->getAnchor().y;
+
     j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
     j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
-    j[name]["size"]["x"] = componentPtr->getSize().x;
-    j[name]["size"]["y"] = componentPtr->getSize().y;
+
+    j[name]["rectSize"]["x"] = componentPtr->getSize().x;
+    j[name]["rectSize"]["y"] = componentPtr->getSize().y;
+
     j[name]["rotation"] = componentPtr->getLocalRotation();
+
     if(componentPtr->getParent() != nullptr)
     {
         j[name]["parent"] = componentPtr->getParent()->serializationID;
     }
 }
 
-void SceneWriter::saveButton(std::string name, Button* componentPtr)
+void SceneWriter::saveButton(Button* componentPtr)
 {
     j[name]["type"] = "Button";
     j[name]["isActive"] = componentPtr->isActive;
@@ -517,23 +525,25 @@ void SceneWriter::saveButton(std::string name, Button* componentPtr)
     j[name]["onClickColor"]["b"] = componentPtr->onClickColor.b;
     j[name]["onClickColor"]["a"] = componentPtr->onClickColor.a;
 
+    for(int i = 0; i < componentPtr->onClickEvents.size(); ++i)
+    {
+        std::string eventName = "e" + std::to_string(i);
 
-    //FIXME: I Hate myself, it won't work biatch
-    // std::vector<std::pair<unsigned int, unsigned char*>> messages;
-    // for(auto e : componentPtr->onClickEvents)
-    // {
-    //     messages.push_back(std::pair<unsigned int, unsigned char*>(e.getEvent(), e.getValue());
-    // }
-    // j[name]["onClickEvents"] = messages;
+        saveMessage(eventName, componentPtr->onClickEvents[i]);
+    }
 }
 
-void SceneWriter::saveHydroAccelerator(std::string name, HydroAccelerator* componentPtr)
+void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
 {
     j[name]["type"] = "HydroAccelerator";
     j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
 }
 
-void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
+#pragma endregion
+
+#pragma region Assets
+
+void SceneWriter::saveMaterial(Material* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
@@ -626,7 +636,7 @@ void SceneWriter::saveMaterial(std::string name, Material* assetPtr)
     j[name]["mat4s"] = structMap;
 }
 
-void SceneWriter::saveTexture(std::string name, Texture* assetPtr)
+void SceneWriter::saveTexture(Texture* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["filePath"] = assetPtr->filePath;
@@ -636,7 +646,7 @@ void SceneWriter::saveTexture(std::string name, Texture* assetPtr)
     j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
 }
 
-void SceneWriter::saveMesh(std::string name, Mesh* assetPtr)
+void SceneWriter::saveMesh(Mesh* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["meshPath"] = assetPtr->getMeshPath();
@@ -651,7 +661,7 @@ void SceneWriter::saveMesh(std::string name, Mesh* assetPtr)
     }
 }
 
-void SceneWriter::saveShader(std::string name, Shader* assetPtr)
+void SceneWriter::saveShader(Shader* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["fragmentShaderPath"] = assetPtr->fragmentShaderPath;
@@ -662,7 +672,7 @@ void SceneWriter::saveShader(std::string name, Shader* assetPtr)
     }
 }
 
-void SceneWriter::saveCubemap(std::string name, Cubemap* assetPtr)
+void SceneWriter::saveCubemap(Cubemap* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["frontPath"] = assetPtr->frontPath;
@@ -680,9 +690,31 @@ void SceneWriter::saveCubemap(std::string name, Cubemap* assetPtr)
     j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
 }
 
-void SceneWriter::saveFont(std::string name, Font* assetPtr)
+void SceneWriter::saveFont(Font* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["fontPath"] = assetPtr->getFontPath();
     j[name]["size"] = assetPtr->getSize();
 }
+
+#pragma endregion
+
+#pragma region Events
+
+void SceneWriter::saveMessage(std::string msgName, Message msg)
+{
+    j[name]["onClickEvents"][msgName.c_str()]["event"] = msg.getEvent();
+    switch(msg.getEvent())
+    {
+        case Event::AUDIO_SOURCE_PLAY:
+            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+        break;
+        case Event::AUDIO_SOURCE_STOP:
+            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+        break;
+        case Event::LOAD_SCENE:
+            j[name]["onClickEvents"][msgName.c_str()]["scene"] = msg.getValue<const char*>();
+        break;
+    }
+}
+#pragma endregion

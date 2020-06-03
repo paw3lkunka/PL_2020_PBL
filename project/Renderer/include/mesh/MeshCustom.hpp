@@ -53,7 +53,6 @@ public:
 private:
     GLuint vao, vbo, ebo;
     GLuint instanceVbo;
-    Bounds bounds;
 
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;

@@ -118,7 +118,7 @@ int Core::init()
             //Code...
         }
 
-        objectModule.saveScene("../resources/Scenes/savedScene.json");
+        objectModule.saveScene("../resources/Scenes/gameScene.json");
     }
 
 #pragma region Renderer
