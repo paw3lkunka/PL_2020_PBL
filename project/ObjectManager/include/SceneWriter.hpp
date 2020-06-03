@@ -76,6 +76,7 @@ private:
     void savePaddle(Paddle* componentPtr);
     void saveEnemy(Enemy* enemyPtr);
     void saveUiRenderer(UiRenderer* componentPtr);
+    void saveTextRenderer(TextRenderer* componentPtr);
     void saveRectTransform(RectTransform* componentPtr);
     void saveButton(Button* componentPtr);
     void saveHydroAccelerator(HydroAccelerator* componentPtr);
