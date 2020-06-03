@@ -8,8 +8,10 @@ echo -n > $_file
 echo -e "#ifndef "$_className"_inl_sh
 #define "$_className"_inl_sh
 
+#include "Component.hpp"
+
 //TODO documentation
-struct "$_className"
+struct "$_className" : public Component
 {
     //fields
 };

@@ -113,7 +113,15 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //Code...
+            auto* enemy = objectModule.newEntity(2,"TMP enemy");
+            {
+                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
+
+                auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
+                    e->detectionCounterMaxValue = 500;
+                    e->sightDistance = 200;
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -184,6 +192,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
+    gameSystemsModule.addSystem(&enemiesSightSystem);
 
 #pragma endregion
 
@@ -324,3 +333,4 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
+EnemiesSightSystem Core::enemiesSightSystem;
