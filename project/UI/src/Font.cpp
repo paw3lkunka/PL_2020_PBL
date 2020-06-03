@@ -54,6 +54,11 @@ unsigned int Font::getCharTex(char c)
     return chars.at(c).textureID;
 }
 
+const Character& Font::getChar(char c)
+{
+    return chars.at(c);
+}
+
 const char* Font::getName()
 {
     return name.c_str();

@@ -34,6 +34,7 @@ void SceneReader::readScene(std::string filePath)
     readTextures();
     readCubemaps();
     readMaterials();
+    readFonts();
     readEntities();
     readComponents();
 }
@@ -99,7 +100,7 @@ void SceneReader::readFonts()
     {
         name = setName("font", i);
         std::string fontPath = j.at(name).at("fontPath").get<std::string>();
-        unsigned int size = j.at(name).at("size").get<unsigned int>();
+        unsigned int size = j.at(name).at("fontSize").get<unsigned int>();
         Font* font = objModulePtr->newFont(fontPath.c_str(), size, name);
         font->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     }
@@ -364,6 +365,11 @@ void SceneReader::readComponents()
         {
             std::cout << "UiRenderer" << std::endl;
             readUiRenderer(name);
+        }
+        else if(componentType == "TextRenderer")
+        {
+            std::cout << "TextRenderer" << std::endl;
+            readTextRenderer(name);
         }
         else if(componentType == "RectTransform")
         {
@@ -768,6 +774,22 @@ void SceneReader::readUiRenderer(std::string name)
     uiRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
 
     assignToEntity(name, uiRenderer);
+}
+
+void SceneReader::readTextRenderer(std::string name)
+{
+    auto textRenderer = objModulePtr->newEmptyComponent<TextRenderer>();
+    textRenderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int materialID = j.at(name).at("material").get<unsigned int>();
+    textRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(materialID);
+
+    unsigned int fontID = j.at(name).at("font").get<unsigned int>();
+    textRenderer->mesh.font = objModulePtr->objectContainer.getFontFromSerializationID(fontID);
+
+    textRenderer->mesh.text = j.at(name).at("text").get<std::string>();
+
+    assignToEntity(name, textRenderer);
 }
 
 void SceneReader::readRectTransform(std::string name)

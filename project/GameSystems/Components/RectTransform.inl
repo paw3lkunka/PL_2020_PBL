@@ -107,6 +107,11 @@ struct RectTransform : public Component
     glm::mat3 modelMatrix = glm::mat3(1.0f);
 
     /**
+     * @brief All parent transformations combined with local transformation without taking size into account
+     */
+    glm::mat3 noScaleModelMatrix = glm::mat3(1.0f);
+
+    /**
      * @brief Get the Parent object
      * @return const RectTransform* 
      */
