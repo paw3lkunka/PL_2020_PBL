@@ -788,6 +788,8 @@ void SceneReader::readTextRenderer(std::string name)
     textRenderer->mesh.font = objModulePtr->objectContainer.getFontFromSerializationID(fontID);
 
     textRenderer->mesh.text = j.at(name).at("text").get<std::string>();
+
+    assignToEntity(name, textRenderer);
 }
 
 void SceneReader::readRectTransform(std::string name)
