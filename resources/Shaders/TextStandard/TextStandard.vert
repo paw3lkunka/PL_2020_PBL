@@ -1,7 +1,6 @@
 #version 430 core
 
-layout (location = 0) in vec4 vertex; // vec2 position, vec2 texcoord
-layout (location = 1) in mat3 instanceModel; // assigns up to index 3
+layout (location = 0) in vec4 vertex;
 
 noperspective out vec2 uv;
 

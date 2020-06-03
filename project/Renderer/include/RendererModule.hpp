@@ -8,7 +8,8 @@
 
 #include "NormalPacket.hpp"
 #include "InstancedPacket.hpp"
-#include "UiPacket.hpp"
+#include "SpritePacket.hpp"
+#include "TextPacket.hpp"
 
 #include <deque>
 #include <map>
@@ -63,7 +64,8 @@ public:
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
-    static constexpr unsigned int DRAW_CALL_UI_ALLOCATION = 256;
+    static constexpr unsigned int DRAW_CALL_UI_ALLOCATION = 128;
+    static constexpr unsigned int DRAW_CALL_TEXT_ALLOCATION = 64;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
 
     // ? +++++ Built in shaders +++++
@@ -116,8 +118,10 @@ private:
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
-    // * Ui render packets collection
-    std::vector<UiPacket> uiPackets;
+    // * Ui sprite packets collection
+    std::vector<SpritePacket> spritePackets;
+    // * Ui text packets collection
+    std::vector<TextPacket> textPackets;
     // * Instanced render packet collection
     // ? size_t used as a key is actually two unsigned ints encoded to act as a pair
     std::unordered_map<size_t, InstancedPacket> instancedPackets; // ? +++++ size_t = mesh id << 32 | material id +++++

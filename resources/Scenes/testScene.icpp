@@ -45,7 +45,6 @@ TextureCreateInfo skyboxCreateInfo = {};
         
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-            t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             t->setParent(&sceneModule.rootNode);
 
         auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
@@ -69,62 +68,62 @@ TextureCreateInfo skyboxCreateInfo = {};
             mr->material = unlitInstancedMat;
     }
 
-    objectModule.newEntity(2, "cubeInstanced2");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.newEntity(2, "cubeInstanced2");
+    // {
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-            mr->material = unlitInstancedMat;
-    }
+    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+    //         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+    //         mr->material = unlitInstancedMat;
+    // }
 
-    objectModule.newEntity(2, "cubeInstanced3");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.newEntity(2, "cubeInstanced3");
+    // {
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-            mr->material = unlitInstancedMat;
-    }
+    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+    //         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+    //         mr->material = unlitInstancedMat;
+    // }
 
-    objectModule.newEntity(2, "cubeInstanced4");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.newEntity(2, "cubeInstanced4");
+    // {
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-            mr->material = unlitInstancedMat;
-    }
+    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+    //         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+    //         mr->material = unlitInstancedMat;
+    // }
 
-    objectModule.newEntity(2, "cubeInstanced5");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.newEntity(2, "cubeInstanced5");
+    // {
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-            mr->material = unlitInstancedMat;
-    }
+    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+    //         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+    //         mr->material = unlitInstancedMat;
+    // }
 
-    objectModule.newEntity(2, "cubeInstanced6");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
-            t->setParent(&sceneModule.rootNode);
+    // objectModule.newEntity(2, "cubeInstanced6");
+    // {
+    //     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+    //         t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
+    //         t->getLocalScaleModifiable() *= 10;
+    //         t->setParent(&sceneModule.rootNode);
 
-        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
-            mr->material = unlitInstancedMat;
-    }
+    //     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+    //         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+    //         mr->material = unlitInstancedMat;
+    // }

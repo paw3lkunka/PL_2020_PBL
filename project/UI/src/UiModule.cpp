@@ -36,7 +36,6 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
     dirty |= transform->dirty;
 
     glm::mat3 local(1.0f);
-    //glm::mat3 noScaleTransform(1.0f);
 
     if (dirty)
     {
@@ -67,7 +66,7 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         rotation[1][0] = sin;
         rotation[1][1] = cos;
 
-        //noScaleTransform = glm::mat3(rotation) * local;
+        //localNoScale = glm::mat3(rotation) * local;
 
         glm::mat2 scale = glm::mat2(1.0f);
         scale[0][0] = transform->getSize().x;
