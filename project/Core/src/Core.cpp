@@ -115,16 +115,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            auto* enemy = objectModule.newEntity(2,"TMP enemy");
-            {
-                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
-                    t->setParent(&sceneModule.rootNode);
-
-                auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
-                    e->detectionCounterMaxValue = 500;
-                    e->sightDistance = 20;
-            }
+            ///Code...
         }
 
         objectModule.saveScene("../resources/Scenes/gameScene.json");
