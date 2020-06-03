@@ -1,8 +1,8 @@
-#include "UiPacket.hpp"
+#include "SpritePacket.hpp"
 
 #include "RendererModule.hpp"
 
-void UiPacket::render(glm::mat4 projection)
+void SpritePacket::render(glm::mat4& projection)
 {
     if (material->getID() != RendererModule::lastMatID)
     {

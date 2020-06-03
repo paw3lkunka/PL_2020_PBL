@@ -1,9 +1,13 @@
 #include "Core.hpp"
 #include <iostream>
+#include <ios>
 #include <cstring>
 
 int main( int argc, char * argv[] )
 {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
     Core core;
 
     for (int i = 1; i < argc; i++)

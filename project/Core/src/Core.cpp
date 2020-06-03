@@ -115,11 +115,13 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            ///Code...
+            
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
+
+    
 
 #pragma region Renderer
 
@@ -201,8 +203,8 @@ int Core::mainLoop()
     double lag = FIXED_TIME_STEP;
 
 #pragma region AudioModule demo
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================

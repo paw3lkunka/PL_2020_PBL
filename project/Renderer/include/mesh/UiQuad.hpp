@@ -1,7 +1,7 @@
 #ifndef _UIQUAD_HPP
 #define _UIQUAD_HPP
 
-#include "mesh/Mesh.hpp"
+#include "Mesh.hpp"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>
