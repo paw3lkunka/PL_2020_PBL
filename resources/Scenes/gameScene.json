@@ -2010,11 +2010,10 @@
     },
     "component145": {
         "entity id": 73,
-        "farPlane": 10000.0,
+        "farPlane": 2500.0,
         "fieldOfView": 80.0,
         "isMain": false,
         "nearPlane": 0.10000000149011612,
-        "orthographicSize": 0.0,
         "projectionMode": 0,
         "serializationID": 274,
         "type": "Camera"
