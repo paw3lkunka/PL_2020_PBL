@@ -439,7 +439,7 @@ void RendererModule::render()
             }
         }
 
-        // std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
+        //std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
 
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
