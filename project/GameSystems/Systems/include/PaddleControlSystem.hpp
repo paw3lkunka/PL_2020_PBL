@@ -10,7 +10,7 @@
 
 struct Transform;
 struct Paddle;
-struct HydroAccelerator;
+//struct HydroAccelerator;
 class Message;
 
 class PaddleControlSystem : public System, public IMsgReceiver
@@ -60,7 +60,7 @@ private:
     bool keyboardInput = true;
 
     Transform* transformPtr;
-    HydroAccelerator* hydroAcceleratorPtr;
+    //HydroAccelerator* hydroAcceleratorPtr;
     Paddle* paddlePtr;
 };
 

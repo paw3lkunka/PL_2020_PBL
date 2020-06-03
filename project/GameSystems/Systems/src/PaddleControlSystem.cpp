@@ -14,8 +14,8 @@ bool PaddleControlSystem::assertEntity(Entity* entity)
 {
     paddlePtr = entity->getComponentPtr<Paddle>();
     transformPtr = entity->getComponentPtr<Transform>();
-    hydroAcceleratorPtr = entity->getComponentPtr<HydroAccelerator>();
-    return (paddlePtr != nullptr && transformPtr != nullptr && hydroAcceleratorPtr != nullptr);
+    //hydroAcceleratorPtr = entity->getComponentPtr<HydroAccelerator>();
+    return (paddlePtr != nullptr && transformPtr != nullptr);
 }
 
 void PaddleControlSystem::fixedUpdate()
@@ -35,8 +35,8 @@ void PaddleControlSystem::fixedUpdate()
     float frontRot = glm::mix(eulerRot.x, paddlePtr->maxFrontRot, copysignf(paddlePtr->position2D.y * paddlePtr->position2D.x, paddlePtr->position2D.y));
     float sideRot = glm::mix(eulerRot.y, paddlePtr->maxSideRot, -paddlePtr->position2D.x);
 
-    hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition());
-    hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
+    //hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition());
+    //hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
 
     transformPtr->getLocalPositionModifiable() = newPos;
     transformPtr->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(frontRot, sideRot, eulerRot.z));
