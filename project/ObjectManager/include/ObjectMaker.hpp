@@ -11,6 +11,7 @@ class Shader;
 class Entity;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 class Animation;
 class Bone;
@@ -91,6 +92,21 @@ public:
                         const char* backPath,
                         const char* topPath,
                         const char* bottomPath);
+
+    /**
+     * @brief Make new cubemap and save to container
+     * 
+     * @param createInfo basic create info (without information from file like width, height)
+     * @param cubemapPath
+     * @return Cubemap* pointer to cubemap
+     */
+    CubemapHdr* newHdrCubemap(TextureCreateInfo createInfo, 
+                            const char* frontPath, 
+                            const char* leftPath, 
+                            const char* rightPath, 
+                            const char* backPath, 
+                            const char* topPath, 
+                            const char* bottomPath);
 
     /**
      * @brief read new meshes from model file

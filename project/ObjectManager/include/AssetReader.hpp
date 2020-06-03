@@ -56,6 +56,7 @@ private:
 
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
+    std::unordered_map<std::string, TextureHdrData> texturesHdr;
     std::unordered_map<std::string, std::string> shaders;
 
     // TODO: I dont have the patience to do it another way
@@ -64,6 +65,7 @@ private:
     //load files to storages methods
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
+    bool loadHdrTexture(std::string path);
     bool loadShader(std::string path);
     bool loadMesh(std::string path);
 

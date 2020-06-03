@@ -8,6 +8,7 @@
 #include "Entity.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
+#include "CubemapHdr.hpp"
 #include "Material.hpp"
 #include "Font.hpp"
 #include "Components.inc"
@@ -125,6 +126,47 @@ Cubemap* ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
         return objContainer->cubemaps[objContainer->cubemaps.size() - 1];
     }
     throw AssetLoadingException("Cubemap");
+}
+
+Cubemap* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo, 
+                                    const char* frontPath, 
+                                    const char* leftPath, 
+                                    const char* rightPath, 
+                                    const char* backPath, 
+                                    const char* topPath, 
+                                    const char* bottomPath)
+{
+    bool loaded = true;
+    loaded &= objModPtr->assetReader.loadHdrTexture(frontPath);
+    loaded &= objModPtr->assetReader.loadHdrTexture(leftPath);
+    loaded &= objModPtr->assetReader.loadHdrTexture(rightPath);
+    loaded &= objModPtr->assetReader.loadHdrTexture(backPath);
+    loaded &= objModPtr->assetReader.loadHdrTexture(topPath);
+    loaded &= objModPtr->assetReader.loadHdrTexture(bottomPath);
+
+    if(loaded)
+    {
+        TextureHdrData frontData = objModPtr->assetReader.texturesHdr[frontPath];
+        createInfo.width = frontData.width;
+        createInfo.height = frontData.height;
+        createInfo.format = frontData.nrComponents == 1 ? GL_RED : frontData.nrComponents == 3 ? GL_RGB : GL_RGBA;
+        TextureHdrData leftData = objModPtr->assetReader.texturesHdr[leftPath];
+        TextureHdrData rightData = objModPtr->assetReader.texturesHdr[rightPath];
+        TextureHdrData backData = objModPtr->assetReader.texturesHdr[backPath];
+        TextureHdrData topData = objModPtr->assetReader.texturesHdr[topPath];
+        TextureHdrData bottomData = objModPtr->assetReader.texturesHdr[bottomPath];
+
+        objContainer->hdrCubemaps.push_back(new CubemapHdr(createInfo, frontData.data, leftData.data, rightData.data, backData.data, topData.data, bottomData.data));
+        auto map = objContainer->hdrCubemaps[objContainer->cubemaps.size() - 1];
+        map->frontPath = frontPath;
+        map->bottomPath = bottomPath;
+        map->leftPath = leftPath;
+        map->rightPath = rightPath;
+        map->topPath = topPath;
+        map->backPath = backPath;
+        return objContainer->hdrCubemaps[objContainer->cubemaps.size() - 1];
+    }
+    throw AssetLoadingException("CubemapHdr");
 }
 
 void ObjectMaker::newModel(const char* filePath)

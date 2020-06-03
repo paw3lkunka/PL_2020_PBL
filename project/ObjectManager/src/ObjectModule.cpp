@@ -5,6 +5,7 @@
 #include "Entity.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
+#include "CubemapHdr.hpp"
 #include "Material.hpp"
 #include "Font.hpp"
 #include "AssetStructers.inl"
@@ -166,6 +167,21 @@ Cubemap* ObjectModule::newCubemap(TextureCreateInfo createInfo, const char* fron
         }
     }
     return objectMaker.newCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
+}
+
+CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
+                    const char* rightPath, const char* backPath, const char* topPath, const char* bottomPath)
+{
+    for(CubemapHdr* c : objectContainer.hdrCubemaps)
+    {
+        if(c->frontPath == frontPath && c->backPath == backPath 
+        && c->leftPath == leftPath && c->rightPath == rightPath 
+        && c->bottomPath == bottomPath && c->topPath == topPath)
+        {
+            return c;
+        }
+    }
+    return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
 void ObjectModule::newModel(const char* filePath)

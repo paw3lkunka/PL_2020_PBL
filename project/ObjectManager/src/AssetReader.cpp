@@ -75,6 +75,25 @@ bool AssetReader::loadTexture(std::string path)
     return false;
 }
 
+bool AssetReader::loadHdrTexture(std::string path)
+{
+    TextureHdrData tData;
+    tData.data = stbi_loadf(path.c_str(), &tData.width, &tData.height, &tData.nrComponents, 0);
+    if(tData.width != 0 && tData.height != 0 && tData.nrComponents != 0)
+    {
+        texturesHdr.insert( std::pair(path, tData) );
+        
+        std::unordered_map<std::string, TextureHdrData>::iterator iter = textures.find(path);
+        std::cout << "Tex hdr loaded: " << path << std::endl;
+        return iter != textures.end();
+    }
+    else
+    {
+        std::cerr << "Error while loading hdr texture " << path << std::endl;
+    }
+    return false;
+}
+
 bool AssetReader::loadShader(std::string path)
 {
     std::string buffer = "";

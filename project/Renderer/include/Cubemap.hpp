@@ -1,13 +1,12 @@
 #ifndef _CUBEMAP_HPP
 #define _CUBEMAP_HPP
 
-#include "ISerializable.hpp"
 #include "Texture.hpp"
 
 /**
  * @brief Holds id of cubemap, pointer to raw data and create info
  */
-class Cubemap : public ISerializable
+class Cubemap : public Texture
 {
     friend class SceneWriter;
 public:
@@ -32,8 +31,6 @@ public:
     std::string bottomPath;
 
 private:
-    GLuint id;
-    TextureCreateInfo info;
     unsigned char* front;
     unsigned char* left;
     unsigned char* right;

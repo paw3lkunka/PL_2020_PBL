@@ -9,7 +9,7 @@ Cubemap::Cubemap(TextureCreateInfo createInfo,
             unsigned char* back,
             unsigned char* top,
             unsigned char* bottom) :
-            info(createInfo),
+            Texture(nullptr, createInfo, ""),
             front(front),
             left(left),
             right(right),

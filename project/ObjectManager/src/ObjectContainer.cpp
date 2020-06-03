@@ -29,6 +29,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     meshes.reserve(50);
     textures.reserve(50);
     cubemaps.reserve(10);
+    hdrCubemaps.reserve(10);
     materials.reserve(30);
     fonts.reserve(16);
 }
@@ -78,6 +79,13 @@ ObjectContainer::~ObjectContainer()
         c = nullptr;
     }
     cubemaps.clear();
+
+    for(auto c : hdrCubemaps)
+    {
+        delete c;
+        c = nullptr;
+    }
+    hdrCubemaps.clear();
 
     for(auto f : fonts)
     {
@@ -198,6 +206,18 @@ Texture* ObjectContainer::getTextureFromSerializationID(unsigned int serializati
 Cubemap* ObjectContainer::getCubemapFromSerializationID(unsigned int serializationID)
 {
     for(auto c : cubemaps)
+    {
+        if(c->serializationID == serializationID)
+        {
+            return c;
+        }
+    }
+    return nullptr;
+}
+
+CubemapHdr* ObjectContainer::getCubemapHdrFromSerializationID(unsigned int serializationID)
+{
+    for(auto c : hdrCubemaps)
     {
         if(c->serializationID == serializationID)
         {
