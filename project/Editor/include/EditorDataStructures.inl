@@ -12,7 +12,8 @@ enum class SortingType : unsigned int
     PADDLE,
     BONES,
     RIGIDBODIES,
-    PLAYER,
+    KAYAK,
+    ENEMY,
 };
 
 #endif /* !EDITORDATASTRUCTURES_INL_ */

@@ -3,8 +3,6 @@
 
 #include <glm/glm.hpp>
 
-#define CLAMP_PROC enemyPtr->detectionCounter = std::clamp(enemyPtr->detectionCounter, 0, enemyPtr->detectionCounterMaxValue);
-
 bool EnemiesSightSystem::assertEntity(Entity* entity)
 {   
     enemyPtr = entity->getComponentPtr<Enemy>();
@@ -19,7 +17,6 @@ void EnemiesSightSystem::fixedUpdate()
         if (kayakPtr->isHidden)
         {
             enemyPtr->detectionCounter -= enemyPtr->detectionNegativeStep;
-            CLAMP_PROC;
         }
         else
         {
@@ -39,9 +36,14 @@ void EnemiesSightSystem::fixedUpdate()
                 {
                     kayakPtr->isDetected = true;
                 }
-                CLAMP_PROC;
+            }
+            else
+            {
+                enemyPtr->detectionCounter -= enemyPtr->detectionNegativeStep;
             }
         }
+
+        enemyPtr->detectionCounter = std::clamp(enemyPtr->detectionCounter, 0, enemyPtr->detectionCounterMaxValue);
     }
 }
 

@@ -54,6 +54,7 @@ private:
     void readHydroAccelerator(std::string name);
     void readKayak(std::string name);
     void readHideout(std::string name);
+    void readEnemy(std::string name);
     void readUiRenderer(std::string name);
     void readRectTransform(std::string name);
     void readButton(std::string name);

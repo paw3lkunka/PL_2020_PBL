@@ -100,8 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -119,10 +119,11 @@ int Core::init()
             {
                 auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
                     t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
+                    t->setParent(&sceneModule.rootNode);
 
                 auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
                     e->detectionCounterMaxValue = 500;
-                    e->sightDistance = 200;
+                    e->sightDistance = 20;
             }
         }
 

@@ -230,6 +230,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             savePaddle(temp);
         }
+        else if(Enemy* temp = dynamic_cast<Enemy*>(objContainerPtr->components[i]))
+        {
+            saveEnemy(temp);
+        }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
             saveUiRenderer(temp);
@@ -472,6 +476,17 @@ void SceneWriter::savePaddle(Paddle* componentPtr)
     j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
     j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
     j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
+}
+
+void SceneWriter::saveEnemy(Enemy* enemyPtr)
+{
+    j[name]["type"] = "Enemy";
+    j[name]["sightDistance"] = enemyPtr->sightDistance;
+    j[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
+    j[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
+    j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
+    j[name]["detectionCounter"] = enemyPtr->detectionCounter;
+
 }
 
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)

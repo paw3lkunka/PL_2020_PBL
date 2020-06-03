@@ -118,6 +118,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Enemy* temp = entityPtr->getComponentPtr<Enemy>())
+    {
+        if(ImGui::CollapsingHeader("Enemy"))
+        {
+            drawEnemy(temp);
+        }
+    }
+
     if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
     {
         if(ImGui::CollapsingHeader("RectTransform"))
@@ -247,10 +255,19 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 }
 
-void EditorModule::drawKayak(Kayak* playerPtr)
+void EditorModule::drawKayak(Kayak* kayakPtr)
 {
-    ImGui::Text(playerPtr->isDetected ? "Detected," : "Not detected,");
-    ImGui::Text(playerPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", playerPtr->isHidden);
+    ImGui::Text(kayakPtr->isDetected ? "Detected," : "Not detected,");
+    ImGui::Text(kayakPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", kayakPtr->isHidden);
+}
+
+void EditorModule::drawEnemy(Enemy* enemyPtr)
+{
+    ImGui::DragFloat("Sight distance", &enemyPtr->sightDistance);
+    ImGui::DragInt("Detection counter", &enemyPtr->detectionCounter);
+    ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
+    ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
+    ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)
@@ -294,8 +311,14 @@ void EditorModule::sortEntities(SortingType sortingType)
                 }
             break;
             break;
-            case SortingType::PLAYER:
+            case SortingType::KAYAK:
                 if(temp->getComponentPtr<Kayak>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::ENEMY:
+                if(temp->getComponentPtr<Enemy>() == nullptr)
                 {
                     continue;
                 }
