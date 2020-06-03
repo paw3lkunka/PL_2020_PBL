@@ -3,15 +3,15 @@
 #include <examples/imgui_impl_opengl3.h>
 #include <examples/imgui_impl_glfw.h>
 #include <glm/gtx/string_cast.hpp>
-
-#include "MomentOfInertia.hpp"
-
 #include <sstream>
 #include <iomanip>
 
 #include "Components.inc"
 #include "Entity.hpp"
 #include "Core.hpp"
+#include "Texture.hpp"
+#include "Shader.hpp"
+#include "MomentOfInertia.hpp"
 
 
 void EditorModule::init(GLFWwindow* window)
@@ -37,6 +37,20 @@ void EditorModule::setup()
     // * index for combo list
     currentItem = 0;
     enumValue = 0;
+    buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
+    buttonShader = objectModule->getMaterialPtrByName("buttonMat")->getShaderPtr();
+    positionPointer = objectModule->newEntity(2, "pointerHelper");
+    {
+        UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
+        Material* mat = objectModule->newMaterial(buttonShader, "crossMat", RenderType::Transparent);
+        mat->setTexture("sprite", objectModule->getTexturePtrByFilePath("Resources/Sprites/cross.png"));
+        mat->setVec4("color", {1.0f, 0.0f, 1.0f, 0.9f});
+        uiR->material = mat;
+
+        RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
+        rt->getSizeModifiable() = {50, 50};
+        GetCore().uiModule.rootNodes.push_back(rt);
+    }
 }
 
 void EditorModule::drawEditor()
@@ -66,6 +80,10 @@ void EditorModule::drawEditor()
             sortEntities(SortingType(enumValue));
             currentItem = 0;
             entityPtr = objectModule->getEntityPtrByID(getEntityIdFromCombo(currentItem));
+        }
+        if(lastEntitySize != (*objectModule->getEntitiesVector()).size())
+        {
+            sortEntities(SortingType(enumValue));
         }
     ImGui::EndChild();
 
@@ -134,9 +152,19 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Button* temp = entityPtr->getComponentPtr<Button>())
+    {
+        if(ImGui::CollapsingHeader("Button"))
+        {
+            drawButton(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
+
+    drawMaker();
 }
 
 void EditorModule::onExit()
@@ -270,6 +298,15 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
 }
 
+void EditorModule::drawButton(Button* button)
+{
+    ImGui::ColorEdit4("Base color", (float*)&button->baseColor);
+    ImGui::ColorEdit4("Highlighted color", (float*)&button->highlightedColor);
+    ImGui::ColorEdit4("On Click color", (float*)&button->onClickColor);
+    ImGui::ColorEdit4("Inactive color", (float*)&button->inactiveColor);
+    ImGui::Checkbox("Active", &button->isActive);
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -285,7 +322,7 @@ void EditorModule::sortEntities(SortingType sortingType)
                 if(temp->getComponentPtr<Bone>() != nullptr)
                 {
                     continue;
-                }
+                } // ! there is no break on purpose !
             case SortingType::TRANSFORM:
                 if(temp->getComponentPtr<Transform>() == nullptr)
                 {
@@ -319,6 +356,12 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::ENEMY:
                 if(temp->getComponentPtr<Enemy>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::RECT_TRANSFORM:
+                if(temp->getComponentPtr<RectTransform>() == nullptr)
                 {
                     continue;
                 }
@@ -359,4 +402,41 @@ void EditorModule::insertEntityToList(unsigned int id)
     entities += " Name: ";
     entities += objectModule->getEntityPtrByID(id)->getName();
     entities += char(0);
+}
+
+void EditorModule::drawMaker()
+{
+    RectTransform* pointerTrans = positionPointer->getComponentPtr<RectTransform>();
+    ImGui::Begin("UI Maker");
+    ImGui::Text("Setup:");
+    ImGui::DragFloat2("Position: ", (float*)&pointerTrans->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Size: ", (float*)&pointerTrans->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
+    if(ImGui::Button("Make button", {100, 20}))
+    {
+        std::cout << "Make button\n";
+        makeNewButton(pointerTrans->getLocalPosition(), pointerTrans->getSize());
+    }
+
+    ImGui::End();
+}
+
+void EditorModule::makeNewButton(glm::vec2 pos, glm::vec2 size)
+{
+    static int counter = 0;
+    std::string buttonName = "button" + std::to_string(counter);
+    std::string materialName = "buttonMat" + std::to_string(counter++);
+    std::cout << buttonName << ", " << materialName << "\n";
+    objectModule->newEntity(3, buttonName);
+    {
+        UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
+        uiR->material = objectModule->newMaterial(buttonShader, materialName, RenderType::Transparent);
+        uiR->material->setTexture("sprite", buttonSprite);
+
+        RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
+        rt->getLocalPositionModifiable() = pos;
+        rt->getSizeModifiable() = size;
+        GetCore().uiModule.rootNodes.push_back(rt);
+
+        Button* butt = objectModule->newEmptyComponentForLastEntity<Button>();
+    }
 }

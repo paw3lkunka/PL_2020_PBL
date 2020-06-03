@@ -428,8 +428,6 @@ void RendererModule::render()
             }
         }
 
-        std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
-
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });

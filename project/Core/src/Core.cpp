@@ -100,8 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -118,7 +118,7 @@ int Core::init()
             ///Code...
         }
 
-        objectModule.saveScene("../resources/Scenes/gameScene.json");
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer

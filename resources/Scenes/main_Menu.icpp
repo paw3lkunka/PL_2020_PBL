@@ -45,6 +45,7 @@ objectModule.newEntity(2, "RiverFlow");
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
     auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+    objectModule.newTexture("Resources/Sprites/cross.png", info);
     auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
     auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
     uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});

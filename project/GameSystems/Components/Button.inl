@@ -16,13 +16,13 @@ struct Button : public Component
     ///@brief isClicked flag - checks if button is clicked by user
     bool isClicked = false;
     ///@brief base color of the active button
-    glm::vec4 baseColor;
+    glm::vec4 baseColor = {0, 0, 0, 1};
     ///@brief color of inactive button
-    glm::vec4 inactiveColor;
+    glm::vec4 inactiveColor = {0, 0, 0, 1};
     ///@brief color when button is highlighted by mouse pointer
-    glm::vec4 highlightedColor;
+    glm::vec4 highlightedColor = {0, 0, 0, 1};
     ///@brief color when button is clicked
-    glm::vec4 onClickColor;
+    glm::vec4 onClickColor = {0, 0, 0, 1};
     ///@brief button color in last frame
     glm::vec4 lastFrameColor;
     ///@brief events - messages - to send when button is clicked

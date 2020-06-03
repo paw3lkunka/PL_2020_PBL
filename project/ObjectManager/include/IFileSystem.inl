@@ -18,6 +18,7 @@ private:
     friend class SceneWriter;
     friend class AssetReader;
     friend class ObjectModule;
+    friend class ObjectContainer;
 };
 
 #endif /* !IFILESYSTEM_INL_ */
