@@ -36,11 +36,13 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
     dirty |= transform->dirty;
 
     glm::mat3 local(1.0f);
+    glm::mat3 localNoScale(1.0f);
 
     if (dirty)
     {
         glm::vec2 parentSize = glm::vec2(1.0f);
         glm::mat3 parentMatrix = glm::mat3(1.0f);
+        glm::mat3 parentMatrixNoScale = glm::mat3(1.0f);
         if (parent == nullptr)
         {
             parentSize.x = Core::windowWidth;
@@ -49,6 +51,7 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         else
         {
             parentMatrix = parent->modelMatrix;
+            parentMatrixNoScale = parent->noScaleModelMatrix;
             parentSize = parent->getSize();
         }
         //TODO  origin motherfucker
@@ -66,7 +69,12 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         rotation[1][0] = sin;
         rotation[1][1] = cos;
 
-        //localNoScale = glm::mat3(rotation) * local;
+        localNoScale = local;
+        localNoScale[0][0] = rotation[0][0];
+        localNoScale[0][1] = rotation[0][1];
+        localNoScale[1][0] = rotation[1][0];
+        localNoScale[1][1] = rotation[1][1];
+        transform->noScaleModelMatrix = parentMatrixNoScale * localNoScale;
 
         glm::mat2 scale = glm::mat2(1.0f);
         scale[0][0] = transform->getSize().x;
@@ -79,7 +87,7 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         local[1][0] = rotScl[1][0];
         local[1][1] = rotScl[1][1];
 
-        transform->modelMatrix = parentMatrix * local;
+        transform->modelMatrix = parentMatrixNoScale * local;
         transform->dirty = false;
     }
     

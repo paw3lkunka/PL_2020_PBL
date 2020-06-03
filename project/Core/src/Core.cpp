@@ -112,130 +112,130 @@ int Core::init()
         // ! Manual extension of scene, run by -u param
         // ? -u
         {
-            
+            // ! ----- This is a dirty hack -----
+            auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 36, "KosugiMaru-Regular");
+            TextureCreateInfo info = {};
+            info.format = GL_RGBA;
+            info.generateMipmaps = false;
+            info.magFilter = GL_LINEAR;
+            info.minFilter = GL_LINEAR;
+            info.wrapMode = GL_CLAMP_TO_EDGE;
+            auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+            auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+            auto textShader = objectModule.newShader("Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+
+            auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
+            uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
+            uiMaterial->setTexture("sprite", buttonTest);
+            auto uiMaterial2 = objectModule.newMaterial(uiShader, "UiStandardMat2", RenderType::Transparent);
+            uiMaterial2->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            uiMaterial2->setTexture("sprite", buttonTest);
+
+            auto redUI = objectModule.newMaterial(uiShader, "redUI", RenderType::Transparent);
+            redUI->setVec4("color", {1.0f, 0.0f, 0.0f, 0.5f});
+            redUI->setTexture("sprite", buttonTest);
+            auto blueUI = objectModule.newMaterial(uiShader, "blueUI", RenderType::Transparent);
+            blueUI->setVec4("color", {0.0f, 0.0f, 1.0f, 0.5f});
+            blueUI->setTexture("sprite", buttonTest);
+            auto greenUI = objectModule.newMaterial(uiShader, "greenUI", RenderType::Transparent);
+            greenUI->setVec4("color", {0.0f, 1.0f, 0.0f, 0.5f});
+            greenUI->setTexture("sprite", buttonTest);
+
+            auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+            textMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+
+            RectTransform* rootRect;
+            objectModule.newEntity(2, "UiTest_leftBottomAnchor");
+            {
+                rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {256.0f, 64.0f};
+                rootRect->getLocalPositionModifiable() = {150.0f, 50.0f};
+                rootRect->getAnchorModifiable() = {0.0f, 0.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = uiMaterial;
+            }
+
+            objectModule.newEntity(2, "TextTest");
+            {
+                auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rect->getSizeModifiable() = {1.0f, 1.0f};
+                rect->getLocalPositionModifiable() = {0.0f, 0.0f};
+                rect->getAnchorModifiable() = {0.0f, 0.0f};
+                rect->setParent(rootRect);
+
+                auto text = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    text->material = textMaterial;
+                    text->mesh.text = "(C) Screensaver Games 2020";
+                    text->mesh.font = font;
+            }
+
+            objectModule.newEntity(2, "UiTest_rightBottomAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {256.0f, 64.0f};
+                rootRect->getLocalPositionModifiable() = {-150.0f, 50.0f};
+                rootRect->getAnchorModifiable() = {1.0f, 0.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = redUI;
+            }
+
+            objectModule.newEntity(2, "UiTest_leftTopAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {256.0f, 64.0f};
+                rootRect->getLocalPositionModifiable() = {150.0f, -50.0f};
+                rootRect->getAnchorModifiable() = {0.0f, 1.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = blueUI;
+            }
+
+            objectModule.newEntity(2, "UiTest_rightTopAnchor");
+            {
+                auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rootRect->getSizeModifiable() = {256.0f, 64.0f};
+                rootRect->getLocalPositionModifiable() = {-150.0f, -50.0f};
+                rootRect->getAnchorModifiable() = {1.0f, 1.0f};
+
+                uiModule.rootNodes.push_back(rootRect);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    ui->material = greenUI;
+            }
+
+            objectModule.newEntity(3, "Sound_On");
+            {
+                auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    rt->getLocalPositionModifiable() = {200, 350};
+                    rt->getSizeModifiable() = {300.0f, 150.0f};
+                    uiModule.rootNodes.push_back(rt);
+
+                auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                    auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+                    buttMaterial->setTexture("sprite", buttonTest);
+                    buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+                    ui->material = buttMaterial;
+                
+                auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+                    butt->baseColor = glm::vec4(0.125f, 0.592f, 0.192f, 0.7f);
+                    butt->inactiveColor = glm::vec4(0.411f, 0.588f, 0.435f, 0.7f);
+                    butt->highlightedColor = glm::vec4(0.239f, 0.858f, 0.329f, 0.7f);
+                    butt->onClickColor = glm::vec4(0.094f, 0.486f, 0.149f, 0.7f);
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
-    // ! ----- This is a dirty hack -----
-    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 36, "KosugiMaru-Regular");
-    TextureCreateInfo info = {};
-    info.format = GL_RGBA;
-    info.generateMipmaps = false;
-    info.magFilter = GL_LINEAR;
-    info.minFilter = GL_LINEAR;
-    info.wrapMode = GL_CLAMP_TO_EDGE;
-    auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
-    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
-    auto textShader = objectModule.newShader("Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
-
-    auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
-    uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
-    uiMaterial->setTexture("sprite", buttonTest);
-    auto uiMaterial2 = objectModule.newMaterial(uiShader, "UiStandardMat2", RenderType::Transparent);
-    uiMaterial2->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
-    uiMaterial2->setTexture("sprite", buttonTest);
-
-    auto redUI = objectModule.newMaterial(uiShader, "redUI", RenderType::Transparent);
-    redUI->setVec4("color", {1.0f, 0.0f, 0.0f, 0.5f});
-    redUI->setTexture("sprite", buttonTest);
-    auto blueUI = objectModule.newMaterial(uiShader, "blueUI", RenderType::Transparent);
-    blueUI->setVec4("color", {0.0f, 0.0f, 1.0f, 0.5f});
-    blueUI->setTexture("sprite", buttonTest);
-    auto greenUI = objectModule.newMaterial(uiShader, "greenUI", RenderType::Transparent);
-    greenUI->setVec4("color", {0.0f, 1.0f, 0.0f, 0.5f});
-    greenUI->setTexture("sprite", buttonTest);
-
-    auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
-    textMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
-
-    RectTransform* rootRect;
-    objectModule.newEntity(2, "UiTest_leftBottomAnchor");
-    {
-        rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        rootRect->getSizeModifiable() = {256.0f, 64.0f};
-        rootRect->getLocalPositionModifiable() = {150.0f, 50.0f};
-        rootRect->getAnchorModifiable() = {0.0f, 0.0f};
-
-        uiModule.rootNodes.push_back(rootRect);
-
-        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            ui->material = uiMaterial;
-    }
-
-    objectModule.newEntity(2, "TextTest");
-    {
-        auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        rect->getSizeModifiable() = {1.0f, 1.0f};
-        rect->getLocalPositionModifiable() = {0.0f, -45.0f};
-        rect->getAnchorModifiable() = {0.5f, 1.0f};
-        uiModule.rootNodes.push_back(rect);
-
-        auto text = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
-            text->material = textMaterial;
-            text->mesh.text = "(C) Screensaver Games 2020";
-            text->mesh.font = font;
-    }
-
-    objectModule.newEntity(2, "UiTest_rightBottomAnchor");
-    {
-        auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        rootRect->getSizeModifiable() = {256.0f, 64.0f};
-        rootRect->getLocalPositionModifiable() = {-150.0f, 50.0f};
-        rootRect->getAnchorModifiable() = {1.0f, 0.0f};
-
-        uiModule.rootNodes.push_back(rootRect);
-
-        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            ui->material = redUI;
-    }
-
-    objectModule.newEntity(2, "UiTest_leftTopAnchor");
-    {
-        auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        rootRect->getSizeModifiable() = {256.0f, 64.0f};
-        rootRect->getLocalPositionModifiable() = {150.0f, -50.0f};
-        rootRect->getAnchorModifiable() = {0.0f, 1.0f};
-
-        uiModule.rootNodes.push_back(rootRect);
-
-        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            ui->material = blueUI;
-    }
-
-    objectModule.newEntity(2, "UiTest_rightTopAnchor");
-    {
-        auto rootRect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        rootRect->getSizeModifiable() = {256.0f, 64.0f};
-        rootRect->getLocalPositionModifiable() = {-150.0f, -50.0f};
-        rootRect->getAnchorModifiable() = {1.0f, 1.0f};
-
-        uiModule.rootNodes.push_back(rootRect);
-
-        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            ui->material = greenUI;
-    }
-
-    objectModule.newEntity(3, "Sound_On");
-    {
-        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {200, 350};
-            rt->getSizeModifiable() = {300.0f, 150.0f};
-            uiModule.rootNodes.push_back(rt);
-
-        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", buttonTest);
-            buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
-            ui->material = buttMaterial;
-        
-        auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
-            butt->baseColor = glm::vec4(0.125f, 0.592f, 0.192f, 0.7f);
-            butt->inactiveColor = glm::vec4(0.411f, 0.588f, 0.435f, 0.7f);
-            butt->highlightedColor = glm::vec4(0.239f, 0.858f, 0.329f, 0.7f);
-            butt->onClickColor = glm::vec4(0.094f, 0.486f, 0.149f, 0.7f);
-    }
+    
 
 #pragma region Renderer
 
