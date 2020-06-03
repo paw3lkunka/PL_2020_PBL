@@ -1,8 +1,8 @@
 {
     "Amounts": {
-        "components": 221,
+        "components": 223,
         "cubemaps": 1,
-        "entities": 102,
+        "entities": 103,
         "fonts": 0,
         "materials": 21,
         "meshes": 17,
@@ -3156,6 +3156,38 @@
         "serializationID": 389,
         "type": "Hideout"
     },
+    "component221": {
+        "entity id": 102,
+        "localPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 391,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
+    "component222": {
+        "detectionCounter": 0,
+        "detectionCounterMaxValue": 500,
+        "detectionNegativeStep": 1,
+        "detectionPositiveStep": 1,
+        "entity id": 102,
+        "serializationID": 392,
+        "sightDistance": 200.0,
+        "type": "Enemy"
+    },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox_02/pz.png",
         "bottomPath": "Resources/Textures/skybox_02/ny.png",
@@ -4108,6 +4140,15 @@
         "id": 101,
         "name": "Hideout2",
         "serializationID": 385
+    },
+    "entity102": {
+        "components": [
+            391,
+            392
+        ],
+        "id": 102,
+        "name": "TMP enemy",
+        "serializationID": 390
     },
     "material000": {
         "cubemaps": {},

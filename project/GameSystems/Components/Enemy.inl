@@ -7,14 +7,27 @@
 
 #ifndef ENEMY__
 #define ENEMY__
+
+#include "Component.hpp"
+
 //TODO documentation
-class Enemy
+struct Enemy : public Component
 {
     //TODO documentation
-    int detectionCounter;
+    float sightDistance;
 
     //TODO documentation
     int detectionCounterMaxValue;
+
+    //TODO documentation
+    int detectionPositiveStep = 1;
+    
+    //TODO documentation
+    int detectionNegativeStep = 1;
+
+    //TODO documentation
+    int detectionCounter = 0;
+
 };
 
 #endif /* !ENEMY__ */

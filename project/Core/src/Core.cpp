@@ -100,8 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -115,7 +115,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //Code...
+            ///Code...
         }
 
         objectModule.saveScene("../resources/Scenes/gameScene.json");
@@ -186,6 +186,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
+    gameSystemsModule.addSystem(&enemiesSightSystem);
 
 #pragma endregion
 
@@ -326,3 +327,4 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
+EnemiesSightSystem Core::enemiesSightSystem;
