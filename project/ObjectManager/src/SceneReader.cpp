@@ -330,6 +330,21 @@ void SceneReader::readComponents()
             std::cout << "Skeleton" << std::endl;
             readSkeleton(name);
         }
+        //else if(componentType == "HydroBody")
+        //{
+        //    std::cout << "HydroBody" << std::endl;
+        //    readHydroBody(name);
+        //}
+        //else if(componentType == "HydroSurface")
+        //{
+        //    std::cout << "HydroSurface" << std::endl;
+        //    readHydroSurface(name);
+        //}
+        //else if(componentType == "HydroAccelerator")
+        //{
+        //    std::cout << "HydroAccelerator" << std::endl;
+        //    readHydroAccelerator(name);
+        //}
         else if(componentType == "Kayak")
         {
             std::cout << "Kayak" << std::endl;
@@ -340,6 +355,21 @@ void SceneReader::readComponents()
             std::cout << "Hideout" << std::endl;
             readHideout(name);
         }
+        else if(componentType == "UiRenderer")
+        {
+            std::cout << "UiRenderer" << std::endl;
+            readUiRenderer(name);
+        }
+        else if(componentType == "RectTransform")
+        {
+            std::cout << "RectTransform" << std::endl;
+            readRectTransform(name);
+        }
+        else if(componentType == "Button")
+        {
+            std::cout << "Button" << std::endl;
+            readButton(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -349,6 +379,10 @@ void SceneReader::readComponents()
         if(componentType == "Transform")
         {
             readTransformParents(name);
+        }
+        else if(componentType == "RectTransform")
+        {
+            readRectTransformParents(name);
         }
     }
 }
@@ -450,6 +484,7 @@ void SceneReader::readAudioSource(std::string name)
     aSource->getPitchModifiable() = j.at(name).at("pitch").get<float>();
     aSource->getReferenceDistanceModifiable() = j.at(name).at("referenceDistance").get<float>();
     aSource->getRolloffFactorModifiable() = j.at(name).at("rolloffFactor").get<float>();
+    aSource->autoPlay = j.at(name).at("autoPlay").get<bool>();
 
     glm::vec3 tempVec;
     tempVec.x = j.at(name).at("direction").at("x");
@@ -503,11 +538,12 @@ void SceneReader::readCamera(std::string name)
     auto camera = objModulePtr->newEmptyComponent<Camera>();
     camera->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
-    camera->farPlane = j.at(name).at("farPlane").get<float>();
-    camera->fieldOfView = j.at(name).at("fieldOfView").get<float>();
-    camera->nearPlane = j.at(name).at("nearPlane").get<float>();
-    camera->orthographicSize = j.at(name).at("orthographicSize").get<float>();
-    camera->projectionMode = CameraProjection(j.at(name).at("projectionMode").get<int>());
+    ViewFrustum& frustum = camera->getFrustumModifiable();
+    frustum.farPlane = j.at(name).at("farPlane").get<float>();
+    frustum.fieldOfView = j.at(name).at("fieldOfView").get<float>();
+    frustum.nearPlane = j.at(name).at("nearPlane").get<float>();
+    frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+    camera->getProjectionModeModifiable() = CameraProjection(j.at(name).at("projectionMode").get<int>());
     camera->isMain = j.at(name).at("isMain").get<bool>();
 
     assignToEntity(name, camera);
@@ -664,6 +700,31 @@ void SceneReader::readSkeleton(std::string name)
     component->serializationID = serializationID;
 }
 
+//void SceneReader::readHydroBody(std::string name)
+//{
+//    auto hydroBody = objModulePtr->newEmptyComponent<HydroBody>();
+//    hydroBody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+//
+//    assignToEntity(name, hydroBody);
+//}
+//
+//void SceneReader::readHydroSurface(std::string name)
+//{
+//    auto hydroSurface = objModulePtr->newEmptyComponent<HydroSurface>();
+//    hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+//
+//    assignToEntity(name, hydroSurface);
+//}
+//
+//void SceneReader::readHydroAccelerator(std::string name)
+//{
+//    auto hydroAccelerator = objModulePtr->newEmptyComponent<HydroAccelerator>();
+//    hydroAccelerator->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+//    hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j.at(name).at("rigidbody").get<unsigned int>() ) );
+//
+//    assignToEntity(name, hydroAccelerator);
+//}
+
 void SceneReader::readKayak(std::string name)
 {
     auto kayak = objModulePtr->newEmptyComponent<Kayak>();
@@ -678,6 +739,65 @@ void SceneReader::readHideout(std::string name)
     hideout->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     assignToEntity(name, hideout);
+}
+
+void SceneReader::readUiRenderer(std::string name)
+{
+    auto uiRenderer = objModulePtr->newEmptyComponent<UiRenderer>();
+    uiRenderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int childID = j.at(name).at("material").get<unsigned int>();
+    uiRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+    assignToEntity(name, uiRenderer);
+}
+
+void SceneReader::readRectTransform(std::string name)
+{
+    auto rectTransform = objModulePtr->newEmptyComponent<RectTransform>();
+    rectTransform->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    rectTransform->getAnchorModifiable().x = j.at(name).at("anchor").at("x").get<float>();
+    rectTransform->getAnchorModifiable().y = j.at(name).at("anchor").at("y").get<float>();
+    
+    rectTransform->getLocalPositionModifiable().x = j.at(name).at("localPosition").at("x").get<float>();
+    rectTransform->getLocalPositionModifiable().y = j.at(name).at("localPosition").at("y").get<float>();
+
+    rectTransform->getSizeModifiable().x = j.at(name).at("rectSize").at("x").get<float>();
+    rectTransform->getSizeModifiable().y = j.at(name).at("rectSize").at("y").get<float>();
+
+    rectTransform->getLocalRotationModifiable() = j.at(name).at("rotation").get<float>();
+    assignToEntity(name, rectTransform);
+}
+
+void SceneReader::readButton(std::string name)
+{
+    auto button = objModulePtr->newEmptyComponent<Button>();
+    button->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    button->isActive = j.at(name).at("isActive").get<bool>();
+
+    button->baseColor.r = j.at(name).at("baseColor").at("r").get<float>();
+    button->baseColor.g = j.at(name).at("baseColor").at("g").get<float>();
+    button->baseColor.b = j.at(name).at("baseColor").at("b").get<float>();
+    button->baseColor.a = j.at(name).at("baseColor").at("a").get<float>();
+
+    button->inactiveColor.r = j.at(name).at("inactiveColor").at("r").get<float>();
+    button->inactiveColor.g = j.at(name).at("inactiveColor").at("g").get<float>();
+    button->inactiveColor.b = j.at(name).at("inactiveColor").at("b").get<float>();
+    button->inactiveColor.a = j.at(name).at("inactiveColor").at("a").get<float>();
+
+    button->highlightedColor.r = j.at(name).at("highlightedColor").at("r").get<float>();
+    button->highlightedColor.g = j.at(name).at("highlightedColor").at("g").get<float>();
+    button->highlightedColor.b = j.at(name).at("highlightedColor").at("b").get<float>();
+    button->highlightedColor.a = j.at(name).at("highlightedColor").at("a").get<float>();
+
+    button->onClickColor.r = j.at(name).at("onClickColor").at("r").get<float>();
+    button->onClickColor.g = j.at(name).at("onClickColor").at("g").get<float>();
+    button->onClickColor.b = j.at(name).at("onClickColor").at("b").get<float>();
+    button->onClickColor.a = j.at(name).at("onClickColor").at("a").get<float>();
+
+    readButtonEvents(name, button);
+    assignToEntity(name, button);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
@@ -726,9 +846,6 @@ void SceneReader::readTransformParents(std::string name)
 {
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
     auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
-    std::cout << "EntityID: " << entityID << '\t';
-    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    std::cout << "SerializationID: " << serializationID << '\n';
     auto trans = entity->getComponentPtr<Transform>();
     try
     {
@@ -746,5 +863,66 @@ void SceneReader::readTransformParents(std::string name)
     catch(nlohmann::detail::out_of_range)
     {
         std::cout << "No parent transform for " << name << std::endl;
+    }
+}
+
+void SceneReader::readRectTransformParents(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto rectTrans = entity->getComponentPtr<RectTransform>();
+    try
+    {
+        auto parentID = j.at(name).at("parent").get<unsigned int>();
+        auto parentTrans = dynamic_cast<RectTransform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
+        rectTrans->setParent(parentTrans);
+    }
+    catch(nlohmann::detail::out_of_range)
+    {
+        GetCore().uiModule.rootNodes.push_back(rectTrans);
+    }
+}
+
+void SceneReader::readButtonEvents(std::string name, Button* buttonPtr)
+{
+    Event event;
+    std::string msgName;
+    for(int i = 0; true; ++i)
+    {
+        try
+        {
+            msgName = "e" + std::to_string(i);
+            event = Event(j.at(name).at("onClickEvents").at(msgName).at("event").get<unsigned int>());
+        }
+        catch(nlohmann::detail::out_of_range)
+        {
+            break;
+        }
+
+        switch(event)
+        {
+            case Event::AUDIO_SOURCE_PLAY:
+            {
+                unsigned int id = j.at(name).at("onClickEvents").at(msgName).at("audioSource").get<unsigned int>();
+                AudioSource* source = dynamic_cast<AudioSource*>(objModulePtr->objectContainer.getComponentFromSerializationID(id));
+                buttonPtr->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY, source));
+            }
+            break;
+
+            case Event::AUDIO_SOURCE_STOP:
+            {
+                unsigned int id = j.at(name).at("onClickEvents").at(msgName).at("audioSource").get<unsigned int>();
+                AudioSource* source = dynamic_cast<AudioSource*>(objModulePtr->objectContainer.getComponentFromSerializationID(id));
+                buttonPtr->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, source));
+            }
+            break;
+
+            case Event::LOAD_SCENE:
+            {
+                std::string scene = j.at(name).at("onClickEvents").at(msgName).at("scene").get<std::string>();
+                buttonPtr->onClickEvents.push_back(Message(Event::LOAD_SCENE, scene.c_str()));
+            }
+            break;
+        }
     }
 }

@@ -360,10 +360,12 @@
     objectModule.newEntity(4, "Camera");
     {
         auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
-            c->farPlane = 10000.0f;
-            c->nearPlane = 0.1f;
-            c->fieldOfView = 80.0f;
-            c->projectionMode = CameraProjection::Perspective;
+        ViewFrustum& frustum = c->getFrustumModifiable();
+            frustum.farPlane = 2500.0f;
+            frustum.nearPlane = 0.1f;
+            frustum.fieldOfView = 80.0f;
+            frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+            c->getProjectionModeModifiable() = CameraProjection::Perspective;
 
         
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -390,6 +392,7 @@ objectModule.newEntity(2, "sampleSound");
         so3->getIsRelativeModifiable() = true;
         so3->getGainModifiable() = 2.0f;
         so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = { 0.0f, 0.0f, 0.0f };
@@ -588,6 +591,24 @@ objectModule.newEntity(2, "sampleSound");
             bc->calculateVert();
     }
 }
+
+// PawelKunka - 2020-05-27 - 11:36
+//Added Rigidbody and HydroBody to the Kayak entity so it now floats 
+//{
+//    auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
+//        rigidbody->mass = 60.0f;
+//        rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
+//        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
+//        rigidbody->drag = 3.0f;
+//        rigidbody->angularDrag = 3.0f;
+//        rigidbody->ignoreGravity = true;
+//    
+//    auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+//    
+//    auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+//        kayakPtr->addComponent(hydroBody);
+//        kayakPtr->addComponent(rigidbody);
+//}
 
 // Surface - Andrzej 27.05
 {

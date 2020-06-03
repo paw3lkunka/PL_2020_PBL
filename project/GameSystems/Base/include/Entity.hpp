@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 
 class Component;
 class SceneReader;

@@ -13,6 +13,7 @@ class Mesh;
 class Cubemap;
 class Shader;
 class Font;
+class Message;
 
 /**
  * @brief Scene saver to file class
@@ -58,26 +59,36 @@ private:
     ///@brief json object - parser to json
     nlohmann::json j;
 
+    ///@brief name of actual object
+    std::string name;
+
     // ? saving components
-    void saveTransform(std::string name, Transform* componentPtr);
-    void saveAudioListener(std::string name, AudioListener* componentPtr);
-    void saveAudioSource(std::string name, AudioSource* componentPtr);
-    void saveCamera(std::string name, Camera* componentPtr);
-    void saveMeshRenderer(std::string name, MeshRenderer* componentPtr);
-    void saveSphereCollider(std::string name, SphereCollider* componentPtr);
-    void saveBoxCollider(std::string name, BoxCollider* componentPtr);
-    void saveRigidbody(std::string name, Rigidbody* componentPtr);
-    void saveLight(std::string name, Light* componentPtr);
-    void savePhysicalInputKeymap(std::string name, PhysicalInputKeymap* keymapPtr);
-    void savePaddle(std::string name, Paddle* componentPtr);
+    void saveTransform(Transform* componentPtr);
+    void saveAudioListener(AudioListener* componentPtr);
+    void saveAudioSource(AudioSource* componentPtr);
+    void saveCamera(Camera* componentPtr);
+    void saveMeshRenderer(MeshRenderer* componentPtr);
+    void saveSphereCollider(SphereCollider* componentPtr);
+    void saveBoxCollider(BoxCollider* componentPtr);
+    void saveRigidbody(Rigidbody* componentPtr);
+    void saveLight(Light* componentPtr);
+    void savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr);
+    void savePaddle(Paddle* componentPtr);
+    void saveUiRenderer(UiRenderer* componentPtr);
+    void saveRectTransform(RectTransform* componentPtr);
+    void saveButton(Button* componentPtr);
+    //void saveHydroAccelerator(HydroAccelerator* componentPtr);
 
     // ? saving assets
-    void saveMaterial(std::string name, Material* assetPtr);
-    void saveTexture(std::string name, Texture* assetPtr);
-    void saveMesh(std::string name, Mesh* assetPtr);
-    void saveShader(std::string name, Shader* assetPtr);
-    void saveCubemap(std::string name, Cubemap* assetPtr);
-    void saveFont(std::string name, Font* assetPtr);
+    void saveMaterial(Material* assetPtr);
+    void saveTexture(Texture* assetPtr);
+    void saveMesh(Mesh* assetPtr);
+    void saveShader(Shader* assetPtr);
+    void saveCubemap(Cubemap* assetPtr);
+    void saveFont(Font* assetPtr);
+
+    // ? saving Messages
+    void saveMessage(std::string msgName, Message msg);
 };
 
 #endif /* !SCENEWRITER_HPP_ */

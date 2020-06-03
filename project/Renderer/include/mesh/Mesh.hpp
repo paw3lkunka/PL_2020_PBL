@@ -2,7 +2,7 @@
 #define _MESH_HPP
 
 #include "mesh/MeshDataStructures.inl"
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 #include "IFileSystem.inl"
 
 #include <glm/glm.hpp>
@@ -58,6 +58,11 @@ public:
      * @return std::vector<unsigned int> 
      */
     virtual std::vector<unsigned int>* getIndices() { return nullptr; }
+
+    /**
+     * @brief Bounds of the mesh
+     */
+    Bounds bounds;
 
 private:
     static unsigned int idcount;
