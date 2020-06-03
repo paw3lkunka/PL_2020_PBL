@@ -1,7 +1,7 @@
 #ifndef COMPONENT_HPP_
 #define COMPONENT_HPP_
 
-#include "ISerializable.inl"
+#include "ISerializable.hpp"
 
 #include <string>
 

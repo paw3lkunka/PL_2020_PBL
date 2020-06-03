@@ -110,6 +110,22 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Kayak* temp = entityPtr->getComponentPtr<Kayak>())
+    {
+        if(ImGui::CollapsingHeader("Kayak"))
+        {
+            drawKayak(temp);
+        }
+    }
+
+    if(Enemy* temp = entityPtr->getComponentPtr<Enemy>())
+    {
+        if(ImGui::CollapsingHeader("Enemy"))
+        {
+            drawEnemy(temp);
+        }
+    }
+
     if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
     {
         if(ImGui::CollapsingHeader("RectTransform"))
@@ -188,7 +204,7 @@ void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
     ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
     ImGui::DragFloat2("Size: ", (float*)&rectTransformPtr->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
-    
+
     rectTransformPtr->getLocalRotationModifiable() = glm::radians(rotation);
 }
 
@@ -239,6 +255,21 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 }
 
+void EditorModule::drawKayak(Kayak* kayakPtr)
+{
+    ImGui::Text(kayakPtr->isDetected ? "Detected," : "Not detected,");
+    ImGui::Text(kayakPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", kayakPtr->isHidden);
+}
+
+void EditorModule::drawEnemy(Enemy* enemyPtr)
+{
+    ImGui::DragFloat("Sight distance", &enemyPtr->sightDistance);
+    ImGui::DragInt("Detection counter", &enemyPtr->detectionCounter);
+    ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
+    ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
+    ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
+}
+
 void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
@@ -275,6 +306,19 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::RIGIDBODIES:
                 if(temp->getComponentPtr<Rigidbody>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            break;
+            case SortingType::KAYAK:
+                if(temp->getComponentPtr<Kayak>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::ENEMY:
+                if(temp->getComponentPtr<Enemy>() == nullptr)
                 {
                     continue;
                 }

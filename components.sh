@@ -28,10 +28,8 @@ echo | tee -a $_file1 >> $_file2
 for _header in $_path/*
 do
     echo "    #include \"$(basename $_header)\"" >> $_file1
-    if [ "${_header##*.}" = "inl" ]; then
-        _class=$(echo $(basename $_header) | cut -f1 -d'.')
-        echo "class $_class;" >> $_file2
-    fi
+    _class=$(echo $(basename $_header) | cut -f1 -d'.')
+    echo "class $_class;" >> $_file2
 done
 
 echo | tee -a $_file1 >> $_file2

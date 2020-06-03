@@ -6,6 +6,7 @@
 #include "Entity.hpp"
 
 #include "HydroBody.inl"
+#include "HydroAccelerator.inl"
 #include "Transform.inl"
 #include "Rigidbody.inl"
 #include "MeshRenderer.inl"
@@ -21,6 +22,8 @@ bool HydroBodySystem::assertEntity(Entity* entity)
         return false;
     }
 
+    hydroAccelerator = entity->getComponentPtr<HydroAccelerator>();
+
     transform = entity->getComponentPtr<Transform>();
     if(transform == nullptr)
     {
@@ -28,7 +31,7 @@ bool HydroBodySystem::assertEntity(Entity* entity)
     }
 
     rigidbody = entity->getComponentPtr<Rigidbody>();
-    if(rigidbody == nullptr)
+    if(rigidbody == nullptr && hydroAccelerator == nullptr)
     {
         return false;
     }
@@ -44,6 +47,10 @@ bool HydroBodySystem::assertEntity(Entity* entity)
 
 void HydroBodySystem::fixedUpdate()
 {
+    modelTranslation = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+    modelVelocity = hydroAccelerator != nullptr ? hydroAccelerator->velocity : rigidbody->velocity;
+    modelAngularVelocity = hydroAccelerator != nullptr ? hydroAccelerator->angularVelocity : rigidbody->angularVelocity;
+    
     generateUnderSurfaceMesh();
 
     //Add forces to the part of the boat that's below the water
@@ -63,19 +70,20 @@ void HydroBodySystem::fixedUpdate()
 
 void HydroBodySystem::addUnderSurfaceForces()
 {
+    float lazyDensity = 5.0f;
+    
     float Cf = HydroForces::resistanceCoefficient
     (
-        0.02f,
-        glm::length(rigidbody->velocity),
+        lazyDensity,
+        glm::length(hydroAccelerator != nullptr ? hydroAccelerator->velocity : rigidbody->velocity),
         fabs(maxSubmergedZ - minSubmergedZ)
     );
 
 
     // TODO: Bring slamming force back to life
     //calculateSlammingVelocities();
-
-    float bodyArea = 0.0f;
-    float bodyMass = rigidbody->mass;
+    //float bodyArea = 0.0f;
+    //float bodyMass = rigidbody->mass;
 
     for (auto it = underSurfaceTriangleData.begin(); it != underSurfaceTriangleData.end(); it++)
     {
@@ -83,10 +91,10 @@ void HydroBodySystem::addUnderSurfaceForces()
         glm::vec3 forceToAdd(0.0f);
 
         //Force 1 - The hydrostatic force (buoyancy)
-        forceToAdd += HydroForces::buoyancyForce(0.02f, *it); // HydroForces::RHO_WATER
+        forceToAdd += HydroForces::buoyancyForce(lazyDensity, *it); // HydroForces::RHO_WATER
 
         //Force 2 - Viscous Water Resistance
-        forceToAdd += HydroForces::viscousWaterResistanceForce(0.02f, *it, Cf);
+        //forceToAdd += HydroForces::viscousWaterResistanceForce(lazyDensity, *it, Cf);
 
         //Force 3 - Pressure drag
         //forceToAdd += HydroForces::pressureDragForce(*it);
@@ -103,13 +111,21 @@ void HydroBodySystem::addUnderSurfaceForces()
         */
 
         //Force 5 - Wave drifting force
-        //forceToAdd += HydroForces::waveDriftingForce(0.02f, it->area, it->normal);
+        //forceToAdd += HydroForces::waveDriftingForce(lazyDensity, it->area, it->normal);
 
         //Add the forces to the boat
         Impulse impulse;
         impulse.force = forceToAdd;
         impulse.point = it->center;
-        rigidbody->impulses.push_back(impulse);
+
+        if(hydroAccelerator == nullptr)
+        {
+            rigidbody->impulses.push_back(impulse);
+        }
+        else
+        {
+            hydroAccelerator->rigidbody->impulses.push_back(impulse);
+        }
     }
 }
 
@@ -128,7 +144,15 @@ void HydroBodySystem::addAboveSurfaceForces()
         Impulse impulse;
         impulse.force = forceToAdd;
         impulse.point = it->center;
-        rigidbody->impulses.push_back(impulse);
+
+        if(hydroAccelerator == nullptr)
+        {
+            rigidbody->impulses.push_back(impulse);
+        }
+        else
+        {
+            hydroAccelerator->rigidbody->impulses.push_back(impulse);
+        }
     }
 }
 
@@ -139,7 +163,7 @@ void HydroBodySystem::calculateSlammingVelocities()
     for(auto it = hydroBody->slammingForceData.begin(); it != hydroBody->slammingForceData.end(); it++)
     {
         it->previousVelocity = it->velocity;
-        glm::vec3 center = static_cast<glm::vec3>(transform->modelMatrix[3]) + it->triangleCenter;
+        glm::vec3 center = modelTranslation + it->triangleCenter;
         it->velocity = HydroForces::getTriangleVelocity(*rigidbody, center);
     }
 }
@@ -175,11 +199,12 @@ void HydroBodySystem::generateUnderSurfaceMesh()
     //Make sure we find the distance to water with the same time
     timeSinceStart = static_cast<float>( GetCore().getCurrentFrameStart() );
 
+    glm::mat4 modelMatrix = transform->getModelMatrix();
     //Find all the distances to water once because some triangles share vertices, so reuse
     for(auto it = meshRenderer->mesh->getVertices()->begin(); it != meshRenderer->mesh->getVertices()->end(); it++)
     {
         //The coordinate should be in global position
-        glm::vec3 globalPos = static_cast<glm::vec3>( transform->getModelMatrix() * glm::vec4(it->position, 1.0f) );
+        glm::vec3 globalPos = static_cast<glm::vec3>( modelMatrix * glm::vec4(it->position, 1.0f) );
         bodyVerticesGlobal.push_back(globalPos);
         // TODO: Make HydroSurface great again
         bodyDistancesToSurface.push_back( HydroWaves::getDistanceToWave(HydroSurface(), globalPos, timeSinceStart) );
@@ -216,8 +241,10 @@ void HydroBodySystem::addTriangles()
                 (
                     vertexData[0].modelPosition, 
                     vertexData[1].modelPosition, 
-                    vertexData[2].modelPosition, 
-                    *rigidbody, 
+                    vertexData[2].modelPosition,
+                    modelTranslation, 
+                    modelVelocity,
+                    modelAngularVelocity, 
                     timeSinceStart
                 )
             );
@@ -239,7 +266,9 @@ void HydroBodySystem::addTriangles()
                 vertexData[0].modelPosition,
                 vertexData[1].modelPosition,
                 vertexData[2].modelPosition,
-                *rigidbody, 
+                modelTranslation, 
+                modelVelocity,
+                modelAngularVelocity, 
                 timeSinceStart
             );
 
@@ -342,8 +371,8 @@ void HydroBodySystem::addTrianglesOneVertexAboveSurface(std::vector<HydroVertexD
 
     //Save the data, such as normal, area, etc      
     //2 triangles below the water  
-    HydroTriangleData triangle1(M, I_M, I_L, *rigidbody, timeSinceStart);
-    HydroTriangleData triangle2(M, I_L, L, *rigidbody, timeSinceStart);
+    HydroTriangleData triangle1(M, I_M, I_L, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart);
+    HydroTriangleData triangle2(M, I_L, L, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart);
 
     checkSubmergedMinMaxZ(triangle1);
     checkSubmergedMinMaxZ(triangle2);
@@ -351,7 +380,7 @@ void HydroBodySystem::addTrianglesOneVertexAboveSurface(std::vector<HydroVertexD
     underSurfaceTriangleData.push_back(triangle1);
     underSurfaceTriangleData.push_back(triangle2);
     //1 triangle above the water
-    aboveSurfaceTriangleData.push_back(HydroTriangleData(I_M, H, I_L, *rigidbody, timeSinceStart));
+    aboveSurfaceTriangleData.push_back(HydroTriangleData(I_M, H, I_L, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart));
 
     //Calculate the total submerged area
     // FIXME: Triangle area for M, I_L, L vertices is nan always...
@@ -435,14 +464,14 @@ void HydroBodySystem::addTrianglesTwoVerticesAboveSurface(std::vector<HydroVerte
 
     //Save the data, such as normal, area, etc
     //1 triangle above the water
-    HydroTriangleData triangle(L, J_H, J_M, *rigidbody, timeSinceStart);
+    HydroTriangleData triangle(L, J_H, J_M, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart);
 
     checkSubmergedMinMaxZ(triangle);
 
     underSurfaceTriangleData.push_back(triangle);
     //2 triangles below the Surface
-    aboveSurfaceTriangleData.push_back(HydroTriangleData(J_H, H, J_M, *rigidbody, timeSinceStart));
-    aboveSurfaceTriangleData.push_back(HydroTriangleData(J_M, H, M, *rigidbody, timeSinceStart));
+    aboveSurfaceTriangleData.push_back(HydroTriangleData(J_H, H, J_M, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart));
+    aboveSurfaceTriangleData.push_back(HydroTriangleData(J_M, H, M, modelTranslation, modelVelocity, modelAngularVelocity, timeSinceStart));
 
     //Calculate the submerged area
     // TODO: Bring slamming force back to life

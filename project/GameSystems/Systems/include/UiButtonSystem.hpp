@@ -30,21 +30,20 @@ public:
     /**
      * @brief Initializes processed entities, runs before first update
      */
-    virtual void start();
-
+    virtual void start() {}
     /**
      * @brief Contain logic of the system called in fixed time steps
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate() {}
+    virtual void fixedUpdate();
 
     /**
      * @brief Contain logic of the system runned once per frame
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void frameUpdate();
+    virtual void frameUpdate() {}
 
 protected:
 private:
@@ -54,7 +53,7 @@ private:
     CursorData lastCursorData;
     bool mouseButtonClicked = false;
 
-    glm::vec4 lastFrameColor;
+    
     float lerpFactor = 0.05f;
 };
 

@@ -65,6 +65,7 @@ void PhysicSystem::fixedUpdate()
 void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
 {
     //TODO check this
+    //FIXME NIE UWZGLĘDNIA SKALI!!!!!
     force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
     torque += glm::cross(impulse.point, impulse.force);
 }

@@ -6,6 +6,8 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "ScenesPaths.inl"
+#include "ModelsPaths.inl"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -98,8 +100,9 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        //#include "../../resources/Scenes/scene_old.icpp"
-        #include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -109,7 +112,7 @@ int Core::init()
 
     if (updateScene)
     {
-        // ! Manual extension of scene, run by -u param
+        // ! Manual extension of scene
         // ? -u
         {
             // ! ----- This is a dirty hack -----
@@ -232,7 +235,7 @@ int Core::init()
             }
         }
 
-        objectModule.saveScene("../resources/Scenes/savedScene.json");
+        objectModule.saveScene("../resources/Scenes/gameScene.json");
     }
 
     
@@ -253,22 +256,6 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
-#pragma region Hydro
-
-    gameSystemsModule.addSystem(&hydroBodySystem);
-
-#pragma endregion // Hydro
-
-    gameSystemsModule.addSystem(&rendererSystem);
-    gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionSystem);
-    gameSystemsModule.addSystem(&physicalBasedInputSystem);
-    gameSystemsModule.addSystem(&physicSystem);
-    gameSystemsModule.addSystem(&skeletonSystem);
-    gameSystemsModule.addSystem(&paddleControlSystem);
-    gameSystemsModule.addSystem(&uiRendererSystem);
-    gameSystemsModule.addSystem(&uiButtonSystem);
-
     // ! IK system initialize
     BoneAttachData leftData;
     leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
@@ -286,17 +273,11 @@ int Core::init()
 
     audioModule.init();
 
-    gameSystemsModule.addSystem(&audioListenerSystem);
-    gameSystemsModule.addSystem(&audioSourceSystem);
-    gameSystemsModule.addSystem(&lightSystem);
-    
 #pragma endregion
 
 #pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-    gameSystemsModule.addSystem(&cameraSystem);
 
 #pragma endregion
 
@@ -306,6 +287,28 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+
+#pragma regnon attach systems
+
+    gameSystemsModule.addSystem(&hydroBodySystem);
+    gameSystemsModule.addSystem(&hideoutSystem);
+    gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&cameraControlSystem);
+    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    gameSystemsModule.addSystem(&physicSystem);
+    gameSystemsModule.addSystem(&skeletonSystem);
+    gameSystemsModule.addSystem(&paddleControlSystem);
+    gameSystemsModule.addSystem(&audioListenerSystem);
+    gameSystemsModule.addSystem(&audioSourceSystem);
+    gameSystemsModule.addSystem(&lightSystem);
+    gameSystemsModule.addSystem(&cameraSystem);
+    gameSystemsModule.addSystem(&uiRendererSystem);
+    gameSystemsModule.addSystem(&uiButtonSystem);
+    gameSystemsModule.addSystem(&enemiesSightSystem);
+
+#pragma endregion
+
     // Everything is ok.
     return 0;
 }
@@ -328,9 +331,8 @@ int Core::mainLoop()
     editorModule.setup();
 
     // ! ----- START SYSTEM FUNCTION -----
-    
-    gameSystemsModule.run(System::START);
 
+    gameSystemsModule.run(System::START);
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -362,6 +364,8 @@ int Core::mainLoop()
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
             uiModule.updateRectTransforms();
+
+            hideoutSystem.clean();
             physicalBasedInputSystem.clearKeysets();
 
             // Decrease the lag by fixed step
@@ -441,3 +445,5 @@ LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
+HideoutSystem Core::hideoutSystem;
+EnemiesSightSystem Core::enemiesSightSystem;

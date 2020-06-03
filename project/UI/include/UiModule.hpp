@@ -33,6 +33,11 @@ public:
     void updateRectTransforms(bool windowResized = false);
 
     /**
+     * @brief remove all root nodes form scene graph
+     */
+    void unloadScene();
+
+    /**
      * @brief Vector of rect transform roots
      */
     std::vector<RectTransform*> rootNodes;

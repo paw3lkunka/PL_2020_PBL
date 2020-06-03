@@ -96,3 +96,12 @@ void UiModule::process(RectTransform* transform, RectTransform* parent, bool dir
         process(t, transform, dirty);
     }
 }
+
+void UiModule::unloadScene()
+{
+    for(auto node : rootNodes)
+    {
+        node = nullptr;
+    }
+    rootNodes.clear();
+}

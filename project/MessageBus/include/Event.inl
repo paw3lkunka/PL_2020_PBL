@@ -53,6 +53,8 @@ enum class Event : unsigned int
     AUDIO_LISTENER_INIT,
     // Audio Listener, update attributes on device level, DATA: AudioListener* containing dirty flags and new attributes' values.
     AUDIO_LISTENER_UPDATE,
+    // Audio source initialization, saving source to global list of sources
+    AUDIO_SOURCE_INIT,
     // Audio Source, update listeners, generating sources for contexts on device, DATA: AudioSource* .
     AUDIO_SOURCE_UPDATE_LISTENERS,
     // Audio Source, update attributes on device level, DATA: AudioSource* containing dirty flags and new attributes' values.
@@ -125,9 +127,10 @@ enum class Event : unsigned int
 #pragma endregion
 
 #pragma region UI Events
-    #pragma region Button
-        
-    #pragma endregion
+#pragma region Button
+    /// Load new scene notification, Data: path to new scene;
+    LOAD_SCENE,
+#pragma endregion
 #pragma endregion
 
     // used to define ranges of values
