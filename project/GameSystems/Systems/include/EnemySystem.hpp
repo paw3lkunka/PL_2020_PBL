@@ -9,11 +9,11 @@ class Transform;
 /**
  * @brief Determine whole enemy behaviour. 
  */
-class EnemiesSystem : public System
+class EnemySystem : public System
 {
 public:
-    EnemiesSystem() = default;
-    virtual ~EnemiesSystem() = default;
+    EnemySystem() = default;
+    virtual ~EnemySystem() = default;
 protected:
     virtual bool assertEntity(Entity* entity);
     virtual void fixedUpdate();

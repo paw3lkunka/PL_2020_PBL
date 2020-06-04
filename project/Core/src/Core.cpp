@@ -186,7 +186,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
-    gameSystemsModule.addSystem(&enemiesSystem);
+    gameSystemsModule.addSystem(&enemySystem);
 
 #pragma endregion
 
@@ -327,4 +327,4 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
-EnemiesSystem Core::enemiesSystem;
+EnemySystem Core::enemySystem;

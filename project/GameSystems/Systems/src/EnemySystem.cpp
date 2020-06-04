@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/vec_swizzle.hpp>
 
-bool EnemiesSystem::assertEntity(Entity* entity)
+bool EnemySystem::assertEntity(Entity* entity)
 {
 	enemyPtr = entity->getComponentPtr<Enemy>();
 	enemyTransformPtr = entity->getComponentPtr<Transform>();
@@ -12,7 +12,7 @@ bool EnemiesSystem::assertEntity(Entity* entity)
 	return enemyPtr && enemyTransformPtr;
 }
 
-void EnemiesSystem::fixedUpdate()
+void EnemySystem::fixedUpdate()
 {
     auto* kayakPtr = Kayak::get();
     auto* kayakTransformPtr = Kayak::getTransform();
@@ -26,7 +26,7 @@ void EnemiesSystem::fixedUpdate()
     }
 }
 
-void EnemiesSystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos)
+void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos)
 {
     if (kayakPtr->isHidden)
     {
@@ -67,7 +67,7 @@ void EnemiesSystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kay
     enemyPtr->detectionCounter = std::clamp(enemyPtr->detectionCounter, 0, enemyPtr->detectionCounterMaxValue);
 }
 
-void EnemiesSystem::animation(Kayak* kayakPtr, glm::vec3 dir)
+void EnemySystem::animation(Kayak* kayakPtr, glm::vec3 dir)
 {
     glm::quat target = glm::quatLookAt(dir, glm::vec3(0.0f, 1.0f, 0.0f));
     glm::quat& rotation = enemyTransformPtr->getLocalRotationModifiable();

@@ -252,7 +252,7 @@ class Core
         static HydroBodySystem hydroBodySystem;
         static HideoutSystem hideoutSystem;
         static UiButtonSystem uiButtonSystem;
-        static EnemiesSystem enemiesSystem;
+        static EnemySystem enemySystem;
 
 #pragma endregion
 
