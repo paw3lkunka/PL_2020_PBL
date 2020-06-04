@@ -23,11 +23,6 @@ void EnemiesSystem::fixedUpdate()
     if (kayakPtr && kayakTransformPtr)
     {
         detection(kayakPtr, enemyPos, kayakPos);
-
-        if (enemyAnimationPtr)
-        {
-            animation(kayakPtr, enemyPos, kayakPos);
-        }
     }
 }
 
@@ -46,10 +41,16 @@ void EnemiesSystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kay
         if ( distance < enemyPtr->sightDistance && glm::dot(forward, toKayak) < enemyPtr->sightAngle)
         {
             enemyPtr->detectionCounter += enemyPtr->detectionPositiveStep;
+
+            if (enemyAnimationPtr)
+            {
+                animation(kayakPtr, toKayak);
+            }
+
             if (enemyPtr->detectionCounter >= enemyPtr->detectionCounterMaxValue && enemyPtr->notified == false)
             {
                 enemyPtr->notified = true;
-                kayakPtr->isDetected++;
+                kayakPtr->isDetected++;                
             }
         }
         else
@@ -66,9 +67,9 @@ void EnemiesSystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kay
     enemyPtr->detectionCounter = std::clamp(enemyPtr->detectionCounter, 0, enemyPtr->detectionCounterMaxValue);
 }
 
-void EnemiesSystem::animation(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos)
+void EnemiesSystem::animation(Kayak* kayakPtr, glm::vec3 dir)
 {
-    glm::quat target = glm::quatLookAt(glm::normalize(kayakPos - enemyPos), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::quat target = glm::quatLookAt(dir, glm::vec3(0.0f, 1.0f, 0.0f));
     glm::quat& rotation = enemyTransformPtr->getLocalRotationModifiable();
     rotation = glm::slerp(rotation, target, enemyAnimationPtr->lerpParameter);
 }

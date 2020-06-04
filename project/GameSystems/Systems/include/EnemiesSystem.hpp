@@ -36,10 +36,9 @@ private:
      * @brief 
      * 
      * @param kayakPtr Pointer to kayak object - MUST NOT BE NULL!
-     * @param enemyPos Position of enemy in world space.
-     * @param kayakPos Position of kayak in world space.
+     * @param dir Direction to look at (normalized).
      */
-    void animation(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos);
+    void animation(Kayak* kayakPtr, glm::vec3 dir);
 };
 
 #endif /* !ENEMIESSYSTEM_HPP_ */
