@@ -3,7 +3,7 @@
 #include "Component.hpp"
 #include "System.hpp"
 
-Entity::Entity(int id, int bufferSize, std::string name, bool serializable) : ISerializable(serializable)
+Entity::Entity(int id, int bufferSize, std::string name)
 {
     this->id = id;
     this->name = name;

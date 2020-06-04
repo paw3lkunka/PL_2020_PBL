@@ -34,7 +34,7 @@ public:
      * @param name entity name
      * @return Entity* pointer for added entity
      */
-    Entity* newEntity(int bufferSize = 0, std::string name = "", bool serializable = true);
+    Entity* newEntity(int bufferSize = 0, std::string name = "");
     
     /**
      * @brief Create new empty component of given type, save to container and return pointer to it.

@@ -160,7 +160,7 @@ public:
      * @param name of the entity (optional)
      * @return Entity* pointer for added entity
      */
-    Entity* newEntity(int bufferSize, std::string name = "", bool serializable = true);
+    Entity* newEntity(int bufferSize, std::string name = "");
     
     /**
      * @brief (Object maker wrapper)

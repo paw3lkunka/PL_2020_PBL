@@ -24,7 +24,7 @@ public:
      * @param bufferSize allow to set initial buffer size (optional)
      * @param name of entity (optional)
      */
-    Entity(int id, int bufferSize = 0, std::string name = "", bool serializable = true);
+    Entity(int id, int bufferSize = 0, std::string name = "");
 
     /**
      * @brief Creates two-way pointer connection between this Entity, and pointed Component 

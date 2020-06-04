@@ -116,7 +116,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 
 #pragma region objectMaker Wrapper
 
-Entity* ObjectModule::newEntity(int bufferSize, std::string name, bool serializable)
+Entity* ObjectModule::newEntity(int bufferSize, std::string name)
 {
     for(int i = 0; i < objectContainer.entities.size(); ++i)
     {
@@ -125,7 +125,7 @@ Entity* ObjectModule::newEntity(int bufferSize, std::string name, bool serializa
             return &objectContainer.entities[i];
         }
     }
-    return objectMaker.newEntity(bufferSize, name, serializable);
+    return objectMaker.newEntity(bufferSize, name);
 }
 
 Shader* ObjectModule::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
