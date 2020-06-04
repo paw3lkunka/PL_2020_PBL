@@ -692,10 +692,11 @@ objectModule.newEntity(2, "sampleSound");
 
         auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
             e->detectionCounterMaxValue = 500;
-            e->sightDistance = 20.0f;
+            e->sightDistance = 100.0f;
+            e->sightAngle = glm::pi<float>() / 4.0f;
 
         auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
-            a->lerpParameter = 0.5f;
+            a->lerpParameter = 0.25f;
 
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->material = objectModule.getMaterialPtrByName("KULA");

@@ -767,7 +767,7 @@ void SceneReader::readEnemyAnimation(std::string name)
 {
     auto anim = objModulePtr->newEmptyComponent<EnemyAnimation>();
     anim->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-    anim->serializationID = j.at(name).at("lerpParameter").get<float>();
+    anim->lerpParameter = j.at(name).at("lerpParameter").get<float>();
 
     assignToEntity(name, anim);
 }

@@ -3186,12 +3186,12 @@
         "detectionPositiveStep": 1,
         "entity id": 102,
         "serializationID": 392,
-        "sightDistance": 20.0,
+        "sightDistance": 100.0,
         "type": "Enemy"
     },
     "component223": {
         "entity id": 102,
-        "lerpParameter": 0.5,
+        "lerpParameter": 0.25,
         "serializationID": 393,
         "type": "EnemyAnimation"
     },
