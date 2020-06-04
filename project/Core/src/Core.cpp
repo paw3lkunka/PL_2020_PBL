@@ -115,13 +115,11 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            
+            //some code here...
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
-
-    
 
 #pragma region Renderer
 
@@ -188,7 +186,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
-    gameSystemsModule.addSystem(&enemiesSightSystem);
+    gameSystemsModule.addSystem(&enemySystem);
 
 #pragma endregion
 
@@ -329,4 +327,4 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
-EnemiesSightSystem Core::enemiesSightSystem;
+EnemySystem Core::enemySystem;

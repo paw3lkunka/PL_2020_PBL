@@ -3,8 +3,6 @@
 
 #pragma region Includes
 
-//TODO check, which includes are really necessary
-
 // * System-depended
 #ifdef __linux__
     #include <unistd.h>
@@ -238,56 +236,23 @@ class Core
 #pragma region Systems
 //TODO must be a better way, than static fields
     public:
-        //TODO documentation
         static CameraSystem cameraSystem;
-
-        //TODO documentation
         static CameraControlSystem cameraControlSystem;
-
-        //TODO documentation
         static AudioSourceSystem audioSourceSystem;
-
-        //TODO documentation
         static AudioListenerSystem audioListenerSystem;
-
-        //TODO documentation
         static MeshRendererSystem rendererSystem;
-
-        //TODO documentation
         static CollisionSystem collisionSystem;
-
-        //TODO documentation
         static PhysicalBasedInputSystem physicalBasedInputSystem;
-
-        //TODO documentation
         static PhysicSystem physicSystem;
-
-        //TODO documentation
         static SkeletonSystem skeletonSystem;
-        
-        //TODO documentation
         static LightSystem lightSystem;
-
-        //TODO documentation
         static PaddleControlSystem paddleControlSystem;
-
-        //TODO documentation
         static PaddleIkSystem paddleIkSystem;
-
-        //TODO documentation
         static UiRendererSystem uiRendererSystem;
-
-        //TODO documentation
         static HydroBodySystem hydroBodySystem;
-        
-        //TODO documentation
         static HideoutSystem hideoutSystem;
-
-        //TODO documentation
         static UiButtonSystem uiButtonSystem;
-
-        //TODO documentation
-        static EnemiesSightSystem enemiesSightSystem;
+        static EnemySystem enemySystem;
 
 #pragma endregion
 

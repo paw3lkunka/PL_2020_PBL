@@ -6,6 +6,7 @@
 #include "Component.hpp"
 #include "Message.inl"
 
+//TODO documentation
 struct Button : public Component
 {
     Button() = default;

@@ -33,7 +33,7 @@ private:
 #endif" >> $_fileHXX
 
 echo -n > $_fileCXX
-echo -e "#include \"Systems.inc\"
+echo -e "#include \"ECS.inc\"
 #include \"Components.inc\"
 
 bool "$_className"::assertEntity(Entity* entity)

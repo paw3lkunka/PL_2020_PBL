@@ -88,6 +88,7 @@ private:
     void drawEnemy(Enemy* enemyPtr);
     void drawButton(Button* button);
     void drawText(TextRenderer* textRenderer);
+    void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
 
     // ! Helper functions
     /**

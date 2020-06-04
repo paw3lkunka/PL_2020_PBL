@@ -22,9 +22,7 @@ class HideoutSystem : public System, public IMsgReceiver
         virtual bool assertEntity(Entity* entity);
         virtual void receiveMessage(Message msg);
         virtual void fixedUpdate();
-        /**
-         * @brief Should be called on end of fixed update.
-         */
+        /// @brief Should be called on end of fixed update.
         void clean();
     protected:
     private:

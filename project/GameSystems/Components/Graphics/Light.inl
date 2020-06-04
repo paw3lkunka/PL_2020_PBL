@@ -7,6 +7,7 @@
 
 enum class LightType { Directional, Point, Spot };
 
+//TODO documentation
 struct Light : public Component
 {
     Light() = default;
@@ -15,12 +16,17 @@ struct Light : public Component
     // HACK: This is potentially unsafe
     glm::mat4 const* modelMatrix;
 
+//TODO documentation
     LightType lightType;
+//TODO documentation
     float intensity;
+//TODO documentation
     glm::vec3 color;
     // For point light
+//TODO documentation
     float range;
     // For spot light
+//TODO documentation
     float angle;
 };
 

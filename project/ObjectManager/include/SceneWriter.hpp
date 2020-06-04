@@ -75,6 +75,7 @@ private:
     void savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr);
     void savePaddle(Paddle* componentPtr);
     void saveEnemy(Enemy* enemyPtr);
+    void saveEnemyAnimation(EnemyAnimation* enemyAnimPtr);
     void saveUiRenderer(UiRenderer* componentPtr);
     void saveTextRenderer(TextRenderer* componentPtr);
     void saveRectTransform(RectTransform* componentPtr);

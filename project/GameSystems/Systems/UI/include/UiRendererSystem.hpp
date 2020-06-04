@@ -10,6 +10,7 @@ struct TextRenderer;
 struct RectTransform;
 class Message;
 
+//TODO documentation
 class UiRendererSystem : public System
 {
 public:
