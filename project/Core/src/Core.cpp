@@ -6,6 +6,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "CubemapHdr.hpp"
 #include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
 
@@ -115,10 +116,24 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            
+            TextureCreateInfo i = {};
+            i.minFilter = GL_LINEAR;
+            i.magFilter = GL_LINEAR;
+            i.wrapMode= GL_CLAMP_TO_EDGE;
+            CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,   "Resources/Textures/skybox_03_hdr/nz.hdr", 
+                                            "Resources/Textures/skybox_03_hdr/nx.hdr", 
+                                            "Resources/Textures/skybox_03_hdr/px.hdr",
+                                            "Resources/Textures/skybox_03_hdr/pz.hdr",
+                                            "Resources/Textures/skybox_03_hdr/py.hdr",
+                                            "Resources/Textures/skybox_03_hdr/ny.hdr");
+
+            auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+            Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+            hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
         }
 
-        objectModule.saveScene("../resources/Scenes/gameScene.json");
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
     
@@ -134,7 +149,8 @@ int Core::init()
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
+    // rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
+    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxHdrMat"));
     
     messageBus.addReceiver( &rendererModule );
 #pragma endregion

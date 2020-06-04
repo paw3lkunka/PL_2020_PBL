@@ -11,6 +11,7 @@ class Material;
 class Texture;
 class Mesh;
 class Cubemap;
+class CubemapHdr;
 class Shader;
 class Font;
 class Message;
@@ -87,6 +88,7 @@ private:
     void saveMesh(Mesh* assetPtr);
     void saveShader(Shader* assetPtr);
     void saveCubemap(Cubemap* assetPtr);
+    void saveCubemapHdr(CubemapHdr* assetPtr);
     void saveFont(Font* assetPtr);
 
     // ? saving Messages

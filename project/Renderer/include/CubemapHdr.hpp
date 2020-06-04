@@ -20,13 +20,13 @@ public:
     /**
      * @brief Initializes hdr cubemap with data and options.
      */
-    void init();
+    virtual void init();
     /**
      * @brief Bind cubemap to provided texture unit
      * 
      * @param textureUnit texture unit id
      */
-    void bind(int textureUnit);
+    virtual void bind(int textureUnit);
 
     std::string frontPath;
     std::string leftPath;

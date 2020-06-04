@@ -79,8 +79,6 @@ public:
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);
-    /// @brief Set texture of given name in material
-    void setCubemap(std::string name, Cubemap* value);
     /// @brief Set int of given name in material
     void setInt(std::string name, int value);
     /// @brief Set float of given name in material
@@ -129,7 +127,6 @@ private:
     std::string name;
 
     std::unordered_map<std::string, Texture*> textures;
-    std::unordered_map<std::string, Cubemap*> cubemaps;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
     std::unordered_map<std::string, glm::vec3> vec3s;

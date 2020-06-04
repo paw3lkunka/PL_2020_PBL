@@ -27,6 +27,7 @@ private:
     void readShaders();
     void readTextures();
     void readCubemaps();
+    void readCubemapsHdr();
     void readMaterials();
     void readMeshes();
     void readFonts();

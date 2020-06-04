@@ -8,6 +8,8 @@
 #include "DistanceComparer.hpp"
 #include "UiRenderer.inl"
 #include "TextRenderer.inl"
+#include "BuiltInShaders.inl"
+#include "BuiltInShapes.inl"
 
 #include <algorithm>
 
@@ -140,8 +142,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
-    internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
+    internalShaderError = new Shader(BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====
@@ -196,57 +197,15 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(skyboxVao);
         glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
-        float skyboxVertices[] = 
-        {
-            // positions          
-            -1.0f,  1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            -1.0f,  1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f
-        };
-        glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
+        
+        glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), BuiltInShapes::cubeTri, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
         glBindVertexArray(0);
+
+        //generateCubemapConvolution()
     }
 
 
@@ -725,4 +684,88 @@ void RendererModule::calculateFrustumPoints()
     frustumPoints[5] = nearCenter + (frustum.up * frustum.Hnear/2.0f) + (frustum.right * frustum.Wnear/2.0f); // 1, 1, -1
     frustumPoints[6] = farCenter - (frustum.up * frustum.Hfar/2.0f) + (frustum.right * frustum.Wfar/2.0f); // 1, -1, 1
     frustumPoints[7] = farCenter + (frustum.up * frustum.Hfar/2.0f) - (frustum.right * frustum.Wfar/2.0f); // -1, 1, 1
+}
+
+void RendererModule::generateCubemapConvolution(Texture* cubemap, unsigned int dimensions)
+{
+    unsigned int captureFBO, captureRBO;
+    glGenFramebuffers(1, &captureFBO);
+    glGenRenderbuffers(1, &captureRBO);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+    glGenTextures(1, &irradianceMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+    for (size_t i = 0; i < 6; i++)
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, dimensions, dimensions, 0, GL_RGB, GL_FLOAT, nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    glm::mat4 captureViews[] =
+    {
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+    };
+
+    Shader irradianceShader(BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
+    irradianceShader.use();
+    irradianceShader.setInt("environmentMap", 0);
+    irradianceShader.setMat4("projection", captureProjection);
+
+    cubemap->bind(0);
+
+    glViewport(0, 0, dimensions, dimensions);
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    for (size_t i = 0; i < 6; i++)
+    {
+        irradianceShader.setMat4("view", captureViews[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        drawCube();
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void RendererModule::drawCube()
+{
+    static unsigned int cubeVao = 0;
+    static unsigned int cubeVbo = 0;
+
+    if (cubeVao == 0)
+    {
+        glGenVertexArrays(1, &cubeVao);
+        glGenBuffers(1, &cubeVbo);
+
+        glBindBuffer(GL_ARRAY_BUFFER, cubeVbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(BuiltInShapes::cubeNormUvTri), BuiltInShapes::cubeNormUvTri, GL_STATIC_DRAW);
+
+        glBindVertexArray(cubeVao);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    glBindVertexArray(cubeVao);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 }

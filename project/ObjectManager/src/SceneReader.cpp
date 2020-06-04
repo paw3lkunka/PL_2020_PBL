@@ -3,6 +3,7 @@
 #include "ObjectExceptions.inl"
 #include "FileStructures.inl"
 #include "Core.hpp"
+#include "CubemapHdr.hpp"
 #include "Collider.inl"
 #include "Camera.inl"
 #include "Font.hpp"
@@ -33,6 +34,7 @@ void SceneReader::readScene(std::string filePath)
     readShaders();
     readTextures();
     readCubemaps();
+    readCubemapsHdr();
     readMaterials();
     readFonts();
     readEntities();
@@ -136,6 +138,35 @@ void SceneReader::readCubemaps()
     }
 }
 
+void SceneReader::readCubemapsHdr()
+{
+    int cubemapsAmount = j.at("Amounts").at("cubemapsHdr").get<int>();
+    std::string name;
+    std::string backPath, frontPath, leftPath, rightPath, topPath, bottomPath;
+    TextureCreateInfo texCreateInfo;
+    for(int i = 0; i < cubemapsAmount; ++i)
+    {
+        name = setName("cubemapHdr", i);
+        frontPath = j.at(name).at("frontPath").get<std::string>();
+        bottomPath = j.at(name).at("bottomPath").get<std::string>();
+        leftPath = j.at(name).at("leftPath").get<std::string>();
+        rightPath = j.at(name).at("rightPath").get<std::string>();
+        topPath = j.at(name).at("topPath").get<std::string>();
+        backPath = j.at(name).at("backPath").get<std::string>();
+
+        texCreateInfo.generateMipmaps = j.at(name).at("creationInfo").at("generateMipmaps").get<bool>();
+        texCreateInfo.format = GLenum(j.at(name).at("creationInfo").at("format").get<unsigned int>());
+        texCreateInfo.width = j.at(name).at("creationInfo").at("width").get<int>();
+        texCreateInfo.height = j.at(name).at("creationInfo").at("height").get<int>();
+        texCreateInfo.magFilter = GLenum(j.at(name).at("creationInfo").at("magFilter").get<unsigned int>());
+        texCreateInfo.minFilter = GLenum(j.at(name).at("creationInfo").at("minFilter").get<unsigned int>());
+        texCreateInfo.wrapMode = GLenum(j.at(name).at("creationInfo").at("wrapMode").get<unsigned int>());
+
+        auto cubemap = objModulePtr->newHdrCubemap(texCreateInfo, frontPath.c_str(), leftPath.c_str(), rightPath.c_str(), backPath.c_str(), topPath.c_str(), bottomPath.c_str());
+        cubemap->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    }
+}
+
 void SceneReader::readMaterials()
 {
     std::string name;
@@ -167,7 +198,16 @@ void SceneReader::readMaterials()
         {
             unsigned int cubemapID = iter.second;
             auto cubemap = objModulePtr->objectContainer.getCubemapFromSerializationID(cubemapID);
-            material->setCubemap(iter.first, cubemap);
+            material->setTexture(iter.first, cubemap);
+        }
+
+        children.clear();
+        j.at(name).at("cubemapsHdr").get_to(children);
+        for(auto iter : children)
+        {
+            unsigned int cubemapID = iter.second;
+            auto cubemap = objModulePtr->objectContainer.getCubemapHdrFromSerializationID(cubemapID);
+            material->setTexture(iter.first, cubemap);
         }
 
         children.clear();

@@ -83,9 +83,9 @@ bool AssetReader::loadHdrTexture(std::string path)
     {
         texturesHdr.insert( std::pair(path, tData) );
         
-        std::unordered_map<std::string, TextureHdrData>::iterator iter = textures.find(path);
+        std::unordered_map<std::string, TextureHdrData>::iterator iter = texturesHdr.find(path);
         std::cout << "Tex hdr loaded: " << path << std::endl;
-        return iter != textures.end();
+        return iter != texturesHdr.end();
     }
     else
     {

@@ -7,12 +7,13 @@
 #include "Component.hpp"
 #include "Shader.hpp"
 #include "Cubemap.hpp"
+#include "CubemapHdr.hpp"
 #include "Material.hpp"
 #include "Transform.inl"
 #include "Font.hpp"
-#include "mesh/Mesh.hpp"
-#include "mesh/MeshCustom.hpp"
-#include "mesh/MeshSkinned.hpp"
+#include "Mesh.hpp"
+#include "MeshCustom.hpp"
+#include "MeshSkinned.hpp"
 
 bool ObjectContainer::hasInstance = false;
 

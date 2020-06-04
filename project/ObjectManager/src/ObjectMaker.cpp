@@ -128,7 +128,7 @@ Cubemap* ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
     throw AssetLoadingException("Cubemap");
 }
 
-Cubemap* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo, 
+CubemapHdr* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo, 
                                     const char* frontPath, 
                                     const char* leftPath, 
                                     const char* rightPath, 

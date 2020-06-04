@@ -17,6 +17,7 @@ class MeshSkinned;
 class MeshCustom;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 
 class ObjectMaker;

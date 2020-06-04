@@ -102,7 +102,7 @@
                                 "Resources/Textures/skybox_02/ny.png");
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-    skyboxMat->setCubemap("cubemap", cubemap);
+    skyboxMat->setTexture("cubemap", cubemap);
 
     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));

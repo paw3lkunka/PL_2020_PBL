@@ -60,21 +60,12 @@ public:
 
     // * Material switching optimization
     static unsigned int lastMatID;
-    //static unsigned int lastShaderID;
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
     static constexpr unsigned int DRAW_CALL_UI_ALLOCATION = 128;
     static constexpr unsigned int DRAW_CALL_TEXT_ALLOCATION = 64;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
-
-    // ? +++++ Built in shaders +++++
-    const char* depthVertexCode = 
-    "#version 430 core\nlayout(location=0) in vec3 position;\nuniform mat4 MVP;\nvoid main() {gl_Position = MVP * vec4(position, 1.0);}";
-    const char* depthFragmentCode = 
-    "#version 430 core\nvoid main() {}";
-    const char* internalErrorFragmentCode = 
-    "#version 430 core\nout vec4 FragColor;\nvoid main() { FragColor = vec4(1.0, 0.0, 1.0, 1.0); }";
 
     void calculateFrustumPlanes();
     void calculateFrustumPoints();
@@ -83,12 +74,15 @@ private:
     float pointToPlaneDistance(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point);
     void drawBounds(Bounds& bounds, Material& material, glm::mat4& model, glm::mat4& VP);
     void drawFrustum(glm::mat4& VP);
+    void generateCubemapConvolution(Texture* cubemap, unsigned int dimensions);
+    void drawCube();
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
     // * Skybox variables
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial = nullptr;
+    unsigned int irradianceMap;
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
@@ -110,8 +104,8 @@ private:
     Light* directionalLight = nullptr;
     unsigned int depthMapFBO = 0;
     unsigned int depthMap = 0;
-    Shader* simpleDepth,* internalShaderError;
     Texture* directionalDepth;
+    Shader* internalShaderError;
     Material* internalErrorMat;
     // TODO: Move this to light properties
     static constexpr int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;

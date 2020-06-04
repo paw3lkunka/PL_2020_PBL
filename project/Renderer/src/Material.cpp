@@ -19,10 +19,8 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
         switch (var.second)
         {
         case GL_SAMPLER_2D:
-            textures.insert(std::pair<std::string, Texture*>(var.first, nullptr));
-            break;
         case GL_SAMPLER_CUBE:
-            cubemaps.insert(std::pair<std::string, Cubemap*>(var.first, nullptr));
+            textures.insert(std::pair<std::string, Texture*>(var.first, nullptr));
             break;
         case GL_INT:
             ints[var.first] = 0;
@@ -93,18 +91,6 @@ void Material::use()
             }
         }
 
-        
-        // * ===== Cubemap samplers =====
-        for(std::pair<std::string, Cubemap*> cubemap : cubemaps)
-        {
-            if (cubemap.second != nullptr)
-            {
-                cubemap.second->bind(i);
-                shader->setInt(cubemap.first, i);
-                ++i;
-            }
-        }
-
         // * ===== Ints =====
         for(auto var : ints)
         {
@@ -158,25 +144,6 @@ void Material::setTexture(std::string name, Texture* value)
     if (texturesIter != textures.end())
     {
         texturesIter->second = value;
-    }
-    // else
-    // {
-    //     std::cerr << "Uniform not found: " << name << std::endl;
-    // }
-}
-
-void Material::setCubemap(std::string name, Cubemap* value)
-{
-    std::unordered_map<std::string, Cubemap*>::iterator cubemapsIter = cubemaps.find(name);
-    if (cubemapsIter != cubemaps.end())
-    {
-        cubemapsIter->second = value;
-    }
-    else
-    {
-        // ! Name not found, aborting !
-        // TODO: Insert appropriate debug log
-        std::cout << "Wrong uniform name: " << name << std::endl;
     }
 }
 

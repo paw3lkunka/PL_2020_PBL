@@ -7,8 +7,9 @@
 #include "Material.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
-#include "mesh/MeshCustom.hpp"
-#include "mesh/MeshSkinned.hpp"
+#include "CubemapHdr.hpp"
+#include "MeshCustom.hpp"
+#include "MeshSkinned.hpp"
 #include "Shader.hpp"
 #include "Entity.hpp"
 #include "Font.hpp"
@@ -40,6 +41,7 @@ void SceneWriter::saveScene(const char* filePath)
     j["Amounts"]["meshes"] = objContainerPtr->meshes.size();
     j["Amounts"]["textures"] = objContainerPtr->textures.size();
     j["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
+    j["Amounts"]["cubemapsHdr"] = objContainerPtr->hdrCubemaps.size();
     j["Amounts"]["fonts"] = objContainerPtr->fonts.size();
     
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
@@ -150,6 +152,23 @@ void SceneWriter::saveScene(const char* filePath)
             name = "cubemap" + std::to_string(i);
         }
         saveCubemap(objContainerPtr->cubemaps[i]);
+    }
+
+    for(int i = 0; i < objContainerPtr->hdrCubemaps.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "cubemapHdr00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "cubemapHdr0" + std::to_string(i);
+        }
+        else
+        {
+            name = "cubemapHdr" + std::to_string(i);
+        }
+        saveCubemapHdr(objContainerPtr->hdrCubemaps[i]);
     }
 
     for(int i = 0; i < objContainerPtr->fonts.size(); ++i)
@@ -577,22 +596,28 @@ void SceneWriter::saveMaterial(Material* assetPtr)
     j[name]["name"] = assetPtr->getName();
     j[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
     j[name]["renderingType"] = assetPtr->getRenderType();
-    childrenMap.clear();
-    for(auto c : assetPtr->cubemaps)
-    {
-        childrenMap[c.first] = c.second->serializationID;
-    }
-    j[name]["cubemaps"] = childrenMap;
 
     childrenMap.clear();
+    std::unordered_map<std::string, unsigned int> cubemaps;
+    std::unordered_map<std::string, unsigned int> cubemapsHdr;
     for(auto t : assetPtr->textures)
     {
-        if (t.second != nullptr)
+        if (dynamic_cast<Cubemap*>(t.second) != nullptr)
+        {
+            cubemaps[t.first] = t.second->serializationID;
+        }
+        else if (dynamic_cast<CubemapHdr*>(t.second) != nullptr)
+        {
+            cubemapsHdr[t.first] = t.second->serializationID;
+        }
+        else if (t.second != nullptr)
         {
             childrenMap[t.first] = t.second->serializationID;
         }
     }
     j[name]["textures"] = childrenMap;
+    j[name]["cubemaps"] = cubemaps;
+    j[name]["cubemapsHdr"] = cubemapsHdr;
 
     childrenMap.clear();
     for(auto i : assetPtr->ints)
@@ -700,6 +725,24 @@ void SceneWriter::saveShader(Shader* assetPtr)
 }
 
 void SceneWriter::saveCubemap(Cubemap* assetPtr)
+{
+    j[name]["serializationID"] = assetPtr->serializationID;
+    j[name]["frontPath"] = assetPtr->frontPath;
+    j[name]["backPath"] = assetPtr->backPath;
+    j[name]["leftPath"] = assetPtr->leftPath;
+    j[name]["rightPath"] = assetPtr->rightPath;
+    j[name]["topPath"] = assetPtr->topPath;
+    j[name]["bottomPath"] = assetPtr->bottomPath;
+    j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    j[name]["creationInfo"]["format"] = assetPtr->info.format;
+    j[name]["creationInfo"]["width"] = assetPtr->info.width;
+    j[name]["creationInfo"]["height"] = assetPtr->info.height;
+    j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+}
+
+void SceneWriter::saveCubemapHdr(CubemapHdr* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["frontPath"] = assetPtr->frontPath;
