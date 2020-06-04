@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_path="$(dirname "$0")/project/GameSystems/Systems/include"
+_path="$(dirname "$0")/project/GameSystems/Systems"
 
 _file1="$(dirname "$0")/project/Autogen/include/Systems.inc"
 _guardian1="SYSTEMS_INC_AUTOGEN"
@@ -25,7 +25,7 @@ echo >> $_file1
 echo "#include \"System.hpp\"" >> $_file1
 echo | tee -a $_file1 >> $_file2
 
-for _header in $_path/*
+for _header in $(find $_path -name '*.hpp' -or -name '*.inl')
 do
     echo "    #include \"$(basename $_header)\"" >> $_file1
     if [ "${_header##*.}" = "hpp" ]; then

@@ -1,8 +1,8 @@
 {
     "Amounts": {
-        "components": 24,
+        "components": 25,
         "cubemaps": 0,
-        "entities": 10,
+        "entities": 11,
         "fonts": 1,
         "materials": 7,
         "meshes": 0,
@@ -140,31 +140,50 @@
         },
         "entity id": 3,
         "localPosition": {
-            "x": 170.0,
-            "y": 350.0
+            "x": 0.0,
+            "y": 0.0
         },
         "rectSize": {
-            "x": 250.0,
-            "y": 100.0
+            "x": 0.0,
+            "y": 0.0
         },
         "rotation": 0.0,
         "serializationID": 21,
         "type": "RectTransform"
     },
     "component008": {
-        "entity id": 3,
-        "material": 23,
-        "serializationID": 22,
-        "type": "UiRenderer"
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 4,
+        "localPosition": {
+            "x": 170.0,
+            "y": 350.0
+        },
+        "parent": 21,
+        "rectSize": {
+            "x": 250.0,
+            "y": 100.0
+        },
+        "rotation": 0.0,
+        "serializationID": 23,
+        "type": "RectTransform"
     },
     "component009": {
+        "entity id": 4,
+        "material": 25,
+        "serializationID": 24,
+        "type": "UiRenderer"
+    },
+    "component010": {
         "baseColor": {
             "a": 0.699999988079071,
             "b": 0.19200000166893005,
             "g": 0.5920000076293945,
             "r": 0.125
         },
-        "entity id": 3,
+        "entity id": 4,
         "highlightedColor": {
             "a": 0.699999988079071,
             "b": 0.32899999618530273,
@@ -190,68 +209,69 @@
                 "event": 22
             }
         },
-        "serializationID": 24,
+        "serializationID": 26,
         "type": "Button"
     },
-    "component010": {
+    "component011": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 4,
+        "entity id": 5,
         "localPosition": {
             "x": -76.0,
             "y": -22.0
         },
-        "parent": 21,
+        "parent": 23,
         "rectSize": {
             "x": 0.5,
             "y": 0.5
         },
         "rotation": 0.0,
-        "serializationID": 26,
+        "serializationID": 28,
         "type": "RectTransform"
     },
-    "component011": {
-        "entity id": 4,
+    "component012": {
+        "entity id": 5,
         "font": 11,
         "material": 15,
-        "serializationID": 27,
+        "serializationID": 29,
         "text": "Start",
         "type": "TextRenderer"
     },
-    "component012": {
+    "component013": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 5,
+        "entity id": 6,
         "localPosition": {
             "x": 170.0,
             "y": 230.0
         },
+        "parent": 21,
         "rectSize": {
             "x": 250.0,
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 30,
+        "serializationID": 32,
         "type": "RectTransform"
     },
-    "component013": {
-        "entity id": 5,
-        "material": 32,
-        "serializationID": 31,
+    "component014": {
+        "entity id": 6,
+        "material": 34,
+        "serializationID": 33,
         "type": "UiRenderer"
     },
-    "component014": {
+    "component015": {
         "baseColor": {
             "a": 0.699999988079071,
             "b": 0.09399999678134918,
             "g": 0.5559999942779541,
             "r": 0.9679999947547913
         },
-        "entity id": 5,
+        "entity id": 6,
         "highlightedColor": {
             "a": 0.699999988079071,
             "b": 0.5090000033378601,
@@ -277,68 +297,69 @@
                 "event": 23
             }
         },
-        "serializationID": 33,
+        "serializationID": 35,
         "type": "Button"
     },
-    "component015": {
+    "component016": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 6,
+        "entity id": 7,
         "localPosition": {
             "x": -110.0,
             "y": -22.0
         },
-        "parent": 30,
+        "parent": 32,
         "rectSize": {
             "x": 0.5,
             "y": 0.5
         },
         "rotation": 0.0,
-        "serializationID": 35,
+        "serializationID": 37,
         "type": "RectTransform"
     },
-    "component016": {
-        "entity id": 6,
+    "component017": {
+        "entity id": 7,
         "font": 11,
         "material": 15,
-        "serializationID": 36,
+        "serializationID": 38,
         "text": "Options",
         "type": "TextRenderer"
     },
-    "component017": {
+    "component018": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 7,
+        "entity id": 8,
         "localPosition": {
             "x": 170.0,
             "y": 111.0
         },
+        "parent": 21,
         "rectSize": {
             "x": 250.0,
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 39,
+        "serializationID": 41,
         "type": "RectTransform"
     },
-    "component018": {
-        "entity id": 7,
-        "material": 41,
-        "serializationID": 40,
+    "component019": {
+        "entity id": 8,
+        "material": 43,
+        "serializationID": 42,
         "type": "UiRenderer"
     },
-    "component019": {
+    "component020": {
         "baseColor": {
             "a": 0.699999988079071,
             "b": 0.22699999809265137,
             "g": 0.17599999904632568,
             "r": 0.8230000138282776
         },
-        "entity id": 7,
+        "entity id": 8,
         "highlightedColor": {
             "a": 0.699999988079071,
             "b": 0.3840000033378601,
@@ -364,48 +385,48 @@
                 "event": 23
             }
         },
-        "serializationID": 42,
+        "serializationID": 44,
         "type": "Button"
     },
-    "component020": {
+    "component021": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 8,
+        "entity id": 9,
         "localPosition": {
             "x": -61.0,
             "y": -22.0
         },
-        "parent": 39,
+        "parent": 41,
         "rectSize": {
             "x": 0.5,
             "y": 0.5
         },
         "rotation": 0.0,
-        "serializationID": 44,
+        "serializationID": 46,
         "type": "RectTransform"
-    },
-    "component021": {
-        "entity id": 8,
-        "font": 11,
-        "material": 15,
-        "serializationID": 45,
-        "text": "Exit",
-        "type": "TextRenderer"
     },
     "component022": {
         "entity id": 9,
-        "material": 50,
-        "serializationID": 49,
-        "type": "UiRenderer"
+        "font": 11,
+        "material": 15,
+        "serializationID": 47,
+        "text": "Exit",
+        "type": "TextRenderer"
     },
     "component023": {
+        "entity id": 10,
+        "material": 52,
+        "serializationID": 51,
+        "type": "UiRenderer"
+    },
+    "component024": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 9,
+        "entity id": 10,
         "localPosition": {
             "x": 0.0,
             "y": 0.0
@@ -415,7 +436,7 @@
             "y": 50.0
         },
         "rotation": 0.0,
-        "serializationID": 51,
+        "serializationID": 53,
         "type": "RectTransform"
     },
     "entity000": {
@@ -448,69 +469,77 @@
     },
     "entity003": {
         "components": [
-            21,
-            22,
-            24
+            21
         ],
         "id": 3,
-        "name": "Start_Button",
+        "name": "Menu_Buttons",
         "serializationID": 20
     },
     "entity004": {
         "components": [
-            26,
-            27
+            23,
+            24,
+            26
         ],
         "id": 4,
-        "name": "Start_Button_Text",
-        "serializationID": 25
+        "name": "Start_Button",
+        "serializationID": 22
     },
     "entity005": {
         "components": [
-            30,
-            31,
-            33
+            28,
+            29
         ],
         "id": 5,
-        "name": "Options_Button",
-        "serializationID": 29
+        "name": "Start_Button_Text",
+        "serializationID": 27
     },
     "entity006": {
         "components": [
-            35,
-            36
+            32,
+            33,
+            35
         ],
         "id": 6,
-        "name": "Options_Button_Text",
-        "serializationID": 34
+        "name": "Options_Button",
+        "serializationID": 31
     },
     "entity007": {
         "components": [
-            39,
-            40,
-            42
+            37,
+            38
         ],
         "id": 7,
-        "name": "Exit_Button",
-        "serializationID": 38
+        "name": "Options_Button_Text",
+        "serializationID": 36
     },
     "entity008": {
         "components": [
-            44,
-            45
+            41,
+            42,
+            44
         ],
         "id": 8,
-        "name": "Exit_Button_Text",
-        "serializationID": 43
+        "name": "Exit_Button",
+        "serializationID": 40
     },
     "entity009": {
         "components": [
-            49,
-            51
+            46,
+            47
         ],
         "id": 9,
+        "name": "Exit_Button_Text",
+        "serializationID": 45
+    },
+    "entity010": {
+        "components": [
+            51,
+            53
+        ],
+        "id": 10,
         "name": "pointerHelper",
-        "serializationID": 48
+        "serializationID": 50
     },
     "font000": {
         "fontPath": "Resources/Fonts/KosugiMaru-Regular.ttf",
@@ -740,7 +769,7 @@
         },
         "name": "startMat",
         "renderingType": 1,
-        "serializationID": 23,
+        "serializationID": 25,
         "shaderSerializationID": 9,
         "textures": {
             "sprite": 13
@@ -800,7 +829,7 @@
         },
         "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 32,
+        "serializationID": 34,
         "shaderSerializationID": 9,
         "textures": {
             "sprite": 13
@@ -860,7 +889,7 @@
         },
         "name": "exitMat",
         "renderingType": 1,
-        "serializationID": 41,
+        "serializationID": 43,
         "shaderSerializationID": 9,
         "textures": {
             "sprite": 13
@@ -920,7 +949,7 @@
         },
         "name": "crossMat",
         "renderingType": 1,
-        "serializationID": 50,
+        "serializationID": 52,
         "shaderSerializationID": 9,
         "textures": {
             "sprite": 12

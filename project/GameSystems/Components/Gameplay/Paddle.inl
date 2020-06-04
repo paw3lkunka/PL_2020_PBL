@@ -2,6 +2,7 @@
 #define PADDLE_INL_
 
 #include "Component.hpp"
+#include <glm/vec2.hpp>
 
 /**
  * @brief Paddle component.
