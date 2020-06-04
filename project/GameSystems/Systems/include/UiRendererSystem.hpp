@@ -2,10 +2,11 @@
 #define _UIRENDERERSYSTEM_HPP
 
 #include "System.hpp"
-#include "mesh/UiQuad.hpp"
+#include "UiQuad.hpp"
 #include "Material.hpp"
 
 struct UiRenderer;
+struct TextRenderer;
 struct RectTransform;
 class Message;
 
@@ -22,6 +23,7 @@ protected:
 private:
     RectTransform* rectTransform;
     UiRenderer* uiRenderer;
+    TextRenderer* textRenderer;
 };
 
 #endif // _UIRENDERERSYSTEM_HPP

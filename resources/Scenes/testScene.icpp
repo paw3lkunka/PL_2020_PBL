@@ -45,7 +45,6 @@ TextureCreateInfo skyboxCreateInfo = {};
         
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-            t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             t->setParent(&sceneModule.rootNode);
 
         auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();

@@ -238,6 +238,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveUiRenderer(temp);
         }
+        else if(TextRenderer* temp = dynamic_cast<TextRenderer*>(objContainerPtr->components[i]))
+        {
+            saveTextRenderer(temp);
+        }
         else if(Button* temp = dynamic_cast<Button*>(objContainerPtr->components[i]))
         {
             saveButton(temp);
@@ -495,6 +499,14 @@ void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
     j[name]["material"] = componentPtr->material->serializationID;
 }
 
+void SceneWriter::saveTextRenderer(TextRenderer* componentPtr)
+{
+    j[name]["type"] = "TextRenderer";
+    j[name]["material"] = componentPtr->material->serializationID;
+    j[name]["font"] = componentPtr->mesh.font->serializationID;
+    j[name]["text"] = componentPtr->mesh.text;
+}
+
 void SceneWriter::saveRectTransform(RectTransform* componentPtr)
 {
     j[name]["type"] = "RectTransform";
@@ -709,7 +721,7 @@ void SceneWriter::saveFont(Font* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["fontPath"] = assetPtr->getFontPath();
-    j[name]["size"] = assetPtr->getSize();
+    j[name]["fontSize"] = assetPtr->getSize();
 }
 
 #pragma endregion

@@ -115,24 +115,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            auto* enemy = objectModule.newEntity(4,"TMP enemy");
-            {
-                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
-                    t->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
-                    t->setParent(&sceneModule.rootNode);
-
-                auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
-                    e->detectionCounterMaxValue = 500;
-                    e->sightDistance = 20.0f;
-
-                auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
-                    a->lerpParameter = 0.5f;
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->material = objectModule.getMaterialPtrByName("KULA");
-                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
-            }
+            //some code here...
         }
 
         objectModule.saveScene("../resources/Scenes/gameScene.json");
@@ -218,8 +201,8 @@ int Core::mainLoop()
     double lag = FIXED_TIME_STEP;
 
 #pragma region AudioModule demo
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
