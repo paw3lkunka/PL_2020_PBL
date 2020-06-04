@@ -234,6 +234,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveEnemy(temp);
         }
+        else if(EnemyAnimation* temp = dynamic_cast<EnemyAnimation*>(objContainerPtr->components[i]))
+        {
+            saveEnemyAnimation(temp);
+        }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
             saveUiRenderer(temp);
@@ -491,6 +495,12 @@ void SceneWriter::saveEnemy(Enemy* enemyPtr)
     j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
     j[name]["detectionCounter"] = enemyPtr->detectionCounter;
 
+}
+
+void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
+{
+    j[name]["type"] = "EnemyAnimation";
+    j[name]["lerpParameter"] = enemyAnimPtr->lerpParameter;
 }
 
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)

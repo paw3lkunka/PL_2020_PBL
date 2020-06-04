@@ -757,6 +757,15 @@ void SceneReader::readEnemy(std::string name)
     assignToEntity(name, kayak);
 }
 
+void SceneReader::readEnemyAnimation(std::string name)
+{
+    auto anim = objModulePtr->newEmptyComponent<EnemyAnimation>();
+    anim->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    anim->serializationID = j.at(name).at("lerpParameter").get<float>();
+
+    assignToEntity(name, anim);
+}
+
 void SceneReader::readHideout(std::string name)
 {
     auto hideout = objModulePtr->newEmptyComponent<Hideout>();

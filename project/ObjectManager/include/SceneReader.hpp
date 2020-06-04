@@ -55,6 +55,7 @@ private:
     void readKayak(std::string name);
     void readHideout(std::string name);
     void readEnemy(std::string name);
+    void readEnemyAnimation(std::string name);
     void readUiRenderer(std::string name);
     void readTextRenderer(std::string name);
     void readRectTransform(std::string name);
