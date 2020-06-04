@@ -16,7 +16,7 @@ struct TextRenderer : public Component
     glm::mat3 modelMatrix;
 
     Material* material;
-    TextMesh mesh;
+    TextMesh mesh = TextMesh();
 };
 
 #endif // _TEXTRENDERER_INL

@@ -167,6 +167,7 @@ set(IMGUI_SOURCES
     "libs/imgui/imgui_widgets.cpp"
     "libs/imgui/examples/imgui_impl_glfw.cpp"
     "libs/imgui/examples/imgui_impl_opengl3.cpp"
+    "libs/imgui/misc/cpp/imgui_stdlib.cpp"
 )
 
 set(IMGUI_HEADERS
@@ -178,6 +179,7 @@ set(IMGUI_HEADERS
     "libs/imgui/imstb_truetype.h"
     "libs/imgui/examples/imgui_impl_glfw.h"
     "libs/imgui/examples/imgui_impl_opengl3.h"
+    "libs/imgui/misc/cpp/imgui_stdlib.h"
 )
 
 add_library(imgui

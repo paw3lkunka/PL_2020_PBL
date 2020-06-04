@@ -14,6 +14,7 @@ class Entity;
 class ObjectModule;
 class Texture;
 class Shader;
+class Font;
 
 /**
  * @brief Simple editor for our purposes
@@ -68,9 +69,12 @@ private:
     // ! UI Maker methods
     void drawMaker();
     void makeNewButton(glm::vec2 pos, glm::vec2 size);
+    void makeNewText(glm::vec2 pos, std::string text);
     Texture* buttonSprite;
     Shader* buttonShader;
     Entity* positionPointer;
+    Font* fontPtr;
+    Shader* textShader;
     int lastEntitySize;
 
     // ! Component drawing functions
@@ -83,6 +87,7 @@ private:
     void drawKayak(Kayak* kayakPtr);
     void drawEnemy(Enemy* enemyPtr);
     void drawButton(Button* button);
+    void drawText(TextRenderer* textRenderer);
 
     // ! Helper functions
     /**

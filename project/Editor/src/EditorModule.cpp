@@ -2,6 +2,7 @@
 
 #include <examples/imgui_impl_opengl3.h>
 #include <examples/imgui_impl_glfw.h>
+#include <misc/cpp/imgui_stdlib.h>
 #include <glm/gtx/string_cast.hpp>
 #include <sstream>
 #include <iomanip>
@@ -11,6 +12,7 @@
 #include "Core.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "Font.hpp"
 #include "MomentOfInertia.hpp"
 
 
@@ -38,7 +40,9 @@ void EditorModule::setup()
     currentItem = 0;
     enumValue = 0;
     buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-    buttonShader = objectModule->getMaterialPtrByName("buttonMat")->getShaderPtr();
+    buttonShader = objectModule->getMaterialPtrByName("startMat")->getShaderPtr();
+    fontPtr = objectModule->getFontPtrByName("KosugiMaru-Regular");
+    textShader = objectModule->getMaterialPtrByName("TextMaterial")->getShaderPtr();
     positionPointer = objectModule->newEntity(2, "pointerHelper");
     {
         UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
@@ -160,6 +164,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(TextRenderer* temp = entityPtr->getComponentPtr<TextRenderer>())
+    {
+        if(ImGui::CollapsingHeader("Text"))
+        {
+            drawText(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -227,7 +239,7 @@ void EditorModule::drawRectTransform(RectTransform* rectTransformPtr)
     //* transform variables
     static float rotation = 0;
     ImGui::Text("Local transform:");
-    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Position: ", (float*)&rectTransformPtr->getLocalPositionModifiable(), 1.0f, -2000.0f, 2000.0f, "%.2f");
     //ImGui::DragFloat2("Origin: ", (float*)&rectTransformPtr->getOriginModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat2("Anchor: ", (float*)&rectTransformPtr->getAnchorModifiable(), 1.0f, 0.0f, 1.0f, "%.2f");
     ImGui::DragFloat("Rotation: ", &rotation, 1.0f, 0.0f, 360.0f, "%.1f");
@@ -305,6 +317,20 @@ void EditorModule::drawButton(Button* button)
     ImGui::ColorEdit4("On Click color", (float*)&button->onClickColor);
     ImGui::ColorEdit4("Inactive color", (float*)&button->inactiveColor);
     ImGui::Checkbox("Active", &button->isActive);
+}
+
+void EditorModule::drawText(TextRenderer* textRenderer)
+{
+    static std::string textBuf = textRenderer->mesh.text;
+    static glm::vec4 color = {0.0f, 0.0f, 0.0f, 1.0f};
+    if(ImGui::InputText("Text", &textBuf))
+    {
+        textRenderer->mesh.text = textBuf;
+    }
+    if(ImGui::ColorEdit4("Color", (float*)&color))
+    {
+        textRenderer->material->setVec4("color", color);
+    }
 }
 
 void EditorModule::sortEntities(SortingType sortingType)
@@ -409,14 +435,16 @@ void EditorModule::drawMaker()
     RectTransform* pointerTrans = positionPointer->getComponentPtr<RectTransform>();
     ImGui::Begin("UI Maker");
     ImGui::Text("Setup:");
-    ImGui::DragFloat2("Position: ", (float*)&pointerTrans->getLocalPositionModifiable(), 1.0f, -100.0f, 2000.0f, "%.2f");
+    ImGui::DragFloat2("Position: ", (float*)&pointerTrans->getLocalPositionModifiable(), 1.0f, -2000.0f, 2000.0f, "%.2f");
     ImGui::DragFloat2("Size: ", (float*)&pointerTrans->getSizeModifiable(), 1.0f, 0.0f, 2000.0f, "%.2f");
     if(ImGui::Button("Make button", {100, 20}))
     {
-        std::cout << "Make button\n";
         makeNewButton(pointerTrans->getLocalPosition(), pointerTrans->getSize());
     }
-
+    if(ImGui::Button("Make text", {100, 20}))
+    {
+        makeNewText(pointerTrans->getLocalPosition(), "Text");
+    }
     ImGui::End();
 }
 
@@ -425,7 +453,6 @@ void EditorModule::makeNewButton(glm::vec2 pos, glm::vec2 size)
     static int counter = 0;
     std::string buttonName = "button" + std::to_string(counter);
     std::string materialName = "buttonMat" + std::to_string(counter++);
-    std::cout << buttonName << ", " << materialName << "\n";
     objectModule->newEntity(3, buttonName);
     {
         UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
@@ -438,5 +465,25 @@ void EditorModule::makeNewButton(glm::vec2 pos, glm::vec2 size)
         GetCore().uiModule.rootNodes.push_back(rt);
 
         Button* butt = objectModule->newEmptyComponentForLastEntity<Button>();
+    }
+}
+
+void EditorModule::makeNewText(glm::vec2 pos, std::string text)
+{
+    static int fontCounter = 0;
+    std::string fontName = "text" + std::to_string(fontCounter);
+    std::string materialName = "textMat" + std::to_string(fontCounter++);
+    objectModule->newEntity(3, fontName);
+    {
+        TextRenderer* tR = objectModule->newEmptyComponentForLastEntity<TextRenderer>();
+        tR->material = objectModule->newMaterial(textShader, materialName, RenderType::Transparent);
+        tR->material->setVec4("color", {0.0f, 0.0f, 0.0f, 0.8f});
+        tR->mesh.text = text;
+        tR->mesh.font = fontPtr;
+
+        RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
+        rt->getLocalPositionModifiable() = pos;
+        rt->getSizeModifiable() = {1,1};
+        GetCore().uiModule.rootNodes.push_back(rt);
     }
 }
