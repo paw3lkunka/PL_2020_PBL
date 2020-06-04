@@ -8,14 +8,18 @@ class Animation;
 class Entity;
 
 
+//TODO documentation
 struct Skeleton : public Component
 {
     Skeleton() = default;
     virtual ~Skeleton() = default;
 
+//TODO documentation
     Entity* rootBone;
+//TODO documentation
     Animation* animation;
 
+//TODO documentation
     glm::mat4 globalInverseTransform;
 };
 

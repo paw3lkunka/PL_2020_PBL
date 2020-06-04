@@ -5,6 +5,7 @@
 #include "Material.hpp"
 #include "TextMesh.hpp"
 
+//TODO documentation
 struct TextRenderer : public Component
 {
     TextRenderer()
@@ -13,9 +14,12 @@ struct TextRenderer : public Component
     }
     virtual ~TextRenderer() = default;
 
+//TODO documentation
     glm::mat3 modelMatrix;
 
+//TODO documentation
     Material* material;
+//TODO documentation
     TextMesh mesh;
 };
 

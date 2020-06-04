@@ -8,7 +8,6 @@
 /**
  * @brief Box-shaped collider (cuboid)
  */
-
 struct BoxCollider : public Collider
 {
     /**

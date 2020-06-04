@@ -5,11 +5,13 @@
 #include "HydroDataStructures.hpp"
 #include "HydroSurface.inl"
 
+//TODO documentation
 struct HydroBody : public Component
 {
     HydroBody() = default;
     ~HydroBody() = default;
 
+//TODO documentation
     HydroSurface* hydroSurface = nullptr;
 
     // TODO: Bring slamming force back to life

@@ -12,6 +12,7 @@
  */
 struct Bone : public Component
 {
+//TODO documentation
     static constexpr unsigned int MAX_BONE_COUNT = 128;
     
     Bone() = default;

@@ -5,6 +5,7 @@
 #include "Transform.inl"
 #include "Light.inl"
 
+//TODO documentation
 class LightSystem : public System
 {
 public:
