@@ -40,7 +40,10 @@ void EnemiesSystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kay
     else
     {
         float distance = glm::distance(enemyPos, kayakPos);
-        if (distance < enemyPtr->sightDistance)
+        glm::vec3 forward = glm::normalize(glm::xyz(enemyTransformPtr->getModelMatrix()[0]));
+        glm::vec3 toKayak = glm::normalize(kayakPos - enemyPos);
+
+        if ( distance < enemyPtr->sightDistance && glm::dot(forward, toKayak) < enemyPtr->sightAngle)
         {
             enemyPtr->detectionCounter += enemyPtr->detectionPositiveStep;
             if (enemyPtr->detectionCounter >= enemyPtr->detectionCounterMaxValue && enemyPtr->notified == false)

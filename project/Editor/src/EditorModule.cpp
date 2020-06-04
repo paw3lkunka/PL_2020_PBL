@@ -272,6 +272,7 @@ void EditorModule::drawKayak(Kayak* kayakPtr)
 void EditorModule::drawEnemy(Enemy* enemyPtr)
 {
     ImGui::DragFloat("Sight distance", &enemyPtr->sightDistance);
+    ImGui::DragFloat("Sight angle", &enemyPtr->sightAngle);
     ImGui::DragInt("Detection counter", &enemyPtr->detectionCounter);
     ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);

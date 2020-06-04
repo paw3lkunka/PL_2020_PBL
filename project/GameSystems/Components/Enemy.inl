@@ -21,6 +21,12 @@ struct Enemy : public Component
     float sightDistance;
 
     /**
+     * @brief Minimum angle between [enemy,kayak] vector and enemys forward vector necessery to detect kayak.
+     * I practice - half of FOV.
+     */
+    float sightAngle;
+
+    /**
      * @brief Kayak is detected, where detectionCounter reach this value.
      */
     int detectionCounterMaxValue;

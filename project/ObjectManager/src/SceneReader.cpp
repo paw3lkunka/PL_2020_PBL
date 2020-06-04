@@ -356,6 +356,11 @@ void SceneReader::readComponents()
             std::cout << "Enemy" << std::endl;
             readEnemy(name);
         }
+        else if(componentType == "EnemyAnimation")
+        {
+            std::cout << "EnemyAnimation" << std::endl;
+            readEnemyAnimation(name);
+        }
         else if(componentType == "Hideout")
         {
             std::cout << "Hideout" << std::endl;
@@ -749,6 +754,7 @@ void SceneReader::readEnemy(std::string name)
     auto kayak = objModulePtr->newEmptyComponent<Enemy>();
     kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     kayak->sightDistance = j.at(name).at("sightDistance").get<float>();
+    kayak->sightAngle = j.at(name).at("sightAngle").get<float>();
     kayak->detectionCounterMaxValue = j.at(name).at("detectionCounterMaxValue").get<int>();
     kayak->detectionPositiveStep = j.at(name).at("detectionPositiveStep").get<int>();
     kayak->detectionNegativeStep = j.at(name).at("detectionNegativeStep").get<int>();

@@ -3180,6 +3180,7 @@
     },
     "component222": {
         "detectionCounter": 0,
+        "sightAngle": 0.78539816339,
         "detectionCounterMaxValue": 500,
         "detectionNegativeStep": 1,
         "detectionPositiveStep": 1,

@@ -490,11 +490,11 @@ void SceneWriter::saveEnemy(Enemy* enemyPtr)
 {
     j[name]["type"] = "Enemy";
     j[name]["sightDistance"] = enemyPtr->sightDistance;
+    j[name]["sightAngle"] = enemyPtr->sightAngle;
     j[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
     j[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
     j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
     j[name]["detectionCounter"] = enemyPtr->detectionCounter;
-
 }
 
 void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
