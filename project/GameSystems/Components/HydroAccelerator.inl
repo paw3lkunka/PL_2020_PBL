@@ -7,15 +7,19 @@
 
 #include "Rigidbody.inl"
 
+//TODO documentation
 struct HydroAccelerator : public Component
 {
     HydroAccelerator() = default;
     ~HydroAccelerator() = default;
 
+//TODO documentation
     Rigidbody* rigidbody;
 
+//TODO documentation
     glm::vec3 velocity = glm::vec3(0.0f);
 
+//TODO documentation
     glm::vec3 angularVelocity = glm::vec3(0.0f);
 };
 

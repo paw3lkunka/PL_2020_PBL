@@ -65,6 +65,7 @@ public:
 protected:
 private:
 
+//TODO documentation
     void processAttach(BoneAttachData data);
     
     Transform* transformPtr;

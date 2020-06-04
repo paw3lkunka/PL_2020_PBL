@@ -13,6 +13,7 @@ struct Paddle;
 struct HydroAccelerator;
 class Message;
 
+//TODO documentation
 class PaddleControlSystem : public System, public IMsgReceiver
 {
 public:

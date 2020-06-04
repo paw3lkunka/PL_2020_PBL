@@ -3,11 +3,13 @@
 
 #include "Component.hpp"
 
-//TODO documentation
+/**
+ * @brief Store all data defining 'look at' animation.
+ */
 struct EnemyAnimation : public Component
 {
     /**
-     * @brief Deterines speed of 'look at' animation
+     * @brief Deterines speed of 'look at' animation.
      *  < 0  - undefined
      *   0   - no move
      * [0,1] - animation

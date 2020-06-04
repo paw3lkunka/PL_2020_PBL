@@ -12,6 +12,7 @@ enum class CameraProjection { Perspective, Orthographic };
  * Elements which must be initialized:
  * aspectRatio, nearPlane/nearDist, farPlane/farDist, fov/fieldOfView/orthographicSize
  */
+//TODO BRIEF
 struct ViewFrustum
 {
     // Current view position - updated every frame for main camera

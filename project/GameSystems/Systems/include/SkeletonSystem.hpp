@@ -9,6 +9,7 @@
 struct Skeleton;
 struct Transform;
 
+//TODO documentation
 class SkeletonSystem : public System
 {
 public:
@@ -44,6 +45,7 @@ public:
     void frameUpdate();
     
 private:
+//TODO documentation
     void processHierarchy(Entity* boneEntity);
     
     std::map<int, glm::mat4> boneTransforms;

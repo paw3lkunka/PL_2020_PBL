@@ -8,6 +8,7 @@
  */
 struct Hideout : public Component
 {
+    //This class is empty, this is fine.
 };
 
 #endif

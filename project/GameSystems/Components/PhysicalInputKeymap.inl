@@ -9,7 +9,6 @@
 
 /**
  * @brief keymap used by PhysicalBasedInputSystem
- * 
  */
 struct PhysicalInputKeymap : public Component
 {

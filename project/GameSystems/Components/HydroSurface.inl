@@ -3,6 +3,7 @@
 
 #include "Component.hpp"
 
+//TODO documentation
 struct HydroSurface : public Component
 {
     //bool isMoving;

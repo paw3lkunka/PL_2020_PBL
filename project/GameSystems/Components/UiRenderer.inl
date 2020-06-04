@@ -5,6 +5,7 @@
 #include "Material.hpp"
 #include "mesh/UiQuad.hpp"
 
+//TODO documentation
 struct UiRenderer : public Component
 {
     UiRenderer()
@@ -13,9 +14,12 @@ struct UiRenderer : public Component
     }
     virtual ~UiRenderer() = default;
 
+//TODO documentation
     glm::mat3 modelMatrix;
 
+//TODO documentation
     Material* material;
+//TODO documentation
     UiQuad mesh;
 };
 
