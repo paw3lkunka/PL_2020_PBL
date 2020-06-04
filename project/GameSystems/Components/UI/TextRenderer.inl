@@ -20,7 +20,7 @@ struct TextRenderer : public Component
 //TODO documentation
     Material* material;
 //TODO documentation
-    TextMesh mesh;
+    TextMesh mesh = TextMesh();
 };
 
 #endif // _TEXTRENDERER_INL

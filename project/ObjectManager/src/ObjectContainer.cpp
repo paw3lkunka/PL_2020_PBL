@@ -231,6 +231,18 @@ Material* ObjectContainer::getMaterialFromName(const char* name)
     return nullptr;
 }
 
+Texture* ObjectContainer::getTexturePtrByFilePath(const char* filePath)
+{
+    for(Texture* t : textures)
+    {
+        if(objModule->compareStrings(t->filePath.c_str(), filePath))
+        {
+            return t;
+        }
+    }
+    return nullptr;
+}
+
 Font* ObjectContainer::getFontFromSerializationID(unsigned int serializationID)
 {
     for(auto f : fonts)

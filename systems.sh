@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_path="$(dirname "$0")/project/GameSystems/Systems/include"
+_path="$(dirname "$0")/project/GameSystems/Systems"
 
 _file1="$(dirname "$0")/project/Autogen/include/Systems.inc"
 _guardian1="SYSTEMS_INC_AUTOGEN"

@@ -438,7 +438,7 @@ void RendererModule::render()
                 opaqueQueue.push_back(&(packet.second));
             }
         }
-
+        //TODO: Remove if it's useless
         //std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
 
         // ? +++++ Sort the render queue +++++

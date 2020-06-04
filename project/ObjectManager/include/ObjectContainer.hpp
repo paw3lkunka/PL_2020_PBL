@@ -141,6 +141,14 @@ public:
     Material* getMaterialFromName(const char* name);
 
     /**
+     * @brief Get the Texture Ptr By Name 
+     * 
+     * @param name of texture
+     * @return Texture* pointer or nullptr if can't find
+     */
+    Texture* getTexturePtrByFilePath(const char* filePath);
+
+    /**
      * @brief Get the Font by SerializationID
      * 
      * @param serializationID of font
