@@ -6,11 +6,11 @@
 class Enemy;
 class Transform;
 
-class EnemiesSightSystem : public System
+class EnemiesSystem : public System
 {
     public:
-        EnemiesSightSystem() = default;
-        virtual ~EnemiesSightSystem() = default;
+        EnemiesSystem() = default;
+        virtual ~EnemiesSystem() = default;
 
     protected:
         virtual bool assertEntity(Entity* entity);
@@ -20,7 +20,10 @@ class EnemiesSightSystem : public System
     private:
         Enemy* enemyPtr;
         Transform* enemyTransformPtr;
-        Transform* kayakTransformPtr;
+        EnemyAnimation* enemyAnimationPtr;
+
+        void detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos);
+        void animation(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos);
 };
 
 #endif /* !ENEMIESSIGTHSYSTEM_HPP_ */

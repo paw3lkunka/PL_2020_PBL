@@ -72,6 +72,7 @@ private:
     void drawRigidbody(Rigidbody* rBodyPtr);
     void drawKayak(Kayak* kayakPtr);
     void drawEnemy(Enemy* enemyPtr);
+    void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
 
     // ! Helper functions
     /**

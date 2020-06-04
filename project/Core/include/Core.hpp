@@ -287,7 +287,7 @@ class Core
         static UiButtonSystem uiButtonSystem;
 
         //TODO documentation
-        static EnemiesSightSystem enemiesSightSystem;
+        static EnemiesSystem enemiesSystem;
 
 #pragma endregion
 

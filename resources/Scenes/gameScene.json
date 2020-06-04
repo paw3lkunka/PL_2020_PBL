@@ -1,6 +1,6 @@
 {
     "Amounts": {
-        "components": 223,
+        "components": 225,
         "cubemaps": 1,
         "entities": 103,
         "fonts": 0,
@@ -3170,9 +3170,9 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
+            "x": 10.0,
+            "y": 20.0,
+            "z": 10.0
         },
         "serializationID": 391,
         "transform parentID": 0,
@@ -3185,8 +3185,19 @@
         "detectionPositiveStep": 1,
         "entity id": 102,
         "serializationID": 392,
-        "sightDistance": 200.0,
+        "sightDistance": 20.0,
         "type": "Enemy"
+    },
+    "component223": {
+        "entity id": 102,
+        "serializationID": 393
+    },
+    "component224": {
+        "entity id": 102,
+        "material": 363,
+        "mesh": 28,
+        "serializationID": 394,
+        "type": "MeshRenderer"
     },
     "cubemap000": {
         "backPath": "Resources/Textures/skybox_02/pz.png",
@@ -4144,7 +4155,9 @@
     "entity102": {
         "components": [
             391,
-            392
+            392,
+            393,
+            394
         ],
         "id": 102,
         "name": "TMP enemy",

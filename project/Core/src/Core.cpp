@@ -115,7 +115,24 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            ///Code...
+            auto* enemy = objectModule.newEntity(4,"TMP enemy");
+            {
+                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
+                    t->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
+                    t->setParent(&sceneModule.rootNode);
+
+                auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
+                    e->detectionCounterMaxValue = 500;
+                    e->sightDistance = 20.0f;
+
+                auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
+                    a->lerpParameter = 0.5f;
+
+                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                    mr->material = objectModule.getMaterialPtrByName("KULA");
+                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+            }
         }
 
         objectModule.saveScene("../resources/Scenes/gameScene.json");
@@ -186,7 +203,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
-    gameSystemsModule.addSystem(&enemiesSightSystem);
+    gameSystemsModule.addSystem(&enemiesSystem);
 
 #pragma endregion
 
@@ -327,4 +344,4 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
-EnemiesSightSystem Core::enemiesSightSystem;
+EnemiesSystem Core::enemiesSystem;

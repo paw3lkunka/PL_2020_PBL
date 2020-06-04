@@ -28,6 +28,9 @@ struct Enemy : public Component
     //TODO documentation
     int detectionCounter = 0;
 
+    //TODO documentation
+    bool notified = false;
+
 };
 
 #endif /* !ENEMY__ */

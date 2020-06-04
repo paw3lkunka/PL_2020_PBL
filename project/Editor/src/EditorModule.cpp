@@ -126,6 +126,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(EnemyAnimation* temp = entityPtr->getComponentPtr<EnemyAnimation>())
+    {
+        if(ImGui::CollapsingHeader("EnemyAnimation"))
+        {
+            drawEnemyAnimation(temp);
+        }
+    }
+
     if(RectTransform* temp = entityPtr->getComponentPtr<RectTransform>())
     {
         if(ImGui::CollapsingHeader("RectTransform"))
@@ -257,7 +265,7 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 
 void EditorModule::drawKayak(Kayak* kayakPtr)
 {
-    ImGui::Text(kayakPtr->isDetected ? "Detected," : "Not detected,");
+    ImGui::Text(kayakPtr->isDetected ? "Detected (%i enemies)." : "Not detected.", kayakPtr->isDetected);
     ImGui::Text(kayakPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", kayakPtr->isHidden);
 }
 
@@ -268,6 +276,11 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
+}
+
+void EditorModule::drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr)
+{
+    ImGui::SliderFloat("Lerp parameter", &enemyAnimationPtr->lerpParameter, 0.0f, 1.0f);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)
