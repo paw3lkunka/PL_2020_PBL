@@ -3,6 +3,9 @@
 
 #include "Component.hpp"
 
+/**
+ * @brief transparency sorting group for ui components
+ */
 struct UiSortingGroup : public Component
 {
     UiSortingGroup() = default;
