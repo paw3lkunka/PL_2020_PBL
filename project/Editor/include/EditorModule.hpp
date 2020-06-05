@@ -89,6 +89,7 @@ private:
     void drawButton(Button* button);
     void drawText(TextRenderer* textRenderer);
     void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
+    void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
 
     // ! Helper functions
     /**

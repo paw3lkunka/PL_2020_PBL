@@ -187,6 +187,7 @@ int Core::init()
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
     gameSystemsModule.addSystem(&enemySystem);
+    gameSystemsModule.addSystem(&sortingGroupSystem);
 
 #pragma endregion
 
@@ -328,3 +329,4 @@ HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
+SortingGroupSystem Core::sortingGroupSystem;

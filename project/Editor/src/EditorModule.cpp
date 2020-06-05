@@ -39,22 +39,22 @@ void EditorModule::setup()
     // * index for combo list
     currentItem = 0;
     enumValue = 0;
-    buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-    buttonShader = objectModule->getMaterialPtrByName("startMat")->getShaderPtr();
-    fontPtr = objectModule->getFontPtrByName("KosugiMaru-Regular");
-    textShader = objectModule->getMaterialPtrByName("TextMaterial")->getShaderPtr();
-    positionPointer = objectModule->newEntity(2, "pointerHelper");
-    {
-        UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
-        Material* mat = objectModule->newMaterial(buttonShader, "crossMat", RenderType::Transparent);
-        mat->setTexture("sprite", objectModule->getTexturePtrByFilePath("Resources/Sprites/cross.png"));
-        mat->setVec4("color", {1.0f, 0.0f, 1.0f, 0.9f});
-        uiR->material = mat;
+    // buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
+    // buttonShader = objectModule->getMaterialPtrByName("startMat")->getShaderPtr();
+    // fontPtr = objectModule->getFontPtrByName("KosugiMaru-Regular");
+    // textShader = objectModule->getMaterialPtrByName("TextMaterial")->getShaderPtr();
+    // positionPointer = objectModule->newEntity(2, "pointerHelper");
+    // {
+    //     UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
+    //     Material* mat = objectModule->newMaterial(buttonShader, "crossMat", RenderType::Transparent);
+    //     mat->setTexture("sprite", objectModule->getTexturePtrByFilePath("Resources/Sprites/cross.png"));
+    //     mat->setVec4("color", {1.0f, 0.0f, 1.0f, 0.9f});
+    //     uiR->material = mat;
 
-        RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
-        rt->getSizeModifiable() = {50, 50};
-        GetCore().uiModule.rootNodes.push_back(rt);
-    }
+    //     RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
+    //     rt->getSizeModifiable() = {50, 50};
+    //     GetCore().uiModule.rootNodes.push_back(rt);
+    // }
 }
 
 void EditorModule::drawEditor()
@@ -180,11 +180,19 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(UiSortingGroup* temp = entityPtr->getComponentPtr<UiSortingGroup>())
+    {
+        if(ImGui::CollapsingHeader("Sorting Group"))
+        {
+            drawSortingGroup(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 
-    drawMaker();
+    //drawMaker();
 }
 
 void EditorModule::onExit()
@@ -345,6 +353,11 @@ void EditorModule::drawText(TextRenderer* textRenderer)
 void EditorModule::drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr)
 {
     ImGui::SliderFloat("Lerp parameter", &enemyAnimationPtr->lerpParameter, 0.0f, 1.0f);
+}
+
+void EditorModule::drawSortingGroup(UiSortingGroup* sortingGroupPtr)
+{
+    ImGui::SliderFloat("Group Transparency: ", &sortingGroupPtr->groupTransparency, 0.0f, 1.0f);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)

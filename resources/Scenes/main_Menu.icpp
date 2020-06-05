@@ -73,8 +73,9 @@ objectModule.newEntity(2, "RiverFlow");
             ui->material = mat;
     }
 
-    objectModule.newEntity(1, "Menu_Buttons");
+    objectModule.newEntity(2, "Menu_Buttons");
     auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+    objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
     uiModule.rootNodes.push_back(buttonsRoot);
 
     objectModule.newEntity(3, "Start_Button");
