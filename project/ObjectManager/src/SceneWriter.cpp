@@ -254,6 +254,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveRectTransform(temp);
         }
+        else if(UiSortingGroup* temp = dynamic_cast<UiSortingGroup*>(objContainerPtr->components[i]))
+        {
+            saveUiSortingGroup(temp);
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
             j[name]["type"] = "Skeleton";
@@ -574,6 +578,11 @@ void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
 {
     j[name]["type"] = "HydroAccelerator";
     j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
+}
+void SceneWriter::saveUiSortingGroup(UiSortingGroup* componentPtr)
+{
+    j[name]["type"] = "UiSortingGroup";
+    j[name]["groupTransparency"] = componentPtr->groupTransparency;
 }
 
 #pragma endregion
