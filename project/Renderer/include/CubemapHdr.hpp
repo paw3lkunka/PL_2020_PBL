@@ -14,6 +14,7 @@ public:
             float* back,
             float* top,
             float* bottom);
+    CubemapHdr(unsigned int externalID);
     CubemapHdr() = default;
     virtual ~CubemapHdr() = default;
 

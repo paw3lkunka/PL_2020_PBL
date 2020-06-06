@@ -26,6 +26,7 @@ uniform sampler2D normal;
 uniform sampler2D occRouMet; // r - occlusion, g - roughness, b - metallic
 
 uniform sampler2D directionalShadowMap;
+uniform samplerCube irradianceMap;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -55,6 +56,7 @@ float DistributionGGX(vec3 normal, vec3 halfway, float roughness);
 float GeometrySmith(vec3 normal, vec3 viewDir, vec3 lightDir, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 
 vec3 calcDirectionalLight(DirectionalLight light);
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir);
@@ -88,8 +90,12 @@ void main()
 // Directional light ------------------------------------------------------------------------
 	Lo += calcDirectionalLight(directionalLight);
 
-// Makeshift ambient lightning
-	vec3 ambient = vec3(0.01, 0.01, 0.01) * albedo;// * ao;//directionalLight.ambient.rgb * albedo * ao;
+// Ambient light comes from convoluted cubemap irradiance
+	vec3 kS = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+	vec3 kD = 1.0 - kS;
+	vec3 irradiance = texture(irradianceMap, N).rgb;
+	vec3 diff = irradiance * albedo;
+	vec3 ambient = (kD * diff) * ao;
 	vec3 color = ambient + Lo;
 
 // HDR tonemapping
@@ -207,4 +213,9 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
 	cosTheta = min(cosTheta, 1.0f);
 	return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
+}
+
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+	return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }

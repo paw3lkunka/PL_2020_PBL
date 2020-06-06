@@ -4,6 +4,7 @@
 #include "mesh/MeshQuad.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include "CubemapHdr.hpp"
 #include "Core.hpp"
 #include "DistanceComparer.hpp"
 #include "UiRenderer.inl"
@@ -26,6 +27,7 @@ RendererModule::~RendererModule()
 {
     delete internalErrorMat;
     delete internalShaderError;
+    delete irradianceMap;
     delete directionalDepth;
 }
 
@@ -405,6 +407,7 @@ void RendererModule::render()
         {
             // TODO: Send directional light shadow map via ubo
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
         }
@@ -418,9 +421,6 @@ void RendererModule::render()
             glBindVertexArray(skyboxVao);
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
-            skyboxMaterial->getShaderPtr()->setInt("cubemap", 0);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
             glDepthFunc(GL_LESS);
@@ -445,9 +445,6 @@ void RendererModule::render()
         glDisable(GL_DEPTH_TEST);
         while(!uiQueue.empty())
         {
-            //static int temp = 0;
-            //temp %= 127;
-            //int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
             uiQueue.front()->render(orthoScreen);
             uiQueue.pop_front();
         }
@@ -699,8 +696,9 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // ? +++++ Generate textures for convoluted environment map +++++
-    glGenTextures(1, &irradianceMap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+    unsigned int irrID;
+    glGenTextures(1, &irrID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, irrID);
     for (size_t i = 0; i < 6; i++)
     {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, dimensions, dimensions, 0, GL_RGB, GL_FLOAT, nullptr);
@@ -710,6 +708,8 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    irradianceMap = new CubemapHdr(irrID);
 
     glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
     glm::mat4 captureViews[] =
@@ -739,7 +739,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     for (size_t i = 0; i < 6; i++)
     {
         irradianceShader.setMat4("view", captureViews[i]);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrID, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawCube();

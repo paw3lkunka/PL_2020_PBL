@@ -30,6 +30,7 @@ struct RendererModuleCreateInfo
 };
 
 class GLFWwindow;
+class CubemapHdr;
 
 /**
  * @brief Renderer module, handles render queues and processes draw calls
@@ -82,7 +83,8 @@ private:
     // * Skybox variables
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial = nullptr;
-    unsigned int irradianceMap;
+    CubemapHdr* irradianceMap = nullptr;
+    //unsigned int irradianceMap;
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers

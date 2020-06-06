@@ -18,6 +18,11 @@ CubemapHdr::CubemapHdr(TextureCreateInfo createInfo,
     init();
 }
 
+CubemapHdr::CubemapHdr(unsigned int externalID) : Texture(nullptr, {}, "")
+{
+    id = externalID;
+}
+
 void CubemapHdr::init()
 {
     glGenTextures(1, &id);
