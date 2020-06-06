@@ -46,7 +46,7 @@ public:
      * 
      * @param textureUnit Texture unit to set
      */
-    virtual void bind(int textureUnit);
+    virtual void bind(int textureUnit) const;
     /**
      * @brief Get the the texture ID
      * 

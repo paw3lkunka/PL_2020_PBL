@@ -74,7 +74,7 @@ private:
     float pointToPlaneDistance(glm::vec3& pointOnPlane, glm::vec3& planeNormal, glm::vec3 point);
     void drawBounds(Bounds& bounds, Material& material, glm::mat4& model, glm::mat4& VP);
     void drawFrustum(glm::mat4& VP);
-    void generateCubemapConvolution(Texture* cubemap, unsigned int dimensions);
+    void generateCubemapConvolution(const Texture* cubemap, unsigned int dimensions);
     void drawCube();
 
     GLFWwindow* window = nullptr;

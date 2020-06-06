@@ -26,7 +26,7 @@ public:
      * 
      * @param textureUnit texture unit id
      */
-    virtual void bind(int textureUnit);
+    virtual void bind(int textureUnit) const;
 
     std::string frontPath;
     std::string leftPath;

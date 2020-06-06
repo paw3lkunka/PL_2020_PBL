@@ -39,7 +39,7 @@ void CubemapHdr::init()
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-void CubemapHdr::bind(int textureUnit)
+void CubemapHdr::bind(int textureUnit) const
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_CUBE_MAP, id);

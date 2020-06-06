@@ -21,7 +21,7 @@ public:
     virtual ~Cubemap() = default;
 
     virtual void init();
-    virtual void bind(int textureUnit);
+    virtual void bind(int textureUnit) const;
 
     std::string frontPath;
     std::string leftPath;

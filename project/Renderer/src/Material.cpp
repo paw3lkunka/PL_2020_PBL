@@ -77,8 +77,6 @@ void Material::use()
             shader->use();
         }
 
-        // TODO: Handle view and projection by UBO
-
         int i = 0;
         // * ===== Texture samplers =====
         for(std::pair<std::string, Texture*> texture : textures)
@@ -241,3 +239,67 @@ int Material::getInt(std::string name)
     }
 }
 
+float Material::getFloat(std::string name)
+{
+    auto iter = floats.find(name);
+    if (iter != floats.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        return 0.0f;
+    }
+}
+
+const glm::vec3* Material::getVec3Ptr(std::string name)
+{
+    auto iter = vec3s.find(name);
+    if (iter != vec3s.end())
+    {
+        return &iter->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+const glm::vec4* Material::getVec4Ptr(std::string name)
+{
+    auto iter = vec4s.find(name);
+    if (iter != vec4s.end())
+    {
+        return &iter->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+const glm::mat4* Material::getMat4Ptr(std::string name)
+{
+    auto iter = mat4s.find(name);
+    if (iter != mat4s.end())
+    {
+        return &iter->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+const Texture* Material::getTexturePtr(std::string name)
+{
+    auto iter = textures.find(name);
+    if (iter != textures.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}

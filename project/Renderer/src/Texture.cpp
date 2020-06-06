@@ -30,7 +30,7 @@ void Texture::init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, info.magFilter);
 }
 
-void Texture::bind(int textureUnit)
+void Texture::bind(int textureUnit) const
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_2D, id);

@@ -26,7 +26,6 @@ RendererModule::~RendererModule()
 {
     delete internalErrorMat;
     delete internalShaderError;
-    delete simpleDepth;
     delete directionalDepth;
 }
 
@@ -205,7 +204,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
 
-        //generateCubemapConvolution()
+        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
     }
 
 
@@ -253,9 +252,6 @@ void RendererModule::render()
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
         {
-            // I made copy instead of sneaky modification of matrix in transform.
-            // That was super unsafe, and now i see, that encapsulating matrices inside transform was a good idea.
-            //                                                                                  ~ Andrzej
             glm::mat4 lightMatrix = *directionalLight->modelMatrix;
             lightMatrix[3].x = cameraMain->getFrustum().position.x;
             lightMatrix[3].y = cameraMain->getFrustum().position.y;
@@ -422,6 +418,9 @@ void RendererModule::render()
             glBindVertexArray(skyboxVao);
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+            skyboxMaterial->getShaderPtr()->setInt("cubemap", 0);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
             glDepthFunc(GL_LESS);
@@ -686,8 +685,9 @@ void RendererModule::calculateFrustumPoints()
     frustumPoints[7] = farCenter + (frustum.up * frustum.Hfar/2.0f) - (frustum.right * frustum.Wfar/2.0f); // -1, 1, 1
 }
 
-void RendererModule::generateCubemapConvolution(Texture* cubemap, unsigned int dimensions)
+void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned int dimensions)
 {
+    // ? +++++ Generate renderbuffers +++++
     unsigned int captureFBO, captureRBO;
     glGenFramebuffers(1, &captureFBO);
     glGenRenderbuffers(1, &captureRBO);
@@ -696,7 +696,9 @@ void RendererModule::generateCubemapConvolution(Texture* cubemap, unsigned int d
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+    // ? +++++ Generate textures for convoluted environment map +++++
     glGenTextures(1, &irradianceMap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
     for (size_t i = 0; i < 6; i++)
@@ -720,15 +722,20 @@ void RendererModule::generateCubemapConvolution(Texture* cubemap, unsigned int d
         glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
     };
 
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
+
     Shader irradianceShader(BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
     irradianceShader.use();
     irradianceShader.setInt("environmentMap", 0);
     irradianceShader.setMat4("projection", captureProjection);
-
     cubemap->bind(0);
 
     glViewport(0, 0, dimensions, dimensions);
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glDisable(GL_CULL_FACE);
+    glDepthFunc(GL_LEQUAL);
     for (size_t i = 0; i < 6; i++)
     {
         irradianceShader.setMat4("view", captureViews[i]);
@@ -737,6 +744,8 @@ void RendererModule::generateCubemapConvolution(Texture* cubemap, unsigned int d
 
         drawCube();
     }
+    glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
