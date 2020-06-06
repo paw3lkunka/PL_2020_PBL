@@ -195,6 +195,12 @@ add_library(imgui
         ${IMGUI_HEADERS}
 )
 
+add_library(xoshiro
+    STATIC
+        "libs/xoshiro/xoshiro256starstar.c"
+        "libs/xoshiro/xoshiro.h"
+)
+
 include_directories( 
     project
     project/Autogen/include
@@ -229,6 +235,7 @@ include_directories(
     libs/json/single_include/nlohmann
     libs/imgui/
     libs/freetype2/include
+    libs/xoshiro/
     build/libs/assimp/include
 )
 
@@ -245,6 +252,7 @@ target_link_libraries(
     PUBLIC nlohmann_json::nlohmann_json
     PUBLIC imgui
     PUBLIC freetype
+    PUBLIC xoshiro
 )
 
 target_compile_options(lib PUBLIC -Wno-volatile)

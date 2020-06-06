@@ -9,6 +9,7 @@
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
 #include "CollisionDataStructures.inl"
+#include "EnemyDataStructures.inl"
 #include "mesh/MeshCustom.hpp"
 #include "AudioFile.hpp"
 #include "Components.inc"
@@ -231,6 +232,28 @@ void ConsoleModule::receiveMessage(Message msg)
     }
         break;
 
+    case Event::PLAYER_DETECTED:
+    {
+        auto EnemyPtr = msg.getValue<Component*>();
+        std::cout << "PLAYER_DETECTED by: " << Name(EnemyPtr) << std::endl;
+    }
+        break;
+        
+    case Event::PLAYER_ESCAPED:
+    {
+        auto EnemyPtr = msg.getValue<Component*>();
+        std::cout << "PLAYER_ESCAPED from: " << Name(EnemyPtr) << std::endl;
+    }
+        break;
+        
+    case Event::PLAYER_ATTACKED:
+    {
+        auto data = msg.getValue<AttackData>();
+        std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
+                << (data.success ? " , un" : ", ") << "successfull, "
+                << "direction: " << glm::to_string(data.direction) << std::endl;
+    }
+        break;
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
         break;

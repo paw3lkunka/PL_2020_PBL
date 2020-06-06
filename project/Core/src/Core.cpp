@@ -1,6 +1,8 @@
 #include "Core.hpp"
 #include "imgui.h"
 
+#include "xoshiro.h"
+
 #include "Components.inc"
 #include "Systems.inc"
 #include "MomentOfInertia.hpp"
@@ -51,6 +53,8 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 
 int Core::init()
 {
+    xoshiro_Init();
+
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;
@@ -310,6 +314,69 @@ void Core::cleanup()
 void Core::close()
 {
     glfwSetWindowShouldClose(window,true);
+}
+
+int Core::randomInt()
+{
+    return xoshiro_next();
+}
+
+
+int Core::randomInt(int max)
+{
+    return xoshiro_next() % (max + 1);
+}
+
+int Core::randomInt(int min, int max)
+{
+    return min + (xoshiro_next() % (max + 1 - min));
+}
+
+float Core::randomFloat01R()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);
+
+    return number.f - 1.0f;
+}
+float Core::randomFloat01L()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);;
+
+    return 2.0f - number.f;
+}
+
+float Core::randomFloatL(float max)
+{
+    return std::lerp(0, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float max)
+{
+    return std::lerp(0, max, randomFloat01R());
+}
+
+float Core::randomFloatL(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01R());
 }
 
 CameraSystem Core::cameraSystem;
