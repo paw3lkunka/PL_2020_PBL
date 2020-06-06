@@ -127,10 +127,19 @@ enum class Event : unsigned int
 #pragma endregion
 
 #pragma region UI Events
-#pragma region Button
-    /// Load new scene notification, Data: path to new scene;
-    LOAD_SCENE,
+    #pragma region Button
+        /// Load new scene notification, Data: path to new scene.
+        LOAD_SCENE,
+    #pragma endregion
 #pragma endregion
+
+#pragma region Gameplay
+    // Kayak was detected by enemy, Data: Enemy* pointer to enemy.
+    PLAYER_DETECTED, 
+    // Kayak escaped from enemy, Data: Enemy* pointer to enemy.
+    PLAYER_ESCAPED,
+    // Kayak was hitten by enemy, Data: AttackData { Enemy* pointer to enemy, vec3 direction, bool success}.
+    PLAYER_ATTACKED,
 #pragma endregion
 
     // used to define ranges of values
@@ -148,6 +157,10 @@ enum class Event : unsigned int
     RESOURCES_LAST = SETUP_BONES,
     COLLISIONS_FIRST = COLLSION_DETECT,
     COLLISIONS_LAST = TRIGGER_EXIT,
+    UI_FIRST = LOAD_SCENE,
+    UI_LAST = LOAD_SCENE,
+    GAMEPLAY_FIRST = PLAYER_DETECTED,
+    GAMEPLAY_LAST = PLAYER_ATTACKED,
 #pragma endregion
 
 };
