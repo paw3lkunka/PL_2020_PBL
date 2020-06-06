@@ -11,7 +11,10 @@
  */
 struct RectTransform : public Component
 {
-    RectTransform() = default;
+    RectTransform()
+    {
+        children.clear();
+    }
     virtual ~RectTransform() = default;
 
     /**

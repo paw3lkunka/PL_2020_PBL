@@ -60,6 +60,7 @@ private:
     void readTextRenderer(std::string name);
     void readRectTransform(std::string name);
     void readButton(std::string name);
+    void readUiSortingGroup(std::string name);
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);

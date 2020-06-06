@@ -855,6 +855,14 @@ void SceneReader::readButton(std::string name)
     assignToEntity(name, button);
 }
 
+void SceneReader::readUiSortingGroup(std::string name)
+{
+    auto sortingGroup = objModulePtr->newEmptyComponent<UiSortingGroup>();
+    sortingGroup->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    sortingGroup->groupTransparency = j.at(name).at("groupTransparency").get<float>();
+    assignToEntity(name, sortingGroup);
+}
+
 void SceneReader::assignToEntity(std::string name, Component* component)
 {
     unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();

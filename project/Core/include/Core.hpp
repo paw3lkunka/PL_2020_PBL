@@ -253,6 +253,7 @@ class Core
         static HideoutSystem hideoutSystem;
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
+        static SortingGroupSystem sortingGroupSystem;
 
 #pragma endregion
 

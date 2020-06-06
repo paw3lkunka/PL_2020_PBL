@@ -116,7 +116,7 @@ public:
     /// @brief Get vec3 of given name
     glm::vec3& getVec3(std::string name);
     /// @brief Get vec4 of given name
-    glm::vec4& getVec4(std::string name);
+    const glm::vec4& getVec4(std::string name);
     /// @brief Get mat4 of given name
     glm::mat4& getMat4(std::string name);
 

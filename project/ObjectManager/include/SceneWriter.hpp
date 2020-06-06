@@ -81,6 +81,7 @@ private:
     void saveRectTransform(RectTransform* componentPtr);
     void saveButton(Button* componentPtr);
     void saveHydroAccelerator(HydroAccelerator* componentPtr);
+    void saveUiSortingGroup(UiSortingGroup* componentPtr);
 
     // ? saving assets
     void saveMaterial(Material* assetPtr);
