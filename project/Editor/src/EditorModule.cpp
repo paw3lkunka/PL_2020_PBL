@@ -134,6 +134,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Camera* temp = entityPtr->getComponentPtr<Camera>())
+    {
+        if(ImGui::CollapsingHeader("Camera"))
+        {
+            drawCamera(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -268,6 +276,12 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
+}
+
+void EditorModule::drawCamera(Camera* cameraPtr)
+{
+    ImGui::DragFloat("Exposure", &cameraPtr->exposure);
+    ImGui::DragFloat("Fov", &cameraPtr->getFrustumModifiable().fieldOfView);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)

@@ -50,12 +50,12 @@ TextureCreateInfo i = {};
 i.minFilter = GL_LINEAR;
 i.magFilter = GL_LINEAR;
 i.wrapMode= GL_CLAMP_TO_EDGE;
-CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_03/nz.hdr", 
-                                                        "Resources/Textures/skybox_03/nx.hdr", 
-                                                        "Resources/Textures/skybox_03/px.hdr",
-                                                        "Resources/Textures/skybox_03/pz.hdr",
-                                                        "Resources/Textures/skybox_03/py.hdr",
-                                                        "Resources/Textures/skybox_03/ny.hdr");
+CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                        "Resources/Textures/skybox_02/nx.hdr", 
+                                                        "Resources/Textures/skybox_02/px.hdr",
+                                                        "Resources/Textures/skybox_02/pz.hdr",
+                                                        "Resources/Textures/skybox_02/py.hdr",
+                                                        "Resources/Textures/skybox_02/ny.hdr");
 
 auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 

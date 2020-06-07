@@ -111,12 +111,20 @@ void RendererModule::receiveMessage(Message msg)
 
         case Event::WINDOW_RESIZED:
             glm::ivec2 size = msg.getValue<glm::ivec2>();
+            // Hdr framebuffers
             glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
             glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
+            // Bloom framebuffers
+            glBindTexture(GL_TEXTURE_2D, pingpongBuffer[0]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glBindTexture(GL_TEXTURE_2D, pingpongBuffer[1]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glBindTexture(GL_TEXTURE_2D, 0);
             break;
     }
 }
@@ -155,7 +163,9 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     internalShaderError = new Shader(BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
-    hdrShader = new Shader(BuiltInShaders::screenSpaceQuadVertex, BuiltInShaders::hdrFragmentShader, nullptr, false);
+    //hdrShader = new Shader(BuiltInShaders::screenSpaceQuadVertex, BuiltInShaders::hdrFragmentShader, nullptr, false);
+    hdrShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/BloomCombine.frag");
+    blurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag");
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -217,7 +227,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
 
-        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
+        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 64);
     }
 
 
@@ -252,6 +262,13 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    // Generate bright color attachment
+    glGenTextures(1, &hdrBrightBuffer);
+    glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     // Generate depth renderbuffer
     glGenRenderbuffers(1, &rboDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
@@ -260,13 +277,36 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     // Attach buffers
     glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, hdrColorBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, hdrBrightBuffer, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+    unsigned int attachments[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, attachments);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         std::cerr << "Hdr framebuffer not complete!\n";
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // * ===== Framebuffers for ping pong gaussian blur =====
+    glGenFramebuffers(2, pingpongFBO);
+    glGenTextures(2, pingpongBuffer);
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
+        glBindTexture(GL_TEXTURE_2D, pingpongBuffer[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongBuffer[i], 0);
+    }
+    
 }
 
 void RendererModule::render()
@@ -470,14 +510,38 @@ void RendererModule::render()
             transparentQueue.pop_front();
         }
 
-        // ? +++++ Forward color pass end ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // ? +++++ Rendering bloom ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        bool horizontal = true, firstIteration = true;
+        int amount = 10;
+
+        blurShader->use();
+        for (size_t i = 0; i < amount; i++)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
+            blurShader->setInt("horizontal", horizontal);
+            glBindTexture(GL_TEXTURE_2D, firstIteration ? hdrBrightBuffer : pingpongBuffer[!horizontal]);
+            
+            drawQuad();
+            
+            horizontal = !horizontal;
+            if (firstIteration)
+            {
+                firstIteration = false;
+            }
+        }
+        
+        // ? +++++ Render to main frame ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // ! ----- Render screen space quad -----
         hdrShader->use();
-        hdrShader->setInt("hdrBuffer", 0);
+        hdrShader->setInt("scene", 0);
+        hdrShader->setInt("bloom", 1);
+        hdrShader->setFloat("exposure", cameraMain->exposure);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, pingpongBuffer[!horizontal]);
         drawQuad();
 
         // ? +++++ Overlay UI rendering loop +++++

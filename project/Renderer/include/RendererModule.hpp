@@ -79,10 +79,14 @@ private:
     void drawCube();
     void drawQuad();
 
-    // * ===== Hdr framebuffer =====
+    // * ===== Hdr framebuffer and postprocessing =====
     unsigned int hdrFBO, rboDepth;
     unsigned int hdrColorBuffer;
+    unsigned int hdrBrightBuffer;
+    unsigned int pingpongFBO[2];
+    unsigned int pingpongBuffer[2];
     Shader* hdrShader;
+    Shader* blurShader;
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
