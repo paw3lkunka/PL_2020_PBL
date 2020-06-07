@@ -5,7 +5,10 @@ out vec4 FragColor;
 in vec2 uv;
 
 uniform sampler2D scene;
-uniform sampler2D bloom;
+uniform sampler2D bloom0;
+uniform sampler2D bloom1;
+uniform sampler2D bloom2;
+uniform sampler2D bloom3;
 
 uniform float exposure;
 
@@ -14,7 +17,7 @@ void main()
     const float gamma = 2.2;
 
     vec3 hdrColor = texture(scene, uv).rgb;
-    vec3 bloomColor = texture(bloom, uv).rgb;
+    vec3 bloomColor = texture(bloom0, uv).rgb + texture(bloom1, uv).rgb + texture(bloom2, uv).rgb + texture(bloom3, uv).rgb;
 
     hdrColor += bloomColor; // Additive blending
 

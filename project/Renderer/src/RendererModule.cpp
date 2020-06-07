@@ -305,7 +305,29 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongBuffer[i], 0);
     }
-    
+
+    glGenFramebuffers(2, blurFBO);
+    glGenTextures(8, blurBuffers);
+
+    for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
+    {
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / (2*j), GetCore().windowHeight / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / (2*j), GetCore().windowHeight / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
 }
 
 void RendererModule::render()
@@ -516,34 +538,62 @@ void RendererModule::render()
         bool horizontal = true, firstIteration = true;
         int amount = 10;
 
+        // Generate minified textures from bright buffer
+        glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
         blurShader->use();
-        for (size_t i = 0; i < amount; i++)
+        for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
         {
-            glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
-            blurShader->setInt("horizontal", horizontal);
-            glBindTexture(GL_TEXTURE_2D, firstIteration ? hdrBrightBuffer : pingpongBuffer[!horizontal]);
-            
-            drawQuad();
-            
-            horizontal = !horizontal;
-            if (firstIteration)
+            glViewport(0, 0, Core::windowWidth / (2*j), Core::windowHeight / (2*j));
+
+            glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[0]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i], 0);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[1]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i + 1], 0);
+
+            for (size_t k = 0; k < amount; k++)
             {
-                firstIteration = false;
+                glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[horizontal]);
+                blurShader->setInt("horizontal", horizontal);
+                glBindTexture(GL_TEXTURE_2D, firstIteration ? hdrBrightBuffer : blurBuffers[i + !horizontal]);
+                
+                drawQuad();
+                
+                horizontal = !horizontal;
+                if (firstIteration)
+                {
+                    firstIteration = false;
+                }
             }
+
+            firstIteration = true;
+            horizontal = true;
         }
-        
+
         // ? +++++ Render to main frame ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // ! ----- Render screen space quad -----
         hdrShader->use();
         hdrShader->setInt("scene", 0);
-        hdrShader->setInt("bloom", 1);
+        hdrShader->setInt("bloom0", 1);
+        hdrShader->setInt("bloom1", 2);
+        hdrShader->setInt("bloom2", 3);
+        hdrShader->setInt("bloom3", 4);
         hdrShader->setFloat("exposure", cameraMain->exposure);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, pingpongBuffer[!horizontal]);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[0]);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[2]);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[4]);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[6]);
         drawQuad();
 
         // ? +++++ Overlay UI rendering loop +++++
@@ -584,44 +634,25 @@ void RendererModule::calculateFrustumPlanes()
 
     glm::vec3 aux, point, normal;
 
-    // std::cout << "==================================================================================\n";
-
     frustumPlanes[NEARP][NORMAL] = frustum.front;
     frustumPlanes[NEARP][POINT] = nearCenter;
-    // std::cout << "Wektor((" << -frustum.front.x << ", " << -frustum.front.y << ", " << -frustum.front.z << "))\n(" 
-    // << nearCenter.x << ", " << nearCenter.y << ", " << nearCenter.z << ")\n";
 
     frustumPlanes[FARP][NORMAL] = -frustum.front;
     frustumPlanes[FARP][POINT] = farCenter;
-    // std::cout << "Wektor((" << frustum.front.x << ", " << frustum.front.y << ", " << frustum.front.z << "))\n(" 
-    // << farCenter.x << ", " << farCenter.y << ", " << farCenter.z << ")\n";
 
     point = nearCenter + frustum.up * frustum.Hnear / 2.0f;
-    //std::cout << "POINT: " << glm::to_string(point) << '\n';
-    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
     aux = point - frustum.position;
-    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
-    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
     normal = glm::normalize(glm::cross(aux, frustum.right));
     frustumPlanes[TOP][NORMAL] = normal;
     frustumPlanes[TOP][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter - frustum.up * frustum.Hnear / 2.0f;
-    //std::cout << "POINT: " << glm::to_string(point) << '\n';
-    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
     aux = point - frustum.position;
-    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
-    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
-    //normal = -glm::cross(frustum.right, aux);
     normal = glm::normalize(glm::cross(frustum.right, aux));
     frustumPlanes[BOTTOM][NORMAL] = normal;
     frustumPlanes[BOTTOM][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter - frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
@@ -629,18 +660,13 @@ void RendererModule::calculateFrustumPlanes()
     normal = glm::normalize(glm::cross(aux, frustum.up));
     frustumPlanes[LEFT][NORMAL] = normal;
     frustumPlanes[LEFT][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter + frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
     aux = glm::normalize(aux);
-    // normal = -glm::cross(frustum.up, aux);
     normal = glm::normalize(glm::cross(frustum.up, aux));
     frustumPlanes[RIGHT][NORMAL] = normal;
     frustumPlanes[RIGHT][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 }
 
 bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
