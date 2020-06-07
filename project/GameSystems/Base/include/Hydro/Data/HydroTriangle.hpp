@@ -7,7 +7,7 @@ struct HydroTriangle
 {
     HydroTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c);
     HydroTriangle(glm::vec3 a, glm::vec3 b, glm::vec3 c, float hA, float hB, float hC);
-    virtual HydroTriangle() = default;
+    virtual ~HydroTriangle() = default;
     
     glm::vec3 A;
     glm::vec3 B;

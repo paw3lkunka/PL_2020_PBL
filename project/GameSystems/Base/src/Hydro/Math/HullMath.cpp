@@ -28,17 +28,15 @@ HullTriangles HullMath::cutHull(std::vector<HydroTriangle> triangles)
 
 void HullMath::processTriangle(HydroTriangle triangle)
 {
-    std::pair<glm::vec3, float> vertices[] =
-    {
-        std::pair(triangle.A, triangle.hA),
-        std::pair(triangle.B, triangle.hB),
-        std::pair(triangle.C, triangle.hC)
-    };
+    std::vector< std::pair<glm::vec3, float> > vertices(3);
+    vertices.push_back( std::pair(triangle.A, triangle.hA) );
+    vertices.push_back( std::pair(triangle.B, triangle.hB) );
+    vertices.push_back( std::pair(triangle.C, triangle.hC) );
 
     std::sort
     (
-        vertices[0], 
-        vertices[2], 
+        vertices.begin(), 
+        vertices.end(), 
         [](const std::pair<glm::vec3, float>& v1, const std::pair<glm::vec3, float>& v2)
         {
             return v1.second > v2.second;
@@ -90,10 +88,10 @@ void HullMath::twoVerticesAboveSurface()
 {
     float tM = -hL / (hM - hL);
     float tH = -hL / (hH - hL);
-    glm:vec3 LM = M - L;
-    glm:vec3 LH = H - L;
-    glm:vec3 cutLM = L + LM * tM;
-    glm:vec3 cutLH = L + LH * tH;
+    glm::vec3 LM = M - L;
+    glm::vec3 LH = H - L;
+    glm::vec3 cutLM = L + LM * tM;
+    glm::vec3 cutLH = L + LH * tH;
 
     hullTriangles.underwater.push_back(HydroTriangle(L, cutLM, cutLH));
     hullTriangles.abovewater.push_back(HydroTriangle(H, cutLH, cutLM));

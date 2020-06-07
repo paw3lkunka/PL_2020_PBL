@@ -230,9 +230,21 @@ void SceneWriter::saveScene(const char* filePath)
         {
             savePaddle(temp);
         }
+        else if(Enemy* temp = dynamic_cast<Enemy*>(objContainerPtr->components[i]))
+        {
+            saveEnemy(temp);
+        }
+        else if(EnemyAnimation* temp = dynamic_cast<EnemyAnimation*>(objContainerPtr->components[i]))
+        {
+            saveEnemyAnimation(temp);
+        }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
             saveUiRenderer(temp);
+        }
+        else if(TextRenderer* temp = dynamic_cast<TextRenderer*>(objContainerPtr->components[i]))
+        {
+            saveTextRenderer(temp);
         }
         else if(Button* temp = dynamic_cast<Button*>(objContainerPtr->components[i]))
         {
@@ -250,17 +262,17 @@ void SceneWriter::saveScene(const char* filePath)
         {
             j[name]["type"] = "Bone";
         }
-        //else if(dynamic_cast<HydroBody*>(objContainerPtr->components[i]))
-        //{
-        //    j[name]["type"] = "HydroBody";
-        //}
+        else if(dynamic_cast<HydroBody*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "HydroBody";
+        }
+        else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
+        {
+            saveHydroAccelerator(temp);
+        }
         //else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
         //{
         //    j[name]["type"] = "HydroSurface";
-        //}
-        //else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
-        //{
-        //    saveHydroAccelerator(temp);
         //}
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
@@ -474,10 +486,35 @@ void SceneWriter::savePaddle(Paddle* componentPtr)
     j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
 }
 
+void SceneWriter::saveEnemy(Enemy* enemyPtr)
+{
+    j[name]["type"] = "Enemy";
+    j[name]["sightDistance"] = enemyPtr->sightDistance;
+    j[name]["sightAngle"] = enemyPtr->sightAngle;
+    j[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
+    j[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
+    j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
+    j[name]["detectionCounter"] = enemyPtr->detectionCounter;
+}
+
+void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
+{
+    j[name]["type"] = "EnemyAnimation";
+    j[name]["lerpParameter"] = enemyAnimPtr->lerpParameter;
+}
+
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
 {
     j[name]["type"] = "UiRenderer";
     j[name]["material"] = componentPtr->material->serializationID;
+}
+
+void SceneWriter::saveTextRenderer(TextRenderer* componentPtr)
+{
+    j[name]["type"] = "TextRenderer";
+    j[name]["material"] = componentPtr->material->serializationID;
+    j[name]["font"] = componentPtr->mesh.font->serializationID;
+    j[name]["text"] = componentPtr->mesh.text;
 }
 
 void SceneWriter::saveRectTransform(RectTransform* componentPtr)
@@ -533,11 +570,11 @@ void SceneWriter::saveButton(Button* componentPtr)
     }
 }
 
-//void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
-//{
-//    j[name]["type"] = "HydroAccelerator";
-//    j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
-//}
+void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
+{
+    j[name]["type"] = "HydroAccelerator";
+    j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
+}
 
 #pragma endregion
 
@@ -694,7 +731,7 @@ void SceneWriter::saveFont(Font* assetPtr)
 {
     j[name]["serializationID"] = assetPtr->serializationID;
     j[name]["fontPath"] = assetPtr->getFontPath();
-    j[name]["size"] = assetPtr->getSize();
+    j[name]["fontSize"] = assetPtr->getSize();
 }
 
 #pragma endregion

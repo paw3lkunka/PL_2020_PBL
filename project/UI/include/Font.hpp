@@ -39,6 +39,14 @@ public:
     unsigned int getCharTex(char c);
 
     /**
+     * @brief Get the Character object of specified char
+     * 
+     * @param c character to get
+     * @return const Character& character object reference
+     */
+    const Character& getChar(char c);
+
+    /**
      * @brief Get name of the material
      * 
      * @return const char* name of the material

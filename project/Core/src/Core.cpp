@@ -100,8 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -115,10 +115,36 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //Code...
+            //auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+
+            //auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+            //auto hydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
+            //    hydroAccelerator->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            //auto paddlePtr = objectModule.getEntityPtrByName("Paddle");
+            //    paddlePtr->addComponent(hydroBody);
+            //    paddlePtr->addComponent(hydroAccelerator);
+
+            /*
+            auto hydroBodyLeft = objectModule.newEmptyComponent<HydroBody>();
+            auto hydroAcceleratorLeft = objectModule.newEmptyComponent<HydroAccelerator>();
+                hydroAcceleratorLeft->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            auto paddleLeftPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+                paddleLeftPtr->addComponent(hydroBodyLeft);
+                paddleLeftPtr->addComponent(hydroAcceleratorLeft);
+
+            auto hydroBodyRight = objectModule.newEmptyComponent<HydroBody>();
+            auto hydroAcceleratorRight = objectModule.newEmptyComponent<HydroAccelerator>();
+                hydroAcceleratorRight->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            auto paddleRightPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+                paddleRightPtr->addComponent(hydroBodyRight);
+                paddleRightPtr->addComponent(hydroAcceleratorRight);
+            */
         }
 
-        objectModule.saveScene("../resources/Scenes/gameScene.json");
+        objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
 #pragma region Renderer
@@ -176,7 +202,10 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    
+    gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
+    
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -185,6 +214,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
+    gameSystemsModule.addSystem(&enemySystem);
 
 #pragma endregion
 
@@ -199,8 +229,8 @@ int Core::mainLoop()
     double lag = FIXED_TIME_STEP;
 
 #pragma region AudioModule demo
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        //messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
 #pragma endregion
 
     // * ===== Game loop ===================================================
@@ -324,3 +354,5 @@ LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
+EnemySystem Core::enemySystem;
+HydroBodySystem Core::hydroBodySystem;

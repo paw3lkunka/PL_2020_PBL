@@ -7,17 +7,10 @@
 struct HydroTriangle;
 class Mesh;
 
-class HydroMeshParser
+namespace HydroMeshParser
 {
-public:
-    HydroMeshParser() = default;
-    virtual ~HydroMeshParser() = default;
-
-    std::vector<HydroTriangle> parse(Mesh mesh, glm::mat4 modelMatrix);
+    std::vector<HydroTriangle> parse(Mesh* mesh, glm::mat4 modelMatrix);
     glm::vec3 vertexToModel(glm::vec3, glm::mat4 modelMatrix);
-
-private:
-    std::vector<float> verticesHeights;
 };
 
 

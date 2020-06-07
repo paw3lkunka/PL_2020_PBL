@@ -7,6 +7,7 @@
 #include "Core.hpp"
 #include "DistanceComparer.hpp"
 #include "UiRenderer.inl"
+#include "TextRenderer.inl"
 
 #include <algorithm>
 
@@ -60,8 +61,17 @@ void RendererModule::receiveMessage(Message msg)
         case Event::RENDERER_ADD_UI_TO_QUEUE:
         {
             UiRenderer* uiElementToAdd = msg.getValue<UiRenderer*>();
-            uiPackets.push_back(UiPacket(&uiElementToAdd->mesh, uiElementToAdd->material, uiElementToAdd->modelMatrix));
-            uiQueue.push_back(&uiPackets.back());
+            if (uiElementToAdd != nullptr)
+            {
+                spritePackets.push_back(SpritePacket(&uiElementToAdd->mesh, uiElementToAdd->material, uiElementToAdd->modelMatrix));
+                uiQueue.push_back(&spritePackets.back());
+            }
+            TextRenderer* textElementToAdd = msg.getValue<TextRenderer*>();
+            if (textElementToAdd != nullptr)
+            {
+                textPackets.push_back(TextPacket(&textElementToAdd->mesh, textElementToAdd->material, textElementToAdd->modelMatrix));
+                uiQueue.push_back(&textPackets.back());
+            }
             break;
         }
         case Event::RENDERER_ADD_LIGHT:
@@ -106,7 +116,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
     instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
-    uiPackets.reserve(DRAW_CALL_UI_ALLOCATION);
+    spritePackets.reserve(DRAW_CALL_UI_ALLOCATION);
+    textPackets.reserve(DRAW_CALL_TEXT_ALLOCATION);
 
     if (createInfo.cullFace)
     {
@@ -427,8 +438,8 @@ void RendererModule::render()
                 opaqueQueue.push_back(&(packet.second));
             }
         }
-
-        std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
+        //TODO: Remove if it's useless
+        //std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
 
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
@@ -495,7 +506,8 @@ void RendererModule::render()
         // ? +++++ Clear the render packets +++++
         normalPackets.clear();
         instancedPackets.clear();
-        uiPackets.clear();
+        spritePackets.clear();
+        textPackets.clear();
     }
 }
 
@@ -581,10 +593,6 @@ bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
         for (size_t j = 0; j < 8 && (in == 0 || out == 0); j++)
         {
             // ? +++++ Check if corner is outside or inside +++++
-            //glm::vec3 normalNormalized = glm::normalize(frustumPlanes[i][NORMAL]);
-            //std::cout << "Normal: " << glm::to_string(frustumPlanes[i][NORMAL]) << '\n';
-            //std::cout << "Normal normalized: " << glm::to_string(normalNormalized) << '\n';
-            //if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], meshBounds.getPoint(j)) < 0.0f)
             if (pointToPlaneDistance2(frustumPlanes[i][POINT], frustumPlanes[i][NORMAL], modelMatrix * glm::vec4(meshBounds.getPoint(j), 1.0f)) < 0.0f)
             {
                 out++;

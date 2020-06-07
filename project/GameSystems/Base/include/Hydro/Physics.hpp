@@ -22,7 +22,8 @@ namespace HydroPhysics
     (
         HydroTriangle triangle, 
         float density = HydroConstants::RHO_WATER, 
-        bool upOnly = HydroConstants::BUOYANCY_UP_ONLY
+        bool upOnly = HydroConstants::BUOYANCY_UP_ONLY, 
+        float buoyancyForceMultiplier = HydroConstants::BUOYANCY_FORCE_MULTIPLIER
     );
     
     glm::vec3 pressureDragForce

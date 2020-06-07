@@ -1,5 +1,5 @@
-#ifndef _HULLMATH_HPP
-#define _HULLMATH_HPP
+#ifndef _HYDROHULLMATH_HPP
+#define _HYDROHULLMATH_HPP
 
 #include <vector>
 #include <glm/vec3.hpp>
@@ -15,4 +15,4 @@ namespace HullMath
     void twoVerticesAboveSurface();
 }
 
-#endif // _HULLMATH_HPP
+#endif // _HYDROHULLMATH_HPP

@@ -21,10 +21,10 @@ float TriangleMath::getArea(glm::vec3 a, glm::vec3 b, glm::vec3 c)
     return abs( glm::length(cross) ) / 2.0f;
 }
 
-glm::vec3 normalizedProjectOnPlane(glm::vec3 vec, glm::vec3 normal)
+glm::vec3 TriangleMath::getCenterVelocity(glm::vec3 velocity, glm::vec3 angularVelocity, glm::vec3 triangleCenter, glm::vec3 centerOfMass)
 {
-    vec = glm::normalize(vec);
-    normal = glm::normalize(normal);
-    
-    return vec - normal * glm::dot( vec, normal );
+    glm::vec3 r_BA = triangleCenter - centerOfMass;
+    glm::vec3 v_A = velocity + glm::cross(angularVelocity, r_BA);
+
+    return v_A;
 }

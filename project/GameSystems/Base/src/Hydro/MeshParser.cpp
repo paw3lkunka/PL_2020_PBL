@@ -3,17 +3,17 @@
 #include "Hydro/Data/HydroTriangle.hpp"
 #include "Mesh.hpp"
 
-std::vector<HydroTriangle> HydroMeshParser::parse(Mesh mesh, glm::mat4 modelMatrix)
+std::vector<HydroTriangle> HydroMeshParser::parse(Mesh* mesh, glm::mat4 modelMatrix)
 {
+    std::vector<float> verticesHeights;
     std::vector<HydroTriangle> triangles;
 
-    auto& indices = mesh->getIndices();
-    auto& vertices = mesh->getVertices();
+    auto& indices = *mesh->getIndices();
+    auto& vertices = *mesh->getVertices();
 
-    verticesHeights.clear();
     for(auto it = vertices.begin(); it != vertices.end(); it++)
     {
-        glm::vec3 vertexWorldPosition = vertexToModel(*it.position, modelMatrix);
+        glm::vec3 vertexWorldPosition = vertexToModel(it->position, modelMatrix);
         // TODO: proper heights calculations
         verticesHeights.push_back(vertexWorldPosition.y);
     }
@@ -22,7 +22,7 @@ std::vector<HydroTriangle> HydroMeshParser::parse(Mesh mesh, glm::mat4 modelMatr
     {
         glm::vec3 A = vertexToModel(vertices[*it].position, modelMatrix);
         glm::vec3 B = vertexToModel(vertices[*(it + 1)].position, modelMatrix);
-        glm::vec3 C = vertexToModel(vertices[*(it + 2)].posiiton, modelMatrix);
+        glm::vec3 C = vertexToModel(vertices[*(it + 2)].position, modelMatrix);
 
         triangles
             .push_back
@@ -42,5 +42,5 @@ std::vector<HydroTriangle> HydroMeshParser::parse(Mesh mesh, glm::mat4 modelMatr
 
 glm::vec3 HydroMeshParser::vertexToModel(glm::vec3 vertex, glm::mat4 modelMatrix)
 {
-    return static_cast<glm::vec3>( modelMatrix * glm::vec4(vertex, 1.0f) ) 
+    return static_cast<glm::vec3>( modelMatrix * glm::vec4(vertex, 1.0f) );
 }

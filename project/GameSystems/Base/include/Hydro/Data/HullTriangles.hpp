@@ -1,5 +1,5 @@
-#ifndef _HULLTRIANGLES_HPP
-#define _HULLTRIANGLES_HPP
+#ifndef _HYDROHULLTRIANGLES_HPP
+#define _HYDROHULLTRIANGLES_HPP
 
 #include <vector>
 
@@ -19,4 +19,4 @@ struct HullTriangles
 };
 
 
-#endif // _HULLTRIANGLES_HPP
+#endif // _HYDROHULLTRIANGLES_HPP

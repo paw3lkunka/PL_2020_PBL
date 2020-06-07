@@ -122,26 +122,35 @@ add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
 add_subdirectory(libs/freetype2/)
 
-aux_source_directory( project                               PROJECT_SRC)
-aux_source_directory( project/Core/src                      CORE_SRC)
-aux_source_directory( project/GameSystems/Base/src          GAME_SRC)
-aux_source_directory( project/GameSystems/Systems/src       SYSTEMS_SRC)
-aux_source_directory( project/Audio/src                     AUDIO_SRC)
-aux_source_directory( project/ObjectManager/src             OBJECTS_SRC)
-aux_source_directory( project/Input/src                     INPUT_SRC)
-aux_source_directory( project/MessageBus/src                MESSAGE_BUS_SRC)
-aux_source_directory( project/Renderer/src                  RENDERER_SRC)
-aux_source_directory( project/Renderer/src/mesh             RENDERER_MESH_SRC)
-aux_source_directory( project/Renderer/src/packets          RENDERER_PACKETS_SRC)
-aux_source_directory( project/Terminal/src                  TERMIANL_SRC)
-aux_source_directory( project/Scene/src                     SCENE_SRC)
-aux_source_directory( project/Editor/src                    EDITOR_SRC)
-aux_source_directory( project/UI/src                        UI_SRC)
+aux_source_directory( project                                   PROJECT_SRC)
+aux_source_directory( project/Core/src                          CORE_SRC)
+aux_source_directory( project/GameSystems/Base/src              GAME_SRC)
+aux_source_directory( project/GameSystems/Systems/Gameplay/src  GAMEPLAY_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Systems/Graphics/src  GRAPHICS_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Systems/Physics/src   PHYSICS_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Systems/UI/src        UI_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro        HYDRO_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Data   HYDRO_DATA_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Math   HYDRO_MATH_SRC)
+aux_source_directory( project/Audio/src                         AUDIO_SRC)
+aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
+aux_source_directory( project/Input/src                         INPUT_SRC)
+aux_source_directory( project/MessageBus/src                    MESSAGE_BUS_SRC)
+aux_source_directory( project/Renderer/src                      RENDERER_SRC)
+aux_source_directory( project/Renderer/src/mesh                 RENDERER_MESH_SRC)
+aux_source_directory( project/Renderer/src/packets              RENDERER_PACKETS_SRC)
+aux_source_directory( project/Terminal/src                      TERMINAL_SRC)
+aux_source_directory( project/Scene/src                         SCENE_SRC)
+aux_source_directory( project/Editor/src                        EDITOR_SRC)
+aux_source_directory( project/UI/src                            UI_SRC)
 
 list( 
     APPEND SOURCE_FILES
         ${CORE_SRC}
         ${GAME_SRC}
+        ${HYDRO_SRC}
+        ${HYDRO_DATA_SRC}
+        ${HYDRO_MATH_SRC}
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
@@ -151,10 +160,14 @@ list(
         ${RENDERER_SRC}
         ${RENDERER_MESH_SRC}
         ${RENDERER_PACKETS_SRC}
-        ${TERMIANL_SRC}
+        ${TERMINAL_SRC}
         ${SCENE_SRC}
         ${EDITOR_SRC}
         ${UI_SRC}
+        ${GAMEPLAY_SYSTEM_SRC}
+        ${GRAPHICS_SYSTEM_SRC}
+        ${PHYSICS_SYSTEM_SRC}
+        ${UI_SYSTEM_SRC}
 )
 
 add_library(lib ${SOURCE_FILES} )
@@ -167,6 +180,7 @@ set(IMGUI_SOURCES
     "libs/imgui/imgui_widgets.cpp"
     "libs/imgui/examples/imgui_impl_glfw.cpp"
     "libs/imgui/examples/imgui_impl_opengl3.cpp"
+    "libs/imgui/misc/cpp/imgui_stdlib.cpp"
 )
 
 set(IMGUI_HEADERS
@@ -178,6 +192,7 @@ set(IMGUI_HEADERS
     "libs/imgui/imstb_truetype.h"
     "libs/imgui/examples/imgui_impl_glfw.h"
     "libs/imgui/examples/imgui_impl_opengl3.h"
+    "libs/imgui/misc/cpp/imgui_stdlib.h"
 )
 
 add_library(imgui
@@ -191,8 +206,18 @@ include_directories(
     project/Autogen/include
     project/Core/include
     project/GameSystems/Base/include
+    project/GameSystems/Base/include/Hydro
+    project/GameSystems/Base/include/Hydro/Data
+    project/GameSystems/Base/include/Hydro/Math
     project/GameSystems/Components
-    project/GameSystems/Systems/include
+    project/GameSystems/Components/Gameplay
+    project/GameSystems/Components/Graphics
+    project/GameSystems/Components/Physics
+    project/GameSystems/Components/UI
+    project/GameSystems/Systems/Gameplay/include
+    project/GameSystems/Systems/Graphics/include
+    project/GameSystems/Systems/Physics/include
+    project/GameSystems/Systems/UI/include
     project/Audio/include
     project/ObjectManager/include
     project/Input/include

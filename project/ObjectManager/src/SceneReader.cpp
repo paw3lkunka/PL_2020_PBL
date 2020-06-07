@@ -34,6 +34,7 @@ void SceneReader::readScene(std::string filePath)
     readTextures();
     readCubemaps();
     readMaterials();
+    readFonts();
     readEntities();
     readComponents();
 }
@@ -99,7 +100,7 @@ void SceneReader::readFonts()
     {
         name = setName("font", i);
         std::string fontPath = j.at(name).at("fontPath").get<std::string>();
-        unsigned int size = j.at(name).at("size").get<unsigned int>();
+        unsigned int size = j.at(name).at("fontSize").get<unsigned int>();
         Font* font = objModulePtr->newFont(fontPath.c_str(), size, name);
         font->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     }
@@ -330,25 +331,35 @@ void SceneReader::readComponents()
             std::cout << "Skeleton" << std::endl;
             readSkeleton(name);
         }
-        //else if(componentType == "HydroBody")
-        //{
-        //    std::cout << "HydroBody" << std::endl;
-        //    readHydroBody(name);
-        //}
+        else if(componentType == "HydroBody")
+        {
+            std::cout << "HydroBody" << std::endl;
+            readHydroBody(name);
+        }
+        else if(componentType == "HydroAccelerator")
+        {
+            std::cout << "HydroAccelerator" << std::endl;
+            readHydroAccelerator(name);
+        }
         //else if(componentType == "HydroSurface")
         //{
         //    std::cout << "HydroSurface" << std::endl;
         //    readHydroSurface(name);
         //}
-        //else if(componentType == "HydroAccelerator")
-        //{
-        //    std::cout << "HydroAccelerator" << std::endl;
-        //    readHydroAccelerator(name);
-        //}
         else if(componentType == "Kayak")
         {
             std::cout << "Kayak" << std::endl;
             readKayak(name);
+        }
+        else if(componentType == "Enemy")
+        {
+            std::cout << "Enemy" << std::endl;
+            readEnemy(name);
+        }
+        else if(componentType == "EnemyAnimation")
+        {
+            std::cout << "EnemyAnimation" << std::endl;
+            readEnemyAnimation(name);
         }
         else if(componentType == "Hideout")
         {
@@ -359,6 +370,11 @@ void SceneReader::readComponents()
         {
             std::cout << "UiRenderer" << std::endl;
             readUiRenderer(name);
+        }
+        else if(componentType == "TextRenderer")
+        {
+            std::cout << "TextRenderer" << std::endl;
+            readTextRenderer(name);
         }
         else if(componentType == "RectTransform")
         {
@@ -700,29 +716,29 @@ void SceneReader::readSkeleton(std::string name)
     component->serializationID = serializationID;
 }
 
-//void SceneReader::readHydroBody(std::string name)
-//{
-//    auto hydroBody = objModulePtr->newEmptyComponent<HydroBody>();
-//    hydroBody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-//
-//    assignToEntity(name, hydroBody);
-//}
-//
+void SceneReader::readHydroBody(std::string name)
+{
+    auto hydroBody = objModulePtr->newEmptyComponent<HydroBody>();
+    hydroBody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hydroBody);
+}
+
+void SceneReader::readHydroAccelerator(std::string name)
+{
+    auto hydroAccelerator = objModulePtr->newEmptyComponent<HydroAccelerator>();
+    hydroAccelerator->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j.at(name).at("rigidbody").get<unsigned int>() ) );
+
+    assignToEntity(name, hydroAccelerator);
+}
+
 //void SceneReader::readHydroSurface(std::string name)
 //{
 //    auto hydroSurface = objModulePtr->newEmptyComponent<HydroSurface>();
 //    hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 //
 //    assignToEntity(name, hydroSurface);
-//}
-//
-//void SceneReader::readHydroAccelerator(std::string name)
-//{
-//    auto hydroAccelerator = objModulePtr->newEmptyComponent<HydroAccelerator>();
-//    hydroAccelerator->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-//    hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j.at(name).at("rigidbody").get<unsigned int>() ) );
-//
-//    assignToEntity(name, hydroAccelerator);
 //}
 
 void SceneReader::readKayak(std::string name)
@@ -731,6 +747,29 @@ void SceneReader::readKayak(std::string name)
     kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     assignToEntity(name, kayak);
+}
+
+void SceneReader::readEnemy(std::string name)
+{
+    auto kayak = objModulePtr->newEmptyComponent<Enemy>();
+    kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    kayak->sightDistance = j.at(name).at("sightDistance").get<float>();
+    kayak->sightAngle = j.at(name).at("sightAngle").get<float>();
+    kayak->detectionCounterMaxValue = j.at(name).at("detectionCounterMaxValue").get<int>();
+    kayak->detectionPositiveStep = j.at(name).at("detectionPositiveStep").get<int>();
+    kayak->detectionNegativeStep = j.at(name).at("detectionNegativeStep").get<int>();
+    kayak->detectionCounter = j.at(name).at("detectionCounter").get<int>();
+
+    assignToEntity(name, kayak);
+}
+
+void SceneReader::readEnemyAnimation(std::string name)
+{
+    auto anim = objModulePtr->newEmptyComponent<EnemyAnimation>();
+    anim->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    anim->lerpParameter = j.at(name).at("lerpParameter").get<float>();
+
+    assignToEntity(name, anim);
 }
 
 void SceneReader::readHideout(std::string name)
@@ -750,6 +789,22 @@ void SceneReader::readUiRenderer(std::string name)
     uiRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
 
     assignToEntity(name, uiRenderer);
+}
+
+void SceneReader::readTextRenderer(std::string name)
+{
+    auto textRenderer = objModulePtr->newEmptyComponent<TextRenderer>();
+    textRenderer->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    unsigned int materialID = j.at(name).at("material").get<unsigned int>();
+    textRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(materialID);
+
+    unsigned int fontID = j.at(name).at("font").get<unsigned int>();
+    textRenderer->mesh.font = objModulePtr->objectContainer.getFontFromSerializationID(fontID);
+
+    textRenderer->mesh.text = j.at(name).at("text").get<std::string>();
+
+    assignToEntity(name, textRenderer);
 }
 
 void SceneReader::readRectTransform(std::string name)

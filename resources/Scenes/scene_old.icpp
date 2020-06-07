@@ -592,23 +592,28 @@ objectModule.newEntity(2, "sampleSound");
     }
 }
 
-// PawelKunka - 2020-05-27 - 11:36
+// PawelKunka 
 //Added Rigidbody and HydroBody to the Kayak entity so it now floats 
-//{
-//    auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
-//        rigidbody->mass = 60.0f;
-//        rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
-//        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
-//        rigidbody->drag = 3.0f;
-//        rigidbody->angularDrag = 3.0f;
-//        rigidbody->ignoreGravity = true;
-//    
-//    auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
-//    
-//    auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
-//        kayakPtr->addComponent(hydroBody);
-//        kayakPtr->addComponent(rigidbody);
-//}
+{
+    auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
+        rigidbody->mass = 120.0f;
+        rigidbody->momentOfInertia = BoxMomentOfInertia(120.0f, 18.0f, 5.0f, 90.0f);
+        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
+        rigidbody->drag = 1.0f;
+        rigidbody->angularDrag = 1.0f;
+        rigidbody->ignoreGravity = true;
+
+    auto boxCollider = objectModule.newEmptyComponent<BoxCollider>();
+        boxCollider->type = Collider::Type::DYNAMIC;
+        boxCollider->halfSize = glm::vec3(9.0f, 2.5f, 45.0f);
+    
+    auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
+    
+    auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+        kayakPtr->addComponent(hydroBody);
+        kayakPtr->addComponent(rigidbody);
+        kayakPtr->addComponent(boxCollider);
+}
 
 // Surface - Andrzej 27.05
 {
@@ -678,5 +683,28 @@ objectModule.newEntity(2, "sampleSound");
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;
         auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+    }
+}
+
+// Enemy
+{
+    auto* enemy = objectModule.newEntity(4,"TMP enemy");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {30.0f, 0.0f, 30.0f};
+            t->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
+            t->setParent(&sceneModule.rootNode);
+
+        auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
+            e->detectionCounterMaxValue = 500;
+            e->sightDistance = 100.0f;
+            e->sightAngle = glm::pi<float>() / 4.0f;
+
+        auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
+            a->lerpParameter = 0.25f;
+
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
     }
 }
