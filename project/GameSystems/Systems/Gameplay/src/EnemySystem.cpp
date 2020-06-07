@@ -1,5 +1,6 @@
 #include "ECS.inc"
 #include "Core.hpp"
+#include "EnemyDataStructures.inl"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/vec_swizzle.hpp>
@@ -48,11 +49,16 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
 
             animation(toKayak);
 
-            if (enemyPtr->detectionCounter >= enemyPtr->detectionCounterMaxValue && enemyPtr->notified == false)
+            if (enemyPtr->detectionCounter >= enemyPtr->detectionCounterMaxValue)
             {
-                GetCore().messageBus.sendMessage(Message(Event::PLAYER_DETECTED, enemyPtr));
-                enemyPtr->notified = true;
-                kayakPtr->isDetected++;                
+                attack(toKayak);
+
+                if (enemyPtr->notified == false)
+                {
+                    GetCore().messageBus.sendMessage(Message(Event::PLAYER_DETECTED, enemyPtr));
+                    enemyPtr->notified = true;
+                    kayakPtr->isDetected++;    
+                }            
             }
         }
         else
@@ -89,6 +95,18 @@ void EnemySystem::attack(glm::vec3 dir)
         if (enemyAttackPtr->attackCounter >= enemyAttackPtr->activationValue)
         {
             enemyAttackPtr->attackCounter -= enemyAttackPtr->activationValue;
+            AttackData data;
+
+            data.enemyPtr = enemyPtr;
+            if (data.success = GetCore().randomFloat01L() > enemyAttackPtr->successChance)
+            {
+                data.direction = dir;
+            }
+            else
+            {
+                glm::quat rot = glm::angleAxis( glm::radians(15.0f) * GetCore().coinToss(1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+                data.direction = glm::toMat4(rot) * glm::vec4(dir, 0.0f);
+            }
         }
     }
 }
