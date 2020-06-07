@@ -116,6 +116,46 @@ void main()
 }
 )shader";
 
+// ? +++++ Screen space quad shader +++++
+const char* screenSpaceQuadVertex = 
+R"shader(
+#version 430 core
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec2 texcoords;
+
+out vec2 uv;
+
+void main()
+{
+    uv = texcoords;
+    gl_Position = vec4(position, 1.0);
+}
+)shader";
+
+// ? +++++ Hdr shader +++++
+const char* hdrFragmentShader = 
+R"shader(
+#version 430 core
+out vec4 FragColor;
+
+in vec2 uv;
+
+uniform sampler2D hdrBuffer;
+
+void main()
+{
+    const float gamma = 2.2;
+    vec3 hdrColor = texture(hdrBuffer, uv).rgb;
+
+    // Reinhard tone mapping
+    vec3 mapped = hdrColor / (hdrColor + vec3(1.0));
+    // Gamma correction
+    mapped = pow(mapped, vec3(1.0 / gamma));
+
+    FragColor = vec4(mapped, 1.0);
+} 
+)shader";
+
 }
 
 #endif // _BUILTINSHADERS_INL

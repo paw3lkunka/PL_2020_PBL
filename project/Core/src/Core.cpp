@@ -102,8 +102,9 @@ int Core::init()
     {
         // ? -r
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
     }
     else
     {
@@ -116,21 +117,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            TextureCreateInfo i = {};
-            i.minFilter = GL_LINEAR;
-            i.magFilter = GL_LINEAR;
-            i.wrapMode= GL_CLAMP_TO_EDGE;
-            CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,   "Resources/Textures/skybox_03_hdr/nz.hdr", 
-                                            "Resources/Textures/skybox_03_hdr/nx.hdr", 
-                                            "Resources/Textures/skybox_03_hdr/px.hdr",
-                                            "Resources/Textures/skybox_03_hdr/pz.hdr",
-                                            "Resources/Textures/skybox_03_hdr/py.hdr",
-                                            "Resources/Textures/skybox_03_hdr/ny.hdr");
-
-            auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-
-            Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-            hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+            
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -217,11 +204,6 @@ int Core::mainLoop()
     double previousFrameStart = glfwGetTime();
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
-
-#pragma region AudioModule demo
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
 
     // * ===== Game loop ===================================================
 

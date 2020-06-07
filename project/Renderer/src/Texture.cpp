@@ -7,6 +7,11 @@ Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string 
     init(); 
 }
 
+Texture::Texture(unsigned int externalID) : IFileSystem(""), data(nullptr)
+{
+    id = externalID;
+}
+
 void Texture::init()
 {
     glGenTextures(1, &id);

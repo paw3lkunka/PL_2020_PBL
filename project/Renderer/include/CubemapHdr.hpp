@@ -3,6 +3,8 @@
 
 #include "Texture.hpp"
 
+#include <string>
+
 class CubemapHdr : public Texture
 {
     friend class SceneWriter;

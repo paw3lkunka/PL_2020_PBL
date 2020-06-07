@@ -34,6 +34,7 @@ public:
      * @param filePath path to file from texture is loaded
      */
     Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath);
+    Texture(unsigned int externalID);
     Texture() = default;
     virtual ~Texture() = default;
 

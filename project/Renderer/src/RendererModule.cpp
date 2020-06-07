@@ -21,12 +21,12 @@
 #include <glm/gtc/type_ptr.hpp>
 
 unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
-//unsigned int lastShaderID = std::numeric_limits<unsigned int>::max();
 
 RendererModule::~RendererModule()
 {
     delete internalErrorMat;
     delete internalShaderError;
+    delete hdrShader;
     delete irradianceMap;
     delete directionalDepth;
 }
@@ -108,6 +108,16 @@ void RendererModule::receiveMessage(Message msg)
                 frustumCullingEnabled = !frustumCullingEnabled;
             }
             break;
+
+        case Event::WINDOW_RESIZED:
+            glm::ivec2 size = msg.getValue<glm::ivec2>();
+            glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
+            break;
     }
 }
 
@@ -145,6 +155,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     internalShaderError = new Shader(BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
+    hdrShader = new Shader(BuiltInShaders::screenSpaceQuadVertex, BuiltInShaders::hdrFragmentShader, nullptr, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -224,20 +235,37 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     depthCreateInfo.wrapMode = GL_CLAMP_TO_BORDER;
     directionalDepth = new Texture(nullptr, depthCreateInfo, "");
 
-    // glGenTextures(1, &depthMap);
-    // glBindTexture(GL_TEXTURE_2D, depthMap);
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, , , 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    // float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+    // * ===== Create framebuffer for hdr rendering =====
+    glGenFramebuffers(1, &hdrFBO);
+
+    // Generate color attachment
+    glGenTextures(1, &hdrColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Generate depth renderbuffer
+    glGenRenderbuffers(1, &rboDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+
+    // Attach buffers
+    glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, hdrColorBuffer, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Hdr framebuffer not complete!\n";
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -402,6 +430,10 @@ void RendererModule::render()
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
+        // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
         // ? +++++ Execute (order 66) opaque rendering loop +++++
         while(!opaqueQueue.empty())
         {
@@ -438,6 +470,16 @@ void RendererModule::render()
             transparentQueue.pop_front();
         }
 
+        // ? +++++ Forward color pass end ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // ! ----- Render screen space quad -----
+        hdrShader->use();
+        hdrShader->setInt("hdrBuffer", 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+        drawQuad();
+
         // ? +++++ Overlay UI rendering loop +++++
         // Get screen ortho projection
         glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
@@ -459,6 +501,7 @@ void RendererModule::render()
         glfwSwapBuffers(window);
 
         // ? +++++ Clear the render packets +++++
+        lastMatID = std::numeric_limits<unsigned int>::max();
         normalPackets.clear();
         instancedPackets.clear();
         spritePackets.clear();
@@ -776,5 +819,30 @@ void RendererModule::drawCube()
 
     glBindVertexArray(cubeVao);
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+}
+
+void RendererModule::drawQuad()
+{
+    static unsigned int quadVao = 0;
+    static unsigned int quadVbo = 0;
+    
+    if (quadVao == 0)
+    {
+        glGenVertexArrays(1, &quadVao);
+        glGenBuffers(1, &quadVbo);
+
+        glBindBuffer(GL_ARRAY_BUFFER, quadVao);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(BuiltInShapes::quadVertices), BuiltInShapes::quadVertices, GL_STATIC_DRAW);
+
+        glBindVertexArray(quadVao);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
+
+    glBindVertexArray(quadVao);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }

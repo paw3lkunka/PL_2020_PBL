@@ -93,15 +93,16 @@ void main()
 // Ambient light comes from convoluted cubemap irradiance
 	vec3 kS = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
 	vec3 kD = 1.0 - kS;
+	kD *= 1.0 - metallic;
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
 	vec3 color = ambient + Lo;
 
-// HDR tonemapping
-	color = color / (color + vec3(1.0f));
-// Gamma correction
-	color = pow(color, vec3(1.0f / 2.2f));
+// // HDR tonemapping
+// 	color = color / (color + vec3(1.0f));
+// // Gamma correction
+// 	color = pow(color, vec3(1.0f / 2.2f));
 
 	// TODO: Better alpha sampling
 	FragColor = vec4(color, texture(diffuse, Texcoord).a);

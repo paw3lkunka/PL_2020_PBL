@@ -77,6 +77,12 @@ private:
     void drawFrustum(glm::mat4& VP);
     void generateCubemapConvolution(const Texture* cubemap, unsigned int dimensions);
     void drawCube();
+    void drawQuad();
+
+    // * ===== Hdr framebuffer =====
+    unsigned int hdrFBO, rboDepth;
+    unsigned int hdrColorBuffer;
+    Shader* hdrShader;
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
@@ -84,7 +90,6 @@ private:
     unsigned int skyboxVao, skyboxVbo;
     Material* skyboxMaterial = nullptr;
     CubemapHdr* irradianceMap = nullptr;
-    //unsigned int irradianceMap;
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers

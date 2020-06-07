@@ -157,14 +157,14 @@ CubemapHdr* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo,
         TextureHdrData bottomData = objModPtr->assetReader.texturesHdr[bottomPath];
 
         objContainer->hdrCubemaps.push_back(new CubemapHdr(createInfo, frontData.data, leftData.data, rightData.data, backData.data, topData.data, bottomData.data));
-        auto map = objContainer->hdrCubemaps[objContainer->cubemaps.size() - 1];
+        auto map = objContainer->hdrCubemaps[objContainer->hdrCubemaps.size() - 1];
         map->frontPath = frontPath;
         map->bottomPath = bottomPath;
         map->leftPath = leftPath;
         map->rightPath = rightPath;
         map->topPath = topPath;
         map->backPath = backPath;
-        return objContainer->hdrCubemaps[objContainer->cubemaps.size() - 1];
+        return objContainer->hdrCubemaps[objContainer->hdrCubemaps.size() - 1];
     }
     throw AssetLoadingException("CubemapHdr");
 }
