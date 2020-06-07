@@ -22,3 +22,6 @@
 [submodule "libs/freetype2"]
 	path = libs/freetype2
 	url = https://git.savannah.gnu.org/git/freetype/freetype2.git
+[submodule "libs/reactphysics3d"]
+	path = libs/reactphysics3d
+	url = 

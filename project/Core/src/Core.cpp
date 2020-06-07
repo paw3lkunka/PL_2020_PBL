@@ -1,4 +1,5 @@
 #include "Core.hpp"
+#include "Utils.hpp"
 #include "imgui.h"
 
 #include "xoshiro.h"
@@ -10,6 +11,7 @@
 #include "Material.hpp"
 #include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
+
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -54,7 +56,8 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 int Core::init()
 {
     xoshiro_Init();
-
+    phisicsWorld = physicsCommon.createPhysicsWorld();
+    
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;

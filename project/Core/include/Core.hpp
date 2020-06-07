@@ -7,6 +7,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <reactphysics3d/reactphysics3d.h>
+
 // * MessgageBus
 #include "MessageBus.hpp"
 
@@ -334,10 +336,14 @@ class Core
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
         static int windowWidth;
         static int windowHeight;
+        
+        inline reactphysics3d::PhysicsWorld* const GetPhysicsWorld() const { return phisicsWorld; }
 
     private:
         static Core* instance;
         GLFWwindow* window; 
+        reactphysics3d::PhysicsCommon physicsCommon;
+        reactphysics3d::PhysicsWorld* phisicsWorld;
 
         double currentFrameStart;
 
