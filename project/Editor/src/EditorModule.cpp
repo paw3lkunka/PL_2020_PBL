@@ -164,10 +164,7 @@ std::string EditorModule::formatVec3(glm::vec3 vector)
 
 void EditorModule::drawTransform(Transform* transformPtr)
 {
-    //* transform variables
-    glm::vec3 localRotation(0.0f);
-
-    localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
+    static glm::vec3 localRotation = glm::eulerAngles(transformPtr->getLocalRotation());
 
     ImGui::Text("Local transform:");
     ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");

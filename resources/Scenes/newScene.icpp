@@ -50,6 +50,7 @@ TextureCreateInfo i = {};
 i.minFilter = GL_LINEAR;
 i.magFilter = GL_LINEAR;
 i.wrapMode= GL_CLAMP_TO_EDGE;
+i.generateMipmaps = false;
 CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
                                                         "Resources/Textures/skybox_02/nx.hdr", 
                                                         "Resources/Textures/skybox_02/px.hdr",
@@ -88,8 +89,8 @@ Entity* terrain = objectModule.newEntity(1, "Terrain");
 objectModule.newEntity(2, "directionalLight");
 {
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(190.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
-        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(45.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(210.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
+        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(15.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
         t->setParent(&sceneModule.rootNode);
 
     auto l = objectModule.newEmptyComponentForLastEntity<Light>();

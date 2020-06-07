@@ -56,7 +56,6 @@ private:
     ///@brief index for current element in combo list
     int currentItem;
 
-
     //HACK: Maybe other solution?
     ///@brief list of sorting types, according to enum class (the same order as in enum class)
     const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0";

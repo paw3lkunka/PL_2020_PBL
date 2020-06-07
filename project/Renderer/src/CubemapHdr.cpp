@@ -41,6 +41,11 @@ void CubemapHdr::init()
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB16F, info.width, info.height, 0, GL_RGB, GL_FLOAT, back);
     glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB16F, info.width, info.height, 0, GL_RGB, GL_FLOAT, front);
     
+    if (info.generateMipmaps)
+    {
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+    }
+
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 

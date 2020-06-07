@@ -227,9 +227,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindVertexArray(0);
 
-        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 64);
+        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
     }
-
 
     // * ===== Create framebuffer for depth map =====
     glGenFramebuffers(1, &depthMapFBO);
@@ -493,6 +492,9 @@ void RendererModule::render()
             glBindVertexArray(skyboxVao);
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
+            // Testing convoluted environment map
+            // irradianceMap->bind(0);
+            // skyboxMaterial->getShaderPtr()->setInt("cubemap", 0);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
             glDepthFunc(GL_LESS);
@@ -815,6 +817,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
     irradianceMap = new CubemapHdr(irrID);
 
