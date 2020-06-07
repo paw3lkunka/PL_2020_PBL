@@ -11,7 +11,7 @@ namespace HydroConstants
     constexpr float RHO_WATER =  0.001f;
 
     constexpr bool BUOYANCY_UP_ONLY = false;
-    constexpr float BUOYANCY_FORCE_MULTIPLIER = 10000.0f;//10000.0f;
+    constexpr float BUOYANCY_FORCE_MULTIPLIER = 10.0f;//10000.0f;
 
     /// @brief Water viscosity in [cm^2 / s] for 18 Celsius degree temperature
     constexpr float VISCOSITY_WATER = 0.010533f;

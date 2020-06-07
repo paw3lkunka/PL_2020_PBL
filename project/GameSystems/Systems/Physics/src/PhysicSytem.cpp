@@ -67,7 +67,7 @@ void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
     //TODO check this
     //FIXME NIE UWZGLĘDNIA SKALI!!!!!
     force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
-    torque += glm::cross(impulse.point, impulse.force);
+    //torque += glm::cross(impulse.point, impulse.force);
 }
 
 void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform)
@@ -76,7 +76,7 @@ void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transfor
     msForce = msForce * collider->halfSize / (collider->halfSize + impulse.point);
     //TODO check this
     force += glm::xyz(transform->getModelMatrix() * glm::vec4(msForce, 0.0f));
-    torque += glm::cross(impulse.point, impulse.force);
+    //torque += glm::cross(impulse.point, impulse.force);
 }
 
 void PhysicSystem::applyImpulse(Impulse impulse)
