@@ -83,8 +83,6 @@ private:
     unsigned int hdrFBO, rboDepth;
     unsigned int hdrColorBuffer;
     unsigned int hdrBrightBuffer;
-    unsigned int pingpongFBO[2];
-    unsigned int pingpongBuffer[2];
     unsigned int blurFBO[2];
     unsigned int blurBuffers[8];
     Shader* hdrShader;

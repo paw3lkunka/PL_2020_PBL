@@ -120,11 +120,24 @@ void RendererModule::receiveMessage(Message msg)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
             // Bloom framebuffers
-            glBindTexture(GL_TEXTURE_2D, pingpongBuffer[0]);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
-            glBindTexture(GL_TEXTURE_2D, pingpongBuffer[1]);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
+            {
+                glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+                
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+                glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+                
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            }
             break;
     }
 }
@@ -289,23 +302,6 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // * ===== Framebuffers for ping pong gaussian blur =====
-    glGenFramebuffers(2, pingpongFBO);
-    glGenTextures(2, pingpongBuffer);
-
-    for (size_t i = 0; i < 2; i++)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
-        glBindTexture(GL_TEXTURE_2D, pingpongBuffer[i]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongBuffer[i], 0);
-    }
-
     glGenFramebuffers(2, blurFBO);
     glGenTextures(8, blurBuffers);
 
@@ -327,7 +323,6 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
-
 }
 
 void RendererModule::render()
@@ -539,8 +534,8 @@ void RendererModule::render()
         int amount = 10;
 
         // Generate minified textures from bright buffer
-        glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        // glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+        // glGenerateMipmap(GL_TEXTURE_2D);
 
         blurShader->use();
         for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
