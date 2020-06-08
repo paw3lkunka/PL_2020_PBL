@@ -1,6 +1,6 @@
 
 objectModule.newModel("Resources/Terrain/Test01.obj");
-//objectModule.newModel("Resources/Models/Box.FBX");
+objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
 
 auto standardPbrShader = objectModule.newShader("Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
 
@@ -26,6 +26,16 @@ auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001
 auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
 auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
 
+auto whiteTex = objectModule.newTexture("Resources/Textures/white.png", texCreateInfo);
+auto blackTex = objectModule.newTexture("Resources/Textures/black.png", texCreateInfo);
+auto bumpTex = objectModule.newTexture("Resources/Textures/bump.png", texCreateInfo);
+auto occroumetTex = objectModule.newTexture("Resources/Textures/occroumet.png", texCreateInfo);
+
+Material* whiteMat = objectModule.newMaterial(standardPbrShader, "whhiteMat", RenderType::Opaque);
+whiteMat->setTexture("diffuse", whiteTex);
+whiteMat->setTexture("normal", bumpTex);
+whiteMat->setTexture("occRouMet", occroumetTex);
+
 Material* grassMat = objectModule.newMaterial(standardPbrShader, "grassMat", RenderType::Opaque);
 grassMat->setTexture("diffuse", grass1Diffuse);
 grassMat->setTexture("normal", grass1Normal);
@@ -39,7 +49,7 @@ gravelMat->setTexture("occRouMet", gravel1Specular);
 Material* rocksMat = objectModule.newMaterial(standardPbrShader, "rocksMat", RenderType::Opaque);
 rocksMat->setTexture("diffuse", rocks1Diffuse);
 rocksMat->setTexture("normal", rocks1Normal);
-rocksMat->setTexture("occRouMet", rocks1Specular); 
+rocksMat->setTexture("occRouMet", rocks1Specular);
 
 Material* waterMat = objectModule.newMaterial(standardPbrShader, "waterMat", RenderType::Transparent);
 waterMat->setTexture("diffuse", water1Diffuse);
@@ -79,12 +89,15 @@ Entity* terrain = objectModule.newEntity(1, "Terrain");
         t->setParent(terrain->getComponentPtr<Transform>());
 }
 
-// {
-//     auto entity = objectModule.getEntityPtrByName("Box001");
+{
+    auto entity = objectModule.getEntityPtrByName("rocks_03");
 
-//     auto mr = entity->getComponentPtr<MeshRenderer>();
-//         mr->material = gravelMat;
-// }
+    auto mr = entity->getComponentPtr<MeshRenderer>();
+        mr->material = whiteMat;
+
+    auto t = entity->getComponentPtr<Transform>();
+        t->setParent(terrain->getComponentPtr<Transform>());
+}
 
 objectModule.newEntity(2, "directionalLight");
 {

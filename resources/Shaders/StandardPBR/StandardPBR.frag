@@ -28,6 +28,9 @@ uniform sampler2D occRouMet; // r - occlusion, g - roughness, b - metallic
 
 uniform sampler2D directionalShadowMap;
 uniform samplerCube irradianceMap;
+// uniform sampler2D ssaoMap;
+
+// uniform vec2 screenSize;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -72,11 +75,13 @@ vec3 calculateNormal()
 
 void main() 
 { 
+	//vec2 NDC = gl_FragCoord.xy / screenSize;
+
 // Sampling the textures for further use
 	albedo = pow(texture(diffuse, Texcoord).rgb, vec3(2.2f)); // Converting texture from sRGB gamma space to linear by using pow()
 	metallic = texture(occRouMet, Texcoord).b;
 	roughness = texture(occRouMet, Texcoord).g;
-	ao = texture(occRouMet, Texcoord).r;
+	ao = texture(occRouMet, Texcoord).r;// * texture(ssaoMap, NDC).r;
 
 // Properties shared between lights
 	N = calculateNormal();

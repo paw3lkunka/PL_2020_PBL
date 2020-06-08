@@ -96,7 +96,13 @@ void Material::use()
         {
             shader->setFloat(var.first, var.second);
         }
-        
+
+        // * ===== Vec2s =====
+        for(auto var : vec2s)
+        {
+            shader->setVec2(var.first, var.second);
+        }
+
         // * ===== Vec3s =====
         for(auto var : vec3s)
         {
@@ -161,6 +167,20 @@ void Material::setFloat(std::string name, float value)
     if (floatsIter != floats.end())
     {
         floatsIter->second = value;
+    }
+    else
+    {
+        // ! Name not found, aborting !
+        // TODO: Insert appropriate debug log
+    }
+}
+
+void Material::setVec2(std::string name, glm::vec2 value)
+{
+    std::unordered_map<std::string, glm::vec2>::iterator vec2sIter = vec2s.find(name);
+    if (vec2sIter != vec2s.end())
+    {
+        vec2sIter->second = value;
     }
     else
     {

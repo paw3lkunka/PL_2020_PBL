@@ -83,6 +83,8 @@ public:
     void setInt(std::string name, int value);
     /// @brief Set float of given name in material
     void setFloat(std::string name, float value);
+    /// @brief Set vec2 of given name in material
+    void setVec2(std::string name, glm::vec2 value);
     /// @brief Set vec3 of given name in material
     void setVec3(std::string name, glm::vec3 value);
     /// @brief Set vec4 of given name in material
@@ -131,6 +133,7 @@ private:
     std::unordered_map<std::string, Texture*> textures;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
+    std::unordered_map<std::string, glm::vec2> vec2s;
     std::unordered_map<std::string, glm::vec3> vec3s;
     std::unordered_map<std::string, glm::vec4> vec4s;
     std::unordered_map<std::string, glm::mat4> mat4s;

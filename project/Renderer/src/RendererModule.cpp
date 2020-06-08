@@ -27,9 +27,9 @@ RendererModule::~RendererModule()
 {
     delete internalErrorMat;
     delete internalShaderError;
-    delete hdrShader;
     delete irradianceMap;
     delete directionalDepth;
+    delete ssaoMap;
 }
 
 void RendererModule::receiveMessage(Message msg)
@@ -115,30 +115,41 @@ void RendererModule::receiveMessage(Message msg)
             // Hdr framebuffers
             glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
             glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
             glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
-            glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
             // Bloom framebuffers
             for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
             {
                 glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
-                
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
                 glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
-                
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             }
+            // Gbuffers
+            glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+
+            // SSAO
+            glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
             break;
     }
 }
@@ -177,10 +188,11 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     internalShaderError = new Shader(BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
-    //hdrShader = new Shader(BuiltInShaders::screenSpaceQuadVertex, BuiltInShaders::hdrFragmentShader, nullptr, false);
-    hdrShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/BloomCombine.frag");
+    combineShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombine.frag");
     blurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag");
     gbufferShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag");
+    ssaoShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAO.frag");
+    ssaoBlurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAOblur.frag");
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -363,17 +375,71 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         std::cerr << "Gbuffer framebuffer not complete!\n";
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
     // * ===== SSAO kernel randomization =====
     ssaoKernel.reserve(64);
     for (size_t i = 0; i < 64; i++)
     {
-        // glm::vec3 sample = {
-        //     GetCore()
-        // };
+        glm::vec3 sample = {
+            GetCore().randomFloat01R() * 2.0f - 1.0f,
+            GetCore().randomFloat01R() * 2.0f - 1.0f,
+            GetCore().randomFloat01R()
+        };
+        sample = glm::normalize(sample);
+        sample *= GetCore().randomFloat01R();
+
+        float scale = static_cast<float>(i) / 64.0f;
+        scale = glm::mix(0.1f, 1.0f, scale * scale);
+        sample *= scale;
+
+        ssaoKernel.push_back(sample);
     }
     
+    ssaoNoise.reserve(16);
+    for (size_t i = 0; i < 16; i++)
+    {
+        glm::vec3 noise = {
+            GetCore().randomFloat01R() * 2.0 - 1.0,
+            GetCore().randomFloat01R() * 2.0 - 1.0,
+            0.0f
+        };
+        ssaoNoise.push_back(noise);
+    }
+
+    glGenTextures(1, &ssaoNoiseTex);
+    glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 4, 4, 0, GL_RGB, GL_FLOAT, ssaoNoise.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // * ===== SSAO framebuffer init =====
+    glGenFramebuffers(1, &ssaoFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+
+    glGenTextures(1, &ssaoColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+
+    // Ssao blur
+    glGenFramebuffers(1, &ssaoBlurFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+    
+    glGenTextures(1, &ssaoColorBufferBlur);
+    glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowWidth, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
+    ssaoMap = new Texture(ssaoColorBufferBlur);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RendererModule::render()
@@ -547,16 +613,57 @@ void RendererModule::render()
         }
 
         RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
+
+        // ? +++++ SSAO rendering ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
+
+        ssaoShader->use();
+        for (size_t i = 0; i < 64; i++)
+        {
+            ssaoShader->setVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
+        }
+        ssaoShader->setMat4("projection", cameraMain->projectionMatrix);
+        glm::vec3 noiseScale = {GetCore().windowWidth / 4.0f, GetCore().windowHeight / 4.0f, 0.0f};
+        ssaoShader->setVec3("noiseScale", noiseScale);
+        ssaoShader->setFloat("radius", 10.5f);
+        ssaoShader->setFloat("bias", 0.025f);
+        ssaoShader->setInt("gPosition", 0);
+        ssaoShader->setInt("gNormal", 1);
+        ssaoShader->setInt("texNoise", 2);
+        drawQuad();
+
+        // Ssao blur
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+
+        ssaoBlurShader->use();
+        ssaoBlurShader->setInt("ssaoInput", 0);
+
+        drawQuad();
+
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
+        glm::vec2 screenSize = {GetCore().windowWidth, GetCore().windowHeight};
         // ? +++++ Execute (order 66) opaque rendering loop +++++
         while(!opaqueQueue.empty())
         {
-            // TODO: Send directional light shadow map via ubo
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
+            // opaqueQueue.front()->material->setTexture("ssaoMap", ssaoMap);
+            // opaqueQueue.front()->material->setVec2("screenSize", screenSize);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
         }
@@ -586,6 +693,9 @@ void RendererModule::render()
         while(!transparentQueue.empty())
         {
             transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
+            // opaqueQueue.front()->material->setTexture("ssaoMap", ssaoMap);
+            // opaqueQueue.front()->material->setVec2("screenSize", screenSize);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
@@ -593,10 +703,6 @@ void RendererModule::render()
         // ? +++++ Rendering bloom ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         bool horizontal = true, firstIteration = true;
         int amount = 10;
-
-        // Generate minified textures from bright buffer
-        // glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
-        // glGenerateMipmap(GL_TEXTURE_2D);
 
         blurShader->use();
         for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
@@ -633,13 +739,14 @@ void RendererModule::render()
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // ! ----- Render screen space quad -----
-        hdrShader->use();
-        hdrShader->setInt("scene", 0);
-        hdrShader->setInt("bloom0", 1);
-        hdrShader->setInt("bloom1", 2);
-        hdrShader->setInt("bloom2", 3);
-        hdrShader->setInt("bloom3", 4);
-        hdrShader->setFloat("exposure", cameraMain->exposure);
+        combineShader->use();
+        combineShader->setInt("scene", 0);
+        combineShader->setInt("bloom0", 1);
+        combineShader->setInt("bloom1", 2);
+        combineShader->setInt("bloom2", 3);
+        combineShader->setInt("bloom3", 4);
+        combineShader->setInt("ssao", 5);
+        combineShader->setFloat("exposure", cameraMain->exposure);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
         glActiveTexture(GL_TEXTURE1);
@@ -650,6 +757,8 @@ void RendererModule::render()
         glBindTexture(GL_TEXTURE_2D, blurBuffers[4]);
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, blurBuffers[6]);
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
         drawQuad();
 
         // ? +++++ Overlay UI rendering loop +++++

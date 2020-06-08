@@ -17,6 +17,9 @@
 #include <GLFW/glfw3.h>
 
 /**
+ * @note "Notka od twórcy"
+ * Tak wiem że tu bałagan. Jeżeli czyta to ktoś z zewnątrz to przepraszam za nieporządek ale tak jest jak czas jest ważniejszy od czystości kodu XD
+ * 
  * @brief Renderer module create info
  * Setting cullFace to true requires cullFaceMode and cullFrontFace set
  * Setting depthTest to true requires 
@@ -86,7 +89,7 @@ private:
     unsigned int hdrBrightBuffer;
     unsigned int blurFBO[2];
     unsigned int blurBuffers[8];
-    Shader* hdrShader;
+    Shader* combineShader;
     Shader* blurShader;
 
     // * ==== Deferred buffers =====
@@ -96,6 +99,15 @@ private:
     unsigned int gbufferNormal;
     Shader* gbufferShader;
     std::vector<glm::vec3> ssaoKernel;
+    std::vector<glm::vec3> ssaoNoise;
+    unsigned int ssaoNoiseTex;
+    unsigned int ssaoFBO;
+    unsigned int ssaoColorBuffer;
+    Shader* ssaoShader;
+    unsigned int ssaoBlurFBO;
+    unsigned int ssaoColorBufferBlur;
+    Shader* ssaoBlurShader;
+    Texture* ssaoMap;
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;
