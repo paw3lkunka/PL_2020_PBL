@@ -9,7 +9,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/vec_swizzle.hpp> 
 
-glm::vec3 PhysicSystem::G_CONST = {0.0f, 9.80665f, 0.0f};
+glm::vec3 PhysicSystem::G_CONST = {0.0f, 980.665f, 0.0f};
 
 bool PhysicSystem::assertEntity(Entity* entity)
 {

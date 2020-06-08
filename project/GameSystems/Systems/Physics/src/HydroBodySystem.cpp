@@ -76,7 +76,7 @@ void HydroBodySystem::fixedUpdate()
         if(hydroAccelerator == nullptr)
         {
             impulse.force += HydroPhysics::buoyancyForce(triangle);
-            //impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity);
+            impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity);
             //impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
         }
         else
@@ -97,7 +97,7 @@ void HydroBodySystem::fixedUpdate()
             //impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
         }
 
-        impulse.point = triangle.center;
+        impulse.point = triangle.center; // - static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
         rb->impulses.push_back(impulse);
     }
