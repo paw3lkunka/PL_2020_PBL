@@ -12,6 +12,9 @@
 
 class Entity;
 class ObjectModule;
+class Texture;
+class Shader;
+class Font;
 
 /**
  * @brief Simple editor for our purposes
@@ -58,9 +61,20 @@ private:
 
     //HACK: Maybe other solution?
     ///@brief list of sorting types, according to enum class (the same order as in enum class)
-    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0";
+    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0RectTransform\0";
     ///@brief index of current sorting type
     int enumValue;
+
+    // ! UI Maker methods
+    void drawMaker();
+    void makeNewButton(glm::vec2 pos, glm::vec2 size);
+    void makeNewText(glm::vec2 pos, std::string text);
+    Texture* buttonSprite;
+    Shader* buttonShader;
+    Entity* positionPointer;
+    Font* fontPtr;
+    Shader* textShader;
+    int lastEntitySize;
 
     // ! Component drawing functions
     void drawTransform(Transform* transformPtr);
@@ -72,6 +86,10 @@ private:
     void drawKayak(Kayak* kayakPtr);
     void drawEnemy(Enemy* enemyPtr);
     void drawCamera(Camera* camera);
+    void drawButton(Button* button);
+    void drawText(TextRenderer* textRenderer);
+    void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
+    void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
 
     // ! Helper functions
     /**

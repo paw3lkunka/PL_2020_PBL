@@ -130,6 +130,14 @@ public:
      */
     Material* getMaterialPtrByName(const char* name) {return objectContainer.getMaterialFromName(name); }
 
+    /**
+     * @brief Get the Texture Ptr By filepath
+     * 
+     * @param filePath of texture
+     * @return Texture* pointer or nullptr if can't find
+     */
+    Texture* getTexturePtrByFilePath(const char* filePath) { return objectContainer.getTexturePtrByFilePath(filePath); }
+
     
     /**
      * @brief Get the Animation Ptr By Name

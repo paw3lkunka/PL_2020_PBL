@@ -37,25 +37,28 @@ objectModule.newEntity(2, "RiverFlow");
 }
 
 {
-    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 42, "KosugiMaru-Regular");
+    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto textShader = objectModule.newShader("Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 128, "KosugiMaru-Regular");
+
     TextureCreateInfo info = {};
     info.format = GL_RGBA;
     info.generateMipmaps = false;
     info.magFilter = GL_LINEAR;
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
+
+    objectModule.newTexture("Resources/Sprites/cross.png", info);
     auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
-    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+
     auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
     uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
     uiMaterial->setTexture("sprite", buttonTest);
-    auto uiMaterial2 = objectModule.newMaterial(uiShader, "UiStandardMat2", RenderType::Transparent);
-    uiMaterial2->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
-    uiMaterial2->setTexture("sprite", buttonTest);
 
 
-    auto textMaterial = objectModule.newMaterial(uiShader, "TextMaterial", RenderType::Transparent);
-    textMaterial->setVec4("color", {1.0f, 0.0f, 0.0f, 1.0f});
+    auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+    textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+
     objectModule.newEntity(2, "Ui_Menu_Background");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
@@ -70,15 +73,20 @@ objectModule.newEntity(2, "RiverFlow");
             ui->material = mat;
     }
 
-    objectModule.newEntity(3, "Sound_On");
+    objectModule.newEntity(2, "Menu_Buttons");
+    auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+    objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+    uiModule.rootNodes.push_back(buttonsRoot);
+
+    objectModule.newEntity(3, "Start_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {200, 350};
-            rt->getSizeModifiable() = {300.0f, 150.0f};
-            uiModule.rootNodes.push_back(rt);
+            rt->getLocalPositionModifiable() = {170, 350};
+            rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->setParent(buttonsRoot);
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat", RenderType::Transparent);
+            auto buttMaterial = objectModule.newMaterial(uiShader, "startMat", RenderType::Transparent);
             buttMaterial->setTexture("sprite", buttonTest);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
@@ -89,17 +97,64 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = glm::vec4(0.239f, 0.858f, 0.329f, 0.7f);
             butt->onClickColor = glm::vec4(0.094f, 0.486f, 0.149f, 0.7f);
             butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+
+        objectModule.newEntity(2, "Start_Button_Text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-76.0f, -22.0f};
+                crt->getSizeModifiable() = {0.5f, 0.5f};
+                crt->setParent(rt);
+
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = font;
+                cui->mesh.text = "Start";
+        }
     }
 
-    objectModule.newEntity(3, "Sound_Off");
+    objectModule.newEntity(3, "Options_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {700, 350};
-            rt->getSizeModifiable() = {300.0f, 150.0f};
-            uiModule.rootNodes.push_back(rt);
+            rt->getLocalPositionModifiable() = {170, 230};
+            rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->setParent(buttonsRoot);
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-            auto buttMaterial = objectModule.newMaterial(uiShader, "buttonMat_2", RenderType::Transparent);
+            auto buttMaterial = objectModule.newMaterial(uiShader, "optionsMat", RenderType::Transparent);
+            buttMaterial->setTexture("sprite", buttonTest);
+            buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
+            ui->material = buttMaterial;
+        
+        auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
+            butt->baseColor = glm::vec4(0.968f, 0.556f, 0.094f, 0.7f);
+            butt->inactiveColor = glm::vec4(0.749f, 0.525f, 0.270f, 0.7f);
+            butt->highlightedColor = glm::vec4(0.972f, 0.752f, 0.509f, 0.7f);
+            butt->onClickColor = glm::vec4(0.705f, 0.392f, 0.031f, 0.7f);
+            butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+
+        objectModule.newEntity(2, "Options_Button_Text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-110.0f, -22.0f};
+                crt->getSizeModifiable() = {0.5f, 0.5f};
+                crt->setParent(rt);
+
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = font;
+                cui->mesh.text = "Options";
+        }
+    }
+
+    objectModule.newEntity(3, "Exit_Button");
+    {
+        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rt->getLocalPositionModifiable() = {170, 111};
+            rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->setParent(buttonsRoot);
+        
+        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            auto buttMaterial = objectModule.newMaterial(uiShader, "exitMat", RenderType::Transparent);
             buttMaterial->setTexture("sprite", buttonTest);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
@@ -110,6 +165,18 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = glm::vec4(0.901f, 0.337f, 0.384f, 0.7f);
             butt->onClickColor = glm::vec4(0.552f, 0.086f, 0.121f, 0.7f);
             butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
-            butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::gameScene));
+
+        objectModule.newEntity(2, "Exit_Button_Text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-61.0f, -22.0f};
+                crt->getSizeModifiable() = {0.5f, 0.5f};
+                crt->setParent(rt);
+
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = font;
+                cui->mesh.text = "Exit";
+        }
     }
 }

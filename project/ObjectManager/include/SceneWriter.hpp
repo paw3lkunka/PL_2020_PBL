@@ -76,11 +76,13 @@ private:
     void savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr);
     void savePaddle(Paddle* componentPtr);
     void saveEnemy(Enemy* enemyPtr);
+    void saveEnemyAnimation(EnemyAnimation* enemyAnimPtr);
     void saveUiRenderer(UiRenderer* componentPtr);
     void saveTextRenderer(TextRenderer* componentPtr);
     void saveRectTransform(RectTransform* componentPtr);
     void saveButton(Button* componentPtr);
     void saveHydroAccelerator(HydroAccelerator* componentPtr);
+    void saveUiSortingGroup(UiSortingGroup* componentPtr);
 
     // ? saving assets
     void saveMaterial(Material* assetPtr);

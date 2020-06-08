@@ -683,3 +683,26 @@ objectModule.newEntity(2, "sampleSound");
         auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
     }
 }
+
+// Enemy
+{
+    auto* enemy = objectModule.newEntity(4,"TMP enemy");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {30.0f, 0.0f, 30.0f};
+            t->getLocalScaleModifiable() = {10.0f, 20.0f, 10.0f};
+            t->setParent(&sceneModule.rootNode);
+
+        auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
+            e->detectionCounterMaxValue = 500;
+            e->sightDistance = 100.0f;
+            e->sightAngle = glm::pi<float>() / 4.0f;
+
+        auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
+            a->lerpParameter = 0.25f;
+
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+    }
+}

@@ -14,6 +14,7 @@ enum class SortingType : unsigned int
     RIGIDBODIES,
     KAYAK,
     ENEMY,
+    RECT_TRANSFORM,
 };
 
 #endif /* !EDITORDATASTRUCTURES_INL_ */

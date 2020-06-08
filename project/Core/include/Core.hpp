@@ -3,15 +3,6 @@
 
 #pragma region Includes
 
-//TODO check, which includes are really necessary
-
-// * System-depended
-#ifdef __linux__
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-#endif
-
 // * Other libs
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -109,6 +100,81 @@ class Core
          */
         std::string sceneFilePath = "Resources/Scenes/mainScene.json";
 #pragma endregion
+
+#pragma region Utilities
+    public:
+        /**
+         * @brief Returns random int.
+         * 
+         * @return int random number.
+         */
+        int randomInt();
+
+        /**
+         * @brief Returns random int from [0, max] range.
+         * 
+         * @param max upper bound of range.
+         * @return int random number.
+         */
+        int randomInt(int max);
+
+        /**
+         * @brief Returns random int from [min, max] range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return int random number.
+         */
+        int randomInt(int min, int max);
+
+        /**
+         * @brief Returns random float from [0, max) range.
+         * 
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatL(float max);
+
+        /**
+         * @brief Returns random float from (0, max] range.
+         * 
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatR(float max);
+        
+        /**
+         * @brief Returns random float from [min, max) range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatL(float min, float max);
+        
+        /**
+         * @brief Returns random float from (min, max] range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatR(float min, float max);
+
+        /**
+         * @brief Returns random float from [0, 1) range.
+         * 
+         * @return float random number.
+         */
+        float randomFloat01L();
+        
+        /**
+         * @brief Returns random float from (0, 1] range.
+         * 
+         * @return float random number.
+         */
+        float randomFloat01R();
+#pragma
 
 #pragma region Constants
     public:       
@@ -234,60 +300,27 @@ class Core
         
 #pragma endregion
 
-
 #pragma region Systems
 //TODO must be a better way, than static fields
     public:
-        //TODO documentation
         static CameraSystem cameraSystem;
-
-        //TODO documentation
         static CameraControlSystem cameraControlSystem;
-
-        //TODO documentation
         static AudioSourceSystem audioSourceSystem;
-
-        //TODO documentation
         static AudioListenerSystem audioListenerSystem;
-
-        //TODO documentation
         static MeshRendererSystem rendererSystem;
-
-        //TODO documentation
         static CollisionSystem collisionSystem;
-
-        //TODO documentation
         static PhysicalBasedInputSystem physicalBasedInputSystem;
-
-        //TODO documentation
         static PhysicSystem physicSystem;
-
-        //TODO documentation
         static SkeletonSystem skeletonSystem;
-        
-        //TODO documentation
         static LightSystem lightSystem;
-
-        //TODO documentation
         static PaddleControlSystem paddleControlSystem;
-
-        //TODO documentation
         static PaddleIkSystem paddleIkSystem;
-
-        //TODO documentation
         static UiRendererSystem uiRendererSystem;
-
-        //TODO documentation
         static HydroBodySystem hydroBodySystem;
-        
-        //TODO documentation
         static HideoutSystem hideoutSystem;
-
-        //TODO documentation
         static UiButtonSystem uiButtonSystem;
-
-        //TODO documentation
-        static EnemiesSightSystem enemiesSightSystem;
+        static EnemySystem enemySystem;
+        static SortingGroupSystem sortingGroupSystem;
 
 #pragma endregion
 

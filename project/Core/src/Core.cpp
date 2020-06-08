@@ -1,6 +1,8 @@
 #include "Core.hpp"
 #include "imgui.h"
 
+#include "xoshiro.h"
+
 #include "Components.inc"
 #include "Systems.inc"
 #include "MomentOfInertia.hpp"
@@ -52,6 +54,8 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 
 int Core::init()
 {
+    xoshiro_Init();
+
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;
@@ -117,13 +121,11 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            
+            //some code here...
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
-
-    
 
 #pragma region Renderer
 
@@ -191,7 +193,8 @@ int Core::init()
     gameSystemsModule.addSystem(&cameraSystem);
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
-    gameSystemsModule.addSystem(&enemiesSightSystem);
+    gameSystemsModule.addSystem(&enemySystem);
+    gameSystemsModule.addSystem(&sortingGroupSystem);
 
 #pragma endregion
 
@@ -204,6 +207,11 @@ int Core::mainLoop()
     double previousFrameStart = glfwGetTime();
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
+
+#pragma region AudioModule demo
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
+        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
+#pragma endregion
 
     // * ===== Game loop ===================================================
 
@@ -311,6 +319,69 @@ void Core::close()
     glfwSetWindowShouldClose(window,true);
 }
 
+int Core::randomInt()
+{
+    return xoshiro_next();
+}
+
+
+int Core::randomInt(int max)
+{
+    return xoshiro_next() % (max + 1);
+}
+
+int Core::randomInt(int min, int max)
+{
+    return min + (xoshiro_next() % (max + 1 - min));
+}
+
+float Core::randomFloat01R()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);
+
+    return number.f - 1.0f;
+}
+float Core::randomFloat01L()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);;
+
+    return 2.0f - number.f;
+}
+
+float Core::randomFloatL(float max)
+{
+    return std::lerp(0, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float max)
+{
+    return std::lerp(0, max, randomFloat01R());
+}
+
+float Core::randomFloatL(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01R());
+}
+
 CameraSystem Core::cameraSystem;
 CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
@@ -327,4 +398,5 @@ UiRendererSystem Core::uiRendererSystem;
 HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
-EnemiesSightSystem Core::enemiesSightSystem;
+EnemySystem Core::enemySystem;
+SortingGroupSystem Core::sortingGroupSystem;

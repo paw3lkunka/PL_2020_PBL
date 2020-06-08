@@ -253,6 +253,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveEnemy(temp);
         }
+        else if(EnemyAnimation* temp = dynamic_cast<EnemyAnimation*>(objContainerPtr->components[i]))
+        {
+            saveEnemyAnimation(temp);
+        }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
             saveUiRenderer(temp);
@@ -268,6 +272,10 @@ void SceneWriter::saveScene(const char* filePath)
         else if(RectTransform* temp = dynamic_cast<RectTransform*>(objContainerPtr->components[i]))
         {
             saveRectTransform(temp);
+        }
+        else if(UiSortingGroup* temp = dynamic_cast<UiSortingGroup*>(objContainerPtr->components[i]))
+        {
+            saveUiSortingGroup(temp);
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
@@ -505,11 +513,17 @@ void SceneWriter::saveEnemy(Enemy* enemyPtr)
 {
     j[name]["type"] = "Enemy";
     j[name]["sightDistance"] = enemyPtr->sightDistance;
+    j[name]["sightAngle"] = enemyPtr->sightAngle;
     j[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
     j[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
     j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
     j[name]["detectionCounter"] = enemyPtr->detectionCounter;
+}
 
+void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
+{
+    j[name]["type"] = "EnemyAnimation";
+    j[name]["lerpParameter"] = enemyAnimPtr->lerpParameter;
 }
 
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
@@ -583,6 +597,11 @@ void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
 {
     j[name]["type"] = "HydroAccelerator";
     j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
+}
+void SceneWriter::saveUiSortingGroup(UiSortingGroup* componentPtr)
+{
+    j[name]["type"] = "UiSortingGroup";
+    j[name]["groupTransparency"] = componentPtr->groupTransparency;
 }
 
 #pragma endregion

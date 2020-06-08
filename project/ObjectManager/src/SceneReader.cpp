@@ -396,6 +396,11 @@ void SceneReader::readComponents()
             std::cout << "Enemy" << std::endl;
             readEnemy(name);
         }
+        else if(componentType == "EnemyAnimation")
+        {
+            std::cout << "EnemyAnimation" << std::endl;
+            readEnemyAnimation(name);
+        }
         else if(componentType == "Hideout")
         {
             std::cout << "Hideout" << std::endl;
@@ -789,12 +794,22 @@ void SceneReader::readEnemy(std::string name)
     auto kayak = objModulePtr->newEmptyComponent<Enemy>();
     kayak->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     kayak->sightDistance = j.at(name).at("sightDistance").get<float>();
+    kayak->sightAngle = j.at(name).at("sightAngle").get<float>();
     kayak->detectionCounterMaxValue = j.at(name).at("detectionCounterMaxValue").get<int>();
     kayak->detectionPositiveStep = j.at(name).at("detectionPositiveStep").get<int>();
     kayak->detectionNegativeStep = j.at(name).at("detectionNegativeStep").get<int>();
     kayak->detectionCounter = j.at(name).at("detectionCounter").get<int>();
 
     assignToEntity(name, kayak);
+}
+
+void SceneReader::readEnemyAnimation(std::string name)
+{
+    auto anim = objModulePtr->newEmptyComponent<EnemyAnimation>();
+    anim->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    anim->lerpParameter = j.at(name).at("lerpParameter").get<float>();
+
+    assignToEntity(name, anim);
 }
 
 void SceneReader::readHideout(std::string name)
@@ -878,6 +893,14 @@ void SceneReader::readButton(std::string name)
 
     readButtonEvents(name, button);
     assignToEntity(name, button);
+}
+
+void SceneReader::readUiSortingGroup(std::string name)
+{
+    auto sortingGroup = objModulePtr->newEmptyComponent<UiSortingGroup>();
+    sortingGroup->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    sortingGroup->groupTransparency = j.at(name).at("groupTransparency").get<float>();
+    assignToEntity(name, sortingGroup);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
