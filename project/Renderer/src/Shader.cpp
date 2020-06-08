@@ -1,5 +1,6 @@
 #include "Shader.hpp"
 #include "ShaderExceptions.hpp"
+#include "RendererModule.hpp"
 
 void Shader::setBool(const std::string& name, bool value) const
 {
@@ -150,7 +151,11 @@ unsigned int Shader::compileShader(const char* shaderCode, GLenum shaderType)
 
 void Shader::use()
 {
-    glUseProgram(ID);
+    if (RendererModule::lastShaderID != ID)
+    {
+        RendererModule::lastShaderID = ID;
+        glUseProgram(ID);
+    }
 }
 
 void Shader::retrieveShaderInfo(GLenum shaderInfoType, std::unordered_map<std::string, GLenum>& buffer)

@@ -28,19 +28,19 @@ uniform mat4 MVP;
 
 mat3 calculateTBN(vec3 normal, vec3 tangent)
 {
-	vec3 T = normalize(vec3(model * vec4(tangent, 0.0f)));
-	vec3 N = normalize(vec3(model * vec4(normal, 0.0f)));
+	vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
+	vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
 	vec3 bitangent = cross(N, T);
-	vec3 B = normalize(vec3(model * vec4(bitangent, 0.0f)));
+	vec3 B = normalize(vec3(model * vec4(bitangent, 0.0)));
 	return mat3(T, B, N);
 }
 
 void main() 
 {
-	FragPos = vec3(model * vec4(position, 1.0f));
+	FragPos = vec3(model * vec4(position, 1.0));
 	Normal = mat3(transpose(inverse(model))) * normal;
 	Texcoord = texcoord;
 	TBN = calculateTBN(normal, tangent);
     FragPosLightSpace = directionalLightMatrix * vec4(FragPos, 1.0);
-	gl_Position = MVP * vec4(position, 1.0f);
+	gl_Position = MVP * vec4(position, 1.0);
 }

@@ -4,11 +4,7 @@
 
 void NormalPacket::render(glm::mat4& VP)
 {
-    if (material->getID() != RendererModule::lastMatID)
-    {
-        material->use();
-        RendererModule::lastMatID = material->getID();
-    }
+    material->use();
     // TODO: switching between diferrent matrix usage
     material->setModel(modelMatrix);
     material->setMVP(modelMatrix, VP);

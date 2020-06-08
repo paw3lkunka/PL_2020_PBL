@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-unsigned int Material::idCount = 0;
+unsigned int Material::idCount = 1;
 
 Material::Material(Shader* shader, const char* name, RenderType renderType, bool enableInstancing, bool serialize)
     : ISerializable(serialize), shader(shader), name(name), enableInstancing(enableInstancing), renderType(renderType)
@@ -67,15 +67,11 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
 
 void Material::use()
 {
-    static unsigned int lastShaderID = 0;
-
-    if (shader != nullptr)
+    if (shader != nullptr && ID != RendererModule::lastMatID)
     {
-        if (lastShaderID != shader->ID)
-        {
-            lastShaderID = shader->ID;
-            shader->use();
-        }
+        RendererModule::lastMatID = ID;
+
+        shader->use();
 
         int i = 0;
         // * ===== Texture samplers =====

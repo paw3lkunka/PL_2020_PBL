@@ -21,6 +21,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
+unsigned int RendererModule::lastShaderID = std::numeric_limits<unsigned int>::max();
 
 RendererModule::~RendererModule()
 {
@@ -179,6 +180,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     //hdrShader = new Shader(BuiltInShaders::screenSpaceQuadVertex, BuiltInShaders::hdrFragmentShader, nullptr, false);
     hdrShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/BloomCombine.frag");
     blurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag");
+    gbufferShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag");
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -302,6 +304,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // * ===== Framebuffers for ping pong gaussian blur =====
+    // TODO: Framebuffer for every color attachment should be more performant, maybe also use MRT to speed things up
     glGenFramebuffers(2, blurFBO);
     glGenTextures(8, blurBuffers);
 
@@ -323,6 +326,54 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
+
+    // * ===== Gbuffer framebuffer =====
+    glGenFramebuffers(1, &gbufferFBO);
+    glGenTextures(1, &gbufferPosition);
+    glGenTextures(1, &gbufferNormal);
+
+    glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferPosition, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormal, 0);
+
+    unsigned int gbufferAttachments[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, gbufferAttachments);
+
+    glGenRenderbuffers(1, &gbufferDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gbufferDepth);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Gbuffer framebuffer not complete!\n";
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // * ===== SSAO kernel randomization =====
+    ssaoKernel.reserve(64);
+    for (size_t i = 0; i < 64; i++)
+    {
+        // glm::vec3 sample = {
+        //     GetCore()
+        // };
+    }
+    
 }
 
 void RendererModule::render()
@@ -486,6 +537,16 @@ void RendererModule::render()
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
+        // ? +++++ Gbuffer rendering pass ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        for(auto packet : opaqueQueue)
+        {
+            packet->renderWithShader(gbufferShader, VP);
+        }
+
+        RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -613,6 +674,7 @@ void RendererModule::render()
 
         // ? +++++ Clear the render packets +++++
         lastMatID = std::numeric_limits<unsigned int>::max();
+        lastShaderID = std::numeric_limits<unsigned int>::max();
         normalPackets.clear();
         instancedPackets.clear();
         spritePackets.clear();

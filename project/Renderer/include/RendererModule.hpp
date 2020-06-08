@@ -61,6 +61,7 @@ public:
 
     // * Material switching optimization
     static unsigned int lastMatID;
+    static unsigned int lastShaderID;
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
@@ -87,6 +88,14 @@ private:
     unsigned int blurBuffers[8];
     Shader* hdrShader;
     Shader* blurShader;
+
+    // * ==== Deferred buffers =====
+    unsigned int gbufferFBO;
+    unsigned int gbufferDepth;
+    unsigned int gbufferPosition;
+    unsigned int gbufferNormal;
+    Shader* gbufferShader;
+    std::vector<glm::vec3> ssaoKernel;
 
     GLFWwindow* window = nullptr;
     RendererModuleCreateInfo createInfo;

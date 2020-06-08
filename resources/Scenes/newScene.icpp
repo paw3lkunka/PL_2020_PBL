@@ -1,6 +1,6 @@
 
 objectModule.newModel("Resources/Terrain/Test01.obj");
-objectModule.newModel("Resources/Models/Box.FBX");
+//objectModule.newModel("Resources/Models/Box.FBX");
 
 auto standardPbrShader = objectModule.newShader("Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
 
@@ -79,12 +79,12 @@ Entity* terrain = objectModule.newEntity(1, "Terrain");
         t->setParent(terrain->getComponentPtr<Transform>());
 }
 
-{
-    auto entity = objectModule.getEntityPtrByName("Box001");
+// {
+//     auto entity = objectModule.getEntityPtrByName("Box001");
 
-    auto mr = entity->getComponentPtr<MeshRenderer>();
-        mr->material = gravelMat;
-}
+//     auto mr = entity->getComponentPtr<MeshRenderer>();
+//         mr->material = gravelMat;
+// }
 
 objectModule.newEntity(2, "directionalLight");
 {

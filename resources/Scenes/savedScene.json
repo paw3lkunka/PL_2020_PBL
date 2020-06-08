@@ -1,13 +1,13 @@
 {
     "Amounts": {
-        "components": 10,
+        "components": 8,
         "cubemaps": 0,
         "cubemapsHdr": 1,
-        "entities": 5,
+        "entities": 4,
         "fonts": 0,
         "materials": 5,
-        "meshes": 2,
-        "shaders": 4,
+        "meshes": 1,
+        "shaders": 5,
         "textures": 12
     },
     "component000": {
@@ -29,12 +29,12 @@
             "z": 1.0
         },
         "serializationID": 3,
-        "transform parentID": 31,
+        "transform parentID": 27,
         "type": "Transform"
     },
     "component001": {
         "entity id": 0,
-        "material": 23,
+        "material": 19,
         "mesh": 4,
         "serializationID": 5,
         "type": "MeshRenderer"
@@ -57,41 +57,12 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 7,
+        "serializationID": 27,
         "transform parentID": 0,
         "type": "Transform"
     },
     "component003": {
-        "entity id": 1,
-        "material": 24,
-        "mesh": 8,
-        "serializationID": 9,
-        "type": "MeshRenderer"
-    },
-    "component004": {
         "entity id": 2,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 31,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component005": {
-        "entity id": 3,
         "localPosition": {
             "x": 0.0,
             "y": 0.0,
@@ -108,69 +79,69 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 33,
+        "serializationID": 29,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component006": {
+    "component004": {
         "color": {
             "b": 1.0,
             "g": 1.0,
             "r": 1.0
         },
-        "entity id": 3,
+        "entity id": 2,
         "intensity": 1.0,
         "lightType": 0,
-        "serializationID": 34,
+        "serializationID": 30,
         "type": "Light"
     },
-    "component007": {
-        "entity id": 4,
+    "component005": {
+        "entity id": 3,
         "farPlane": 2500.0,
         "fieldOfView": 80.0,
         "isMain": true,
         "nearPlane": 0.10000000149011612,
         "projectionMode": 0,
-        "serializationID": 36,
+        "serializationID": 32,
         "type": "Camera"
     },
-    "component008": {
-        "entity id": 4,
+    "component006": {
+        "entity id": 3,
         "localPosition": {
-            "x": 270.9981384277344,
-            "y": 121.54322052001953,
-            "z": 152.98809814453125
+            "x": 306.26043701171875,
+            "y": 138.43951416015625,
+            "z": 121.42678833007813
         },
         "localRotation": {
-            "w": 0.19048839807510376,
-            "x": -0.021198373287916183,
-            "y": 0.9754391312599182,
-            "z": 0.10855108499526978
+            "w": 0.5067377090454102,
+            "x": -0.09208984673023224,
+            "y": 0.8433544039726257,
+            "z": 0.15326344966888428
         },
         "localScale": {
             "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 37,
+        "serializationID": 33,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component009": {
+    "component007": {
         "at": {
-            "x": -0.3670174479484558,
-            "y": -0.21984604001045227,
-            "z": 0.9038617610931396
+            "x": -0.8264909982681274,
+            "y": -0.35184159874916077,
+            "z": 0.43945443630218506
         },
-        "entity id": 4,
+        "entity id": 3,
         "gain": 1.0,
         "isCurrent": 1,
-        "serializationID": 38,
+        "serializationID": 34,
         "type": "AudioListener",
         "up": {
-            "x": -0.08271089941263199,
-            "y": 0.9755346775054932,
-            "z": 0.20369389653205872
+            "x": -0.3106575012207031,
+            "y": 0.9360595345497131,
+            "z": 0.1651799976825714
         }
     },
     "cubemapHdr000": {
@@ -188,7 +159,7 @@
         "frontPath": "Resources/Textures/skybox_02/nz.hdr",
         "leftPath": "Resources/Textures/skybox_02/nx.hdr",
         "rightPath": "Resources/Textures/skybox_02/px.hdr",
-        "serializationID": 27,
+        "serializationID": 23,
         "topPath": "Resources/Textures/skybox_02/py.hdr"
     },
     "entity000": {
@@ -202,44 +173,35 @@
     },
     "entity001": {
         "components": [
-            7,
-            9
+            27
         ],
         "id": 1,
-        "name": "Box001",
-        "serializationID": 6
+        "name": "Terrain",
+        "serializationID": 26
     },
     "entity002": {
         "components": [
-            31
+            29,
+            30
         ],
         "id": 2,
-        "name": "Terrain",
-        "serializationID": 30
+        "name": "directionalLight",
+        "serializationID": 28
     },
     "entity003": {
         "components": [
+            32,
             33,
             34
         ],
         "id": 3,
-        "name": "directionalLight",
-        "serializationID": 32
-    },
-    "entity004": {
-        "components": [
-            36,
-            37,
-            38
-        ],
-        "id": 4,
         "name": "Camera",
-        "serializationID": 35
+        "serializationID": 31
     },
     "material000": {
         "cubemaps": {},
         "cubemapsHdr": {
-            "irradianceMap": 41
+            "irradianceMap": 38
         },
         "floats": {},
         "instancingEnabled": false,
@@ -338,13 +300,13 @@
         },
         "name": "grassMat",
         "renderingType": 0,
-        "serializationID": 23,
-        "shaderSerializationID": 10,
+        "serializationID": 19,
+        "shaderSerializationID": 6,
         "textures": {
-            "diffuse": 11,
-            "directionalShadowMap": 43,
-            "normal": 12,
-            "occRouMet": 13
+            "diffuse": 7,
+            "directionalShadowMap": 40,
+            "normal": 8,
+            "occRouMet": 9
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -375,9 +337,7 @@
     },
     "material001": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 41
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -475,13 +435,12 @@
         },
         "name": "gravelMat",
         "renderingType": 0,
-        "serializationID": 24,
-        "shaderSerializationID": 10,
+        "serializationID": 20,
+        "shaderSerializationID": 6,
         "textures": {
-            "diffuse": 14,
-            "directionalShadowMap": 43,
-            "normal": 15,
-            "occRouMet": 16
+            "diffuse": 10,
+            "normal": 11,
+            "occRouMet": 12
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -610,12 +569,12 @@
         },
         "name": "rocksMat",
         "renderingType": 0,
-        "serializationID": 25,
-        "shaderSerializationID": 10,
+        "serializationID": 21,
+        "shaderSerializationID": 6,
         "textures": {
-            "diffuse": 17,
-            "normal": 18,
-            "occRouMet": 19
+            "diffuse": 13,
+            "normal": 14,
+            "occRouMet": 15
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -744,12 +703,12 @@
         },
         "name": "waterMat",
         "renderingType": 1,
-        "serializationID": 26,
-        "shaderSerializationID": 10,
+        "serializationID": 22,
+        "shaderSerializationID": 6,
         "textures": {
-            "diffuse": 20,
-            "normal": 21,
-            "occRouMet": 22
+            "diffuse": 16,
+            "normal": 17,
+            "occRouMet": 18
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -781,7 +740,7 @@
     "material004": {
         "cubemaps": {},
         "cubemapsHdr": {
-            "cubemap": 27
+            "cubemap": 23
         },
         "floats": {},
         "instancingEnabled": false,
@@ -824,17 +783,17 @@
                 0.0
             ],
             "viewStatic": [
-                -0.9265295267105103,
-                -0.0827108845114708,
-                0.3670174181461334,
+                -0.4694727063179016,
+                -0.31065747141838074,
+                0.8264909386634827,
                 0.0,
-                -1.4901159417490817e-08,
-                0.9755346775054932,
-                0.21984605491161346,
+                -4.470348358154297e-08,
+                0.9360595941543579,
+                0.35184162855148315,
                 0.0,
-                -0.37622180581092834,
-                0.20369386672973633,
-                -0.9038617014884949,
+                -0.8829470276832581,
+                0.1651800274848938,
+                -0.43945446610450745,
                 0.0,
                 0.0,
                 0.0,
@@ -844,8 +803,8 @@
         },
         "name": "skyboxHdrMat",
         "renderingType": 0,
-        "serializationID": 29,
-        "shaderSerializationID": 28,
+        "serializationID": 25,
+        "shaderSerializationID": 24,
         "textures": {},
         "vec3s": {
             "viewPos": [
@@ -862,31 +821,30 @@
         "serializationID": 4,
         "type": "MeshCustom"
     },
-    "mesh001": {
-        "filePath": "Resources/Models/Box.FBX",
-        "meshPath": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 8,
-        "type": "MeshCustom"
-    },
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.frag",
-        "serializationID": 10,
+        "serializationID": 6,
         "vertexShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag",
-        "serializationID": 28,
+        "serializationID": 24,
         "vertexShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert"
     },
     "shader002": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/BloomCombine.frag",
-        "serializationID": 39,
+        "serializationID": 35,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
     },
     "shader003": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/GaussianBlur.frag",
-        "serializationID": 40,
+        "serializationID": 36,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
+    },
+    "shader004": {
+        "fragmentShaderPath": "Resources/Shaders/PostProcessing/PosNormBuffers.frag",
+        "serializationID": 37,
+        "vertexShaderPath": "Resources/Shaders/PostProcessing/ViewSpaceValues.vert"
     },
     "texture000": {
         "creationInfo": {
@@ -896,7 +854,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png",
-        "serializationID": 11
+        "serializationID": 7
     },
     "texture001": {
         "creationInfo": {
@@ -906,7 +864,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png",
-        "serializationID": 12
+        "serializationID": 8
     },
     "texture002": {
         "creationInfo": {
@@ -916,7 +874,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png",
-        "serializationID": 13
+        "serializationID": 9
     },
     "texture003": {
         "creationInfo": {
@@ -926,7 +884,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_diff_2k.png",
-        "serializationID": 14
+        "serializationID": 10
     },
     "texture004": {
         "creationInfo": {
@@ -936,7 +894,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_nor_2k.png",
-        "serializationID": 15
+        "serializationID": 11
     },
     "texture005": {
         "creationInfo": {
@@ -946,7 +904,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_occRouMet.png",
-        "serializationID": 16
+        "serializationID": 12
     },
     "texture006": {
         "creationInfo": {
@@ -956,7 +914,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_diff_2k.png",
-        "serializationID": 17
+        "serializationID": 13
     },
     "texture007": {
         "creationInfo": {
@@ -966,7 +924,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_nor_2k.png",
-        "serializationID": 18
+        "serializationID": 14
     },
     "texture008": {
         "creationInfo": {
@@ -976,7 +934,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_occRouMet.png",
-        "serializationID": 19
+        "serializationID": 15
     },
     "texture009": {
         "creationInfo": {
@@ -986,7 +944,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_COLOR.png",
-        "serializationID": 20
+        "serializationID": 16
     },
     "texture010": {
         "creationInfo": {
@@ -996,7 +954,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_NORM.png",
-        "serializationID": 21
+        "serializationID": 17
     },
     "texture011": {
         "creationInfo": {
@@ -1006,6 +964,6 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_OccRouSpec.png",
-        "serializationID": 22
+        "serializationID": 18
     }
 }
