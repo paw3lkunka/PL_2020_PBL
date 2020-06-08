@@ -254,6 +254,8 @@ class Core
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
         static SortingGroupSystem sortingGroupSystem;
+        static ToggleButtonSystem toggleButtonSystem;
+        static CargoStorageSystem cargoStorageSystem;
 
 #pragma endregion
 

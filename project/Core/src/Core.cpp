@@ -100,7 +100,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
@@ -115,7 +116,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //some code here...
+            
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -188,6 +189,8 @@ int Core::init()
     gameSystemsModule.addSystem(&uiButtonSystem);
     gameSystemsModule.addSystem(&enemySystem);
     gameSystemsModule.addSystem(&sortingGroupSystem);
+    gameSystemsModule.addSystem(&toggleButtonSystem);
+    gameSystemsModule.addSystem(&cargoStorageSystem);
 
 #pragma endregion
 
@@ -330,3 +333,5 @@ UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
 SortingGroupSystem Core::sortingGroupSystem;
+ToggleButtonSystem Core::toggleButtonSystem;
+CargoStorageSystem Core::cargoStorageSystem;

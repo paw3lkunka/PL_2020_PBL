@@ -12,7 +12,7 @@ bool UiButtonSystem::assertEntity(Entity* entity)
     return (buttonPtr != nullptr) && (rendererPtr != nullptr) && (rectTransformPtr != nullptr);
 }
 
-void UiButtonSystem::fixedUpdate()
+void UiButtonSystem::frameUpdate()
 {
     if(buttonPtr->isActive) //check if button is active
     {
@@ -33,7 +33,7 @@ void UiButtonSystem::fixedUpdate()
                 }
                 buttonPtr->isClicked = true;
             }
-            else //* if is over button, change color to highlited
+            else if(!mouseButtonClicked) //* if is over button, change color to highlited
             {
                 buttonPtr->isClicked = false;
                 buttonPtr->lastFrameColor = glm::mix(buttonPtr->lastFrameColor, buttonPtr->highlightedColor, lerpFactor);

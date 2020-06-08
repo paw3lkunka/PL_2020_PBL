@@ -1,0 +1,221 @@
+objectModule.newAudioClip("Resources/Audios/river.wav");
+objectModule.newEntity(4, "Camera");
+{
+    auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
+        ViewFrustum& frustum = c->getFrustumModifiable();
+            frustum.farPlane = 2500.0f;
+            frustum.nearPlane = 0.1f;
+            frustum.fieldOfView = 80.0f;
+            frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+        c->getProjectionModeModifiable() = CameraProjection::Perspective;
+
+    
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+
+    auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+        li->getIsCurrentModifiable() = true;
+        li->getGainModifiable() = 1.0f;
+        li->getVelocityModifiable();
+        li->getPositionModifiable();
+        li->getAtModifiable();
+        li->getUpModifiable();
+}
+
+objectModule.newEntity(2, "RiverFlow");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
+        so3->getClipsModifiable().push_back("Resources/Audios/river.wav");
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 2.0f;
+        so3->getIsLoopingModifiable() = true;
+}
+
+{
+    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto textShader = objectModule.newShader("Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 128, "KosugiMaru-Regular");
+
+    TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+
+    auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+
+    auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
+    uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
+    uiMaterial->setTexture("sprite", buttonTest);
+
+
+    auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+    textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+
+    objectModule.newEntity(2, "Ui_Menu_Background");
+    {
+        auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            rt->getAnchorModifiable() = {0.5f, 0.5f};
+            rt->getSizeModifiable() = {1920, 1080};
+            uiModule.rootNodes.push_back(rt);
+
+        auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
+            mat->setTexture("sprite", buttonTest);
+            mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
+            ui->material = mat;
+    }
+
+    {        
+        {   //cargo button 1
+            objectModule.newEntity(3, "CargoButton1");
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getSizeModifiable() = {300, 150};
+                rt->getLocalPositionModifiable() = {500, 500};
+                uiModule.rootNodes.push_back(rt);
+            auto tb = objectModule.newEmptyComponentForLastEntity<CargoButton>();
+                tb->baseColorOn = {0.184f, 0.772f, 0.149f, 0.8f};
+                tb->highlightedColorOn = {0.368f, 0.862f, 0.337f, 0.8f};
+                tb->onClickColorOn = {0.168f, 0.643f, 0.137f, 0.8f};
+
+                tb->baseColorOff = {0.905f, 0.094f, 0.101f, 0.8f};
+                tb->highlightedColorOff = {0.949f, 0.411f, 0.415f, 0.8f};
+                tb->onClickColorOff = {0.682f, 0.058f, 0.066f, 0.8f};
+
+                tb->inactiveColor = {0.0f, 0.0f, 0.0f, 0.8f};
+                tb->onActivateEvents.push_back(Message(Event::ADD_CARGO, tb->entityPtr->getComponentPtr<Cargo*>()));
+                tb->onDeactivateEvents.push_back(Message(Event::REMOVE_CARGO, tb->entityPtr->getComponentPtr<Cargo*>()));
+                
+            {
+                auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
+                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                uiR->material = objectModule.newMaterial(shader, "Toggle_1", RenderType::Transparent);
+                uiR->material->setTexture("sprite", tex);
+            }
+            
+            objectModule.newEntity(2, "Cargo1Name");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-44.0f, 31.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo1NameMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Name";
+
+                tb->nameText = cui;
+            }
+            objectModule.newEntity(2, "Cargo1Weight");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-135.0f, -8.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo1WeightMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Weight";
+
+                tb->weightText = cui;
+            }
+            objectModule.newEntity(2, "Cargo1Income");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-135.0f, -51.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo1IncomeMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Income";
+                tb->incomeText = cui;
+            }
+        }
+
+        { //cargo button 2
+            objectModule.newEntity(3, "CargoButton2");
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getSizeModifiable() = {300, 150};
+                rt->getLocalPositionModifiable() = {500, 500};
+                uiModule.rootNodes.push_back(rt);
+            auto tb = objectModule.newEmptyComponentForLastEntity<CargoButton>();
+                tb->baseColorOn = {0.184f, 0.772f, 0.149f, 0.8f};
+                tb->highlightedColorOn = {0.368f, 0.862f, 0.337f, 0.8f};
+                tb->onClickColorOn = {0.168f, 0.643f, 0.137f, 0.8f};
+
+                tb->baseColorOff = {0.905f, 0.094f, 0.101f, 0.8f};
+                tb->highlightedColorOff = {0.949f, 0.411f, 0.415f, 0.8f};
+                tb->onClickColorOff = {0.682f, 0.058f, 0.066f, 0.8f};
+
+                tb->inactiveColor = {0.0f, 0.0f, 0.0f, 0.8f};
+                tb->onActivateEvents.push_back(Message(Event::ADD_CARGO, tb->entityPtr->getComponentPtr<Cargo*>()));
+                tb->onDeactivateEvents.push_back(Message(Event::REMOVE_CARGO, tb->entityPtr->getComponentPtr<Cargo*>()));
+            {
+                auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
+                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                uiR->material = objectModule.newMaterial(shader, "Toggle_2", RenderType::Transparent);
+                uiR->material->setTexture("sprite", tex);
+            }
+            
+            objectModule.newEntity(2, "Cargo2Name");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-44.0f, 31.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo1NameMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Name";
+
+                tb->nameText = cui;
+            }
+            objectModule.newEntity(2, "Cargo2Weight");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-135.0f, -8.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo2WeightMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Weight";
+
+                tb->weightText = cui;
+            }
+            objectModule.newEntity(2, "Cargo2Income");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                    crt->getSizeModifiable() = {0.3f, 0.3f};
+                    crt->getLocalPositionModifiable() = {-135.0f, -51.0f};
+                    crt->setParent(rt);
+
+                auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                    cui->material = objectModule.newMaterial(textShader, "Cargo2IncomeMat", RenderType::Transparent);
+                    cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                    cui->mesh.font = font;
+                    cui->mesh.text = "Income";
+                tb->incomeText = cui;
+            }
+        }
+    }
+}

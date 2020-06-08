@@ -122,15 +122,20 @@ enum class Event : unsigned int
     COLLSION_DETECT,
     // DYNAMIC collider entered TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
     TRIGGER_ENTER,
-    // DYNAMIC collider escaped TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
+    // DYNAMIC collider escaped TRIGGER; DATA: TriggerData {Collider* cause, Collider* trigger}.
     TRIGGER_EXIT,
 #pragma endregion
 
-#pragma region UI Events
 #pragma region Button
-    /// Load new scene notification, Data: path to new scene;
+    /// Load new scene notification, DATA: path to new scene;
     LOAD_SCENE,
 #pragma endregion
+
+#pragma region Cargo
+    /// Add cargo to storage, DATA: Cargo*
+    ADD_CARGO,
+    /// Remove cargo from storage; DATA: Cargo*
+    REMOVE_CARGO,
 #pragma endregion
 
     // used to define ranges of values
