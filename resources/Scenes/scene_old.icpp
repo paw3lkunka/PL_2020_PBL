@@ -145,7 +145,7 @@
 #pragma region Entities
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("barrel_biohazard");
+        Entity* entity = objectModule.getEntityPtrByName("Barrel_01.FBX/barrel_biohazard");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = barrel1Mat;
 
@@ -154,13 +154,13 @@
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("test_riverbed");
+        Entity* entity = objectModule.getEntityPtrByName("test_riverbed.FBX/test_riverbed");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = grassMat;
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("rocks_03");
+        Entity* entity = objectModule.getEntityPtrByName("rocks_03.FBX/rocks_03");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = simpleLitMat;
 
@@ -171,7 +171,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Surface");
         if(entity != nullptr)
         {
             auto mr = entity->getComponentPtr<MeshRenderer>();
@@ -193,7 +193,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Water");
+        auto entity = objectModule.getEntityPtrByName("Water.FBX/Water");
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
@@ -203,7 +203,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Cliffs");
+        auto entity = objectModule.getEntityPtrByName("Cliffs.FBX/Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = rocksMat;
 
@@ -212,7 +212,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Left_bank");
+        auto entity = objectModule.getEntityPtrByName("Left_bank.FBX/Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -221,7 +221,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Right_bank");
+        auto entity = objectModule.getEntityPtrByName("Right_bank.FBX/Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -230,7 +230,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Riverbed");
+        auto entity = objectModule.getEntityPtrByName("Riverbed.FBX/Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = gravelMat;
 
@@ -239,7 +239,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Joints");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = unlitSkinnedMat;
 
@@ -249,7 +249,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Sphere001");
+        auto entity = objectModule.getEntityPtrByName("unit_sphere.FBX/Sphere001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -265,7 +265,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Box001");
+        auto entity = objectModule.getEntityPtrByName("Box.FBX/Box001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
             t->getLocalScaleModifiable() *= 10;

@@ -28,6 +28,9 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
         case GL_FLOAT:
             floats[var.first] = 0.0f;
             break;
+        case GL_FLOAT_VEC2:
+            vec2s[var.first] = glm::vec3(0);
+            break;
         case GL_FLOAT_VEC3:
             vec3s[var.first] = glm::vec3(0);
             break;
@@ -121,7 +124,7 @@ void Material::use()
             shader->setMat4(var.first, var.second);
         }
     }
-    else
+    else if (shader == nullptr)
     {
         std::cerr << "Material " << name << " has no shader!\n";
     }
