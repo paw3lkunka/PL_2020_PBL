@@ -13,6 +13,11 @@ public:
     ~CargoStorage() = default;
 
     std::list<Cargo*> cargosStored;
+
+    float weightLimit = 30.0f;
+
+    float weightSum = 0.0f;
+    float incomeSum = 0.0f;
 };
 
 #endif /* !CARGOSTORAGE_INL_ */

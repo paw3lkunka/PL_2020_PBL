@@ -96,7 +96,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->inactiveColor = glm::vec4(0.411f, 0.588f, 0.435f, 0.7f);
             butt->highlightedColor = glm::vec4(0.239f, 0.858f, 0.329f, 0.7f);
             butt->onClickColor = glm::vec4(0.094f, 0.486f, 0.149f, 0.7f);
-            butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+            butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::selectCargoScene));
 
         objectModule.newEntity(2, "Start_Button_Text");
         {
@@ -165,6 +165,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = glm::vec4(0.901f, 0.337f, 0.384f, 0.7f);
             butt->onClickColor = glm::vec4(0.552f, 0.086f, 0.121f, 0.7f);
             butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+            butt->onClickEvents.push_back(Message(Event::EXIT_GAME));
 
         objectModule.newEntity(2, "Exit_Button_Text");
         {

@@ -254,6 +254,21 @@ void ConsoleModule::receiveMessage(Message msg)
                 << "direction: " << glm::to_string(data.direction) << std::endl;
     }
         break;
+
+    case Event::ADD_CARGO:
+        std::cout << "ADD_CARGO" << std::endl;
+    break;
+    case Event::REMOVE_CARGO:
+        std::cout << "REMOVE_CARGO" << std::endl;
+    break;
+
+    case Event::EXIT_GAME:
+        std::cout << "EXIT" << std::endl;
+    break;
+
+    case Event::LOAD_SCENE:
+        std::cout << "LOAD_SCENE: " << msg.getValue<const char*>() << std::endl;
+    break;
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
         break;

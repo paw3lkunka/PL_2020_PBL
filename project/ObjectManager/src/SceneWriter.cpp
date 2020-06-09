@@ -33,6 +33,7 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 
 void SceneWriter::saveScene(const char* filePath)
 {
+    j.clear();
     j["Amounts"]["entities"] = objContainerPtr->entities.size();
     j["Amounts"]["shaders"] = objContainerPtr->shaders.size();
     j["Amounts"]["materials"] = objContainerPtr->materials.size();
@@ -257,6 +258,22 @@ void SceneWriter::saveScene(const char* filePath)
         else if(UiSortingGroup* temp = dynamic_cast<UiSortingGroup*>(objContainerPtr->components[i]))
         {
             saveUiSortingGroup(temp);
+        }
+        else if(CargoButton* temp = dynamic_cast<CargoButton*>(objContainerPtr->components[i]))
+        {
+            saveCargoButton(temp);
+        }
+        else if(ToggleButton* temp = dynamic_cast<ToggleButton*>(objContainerPtr->components[i]))
+        {
+            saveToggleButton(temp);
+        }
+        else if(CargoStorage* temp = dynamic_cast<CargoStorage*>(objContainerPtr->components[i]))
+        {
+            saveCargoStorage(temp);
+        }
+        else if(dynamic_cast<Cargo*>(objContainerPtr->components[i]))
+        {
+            j[name]["type"] = "Cargo";
         }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
@@ -579,10 +596,108 @@ void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
     j[name]["type"] = "HydroAccelerator";
     j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
 }
+
 void SceneWriter::saveUiSortingGroup(UiSortingGroup* componentPtr)
 {
     j[name]["type"] = "UiSortingGroup";
     j[name]["groupTransparency"] = componentPtr->groupTransparency;
+}
+
+void SceneWriter::saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser)
+{
+    (*parser)[cargoName]["name"] = componentPtr->name;
+    (*parser)[cargoName]["isRisky"] = componentPtr->isRisky;
+    (*parser)[cargoName]["weight"] = componentPtr->weight;
+    (*parser)[cargoName]["income"] = componentPtr->income;
+}
+
+void SceneWriter::saveToggleButton(ToggleButton* componentPtr)
+{
+    j[name]["type"] = "ToggleButton";
+    j[name]["isActive"] = componentPtr->isActive;
+
+    j[name]["inactiveColor"]["r"] = componentPtr->inactiveColor.r;
+    j[name]["inactiveColor"]["g"] = componentPtr->inactiveColor.g;
+    j[name]["inactiveColor"]["b"] = componentPtr->inactiveColor.b;
+    j[name]["inactiveColor"]["a"] = componentPtr->inactiveColor.a;
+
+    j[name]["baseColorOn"]["r"] = componentPtr->baseColorOn.r;
+    j[name]["baseColorOn"]["g"] = componentPtr->baseColorOn.g;
+    j[name]["baseColorOn"]["b"] = componentPtr->baseColorOn.b;
+    j[name]["baseColorOn"]["a"] = componentPtr->baseColorOn.a;
+
+    j[name]["highlightedColorOn"]["r"] = componentPtr->highlightedColorOn.r;
+    j[name]["highlightedColorOn"]["g"] = componentPtr->highlightedColorOn.g;
+    j[name]["highlightedColorOn"]["b"] = componentPtr->highlightedColorOn.b;
+    j[name]["highlightedColorOn"]["a"] = componentPtr->highlightedColorOn.a;
+
+    j[name]["onClickColorOn"]["r"] = componentPtr->onClickColorOn.r;
+    j[name]["onClickColorOn"]["g"] = componentPtr->onClickColorOn.g;
+    j[name]["onClickColorOn"]["b"] = componentPtr->onClickColorOn.b;
+    j[name]["onClickColorOn"]["a"] = componentPtr->onClickColorOn.a;
+
+    j[name]["baseColorOff"]["r"] = componentPtr->baseColorOff.r;
+    j[name]["baseColorOff"]["g"] = componentPtr->baseColorOff.g;
+    j[name]["baseColorOff"]["b"] = componentPtr->baseColorOff.b;
+    j[name]["baseColorOff"]["a"] = componentPtr->baseColorOff.a;
+
+    j[name]["highlightedColorOff"]["r"] = componentPtr->highlightedColorOff.r;
+    j[name]["highlightedColorOff"]["g"] = componentPtr->highlightedColorOff.g;
+    j[name]["highlightedColorOff"]["b"] = componentPtr->highlightedColorOff.b;
+    j[name]["highlightedColorOff"]["a"] = componentPtr->highlightedColorOff.a;
+
+    j[name]["onClickColorOff"]["r"] = componentPtr->onClickColorOff.r;
+    j[name]["onClickColorOff"]["g"] = componentPtr->onClickColorOff.g;
+    j[name]["onClickColorOff"]["b"] = componentPtr->onClickColorOff.b;
+    j[name]["onClickColorOff"]["a"] = componentPtr->onClickColorOff.a;
+
+    for(int i = 0; i < componentPtr->onActivateEvents.size(); ++i)
+    {
+        std::string eventName = "e" + std::to_string(i);
+
+        saveMessage(eventName, componentPtr->onActivateEvents[i], "onActivateEvents");
+    }
+
+    for(int i = 0; i < componentPtr->onDeactivateEvents.size(); ++i)
+    {
+        std::string eventName = "e" + std::to_string(i);
+
+        saveMessage(eventName, componentPtr->onDeactivateEvents[i], "onDeactivateEvents");
+    }
+}
+
+void SceneWriter::saveCargoButton(CargoButton* componentPtr)
+{
+    saveToggleButton(componentPtr);
+    j[name]["type"] = "CargoButton";
+    j[name]["nameText"] = componentPtr->nameText->serializationID;
+    j[name]["incomeText"] = componentPtr->incomeText->serializationID;
+    j[name]["weightText"] = componentPtr->weightText->serializationID;
+}
+
+void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
+{
+    j[name]["type"] = "CargoStorage";
+    if(componentPtr->entityPtr->getComponentPtr<Transform>() == nullptr)
+    {
+        nlohmann::json* temp = new nlohmann::json();
+        int i = 0;
+        for(auto cargo : componentPtr->cargosStored)
+        {
+            std::string cargoName = "c" + std::to_string(i++);
+            saveCargo(cargo, cargoName, temp);
+        }
+
+
+        std::ofstream file("Resources/Scenes/chosenCargos.json");
+        if(file.good())
+        {
+            file << std::setw(4) << temp;
+        }
+        file.close();
+
+        delete temp;
+    }
 }
 
 #pragma endregion
@@ -747,20 +862,31 @@ void SceneWriter::saveFont(Font* assetPtr)
 
 #pragma region Events
 
-void SceneWriter::saveMessage(std::string msgName, Message msg)
+void SceneWriter::saveMessage(std::string msgName, Message msg, std::string typeName)
 {
-    j[name]["onClickEvents"][msgName.c_str()]["event"] = msg.getEvent();
+    int event = -1;
     switch(msg.getEvent())
     {
         case Event::AUDIO_SOURCE_PLAY:
-            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            event = (int)Event::AUDIO_SOURCE_PLAY;
+            j[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::AUDIO_SOURCE_STOP:
-            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            event = (int)Event::AUDIO_SOURCE_STOP;
+            j[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::LOAD_SCENE:
-            j[name]["onClickEvents"][msgName.c_str()]["scene"] = msg.getValue<const char*>();
+            event = (int)Event::LOAD_SCENE;
+            j[name][typeName.c_str()][msgName.c_str()]["scene"] = msg.getValue<const char*>();
         break;
+        case Event::EXIT_GAME:
+            event = (int)Event::EXIT_GAME;
+        break;
+    }
+
+    if(event != -1)
+    {
+        j[name][typeName.c_str()][msgName.c_str()]["event"] = msg.getEvent();
     }
 }
 #pragma endregion

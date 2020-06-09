@@ -8,7 +8,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
-#include "ScenesPaths.inl"
+#include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
 
 Core* Core::instance = nullptr;
@@ -104,9 +104,9 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -120,7 +120,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            
+
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -176,7 +176,7 @@ int Core::init()
 
 #pragma regnon attach systems
 
-    gameSystemsModule.addSystem(&hydroBodySystem);
+    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -195,6 +195,7 @@ int Core::init()
     gameSystemsModule.addSystem(&sortingGroupSystem);
     gameSystemsModule.addSystem(&toggleButtonSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
+    gameSystemsModule.addSystem(&cargoButtonSystem);
 
 #pragma endregion
 
@@ -402,3 +403,4 @@ EnemySystem Core::enemySystem;
 SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
+CargoButtonSystem Core::cargoButtonSystem;

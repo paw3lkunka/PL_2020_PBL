@@ -82,7 +82,12 @@ private:
     void saveButton(Button* componentPtr);
     void saveHydroAccelerator(HydroAccelerator* componentPtr);
     void saveUiSortingGroup(UiSortingGroup* componentPtr);
-    //TODO: Cargo and ToggleButton saving
+    void saveToggleButton(ToggleButton* componentPtr);
+    void saveCargoButton(CargoButton* componentPtr);
+    void saveCargoStorage(CargoStorage* componentPtr);
+
+    // ! didn't call it in saveComponents
+    void saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser);
 
     // ? saving assets
     void saveMaterial(Material* assetPtr);
@@ -93,7 +98,7 @@ private:
     void saveFont(Font* assetPtr);
 
     // ? saving Messages
-    void saveMessage(std::string msgName, Message msg);
+    void saveMessage(std::string msgName, Message msg, std::string typeName = "onClickEvents");
 };
 
 #endif /* !SCENEWRITER_HPP_ */

@@ -4,6 +4,8 @@
 #include "CargoStorage.inl"
 #include "Cargo.inl"
 
+#include <algorithm>
+
 void CargoStorageSystem::receiveMessage(Message msg)
 {
     if(cargoStoragePtr != nullptr)
@@ -13,23 +15,28 @@ void CargoStorageSystem::receiveMessage(Message msg)
             case Event::ADD_CARGO:
             {
                 Cargo* cargoToAdd = msg.getValue<Cargo*>();
-                if(findCargo(cargoStoragePtr->cargosStored, cargoToAdd) != cargoStoragePtr->cargosStored.end())
+                std::list<Cargo*>::iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), cargoToAdd);
+                if(iter != cargoStoragePtr->cargosStored.end())
                 {
                     std::cerr << "Cargo already exists!" << std::endl;
                 }
                 else
                 {
-                    cargoStoragePtr->cargosStored.push_back(msg.getValue<Cargo*>());
+                    cargoStoragePtr->cargosStored.push_back(cargoToAdd);
+                    cargoStoragePtr->weightSum += cargoToAdd->weight;
+                    cargoStoragePtr->incomeSum += cargoToAdd->income;
                 }
             }
             break;
             case Event::REMOVE_CARGO:
             {
                 Cargo* cargoToRemove = msg.getValue<Cargo*>();
-                auto iter = findCargo(cargoStoragePtr->cargosStored, cargoToRemove);
+                std::list<Cargo*>::iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), cargoToRemove);
                 if(iter != cargoStoragePtr->cargosStored.end())
                 {
                     cargoStoragePtr->cargosStored.erase(iter);
+                    cargoStoragePtr->weightSum -= cargoToRemove->weight;
+                    cargoStoragePtr->incomeSum -= cargoToRemove->income;
                 }
                 else
                 {
@@ -50,16 +57,4 @@ bool CargoStorageSystem::assertEntity(Entity* entity)
 void CargoStorageSystem::frameUpdate()
 {
 
-}
-
-std::list<Cargo*>::iterator CargoStorageSystem::findCargo(std::list<Cargo*> vec, Cargo* toFind)
-{
-    for(std::list<Cargo*>::iterator iter = vec.begin(); iter != vec.end(); ++iter)
-    {
-        if(*(*iter) == *toFind)
-        {
-            return iter;
-        }
-    }
-    return vec.end();
 }

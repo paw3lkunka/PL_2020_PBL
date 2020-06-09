@@ -34,6 +34,8 @@ namespace Cargos
         CargoType("Jewelry", false, {2, 8}, {300, 1000}),
         CargoType("Fake Documents", true, {0.3, 5}, {600, 1500})
     };
+    
+    const int baseCargosSize = 8;
 }
 
 #endif /* !CARGODATASTRUCTURES_INL_ */

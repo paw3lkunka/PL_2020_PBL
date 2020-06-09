@@ -25,11 +25,11 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     hasInstance = true;
     shaders.reserve(50);
     components.reserve(400);
-    entities.reserve(200);
+    entities.reserve(400);
     meshes.reserve(50);
     textures.reserve(50);
     cubemaps.reserve(10);
-    materials.reserve(30);
+    materials.reserve(50);
     fonts.reserve(16);
 }
 
@@ -276,11 +276,30 @@ Font* ObjectContainer::getFontPtrByName(const char* name)
 
 void ObjectContainer::unloadScene()
 {
+    //HACK: I HATE MYSELF
+    for(int i = materials.size() - 1; i > 0; --i)
+    {
+        delete materials[i];
+        materials[i] = nullptr;
+    }
+    for(int i = textures.size() - 1; i > 0; --i)
+    {
+        delete textures[i];
+        textures[i] = nullptr;
+    }
+    for(int i = shaders.size() - 1; i > 0; --i)
+    {
+        delete shaders[i];
+        shaders[i] = nullptr;
+    }
     for(int i = components.size() - 1; i > 0; --i)
     {
         delete components[i];
         components[i] = nullptr;
     }
+    shaders.clear();
+    textures.clear();
+    materials.clear();
     components.clear();
     entities.clear();
 }

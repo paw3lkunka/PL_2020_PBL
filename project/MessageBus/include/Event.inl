@@ -129,6 +129,8 @@ enum class Event : unsigned int
 #pragma region Button
     /// Load new scene notification, DATA: path to new scene;
     LOAD_SCENE,
+    /// exit game.
+    EXIT_GAME,
 #pragma endregion
 
 #pragma region Cargo

@@ -48,16 +48,6 @@ public:
 protected:
 private:
     CargoStorage* cargoStoragePtr = nullptr;
-
-    /**
-     * @brief find cargo in list method
-     * 
-     * @param vec storage where it will be looking in
-     * @param toFind cargo to find in storage
-     * @return true cargo found
-     * @return false cargo not found
-     */
-    std::list<Cargo*>::iterator findCargo(std::list<Cargo*> vec, Cargo* toFind);
 };
 
 #endif /* !CARGOSTORAGESYSTEM_HPP_ */

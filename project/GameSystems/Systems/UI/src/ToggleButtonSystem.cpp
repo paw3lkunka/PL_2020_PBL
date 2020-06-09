@@ -58,7 +58,7 @@ void ToggleButtonSystem::frameUpdate()
                 // * Send on activation messages if button switches to ON
                 if(toggleButtonPtr->state) 
                 {
-                    for(auto m : toggleButtonPtr->onActivateEvents)
+                    for(auto m : toggleButtonPtr->onDeactivateEvents)
                     {
                         GetCore().messageBus.sendMessage(m);
                     }
@@ -66,7 +66,7 @@ void ToggleButtonSystem::frameUpdate()
                 // * Send on deactivation messages if button switches to OFF
                 else
                 {
-                    for(auto m : toggleButtonPtr->onDeactivateEvents)
+                    for(auto m : toggleButtonPtr->onActivateEvents)
                     {
                         GetCore().messageBus.sendMessage(m);
                     }

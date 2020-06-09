@@ -98,7 +98,7 @@ class Core
         /**
          * @brief Path to scene file.
          */
-        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
+        std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";
 #pragma endregion
 
 #pragma region Utilities
@@ -290,12 +290,16 @@ class Core
         class : public IModule
         {
         virtual void receiveMessage(Message msg)
+        {
+            if(msg.getEvent() == Event::EXIT_GAME)
             {
-                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-                {
-                    instance->close();
-                }
+                instance->close();
             }
+            if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
+            {
+                instance->close();
+            }
+        }
         } tmpExit;
         
 #pragma endregion
@@ -323,6 +327,7 @@ class Core
         static SortingGroupSystem sortingGroupSystem;
         static ToggleButtonSystem toggleButtonSystem;
         static CargoStorageSystem cargoStorageSystem;
+        static CargoButtonSystem cargoButtonSystem;
 
 #pragma endregion
 
