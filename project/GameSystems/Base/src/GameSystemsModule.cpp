@@ -35,6 +35,10 @@ void GameSystemsModule::run(System::UpdateType updateType)
 {
     for( auto sys : systems )
     {
+        if(GetCore().isGamePaused() && sys->isPausable())
+        {
+            continue;
+        }
         for( Entity& ent : *entities )
         {
             sys->process(&ent, updateType);

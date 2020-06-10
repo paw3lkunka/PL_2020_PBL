@@ -14,7 +14,7 @@ struct UiRenderer;
 class UiButtonSystem : public System, public IMsgReceiver
 {
 public:
-    UiButtonSystem() = default;
+    UiButtonSystem() : System(false) {}
     ~UiButtonSystem() = default;
 
     ///@brief inherited from IMsgReceiver

@@ -266,6 +266,10 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "EXIT" << std::endl;
     break;
 
+    case Event::PAUSE_GAME:
+        std::cout << "PAUSE" << std::endl;
+    break;
+
     case Event::LOAD_SCENE:
         std::cout << "LOAD_SCENE: " << msg.getValue<const char*>() << std::endl;
     break;

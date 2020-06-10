@@ -1133,7 +1133,15 @@ void SceneReader::readEvent(std::string name, std::string containerName, std::ve
                 {
                     messages.push_back(Message(Event::LOAD_SCENE, Scenes::gameScene));
                 }
+                else if(scene == Scenes::mainMenuScene)
+                {
+                    messages.push_back(Message(Event::LOAD_SCENE, Scenes::mainMenuScene));
+                }
             }
+            break;
+
+            case Event::EXIT_GAME:
+                messages.push_back(Message(Event::EXIT_GAME));
             break;
         }
     }

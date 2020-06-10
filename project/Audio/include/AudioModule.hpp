@@ -107,6 +107,12 @@ class AudioModule : public IModule
         std::vector<ALCcontext*> contexts = {};
 
         std::vector<AudioSource*> sources = {};
+        ///@brief all playing sources - helpful while pausing
+        std::vector<AudioSource*> playingSources = {};
+
+        ///@brief all sources paused flag
+        bool paused = false;
+
         /**
          * @brief Pointer to currently processed AudioListener
          * 

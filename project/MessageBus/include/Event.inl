@@ -67,6 +67,8 @@ enum class Event : unsigned int
     AUDIO_SOURCE_PAUSE,
     // Audio Source, stop playing,set Source's offset on the beginning of buffer queue, DATA: AudioSource* .
     AUDIO_SOURCE_REWIND,
+    // Pause all playing audio sources
+    AUDIO_SOURCE_PAUSE_ALL_PLAYING,
 #pragma endregion
 
 #pragma region WINDOW
@@ -131,6 +133,8 @@ enum class Event : unsigned int
     LOAD_SCENE,
     /// exit game.
     EXIT_GAME,
+    ///pause game
+    PAUSE_GAME,
 #pragma endregion
 
 #pragma region Cargo

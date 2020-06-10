@@ -107,7 +107,6 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().sceneModule.updateTransforms();
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
-    GetCore().audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }

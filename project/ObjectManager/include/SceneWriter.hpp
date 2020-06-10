@@ -57,7 +57,7 @@ private:
     std::unordered_map<std::string, unsigned int> childrenMap;
 
     ///@brief json object - parser to json
-    nlohmann::json j;
+    nlohmann::json* json;
 
     ///@brief name of actual object
     std::string name;

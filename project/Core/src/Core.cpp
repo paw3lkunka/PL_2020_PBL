@@ -98,7 +98,7 @@ int Core::init()
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &uiModule );
-    messageBus.addReceiver( &tmpExit );
+    messageBus.addReceiver( &gamePlayModule );
 
     // ! Scene loading
     if (recreateScene)

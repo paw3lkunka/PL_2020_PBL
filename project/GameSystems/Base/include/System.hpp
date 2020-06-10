@@ -1,15 +1,24 @@
 #ifndef SYSTEM_HPP_
 #define SYSTEM_HPP_
 
+#include "IPausable.inl"
 class Entity;
 
 /**
  * @brief Base class for all ECS systems
  * implementation should have private pointers to required Components
  */
-class System
+class System : public IPausable
 {
     public:
+
+        /**
+         * @brief Construct a new System object
+         * 
+         * @param pausable is system pausable - flag for IPausable interface
+         */
+        System(bool pausable = true) : IPausable(pausable) {}
+
         /**
          * @brief identifiers for types of update. 
          */
