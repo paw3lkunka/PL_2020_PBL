@@ -386,13 +386,41 @@ float Core::randomFloatR(float min, float max)
 
 void Core::loadAllTerrainChunks()
 {
+    auto terrainRoot = objectModule.getEntityPtrByName("Terrain")->getComponentPtr<Transform>();
+
     namespace fs = std::filesystem;
     std::string path = "Resources/Terrain";
     for (auto& entry : fs::directory_iterator(path))
     {
         objectModule.newModel(entry.path().string().c_str());
-        std::cout << entry.path().filename().string() + "/defaultobject" << std::endl;
-        //Entity* entity = objectModule.getEntityPtrByName(entry.path().filename().string() + "/defaultobject");
+        std::string filename = entry.path().filename().string();
+        Entity* entity = objectModule.getEntityPtrByName((filename + "/defaultobject").c_str());
+        {
+            size_t start = filename.find_first_of('(') + 1;
+            size_t end = filename.find_first_of(')');
+            size_t size = end - start;
+            std::string parsePos = filename.substr(start, size);
+            std::string delimiter = ", ";
+            float positions[3];
+            int i = 0;
+            size_t pos;
+            std::string token;
+            while ((pos = parsePos.find(delimiter)) != std::string::npos)
+            {
+                token = parsePos.substr(0, pos);
+                positions[i] = std::stof(token);
+                parsePos.erase(0, pos + delimiter.length());
+                i++;
+            }
+            positions[i] = std::stof(parsePos);
+            
+            auto t = entity->getComponentPtr<Transform>();
+            t->getLocalPositionModifiable() = {-positions[0], positions[1], positions[2]};
+            t->setParent(terrainRoot);
+
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("grassMat");
+        }
     }
 }
 

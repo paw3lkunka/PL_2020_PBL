@@ -87,8 +87,8 @@ private:
     unsigned int hdrFBO, rboDepth;
     unsigned int hdrColorBuffer;
     unsigned int hdrBrightBuffer;
-    unsigned int blurFBO[2];
-    unsigned int blurBuffers[8];
+    unsigned int blurFBO[6];
+    unsigned int blurBuffers[6];
     Shader* combineShader;
     Shader* blurShader;
 

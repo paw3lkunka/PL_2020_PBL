@@ -3,21 +3,24 @@
 
 #include "Component.hpp"
 #include "Material.hpp"
-#include "mesh/Mesh.hpp"
+#include "Mesh.hpp"
 
-//TODO documentation
+/**
+ * @brief Mesh rendering component
+ */
 struct MeshRenderer : public Component
 {
     MeshRenderer() = default;
     virtual ~MeshRenderer() = default;
 
-//TODO documentation
-    //TODO may this be pointer?
+    /**
+     * @brief The model matrix of this mesh
+     */
     glm::mat4 modelMatrix;
-    
-//TODO documentation
+
+    /// @brief Pointer to mesh's material
     Material* material;
-//TODO documentation
+    /// @brief Pointer to mesh to be rendered
     Mesh* mesh;
 };
 

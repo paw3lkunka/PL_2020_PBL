@@ -1,12 +1,12 @@
 {
     "Amounts": {
-        "components": 12,
+        "components": 94,
         "cubemaps": 0,
         "cubemapsHdr": 1,
-        "entities": 6,
+        "entities": 47,
         "fonts": 0,
         "materials": 7,
-        "meshes": 3,
+        "meshes": 44,
         "shaders": 8,
         "textures": 19
     },
@@ -29,12 +29,11 @@
             "z": 1.0
         },
         "serializationID": 3,
-        "transform parentID": 45,
+        "transform parentID": 0,
         "type": "Transform"
     },
     "component001": {
         "entity id": 0,
-        "material": 35,
         "mesh": 4,
         "serializationID": 5,
         "type": "MeshRenderer"
@@ -58,46 +57,18 @@
             "z": 1.0
         },
         "serializationID": 7,
-        "transform parentID": 0,
+        "transform parentID": 41,
         "type": "Transform"
     },
     "component003": {
         "entity id": 1,
+        "material": 32,
         "mesh": 8,
         "serializationID": 9,
         "type": "MeshRenderer"
     },
     "component004": {
         "entity id": 2,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 11,
-        "transform parentID": 45,
-        "type": "Transform"
-    },
-    "component005": {
-        "entity id": 2,
-        "material": 36,
-        "mesh": 12,
-        "serializationID": 13,
-        "type": "MeshRenderer"
-    },
-    "component006": {
-        "entity id": 3,
         "localPosition": {
             "x": 50.0,
             "y": -100.0,
@@ -114,12 +85,12 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 45,
+        "serializationID": 41,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component007": {
-        "entity id": 4,
+    "component005": {
+        "entity id": 3,
         "localPosition": {
             "x": 0.0,
             "y": 0.0,
@@ -136,70 +107,1288 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 47,
+        "serializationID": 43,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component008": {
+    "component006": {
         "color": {
             "b": 1.0,
             "g": 1.0,
             "r": 1.0
         },
-        "entity id": 4,
+        "entity id": 3,
         "intensity": 1.0,
         "lightType": 0,
-        "serializationID": 48,
+        "serializationID": 44,
         "type": "Light"
     },
-    "component009": {
-        "entity id": 5,
+    "component007": {
+        "entity id": 4,
         "farPlane": 2500.0,
         "fieldOfView": 80.0,
         "isMain": true,
         "nearPlane": 0.10000000149011612,
         "projectionMode": 0,
-        "serializationID": 50,
+        "serializationID": 46,
         "type": "Camera"
     },
-    "component010": {
-        "entity id": 5,
+    "component008": {
+        "entity id": 4,
         "localPosition": {
-            "x": 29.112594604492188,
-            "y": 23.963687896728516,
-            "z": 13.374482154846191
+            "x": 10.897998809814453,
+            "y": 31.072429656982422,
+            "z": -19.68889617919922
         },
         "localRotation": {
-            "w": 0.48533400893211365,
-            "x": -0.05658451095223427,
-            "y": 0.8666257858276367,
-            "z": 0.1010388731956482
+            "w": 0.26652830839157104,
+            "x": -0.046756356954574585,
+            "y": 0.9482124447822571,
+            "z": 0.16634239256381989
         },
         "localScale": {
             "x": 1.0,
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 51,
+        "serializationID": 47,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component011": {
+    "component009": {
         "at": {
-            "x": -0.8297714591026306,
-            "y": -0.23005056381225586,
-            "z": 0.5084841251373291
+            "x": -0.48989564180374146,
+            "y": -0.340379536151886,
+            "z": 0.8025858998298645
         },
-        "entity id": 5,
+        "entity id": 4,
         "gain": 1.0,
         "isCurrent": 1,
-        "serializationID": 52,
+        "serializationID": 48,
         "type": "AudioListener",
         "up": {
-            "x": -0.19615039229393005,
-            "y": 0.9731786847114563,
-            "z": 0.12020102143287659
+            "x": -0.1773398220539093,
+            "y": 0.9402881264686584,
+            "z": 0.29053208231925964
         }
+    },
+    "component010": {
+        "entity id": 5,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 50,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component011": {
+        "entity id": 5,
+        "material": 33,
+        "mesh": 51,
+        "serializationID": 52,
+        "type": "MeshRenderer"
+    },
+    "component012": {
+        "entity id": 6,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 54,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component013": {
+        "entity id": 6,
+        "material": 33,
+        "mesh": 55,
+        "serializationID": 56,
+        "type": "MeshRenderer"
+    },
+    "component014": {
+        "entity id": 7,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 58,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component015": {
+        "entity id": 7,
+        "material": 33,
+        "mesh": 59,
+        "serializationID": 60,
+        "type": "MeshRenderer"
+    },
+    "component016": {
+        "entity id": 8,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 62,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component017": {
+        "entity id": 8,
+        "material": 33,
+        "mesh": 63,
+        "serializationID": 64,
+        "type": "MeshRenderer"
+    },
+    "component018": {
+        "entity id": 9,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 66,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component019": {
+        "entity id": 9,
+        "material": 33,
+        "mesh": 67,
+        "serializationID": 68,
+        "type": "MeshRenderer"
+    },
+    "component020": {
+        "entity id": 10,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": -100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 70,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component021": {
+        "entity id": 10,
+        "material": 33,
+        "mesh": 71,
+        "serializationID": 72,
+        "type": "MeshRenderer"
+    },
+    "component022": {
+        "entity id": 11,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 74,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component023": {
+        "entity id": 11,
+        "material": 33,
+        "mesh": 75,
+        "serializationID": 76,
+        "type": "MeshRenderer"
+    },
+    "component024": {
+        "entity id": 12,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 78,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component025": {
+        "entity id": 12,
+        "material": 33,
+        "mesh": 79,
+        "serializationID": 80,
+        "type": "MeshRenderer"
+    },
+    "component026": {
+        "entity id": 13,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 82,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component027": {
+        "entity id": 13,
+        "material": 33,
+        "mesh": 83,
+        "serializationID": 84,
+        "type": "MeshRenderer"
+    },
+    "component028": {
+        "entity id": 14,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 86,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component029": {
+        "entity id": 14,
+        "material": 33,
+        "mesh": 87,
+        "serializationID": 88,
+        "type": "MeshRenderer"
+    },
+    "component030": {
+        "entity id": 15,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 90,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component031": {
+        "entity id": 15,
+        "material": 33,
+        "mesh": 91,
+        "serializationID": 92,
+        "type": "MeshRenderer"
+    },
+    "component032": {
+        "entity id": 16,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 94,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component033": {
+        "entity id": 16,
+        "material": 33,
+        "mesh": 95,
+        "serializationID": 96,
+        "type": "MeshRenderer"
+    },
+    "component034": {
+        "entity id": 17,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 98,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component035": {
+        "entity id": 17,
+        "material": 33,
+        "mesh": 99,
+        "serializationID": 100,
+        "type": "MeshRenderer"
+    },
+    "component036": {
+        "entity id": 18,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 102,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component037": {
+        "entity id": 18,
+        "material": 33,
+        "mesh": 103,
+        "serializationID": 104,
+        "type": "MeshRenderer"
+    },
+    "component038": {
+        "entity id": 19,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 106,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component039": {
+        "entity id": 19,
+        "material": 33,
+        "mesh": 107,
+        "serializationID": 108,
+        "type": "MeshRenderer"
+    },
+    "component040": {
+        "entity id": 20,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 110,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component041": {
+        "entity id": 20,
+        "material": 33,
+        "mesh": 111,
+        "serializationID": 112,
+        "type": "MeshRenderer"
+    },
+    "component042": {
+        "entity id": 21,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 114,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component043": {
+        "entity id": 21,
+        "material": 33,
+        "mesh": 115,
+        "serializationID": 116,
+        "type": "MeshRenderer"
+    },
+    "component044": {
+        "entity id": 22,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 118,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component045": {
+        "entity id": 22,
+        "material": 33,
+        "mesh": 119,
+        "serializationID": 120,
+        "type": "MeshRenderer"
+    },
+    "component046": {
+        "entity id": 23,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 122,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component047": {
+        "entity id": 23,
+        "material": 33,
+        "mesh": 123,
+        "serializationID": 124,
+        "type": "MeshRenderer"
+    },
+    "component048": {
+        "entity id": 24,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 126,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component049": {
+        "entity id": 24,
+        "material": 33,
+        "mesh": 127,
+        "serializationID": 128,
+        "type": "MeshRenderer"
+    },
+    "component050": {
+        "entity id": 25,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 130,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component051": {
+        "entity id": 25,
+        "material": 33,
+        "mesh": 131,
+        "serializationID": 132,
+        "type": "MeshRenderer"
+    },
+    "component052": {
+        "entity id": 26,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 134,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component053": {
+        "entity id": 26,
+        "material": 33,
+        "mesh": 135,
+        "serializationID": 136,
+        "type": "MeshRenderer"
+    },
+    "component054": {
+        "entity id": 27,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 138,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component055": {
+        "entity id": 27,
+        "material": 33,
+        "mesh": 139,
+        "serializationID": 140,
+        "type": "MeshRenderer"
+    },
+    "component056": {
+        "entity id": 28,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 142,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component057": {
+        "entity id": 28,
+        "material": 33,
+        "mesh": 143,
+        "serializationID": 144,
+        "type": "MeshRenderer"
+    },
+    "component058": {
+        "entity id": 29,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 146,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component059": {
+        "entity id": 29,
+        "material": 33,
+        "mesh": 147,
+        "serializationID": 148,
+        "type": "MeshRenderer"
+    },
+    "component060": {
+        "entity id": 30,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 150,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component061": {
+        "entity id": 30,
+        "material": 33,
+        "mesh": 151,
+        "serializationID": 152,
+        "type": "MeshRenderer"
+    },
+    "component062": {
+        "entity id": 31,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 154,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component063": {
+        "entity id": 31,
+        "material": 33,
+        "mesh": 155,
+        "serializationID": 156,
+        "type": "MeshRenderer"
+    },
+    "component064": {
+        "entity id": 32,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 158,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component065": {
+        "entity id": 32,
+        "material": 33,
+        "mesh": 159,
+        "serializationID": 160,
+        "type": "MeshRenderer"
+    },
+    "component066": {
+        "entity id": 33,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 162,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component067": {
+        "entity id": 33,
+        "material": 33,
+        "mesh": 163,
+        "serializationID": 164,
+        "type": "MeshRenderer"
+    },
+    "component068": {
+        "entity id": 34,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 166,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component069": {
+        "entity id": 34,
+        "material": 33,
+        "mesh": 167,
+        "serializationID": 168,
+        "type": "MeshRenderer"
+    },
+    "component070": {
+        "entity id": 35,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 170,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component071": {
+        "entity id": 35,
+        "material": 33,
+        "mesh": 171,
+        "serializationID": 172,
+        "type": "MeshRenderer"
+    },
+    "component072": {
+        "entity id": 36,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 174,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component073": {
+        "entity id": 36,
+        "material": 33,
+        "mesh": 175,
+        "serializationID": 176,
+        "type": "MeshRenderer"
+    },
+    "component074": {
+        "entity id": 37,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 178,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component075": {
+        "entity id": 37,
+        "material": 33,
+        "mesh": 179,
+        "serializationID": 180,
+        "type": "MeshRenderer"
+    },
+    "component076": {
+        "entity id": 38,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 182,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component077": {
+        "entity id": 38,
+        "material": 33,
+        "mesh": 183,
+        "serializationID": 184,
+        "type": "MeshRenderer"
+    },
+    "component078": {
+        "entity id": 39,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 186,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component079": {
+        "entity id": 39,
+        "material": 33,
+        "mesh": 187,
+        "serializationID": 188,
+        "type": "MeshRenderer"
+    },
+    "component080": {
+        "entity id": 40,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 190,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component081": {
+        "entity id": 40,
+        "material": 33,
+        "mesh": 191,
+        "serializationID": 192,
+        "type": "MeshRenderer"
+    },
+    "component082": {
+        "entity id": 41,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 194,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component083": {
+        "entity id": 41,
+        "material": 33,
+        "mesh": 195,
+        "serializationID": 196,
+        "type": "MeshRenderer"
+    },
+    "component084": {
+        "entity id": 42,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 198,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component085": {
+        "entity id": 42,
+        "material": 33,
+        "mesh": 199,
+        "serializationID": 200,
+        "type": "MeshRenderer"
+    },
+    "component086": {
+        "entity id": 43,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 202,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component087": {
+        "entity id": 43,
+        "material": 33,
+        "mesh": 203,
+        "serializationID": 204,
+        "type": "MeshRenderer"
+    },
+    "component088": {
+        "entity id": 44,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 206,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component089": {
+        "entity id": 44,
+        "material": 33,
+        "mesh": 207,
+        "serializationID": 208,
+        "type": "MeshRenderer"
+    },
+    "component090": {
+        "entity id": 45,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 210,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component091": {
+        "entity id": 45,
+        "material": 33,
+        "mesh": 211,
+        "serializationID": 212,
+        "type": "MeshRenderer"
+    },
+    "component092": {
+        "entity id": 46,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 214,
+        "transform parentID": 41,
+        "type": "Transform"
+    },
+    "component093": {
+        "entity id": 46,
+        "material": 33,
+        "mesh": 215,
+        "serializationID": 216,
+        "type": "MeshRenderer"
     },
     "cubemapHdr000": {
         "backPath": "Resources/Textures/skybox_02/pz.hdr",
@@ -216,7 +1405,7 @@
         "frontPath": "Resources/Textures/skybox_02/nz.hdr",
         "leftPath": "Resources/Textures/skybox_02/nx.hdr",
         "rightPath": "Resources/Textures/skybox_02/px.hdr",
-        "serializationID": 41,
+        "serializationID": 37,
         "topPath": "Resources/Textures/skybox_02/py.hdr"
     },
     "entity000": {
@@ -225,7 +1414,7 @@
             5
         ],
         "id": 0,
-        "name": "Terrain.obj/defaultobject",
+        "name": "Box.FBX/Box001",
         "serializationID": 2
     },
     "entity001": {
@@ -234,50 +1423,417 @@
             9
         ],
         "id": 1,
-        "name": "Box.FBX/Box001",
+        "name": "rocks_03.FBX/rocks_03",
         "serializationID": 6
     },
     "entity002": {
         "components": [
-            11,
-            13
+            41
         ],
         "id": 2,
-        "name": "rocks_03.FBX/rocks_03",
-        "serializationID": 10
+        "name": "Terrain",
+        "serializationID": 40
     },
     "entity003": {
         "components": [
-            45
+            43,
+            44
         ],
         "id": 3,
-        "name": "Terrain",
-        "serializationID": 44
+        "name": "directionalLight",
+        "serializationID": 42
     },
     "entity004": {
         "components": [
+            46,
             47,
             48
         ],
         "id": 4,
-        "name": "directionalLight",
-        "serializationID": 46
+        "name": "Camera",
+        "serializationID": 45
     },
     "entity005": {
         "components": [
             50,
-            51,
             52
         ],
         "id": 5,
-        "name": "Camera",
+        "name": "Terrain_(-100.0, 0.0, -100.0).obj/defaultobject",
         "serializationID": 49
+    },
+    "entity006": {
+        "components": [
+            54,
+            56
+        ],
+        "id": 6,
+        "name": "Terrain_(-100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 53
+    },
+    "entity007": {
+        "components": [
+            58,
+            60
+        ],
+        "id": 7,
+        "name": "Terrain_(-100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 57
+    },
+    "entity008": {
+        "components": [
+            62,
+            64
+        ],
+        "id": 8,
+        "name": "Terrain_(-100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 61
+    },
+    "entity009": {
+        "components": [
+            66,
+            68
+        ],
+        "id": 9,
+        "name": "Terrain_(-100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 65
+    },
+    "entity010": {
+        "components": [
+            70,
+            72
+        ],
+        "id": 10,
+        "name": "Terrain_(0.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 69
+    },
+    "entity011": {
+        "components": [
+            74,
+            76
+        ],
+        "id": 11,
+        "name": "Terrain_(0.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 73
+    },
+    "entity012": {
+        "components": [
+            78,
+            80
+        ],
+        "id": 12,
+        "name": "Terrain_(0.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 77
+    },
+    "entity013": {
+        "components": [
+            82,
+            84
+        ],
+        "id": 13,
+        "name": "Terrain_(0.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 81
+    },
+    "entity014": {
+        "components": [
+            86,
+            88
+        ],
+        "id": 14,
+        "name": "Terrain_(0.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 85
+    },
+    "entity015": {
+        "components": [
+            90,
+            92
+        ],
+        "id": 15,
+        "name": "Terrain_(0.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 89
+    },
+    "entity016": {
+        "components": [
+            94,
+            96
+        ],
+        "id": 16,
+        "name": "Terrain_(100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 93
+    },
+    "entity017": {
+        "components": [
+            98,
+            100
+        ],
+        "id": 17,
+        "name": "Terrain_(100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 97
+    },
+    "entity018": {
+        "components": [
+            102,
+            104
+        ],
+        "id": 18,
+        "name": "Terrain_(100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 101
+    },
+    "entity019": {
+        "components": [
+            106,
+            108
+        ],
+        "id": 19,
+        "name": "Terrain_(100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 105
+    },
+    "entity020": {
+        "components": [
+            110,
+            112
+        ],
+        "id": 20,
+        "name": "Terrain_(100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 109
+    },
+    "entity021": {
+        "components": [
+            114,
+            116
+        ],
+        "id": 21,
+        "name": "Terrain_(100.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 113
+    },
+    "entity022": {
+        "components": [
+            118,
+            120
+        ],
+        "id": 22,
+        "name": "Terrain_(100.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 117
+    },
+    "entity023": {
+        "components": [
+            122,
+            124
+        ],
+        "id": 23,
+        "name": "Terrain_(200.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 121
+    },
+    "entity024": {
+        "components": [
+            126,
+            128
+        ],
+        "id": 24,
+        "name": "Terrain_(200.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 125
+    },
+    "entity025": {
+        "components": [
+            130,
+            132
+        ],
+        "id": 25,
+        "name": "Terrain_(200.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 129
+    },
+    "entity026": {
+        "components": [
+            134,
+            136
+        ],
+        "id": 26,
+        "name": "Terrain_(200.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 133
+    },
+    "entity027": {
+        "components": [
+            138,
+            140
+        ],
+        "id": 27,
+        "name": "Terrain_(200.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 137
+    },
+    "entity028": {
+        "components": [
+            142,
+            144
+        ],
+        "id": 28,
+        "name": "Terrain_(200.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 141
+    },
+    "entity029": {
+        "components": [
+            146,
+            148
+        ],
+        "id": 29,
+        "name": "Terrain_(200.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 145
+    },
+    "entity030": {
+        "components": [
+            150,
+            152
+        ],
+        "id": 30,
+        "name": "Terrain_(200.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 149
+    },
+    "entity031": {
+        "components": [
+            154,
+            156
+        ],
+        "id": 31,
+        "name": "Terrain_(200.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 153
+    },
+    "entity032": {
+        "components": [
+            158,
+            160
+        ],
+        "id": 32,
+        "name": "Terrain_(300.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 157
+    },
+    "entity033": {
+        "components": [
+            162,
+            164
+        ],
+        "id": 33,
+        "name": "Terrain_(300.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 161
+    },
+    "entity034": {
+        "components": [
+            166,
+            168
+        ],
+        "id": 34,
+        "name": "Terrain_(300.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 165
+    },
+    "entity035": {
+        "components": [
+            170,
+            172
+        ],
+        "id": 35,
+        "name": "Terrain_(300.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 169
+    },
+    "entity036": {
+        "components": [
+            174,
+            176
+        ],
+        "id": 36,
+        "name": "Terrain_(300.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 173
+    },
+    "entity037": {
+        "components": [
+            178,
+            180
+        ],
+        "id": 37,
+        "name": "Terrain_(300.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 177
+    },
+    "entity038": {
+        "components": [
+            182,
+            184
+        ],
+        "id": 38,
+        "name": "Terrain_(300.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 181
+    },
+    "entity039": {
+        "components": [
+            186,
+            188
+        ],
+        "id": 39,
+        "name": "Terrain_(300.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 185
+    },
+    "entity040": {
+        "components": [
+            190,
+            192
+        ],
+        "id": 40,
+        "name": "Terrain_(300.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 189
+    },
+    "entity041": {
+        "components": [
+            194,
+            196
+        ],
+        "id": 41,
+        "name": "Terrain_(400.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 193
+    },
+    "entity042": {
+        "components": [
+            198,
+            200
+        ],
+        "id": 42,
+        "name": "Terrain_(400.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 197
+    },
+    "entity043": {
+        "components": [
+            202,
+            204
+        ],
+        "id": 43,
+        "name": "Terrain_(400.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 201
+    },
+    "entity044": {
+        "components": [
+            206,
+            208
+        ],
+        "id": 44,
+        "name": "Terrain_(400.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 205
+    },
+    "entity045": {
+        "components": [
+            210,
+            212
+        ],
+        "id": 45,
+        "name": "Terrain_(400.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 209
+    },
+    "entity046": {
+        "components": [
+            214,
+            216
+        ],
+        "id": 46,
+        "name": "Terrain_(400.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 213
     },
     "material000": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 58
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -375,23 +1931,22 @@
         },
         "name": "terrainMat",
         "renderingType": 0,
-        "serializationID": 35,
-        "shaderSerializationID": 15,
+        "serializationID": 31,
+        "shaderSerializationID": 11,
         "textures": {
-            "diffuse0": 17,
-            "diffuse1": 20,
-            "diffuse2": 26,
-            "diffuse3": 31,
-            "directionalShadowMap": 60,
-            "normal0": 18,
-            "normal1": 21,
-            "normal2": 27,
-            "normal3": 33,
-            "orm0": 19,
-            "orm1": 22,
-            "orm2": 34,
-            "orm3": 34,
-            "splatmap": 16
+            "diffuse0": 13,
+            "diffuse1": 16,
+            "diffuse2": 22,
+            "diffuse3": 27,
+            "normal0": 14,
+            "normal1": 17,
+            "normal2": 23,
+            "normal3": 29,
+            "orm0": 15,
+            "orm1": 18,
+            "orm2": 30,
+            "orm3": 30,
+            "splatmap": 12
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -423,7 +1978,7 @@
     "material001": {
         "cubemaps": {},
         "cubemapsHdr": {
-            "irradianceMap": 58
+            "irradianceMap": 222
         },
         "floats": {},
         "instancingEnabled": false,
@@ -522,13 +2077,13 @@
         },
         "name": "whiteMat",
         "renderingType": 0,
-        "serializationID": 36,
-        "shaderSerializationID": 14,
+        "serializationID": 32,
+        "shaderSerializationID": 10,
         "textures": {
-            "diffuse": 31,
-            "directionalShadowMap": 60,
-            "normal": 33,
-            "occRouMet": 34
+            "diffuse": 27,
+            "directionalShadowMap": 224,
+            "normal": 29,
+            "occRouMet": 30
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -559,7 +2114,9 @@
     },
     "material002": {
         "cubemaps": {},
-        "cubemapsHdr": {},
+        "cubemapsHdr": {
+            "irradianceMap": 222
+        },
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -657,12 +2214,13 @@
         },
         "name": "grassMat",
         "renderingType": 0,
-        "serializationID": 37,
-        "shaderSerializationID": 14,
+        "serializationID": 33,
+        "shaderSerializationID": 10,
         "textures": {
-            "diffuse": 17,
-            "normal": 18,
-            "occRouMet": 19
+            "diffuse": 13,
+            "directionalShadowMap": 224,
+            "normal": 14,
+            "occRouMet": 15
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -791,12 +2349,12 @@
         },
         "name": "gravelMat",
         "renderingType": 0,
-        "serializationID": 38,
-        "shaderSerializationID": 14,
+        "serializationID": 34,
+        "shaderSerializationID": 10,
         "textures": {
-            "diffuse": 20,
-            "normal": 21,
-            "occRouMet": 22
+            "diffuse": 16,
+            "normal": 17,
+            "occRouMet": 18
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -925,12 +2483,12 @@
         },
         "name": "rocksMat",
         "renderingType": 0,
-        "serializationID": 39,
-        "shaderSerializationID": 14,
+        "serializationID": 35,
+        "shaderSerializationID": 10,
         "textures": {
-            "diffuse": 23,
-            "normal": 24,
-            "occRouMet": 25
+            "diffuse": 19,
+            "normal": 20,
+            "occRouMet": 21
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -1059,12 +2617,12 @@
         },
         "name": "waterMat",
         "renderingType": 1,
-        "serializationID": 40,
-        "shaderSerializationID": 14,
+        "serializationID": 36,
+        "shaderSerializationID": 10,
         "textures": {
-            "diffuse": 28,
-            "normal": 29,
-            "occRouMet": 30
+            "diffuse": 24,
+            "normal": 25,
+            "occRouMet": 26
         },
         "vec3s": {
             "directionalLight.direction": [
@@ -1096,7 +2654,7 @@
     "material006": {
         "cubemaps": {},
         "cubemapsHdr": {
-            "cubemap": 41
+            "cubemap": 37
         },
         "floats": {},
         "instancingEnabled": false,
@@ -1139,17 +2697,17 @@
                 0.0
             ],
             "viewStatic": [
-                -0.5224981307983398,
-                -0.19615037739276886,
-                0.8297713398933411,
+                -0.8535528182983398,
+                -0.17733973264694214,
+                0.4898954927921295,
                 0.0,
-                2.2351736461700966e-08,
-                0.973178505897522,
-                0.23005053400993347,
+                -2.980230462412692e-08,
+                0.9402881264686584,
+                0.340379536151886,
                 0.0,
-                -0.8526402711868286,
-                0.1202009916305542,
-                -0.5084840655326843,
+                -0.5210057497024536,
+                0.2905319631099701,
+                -0.8025855422019958,
                 0.0,
                 0.0,
                 0.0,
@@ -1159,8 +2717,8 @@
         },
         "name": "skyboxHdrMat",
         "renderingType": 0,
-        "serializationID": 43,
-        "shaderSerializationID": 42,
+        "serializationID": 39,
+        "shaderSerializationID": 38,
         "textures": {},
         "vec3s": {
             "viewPos": [
@@ -1172,61 +2730,307 @@
         "vec4s": {}
     },
     "mesh000": {
-        "filePath": "Resources/Terrain/Terrain.obj",
-        "meshPath": "Resources/Terrain/Terrain.obj/defaultobject",
+        "filePath": "Resources/Models/Box.FBX",
+        "meshPath": "Resources/Models/Box.FBX/Box001",
         "serializationID": 4,
         "type": "MeshCustom"
     },
     "mesh001": {
-        "filePath": "Resources/Models/Box.FBX",
-        "meshPath": "Resources/Models/Box.FBX/Box001",
+        "filePath": "Resources/Models/Rocks/rocks_03.FBX",
+        "meshPath": "Resources/Models/Rocks/rocks_03.FBX/rocks_03",
         "serializationID": 8,
         "type": "MeshCustom"
     },
     "mesh002": {
-        "filePath": "Resources/Models/Rocks/rocks_03.FBX",
-        "meshPath": "Resources/Models/Rocks/rocks_03.FBX/rocks_03",
-        "serializationID": 12,
+        "filePath": "Resources/Terrain\\Terrain_(-100.0, 0.0, -100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(-100.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 51,
+        "type": "MeshCustom"
+    },
+    "mesh003": {
+        "filePath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 55,
+        "type": "MeshCustom"
+    },
+    "mesh004": {
+        "filePath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 59,
+        "type": "MeshCustom"
+    },
+    "mesh005": {
+        "filePath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 63,
+        "type": "MeshCustom"
+    },
+    "mesh006": {
+        "filePath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(-100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 67,
+        "type": "MeshCustom"
+    },
+    "mesh007": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, -100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 71,
+        "type": "MeshCustom"
+    },
+    "mesh008": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 75,
+        "type": "MeshCustom"
+    },
+    "mesh009": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 79,
+        "type": "MeshCustom"
+    },
+    "mesh010": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 83,
+        "type": "MeshCustom"
+    },
+    "mesh011": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 87,
+        "type": "MeshCustom"
+    },
+    "mesh012": {
+        "filePath": "Resources/Terrain\\Terrain_(0.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(0.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 91,
+        "type": "MeshCustom"
+    },
+    "mesh013": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 95,
+        "type": "MeshCustom"
+    },
+    "mesh014": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 99,
+        "type": "MeshCustom"
+    },
+    "mesh015": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 103,
+        "type": "MeshCustom"
+    },
+    "mesh016": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 107,
+        "type": "MeshCustom"
+    },
+    "mesh017": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 111,
+        "type": "MeshCustom"
+    },
+    "mesh018": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 115,
+        "type": "MeshCustom"
+    },
+    "mesh019": {
+        "filePath": "Resources/Terrain\\Terrain_(100.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(100.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 119,
+        "type": "MeshCustom"
+    },
+    "mesh020": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 123,
+        "type": "MeshCustom"
+    },
+    "mesh021": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 127,
+        "type": "MeshCustom"
+    },
+    "mesh022": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 131,
+        "type": "MeshCustom"
+    },
+    "mesh023": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 135,
+        "type": "MeshCustom"
+    },
+    "mesh024": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 139,
+        "type": "MeshCustom"
+    },
+    "mesh025": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 143,
+        "type": "MeshCustom"
+    },
+    "mesh026": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 147,
+        "type": "MeshCustom"
+    },
+    "mesh027": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 151,
+        "type": "MeshCustom"
+    },
+    "mesh028": {
+        "filePath": "Resources/Terrain\\Terrain_(200.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(200.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 155,
+        "type": "MeshCustom"
+    },
+    "mesh029": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 159,
+        "type": "MeshCustom"
+    },
+    "mesh030": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 163,
+        "type": "MeshCustom"
+    },
+    "mesh031": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 167,
+        "type": "MeshCustom"
+    },
+    "mesh032": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 171,
+        "type": "MeshCustom"
+    },
+    "mesh033": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 175,
+        "type": "MeshCustom"
+    },
+    "mesh034": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 179,
+        "type": "MeshCustom"
+    },
+    "mesh035": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 183,
+        "type": "MeshCustom"
+    },
+    "mesh036": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 187,
+        "type": "MeshCustom"
+    },
+    "mesh037": {
+        "filePath": "Resources/Terrain\\Terrain_(300.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(300.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 191,
+        "type": "MeshCustom"
+    },
+    "mesh038": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 195,
+        "type": "MeshCustom"
+    },
+    "mesh039": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 199,
+        "type": "MeshCustom"
+    },
+    "mesh040": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 203,
+        "type": "MeshCustom"
+    },
+    "mesh041": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 207,
+        "type": "MeshCustom"
+    },
+    "mesh042": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 211,
+        "type": "MeshCustom"
+    },
+    "mesh043": {
+        "filePath": "Resources/Terrain\\Terrain_(400.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain\\Terrain_(400.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 215,
         "type": "MeshCustom"
     },
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.frag",
-        "serializationID": 14,
+        "serializationID": 10,
         "vertexShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/StandardTerrain/StandardTerrain.frag",
-        "serializationID": 15,
+        "serializationID": 11,
         "vertexShaderPath": "Resources/Shaders/StandardTerrain/StandardTerrain.vert"
     },
     "shader002": {
         "fragmentShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag",
-        "serializationID": 42,
+        "serializationID": 38,
         "vertexShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert"
     },
     "shader003": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/AllCombine.frag",
-        "serializationID": 53,
+        "serializationID": 217,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
     },
     "shader004": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/GaussianBlur.frag",
-        "serializationID": 54,
+        "serializationID": 218,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
     },
     "shader005": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/PosNormBuffers.frag",
-        "serializationID": 55,
+        "serializationID": 219,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/ViewSpaceValues.vert"
     },
     "shader006": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/SSAO.frag",
-        "serializationID": 56,
+        "serializationID": 220,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
     },
     "shader007": {
         "fragmentShaderPath": "Resources/Shaders/PostProcessing/SSAOblur.frag",
-        "serializationID": 57,
+        "serializationID": 221,
         "vertexShaderPath": "Resources/Shaders/PostProcessing/Quad.vert"
     },
     "texture000": {
@@ -1236,8 +3040,8 @@
             "minFilter": 9987,
             "wrapMode": 10497
         },
-        "filePath": "Resources/Terrain/Terrain_splatmap_0.tga",
-        "serializationID": 16
+        "filePath": "Resources/Splatmaps/Terrain_splatmap_0.tga",
+        "serializationID": 12
     },
     "texture001": {
         "creationInfo": {
@@ -1247,7 +3051,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png",
-        "serializationID": 17
+        "serializationID": 13
     },
     "texture002": {
         "creationInfo": {
@@ -1257,7 +3061,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png",
-        "serializationID": 18
+        "serializationID": 14
     },
     "texture003": {
         "creationInfo": {
@@ -1267,7 +3071,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png",
-        "serializationID": 19
+        "serializationID": 15
     },
     "texture004": {
         "creationInfo": {
@@ -1277,7 +3081,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_diff_2k.png",
-        "serializationID": 20
+        "serializationID": 16
     },
     "texture005": {
         "creationInfo": {
@@ -1287,7 +3091,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_nor_2k.png",
-        "serializationID": 21
+        "serializationID": 17
     },
     "texture006": {
         "creationInfo": {
@@ -1297,7 +3101,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGround/rock_ground_02_occRouMet.png",
-        "serializationID": 22
+        "serializationID": 18
     },
     "texture007": {
         "creationInfo": {
@@ -1307,7 +3111,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_diff_2k.png",
-        "serializationID": 23
+        "serializationID": 19
     },
     "texture008": {
         "creationInfo": {
@@ -1317,7 +3121,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_nor_2k.png",
-        "serializationID": 24
+        "serializationID": 20
     },
     "texture009": {
         "creationInfo": {
@@ -1327,7 +3131,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rock/rock_04_occRouMet.png",
-        "serializationID": 25
+        "serializationID": 21
     },
     "texture010": {
         "creationInfo": {
@@ -1337,7 +3141,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGrass/rockGrass_diffuse.png",
-        "serializationID": 26
+        "serializationID": 22
     },
     "texture011": {
         "creationInfo": {
@@ -1347,7 +3151,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/rockGrass/rockGrass_normal.png",
-        "serializationID": 27
+        "serializationID": 23
     },
     "texture012": {
         "creationInfo": {
@@ -1357,7 +3161,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_COLOR.png",
-        "serializationID": 28
+        "serializationID": 24
     },
     "texture013": {
         "creationInfo": {
@@ -1367,7 +3171,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_NORM.png",
-        "serializationID": 29
+        "serializationID": 25
     },
     "texture014": {
         "creationInfo": {
@@ -1377,7 +3181,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/water/Water_001_OccRouSpec.png",
-        "serializationID": 30
+        "serializationID": 26
     },
     "texture015": {
         "creationInfo": {
@@ -1387,7 +3191,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/white.png",
-        "serializationID": 31
+        "serializationID": 27
     },
     "texture016": {
         "creationInfo": {
@@ -1397,7 +3201,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/black.png",
-        "serializationID": 32
+        "serializationID": 28
     },
     "texture017": {
         "creationInfo": {
@@ -1407,7 +3211,7 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/bump.png",
-        "serializationID": 33
+        "serializationID": 29
     },
     "texture018": {
         "creationInfo": {
@@ -1417,6 +3221,6 @@
             "wrapMode": 10497
         },
         "filePath": "Resources/Textures/occroumet.png",
-        "serializationID": 34
+        "serializationID": 30
     }
 }

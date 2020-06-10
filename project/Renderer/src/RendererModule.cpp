@@ -123,13 +123,13 @@ void RendererModule::receiveMessage(Message msg)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
 
             // Bloom framebuffers
-            for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
+            for (size_t i = 0, j = 1; i < 6; i += 2, j *= 2)
             {
                 glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / j, size.y / j, 0, GL_RGBA, GL_FLOAT, nullptr);
 
                 glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / (2*j), size.y / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / j, size.y / j, 0, GL_RGBA, GL_FLOAT, nullptr);
             }
             // Gbuffers
             glBindTexture(GL_TEXTURE_2D, gbufferPosition);
@@ -317,26 +317,32 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     // * ===== Framebuffers for ping pong gaussian blur =====
     // TODO: Framebuffer for every color attachment should be more performant, maybe also use MRT to speed things up
-    glGenFramebuffers(2, blurFBO);
-    glGenTextures(8, blurBuffers);
+    glGenFramebuffers(6, blurFBO);
+    glGenTextures(6, blurBuffers);
 
-    for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
+    for (size_t i = 0, j = 1; i < 6; i += 2, j *= 2)
     {
         glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / (2*j), GetCore().windowHeight / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / j, GetCore().windowHeight / j, 0, GL_RGBA, GL_FLOAT, nullptr);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+        glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i], 0);
+
         glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / (2*j), GetCore().windowHeight / (2*j), 0, GL_RGBA, GL_FLOAT, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / j, GetCore().windowHeight / j, 0, GL_RGBA, GL_FLOAT, nullptr);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i+1]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i+1], 0);
     }
 
     // * ===== Gbuffer framebuffer =====
@@ -703,19 +709,13 @@ void RendererModule::render()
         int amount = 10;
 
         blurShader->use();
-        for (size_t i = 0, j = 1; i < 8; i += 2, ++j)
+        for (size_t i = 0, j = 1; i < 6; i += 2, j *= 2)
         {
-            glViewport(0, 0, Core::windowWidth / (2*j), Core::windowHeight / (2*j));
-
-            glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[0]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i], 0);
-
-            glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[1]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i + 1], 0);
+            glViewport(0, 0, Core::windowWidth / j, Core::windowHeight / j);
 
             for (size_t k = 0; k < amount; k++)
             {
-                glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[horizontal]);
+                glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i + horizontal]);
                 blurShader->setInt("horizontal", horizontal);
                 glBindTexture(GL_TEXTURE_2D, firstIteration ? hdrBrightBuffer : blurBuffers[i + !horizontal]);
                 
@@ -742,8 +742,7 @@ void RendererModule::render()
         combineShader->setInt("bloom0", 1);
         combineShader->setInt("bloom1", 2);
         combineShader->setInt("bloom2", 3);
-        combineShader->setInt("bloom3", 4);
-        combineShader->setInt("ssao", 5);
+        combineShader->setInt("ssao", 4);
         combineShader->setFloat("exposure", cameraMain->exposure);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
@@ -754,8 +753,6 @@ void RendererModule::render()
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, blurBuffers[4]);
         glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, blurBuffers[6]);
-        glActiveTexture(GL_TEXTURE5);
         glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
         drawQuad();
 
