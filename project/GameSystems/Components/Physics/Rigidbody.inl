@@ -3,6 +3,7 @@
 
 #include "Component.hpp"
 
+#include <reactphysics3d/reactphysics3d.h>
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -14,6 +15,10 @@
  */
 struct Rigidbody : public Component
 {
+    friend class PhysicSystem;
+    //HACK
+    friend class Core;
+
     Rigidbody() = default;
     virtual ~Rigidbody() = default;
 
@@ -21,9 +26,6 @@ struct Rigidbody : public Component
 
     ///@brief Mass of the rigidbody
     float mass = 1;
-
-    ///@brief Moment of interia of Rigidbody
-    glm::mat3 momentOfInertia = glm::mat3(0);
 
     ///@brief Drag of the rigidbody
     float drag = 1;
@@ -34,19 +36,23 @@ struct Rigidbody : public Component
     ///@brief determines, if gravity affects this body
     bool ignoreGravity = false;
 
+    //TODO documentation, serialization, mental castration
+    reactphysics3d::BodyType type;
+
     // ? unserialized
-
-    ///@brief Inverted moment of interia of Rigidbody
-    glm::mat3 invertedMomentOfInertia = glm::mat3(0);
-
-    ///@brief Stores all impulses - cleared on the end of frame
-    std::vector<Impulse> impulses;
 
     ///@brief Velocity of the rigidbody,
     glm::vec3 velocity = {0.0f, 0.0f, 0.0f};
 
     ///@brief Angular velocity of the rigidbody
     glm::vec3 angularVelocity = {0.0f, 0.0f, 0.0f};
+
+    std::vector<Impulse> impulses;
+
+private:
+
+    ///@brief Pointer to reactphysics3d object
+    reactphysics3d::RigidBody* reactRB;
 };
 
 #endif

@@ -3,21 +3,16 @@
 
 #include "Collider.inl"
 
-
-#include <glm/glm.hpp>
-
 /**
  * @brief Sphere-shaped collider
  */
 struct SphereCollider : public Collider
 {
     SphereCollider() = default;
-    virtual ~SphereCollider() = default;
+    virtual ~SphereCollider();
 
-    /**
-     * @brief Collider local center
-     */
-    glm::vec3 center = {0.0f, 0.0f, 0.0f};
+    //TODO documentation
+    virtual void computeReactCS();
 
     /**
      * @brief Radius of the sphere collider

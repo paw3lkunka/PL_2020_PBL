@@ -1,6 +1,7 @@
 #include "ConsoleModule.hpp"
 
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 #include "MessageBus.hpp"
 #include "Message.inl"

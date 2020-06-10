@@ -12,6 +12,7 @@
 #include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
 
+#include "glm/gtx/string_cast.hpp"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -56,7 +57,7 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 int Core::init()
 {
     xoshiro_Init();
-    phisicsWorld = physicsCommon.createPhysicsWorld();
+    physicsWorld = physicsCommon.createPhysicsWorld();
     
     if( instance != nullptr )
     {
@@ -107,9 +108,9 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -182,7 +183,6 @@ int Core::init()
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
@@ -250,6 +250,27 @@ int Core::mainLoop()
             
             gameSystemsModule.run(System::FIXED);
 
+            physicsWorld->update(FIXED_TIME_STEP_F);
+
+            //HACK
+            for (Entity& e : *gameSystemsModule.entities)
+            {
+                if (auto* rb = e.getComponentPtr<Rigidbody>())
+                {
+                    reactphysics3d::Transform reactT = rb->reactRB->getTransform();
+
+                    glm::vec3 pos = Vec3Cast(reactT.getPosition());
+                    glm::quat rot = QuatCast(reactT.getOrientation());
+
+                    auto* tr = e.getComponentPtr<Transform>();
+
+                    tr->getLocalPositionModifiable() = tr->getToParentMatrix() * glm::vec4(pos, 1.0f);
+                    tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());;
+
+
+                }
+            }
+
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
             uiModule.updateRectTransforms();
@@ -307,6 +328,8 @@ void Core::cleanup()
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
     audioModule.cleanup();
+    physicsCommon.destroyPhysicsWorld(physicsWorld);
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -387,7 +410,6 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionSystem Core::collisionSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;

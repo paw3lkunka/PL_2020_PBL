@@ -588,7 +588,6 @@ objectModule.newEntity(2, "sampleSound");
             rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
-            bc->calculateVert();
     }
 }
 

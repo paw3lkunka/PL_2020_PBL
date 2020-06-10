@@ -310,7 +310,6 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
-        static CollisionSystem collisionSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;
@@ -337,13 +336,13 @@ class Core
         static int windowWidth;
         static int windowHeight;
         
-        inline reactphysics3d::PhysicsWorld* const GetPhysicsWorld() const { return phisicsWorld; }
+        inline rp3d::PhysicsWorld* const GetPhysicsWorld() const { return physicsWorld; }
+        rp3d::PhysicsCommon physicsCommon;
 
     private:
         static Core* instance;
         GLFWwindow* window; 
-        reactphysics3d::PhysicsCommon physicsCommon;
-        reactphysics3d::PhysicsWorld* phisicsWorld;
+        rp3d::PhysicsWorld* physicsWorld;
 
         double currentFrameStart;
 

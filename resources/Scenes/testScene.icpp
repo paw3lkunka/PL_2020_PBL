@@ -66,6 +66,15 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = true;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced2");
@@ -78,6 +87,16 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = false;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced3");
@@ -90,6 +109,16 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = false;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced4");
@@ -102,6 +131,16 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = true;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced5");
@@ -114,6 +153,16 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = false;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }
 
     objectModule.newEntity(2, "cubeInstanced6");
@@ -126,4 +175,14 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.5f;
+            rb->ignoreGravity = true;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {5.0f, 5.0f, 5.0f};
     }

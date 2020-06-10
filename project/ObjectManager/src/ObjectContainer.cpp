@@ -33,7 +33,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     fonts.reserve(16);
 }
 
-ObjectContainer::~ObjectContainer()
+void ObjectContainer::cleanup()
 {
     for(auto c : components)
     {

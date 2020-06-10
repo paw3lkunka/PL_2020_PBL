@@ -42,7 +42,7 @@ public:
     /**
      * @brief Destroy the Object Container
      */
-    ~ObjectContainer();
+    void cleanup();
 
     /**
      * @brief Get the Mesh Custom From Path 

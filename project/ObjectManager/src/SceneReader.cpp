@@ -604,6 +604,7 @@ void SceneReader::readMeshRenderer(std::string name)
 
 void SceneReader::readSphereCollider(std::string name)
 {
+    //TODO check after phisic backend change
     auto sphereCollider = objModulePtr->newEmptyComponent<SphereCollider>();
     sphereCollider->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
@@ -614,13 +615,13 @@ void SceneReader::readSphereCollider(std::string name)
     
     sphereCollider->center = center;
     sphereCollider->radius = j.at(name).at("radius").get<float>();
-    sphereCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
 
     assignToEntity(name, sphereCollider);
 }
 
 void SceneReader::readBoxCollider(std::string name)
 {
+    //TODO check after phisic backend change
     auto boxCollider = objModulePtr->newEmptyComponent<BoxCollider>();
     boxCollider->serializationID = j.at(name).at("serializationID").get<unsigned int>();
     
@@ -631,10 +632,6 @@ void SceneReader::readBoxCollider(std::string name)
     boxCollider->halfSize.x = j.at(name).at("halfSize").at("x").get<float>();
     boxCollider->halfSize.y = j.at(name).at("halfSize").at("y").get<float>();
     boxCollider->halfSize.z = j.at(name).at("halfSize").at("z").get<float>();
-    
-    boxCollider->type = Collider::Type(j.at(name).at("colliderType").get<unsigned int>());
-
-    boxCollider->calculateVert();
 
     assignToEntity(name, boxCollider);
 }
@@ -665,15 +662,11 @@ void SceneReader::readLight(std::string name)
 
 void SceneReader::readRigidbody(std::string name)
 {
+    //TODO check after phisic backend change
     auto rigidbody = objModulePtr->newEmptyComponent<Rigidbody>();
     rigidbody->serializationID = j.at(name).at("serializationID").get<unsigned int>();
 
     rigidbody->mass = j.at(name).at("mass").get<float>();
-
-    rigidbody->momentOfInertia[0][0] = j.at(name).at("momentOfInertia").at("0,0").get<float>();
-    rigidbody->momentOfInertia[1][1] = j.at(name).at("momentOfInertia").at("1,1").get<float>();
-    rigidbody->momentOfInertia[2][2] = j.at(name).at("momentOfInertia").at("2,2").get<float>();
-    rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
 
     rigidbody->drag = j.at(name).at("drag").get<float>();
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();

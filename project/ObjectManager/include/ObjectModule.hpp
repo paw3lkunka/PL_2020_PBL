@@ -39,6 +39,9 @@ public:
     ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this), sceneReader(this) {}
     ~ObjectModule() = default;
 
+    //TODO documentation
+    void cleanup();
+
     /**
      * @brief Get the Entities Vector object from container
      * 

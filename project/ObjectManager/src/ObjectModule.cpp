@@ -63,6 +63,11 @@ bool ObjectModule::compareStrings(std::string str1, std::string str2)
     return true;
 }
 
+void ObjectModule::cleanup()
+{
+    objectContainer.cleanup();
+}
+
 #pragma region Scene Wrapper
 void ObjectModule::saveScene(const char* filePath)
 {

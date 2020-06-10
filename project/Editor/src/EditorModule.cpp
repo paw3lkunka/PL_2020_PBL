@@ -288,22 +288,11 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
+    //TODO check after phisic backend change
     ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
     if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
     {
-        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
-        {
-            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
-        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
-        {
-            //TODO implement solid or hollow
-            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
+        //moment of inertia ws here
     }
     ImGui::DragFloat("Drag", &rBodyPtr->drag);
     ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);

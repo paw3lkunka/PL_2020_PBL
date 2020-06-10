@@ -388,8 +388,8 @@ void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 {
+    //TODO check after phisic backend change
     j[name]["type"] = "SphereCollider";
-    j[name]["colliderType"] = componentPtr->type;
     j[name]["radius"] = componentPtr->radius;
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
@@ -398,8 +398,8 @@ void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 
 void SceneWriter::saveBoxCollider(BoxCollider* componentPtr)
 {
+    //TODO check after phisic backend change
     j[name]["type"] = "BoxCollider";
-    j[name]["colliderType"] = componentPtr->type;
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
     j[name]["center"]["z"] = componentPtr->center.z;
@@ -428,11 +428,9 @@ void SceneWriter::saveLight(Light* componentPtr)
 
 void SceneWriter::saveRigidbody(Rigidbody* componentPtr)
 {
+    //TODO check after phisic backend change
     j[name]["type"] = "Rigidbody";
     j[name]["mass"] = componentPtr->mass;
-    j[name]["momentOfInertia"]["0,0"] = componentPtr->momentOfInertia[0][0];
-    j[name]["momentOfInertia"]["1,1"] = componentPtr->momentOfInertia[1][1];
-    j[name]["momentOfInertia"]["2,2"] = componentPtr->momentOfInertia[2][2];
     j[name]["drag"] = componentPtr->drag;
     j[name]["angularDrag"] = componentPtr->angularDrag;
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
