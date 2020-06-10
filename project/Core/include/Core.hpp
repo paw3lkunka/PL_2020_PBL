@@ -174,6 +174,11 @@ class Core
          * @return float random number.
          */
         float randomFloat01R();
+
+        /**
+         * @brief Loads all models from Terrain folder
+         */
+        void loadAllTerrainChunks();
 #pragma
 
 #pragma region Constants

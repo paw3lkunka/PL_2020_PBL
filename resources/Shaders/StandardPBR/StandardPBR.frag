@@ -55,6 +55,7 @@ const vec2 jitter[9] = {
 // Global shader variables
 vec3 N, V, F0, albedo;
 float metallic, roughness, ao;
+float directionalShadow;
 
 float DistributionGGX(vec3 normal, vec3 halfway, float roughness);
 float GeometrySmith(vec3 normal, vec3 viewDir, vec3 lightDir, float roughness);
@@ -103,12 +104,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = ambient + Lo;
-
-// // HDR tonemapping
-// 	color = color / (color + vec3(1.0f));
-// // Gamma correction
-// 	color = pow(color, vec3(1.0f / 2.2f));
+	vec3 color = ambient + Lo * (1.0 - directionalShadow * 0.7);
 
 	// TODO: Better alpha sampling
 	FragColor = vec4(color, texture(diffuse, Texcoord).a);
@@ -137,7 +133,7 @@ vec3 calcDirectionalLight(DirectionalLight light)
 	vec3 F = fresnelSchlick(max(dot(H, V), 0.0f), F0);
 
 	vec3 nominator = NDF * G * F;
-	float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f; // added 0.001f to prevent division by zero
+	float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f; // added 0.0001f to prevent division by zero
 	vec3 specular = nominator / denominator;
 
 	// Calculate specular/albedo distribution
@@ -149,9 +145,10 @@ vec3 calcDirectionalLight(DirectionalLight light)
 	float NdotL = max(dot(N, L), 0.0f);
 
     // Calculate shadow
-    float shadow = calcShadow(FragPosLightSpace, L);
+    directionalShadow = calcShadow(FragPosLightSpace, L);
 
-	return (1.0 - shadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
+	return (1.0 - directionalShadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
+	//return ((kD * albedo / PI + specular) * radiance * NdotL);
 }
 
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
@@ -176,7 +173,6 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
 	{
 		for(int y = -2; y <= 2; ++y)
 		{
-			// TODO: better shadow filtering
 			float pcfDepth = texture(directionalShadowMap, projCoords.xy + (vec2(x, y) + jitter[int(mod((x+2) + ((y+2)*5), 8))]) * texelSize).r; 
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}    

@@ -77,6 +77,7 @@ const vec2 jitter[9] = {
 // ===== Global shader variables =====
 vec3 N, V, F0, albedo;
 float metallic, roughness, ao;
+float directionalShadow;
 
 // ===== Internal function prototypes =====
 float DistributionGGX(vec3 normal, vec3 halfway, float roughness);
@@ -140,7 +141,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = ambient + Lo;
+	vec3 color = ambient + Lo * (1.0 - directionalShadow * 0.7);
 
 	FragColor = vec4(color, 1.0);
 
@@ -180,9 +181,9 @@ vec3 calcDirectionalLight(DirectionalLight light)
 	float NdotL = max(dot(N, L), 0.0f);
 
     // Calculate shadow
-    float shadow = calcShadow(FragPosLightSpace, L);
+    directionalShadow = calcShadow(FragPosLightSpace, L);
 
-	return (1.0 - shadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
+	return ((kD * albedo / PI + specular) * radiance * NdotL);
 }
 
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)

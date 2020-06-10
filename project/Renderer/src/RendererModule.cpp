@@ -1089,7 +1089,7 @@ void RendererModule::drawQuad()
         glGenVertexArrays(1, &quadVao);
         glGenBuffers(1, &quadVbo);
 
-        glBindBuffer(GL_ARRAY_BUFFER, quadVao);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(BuiltInShapes::quadVertices), BuiltInShapes::quadVertices, GL_STATIC_DRAW);
 
         glBindVertexArray(quadVao);

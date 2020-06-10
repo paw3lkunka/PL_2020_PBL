@@ -1,6 +1,7 @@
 #include "mesh/MeshCustom.hpp"
 
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
 {

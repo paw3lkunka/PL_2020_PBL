@@ -12,6 +12,8 @@
 #include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
 
+#include <filesystem>
+
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
 int Core::windowHeight = INIT_WINDOW_HEIGHT;
@@ -380,6 +382,18 @@ float Core::randomFloatL(float min, float max)
 float Core::randomFloatR(float min, float max)
 {
     return std::lerp(min, max, randomFloat01R());
+}
+
+void Core::loadAllTerrainChunks()
+{
+    namespace fs = std::filesystem;
+    std::string path = "Resources/Terrain";
+    for (auto& entry : fs::directory_iterator(path))
+    {
+        objectModule.newModel(entry.path().string().c_str());
+        std::cout << entry.path().filename().string() + "/defaultobject" << std::endl;
+        //Entity* entity = objectModule.getEntityPtrByName(entry.path().filename().string() + "/defaultobject");
+    }
 }
 
 CameraSystem Core::cameraSystem;
