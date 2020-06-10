@@ -305,6 +305,7 @@ class Core
     public:
         static CameraSystem cameraSystem;
         static CameraControlSystem cameraControlSystem;
+        static GameplayCameraSystem gameplayCameraSystem;
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;

@@ -104,8 +104,8 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
     }
     else
@@ -120,6 +120,20 @@ int Core::init()
         // ? -u
         {
             //some code here...
+
+            auto cameraArmPtr = objectModule.newEntity(2, "CameraArm");
+                auto armTransform = objectModule.newEmptyComponentForLastEntity<Transform>();
+                    armTransform->setParent(&sceneModule.rootNode);
+                auto gameplayCameraPtr = objectModule.newEmptyComponentForLastEntity<GameplayCamera>();
+
+            auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
+                gameplayCameraPtr->playerTransform = kayakPtr->getComponentPtr<Transform>();
+
+            auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+            auto cameraTransform = cameraPtr->getComponentPtr<Transform>();
+                
+                gameplayCameraPtr->cameraTransform = cameraTransform;
+                cameraTransform->setParent(armTransform);
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -178,7 +192,10 @@ int Core::init()
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
-    gameSystemsModule.addSystem(&cameraControlSystem);
+    
+    gameSystemsModule.addSystem(&gameplayCameraSystem);
+    //gameSystemsModule.addSystem(&cameraControlSystem);
+    
     gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
@@ -381,6 +398,7 @@ float Core::randomFloatR(float min, float max)
 
 CameraSystem Core::cameraSystem;
 CameraControlSystem Core::cameraControlSystem;
+GameplayCameraSystem Core::gameplayCameraSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
