@@ -30,12 +30,12 @@ BoxCollider::BoxCollider(float width, float height, float depth, float x, float 
 
 BoxCollider::~BoxCollider()
 {
-    GetCore().physicsCommon.destroyBoxShape(dynamic_cast<reactphysics3d::BoxShape*>(reactCS));
+    GetCore().physicModule.GetCommon().destroyBoxShape(dynamic_cast<reactphysics3d::BoxShape*>(reactShape));
 }
 
 void BoxCollider::computeReactCS()
 {
-    reactCS = GetCore().physicsCommon.createBoxShape(Vec3Cast(halfSize));
+    reactShape = GetCore().physicModule.GetCommon().createBoxShape(Vec3Cast(halfSize));
 }
 
 rp3d::Vector3 BoxCollider::computeInnertiaTensor(float mass)

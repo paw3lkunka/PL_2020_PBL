@@ -137,6 +137,7 @@ aux_source_directory( project/Audio/src                         AUDIO_SRC)
 aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
 aux_source_directory( project/Input/src                         INPUT_SRC)
 aux_source_directory( project/MessageBus/src                    MESSAGE_BUS_SRC)
+aux_source_directory( project/Physic/src                        PHYSIC_BUS_SRC)
 aux_source_directory( project/Renderer/src                      RENDERER_SRC)
 aux_source_directory( project/Renderer/src/mesh                 RENDERER_MESH_SRC)
 aux_source_directory( project/Renderer/src/packets              RENDERER_PACKETS_SRC)
@@ -155,6 +156,7 @@ list(
         ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
+        ${PHYSIC_BUS_SRC}
         ${RENDERER_SRC}
         ${RENDERER_MESH_SRC}
         ${RENDERER_PACKETS_SRC}
@@ -223,6 +225,7 @@ include_directories(
     project/ObjectManager/include
     project/Input/include
     project/MessageBus/include
+    project/Physic/include
     project/Renderer/include
     project/Renderer/include/mesh
     project/Renderer/include/packets

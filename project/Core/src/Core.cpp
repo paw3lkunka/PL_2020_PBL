@@ -57,7 +57,7 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 int Core::init()
 {
     xoshiro_Init();
-    physicsWorld = physicsCommon.createPhysicsWorld();
+    physicModule.init();
     
     if( instance != nullptr )
     {
@@ -244,7 +244,7 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
-            physicSimulation();
+            physicModule.physicSimulation(gameSystemsModule.entities);
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -278,27 +278,6 @@ int Core::mainLoop()
     return 0;
 }
 
-void Core::physicSimulation()
-{
-    physicsWorld->update(FIXED_TIME_STEP_F);
-
-    for (Entity& e : *gameSystemsModule.entities)
-    {
-        if (auto* rb = e.getComponentPtr<Rigidbody>())
-        {
-            reactphysics3d::Transform reactT = rb->reactRB->getTransform();
-
-            glm::vec3 pos = Vec3Cast(reactT.getPosition());
-            glm::quat rot = QuatCast(reactT.getOrientation());
-
-            auto* tr = e.getComponentPtr<Transform>();
-
-            tr->getLocalPositionModifiable() = tr->getToParentMatrix() * glm::vec4(pos, 1.0f);
-            tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());;
-        }
-    }
-}
-
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -326,7 +305,7 @@ void Core::cleanup()
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
     audioModule.cleanup();
-    physicsCommon.destroyPhysicsWorld(physicsWorld);
+    physicModule.cleanup();
     objectModule.cleanup();
 
 	glfwDestroyWindow(window);

@@ -21,18 +21,24 @@ bool PhysicSystem::assertEntity(Entity* entity)
 
 void PhysicSystem::start()
 {
+    rp3d::Transform reactTrb
+    (
+        Vec3Cast(transformPtr->getModelMatrix()[3]),
+        QuatCast(transformPtr->getWorldRotation())
+    );
+    rBodyPtr->reactRB = GetCore().physicModule.GetWorld().createRigidBody(reactTrb);
     
-    //Create react RB
-    rp3d::Transform reactTrb;
-    reactTrb.setPosition(Vec3Cast(transformPtr->getModelMatrix()[3]));
-    reactTrb.setOrientation(QuatCast(transformPtr->getWorldRotation()));
-    rBodyPtr->reactRB = GetCore().GetPhysicsWorld()->createRigidBody(reactTrb);
-    //Should it be method?
-    
-
     colliderPtr->computeReactCS();
-    rp3d::Transform reactTc(Vec3Cast(colliderPtr->center), rp3d::Quaternion::identity());
-    rBodyPtr->reactRB->addCollider(colliderPtr->reactCS, reactTc);
+
+    rp3d::Transform reactTc
+    (
+        Vec3Cast(colliderPtr->center),
+        rp3d::Quaternion::identity()
+    );
+
+    colliderPtr->reactCollider = rBodyPtr->reactRB->addCollider(colliderPtr->reactShape, reactTc);
+    colliderPtr->reactCollider->setIsTrigger(colliderPtr->isTrigger);
+
     rBodyPtr->updateReactRB(true);
 }
 

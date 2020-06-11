@@ -7,8 +7,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <reactphysics3d/reactphysics3d.h>
-
 // * MessgageBus
 #include "MessageBus.hpp"
 
@@ -22,6 +20,7 @@
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
+#include "PhysicModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -251,11 +250,6 @@ class Core
          * @return double 
          */
         double getCurrentFrameStart();
-
-        /**
-         * @brief Apply phisic simulation, and updates necessery components. 
-         */
-        void physicSimulation();
 #pragma endregion
 
 #pragma region Modules
@@ -289,6 +283,9 @@ class Core
 
         ///@brief ui graph
         UiModule uiModule;
+
+        ///@brief responsible for physic simulation
+        PhysicModule physicModule;
 
         /**
          * TODO Please, do something better here ;-;
@@ -340,14 +337,10 @@ class Core
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
         static int windowWidth;
         static int windowHeight;
-        
-        inline rp3d::PhysicsWorld* const GetPhysicsWorld() const { return physicsWorld; }
-        rp3d::PhysicsCommon physicsCommon;
 
     private:
         static Core* instance;
         GLFWwindow* window; 
-        rp3d::PhysicsWorld* physicsWorld;
 
         double currentFrameStart;
 

@@ -14,13 +14,18 @@
 struct Collider : public Component
 {    
     /**
-     * @brief Center of the collider in local space
+     * @brief Center of the collider in local space.
      */
     glm::vec3 center = {0.0f, 0.0f, 0.0f};
 
     /**
+     * @brief Determine if collider is trigger.
+     */
+    bool isTrigger = false;
+
+    /**
      * @brief Create CollisionShape depending on type and parameters.
-     * pointer will be stored at reactCS, and created object will be deallocated by destructor of final class;
+     * pointer will be stored at reactShape, and created object will be deallocated by destructor of final class;
      */
     virtual void computeReactCS() = 0;
 
@@ -36,7 +41,13 @@ struct Collider : public Component
      * @brief Pointer to CollisionShape, created by computeReactCS().
      * If uninitialized - nullptr. 
      */
-    rp3d::CollisionShape* reactCS = nullptr;
+    rp3d::CollisionShape* reactShape = nullptr;
+
+    /**
+     * @brief Pointer to Collider, setted externally by system;
+     * 
+     */
+    rp3d::Collider* reactCollider = nullptr;
 
     virtual ~Collider() = default;
 };

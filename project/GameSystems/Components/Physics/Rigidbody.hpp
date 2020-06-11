@@ -5,6 +5,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 
+#include "Core.hpp"
 #include "Utils.hpp"
 #include "PhisicStructures.inl"
 
@@ -14,7 +15,7 @@
 struct Rigidbody : public Component
 {
     friend class PhysicSystem;
-    friend void Core::physicSimulation();
+    friend class PhysicModule;
 
     Rigidbody() = default;
     virtual ~Rigidbody() = default;

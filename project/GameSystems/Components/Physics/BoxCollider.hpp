@@ -19,13 +19,13 @@ struct BoxCollider : public Collider
 
     /**
      * @brief Construct a new Box Collider object of size 1x1x1.
-     * IMPORTANT reactCS must be still initialized by computeReactCS()!
+     * IMPORTANT reactShape must be still initialized by computeReactCS()!
      */
     BoxCollider();
 
     /**
      * @brief Construct a new Box Collider object
-     * IMPORTANT reactCS must be still initialized by computeReactCS()!
+     * IMPORTANT reactShape must be still initialized by computeReactCS()!
      * 
      * @param size size of collider
      * @param center centre of collider (in model space), default [0,0,0]
@@ -34,7 +34,7 @@ struct BoxCollider : public Collider
     
     /**
      * @brief Construct a new Box Collider object
-     * IMPORTANT reactCS must be still initialized by computeReactCS()!
+     * IMPORTANT reactShape must be still initialized by computeReactCS()!
      * 
      * @param width size of collider
      * @param height size of collider
@@ -44,7 +44,7 @@ struct BoxCollider : public Collider
 
     /**
      * @brief Construct a new Box Collider object
-     * IMPORTANT reactCS must be still initialized by computeReactCS()!
+     * IMPORTANT reactShape must be still initialized by computeReactCS()!
      * 
      * @param width size of collider
      * @param height size of collider

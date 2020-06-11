@@ -4,12 +4,12 @@
 
 SphereCollider::~SphereCollider()
 {    
-    GetCore().physicsCommon.destroySphereShape(dynamic_cast<reactphysics3d::SphereShape*>(reactCS));
+    GetCore().physicModule.GetCommon().destroySphereShape(dynamic_cast<reactphysics3d::SphereShape*>(reactShape));
 }
 
 void SphereCollider::computeReactCS()
 {
-    reactCS = GetCore().physicsCommon.createSphereShape(radius);
+    reactShape = GetCore().physicModule.GetCommon().createSphereShape(radius);
 }
 
 rp3d::Vector3 SphereCollider::computeInnertiaTensor(float mass)

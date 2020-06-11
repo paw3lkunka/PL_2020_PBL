@@ -50,7 +50,7 @@ float HydroForces::getTriangleArea(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)
 
 glm::vec3 HydroForces::buoyancyForce(float rho, HydroTriangleData triangleData)
 {
-    glm::vec3 buoyancyForce = rho * (-GetCore().GetPhysicsWorld()->getGravity().y) * triangleData.distanceToSurface * triangleData.area * triangleData.normal;
+    glm::vec3 buoyancyForce = rho * (-GetCore().physicModule.GetWorld().getGravity().y) * triangleData.distanceToSurface * triangleData.area * triangleData.normal;
     buoyancyForce.x = 0.0f;
     buoyancyForce.z = 0.0f;
     
@@ -174,7 +174,7 @@ glm::vec3 HydroForces::airResistanceForce(float rho, HydroTriangleData triangleD
 
 glm::vec3 HydroForces::waveDriftingForce(float rho, float area, glm::vec3 normal)
 {
-    glm::vec3 waveDriftingForce = 0.5f * rho * GetCore().GetPhysicsWorld()->getGravity().y * area * area * normal;
+    glm::vec3 waveDriftingForce = 0.5f * rho * GetCore().physicModule.GetWorld().getGravity().y * area * area * normal;
     waveDriftingForce.y = 0.0f;
     
     waveDriftingForce = checkForceIsValid(waveDriftingForce, "Wave drifting force");
