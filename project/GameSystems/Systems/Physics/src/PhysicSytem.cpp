@@ -28,45 +28,12 @@ void PhysicSystem::start()
     reactTrb.setOrientation(QuatCast(transformPtr->getWorldRotation()));
     rBodyPtr->reactRB = GetCore().GetPhysicsWorld()->createRigidBody(reactTrb);
     //Should it be method?
-    {
-    if (rBodyPtr->angularDrag > 1.0f || rBodyPtr->angularDrag < 0.0f )
-        {
-            std::cerr << "ERROR: Angular drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped." << std::endl;
-            rBodyPtr->angularDrag = std::clamp(rBodyPtr->angularDrag, 0.0f, 1.0f);
-        }
-        if (rBodyPtr->drag > 1.0f || rBodyPtr->drag < 0.0f )
-        {
-            std::cerr << "ERROR: Drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped." << std::endl;
-            rBodyPtr->drag = std::clamp(rBodyPtr->drag, 0.0f, 1.0f);
-        }
-
-
-        std::cout << (int)rBodyPtr->type << (int)rBodyPtr->reactRB->getType() << std::endl;
-        rBodyPtr->reactRB->setAngularDamping(rBodyPtr->angularDrag);
-        rBodyPtr->reactRB->setLinearDamping(rBodyPtr->drag);           //HACK
-        rBodyPtr->reactRB->setLocalInertiaTensor(BoxMomentOfInertia(rBodyPtr->mass, {1.0f, 1.0f, 1.0f}));
-        rBodyPtr->reactRB->enableGravity(!rBodyPtr->ignoreGravity);
-        rBodyPtr->reactRB->setMass(rBodyPtr->mass);
-        rBodyPtr->reactRB->setType(rBodyPtr->type);
-
-        //HACK
-        if (Name(rBodyPtr) == "PhysicSurface")
-        {
-            rBodyPtr->reactRB->setType(rp3d::BodyType::STATIC);
-        }
-    }
     
 
     colliderPtr->computeReactCS();
     rp3d::Transform reactTc(Vec3Cast(colliderPtr->center), rp3d::Quaternion::identity());
     rBodyPtr->reactRB->addCollider(colliderPtr->reactCS, reactTc);
-
-    //if (Name(rBodyPtr) == "PhysicSurface")
-        //rBodyPtr->reactRB->setType(rp3d::BodyType::STATIC);
-    //else
-    {
-    }
-    
+    rBodyPtr->updateReactRB();
 }
 
 void PhysicSystem::fixedUpdate()

@@ -289,15 +289,22 @@ void EditorModule::drawLight(Light* lightPtr)
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
     //TODO check after phisic backend change
-    ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
+    bool changed = false;
+
+    changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
     if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
     {
         //moment of inertia ws here
     }
-    ImGui::DragFloat("Drag", &rBodyPtr->drag);
-    ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+    changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
+    changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
+
+    if (changed)
+    {
+        rBodyPtr->updateReactRB();
+    }
 }
 
 void EditorModule::drawKayak(Kayak* kayakPtr)
