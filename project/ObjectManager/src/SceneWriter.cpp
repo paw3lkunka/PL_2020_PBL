@@ -434,6 +434,7 @@ void SceneWriter::saveRigidbody(Rigidbody* componentPtr)
     j[name]["drag"] = componentPtr->drag;
     j[name]["angularDrag"] = componentPtr->angularDrag;
     j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
+    j[name]["bodyType"] = componentPtr->type;
 }
 
 void SceneWriter::savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr)

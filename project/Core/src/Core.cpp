@@ -255,6 +255,11 @@ int Core::mainLoop()
             //HACK
             for (Entity& e : *gameSystemsModule.entities)
             {
+                
+                //HACK
+                if (e.getName() == "Kayak")
+                    continue;
+
                 if (auto* rb = e.getComponentPtr<Rigidbody>())
                 {
                     reactphysics3d::Transform reactT = rb->reactRB->getTransform();

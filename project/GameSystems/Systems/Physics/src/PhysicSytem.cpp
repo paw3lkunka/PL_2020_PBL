@@ -28,24 +28,34 @@ void PhysicSystem::start()
     reactTrb.setOrientation(QuatCast(transformPtr->getWorldRotation()));
     rBodyPtr->reactRB = GetCore().GetPhysicsWorld()->createRigidBody(reactTrb);
     //Should it be method?
-
-    
+    {
     if (rBodyPtr->angularDrag > 1.0f || rBodyPtr->angularDrag < 0.0f )
-    {
-        std::cerr << "ERROR: Angular drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped.";
-        rBodyPtr->angularDrag = std::clamp(rBodyPtr->angularDrag, 0.0f, 1.0f);
-    }
-    if (rBodyPtr->drag > 1.0f || rBodyPtr->drag < 0.0f )
-    {
-        std::cerr << "ERROR: Drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped.";
-        rBodyPtr->drag = std::clamp(rBodyPtr->drag, 0.0f, 1.0f);
-    }
+        {
+            std::cerr << "ERROR: Angular drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped." << std::endl;
+            rBodyPtr->angularDrag = std::clamp(rBodyPtr->angularDrag, 0.0f, 1.0f);
+        }
+        if (rBodyPtr->drag > 1.0f || rBodyPtr->drag < 0.0f )
+        {
+            std::cerr << "ERROR: Drag of " << Name(rBodyPtr) << " is out of bounds. Value was clamped." << std::endl;
+            rBodyPtr->drag = std::clamp(rBodyPtr->drag, 0.0f, 1.0f);
+        }
 
-    rBodyPtr->reactRB->setMass(rBodyPtr->mass);
-    rBodyPtr->reactRB->setAngularDamping(rBodyPtr->angularDrag);
-    rBodyPtr->reactRB->setLinearDamping(rBodyPtr->drag);           //HACK
-    rBodyPtr->reactRB->setLocalInertiaTensor(BoxMomentOfInertia(rBodyPtr->mass, {1.0f, 1.0f, 1.0f}));
-    rBodyPtr->reactRB->enableGravity(!rBodyPtr->ignoreGravity);
+
+        std::cout << (int)rBodyPtr->type << (int)rBodyPtr->reactRB->getType() << std::endl;
+        rBodyPtr->reactRB->setAngularDamping(rBodyPtr->angularDrag);
+        rBodyPtr->reactRB->setLinearDamping(rBodyPtr->drag);           //HACK
+        rBodyPtr->reactRB->setLocalInertiaTensor(BoxMomentOfInertia(rBodyPtr->mass, {1.0f, 1.0f, 1.0f}));
+        rBodyPtr->reactRB->enableGravity(!rBodyPtr->ignoreGravity);
+        rBodyPtr->reactRB->setMass(rBodyPtr->mass);
+        rBodyPtr->reactRB->setType(rBodyPtr->type);
+
+        //HACK
+        if (Name(rBodyPtr) == "PhysicSurface")
+        {
+            rBodyPtr->reactRB->setType(rp3d::BodyType::STATIC);
+        }
+    }
+    
 
     colliderPtr->computeReactCS();
     rp3d::Transform reactTc(Vec3Cast(colliderPtr->center), rp3d::Quaternion::identity());
@@ -68,7 +78,24 @@ void PhysicSystem::fixedUpdate()
 
     for (Impulse& i : rBodyPtr->impulses)
     {
-        rBodyPtr->reactRB->applyForceAtWorldPosition(Vec3Cast(i.force), Vec3Cast(i.point));
+        switch (i.type)
+        {
+        case Impulse::CENTER_OF_MASS_FORCE:
+            rBodyPtr->reactRB->applyForceToCenterOfMass(Vec3Cast(i.force));
+            break;
+
+        case Impulse::WORLD_SPACE_FORCE:
+            rBodyPtr->reactRB->applyForceAtWorldPosition(Vec3Cast(i.force), Vec3Cast(i.point));
+            break;
+
+        case Impulse::LOCAL_SPACE_FORCE:
+            rBodyPtr->reactRB->applyForceAtLocalPosition(Vec3Cast(i.force), Vec3Cast(i.point));
+            break;
+
+        case Impulse::TORQUE:
+            rBodyPtr->reactRB->applyTorque(Vec3Cast(i.force));
+            break;
+        }
         std::cout << "impulse" << std::endl;
     }
     rBodyPtr->impulses.clear();

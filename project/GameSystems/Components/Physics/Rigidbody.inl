@@ -24,20 +24,20 @@ struct Rigidbody : public Component
 
     // ? serialized
 
-    ///@brief Mass of the rigidbody
+    ///@brief Mass of the rigidbody.
     float mass = 1;
 
-    ///@brief Drag of the rigidbody
+    ///@brief Drag of the rigidbody.
     float drag = 1;
 
-    ///@brief Angular drag of the rigidbody
+    ///@brief Angular drag of the rigidbody.
     float angularDrag = 1;
 
-    ///@brief determines, if gravity affects this body
+    ///@brief determines, if gravity affects this body.
     bool ignoreGravity = false;
 
-    //TODO documentation, serialization, mental castration
-    reactphysics3d::BodyType type;
+    ///@brief Type of rigidbody (Static / Cinematic / Dynamic).
+    rp3d::BodyType type = rp3d::BodyType::DYNAMIC;
 
     // ? unserialized
 

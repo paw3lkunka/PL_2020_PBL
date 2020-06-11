@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <reactphysics3d/reactphysics3d.h>
 
 bool SceneReader::hasInstance = false;
 
@@ -671,6 +672,7 @@ void SceneReader::readRigidbody(std::string name)
     rigidbody->drag = j.at(name).at("drag").get<float>();
     rigidbody->angularDrag = j.at(name).at("angularDrag").get<float>();
     rigidbody->ignoreGravity = j.at(name).at("ignoreGravity").get<bool>();
+    rigidbody->type = static_cast<rp3d::BodyType>(j.at(name).at("bodyType").get<int>());
 
     assignToEntity(name, rigidbody);
 }
