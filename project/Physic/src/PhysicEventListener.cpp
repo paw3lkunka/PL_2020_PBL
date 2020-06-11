@@ -27,9 +27,6 @@ void PhysicEventListener::onContact(const rp3d::CollisionCallback::CallbackData&
                 GetCore().messageBus.sendMessage(Message(Event::COLLSION_EXIT, data));
                 break;
         }
-        
-
-
     }
 }
 
@@ -43,14 +40,17 @@ void PhysicEventListener::onTrigger(const rp3d::OverlapCallback::CallbackData& c
         //Addresses of our components is stored in rp3d components as user data pointer.
         Rigidbody* rb1 = reinterpret_cast<Rigidbody*>(overlappingPair.getBody1()->getUserData());
         Rigidbody* rb2 = reinterpret_cast<Rigidbody*>(overlappingPair.getBody2()->getUserData());
+        
+        Collider* c1 = reinterpret_cast<Collider*>(overlappingPair.getCollider1()->getUserData());
+        Collider* c2 = reinterpret_cast<Collider*>(overlappingPair.getCollider2()->getUserData());
 
         CollisionData data;
 
-        if (overlappingPair.getCollider2()->getIsTrigger())
+        if (c2->isTrigger)
         {
             data = {rb1, rb2};
         }
-        else
+        else if (c1->isTrigger)
         {
             data = {rb2, rb1};
         }

@@ -615,6 +615,7 @@ void SceneReader::readSphereCollider(std::string name)
     center.z = j.at(name).at("center").at("z").get<float>();
     
     sphereCollider->center = center;
+    sphereCollider->isTrigger = j.at(name).at("isTrigger").get<bool>();
     sphereCollider->radius = j.at(name).at("radius").get<float>();
 
     assignToEntity(name, sphereCollider);
@@ -625,6 +626,8 @@ void SceneReader::readBoxCollider(std::string name)
     //TODO check after phisic backend change
     auto boxCollider = objModulePtr->newEmptyComponent<BoxCollider>();
     boxCollider->serializationID = j.at(name).at("serializationID").get<unsigned int>();
+
+    boxCollider->isTrigger = j.at(name).at("isTrigger").get<bool>();
     
     boxCollider->center.x = j.at(name).at("center").at("x").get<float>();
     boxCollider->center.y = j.at(name).at("center").at("y").get<float>();

@@ -390,6 +390,7 @@ void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 {
     //TODO check after phisic backend change
     j[name]["type"] = "SphereCollider";
+    j[name]["isTrigger"] = componentPtr->isTrigger;
     j[name]["radius"] = componentPtr->radius;
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
@@ -400,6 +401,7 @@ void SceneWriter::saveBoxCollider(BoxCollider* componentPtr)
 {
     //TODO check after phisic backend change
     j[name]["type"] = "BoxCollider";
+    j[name]["isTrigger"] = componentPtr->isTrigger;
     j[name]["center"]["x"] = componentPtr->center.x;
     j[name]["center"]["y"] = componentPtr->center.y;
     j[name]["center"]["z"] = componentPtr->center.z;

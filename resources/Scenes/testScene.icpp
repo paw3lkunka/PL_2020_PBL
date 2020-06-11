@@ -28,11 +28,15 @@ TextureCreateInfo skyboxCreateInfo = {};
                                 "Resources/Textures/skybox_02/ny.png");
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-    skyboxMat->setCubemap("cubemap", cubemap);
+        skyboxMat->setCubemap("cubemap", cubemap);
 
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
-    unlitInstancedMat->setTexture("mainTex", texture);
-    unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
+    {
+        unlitInstancedMat->setTexture("mainTex", texture);
+        unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
+    }
+
+    Material* rushesMat = objectModule.newMaterial(unlitColor, "RushesMat", RenderType::Transparent);
 
     objectModule.newEntity(4, "Camera");
     {
@@ -207,7 +211,7 @@ TextureCreateInfo skyboxCreateInfo = {};
             bc->halfSize =  glm::vec3(100, 0.5, 100) * 0.5f;
     }
     
-    Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
+    Entity* entity = objectModule.newEntity(6, "PhisicBasedInputTest");
     {
         
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
@@ -228,6 +232,7 @@ TextureCreateInfo skyboxCreateInfo = {};
 
             keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
             keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
+
         Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
             transform->setParent(&sceneModule.rootNode);
             transform->getLocalPositionModifiable().x = 5;
@@ -250,4 +255,36 @@ TextureCreateInfo skyboxCreateInfo = {};
             rigidbody->angularDrag = 0.1;
             rigidbody->mass = 10;
             rigidbody->ignoreGravity = true;
+
+        Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
+    }
+
+    auto* hideout1 = objectModule.newEntity(4,"Hideout1");
+    {
+        auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+            tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
+            tr->getLocalScaleModifiable() = {2.0f, 1.0f, 2.0f};
+            tr->setParent(&sceneModule.rootNode);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize =  glm::vec3(1.0f, 0.5f, 1.0f);
+            bc->isTrigger = true;
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+            mr->material = rushesMat;
+        auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+    }
+    
+    auto* hideout2 = objectModule.newEntity(4,"Hideout2");
+    {
+        auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+            tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
+            tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
+            tr->setParent(&sceneModule.rootNode);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize =  glm::vec3(0.5f, 0.5f, 0.5f);
+            bc->isTrigger = true;
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+            mr->material = rushesMat;
+        auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
     }

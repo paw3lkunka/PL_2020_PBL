@@ -43,8 +43,8 @@ void PhysicSystem::start()
     rBodyPtr->updateReactRB(true);
 
     //Addresses of our components is stored in rp3d components as user data pointer.
-    rBodyPtr->reactRB->setUserData(&rBodyPtr);
-    colliderPtr->reactCollider->setUserData(&colliderPtr);
+    rBodyPtr->reactRB->setUserData(rBodyPtr);
+    colliderPtr->reactCollider->setUserData(colliderPtr);
 }
 
 void PhysicSystem::fixedUpdate()

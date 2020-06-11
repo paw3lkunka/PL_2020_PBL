@@ -225,7 +225,8 @@ void ConsoleModule::receiveMessage(Message msg)
         auto tData = msg.getValue<CollisionData>();
         std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;
     }
-        
+        break;
+
     case Event::TRIGGER_ENTER:
     {
         auto tData = msg.getValue<TriggerData>();
