@@ -63,7 +63,6 @@ void PhysicSystem::fixedUpdate()
             rBodyPtr->reactRB->applyTorque(Vec3Cast(i.force));
             break;
         }
-        std::cout << "impulse" << std::endl;
     }
     rBodyPtr->impulses.clear();
 }

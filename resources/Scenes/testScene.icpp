@@ -61,8 +61,8 @@ TextureCreateInfo skyboxCreateInfo = {};
     objectModule.newEntity(2, "cubeInstanced1");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 20.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 2.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -76,14 +76,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced2");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -2.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -98,14 +98,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced3");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 3.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -120,14 +120,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced4");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -3.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -142,14 +142,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced5");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -3.5f, 1.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -164,14 +164,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced6");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 3.5f, 1.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -186,14 +186,14 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {5.0f, 5.0f, 5.0f};
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
     
     objectModule.newEntity(2, "surface");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, -50.0f, 0.0f };
-            t->getLocalScaleModifiable() = {100, 5, 100};
+            t->getLocalPositionModifiable() = { 0.0f, -5.0f, 0.0f };
+            t->getLocalScaleModifiable() = {100, 0.5, 100};
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
@@ -204,7 +204,7 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->type = rp3d::BodyType::STATIC;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize =  glm::vec3(100, 5, 100) * 0.5f;
+            bc->halfSize =  glm::vec3(100, 0.5, 100) * 0.5f;
     }
     
     Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
@@ -230,11 +230,11 @@ TextureCreateInfo skyboxCreateInfo = {};
             keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
         Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
             transform->setParent(&sceneModule.rootNode);
-            transform->getLocalPositionModifiable().x = 50;
-            transform->getLocalScaleModifiable() *= 5;
+            transform->getLocalPositionModifiable().x = 5;
+            transform->getLocalScaleModifiable();
 
         SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-            collider->radius = 5;
+            collider->radius = 1;
 
         MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
