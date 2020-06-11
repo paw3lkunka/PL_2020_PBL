@@ -58,19 +58,19 @@ void SceneReader::readShaders()
         name = setName("shader", i);
         fragmentShaderPath = j->at(name).at("fragmentShaderPath").get<std::string>();
         vertexShaderPath = j->at(name).at("vertexShaderPath").get<std::string>();
-
+        std::string shaderName = j->at(name).at("shaderName").get<std::string>();
         std::cout << fragmentShaderPath << std::endl;
         std::cout << vertexShaderPath << std::endl;
         
         try
         {
             geometryShaderPath = j->at(name).at("geometryShaderPath").get<std::string>();
-            shader = objModulePtr->newShader(vertexShaderPath.c_str(), fragmentShaderPath.c_str(), geometryShaderPath.c_str());
+            shader = objModulePtr->newShader(shaderName, vertexShaderPath.c_str(), fragmentShaderPath.c_str(), geometryShaderPath.c_str());
         }
         catch(nlohmann::detail::out_of_range)
         {
             std::cout << "Caught exception" << std::endl;
-            shader = objModulePtr->newShader(vertexShaderPath.c_str(), fragmentShaderPath.c_str());
+            shader = objModulePtr->newShader(shaderName, vertexShaderPath.c_str(), fragmentShaderPath.c_str());
         }
         shader->serializationID = j->at(name).at("serializationID").get<unsigned int>();
     }
@@ -105,7 +105,8 @@ void SceneReader::readFonts()
         name = setName("font", i);
         std::string fontPath = j->at(name).at("fontPath").get<std::string>();
         unsigned int size = j->at(name).at("fontSize").get<unsigned int>();
-        Font* font = objModulePtr->newFont(fontPath.c_str(), size, name);
+        std::string fontName = j->at(name).at("fontName").get<std::string>();
+        Font* font = objModulePtr->newFont(fontPath.c_str(), size, fontName);
         font->serializationID = j->at(name).at("serializationID").get<unsigned int>();
     }
     
@@ -145,10 +146,11 @@ void SceneReader::readMaterials()
     std::string name;
     int materialsAmount = j->at("Amounts").at("materials").get<int>();
     std::unordered_map<std::string, unsigned int> children;
+    std::unordered_map<std::string, std::string> textures;
     std::unordered_map<std::string, int> ints;
     std::unordered_map<std::string, float> floats;
     std::unordered_map<std::string, std::vector<float>> structMap;
-    unsigned int shaderID;
+    std::string shaderName;
 
     for(int i = 0; i < materialsAmount; ++i)
     {
@@ -156,8 +158,8 @@ void SceneReader::readMaterials()
         children.clear();
 
 
-        shaderID = j->at(name).at("shaderSerializationID").get<unsigned int>();
-        auto shader = objModulePtr->objectContainer.getShaderFromSerializationID(shaderID);
+        shaderName = j->at(name).at("shaderName").get<std::string>();
+        auto shader = objModulePtr->objectContainer.getShaderPtrByName(shaderName);
         auto instancingEnabled = j->at(name).at("instancingEnabled").get<bool>();
         auto renderingType = j->at(name).at("renderingType").get<int>();
         auto matName = j->at(name).at("name").get<std::string>();
@@ -174,12 +176,11 @@ void SceneReader::readMaterials()
             material->setCubemap(iter.first, cubemap);
         }
 
-        children.clear();
-        j->at(name).at("textures").get_to(children);
-        for(auto iter : children)
+        j->at(name).at("textures").get_to(textures);
+        for(auto iter : textures)
         {
-            unsigned int texID = iter.second;
-            auto texture = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
+            std::string texPath = iter.second;
+            auto texture = objModulePtr->objectContainer.getTexturePtrByFilePath(texPath.c_str());
             material->setTexture(iter.first, texture);
         }
 
@@ -600,8 +601,8 @@ void SceneReader::readMeshRenderer(std::string name)
         auto renderer = dynamic_cast<MeshRenderer*>(component);
         try
         {
-            unsigned int childID = j->at(name).at("material").get<unsigned int>();
-            renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+            std::string materialName = j->at(name).at("material").get<std::string>();
+            renderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
         }
         catch(nlohmann::detail::out_of_range)
         {
@@ -615,11 +616,11 @@ void SceneReader::readMeshRenderer(std::string name)
         auto renderer = objModulePtr->newEmptyComponent<MeshRenderer>();
         renderer->serializationID = serializationID;
 
-        unsigned int childID = j->at(name).at("material").get<unsigned int>();
-        renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        std::string materialName = j->at(name).at("material").get<std::string>();
+        renderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
 
-        childID = j->at(name).at("mesh").get<unsigned int>();
-        renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+        std::string meshPath = j->at(name).at("mesh").get<std::string>();
+        renderer->mesh = objModulePtr->objectContainer.getMeshByMeshPath(meshPath);
 
         assignToEntity(name, renderer);
     }
@@ -808,8 +809,8 @@ void SceneReader::readUiRenderer(std::string name)
     auto uiRenderer = objModulePtr->newEmptyComponent<UiRenderer>();
     uiRenderer->serializationID = j->at(name).at("serializationID").get<unsigned int>();
 
-    unsigned int childID = j->at(name).at("material").get<unsigned int>();
-    uiRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+    std::string materialName = j->at(name).at("material").get<std::string>();
+    uiRenderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
 
     assignToEntity(name, uiRenderer);
 }
@@ -819,11 +820,11 @@ void SceneReader::readTextRenderer(std::string name)
     auto textRenderer = objModulePtr->newEmptyComponent<TextRenderer>();
     textRenderer->serializationID = j->at(name).at("serializationID").get<unsigned int>();
 
-    unsigned int materialID = j->at(name).at("material").get<unsigned int>();
-    textRenderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(materialID);
+    std::string materialName = j->at(name).at("material").get<std::string>();
+    textRenderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
 
-    unsigned int fontID = j->at(name).at("font").get<unsigned int>();
-    textRenderer->mesh.font = objModulePtr->objectContainer.getFontFromSerializationID(fontID);
+    std::string fontName = j->at(name).at("font").get<std::string>();
+    textRenderer->mesh.font = objModulePtr->objectContainer.getFontPtrByName(fontName.c_str());
 
     textRenderer->mesh.text = j->at(name).at("text").get<std::string>();
 
@@ -1124,7 +1125,7 @@ void SceneReader::readEvent(std::string name, std::string containerName, std::ve
             case Event::LOAD_SCENE:
             {
                 std::string scene = j->at(name).at(containerName).at(msgName).at("scene").get<std::string>();
-                //HACK: ULTRA HACK, I HATE MYSELF FOR THAT ;-;
+                //TODO: Maybe smth better?
                 if(scene == Scenes::selectCargoScene)
                 {
                     messages.push_back(Message(Event::LOAD_SCENE, Scenes::selectCargoScene));

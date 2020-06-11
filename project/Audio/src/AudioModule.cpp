@@ -202,6 +202,7 @@ void AudioModule::unloadScene()
     clips.clear();
     sources.clear();
     queueCounters.clear();
+    playingSources.clear();
 }
 
 void AudioModule::cleanup()

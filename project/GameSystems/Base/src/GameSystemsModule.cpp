@@ -40,7 +40,7 @@ void GameSystemsModule::run(System::UpdateType updateType)
             continue;
         }
         for( Entity& ent : *entities )
-        {
+        {  
             sys->process(&ent, updateType);
         }
     }

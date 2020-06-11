@@ -2,6 +2,9 @@
 #define GAMEPLAYMODULE_HPP_
 
 #include "IModule.inl"
+#include <string>
+
+class Entity;
 
 class GamePlayModule : public IModule
 {
@@ -12,8 +15,14 @@ public:
     ///@brief inherited from IModule
     virtual void receiveMessage(Message msg);
 
+    ///@brief initialize module
+    void init();
+
 protected:
 private:
+    Entity* loadingScreenEntity;
+
+    void reloadScene(std::string name);
 };
 
 #endif /* !GAMEPLAYMODULE_HPP_ */

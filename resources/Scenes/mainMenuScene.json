@@ -129,7 +129,7 @@
     },
     "component006": {
         "entity id": 2,
-        "material": 19,
+        "material": "UiBg",
         "serializationID": 18,
         "type": "UiRenderer"
     },
@@ -178,7 +178,7 @@
     },
     "component010": {
         "entity id": 4,
-        "material": 26,
+        "material": "startMat",
         "serializationID": 25,
         "type": "UiRenderer"
     },
@@ -211,7 +211,7 @@
         },
         "onClickEvents": {
             "e0": {
-                "event": 45,
+                "event": 46,
                 "scene": "Resources/Scenes/selectCargoScene.json"
             }
         },
@@ -239,8 +239,8 @@
     },
     "component013": {
         "entity id": 5,
-        "font": 11,
-        "material": 15,
+        "font": "KosugiMaru-Regular",
+        "material": "TextMaterial",
         "serializationID": 30,
         "text": "Start",
         "type": "TextRenderer"
@@ -266,7 +266,7 @@
     },
     "component015": {
         "entity id": 6,
-        "material": 35,
+        "material": "optionsMat",
         "serializationID": 34,
         "type": "UiRenderer"
     },
@@ -290,7 +290,7 @@
             "g": 0.5249999761581421,
             "r": 0.7490000128746033
         },
-        "isActive": false,
+        "isActive": true,
         "onClickColor": {
             "a": 0.699999988079071,
             "b": 0.03099999949336052,
@@ -327,8 +327,8 @@
     },
     "component018": {
         "entity id": 7,
-        "font": 11,
-        "material": 15,
+        "font": "KosugiMaru-Regular",
+        "material": "TextMaterial",
         "serializationID": 39,
         "text": "Options",
         "type": "TextRenderer"
@@ -354,7 +354,7 @@
     },
     "component020": {
         "entity id": 8,
-        "material": 44,
+        "material": "exitMat",
         "serializationID": 43,
         "type": "UiRenderer"
     },
@@ -391,7 +391,7 @@
                 "event": 23
             },
             "e1": {
-                "event": 46
+                "event": 47
             }
         },
         "serializationID": 45,
@@ -418,8 +418,8 @@
     },
     "component023": {
         "entity id": 9,
-        "font": 11,
-        "material": 15,
+        "font": "KosugiMaru-Regular",
+        "material": "TextMaterial",
         "serializationID": 48,
         "text": "Exit",
         "type": "TextRenderer"
@@ -519,6 +519,7 @@
         "serializationID": 46
     },
     "font000": {
+        "fontName": "KosugiMaru-Regular",
         "fontPath": "Resources/Fonts/KosugiMaru-Regular.ttf",
         "fontSize": 128,
         "serializationID": 11
@@ -569,9 +570,9 @@
         "name": "UiStandardMat",
         "renderingType": 1,
         "serializationID": 14,
-        "shaderSerializationID": 9,
+        "shaderName": "UiStandard",
         "textures": {
-            "sprite": 13
+            "sprite": "Resources/Sprites/button_test.png"
         },
         "vec3s": {},
         "vec4s": {
@@ -629,7 +630,7 @@
         "name": "TextMaterial",
         "renderingType": 1,
         "serializationID": 15,
-        "shaderSerializationID": 10,
+        "shaderName": "TextStandard",
         "textures": {},
         "vec3s": {},
         "vec4s": {
@@ -687,9 +688,9 @@
         "name": "UiBg",
         "renderingType": 0,
         "serializationID": 19,
-        "shaderSerializationID": 9,
+        "shaderName": "UiStandard",
         "textures": {
-            "sprite": 13
+            "sprite": "Resources/Sprites/button_test.png"
         },
         "vec3s": {},
         "vec4s": {
@@ -747,9 +748,9 @@
         "name": "startMat",
         "renderingType": 1,
         "serializationID": 26,
-        "shaderSerializationID": 9,
+        "shaderName": "UiStandard",
         "textures": {
-            "sprite": 13
+            "sprite": "Resources/Sprites/button_test.png"
         },
         "vec3s": {},
         "vec4s": {
@@ -807,9 +808,9 @@
         "name": "optionsMat",
         "renderingType": 1,
         "serializationID": 35,
-        "shaderSerializationID": 9,
+        "shaderName": "UiStandard",
         "textures": {
-            "sprite": 13
+            "sprite": "Resources/Sprites/button_test.png"
         },
         "vec3s": {},
         "vec4s": {
@@ -867,9 +868,9 @@
         "name": "exitMat",
         "renderingType": 1,
         "serializationID": 44,
-        "shaderSerializationID": 9,
+        "shaderName": "UiStandard",
         "textures": {
-            "sprite": 13
+            "sprite": "Resources/Sprites/button_test.png"
         },
         "vec3s": {},
         "vec4s": {
@@ -884,11 +885,13 @@
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
         "serializationID": 9,
+        "shaderName": "UiStandard",
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
         "serializationID": 10,
+        "shaderName": "TextStandard",
         "vertexShaderPath": "Resources/Shaders/TextStandard/TextStandard.vert"
     },
     "texture000": {

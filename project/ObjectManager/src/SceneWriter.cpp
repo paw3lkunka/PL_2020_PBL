@@ -400,9 +400,9 @@ void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
     (*json)[name]["type"] = "MeshRenderer";
     if(componentPtr->material != nullptr)
     {
-        (*json)[name]["material"] = componentPtr->material->serializationID;
+        (*json)[name]["material"] = componentPtr->material->getName();
     }
-    (*json)[name]["mesh"] = componentPtr->mesh->serializationID;
+    (*json)[name]["mesh"] = componentPtr->mesh->getMeshPath();
     
 }
 
@@ -530,14 +530,14 @@ void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
 {
     (*json)[name]["type"] = "UiRenderer";
-    (*json)[name]["material"] = componentPtr->material->serializationID;
+    (*json)[name]["material"] = componentPtr->material->getName();
 }
 
 void SceneWriter::saveTextRenderer(TextRenderer* componentPtr)
 {
     (*json)[name]["type"] = "TextRenderer";
-    (*json)[name]["material"] = componentPtr->material->serializationID;
-    (*json)[name]["font"] = componentPtr->mesh.font->serializationID;
+    (*json)[name]["material"] = componentPtr->material->getName();
+    (*json)[name]["font"] = componentPtr->mesh.font->getName();
     (*json)[name]["text"] = componentPtr->mesh.text;
 }
 
@@ -695,7 +695,7 @@ void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
         std::ofstream file("Resources/Scenes/chosenCargos.json");
         if(file.good())
         {
-            file << std::setw(4) << temp;
+            file << std::setw(4) << *temp;
         }
         file.close();
 
@@ -710,7 +710,7 @@ void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
 void SceneWriter::saveMaterial(Material* assetPtr)
 {
     (*json)[name]["serializationID"] = assetPtr->serializationID;
-    (*json)[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
+    (*json)[name]["shaderName"] = assetPtr->shader->shaderName;
     (*json)[name]["name"] = assetPtr->getName();
     (*json)[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
     (*json)[name]["renderingType"] = assetPtr->getRenderType();
@@ -721,15 +721,15 @@ void SceneWriter::saveMaterial(Material* assetPtr)
     }
     (*json)[name]["cubemaps"] = childrenMap;
 
-    childrenMap.clear();
+    std::unordered_map<std::string, std::string> texMap;
     for(auto t : assetPtr->textures)
     {
         if (t.second != nullptr)
         {
-            childrenMap[t.first] = t.second->serializationID;
+            texMap[t.first] = t.second->filePath;
         }
     }
-    (*json)[name]["textures"] = childrenMap;
+    (*json)[name]["textures"] = texMap;
 
     childrenMap.clear();
     for(auto i : assetPtr->ints)
@@ -827,6 +827,7 @@ void SceneWriter::saveMesh(Mesh* assetPtr)
 
 void SceneWriter::saveShader(Shader* assetPtr)
 {
+    (*json)[name]["shaderName"] = assetPtr->shaderName;
     (*json)[name]["serializationID"] = assetPtr->serializationID;
     (*json)[name]["fragmentShaderPath"] = assetPtr->fragmentShaderPath;
     (*json)[name]["vertexShaderPath"] = assetPtr->vertexShaderPath;
@@ -859,6 +860,7 @@ void SceneWriter::saveFont(Font* assetPtr)
     (*json)[name]["serializationID"] = assetPtr->serializationID;
     (*json)[name]["fontPath"] = assetPtr->getFontPath();
     (*json)[name]["fontSize"] = assetPtr->getSize();
+    (*json)[name]["fontName"] = assetPtr->getName();
 }
 
 #pragma endregion

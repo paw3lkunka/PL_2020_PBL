@@ -14,7 +14,12 @@ struct CargoButton : public ToggleButton
 {
 public:
     CargoButton() = default;
-    ~CargoButton() = default;
+    ~CargoButton()
+    {
+        nameText = nullptr;
+        weightText = nullptr;
+        incomeText = nullptr;
+    }
 
     ///@brief text renderer component which contains name of cargo
     TextRenderer* nameText;

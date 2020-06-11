@@ -14,7 +14,11 @@
 struct ToggleButton : public Component
 {
     ToggleButton() = default;
-    ~ToggleButton() = default;
+    ~ToggleButton()
+    {
+        onActivateEvents.clear();
+        onDeactivateEvents.clear();
+    }
 
     ///@brief determines if button can be clicked (used)
     bool isActive = true;

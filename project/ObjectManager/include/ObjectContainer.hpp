@@ -22,6 +22,7 @@ class Material;
 class ObjectMaker;
 class ObjectModule;
 class SceneWriter;
+class GamePlayModule;
 
 /**
  * @brief container of entity, components and assets
@@ -31,6 +32,7 @@ class ObjectContainer
     friend class ObjectMaker;
     friend class ObjectModule;
     friend class SceneWriter;
+    friend class GamePlayModule;
 public:
     /**
      * @brief Construct a new Object Container object
@@ -67,6 +69,14 @@ public:
      * @return Mesh* mesh pointer or nullprt if can't find
      */
     Mesh* getMeshFromSerializationID(unsigned int serializationID);
+
+    /**
+     * @brief Get the Mesh By Mesh Path 
+     * 
+     * @param meshPath path to mesh
+     * @return Mesh* pointer or nullprt if can't find
+     */
+    Mesh* getMeshByMeshPath(std::string meshPath);
     
     /**
      * @brief Get the Entity by ID
@@ -162,6 +172,14 @@ public:
     Animation* getAnimationPtrByName(const char* name);
     // TODO documentation
     Font* getFontPtrByName(const char* name);
+
+    /**
+     * @brief Get the Shader Ptr By Name
+     * 
+     * @param shaderName name of shader
+     * @return Shader* pointer to shader or nullptr if not found
+     */
+    Shader* getShaderPtrByName(std::string shaderName);
 
     /**
      * @brief Removes all components and entities from scene

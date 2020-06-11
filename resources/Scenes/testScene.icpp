@@ -1,7 +1,7 @@
-auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
-
+auto unlitTexture = objectModule.newShader("UnlitTexture", "Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
+auto skyboxShader = objectModule.newShader("SkyboxCubemap", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
+objectModule.newAudioClip("Resources/Audios/shingeki.wav");
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -49,7 +49,7 @@ TextureCreateInfo skyboxCreateInfo = {};
 
         auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
             li->getIsCurrentModifiable() = true;
-            li->getGainModifiable() = 1.0f;
+            li->getGainModifiable() = 0.5f;
             li->getVelocityModifiable();
             li->getPositionModifiable();
             li->getAtModifiable();
@@ -78,6 +78,14 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
+        so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.1f;
+        so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
     }
 
     objectModule.newEntity(2, "cubeInstanced3");

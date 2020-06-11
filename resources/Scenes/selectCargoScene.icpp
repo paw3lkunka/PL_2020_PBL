@@ -38,8 +38,8 @@ objectModule.newEntity(2, "RiverFlow");
 }
 
 {
-    auto uiShader = objectModule.newShader("Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
-    auto textShader = objectModule.newShader("Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
     auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 128, "KosugiMaru-Regular");
 
     TextureCreateInfo info = {};

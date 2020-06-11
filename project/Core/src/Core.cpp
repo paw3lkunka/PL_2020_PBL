@@ -106,8 +106,7 @@ int Core::init()
         // ? -r
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -173,6 +172,7 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+    gamePlayModule.init();
 
 #pragma regnon attach systems
 
@@ -302,12 +302,12 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    audioModule.cleanup();
     editorModule.onExit();
 
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
-    audioModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
