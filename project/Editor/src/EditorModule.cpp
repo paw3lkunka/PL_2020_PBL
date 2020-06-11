@@ -291,7 +291,7 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
-    //TODO check after phisic backend change
+    //TODO check after physic backend change
     bool changed = false, mass = false;
 
     changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
@@ -299,6 +299,23 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
     changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
     
+    char* bType = "ERROR";
+    switch (rBodyPtr->type)
+    {
+    case rp3d::BodyType::STATIC:
+        bType = "static";
+        break;
+
+    case rp3d::BodyType::KINEMATIC:
+        bType = "kinematic";
+        break;
+
+    case rp3d::BodyType::DYNAMIC:
+        bType = "dynamic";
+        break;
+    }
+
+    ImGui::Text((std::string("Body type: ") + bType).c_str());
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 

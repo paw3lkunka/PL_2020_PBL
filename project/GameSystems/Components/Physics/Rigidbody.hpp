@@ -14,8 +14,7 @@
 struct Rigidbody : public Component
 {
     friend class PhysicSystem;
-    //HACK
-    friend class Core;
+    friend void Core::physicSimulation();
 
     Rigidbody() = default;
     virtual ~Rigidbody() = default;
@@ -49,14 +48,19 @@ struct Rigidbody : public Component
     std::vector<Impulse> impulses;
 
     /**
-     * @brief Updates state of react RigidBody.
+     * @brief Update state of react RigidBody.
      * 
      * @param updateInnertiaTensor update also inntertia tensor. To do this, this component must be assigned to entity along with Collider component.
      */
     void updateReactRB(bool updateInnertiaTensor);
 
-    //TODO: documentation
+    /**
+     * @brief Update state of react Transform, applying valuse from given Transform.
+     * 
+     * @param transformPtr transform with values to apply.
+     */
     void updateReactTransform(Transform* transformPtr);
+    
 private:
 
     ///@brief Pointer to reactphysics3d object

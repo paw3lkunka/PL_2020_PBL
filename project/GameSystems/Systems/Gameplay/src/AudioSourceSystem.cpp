@@ -8,7 +8,7 @@
 #include <glm/gtx/vec_swizzle.hpp>
 
 #include "AudioSource.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Rigidbody.hpp"
 
 

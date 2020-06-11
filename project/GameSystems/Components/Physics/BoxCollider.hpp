@@ -55,13 +55,22 @@ struct BoxCollider : public Collider
      */
     BoxCollider(float width, float height, float depth, float x, float y, float z);
 
-    //TODO documentation
+    /**
+     * @brief Release memory allocated in physic world object.
+     */
     virtual ~BoxCollider();
 
-    //TODO documentation
+    /**
+     * @brief Create react phisic box shape, basing on valuses stored in fields - used in physic simulation.
+     */
     virtual void computeReactCS();
 
-    //TODO: documentation
+    /**
+     * @brief Compute value of innertia tensor for given mass, basing on valuses stored in fields.
+     * 
+     * @param mass Mass of body
+     * @return rp3d::Vector3 innertia tensor (diagonal).
+     */
     virtual rp3d::Vector3 computeInnertiaTensor(float mass);
 };
 

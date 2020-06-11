@@ -4,7 +4,7 @@
 #include "Entity.hpp"
 
 #include "Camera.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Message.inl"
 
 #include <glm/gtx/string_cast.hpp>
@@ -70,7 +70,7 @@ void CameraSystem::frameUpdate()
                                                     frustum.farPlane
                                                     );
                     break;
-                // ! ----- Warning! Othographic projection is untested and may produce undefined behaviour ----- !
+                // ! ----- Warning! Orthographic projection is untested and may produce undefined behaviour ----- !
                 case CameraProjection::Orthographic:
                     camera->projectionMatrix = glm::ortho(
                                                     -frustum.orthographicSize * frustum.aspectRatio,

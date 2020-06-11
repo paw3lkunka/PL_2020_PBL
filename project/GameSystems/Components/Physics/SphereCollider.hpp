@@ -12,10 +12,17 @@ struct SphereCollider : public Collider
     SphereCollider() = default;
     virtual ~SphereCollider();
 
-    //TODO documentation
+    /**
+     * @brief Create react phisic box shape, basing on valuses stored in fields - used in physic simulation.
+     */
     virtual void computeReactCS();
 
-    //TODO: documentation
+    /**
+     * @brief Compute value of innertia tensor for given mass, basing on valuses stored in fields.
+     * 
+     * @param mass Mass of body
+     * @return rp3d::Vector3 innertia tensor (diagonal).
+     */
     virtual rp3d::Vector3 computeInnertiaTensor(float mass);
 
     /**

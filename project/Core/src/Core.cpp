@@ -145,30 +145,25 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
+    // TODO <make this function>
     // ! IK system initialize
-    BoneAttachData leftData;
-    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
+        BoneAttachData leftData;
+        leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+        leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
-    BoneAttachData rightData;
-    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
+        BoneAttachData rightData;
+        rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+        rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
-    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-    //gameSystemsModule.addSystem(&paddleIkSystem);
-
-#pragma region AudioModule demo - initialization
+        Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+        //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+        //gameSystemsModule.addSystem(&paddleIkSystem);
+    // TODO </make this function>
 
     audioModule.init();
 
-#pragma endregion
-
-#pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-#pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 

@@ -1,5 +1,5 @@
 #include "Kayak.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Entity.hpp"
 
 Kayak* Kayak::lastInstance = nullptr;

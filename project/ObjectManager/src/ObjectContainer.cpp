@@ -8,7 +8,7 @@
 #include "Shader.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Font.hpp"
 #include "mesh/Mesh.hpp"
 #include "mesh/MeshCustom.hpp"

@@ -9,7 +9,7 @@
 
 #include "Entity.hpp"
 
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Rigidbody.hpp"
 #include "AudioListener.inl"
 
