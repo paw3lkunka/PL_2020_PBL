@@ -1,6 +1,8 @@
 #ifndef PHYSICMODULE_HPP_
 #define PHYSICMODULE_HPP_
 
+#include "PhysicEventListener.hpp"
+
 #include <reactphysics3d/reactphysics3d.h>
 #include <vector>
 
@@ -27,13 +29,14 @@ class PhysicModule
         
         //TODO: documentation
         inline rp3d::PhysicsWorld& GetWorld() { return *physicsWorld; }
-        
+
         //TODO: documentation
         inline rp3d::PhysicsCommon& GetCommon() { return physicsCommon; }
         
     private:
         rp3d::PhysicsCommon physicsCommon;
         rp3d::PhysicsWorld* physicsWorld;
+        PhysicEventListener eventListener;
 };
 
 #endif /* !PHYSICMODULE_HPP_ */

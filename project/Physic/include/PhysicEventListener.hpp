@@ -9,7 +9,8 @@ class PhysicEventListener : public rp3d::EventListener
         PhysicEventListener() = default;
         virtual ~PhysicEventListener() = default;
 
-        virtual void onContact(const CollisionCallback::CallbackData& callbackData);
+        virtual void onContact(const rp3d::CollisionCallback::CallbackData& callbackData);
+        virtual void onTrigger(const rp3d::OverlapCallback::CallbackData& callbackData);
         
     protected:
     private:

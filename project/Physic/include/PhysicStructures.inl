@@ -3,6 +3,33 @@
 
 #include <glm/glm.hpp>
 
+class Rigidbody;
+class Collider;
+
+/**
+ * @brief Data structure for trigger events
+ * 
+ */
+struct TriggerData
+{
+    /// @brief Rigidbody component of object interacted with trigger.
+    Rigidbody* causeBody;
+    /// @brief Rigidbody component of trigger object.
+    Rigidbody* triggerBody;
+};
+
+/**
+ * @brief Data structure for collision events
+ * 
+ */
+struct CollisionData
+{
+    /// @brief Rigidbody component of first colliding object.
+    Rigidbody* body1;
+    /// @brief Rigidbody component of second colliding object.
+    Rigidbody* body2;
+};
+
 /**
  * @brief Structure encapsulating force it's point of application;
  * Forces are applied by kinematic system in only in one frame 

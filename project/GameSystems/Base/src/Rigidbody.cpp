@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "Utils.hpp"
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 
 void Rigidbody::updateReactRB(bool updateInnertiaTensor)    
 {

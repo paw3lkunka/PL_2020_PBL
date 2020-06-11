@@ -7,7 +7,7 @@
 
 #include "Core.hpp"
 #include "Utils.hpp"
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 
 /**
  * @brief Rigidbody struct with all of its data and forces

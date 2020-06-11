@@ -21,6 +21,7 @@ bool PhysicSystem::assertEntity(Entity* entity)
 
 void PhysicSystem::start()
 {
+
     rp3d::Transform reactTrb
     (
         Vec3Cast(transformPtr->getModelMatrix()[3]),
@@ -40,6 +41,10 @@ void PhysicSystem::start()
     colliderPtr->reactCollider->setIsTrigger(colliderPtr->isTrigger);
 
     rBodyPtr->updateReactRB(true);
+
+    //Addresses of our components is stored in rp3d components as user data pointer.
+    rBodyPtr->reactRB->setUserData(&rBodyPtr);
+    colliderPtr->reactCollider->setUserData(&colliderPtr);
 }
 
 void PhysicSystem::fixedUpdate()

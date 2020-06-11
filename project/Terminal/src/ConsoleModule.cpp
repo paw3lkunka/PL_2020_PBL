@@ -9,7 +9,6 @@
 #include "GamepadDataStructures.inl"
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
-#include "CollisionDataStructures.inl"
 #include "EnemyDataStructures.inl"
 #include "mesh/MeshCustom.hpp"
 #include "AudioFile.hpp"
@@ -214,22 +213,30 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::AUDIO_SOURCE_REWIND:
         break;
 
-    case Event::COLLSION_DETECT:
-        {
-        }
+    case Event::COLLSION_ENTER:
+    {
+        auto tData = msg.getValue<CollisionData>();
+        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " detected" << std::endl;
+    }
         break;
+        
+    case Event::COLLSION_EXIT:
+    {
+        auto tData = msg.getValue<CollisionData>();
+        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;
+    }
         
     case Event::TRIGGER_ENTER:
     {
-        auto tData = msg.getValue<CollisionData>();
-        std::cout << "Trigger: " << Name(tData.target) << " was entered by: " << Name(tData.cause) << std::endl;
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.triggerBody) << " was entered by: " << Name(tData.causeBody) << std::endl;
     }
         break;
         
     case Event::TRIGGER_EXIT:
     {
-        auto tData = msg.getValue<CollisionData>();
-        std::cout << "Trigger: " << Name(tData.target) << " was exited by: " << Name(tData.cause) << std::endl;
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.triggerBody) << " was exited by: " << Name(tData.causeBody) << std::endl;
     }
         break;
 

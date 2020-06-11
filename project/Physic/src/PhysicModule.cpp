@@ -6,6 +6,7 @@
 void PhysicModule::init()
 {
     physicsWorld = physicsCommon.createPhysicsWorld();
+    physicsWorld->setEventListener(&eventListener);
 }
 
 void PhysicModule::cleanup()

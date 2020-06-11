@@ -11,7 +11,7 @@
 #include "Rigidbody.hpp"
 #include "MeshRenderer.inl"
 #include "HydroDataStructures.hpp"
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 
 
 bool HydroBodySystem::assertEntity(Entity* entity)

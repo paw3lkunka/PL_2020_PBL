@@ -299,7 +299,7 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
     changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
     
-    char* bType = "ERROR";
+    std::string bType = "ERROR";
     switch (rBodyPtr->type)
     {
     case rp3d::BodyType::STATIC:
