@@ -3,8 +3,10 @@
 
 #include "RenderPacket.inl"
 
-// TODO Documentation
-struct NormalPacket : RenderPacket
+/**
+ * @brief Regular rendering packet abstraction class
+ */
+struct NormalPacket : public RenderPacket
 {
     NormalPacket(Mesh* mesh, Material* material, glm::mat4 model) : RenderPacket(mesh, material), modelMatrix(model) {}
     NormalPacket() = default;

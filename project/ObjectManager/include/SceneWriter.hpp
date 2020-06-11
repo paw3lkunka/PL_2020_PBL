@@ -69,6 +69,7 @@ private:
     void saveAudioSource(AudioSource* componentPtr);
     void saveCamera(Camera* componentPtr);
     void saveMeshRenderer(MeshRenderer* componentPtr);
+    void saveTerrainRenderer(TerrainRenderer* componentPtr);
     void saveSphereCollider(SphereCollider* componentPtr);
     void saveBoxCollider(BoxCollider* componentPtr);
     void saveRigidbody(Rigidbody* componentPtr);

@@ -225,6 +225,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveMeshRenderer(temp);
         }
+        else if(TerrainRenderer* temp = dynamic_cast<TerrainRenderer*>(objContainerPtr->components[i]))
+        {
+            saveTerrainRenderer(temp);
+        }
         else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
             saveSphereCollider(temp);
@@ -403,6 +407,17 @@ void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
     }
     j[name]["mesh"] = componentPtr->mesh->serializationID;
     
+}
+
+void SceneWriter::saveTerrainRenderer(TerrainRenderer* componentPtr)
+{
+    j[name]["type"] = "TerrainRenderer";
+    if(componentPtr->material != nullptr)
+    {
+        j[name]["material"] = componentPtr->material->serializationID;
+    }
+    j[name]["mesh"] = componentPtr->terrainMesh->serializationID;
+    j[name]["splatmap"] = componentPtr->splatmap->serializationID;
 }
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)

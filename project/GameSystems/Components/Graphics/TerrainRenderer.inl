@@ -15,11 +15,13 @@ struct TerrainRenderer : public Component
 
     /// @brief Terrain's material
     Material* material;
+    /// @brief Current terrain's splatmap image
+    Texture* splatmap;
 
-    /// @brief Pointers to all terrain meshes
-    std::vector<Mesh*> terrainMeshes;
-    /// @brief Terrain transformations
-    std::vector<glm::mat4> modelMatrices;
+    /// @brief Pointer terrain's meshe
+    Mesh* terrainMesh;
+    /// @brief Terrain transform
+    glm::mat4 modelMatrix;
 };
 
 #endif // _TERRAINRENDERER_INL

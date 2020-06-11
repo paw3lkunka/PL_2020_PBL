@@ -7,6 +7,7 @@
 #include "Camera.inl"
 
 #include "NormalPacket.hpp"
+#include "TerrainPacket.hpp"
 #include "InstancedPacket.hpp"
 #include "SpritePacket.hpp"
 #include "TextPacket.hpp"
@@ -68,6 +69,7 @@ public:
 
 private:
     static constexpr unsigned int DRAW_CALL_NORMAL_ALLOCATION = 512;
+    static constexpr unsigned int DRAW_CALL_TERRAIN_ALLOCATION = 256;
     static constexpr unsigned int DRAW_CALL_UI_ALLOCATION = 128;
     static constexpr unsigned int DRAW_CALL_TEXT_ALLOCATION = 64;
     static constexpr unsigned int DRAW_CALL_INSTANCED_ALLOCATION = 128;
@@ -129,6 +131,7 @@ private:
 
     unsigned int gizmoVao, gizmoVbo;
 
+    std::deque<TerrainPacket*> terrainQueue;
     std::deque<RenderPacket*> opaqueQueue;
     std::deque<NormalPacket*> transparentQueue;
     std::deque<UiPacket*> uiQueue;
@@ -144,6 +147,8 @@ private:
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
+    // * Normal render packets collection
+    std::vector<TerrainPacket> terrainPackets;
     // * Ui sprite packets collection
     std::vector<SpritePacket> spritePackets;
     // * Ui text packets collection

@@ -331,6 +331,11 @@ void SceneReader::readComponents()
             std::cout << "MeshRenderer" << std::endl;
             readMeshRenderer(name);
         }
+        else if(componentType == "TerrainRenderer")
+        {
+            std::cout << "TerrainRenderer" << std::endl;
+            readTerrainRenderer(name);
+        }
         else if(componentType == "SphereCollider")
         {
             std::cout << "SphereCollider" << std::endl;
@@ -637,6 +642,48 @@ void SceneReader::readMeshRenderer(std::string name)
 
         childID = j.at(name).at("mesh").get<unsigned int>();
         renderer->mesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+        assignToEntity(name, renderer);
+    }
+}
+
+void SceneReader::readTerrainRenderer(std::string name)
+{
+    unsigned int entityID = j.at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto component = entity->getComponentPtr<TerrainRenderer>();
+
+    auto serializationID = j.at(name).at("serializationID").get<unsigned int>();
+    if(component != nullptr)
+    {
+        auto renderer = dynamic_cast<TerrainRenderer*>(component);
+        try
+        {
+            unsigned int childID = j.at(name).at("material").get<unsigned int>();
+            renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        }
+        catch(nlohmann::detail::out_of_range)
+        {
+            renderer->material = nullptr;
+        }
+        unsigned int texID = j.at(name).at("splatmap").get<unsigned int>();
+        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
+        renderer->serializationID = serializationID;
+        return;
+    }
+    else
+    {
+        auto renderer = objModulePtr->newEmptyComponent<TerrainRenderer>();
+        renderer->serializationID = serializationID;
+
+        unsigned int childID = j.at(name).at("material").get<unsigned int>();
+        renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+        childID = j.at(name).at("mesh").get<unsigned int>();
+        renderer->terrainMesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+        unsigned int texID = j.at(name).at("splatmap").get<unsigned int>();
+        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
 
         assignToEntity(name, renderer);
     }

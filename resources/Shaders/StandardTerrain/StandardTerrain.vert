@@ -39,7 +39,7 @@ void main()
 {
 	FragPos = vec3(model * vec4(position, 1.0));
 	Normal = mat3(transpose(inverse(model))) * normal;
-	Texcoord = texcoord;
+	Texcoord = vec2(-texcoord.y + 1.0, -texcoord.x + 1.0);
 	TBN = calculateTBN(normal, tangent);
     FragPosLightSpace = directionalLightMatrix * vec4(FragPos, 1.0);
 	gl_Position = MVP * vec4(position, 1.0);

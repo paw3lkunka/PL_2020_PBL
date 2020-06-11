@@ -1,7 +1,7 @@
 #include "RendererModule.hpp"
 
 #include "Message.inl"
-#include "mesh/MeshQuad.hpp"
+#include "MeshQuad.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
 #include "CubemapHdr.hpp"
@@ -9,6 +9,7 @@
 #include "DistanceComparer.hpp"
 #include "UiRenderer.inl"
 #include "TextRenderer.inl"
+#include "TerrainRenderer.inl"
 #include "BuiltInShaders.inl"
 #include "BuiltInShapes.inl"
 
@@ -20,8 +21,8 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
-unsigned int RendererModule::lastShaderID = std::numeric_limits<unsigned int>::max();
+unsigned int RendererModule::lastMatID = 0;
+unsigned int RendererModule::lastShaderID = 0;
 
 RendererModule::~RendererModule()
 {
@@ -60,6 +61,19 @@ void RendererModule::receiveMessage(Message msg)
                 normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
             }
             
+            break;
+        }
+        case Event::RENDERER_ADD_TERRAIN_TO_QUEUE:
+        {
+            TerrainRenderer* tr = msg.getValue<TerrainRenderer*>();
+            if (tr->material != nullptr)
+            {
+                terrainPackets.push_back(TerrainPacket(tr->terrainMesh, tr->material, tr->splatmap, tr->modelMatrix));
+            }
+            else
+            {
+                terrainPackets.push_back(TerrainPacket(tr->terrainMesh, internalErrorMat, tr->splatmap, tr->modelMatrix));
+            }
             break;
         }
         case Event::RENDERER_ADD_UI_TO_QUEUE:
@@ -161,6 +175,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     this->skyboxMaterial = skyboxMaterial;
 
     normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
+    terrainPackets.reserve(DRAW_CALL_TERRAIN_ALLOCATION);
     instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
     spritePackets.reserve(DRAW_CALL_UI_ALLOCATION);
     textPackets.reserve(DRAW_CALL_TEXT_ALLOCATION);
@@ -469,7 +484,7 @@ void RendererModule::render()
             // ? ++++++ Send directional light matrices to UBO +++++
             glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
-            glm::mat4 directionalProjMat = glm::ortho(-512.0f, 512.0f, -512.0f, 512.0f, 2000.0f, -2000.0f);
+            glm::mat4 directionalProjMat = glm::ortho(-256.0f, 256.0f, -256.0f, 256.0f, 1000.0f, -1000.0f);
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &directionalProjMat);
             glm::mat4 directionalViewMat = glm::inverse(lightMatrix);
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &directionalViewMat);
@@ -491,10 +506,15 @@ void RendererModule::render()
             glClear(GL_DEPTH_BUFFER_BIT);
 
             // TODO: Culling for directional light shadow mapping
+            // * ===== Terrain packets shadow mapping ====
+            for(auto& packet : terrainPackets)
+            {
+                packet.render(VP);
+            }
+
             // * ===== Normal unordered packets shadow mapping =====
             for(auto& packet : normalPackets)
             {
-                // TODO: Transparent shadows
                 if (packet.material->getRenderType() == RenderType::Opaque)
                 {
                     packet.render(VP);
@@ -581,6 +601,15 @@ void RendererModule::render()
             }
         }
 
+        // * ===== Terrain packets =====
+        for(auto& packet : terrainPackets)
+        {
+            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            {
+                terrainQueue.push_back(&packet);
+            }
+        }
+
         // * ===== Instanced packets =====
         for(auto& packet : instancedPackets)
         {
@@ -602,8 +631,6 @@ void RendererModule::render()
                 opaqueQueue.push_back(&(packet.second));
             }
         }
-        //TODO: Remove if it's useless
-        //std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
 
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
@@ -613,7 +640,12 @@ void RendererModule::render()
         glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for(auto packet : opaqueQueue)
+        for(auto& packet : terrainQueue)
+        {
+            packet->renderWithShader(gbufferShader, VP);
+        }
+
+        for(auto& packet : opaqueQueue)
         {
             packet->renderWithShader(gbufferShader, VP);
         }
@@ -662,8 +694,16 @@ void RendererModule::render()
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        glm::vec2 screenSize = {GetCore().windowWidth, GetCore().windowHeight};
-        // ? +++++ Execute (order 66) opaque rendering loop +++++
+        // ! +++++ Terrain +++++
+        while(!terrainQueue.empty())
+        {
+            terrainQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            terrainQueue.front()->material->setTexture("irradianceMap", irradianceMap);
+            terrainQueue.front()->render(VP);
+            terrainQueue.pop_front();
+        }
+
+        // ! +++++ Opaque +++++
         while(!opaqueQueue.empty())
         {
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
@@ -672,7 +712,7 @@ void RendererModule::render()
             opaqueQueue.pop_front();
         }
 
-        // ? +++++ Render skybox with appropriate depth test function +++++
+        // ! +++++ Skybox +++++
 
         if (skyboxMaterial != nullptr)
         {
@@ -681,15 +721,12 @@ void RendererModule::render()
             glBindVertexArray(skyboxVao);
             skyboxMaterial->setMat4("viewStatic", viewStatic);
             skyboxMaterial->use();
-            // Testing convoluted environment map
-            // irradianceMap->bind(0);
-            // skyboxMaterial->getShaderPtr()->setInt("cubemap", 0);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
             glDepthFunc(GL_LESS);
         }
 
-        // ? +++++ Transparent rendering loop +++++
+        // ! +++++ Transparent +++++
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->getFrustum().position));
@@ -698,8 +735,6 @@ void RendererModule::render()
         {
             transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
-            // opaqueQueue.front()->material->setTexture("ssaoMap", ssaoMap);
-            // opaqueQueue.front()->material->setVec2("screenSize", screenSize);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
@@ -736,7 +771,7 @@ void RendererModule::render()
         glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // ! ----- Render screen space quad -----
+        // ! ----- Combine -----
         combineShader->use();
         combineShader->setInt("scene", 0);
         combineShader->setInt("bloom0", 1);
@@ -757,7 +792,6 @@ void RendererModule::render()
         drawQuad();
 
         // ? +++++ Overlay UI rendering loop +++++
-        // Get screen ortho projection
         glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
 
         glDisable(GL_DEPTH_TEST);
@@ -777,9 +811,10 @@ void RendererModule::render()
         glfwSwapBuffers(window);
 
         // ? +++++ Clear the render packets +++++
-        lastMatID = std::numeric_limits<unsigned int>::max();
-        lastShaderID = std::numeric_limits<unsigned int>::max();
+        lastMatID = 0;
+        lastShaderID = 0;
         normalPackets.clear();
+        terrainPackets.clear();
         instancedPackets.clear();
         spritePackets.clear();
         textPackets.clear();

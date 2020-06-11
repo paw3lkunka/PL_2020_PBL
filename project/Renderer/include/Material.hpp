@@ -12,6 +12,7 @@
 
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <map>
 #include <string>
 
 #include "Texture.hpp"
@@ -76,6 +77,13 @@ public:
      * @param name Uniform name, "model" by default
      */
     void setModel(const glm::mat4& M, std::string name = "model");
+    /**
+     * @brief Automatically sets both model and model-view-projection (MVP) matrix
+     * 
+     * @param M Model matrix
+     * @param VP View-projecion matrix
+     */
+    void setTransformMatrices(const glm::mat4& M, const glm::mat4& VP);
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);
@@ -121,6 +129,8 @@ public:
     const glm::mat4* getMat4Ptr(std::string name);
     /// @brief Get texture of given name
     const Texture* getTexturePtr(std::string name);
+    /// @brief Get unit id of specified texture
+    int getTextureUnit(std::string name);
 
 private:
     static unsigned int idCount;
@@ -130,12 +140,19 @@ private:
     Shader* shader;
     std::string name;
 
-    std::unordered_map<std::string, Texture*> textures;
+    bool texturesChanged = true;
+    std::map<std::string, Texture*> textures;
+    bool intsChanged = true;
     std::unordered_map<std::string, int> ints;
+    bool floatsChanged = true;
     std::unordered_map<std::string, float> floats;
+    bool vec2sChanged = true;
     std::unordered_map<std::string, glm::vec2> vec2s;
+    bool vec3sChanged = true;
     std::unordered_map<std::string, glm::vec3> vec3s;
+    bool vec4sChanged = true;
     std::unordered_map<std::string, glm::vec4> vec4s;
+    bool mat4sChanged = true;
     std::unordered_map<std::string, glm::mat4> mat4s;
 };
 

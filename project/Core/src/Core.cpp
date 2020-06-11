@@ -183,6 +183,7 @@ int Core::init()
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
@@ -418,8 +419,26 @@ void Core::loadAllTerrainChunks()
             t->getLocalPositionModifiable() = {-positions[0], positions[1], positions[2]};
             t->setParent(terrainRoot);
 
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = objectModule.getMaterialPtrByName("grassMat");
+            auto mr = entity->getComponentPtr<TerrainRenderer>();
+                mr->material = objectModule.getMaterialPtrByName("terrainMat");
+        }
+    }
+    path = "Resources/Splatmaps";
+    for(auto& entry : fs::directory_iterator(path))
+    {
+        TextureCreateInfo ti = {};
+        ti.generateMipmaps = true;
+        ti.magFilter = GL_LINEAR;
+        ti.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+        ti.wrapMode = GL_CLAMP_TO_EDGE;
+
+        Texture* splatTexture = objectModule.newTexture(entry.path().string().c_str(), ti);
+        std::string filename = entry.path().filename().string();
+        filename = filename.substr(0, filename.find_last_of('.'));
+        Entity* entity = objectModule.getEntityPtrByName((filename +  ".obj/defaultobject").c_str());
+        {
+            auto tr = entity->getComponentPtr<TerrainRenderer>();
+            tr->splatmap = splatTexture;
         }
     }
 }
@@ -429,6 +448,7 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
+TerrainRendererSystem Core::terrainSystem;
 CollisionSystem Core::collisionSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;

@@ -1,13 +1,9 @@
 #include "NormalPacket.hpp"
 
-#include "RendererModule.hpp"
-
 void NormalPacket::render(glm::mat4& VP)
 {
     material->use();
-    // TODO: switching between diferrent matrix usage
-    material->setModel(modelMatrix);
-    material->setMVP(modelMatrix, VP);
+    material->setTransformMatrices(modelMatrix, VP);
     mesh->render();
 }
 

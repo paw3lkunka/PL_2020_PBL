@@ -42,7 +42,6 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
             break;
         default:
             // ! Undefined uniform type !
-            // TODO: Throw exception here
             std::cerr << "Material " << name << " encountered an unsupported uniform type with name " << var.first << '\n';
             break;
         }
@@ -63,65 +62,93 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
     if (enableInstancing && !instancingSupported)
     {
         enableInstancing = false;
-        // TODO: Proper error logging
         std::cerr << "Instancing for material " << name << " is not supported! Falling back to normal rendering.\n";
     }
 }
 
 void Material::use()
 {
-    if (shader != nullptr && ID != RendererModule::lastMatID)
+    if (shader != nullptr)
     {
+        bool materialChanged = ID != RendererModule::lastMatID;
         RendererModule::lastMatID = ID;
 
         shader->use();
 
-        int i = 0;
-        // * ===== Texture samplers =====
-        for(std::pair<std::string, Texture*> texture : textures)
+        if (materialChanged || texturesChanged)
         {
-            if (texture.second != nullptr)
+            int i = 0;
+            // * ===== Texture samplers =====
+            for(std::pair<std::string, Texture*> texture : textures)
             {
-                texture.second->bind(i);
-                shader->setInt(texture.first, i);
-                ++i;
+                if (texture.second != nullptr)
+                {
+                    texture.second->bind(i);
+                    shader->setInt(texture.first, i);
+                    ++i;
+                }
             }
+            texturesChanged = false;
         }
 
-        // * ===== Ints =====
-        for(auto var : ints)
+        if (materialChanged || intsChanged)
         {
-            shader->setInt(var.first, var.second);
+            // * ===== Ints =====
+            for(auto var : ints)
+            {
+                shader->setInt(var.first, var.second);
+            }
+            intsChanged = false;
         }
 
-        // * ===== Floats =====
-        for(auto var : floats)
+        if (materialChanged || floatsChanged)
         {
-            shader->setFloat(var.first, var.second);
+            // * ===== Floats =====
+            for(auto var : floats)
+            {
+                shader->setFloat(var.first, var.second);
+            }
+            floatsChanged = false;
         }
 
-        // * ===== Vec2s =====
-        for(auto var : vec2s)
+        if (materialChanged || vec2sChanged)
         {
-            shader->setVec2(var.first, var.second);
+            // * ===== Vec2s =====
+            for(auto var : vec2s)
+            {
+                shader->setVec2(var.first, var.second);
+            }
+            vec2sChanged = false;
         }
 
-        // * ===== Vec3s =====
-        for(auto var : vec3s)
+        if (materialChanged || vec3sChanged)
         {
-            shader->setVec3(var.first, var.second);
+            // * ===== Vec3s =====
+            for(auto var : vec3s)
+            {
+                shader->setVec3(var.first, var.second);
+            }
+            vec3sChanged = false;
         }
 
-        // * ===== Vec4s =====
-        for(auto var : vec4s)
+        if (materialChanged || vec4sChanged)
         {
-            shader->setVec4(var.first, var.second);
+            // * ===== Vec4s =====
+            for(auto var : vec4s)
+            {
+                shader->setVec4(var.first, var.second);
+            }
+            vec4sChanged = false;
         }
 
-        // * ===== Mat4s =====
-        for(auto var : mat4s)
+        if (materialChanged || mat4sChanged)
         {
-            shader->setMat4(var.first, var.second);
+            // * ===== Mat4s =====
+            for(auto var : mat4s)
+            {
+                shader->setMat4(var.first, var.second);
+            }
+            mat4sChanged = false;
         }
     }
     else if (shader == nullptr)
@@ -141,12 +168,20 @@ void Material::setModel(const glm::mat4& M, std::string name)
     shader->setMat4(name, M);
 }
 
+void Material::setTransformMatrices(const glm::mat4& M, const glm::mat4& VP)
+{
+    glm::mat4 MVP = VP * M;
+    shader->setMat4("model", M);
+    shader->setMat4("MVP", MVP);
+}
+
 void Material::setTexture(std::string name, Texture* value)
 {
-    std::unordered_map<std::string, Texture*>::iterator texturesIter = textures.find(name);
+    std::map<std::string, Texture*>::iterator texturesIter = textures.find(name);
     if (texturesIter != textures.end())
     {
         texturesIter->second = value;
+        texturesChanged = true;
     }
 }
 
@@ -156,6 +191,7 @@ void Material::setInt(std::string name, int value)
     if (intsIter != ints.end())
     {
         intsIter->second = value;
+        intsChanged = true;
     }
     else
     {
@@ -170,6 +206,7 @@ void Material::setFloat(std::string name, float value)
     if (floatsIter != floats.end())
     {
         floatsIter->second = value;
+        floatsChanged = true;
     }
     else
     {
@@ -184,6 +221,7 @@ void Material::setVec2(std::string name, glm::vec2 value)
     if (vec2sIter != vec2s.end())
     {
         vec2sIter->second = value;
+        vec2sChanged = true;
     }
     else
     {
@@ -198,6 +236,7 @@ void Material::setVec3(std::string name, glm::vec3 value)
     if (vec3sIter != vec3s.end())
     {
         vec3sIter->second = value;
+        vec3sChanged = true;
     }
     else
     {
@@ -212,6 +251,7 @@ void Material::setVec4(std::string name, glm::vec4 value)
     if (vec4sIter != vec4s.end())
     {
         vec4sIter->second = value;
+        vec4sChanged = true;
     }
     else
     {
@@ -226,6 +266,7 @@ void Material::setMat4(std::string name, glm::mat4 value)
     if (mat4sIter != mat4s.end())
     {
         mat4sIter->second = value;
+        mat4sChanged = true;
     }
     else
     {
@@ -321,4 +362,18 @@ const Texture* Material::getTexturePtr(std::string name)
     {
         return nullptr;
     }
+}
+
+int Material::getTextureUnit(std::string name)
+{
+    int i = 0;
+    for(auto texture : textures)
+    {
+        if (texture.first == name)
+        {
+            return i;
+        }
+        i++;
+    }
+    return -1;
 }

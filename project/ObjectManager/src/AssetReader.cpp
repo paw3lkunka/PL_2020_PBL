@@ -201,10 +201,22 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
         // FIXME: If node contains more than one mesh, the entity receives more than one MeshRenderer
         // ! and mesh renderer system is not equipped to handle this
 
-        // * ----- Create mesh renderer and add created mesh -----
-        auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
-            mr->mesh = newMesh;
-        e->addComponent(mr);
+        std::string dirPath = path.substr(0, path.find_last_of("/\\"));
+        dirPath = dirPath.substr(dirPath.find_last_of("/\\") + 1);
+
+        if (dirPath == "Terrain")
+        {
+            auto tr = objectModulePtr->newEmptyComponent<TerrainRenderer>();
+                tr->terrainMesh = newMesh;
+            e->addComponent(tr);
+        }
+        else
+        {
+            // * ----- Create mesh renderer and add created mesh -----
+            auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
+                mr->mesh = newMesh;
+            e->addComponent(mr);
+        }
     }
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++

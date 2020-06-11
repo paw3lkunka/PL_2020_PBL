@@ -4,12 +4,6 @@
 
 void TextPacket::render(glm::mat4& projection)
 {
-    if (material->getID() != RendererModule::lastMatID)
-    {
-        material->use();
-        RendererModule::lastMatID = material->getID();
-    }
-
     glm::mat4 model = glm::mat4(1.0f);
     model[3][0] = modelMatrix[2][0];
     model[3][1] = modelMatrix[2][1];
@@ -19,6 +13,6 @@ void TextPacket::render(glm::mat4& projection)
     model[1][1] = modelMatrix[1][1];
     material->getShaderPtr()->setMat3("model", modelMatrix);
     material->getShaderPtr()->setInt("sprite", 0);
-
+    material->use();
     mesh->render();
 }
