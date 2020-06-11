@@ -1,4 +1,4 @@
-#include "CameraControlSystem.hpp"
+#include "FreeCameraControlSystem.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -11,14 +11,24 @@
 #include "Camera.inl"
 #include "Core.hpp"
 
-bool CameraControlSystem::assertEntity(Entity* entity)
+bool FreeCameraControlSystem::assertEntity(Entity* entity)
 {
-    transform = entity->getComponentPtr<Transform>();
     camera = entity->getComponentPtr<Camera>();
-    return (camera != nullptr && transform != nullptr && camera->isMain);
+    if(camera == nullptr)
+    {
+        return false;
+    }
+
+    transform = entity->getComponentPtr<Transform>();
+    if(transform == nullptr)
+    {
+        return false;
+    }
+
+    return (camera->isMain && camera->control == CameraControl::Free);
 }
 
-void CameraControlSystem::receiveMessage(Message msg)
+void FreeCameraControlSystem::receiveMessage(Message msg)
 {
     switch (msg.getEvent())
     {
@@ -123,8 +133,9 @@ void CameraControlSystem::receiveMessage(Message msg)
     }
 }
 
-void CameraControlSystem::fixedUpdate()
+void FreeCameraControlSystem::fixedUpdate()
 {
+    
     glm::vec3 direction = glm::vec3(0.0f);
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));

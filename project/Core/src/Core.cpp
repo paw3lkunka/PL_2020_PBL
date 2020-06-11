@@ -120,7 +120,7 @@ int Core::init()
         // ? -u
         {
             //some code here...
-
+            /*
             auto cameraArmPtr = objectModule.newEntity(2, "CameraArm");
                 auto armTransform = objectModule.newEmptyComponentForLastEntity<Transform>();
                     armTransform->setParent(&sceneModule.rootNode);
@@ -134,6 +134,7 @@ int Core::init()
                 
                 gameplayCameraPtr->cameraTransform = cameraTransform;
                 cameraTransform->setParent(armTransform);
+            */
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -193,8 +194,9 @@ int Core::init()
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     
-    gameSystemsModule.addSystem(&gameplayCameraSystem);
-    //gameSystemsModule.addSystem(&cameraControlSystem);
+    gameSystemsModule.addSystem(&freeCameraControlSystem);
+    gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
+    gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
     
     gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
@@ -397,8 +399,9 @@ float Core::randomFloatR(float min, float max)
 }
 
 CameraSystem Core::cameraSystem;
-CameraControlSystem Core::cameraControlSystem;
-GameplayCameraSystem Core::gameplayCameraSystem;
+FreeCameraControlSystem Core::freeCameraControlSystem;
+FirstPersonCameraControlSystem Core::firstPersonCameraControlSystem;
+ThirdPersonCameraControlSystem Core::thirdPersonCameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
