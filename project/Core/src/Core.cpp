@@ -249,32 +249,7 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
-
-            physicsWorld->update(FIXED_TIME_STEP_F);
-
-            //HACK
-            for (Entity& e : *gameSystemsModule.entities)
-            {
-                
-                //HACK
-                if (e.getName() == "Kayak")
-                    continue;
-
-                if (auto* rb = e.getComponentPtr<Rigidbody>())
-                {
-                    reactphysics3d::Transform reactT = rb->reactRB->getTransform();
-
-                    glm::vec3 pos = Vec3Cast(reactT.getPosition());
-                    glm::quat rot = QuatCast(reactT.getOrientation());
-
-                    auto* tr = e.getComponentPtr<Transform>();
-
-                    tr->getLocalPositionModifiable() = tr->getToParentMatrix() * glm::vec4(pos, 1.0f);
-                    tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());;
-
-
-                }
-            }
+            physicSimulation();
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -296,6 +271,8 @@ int Core::mainLoop()
 
         // ? IMGUI Window setting up
         editorModule.drawEditor();
+        //HACK i added this here, tu apply changes to model matrix;
+        sceneModule.updateTransforms();
 
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
@@ -304,6 +281,27 @@ int Core::mainLoop()
     }    
 
     return 0;
+}
+
+void Core::physicSimulation()
+{
+    physicsWorld->update(FIXED_TIME_STEP_F);
+
+    for (Entity& e : *gameSystemsModule.entities)
+    {
+        if (auto* rb = e.getComponentPtr<Rigidbody>())
+        {
+            reactphysics3d::Transform reactT = rb->reactRB->getTransform();
+
+            glm::vec3 pos = Vec3Cast(reactT.getPosition());
+            glm::quat rot = QuatCast(reactT.getOrientation());
+
+            auto* tr = e.getComponentPtr<Transform>();
+
+            tr->getLocalPositionModifiable() = tr->getToParentMatrix() * glm::vec4(pos, 1.0f);
+            tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());;
+        }
+    }
 }
 
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)

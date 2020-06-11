@@ -25,10 +25,18 @@ struct Collider : public Component
     virtual void computeReactCS() = 0;
 
     /**
+     * @brief Compute innertia tensor basing on collider's shape and body's mass.
+     * 
+     * @param mass of body.
+     * @return rp3d::Vector3 innertia tensor.
+     */
+    virtual rp3d::Vector3 computeInnertiaTensor(float mass) = 0;
+
+    /**
      * @brief Pointer to CollisionShape, created by computeReactCS().
      * If uninitialized - nullptr. 
      */
-    reactphysics3d::CollisionShape* reactCS = nullptr;
+    rp3d::CollisionShape* reactCS = nullptr;
 
     virtual ~Collider() = default;
 };

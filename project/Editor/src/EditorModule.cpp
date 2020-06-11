@@ -212,16 +212,19 @@ std::string EditorModule::formatVec3(glm::vec3 vector)
 
 void EditorModule::drawTransform(Transform* transformPtr)
 {
+    bool updateReactT;
+
     //* transform variables
     glm::vec3 localRotation(0.0f);
 
     localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
 
     ImGui::Text("Local transform:");
-    ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+    updateReactT |= ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
     if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
     {
         transformPtr->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        updateReactT = true;
     }
     ImGui::DragFloat3("Scale: ", (float*)&transformPtr->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
     ImGui::NewLine();
@@ -289,21 +292,19 @@ void EditorModule::drawLight(Light* lightPtr)
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
     //TODO check after phisic backend change
-    bool changed = false;
+    bool changed = false, mass = false;
 
     changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
-    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
-    {
-        //moment of inertia ws here
-    }
+    changed |= mass = ImGui::DragFloat("Mass", &rBodyPtr->mass);
     changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
     changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+    
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
 
     if (changed)
     {
-        rBodyPtr->updateReactRB();
+        rBodyPtr->updateReactRB(mass);
     }
 }
 

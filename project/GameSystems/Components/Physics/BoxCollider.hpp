@@ -5,6 +5,7 @@
 
 /**
  * @brief Box-shaped collider (cuboid)
+ * IMPORTANT collider size is defined in world scale!
  */
 struct BoxCollider : public Collider
 {
@@ -59,6 +60,9 @@ struct BoxCollider : public Collider
 
     //TODO documentation
     virtual void computeReactCS();
+
+    //TODO: documentation
+    virtual rp3d::Vector3 computeInnertiaTensor(float mass);
 };
 
 #endif /* !BOXCOLLIDER_HPP_ */

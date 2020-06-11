@@ -9,7 +9,7 @@
 
 #include "AudioSource.inl"
 #include "Transform.inl"
-#include "Rigidbody.inl"
+#include "Rigidbody.hpp"
 
 
 bool AudioSourceSystem::assertEntity(Entity* entity)

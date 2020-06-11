@@ -2,7 +2,7 @@
 
 #include "Core.hpp"
 #include "Entity.hpp"
-#include "Rigidbody.inl"
+#include "Rigidbody.hpp"
 #include "PhysicSystem.hpp"
 #include "HydroSurface.inl"
 

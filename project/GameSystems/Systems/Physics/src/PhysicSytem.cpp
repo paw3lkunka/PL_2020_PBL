@@ -33,15 +33,12 @@ void PhysicSystem::start()
     colliderPtr->computeReactCS();
     rp3d::Transform reactTc(Vec3Cast(colliderPtr->center), rp3d::Quaternion::identity());
     rBodyPtr->reactRB->addCollider(colliderPtr->reactCS, reactTc);
-    rBodyPtr->updateReactRB();
+    rBodyPtr->updateReactRB(true);
 }
 
 void PhysicSystem::fixedUpdate()
 {
-    rp3d::Transform t;
-    t.setPosition(Vec3Cast(transformPtr->getModelMatrix()[3]));
-    t.setOrientation(QuatCast(transformPtr->getWorldRotation()));
-    rBodyPtr->reactRB->setTransform(t);
+    rBodyPtr->updateReactTransform(transformPtr);
 
     for (Impulse& i : rBodyPtr->impulses)
     {

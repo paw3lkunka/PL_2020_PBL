@@ -1,14 +1,12 @@
 #ifndef RIGIDBODY_INL_
 #define RIGIDBODY_INL_
 
-#include "Component.hpp"
-
 #include <reactphysics3d/reactphysics3d.h>
 #include <vector>
 #include <glm/glm.hpp>
 
+#include "Utils.hpp"
 #include "PhisicStructures.inl"
-#include "MomentOfInertia.hpp"
 
 /**
  * @brief Rigidbody struct with all of its data and forces
@@ -39,14 +37,6 @@ struct Rigidbody : public Component
     ///@brief Type of rigidbody (Static / Cinematic / Dynamic).
     rp3d::BodyType type = rp3d::BodyType::DYNAMIC;
 
-    ///@brief Determines body shape.
-    enum Shape
-    {
-        BOX,
-        SOLID_SPHERE,
-        HOLLOW_SPHERE
-    } shape = BOX;
-
     // ? unserialized
 
     ///@brief Velocity of the rigidbody,
@@ -55,35 +45,18 @@ struct Rigidbody : public Component
     ///@brief Angular velocity of the rigidbody
     glm::vec3 angularVelocity = {0.0f, 0.0f, 0.0f};
 
-    ///@brief 
+    ///@brief list of all impulses applied in this time step;
     std::vector<Impulse> impulses;
 
-    void updateReactRB()    
-    {
-        if (angularDrag > 1.0f || angularDrag < 0.0f )
-        {
-            std::cerr << "ERROR: Angular drag of " << Name(this) << " is out of bounds. Value was clamped." << std::endl;
-            angularDrag = std::clamp(angularDrag, 0.0f, 1.0f);
-        }
-        if (drag > 1.0f || drag < 0.0f )
-        {
-            std::cerr << "ERROR: Drag of " << Name(this) << " is out of bounds. Value was clamped." << std::endl;
-            drag = std::clamp(drag, 0.0f, 1.0f);
-        }
-        
-        reactRB->setType(type);
-        
-        if (type == rp3d::BodyType::DYNAMIC)
-        {
-            reactRB->setAngularDamping(angularDrag);
-            reactRB->setLinearDamping(drag);           //HACK
-            reactRB->setLocalInertiaTensor(BoxMomentOfInertia(mass, {1.0f, 1.0f, 1.0f}));
-            reactRB->enableGravity(!ignoreGravity);
-            reactRB->setMass(mass);
-        }
-    }
+    /**
+     * @brief Updates state of react RigidBody.
+     * 
+     * @param updateInnertiaTensor update also inntertia tensor. To do this, this component must be assigned to entity along with Collider component.
+     */
+    void updateReactRB(bool updateInnertiaTensor);
 
-
+    //TODO: documentation
+    void updateReactTransform(Transform* transformPtr);
 private:
 
     ///@brief Pointer to reactphysics3d object

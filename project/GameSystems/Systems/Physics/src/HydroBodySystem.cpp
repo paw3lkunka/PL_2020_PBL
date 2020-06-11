@@ -8,7 +8,7 @@
 #include "HydroBody.inl"
 #include "HydroAccelerator.inl"
 #include "Transform.inl"
-#include "Rigidbody.inl"
+#include "Rigidbody.hpp"
 #include "MeshRenderer.inl"
 #include "HydroDataStructures.hpp"
 #include "PhisicStructures.inl"

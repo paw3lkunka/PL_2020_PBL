@@ -1,5 +1,6 @@
 #include "SphereCollider.hpp"
 #include "Core.hpp"
+#include "MomentOfInertia.hpp"
 
 SphereCollider::~SphereCollider()
 {    
@@ -8,6 +9,10 @@ SphereCollider::~SphereCollider()
 
 void SphereCollider::computeReactCS()
 {
-    //TODO Scale?
     reactCS = GetCore().physicsCommon.createSphereShape(radius);
+}
+
+rp3d::Vector3 SphereCollider::computeInnertiaTensor(float mass)
+{
+    return SphereMomentOfInertia(mass, radius, isHollow);
 }

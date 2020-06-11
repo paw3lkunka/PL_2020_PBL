@@ -251,6 +251,11 @@ class Core
          * @return double 
          */
         double getCurrentFrameStart();
+
+        /**
+         * @brief Apply phisic simulation, and updates necessery components. 
+         */
+        void physicSimulation();
 #pragma endregion
 
 #pragma region Modules

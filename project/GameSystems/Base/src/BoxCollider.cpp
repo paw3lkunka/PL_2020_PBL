@@ -2,6 +2,7 @@
 
 #include "Core.hpp"
 #include "Utils.hpp"
+#include "MomentOfInertia.hpp"
 
 BoxCollider::BoxCollider()
 {
@@ -34,6 +35,10 @@ BoxCollider::~BoxCollider()
 
 void BoxCollider::computeReactCS()
 {
-    //TODO Scale?
     reactCS = GetCore().physicsCommon.createBoxShape(Vec3Cast(halfSize));
+}
+
+rp3d::Vector3 BoxCollider::computeInnertiaTensor(float mass)
+{
+    return BoxMomentOfInertia(mass, 2.0f * halfSize);
 }
