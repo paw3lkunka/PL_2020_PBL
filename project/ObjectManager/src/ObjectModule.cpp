@@ -36,31 +36,13 @@ void ObjectModule::receiveMessage(Message msg)
             }
         }
         break;
-        case Event::LOAD_SCENE:
-            unloadSceneAndLoadNew(msg.getValue<const char*>());
-        break;
     }
 }
 
-bool ObjectModule::compareStrings(const char* str1, const char* str2)
-{
-    return std::strcmp(str1, str2) == 0;
-}
 
-bool ObjectModule::compareStrings(std::string str1, std::string str2)
+void ObjectModule::cleanup()
 {
-    if(str1.length() != str2.length())
-    {
-        return false;
-    }
-    for(int i = 0; i < str1.length(); ++i)
-    {
-        if( str1[i] != str2[i])
-        {
-            return false;
-        }
-    }
-    return true;
+    objectContainer.cleanup();
 }
 
 #pragma region Scene Wrapper
@@ -76,7 +58,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
-    GetCore().audioModule.cleanup();
+    GetCore().audioModule.unloadScene();
     objectContainer.unloadScene();
     // ! removing all associations for scene root node
     GetCore().sceneModule.unloadScene();
@@ -107,7 +89,6 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().sceneModule.updateTransforms();
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
-    GetCore().audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }
@@ -128,17 +109,16 @@ Entity* ObjectModule::newEntity(int bufferSize, std::string name)
     return objectMaker.newEntity(bufferSize, name);
 }
 
-Shader* ObjectModule::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
+Shader* ObjectModule::newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
 {   
     for(Shader* s : objectContainer.shaders)
     {
-        if(s->vertexShaderPath == std::string(vertexShaderPath) 
-        && s->fragmentShaderPath == std::string(fragmentShaderPath) )
+        if(shaderName.compare(s->shaderName) == 0)
         {
             return s;
         }
     }
-    return objectMaker.newShader(vertexShaderPath, fragmentShaderPath, geometryShaderPath);
+    return objectMaker.newShader(shaderName, vertexShaderPath, fragmentShaderPath, geometryShaderPath);
 }
 
 Texture* ObjectModule::newTexture(const char* filePath, TextureCreateInfo createInfo)
@@ -184,7 +164,7 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType
 {
     for(auto m : objectContainer.materials)
     {
-        if(compareStrings(m->getName(), name.c_str()))
+        if(strcmp(m->getName(), name.c_str()) == 0)
         {
             return m;
         }
@@ -201,7 +181,7 @@ Font* ObjectModule::newFont(const char* filePath, unsigned int size, std::string
 {
     for(auto f : objectContainer.fonts)
     {
-        if(compareStrings(f->getFontPath(), filePath))
+        if(strcmp(f->getFontPath(), filePath) == 0)
         {
             return f;
         }

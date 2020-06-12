@@ -56,12 +56,13 @@ public:
     /**
      * @brief Make new shader and save to container
      * 
+     * @param shaderName name of shader
      * @param vertexShaderPath path of vertex shader
      * @param fragmentShaderPath path of fragment shader
      * @param geometryShaderPath path of geometry shader (optional)
      * @return Shader* pointer to shader
      */
-    Shader* newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
+    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
 
     /**
      * @brief make new Texture and save to container

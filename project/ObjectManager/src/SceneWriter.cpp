@@ -33,14 +33,15 @@ SceneWriter::SceneWriter(ObjectModule* objectModulePtr)
 
 void SceneWriter::saveScene(const char* filePath)
 {
-    j["Amounts"]["entities"] = objContainerPtr->entities.size();
-    j["Amounts"]["shaders"] = objContainerPtr->shaders.size();
-    j["Amounts"]["materials"] = objContainerPtr->materials.size();
-    j["Amounts"]["components"] = objContainerPtr->components.size();
-    j["Amounts"]["meshes"] = objContainerPtr->meshes.size();
-    j["Amounts"]["textures"] = objContainerPtr->textures.size();
-    j["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
-    j["Amounts"]["fonts"] = objContainerPtr->fonts.size();
+    json = new nlohmann::json();
+    (*json)["Amounts"]["entities"] = objContainerPtr->entities.size();
+    (*json)["Amounts"]["shaders"] = objContainerPtr->shaders.size();
+    (*json)["Amounts"]["materials"] = objContainerPtr->materials.size();
+    (*json)["Amounts"]["components"] = objContainerPtr->components.size();
+    (*json)["Amounts"]["meshes"] = objContainerPtr->meshes.size();
+    (*json)["Amounts"]["textures"] = objContainerPtr->textures.size();
+    (*json)["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
+    (*json)["Amounts"]["fonts"] = objContainerPtr->fonts.size();
     
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
     {
@@ -57,14 +58,14 @@ void SceneWriter::saveScene(const char* filePath)
         {
             name = "entity" + std::to_string(i);
         }
-        j[name]["id"] = objContainerPtr->entities[i].getId();
-        j[name]["name"] = objContainerPtr->entities[i].getName();
-        j[name]["serializationID"] = objContainerPtr->entities[i].serializationID;
+        (*json)[name]["id"] = objContainerPtr->entities[i].getId();
+        (*json)[name]["name"] = objContainerPtr->entities[i].getName();
+        (*json)[name]["serializationID"] = objContainerPtr->entities[i].serializationID;
         for(int j = 0; j < objContainerPtr->entities[i].getComponentsPtr()->size(); ++j)
         {
             childrenID.push_back(objContainerPtr->entities[i].getComponentsPtr()->operator[](j)->serializationID);
         }
-        j[name]["components"] = childrenID;
+        (*json)[name]["components"] = childrenID;
     }
 
     for(int i = 0; i < objContainerPtr->shaders.size(); ++i)
@@ -184,8 +185,8 @@ void SceneWriter::saveScene(const char* filePath)
             name = "component" + std::to_string(i);
         }
 
-        j[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
-        j[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
+        (*json)[name]["entity id"] = objContainerPtr->components[i]->entityPtr->getId();
+        (*json)[name]["serializationID"] = objContainerPtr->components[i]->serializationID;
         if(Transform* temp = dynamic_cast<Transform*>(objContainerPtr->components[i]))
         {
             saveTransform(temp);
@@ -258,21 +259,37 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveUiSortingGroup(temp);
         }
+        else if(CargoButton* temp = dynamic_cast<CargoButton*>(objContainerPtr->components[i]))
+        {
+            saveCargoButton(temp);
+        }
+        else if(ToggleButton* temp = dynamic_cast<ToggleButton*>(objContainerPtr->components[i]))
+        {
+            saveToggleButton(temp);
+        }
+        else if(CargoStorage* temp = dynamic_cast<CargoStorage*>(objContainerPtr->components[i]))
+        {
+            saveCargoStorage(temp);
+        }
+        else if(dynamic_cast<Cargo*>(objContainerPtr->components[i]))
+        {
+            (*json)[name]["type"] = "Cargo";
+        }
         else if(dynamic_cast<Skeleton*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "Skeleton";
+            (*json)[name]["type"] = "Skeleton";
         }
         else if(dynamic_cast<Bone*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "Bone";
+            (*json)[name]["type"] = "Bone";
         }
         else if(dynamic_cast<HydroBody*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "HydroBody";
+            (*json)[name]["type"] = "HydroBody";
         }
         else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "HydroSurface";
+            (*json)[name]["type"] = "HydroSurface";
         }
         else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
         {
@@ -280,184 +297,185 @@ void SceneWriter::saveScene(const char* filePath)
         }
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "Kayak";
+            (*json)[name]["type"] = "Kayak";
         }
         else if(dynamic_cast<Hideout*>(objContainerPtr->components[i]))
         {
-            j[name]["type"] = "Hideout";
+            (*json)[name]["type"] = "Hideout";
         }
     }
 
     std::ofstream file(filePath);
     if(file.good())
     {
-        file << std::setw(4) << j;
+        file << std::setw(4) << *json;
     }
     file.close();
+
+    delete json;
+    json = nullptr;
 }
 
 #pragma region Components
 void SceneWriter::saveTransform(Transform* componentPtr)
 {
-    j[name]["type"] = "Transform";
+    (*json)[name]["type"] = "Transform";
     if(componentPtr->getParent() != nullptr)
-        j[name]["transform parentID"] = componentPtr->getParent()->serializationID;
+        (*json)[name]["transform parentID"] = componentPtr->getParent()->serializationID;
 
-    j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
-    j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
-    j[name]["localPosition"]["z"] = componentPtr->getLocalPosition().z;
+    (*json)[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
+    (*json)[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
+    (*json)[name]["localPosition"]["z"] = componentPtr->getLocalPosition().z;
 
-    j[name]["localRotation"]["x"] = componentPtr->getLocalRotation().x;
-    j[name]["localRotation"]["y"] = componentPtr->getLocalRotation().y;
-    j[name]["localRotation"]["z"] = componentPtr->getLocalRotation().z;
-    j[name]["localRotation"]["w"] = componentPtr->getLocalRotation().w;
+    (*json)[name]["localRotation"]["x"] = componentPtr->getLocalRotation().x;
+    (*json)[name]["localRotation"]["y"] = componentPtr->getLocalRotation().y;
+    (*json)[name]["localRotation"]["z"] = componentPtr->getLocalRotation().z;
+    (*json)[name]["localRotation"]["w"] = componentPtr->getLocalRotation().w;
 
-    j[name]["localScale"]["x"] = componentPtr->getLocalScale().x;
-    j[name]["localScale"]["y"] = componentPtr->getLocalScale().y;
-    j[name]["localScale"]["z"] = componentPtr->getLocalScale().z;
+    (*json)[name]["localScale"]["x"] = componentPtr->getLocalScale().x;
+    (*json)[name]["localScale"]["y"] = componentPtr->getLocalScale().y;
+    (*json)[name]["localScale"]["z"] = componentPtr->getLocalScale().z;
 }
 
 void SceneWriter::saveAudioListener(AudioListener* componentPtr)
 {
-    j[name]["type"] = "AudioListener";
-    j[name]["gain"] = componentPtr->getGain();
-    j[name]["at"]["x"] = componentPtr->getAt().x;
-    j[name]["at"]["y"] = componentPtr->getAt().y;
-    j[name]["at"]["z"] = componentPtr->getAt().z;
-    j[name]["up"]["x"] = componentPtr->getUp().x;
-    j[name]["up"]["y"] = componentPtr->getUp().y;
-    j[name]["up"]["z"] = componentPtr->getUp().z;
-    j[name]["isCurrent"] = componentPtr->getIsCurrent();
+    (*json)[name]["type"] = "AudioListener";
+    (*json)[name]["gain"] = componentPtr->getGain();
+    (*json)[name]["at"]["x"] = componentPtr->getAt().x;
+    (*json)[name]["at"]["y"] = componentPtr->getAt().y;
+    (*json)[name]["at"]["z"] = componentPtr->getAt().z;
+    (*json)[name]["up"]["x"] = componentPtr->getUp().x;
+    (*json)[name]["up"]["y"] = componentPtr->getUp().y;
+    (*json)[name]["up"]["z"] = componentPtr->getUp().z;
+    (*json)[name]["isCurrent"] = componentPtr->getIsCurrent();
 }
 
 void SceneWriter::saveAudioSource(AudioSource* componentPtr)
 {
-    j[name]["type"] = "AudioSource";
+    (*json)[name]["type"] = "AudioSource";
     childrenID.clear();
     for(int j = 0; j < componentPtr->getListenersModifiable().size(); ++j)
     {
         childrenID.push_back(componentPtr->getListenersModifiable().at(j)->serializationID);
     }
-    j[name]["listeners"] = childrenID; 
-    j[name]["clips"] = componentPtr->getClips();
-    j[name]["isRelativeToListener"] = componentPtr->getIsRelative();
-    j[name]["isLooping"] = componentPtr->getIsLooping();
-    j[name]["minGain"] = componentPtr->getMinGain();
-    j[name]["gain"] = componentPtr->getGain();
-    j[name]["maxGain"] = componentPtr->getMaxGain();
-    j[name]["referenceDistance"] = componentPtr->getReferenceDistance();
-    j[name]["rolloffFactor"] = componentPtr->getRolloffFactor();
-    j[name]["autoPlay"] = componentPtr->autoPlay;
+    (*json)[name]["listeners"] = childrenID;
+    (*json)[name]["clips"] = componentPtr->getClips();
+    (*json)[name]["isRelativeToListener"] = componentPtr->getIsRelative();
+    (*json)[name]["isLooping"] = componentPtr->getIsLooping();
+    (*json)[name]["minGain"] = componentPtr->getMinGain();
+    (*json)[name]["gain"] = componentPtr->getGain();
+    (*json)[name]["maxGain"] = componentPtr->getMaxGain();
+    (*json)[name]["referenceDistance"] = componentPtr->getReferenceDistance();
+    (*json)[name]["rolloffFactor"] = componentPtr->getRolloffFactor();
+    (*json)[name]["autoPlay"] = componentPtr->autoPlay;
     if(componentPtr->getMaxDistance() != std::numeric_limits<float>::infinity())
     {
-        j[name]["maxDistance"] = componentPtr->getMaxDistance();
+        (*json)[name]["maxDistance"] = componentPtr->getMaxDistance();
     }
     else
     {
-        j[name]["maxDistance"] = "infinity";
+        (*json)[name]["maxDistance"] = "infinity";
     }
-    j[name]["pitch"] = componentPtr->getPitch();
-    j[name]["direction"]["x"] = componentPtr->getDirection().x;
-    j[name]["direction"]["y"] = componentPtr->getDirection().y;
-    j[name]["direction"]["z"] = componentPtr->getDirection().z;
-    j[name]["coneInnerAngle"] = componentPtr->getConeInnerAngle();
-    j[name]["coneOuterAngle"] = componentPtr->getConeOuterAngle();
-    j[name]["coneOuterGain"] = componentPtr->getConeOuterGain();
+    (*json)[name]["pitch"] = componentPtr->getPitch();
+    (*json)[name]["direction"]["x"] = componentPtr->getDirection().x;
+    (*json)[name]["direction"]["y"] = componentPtr->getDirection().y;
+    (*json)[name]["direction"]["z"] = componentPtr->getDirection().z;
+    (*json)[name]["coneInnerAngle"] = componentPtr->getConeInnerAngle();
+    (*json)[name]["coneOuterAngle"] = componentPtr->getConeOuterAngle();
+    (*json)[name]["coneOuterGain"] = componentPtr->getConeOuterGain();
 }
 
 void SceneWriter::saveCamera(Camera* componentPtr)
 {
-    j[name]["type"] = "Camera";
-    j[name]["projectionMode"] = componentPtr->getProjectionMode();
-    j[name]["isMain"] = componentPtr->isMain;
-    j[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
-    j[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
-    j[name]["farPlane"] = componentPtr->getFrustum().farPlane;
+    (*json)[name]["type"] = "Camera";
+    (*json)[name]["projectionMode"] = componentPtr->getProjectionMode();
+    (*json)[name]["isMain"] = componentPtr->isMain;
+    (*json)[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
+    (*json)[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
+    (*json)[name]["farPlane"] = componentPtr->getFrustum().farPlane;
 }
 
 void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
 {
-    j[name]["type"] = "MeshRenderer";
+    (*json)[name]["type"] = "MeshRenderer";
     if(componentPtr->material != nullptr)
     {
-        j[name]["material"] = componentPtr->material->serializationID;
+        (*json)[name]["material"] = componentPtr->material->getName();
     }
-    j[name]["mesh"] = componentPtr->mesh->serializationID;
+    (*json)[name]["mesh"] = componentPtr->mesh->getMeshPath();
     
 }
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 {
-    j[name]["type"] = "SphereCollider";
-    j[name]["colliderType"] = componentPtr->type;
-    j[name]["radius"] = componentPtr->radius;
-    j[name]["center"]["x"] = componentPtr->center.x;
-    j[name]["center"]["y"] = componentPtr->center.y;
-    j[name]["center"]["z"] = componentPtr->center.z;
+    (*json)[name]["type"] = "SphereCollider";
+    (*json)[name]["isTrigger"] = componentPtr->isTrigger;
+    (*json)[name]["radius"] = componentPtr->radius;
+    (*json)[name]["center"]["x"] = componentPtr->center.x;
+    (*json)[name]["center"]["y"] = componentPtr->center.y;
+    (*json)[name]["center"]["z"] = componentPtr->center.z;
 }
 
 void SceneWriter::saveBoxCollider(BoxCollider* componentPtr)
 {
-    j[name]["type"] = "BoxCollider";
-    j[name]["colliderType"] = componentPtr->type;
-    j[name]["center"]["x"] = componentPtr->center.x;
-    j[name]["center"]["y"] = componentPtr->center.y;
-    j[name]["center"]["z"] = componentPtr->center.z;
-    j[name]["halfSize"]["x"] = componentPtr->halfSize.x;
-    j[name]["halfSize"]["y"] = componentPtr->halfSize.y;
-    j[name]["halfSize"]["z"] = componentPtr->halfSize.z;
+    (*json)[name]["type"] = "BoxCollider";
+    (*json)[name]["isTrigger"] = componentPtr->isTrigger;
+    (*json)[name]["center"]["x"] = componentPtr->center.x;
+    (*json)[name]["center"]["y"] = componentPtr->center.y;
+    (*json)[name]["center"]["z"] = componentPtr->center.z;
+    (*json)[name]["halfSize"]["x"] = componentPtr->halfSize.x;
+    (*json)[name]["halfSize"]["y"] = componentPtr->halfSize.y;
+    (*json)[name]["halfSize"]["z"] = componentPtr->halfSize.z;
 }
 
 void SceneWriter::saveLight(Light* componentPtr)
 {
-    j[name]["type"] = "Light";
-    j[name]["lightType"] = componentPtr->lightType;
-    j[name]["intensity"] = componentPtr->intensity;
-    j[name]["color"]["r"] = componentPtr->color.r;
-    j[name]["color"]["g"] = componentPtr->color.g;
-    j[name]["color"]["b"] = componentPtr->color.b;
+    (*json)[name]["type"] = "Light";
+    (*json)[name]["lightType"] = componentPtr->lightType;
+    (*json)[name]["intensity"] = componentPtr->intensity;
+    (*json)[name]["color"]["r"] = componentPtr->color.r;
+    (*json)[name]["color"]["g"] = componentPtr->color.g;
+    (*json)[name]["color"]["b"] = componentPtr->color.b;
     if (componentPtr->lightType == LightType::Point || componentPtr->lightType == LightType::Spot)
     {
-        j[name]["range"] = componentPtr->range;
+        (*json)[name]["range"] = componentPtr->range;
         if (componentPtr->lightType == LightType::Spot)
         {
-            j[name]["angle"] = componentPtr->angle;
+            (*json)[name]["angle"] = componentPtr->angle;
         }
     }
 }
 
 void SceneWriter::saveRigidbody(Rigidbody* componentPtr)
 {
-    j[name]["type"] = "Rigidbody";
-    j[name]["mass"] = componentPtr->mass;
-    j[name]["momentOfInertia"]["0,0"] = componentPtr->momentOfInertia[0][0];
-    j[name]["momentOfInertia"]["1,1"] = componentPtr->momentOfInertia[1][1];
-    j[name]["momentOfInertia"]["2,2"] = componentPtr->momentOfInertia[2][2];
-    j[name]["drag"] = componentPtr->drag;
-    j[name]["angularDrag"] = componentPtr->angularDrag;
-    j[name]["ignoreGravity"] = componentPtr->ignoreGravity;
+    (*json)[name]["type"] = "Rigidbody";
+    (*json)[name]["mass"] = componentPtr->mass;
+    (*json)[name]["bodyType"] = componentPtr->type;;
+    (*json)[name]["drag"] = componentPtr->drag;
+    (*json)[name]["angularDrag"] = componentPtr->angularDrag;
+    (*json)[name]["ignoreGravity"] = componentPtr->ignoreGravity;
 }
 
 void SceneWriter::savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr)
 {
-    j[name]["type"] = "PhysicalInputKeymap";
+    (*json)[name]["type"] = "PhysicalInputKeymap";
 
-    j[name]["single"]["size"] = keymapPtr->single.size();
-    j[name]["continuous"]["size"] = keymapPtr->continuous.size();
+    (*json)[name]["single"]["size"] = keymapPtr->single.size();
+    (*json)[name]["continuous"]["size"] = keymapPtr->continuous.size();
 
     int i = 0;
 
     for (auto& entry : keymapPtr->single)
     {
-        j[name]["single"]["key " + std::to_string(i)]["keycode"] = entry.first;
+        (*json)[name]["single"]["key " + std::to_string(i)]["keycode"] = entry.first;
 
-        j[name]["single"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
-        j[name]["single"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
-        j[name]["single"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+        (*json)[name]["single"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        (*json)[name]["single"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        (*json)[name]["single"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
 
-        j[name]["single"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
-        j[name]["single"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
-        j[name]["single"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        (*json)[name]["single"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        (*json)[name]["single"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        (*json)[name]["single"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
         i++;
     }
 
@@ -465,106 +483,106 @@ void SceneWriter::savePhysicalInputKeymap(PhysicalInputKeymap* keymapPtr)
 
     for (auto& entry : keymapPtr->continuous)
     {
-        j[name]["continuous"]["key " + std::to_string(i)]["keycode"] = entry.first;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["keycode"] = entry.first;
 
-        j[name]["continuous"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
-        j[name]["continuous"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
-        j[name]["continuous"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["force"]["x"] = entry.second.force.x;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["force"]["y"] = entry.second.force.y;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["force"]["z"] = entry.second.force.z;
 
-        j[name]["continuous"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
-        j[name]["continuous"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
-        j[name]["continuous"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["point"]["x"] = entry.second.point.x;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["point"]["y"] = entry.second.point.y;
+        (*json)[name]["continuous"]["key " + std::to_string(i)]["point"]["z"] = entry.second.point.z;
         i++;
     }
 }
 
 void SceneWriter::savePaddle(Paddle* componentPtr)
 {
-    j[name]["type"] = "Paddle";
-    j[name]["minSpeed"] = componentPtr->minSpeed;
-    j[name]["maxSpeed"] = componentPtr->maxSpeed;
-    j[name]["maxFrontRot"] = componentPtr->maxFrontRot;
-    j[name]["maxSideRot"] = componentPtr->maxSideRot;
-    j[name]["maxPos"]["x"] = componentPtr->maxPos.x;
-    j[name]["maxPos"]["y"] = componentPtr->maxPos.y;
-    j[name]["maxPos"]["z"] = componentPtr->maxPos.z;
+    (*json)[name]["type"] = "Paddle";
+    (*json)[name]["minSpeed"] = componentPtr->minSpeed;
+    (*json)[name]["maxSpeed"] = componentPtr->maxSpeed;
+    (*json)[name]["maxFrontRot"] = componentPtr->maxFrontRot;
+    (*json)[name]["maxSideRot"] = componentPtr->maxSideRot;
+    (*json)[name]["maxPos"]["x"] = componentPtr->maxPos.x;
+    (*json)[name]["maxPos"]["y"] = componentPtr->maxPos.y;
+    (*json)[name]["maxPos"]["z"] = componentPtr->maxPos.z;
 }
 
 void SceneWriter::saveEnemy(Enemy* enemyPtr)
 {
-    j[name]["type"] = "Enemy";
-    j[name]["sightDistance"] = enemyPtr->sightDistance;
-    j[name]["sightAngle"] = enemyPtr->sightAngle;
-    j[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
-    j[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
-    j[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
-    j[name]["detectionCounter"] = enemyPtr->detectionCounter;
+    (*json)[name]["type"] = "Enemy";
+    (*json)[name]["sightDistance"] = enemyPtr->sightDistance;
+    (*json)[name]["sightAngle"] = enemyPtr->sightAngle;
+    (*json)[name]["detectionCounterMaxValue"] = enemyPtr->detectionCounterMaxValue;
+    (*json)[name]["detectionPositiveStep"] = enemyPtr->detectionPositiveStep;
+    (*json)[name]["detectionNegativeStep"] = enemyPtr->detectionNegativeStep;
+    (*json)[name]["detectionCounter"] = enemyPtr->detectionCounter;
 }
 
 void SceneWriter::saveEnemyAnimation(EnemyAnimation* enemyAnimPtr)
 {
-    j[name]["type"] = "EnemyAnimation";
-    j[name]["lerpParameter"] = enemyAnimPtr->lerpParameter;
+    (*json)[name]["type"] = "EnemyAnimation";
+    (*json)[name]["lerpParameter"] = enemyAnimPtr->lerpParameter;
 }
 
 void SceneWriter::saveUiRenderer(UiRenderer* componentPtr)
 {
-    j[name]["type"] = "UiRenderer";
-    j[name]["material"] = componentPtr->material->serializationID;
+    (*json)[name]["type"] = "UiRenderer";
+    (*json)[name]["material"] = componentPtr->material->getName();
 }
 
 void SceneWriter::saveTextRenderer(TextRenderer* componentPtr)
 {
-    j[name]["type"] = "TextRenderer";
-    j[name]["material"] = componentPtr->material->serializationID;
-    j[name]["font"] = componentPtr->mesh.font->serializationID;
-    j[name]["text"] = componentPtr->mesh.text;
+    (*json)[name]["type"] = "TextRenderer";
+    (*json)[name]["material"] = componentPtr->material->getName();
+    (*json)[name]["font"] = componentPtr->mesh.font->getName();
+    (*json)[name]["text"] = componentPtr->mesh.text;
 }
 
 void SceneWriter::saveRectTransform(RectTransform* componentPtr)
 {
-    j[name]["type"] = "RectTransform";
+    (*json)[name]["type"] = "RectTransform";
 
-    j[name]["anchor"]["x"] = componentPtr->getAnchor().x;
-    j[name]["anchor"]["y"] = componentPtr->getAnchor().y;
+    (*json)[name]["anchor"]["x"] = componentPtr->getAnchor().x;
+    (*json)[name]["anchor"]["y"] = componentPtr->getAnchor().y;
 
-    j[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
-    j[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
+    (*json)[name]["localPosition"]["x"] = componentPtr->getLocalPosition().x;
+    (*json)[name]["localPosition"]["y"] = componentPtr->getLocalPosition().y;
 
-    j[name]["rectSize"]["x"] = componentPtr->getSize().x;
-    j[name]["rectSize"]["y"] = componentPtr->getSize().y;
+    (*json)[name]["rectSize"]["x"] = componentPtr->getSize().x;
+    (*json)[name]["rectSize"]["y"] = componentPtr->getSize().y;
 
-    j[name]["rotation"] = componentPtr->getLocalRotation();
+    (*json)[name]["rotation"] = componentPtr->getLocalRotation();
 
     if(componentPtr->getParent() != nullptr)
     {
-        j[name]["parent"] = componentPtr->getParent()->serializationID;
+        (*json)[name]["parent"] = componentPtr->getParent()->serializationID;
     }
 }
 
 void SceneWriter::saveButton(Button* componentPtr)
 {
-    j[name]["type"] = "Button";
-    j[name]["isActive"] = componentPtr->isActive;
-    j[name]["baseColor"]["r"] = componentPtr->baseColor.r;
-    j[name]["baseColor"]["g"] = componentPtr->baseColor.g;
-    j[name]["baseColor"]["b"] = componentPtr->baseColor.b;
-    j[name]["baseColor"]["a"] = componentPtr->baseColor.a;
+    (*json)[name]["type"] = "Button";
+    (*json)[name]["isActive"] = componentPtr->isActive;
+    (*json)[name]["baseColor"]["r"] = componentPtr->baseColor.r;
+    (*json)[name]["baseColor"]["g"] = componentPtr->baseColor.g;
+    (*json)[name]["baseColor"]["b"] = componentPtr->baseColor.b;
+    (*json)[name]["baseColor"]["a"] = componentPtr->baseColor.a;
 
-    j[name]["inactiveColor"]["r"] = componentPtr->inactiveColor.r;
-    j[name]["inactiveColor"]["g"] = componentPtr->inactiveColor.g;
-    j[name]["inactiveColor"]["b"] = componentPtr->inactiveColor.b;
-    j[name]["inactiveColor"]["a"] = componentPtr->inactiveColor.a;
+    (*json)[name]["inactiveColor"]["r"] = componentPtr->inactiveColor.r;
+    (*json)[name]["inactiveColor"]["g"] = componentPtr->inactiveColor.g;
+    (*json)[name]["inactiveColor"]["b"] = componentPtr->inactiveColor.b;
+    (*json)[name]["inactiveColor"]["a"] = componentPtr->inactiveColor.a;
 
-    j[name]["highlightedColor"]["r"] = componentPtr->highlightedColor.r;
-    j[name]["highlightedColor"]["g"] = componentPtr->highlightedColor.g;
-    j[name]["highlightedColor"]["b"] = componentPtr->highlightedColor.b;
-    j[name]["highlightedColor"]["a"] = componentPtr->highlightedColor.a;
+    (*json)[name]["highlightedColor"]["r"] = componentPtr->highlightedColor.r;
+    (*json)[name]["highlightedColor"]["g"] = componentPtr->highlightedColor.g;
+    (*json)[name]["highlightedColor"]["b"] = componentPtr->highlightedColor.b;
+    (*json)[name]["highlightedColor"]["a"] = componentPtr->highlightedColor.a;
 
-    j[name]["onClickColor"]["r"] = componentPtr->onClickColor.r;
-    j[name]["onClickColor"]["g"] = componentPtr->onClickColor.g;
-    j[name]["onClickColor"]["b"] = componentPtr->onClickColor.b;
-    j[name]["onClickColor"]["a"] = componentPtr->onClickColor.a;
+    (*json)[name]["onClickColor"]["r"] = componentPtr->onClickColor.r;
+    (*json)[name]["onClickColor"]["g"] = componentPtr->onClickColor.g;
+    (*json)[name]["onClickColor"]["b"] = componentPtr->onClickColor.b;
+    (*json)[name]["onClickColor"]["a"] = componentPtr->onClickColor.a;
 
     for(int i = 0; i < componentPtr->onClickEvents.size(); ++i)
     {
@@ -576,13 +594,111 @@ void SceneWriter::saveButton(Button* componentPtr)
 
 void SceneWriter::saveHydroAccelerator(HydroAccelerator* componentPtr)
 {
-    j[name]["type"] = "HydroAccelerator";
-    j[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
+    (*json)[name]["type"] = "HydroAccelerator";
+    (*json)[name]["rigidbody"] = componentPtr->rigidbody->serializationID;
 }
+
 void SceneWriter::saveUiSortingGroup(UiSortingGroup* componentPtr)
 {
-    j[name]["type"] = "UiSortingGroup";
-    j[name]["groupTransparency"] = componentPtr->groupTransparency;
+    (*json)[name]["type"] = "UiSortingGroup";
+    (*json)[name]["groupTransparency"] = componentPtr->groupTransparency;
+}
+
+void SceneWriter::saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser)
+{
+    (*parser)[cargoName]["name"] = componentPtr->name;
+    (*parser)[cargoName]["isRisky"] = componentPtr->isRisky;
+    (*parser)[cargoName]["weight"] = componentPtr->weight;
+    (*parser)[cargoName]["income"] = componentPtr->income;
+}
+
+void SceneWriter::saveToggleButton(ToggleButton* componentPtr)
+{
+    (*json)[name]["type"] = "ToggleButton";
+    (*json)[name]["isActive"] = componentPtr->isActive;
+
+    (*json)[name]["inactiveColor"]["r"] = componentPtr->inactiveColor.r;
+    (*json)[name]["inactiveColor"]["g"] = componentPtr->inactiveColor.g;
+    (*json)[name]["inactiveColor"]["b"] = componentPtr->inactiveColor.b;
+    (*json)[name]["inactiveColor"]["a"] = componentPtr->inactiveColor.a;
+
+    (*json)[name]["baseColorOn"]["r"] = componentPtr->baseColorOn.r;
+    (*json)[name]["baseColorOn"]["g"] = componentPtr->baseColorOn.g;
+    (*json)[name]["baseColorOn"]["b"] = componentPtr->baseColorOn.b;
+    (*json)[name]["baseColorOn"]["a"] = componentPtr->baseColorOn.a;
+
+    (*json)[name]["highlightedColorOn"]["r"] = componentPtr->highlightedColorOn.r;
+    (*json)[name]["highlightedColorOn"]["g"] = componentPtr->highlightedColorOn.g;
+    (*json)[name]["highlightedColorOn"]["b"] = componentPtr->highlightedColorOn.b;
+    (*json)[name]["highlightedColorOn"]["a"] = componentPtr->highlightedColorOn.a;
+
+    (*json)[name]["onClickColorOn"]["r"] = componentPtr->onClickColorOn.r;
+    (*json)[name]["onClickColorOn"]["g"] = componentPtr->onClickColorOn.g;
+    (*json)[name]["onClickColorOn"]["b"] = componentPtr->onClickColorOn.b;
+    (*json)[name]["onClickColorOn"]["a"] = componentPtr->onClickColorOn.a;
+
+    (*json)[name]["baseColorOff"]["r"] = componentPtr->baseColorOff.r;
+    (*json)[name]["baseColorOff"]["g"] = componentPtr->baseColorOff.g;
+    (*json)[name]["baseColorOff"]["b"] = componentPtr->baseColorOff.b;
+    (*json)[name]["baseColorOff"]["a"] = componentPtr->baseColorOff.a;
+
+    (*json)[name]["highlightedColorOff"]["r"] = componentPtr->highlightedColorOff.r;
+    (*json)[name]["highlightedColorOff"]["g"] = componentPtr->highlightedColorOff.g;
+    (*json)[name]["highlightedColorOff"]["b"] = componentPtr->highlightedColorOff.b;
+    (*json)[name]["highlightedColorOff"]["a"] = componentPtr->highlightedColorOff.a;
+
+    (*json)[name]["onClickColorOff"]["r"] = componentPtr->onClickColorOff.r;
+    (*json)[name]["onClickColorOff"]["g"] = componentPtr->onClickColorOff.g;
+    (*json)[name]["onClickColorOff"]["b"] = componentPtr->onClickColorOff.b;
+    (*json)[name]["onClickColorOff"]["a"] = componentPtr->onClickColorOff.a;
+
+    for(int i = 0; i < componentPtr->onActivateEvents.size(); ++i)
+    {
+        std::string eventName = "e" + std::to_string(i);
+
+        saveMessage(eventName, componentPtr->onActivateEvents[i], "onActivateEvents");
+    }
+
+    for(int i = 0; i < componentPtr->onDeactivateEvents.size(); ++i)
+    {
+        std::string eventName = "e" + std::to_string(i);
+
+        saveMessage(eventName, componentPtr->onDeactivateEvents[i], "onDeactivateEvents");
+    }
+}
+
+void SceneWriter::saveCargoButton(CargoButton* componentPtr)
+{
+    saveToggleButton(componentPtr);
+    (*json)[name]["type"] = "CargoButton";
+    (*json)[name]["nameText"] = componentPtr->nameText->serializationID;
+    (*json)[name]["incomeText"] = componentPtr->incomeText->serializationID;
+    (*json)[name]["weightText"] = componentPtr->weightText->serializationID;
+}
+
+void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
+{
+    (*json)[name]["type"] = "CargoStorage";
+    if(componentPtr->entityPtr->getComponentPtr<Transform>() == nullptr)
+    {
+        nlohmann::json* temp = new nlohmann::json();
+        int i = 0;
+        for(auto cargo : componentPtr->cargosStored)
+        {
+            std::string cargoName = "c" + std::to_string(i++);
+            saveCargo(cargo, cargoName, temp);
+        }
+
+
+        std::ofstream file("Resources/Scenes/chosenCargos.json");
+        if(file.good())
+        {
+            file << std::setw(4) << *temp;
+        }
+        file.close();
+
+        delete temp;
+    }
 }
 
 #pragma endregion
@@ -591,34 +707,34 @@ void SceneWriter::saveUiSortingGroup(UiSortingGroup* componentPtr)
 
 void SceneWriter::saveMaterial(Material* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["shaderSerializationID"] = assetPtr->shader->serializationID;
-    j[name]["name"] = assetPtr->getName();
-    j[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
-    j[name]["renderingType"] = assetPtr->getRenderType();
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["shaderName"] = assetPtr->shader->shaderName;
+    (*json)[name]["name"] = assetPtr->getName();
+    (*json)[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
+    (*json)[name]["renderingType"] = assetPtr->getRenderType();
     childrenMap.clear();
     for(auto c : assetPtr->cubemaps)
     {
         childrenMap[c.first] = c.second->serializationID;
     }
-    j[name]["cubemaps"] = childrenMap;
+    (*json)[name]["cubemaps"] = childrenMap;
 
-    childrenMap.clear();
+    std::unordered_map<std::string, std::string> texMap;
     for(auto t : assetPtr->textures)
     {
         if (t.second != nullptr)
         {
-            childrenMap[t.first] = t.second->serializationID;
+            texMap[t.first] = t.second->filePath;
         }
     }
-    j[name]["textures"] = childrenMap;
+    (*json)[name]["textures"] = texMap;
 
     childrenMap.clear();
     for(auto i : assetPtr->ints)
     {
         childrenMap[i.first] = i.second;
     }
-    j[name]["ints"] = childrenMap;
+    (*json)[name]["ints"] = childrenMap;
 
     std::unordered_map<std::string, float> floatMap;
 
@@ -626,7 +742,7 @@ void SceneWriter::saveMaterial(Material* assetPtr)
     {
         floatMap[f.first] = f.second;
     }
-    j[name]["floats"] = floatMap;
+    (*json)[name]["floats"] = floatMap;
 
 
     std::unordered_map<std::string, std::vector<float>> structMap;
@@ -641,7 +757,7 @@ void SceneWriter::saveMaterial(Material* assetPtr)
         structMap[v.first] = floatVec;
     }
 
-    j[name]["vec3s"] = structMap;
+    (*json)[name]["vec3s"] = structMap;
 
     structMap.clear();
     for(auto v : assetPtr->vec4s)
@@ -654,7 +770,7 @@ void SceneWriter::saveMaterial(Material* assetPtr)
 
         structMap[v.first] = floatVec;
     }
-    j[name]["vec4s"] = structMap;
+    (*json)[name]["vec4s"] = structMap;
 
     structMap.clear();
     for(auto m : assetPtr->mat4s)
@@ -679,88 +795,101 @@ void SceneWriter::saveMaterial(Material* assetPtr)
 
         structMap[m.first] = floatVec;
     }
-    j[name]["mat4s"] = structMap;
+    (*json)[name]["mat4s"] = structMap;
 }
 
 void SceneWriter::saveTexture(Texture* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["filePath"] = assetPtr->filePath;
-    j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
-    j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
-    j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
-    j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["filePath"] = assetPtr->filePath;
+    (*json)[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    (*json)[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    (*json)[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    (*json)[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
 }
 
 void SceneWriter::saveMesh(Mesh* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["meshPath"] = assetPtr->getMeshPath();
-    j[name]["filePath"] = assetPtr->filePath;
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["meshPath"] = assetPtr->getMeshPath();
+    (*json)[name]["filePath"] = assetPtr->filePath;
     if(dynamic_cast<MeshCustom*>(assetPtr) != nullptr)
     {
-        j[name]["type"] = "MeshCustom";
+        (*json)[name]["type"] = "MeshCustom";
     }
     else if(dynamic_cast<MeshSkinned*>(assetPtr) != nullptr)
     {
-        j[name]["type"] = "MeshSkinned";
+        (*json)[name]["type"] = "MeshSkinned";
     }
 }
 
 void SceneWriter::saveShader(Shader* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["fragmentShaderPath"] = assetPtr->fragmentShaderPath;
-    j[name]["vertexShaderPath"] = assetPtr->vertexShaderPath;
+    (*json)[name]["shaderName"] = assetPtr->shaderName;
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["fragmentShaderPath"] = assetPtr->fragmentShaderPath;
+    (*json)[name]["vertexShaderPath"] = assetPtr->vertexShaderPath;
     if(assetPtr->geometryShaderPath != "")
     {
-        j[name]["geometryShaderPath"] = assetPtr->geometryShaderPath;
+        (*json)[name]["geometryShaderPath"] = assetPtr->geometryShaderPath;
     }
 }
 
 void SceneWriter::saveCubemap(Cubemap* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["frontPath"] = assetPtr->frontPath;
-    j[name]["backPath"] = assetPtr->backPath;
-    j[name]["leftPath"] = assetPtr->leftPath;
-    j[name]["rightPath"] = assetPtr->rightPath;
-    j[name]["topPath"] = assetPtr->topPath;
-    j[name]["bottomPath"] = assetPtr->bottomPath;
-    j[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
-    j[name]["creationInfo"]["format"] = assetPtr->info.format;
-    j[name]["creationInfo"]["width"] = assetPtr->info.width;
-    j[name]["creationInfo"]["height"] = assetPtr->info.height;
-    j[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
-    j[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
-    j[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["frontPath"] = assetPtr->frontPath;
+    (*json)[name]["backPath"] = assetPtr->backPath;
+    (*json)[name]["leftPath"] = assetPtr->leftPath;
+    (*json)[name]["rightPath"] = assetPtr->rightPath;
+    (*json)[name]["topPath"] = assetPtr->topPath;
+    (*json)[name]["bottomPath"] = assetPtr->bottomPath;
+    (*json)[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    (*json)[name]["creationInfo"]["format"] = assetPtr->info.format;
+    (*json)[name]["creationInfo"]["width"] = assetPtr->info.width;
+    (*json)[name]["creationInfo"]["height"] = assetPtr->info.height;
+    (*json)[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    (*json)[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    (*json)[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
 }
 
 void SceneWriter::saveFont(Font* assetPtr)
 {
-    j[name]["serializationID"] = assetPtr->serializationID;
-    j[name]["fontPath"] = assetPtr->getFontPath();
-    j[name]["fontSize"] = assetPtr->getSize();
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["fontPath"] = assetPtr->getFontPath();
+    (*json)[name]["fontSize"] = assetPtr->getSize();
+    (*json)[name]["fontName"] = assetPtr->getName();
 }
 
 #pragma endregion
 
 #pragma region Events
 
-void SceneWriter::saveMessage(std::string msgName, Message msg)
+void SceneWriter::saveMessage(std::string msgName, Message msg, std::string typeName)
 {
-    j[name]["onClickEvents"][msgName.c_str()]["event"] = msg.getEvent();
+    int event = -1;
     switch(msg.getEvent())
     {
         case Event::AUDIO_SOURCE_PLAY:
-            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            event = (int)Event::AUDIO_SOURCE_PLAY;
+            (*json)[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::AUDIO_SOURCE_STOP:
-            j[name]["onClickEvents"][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+            event = (int)Event::AUDIO_SOURCE_STOP;
+            (*json)[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
         case Event::LOAD_SCENE:
-            j[name]["onClickEvents"][msgName.c_str()]["scene"] = msg.getValue<const char*>();
+            event = (int)Event::LOAD_SCENE;
+            (*json)[name][typeName.c_str()][msgName.c_str()]["scene"] = msg.getValue<const char*>();
         break;
+        case Event::EXIT_GAME:
+            event = (int)Event::EXIT_GAME;
+        break;
+    }
+
+    if(event != -1)
+    {
+        (*json)[name][typeName.c_str()][msgName.c_str()]["event"] = msg.getEvent();
     }
 }
 #pragma endregion

@@ -83,11 +83,37 @@ void AudioModule::receiveMessage(Message msg)
             audioSourceRewindHandler(audioSourcePtr);
         }
             break;
+        case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
+            paused = !paused;
+            if(paused)
+            {
+                for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+                {
+                    audioSourcePauseHandler(*iter);
+                }
+            }
+            else
+            {
+                for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+                {
+                    audioSourcePlayHandler(*iter);
+                }
+            }
+        break;
         }
 
         if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
         {
             alcPushCurrentContextChangesToDevice();
+            for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+            {
+                ALint state;
+                alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
+                if(state == AL_STOPPED)
+                {
+                    playingSources.erase(iter);
+                }
+            }
         }
     }
     catch(AudioContextLevelException e)
@@ -176,6 +202,7 @@ void AudioModule::unloadScene()
     clips.clear();
     sources.clear();
     queueCounters.clear();
+    playingSources.clear();
 }
 
 void AudioModule::cleanup()
@@ -564,7 +591,10 @@ void AudioModule::audioSourcePlayHandler(AudioSource* audioSourcePtr)
         GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr) );
         return;
     }
-    
+    if(std::find(playingSources.begin(), playingSources.end(), audioSourcePtr) == playingSources.end())
+    {
+        playingSources.push_back(audioSourcePtr);
+    }
     for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
     {
         alSourcePlay(it->second);

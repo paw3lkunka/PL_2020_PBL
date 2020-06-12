@@ -2743,8 +2743,8 @@
         "type": "Paddle"
     },
     "component195": {
-        "angularDrag": 5.0,
-        "drag": 10.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 0,
         "ignoreGravity": false,
         "mass": 10.0,
@@ -2757,8 +2757,8 @@
         "type": "Rigidbody"
     },
     "component196": {
-        "angularDrag": 10.0,
-        "drag": 5.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 75,
         "ignoreGravity": false,
         "mass": 10.0,
@@ -2901,8 +2901,8 @@
         "type": "MeshRenderer"
     },
     "component201": {
-        "angularDrag": 5.0,
-        "drag": 5.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 97,
         "ignoreGravity": true,
         "mass": 10.0,
@@ -2944,8 +2944,8 @@
         "type": "MeshRenderer"
     },
     "component204": {
-        "angularDrag": 2.0,
-        "drag": 10.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 98,
         "ignoreGravity": false,
         "mass": 10.0,
@@ -2974,8 +2974,8 @@
         "type": "BoxCollider"
     },
     "component206": {
-        "angularDrag": 3.0,
-        "drag": 3.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 94,
         "ignoreGravity": true,
         "mass": 60.0,
@@ -3031,8 +3031,8 @@
         "type": "BoxCollider"
     },
     "component210": {
-        "angularDrag": 1.0,
-        "drag": 1.0,
+        "angularDrag": 0.5,
+        "drag": 0.1,
         "entity id": 99,
         "ignoreGravity": true,
         "mass": 2000.0,

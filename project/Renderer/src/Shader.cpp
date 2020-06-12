@@ -75,8 +75,8 @@ void Shader::setMat3(const char* name, const glm::mat3& mat) const
 	glUniformMatrix3fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
 }
 
-Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode, bool serialize) 
-    : ISerializable(serialize)
+Shader::Shader(std::string name, const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode, bool serialize)
+    : ISerializable(serialize), shaderName(name)
 {
     // * Shader compilation ==============================================
     unsigned int vertex, fragment, geometry;
