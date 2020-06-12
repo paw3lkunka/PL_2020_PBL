@@ -119,7 +119,11 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //some code here...
+            auto* ea = objectModule.newEmptyComponent<EnemyAttack>();
+                ea->activationValue = 100;
+                ea->incrementValue = 1;
+                ea->successChance = 0.5f;
+                objectModule.getEntityPtrByName("TMP enemy")->addComponent(ea);
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
