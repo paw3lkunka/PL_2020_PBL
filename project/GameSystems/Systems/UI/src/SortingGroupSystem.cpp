@@ -41,13 +41,13 @@ void SortingGroupSystem::setChildrenTransparency(RectTransform* parent)
     }
     else if(auto image = parent->entityPtr->getComponentPtr<UiRenderer>())
     {
-        glm::vec4 color = image->material->getVec4("color");
+        glm::vec4 color = *image->material->getVec4Ptr("color");
         color.a = sortingGroupPtr->groupTransparency;
         image->material->setVec4("color", color);
     }
     else if(auto text = parent->entityPtr->getComponentPtr<TextRenderer>())
     {
-        glm::vec4 color = text->material->getVec4("color");
+        glm::vec4 color = *text->material->getVec4Ptr("color");
         color.a = sortingGroupPtr->groupTransparency;
         text->material->setVec4("color", color);
     }

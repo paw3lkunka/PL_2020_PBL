@@ -8,6 +8,7 @@ class Entity;
 class Shader;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 enum class FileType: unsigned int;
 enum class RenderType;
@@ -193,7 +194,7 @@ public:
      * @param geometryShaderPath path of geometry shader (optional)
      * @return Shader* pointer to shader
      */
-    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
+    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr, bool serialize = true);
 
     /**
      * @brief Checks if texture exist, if doesn't - makes it
@@ -205,7 +206,7 @@ public:
     Texture* newTexture(const char* filePath, TextureCreateInfo createInfo);
 
     /**
-     * @brief Checks if cubemap exist, if doesn't - makes it
+     * @brief Checks if cubemap exists, if doesn't - makes it
      * 
      * @param createInfo basic create info (without information from file like width, height)
      * @param frontPath front wall path
@@ -223,6 +224,27 @@ public:
                         const char* backPath,
                         const char* topPath,
                         const char* bottomPath);
+
+    /**
+     * @brief Checks if hdr cubemap exists, if doesn't - makes it
+     * 
+     * @param createInfo basic create info (without information from file like width, height)
+     * @param frontPath front wall path
+     * @param leftPath left wall path
+     * @param rightPath right wall path
+     * @param backPath back wall path
+     * @param topPath top wall path
+     * @param bottomPath bottom wall path
+     * @return CubemapHdr* pointer to hdr cubemap
+     */
+    CubemapHdr* newHdrCubemap(TextureCreateInfo createInfo, 
+                                const char* frontPath, 
+                                const char* leftPath, 
+                                const char* rightPath,
+                                const char* backPath,
+                                const char* topPath,
+                                const char* bottomPath);
+
 
     /**
      * @brief Checks if model was loaded before, if doesn't - loads it

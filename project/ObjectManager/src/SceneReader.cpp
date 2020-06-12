@@ -3,6 +3,7 @@
 #include "ObjectExceptions.inl"
 #include "FileStructures.inl"
 #include "Core.hpp"
+#include "CubemapHdr.hpp"
 #include "Collider.inl"
 #include "Camera.inl"
 #include "Font.hpp"
@@ -36,6 +37,7 @@ void SceneReader::readScene(std::string filePath)
     readShaders();
     readTextures();
     readCubemaps();
+    readCubemapsHdr();
     readMaterials();
     readFonts();
     readEntities();
@@ -122,6 +124,7 @@ void SceneReader::readCubemaps()
     for(int i = 0; i < cubemapsAmount; ++i)
     {
         name = setName("cubemap", i);
+
         frontPath = j->at(name).at("frontPath").get<std::string>();
         bottomPath = j->at(name).at("bottomPath").get<std::string>();
         leftPath = j->at(name).at("leftPath").get<std::string>();
@@ -138,6 +141,35 @@ void SceneReader::readCubemaps()
         texCreateInfo.wrapMode = GLenum(j->at(name).at("creationInfo").at("wrapMode").get<unsigned int>());
 
         auto cubemap = objModulePtr->newCubemap(texCreateInfo, frontPath.c_str(), leftPath.c_str(), rightPath.c_str(), backPath.c_str(), topPath.c_str(), bottomPath.c_str());
+        cubemap->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+    }
+}
+
+void SceneReader::readCubemapsHdr()
+{
+    int cubemapsAmount = j->at("Amounts").at("cubemapsHdr").get<int>();
+    std::string name;
+    std::string backPath, frontPath, leftPath, rightPath, topPath, bottomPath;
+    TextureCreateInfo texCreateInfo;
+    for(int i = 0; i < cubemapsAmount; ++i)
+    {
+        name = setName("cubemapHdr", i);
+        frontPath = j->at(name).at("frontPath").get<std::string>();
+        bottomPath = j->at(name).at("bottomPath").get<std::string>();
+        leftPath = j->at(name).at("leftPath").get<std::string>();
+        rightPath = j->at(name).at("rightPath").get<std::string>();
+        topPath = j->at(name).at("topPath").get<std::string>();
+        backPath = j->at(name).at("backPath").get<std::string>();
+
+        texCreateInfo.generateMipmaps = j->at(name).at("creationInfo").at("generateMipmaps").get<bool>();
+        texCreateInfo.format = GLenum(j->at(name).at("creationInfo").at("format").get<unsigned int>());
+        texCreateInfo.width = j->at(name).at("creationInfo").at("width").get<int>();
+        texCreateInfo.height = j->at(name).at("creationInfo").at("height").get<int>();
+        texCreateInfo.magFilter = GLenum(j->at(name).at("creationInfo").at("magFilter").get<unsigned int>());
+        texCreateInfo.minFilter = GLenum(j->at(name).at("creationInfo").at("minFilter").get<unsigned int>());
+        texCreateInfo.wrapMode = GLenum(j->at(name).at("creationInfo").at("wrapMode").get<unsigned int>());
+
+        auto cubemap = objModulePtr->newHdrCubemap(texCreateInfo, frontPath.c_str(), leftPath.c_str(), rightPath.c_str(), backPath.c_str(), topPath.c_str(), bottomPath.c_str());
         cubemap->serializationID = j->at(name).at("serializationID").get<unsigned int>();
     }
 }
@@ -168,18 +200,30 @@ void SceneReader::readMaterials()
         auto material = objModulePtr->newMaterial(shader, matName, (RenderType)renderingType, instancingEnabled);
         material->serializationID = j->at(name).at("serializationID").get<unsigned int>();
 
-
+        children.clear();
         j->at(name).at("cubemaps").get_to(children);
         for(auto iter : children)
         {
             unsigned int cubemapID = iter.second;
             auto cubemap = objModulePtr->objectContainer.getCubemapFromSerializationID(cubemapID);
-            material->setCubemap(iter.first, cubemap);
+            material->setTexture(iter.first, cubemap);
         }
 
+        children.clear();
+        j->at(name).at("cubemapsHdr").get_to(children);
+        for(auto iter : children)
+        {
+            unsigned int cubemapID = iter.second;
+            auto cubemap = objModulePtr->objectContainer.getCubemapHdrFromSerializationID(cubemapID);
+            material->setTexture(iter.first, cubemap);
+        }
+
+        textures.clear();
         j->at(name).at("textures").get_to(textures);
+        std::cout << "Texture count for " << name << ": " << textures.size() << '\n';
         for(auto iter : textures)
         {
+            std::cout << "Texture at " << name << ": " << iter.first << '\n';
             std::string texPath = iter.second;
             auto texture = objModulePtr->objectContainer.getTexturePtrByFilePath(texPath.c_str());
             material->setTexture(iter.first, texture);
@@ -199,6 +243,15 @@ void SceneReader::readMaterials()
         for(auto iter : floats)
         {
             material->setFloat(iter.first, iter.second);
+        }
+
+        structMap.clear();
+        j->at(name).at("vec2s").get_to(structMap);
+        for(auto iter : structMap)
+        {
+            std::string uniName = iter.first;
+            glm::vec2 vector(iter.second[0], iter.second[1]);
+            material->setVec2(uniName, vector);
         }
 
         structMap.clear();
@@ -231,6 +284,11 @@ void SceneReader::readMaterials()
             
             glm::mat4 matrix(c0, c1, c2, c3);
             material->setMat4(uniName, matrix);
+        }
+
+        if (j->at(name).at("isSkybox").get<bool>())
+        {
+            GetCore().rendererModule.setSkybox(material);
         }
     }
 }
@@ -296,6 +354,11 @@ void SceneReader::readComponents()
         {
             std::cout << "MeshRenderer" << std::endl;
             readMeshRenderer(name);
+        }
+        else if(componentType == "TerrainRenderer")
+        {
+            std::cout << "TerrainRenderer" << std::endl;
+            readTerrainRenderer(name);
         }
         else if(componentType == "SphereCollider")
         {
@@ -622,6 +685,48 @@ void SceneReader::readMeshRenderer(std::string name)
 
         std::string meshPath = j->at(name).at("mesh").get<std::string>();
         renderer->mesh = objModulePtr->objectContainer.getMeshByMeshPath(meshPath);
+
+        assignToEntity(name, renderer);
+    }
+}
+
+void SceneReader::readTerrainRenderer(std::string name)
+{
+    unsigned int entityID = j->at(name).at("entity id").get<unsigned int>();
+    auto entity = objModulePtr->objectContainer.getEntityFromID(entityID);
+    auto component = entity->getComponentPtr<TerrainRenderer>();
+
+    auto serializationID = j->at(name).at("serializationID").get<unsigned int>();
+    if(component != nullptr)
+    {
+        auto renderer = dynamic_cast<TerrainRenderer*>(component);
+        try
+        {
+            unsigned int childID = j->at(name).at("material").get<unsigned int>();
+            renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        }
+        catch(nlohmann::detail::out_of_range)
+        {
+            renderer->material = nullptr;
+        }
+        unsigned int texID = j->at(name).at("splatmap").get<unsigned int>();
+        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
+        renderer->serializationID = serializationID;
+        return;
+    }
+    else
+    {
+        auto renderer = objModulePtr->newEmptyComponent<TerrainRenderer>();
+        renderer->serializationID = serializationID;
+
+        unsigned int childID = j->at(name).at("material").get<unsigned int>();
+        renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+
+        childID = j->at(name).at("mesh").get<unsigned int>();
+        renderer->terrainMesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+
+        unsigned int texID = j->at(name).at("splatmap").get<unsigned int>();
+        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
 
         assignToEntity(name, renderer);
     }

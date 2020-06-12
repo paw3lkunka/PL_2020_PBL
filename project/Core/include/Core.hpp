@@ -29,6 +29,7 @@
 #include "SystemsPreDeclarations.hxx"
 
 // * Others
+#include <filesystem>
 
 class Message;
 enum class Event : unsigned int;
@@ -320,6 +321,7 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
+        static TerrainRendererSystem terrainSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;

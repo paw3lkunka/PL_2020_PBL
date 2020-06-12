@@ -168,6 +168,10 @@ void ConsoleModule::receiveMessage(Message msg)
         //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;
 
+    case Event::RENDERER_ADD_TERRAIN_TO_QUEUE:
+        //std::cout << "console here: RENDERER_ADD_TERRAIN_TO_QUEUE.\n";
+        break;
+
     case Event::RENDERER_ADD_UI_TO_QUEUE:
         //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;

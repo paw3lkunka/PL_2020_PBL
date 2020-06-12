@@ -172,6 +172,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Camera* temp = entityPtr->getComponentPtr<Camera>())
+    {
+        if(ImGui::CollapsingHeader("Camera"))
+        {
+            drawCamera(temp);
+        }
+    }
+    
     if(Button* temp = entityPtr->getComponentPtr<Button>())
     {
         if(ImGui::CollapsingHeader("Button"))
@@ -314,7 +322,7 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
     changed |= mass = ImGui::DragFloat("Mass", &rBodyPtr->mass);
     changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
     changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
-    
+
     std::string bType = "ERROR";
     switch (rBodyPtr->type)
     {
@@ -355,6 +363,12 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragInt("Counter max value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
+}
+
+void EditorModule::drawCamera(Camera* cameraPtr)
+{
+    ImGui::DragFloat("Exposure", &cameraPtr->exposure);
+    ImGui::DragFloat("Fov", &cameraPtr->getFrustumModifiable().fieldOfView);
 }
 
 void EditorModule::drawEnemyAttack(EnemyAttack* attackPtr)

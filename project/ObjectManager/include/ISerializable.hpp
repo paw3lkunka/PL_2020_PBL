@@ -9,12 +9,14 @@ class ISerializable
 public:
     ISerializable(bool makeSerializable = true) 
     {
+        serialize = makeSerializable;
         if (makeSerializable)
         {
             serializationID = nextID++;
         }
     }
     unsigned int serializationID;
+    bool serialize;
 
     virtual ~ISerializable() = default;
 private:

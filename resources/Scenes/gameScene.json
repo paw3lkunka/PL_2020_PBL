@@ -1,13 +1,14 @@
 {
     "Amounts": {
-        "components": 18,
-        "cubemaps": 1,
-        "entities": 8,
+        "components": 108,
+        "cubemaps": 0,
+        "cubemapsHdr": 1,
+        "entities": 54,
         "fonts": 0,
-        "materials": 3,
-        "meshes": 1,
+        "materials": 4,
+        "meshes": 51,
         "shaders": 4,
-        "textures": 2
+        "textures": 67
     },
     "component000": {
         "entity id": 0,
@@ -17,48 +18,10 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 7,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component001": {
-        "entity id": 0,
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 9,
-        "type": "MeshRenderer"
-    },
-    "component002": {
-        "entity id": 1,
-        "farPlane": 2500.0,
-        "fieldOfView": 80.0,
-        "isMain": true,
-        "nearPlane": 0.10000000149011612,
-        "projectionMode": 0,
-        "serializationID": 14,
-        "type": "Camera"
-    },
-    "component003": {
-        "entity id": 1,
-        "localPosition": {
-            "x": -50.93379211425781,
-            "y": 22.916799545288086,
-            "z": -52.16506576538086
-        },
-        "localRotation": {
-            "w": -0.3615317940711975,
-            "x": 0.008204305544495583,
-            "y": 0.9320837259292603,
-            "z": 0.021151944994926453
+            "w": 0.21315144002437592,
+            "x": 0.037584349513053894,
+            "y": 0.9614638686180115,
+            "z": -0.16953203082084656
         },
         "localScale": {
             "x": 1.0,
@@ -69,29 +32,73 @@
         "transform parentID": 0,
         "type": "Transform"
     },
+    "component001": {
+        "color": {
+            "b": 1.0,
+            "g": 1.0,
+            "r": 1.0
+        },
+        "entity id": 0,
+        "intensity": 1.0,
+        "lightType": 0,
+        "serializationID": 16,
+        "type": "Light"
+    },
+    "component002": {
+        "entity id": 1,
+        "farPlane": 2500.0,
+        "fieldOfView": 80.0,
+        "isMain": true,
+        "nearPlane": 0.10000000149011612,
+        "projectionMode": 0,
+        "serializationID": 18,
+        "type": "Camera"
+    },
+    "component003": {
+        "entity id": 1,
+        "localPosition": {
+            "x": 9.680521965026855,
+            "y": 20.80162239074707,
+            "z": -5.704916000366211
+        },
+        "localRotation": {
+            "w": 0.30950477719306946,
+            "x": -0.06606947630643845,
+            "y": 0.9276983141899109,
+            "z": 0.19803422689437866
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 19,
+        "transform parentID": 0,
+        "type": "Transform"
+    },
     "component004": {
         "at": {
-            "x": 0.6736087203025818,
-            "y": -0.04536300152540207,
-            "z": 0.7376947402954102
+            "x": -0.5480860471725464,
+            "y": -0.40832966566085815,
+            "z": 0.7299785614013672
         },
         "entity id": 1,
-        "gain": 0.5,
+        "gain": 1.0,
         "isCurrent": 1,
-        "serializationID": 16,
+        "serializationID": 20,
         "type": "AudioListener",
         "up": {
-            "x": 0.03058840148150921,
-            "y": 0.9989705681800842,
-            "z": 0.03349853307008743
+            "x": -0.24517016112804413,
+            "y": 0.9128345251083374,
+            "z": 0.3265343904495239
         }
     },
     "component005": {
         "entity id": 2,
         "localPosition": {
-            "x": 20.5,
-            "y": 0.0,
-            "z": 10.0
+            "x": 50.0,
+            "y": -100.0,
+            "z": -50.0
         },
         "localRotation": {
             "w": 1.0,
@@ -100,85 +107,50 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
-        "serializationID": 18,
+        "serializationID": 36,
         "transform parentID": 0,
         "type": "Transform"
     },
     "component006": {
-        "entity id": 2,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 19,
-        "type": "MeshRenderer"
+        "entity id": 3,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": -100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 38,
+        "transform parentID": 36,
+        "type": "Transform"
     },
     "component007": {
         "entity id": 3,
-        "localPosition": {
-            "x": -20.5,
-            "y": 0.0,
-            "z": 10.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
-        },
-        "serializationID": 21,
-        "transform parentID": 0,
-        "type": "Transform"
+        "material": 34,
+        "mesh": 39,
+        "serializationID": 40,
+        "splatmap": 241,
+        "type": "TerrainRenderer"
     },
     "component008": {
-        "entity id": 3,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 22,
-        "type": "MeshRenderer"
-    },
-    "component009": {
-        "autoPlay": true,
-        "clips": [
-            "Resources/Audios/shingeki.wav"
-        ],
-        "coneInnerAngle": 360.0,
-        "coneOuterAngle": 360.0,
-        "coneOuterGain": 0.0,
-        "direction": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "entity id": 3,
-        "gain": 0.10000000149011612,
-        "isLooping": 1,
-        "isRelativeToListener": 1,
-        "listeners": [
-            16
-        ],
-        "maxDistance": "infinity",
-        "maxGain": 1.0,
-        "minGain": 0.0,
-        "pitch": 1.0,
-        "referenceDistance": 1.0,
-        "rolloffFactor": 1.0,
-        "serializationID": 23,
-        "type": "AudioSource"
-    },
-    "component010": {
         "entity id": 4,
         "localPosition": {
-            "x": 30.5,
+            "x": 100.0,
             "y": 0.0,
-            "z": 10.0
+            "z": 0.0
         },
         "localRotation": {
             "w": 1.0,
@@ -187,27 +159,58 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
-        "serializationID": 25,
-        "transform parentID": 0,
+        "serializationID": 42,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component009": {
+        "entity id": 4,
+        "material": 34,
+        "mesh": 43,
+        "serializationID": 44,
+        "splatmap": 242,
+        "type": "TerrainRenderer"
+    },
+    "component010": {
+        "entity id": 5,
+        "localPosition": {
+            "x": 100.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 46,
+        "transform parentID": 36,
         "type": "Transform"
     },
     "component011": {
-        "entity id": 4,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 26,
-        "type": "MeshRenderer"
+        "entity id": 5,
+        "material": 34,
+        "mesh": 47,
+        "serializationID": 48,
+        "splatmap": 243,
+        "type": "TerrainRenderer"
     },
     "component012": {
-        "entity id": 5,
+        "entity id": 6,
         "localPosition": {
-            "x": -30.5,
+            "x": 100.0,
             "y": 0.0,
-            "z": 10.0
+            "z": 200.0
         },
         "localRotation": {
             "w": 1.0,
@@ -216,27 +219,28 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
-        "serializationID": 28,
-        "transform parentID": 0,
+        "serializationID": 50,
+        "transform parentID": 36,
         "type": "Transform"
     },
     "component013": {
-        "entity id": 5,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 29,
-        "type": "MeshRenderer"
+        "entity id": 6,
+        "material": 34,
+        "mesh": 51,
+        "serializationID": 52,
+        "splatmap": 244,
+        "type": "TerrainRenderer"
     },
     "component014": {
-        "entity id": 6,
+        "entity id": 7,
         "localPosition": {
-            "x": -30.5,
-            "y": 10.0,
-            "z": 10.0
+            "x": 100.0,
+            "y": 0.0,
+            "z": 300.0
         },
         "localRotation": {
             "w": 1.0,
@@ -245,27 +249,28 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
-        "serializationID": 31,
-        "transform parentID": 0,
+        "serializationID": 54,
+        "transform parentID": 36,
         "type": "Transform"
     },
     "component015": {
-        "entity id": 6,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 32,
-        "type": "MeshRenderer"
+        "entity id": 7,
+        "material": 34,
+        "mesh": 55,
+        "serializationID": 56,
+        "splatmap": 245,
+        "type": "TerrainRenderer"
     },
     "component016": {
-        "entity id": 7,
+        "entity id": 8,
         "localPosition": {
-            "x": 30.5,
-            "y": 10.0,
-            "z": 10.0
+            "x": 100.0,
+            "y": 0.0,
+            "z": 400.0
         },
         "localRotation": {
             "w": 1.0,
@@ -274,120 +279,2021 @@
             "z": 0.0
         },
         "localScale": {
-            "x": 10.0,
-            "y": 10.0,
-            "z": 10.0
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
         },
-        "serializationID": 34,
-        "transform parentID": 0,
+        "serializationID": 58,
+        "transform parentID": 36,
         "type": "Transform"
     },
     "component017": {
-        "entity id": 7,
-        "material": "unlitInstancedMat",
-        "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 35,
-        "type": "MeshRenderer"
+        "entity id": 8,
+        "material": 34,
+        "mesh": 59,
+        "serializationID": 60,
+        "splatmap": 246,
+        "type": "TerrainRenderer"
     },
-    "cubemap000": {
-        "backPath": "Resources/Textures/skybox_02/pz.png",
-        "bottomPath": "Resources/Textures/skybox_02/ny.png",
+    "component018": {
+        "entity id": 9,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": -100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 62,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component019": {
+        "entity id": 9,
+        "material": 34,
+        "mesh": 63,
+        "serializationID": 64,
+        "splatmap": 247,
+        "type": "TerrainRenderer"
+    },
+    "component020": {
+        "entity id": 10,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 66,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component021": {
+        "entity id": 10,
+        "material": 34,
+        "mesh": 67,
+        "serializationID": 68,
+        "splatmap": 248,
+        "type": "TerrainRenderer"
+    },
+    "component022": {
+        "entity id": 11,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 70,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component023": {
+        "entity id": 11,
+        "material": 34,
+        "mesh": 71,
+        "serializationID": 72,
+        "splatmap": 249,
+        "type": "TerrainRenderer"
+    },
+    "component024": {
+        "entity id": 12,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 74,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component025": {
+        "entity id": 12,
+        "material": 34,
+        "mesh": 75,
+        "serializationID": 76,
+        "splatmap": 250,
+        "type": "TerrainRenderer"
+    },
+    "component026": {
+        "entity id": 13,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 78,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component027": {
+        "entity id": 13,
+        "material": 34,
+        "mesh": 79,
+        "serializationID": 80,
+        "splatmap": 251,
+        "type": "TerrainRenderer"
+    },
+    "component028": {
+        "entity id": 14,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 82,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component029": {
+        "entity id": 14,
+        "material": 34,
+        "mesh": 83,
+        "serializationID": 84,
+        "splatmap": 252,
+        "type": "TerrainRenderer"
+    },
+    "component030": {
+        "entity id": 15,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 86,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component031": {
+        "entity id": 15,
+        "material": 34,
+        "mesh": 87,
+        "serializationID": 88,
+        "splatmap": 253,
+        "type": "TerrainRenderer"
+    },
+    "component032": {
+        "entity id": 16,
+        "localPosition": {
+            "x": -0.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 90,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component033": {
+        "entity id": 16,
+        "material": 34,
+        "mesh": 91,
+        "serializationID": 92,
+        "splatmap": 254,
+        "type": "TerrainRenderer"
+    },
+    "component034": {
+        "entity id": 17,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 94,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component035": {
+        "entity id": 17,
+        "material": 34,
+        "mesh": 95,
+        "serializationID": 96,
+        "splatmap": 255,
+        "type": "TerrainRenderer"
+    },
+    "component036": {
+        "entity id": 18,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 98,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component037": {
+        "entity id": 18,
+        "material": 34,
+        "mesh": 99,
+        "serializationID": 100,
+        "splatmap": 256,
+        "type": "TerrainRenderer"
+    },
+    "component038": {
+        "entity id": 19,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 102,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component039": {
+        "entity id": 19,
+        "material": 34,
+        "mesh": 103,
+        "serializationID": 104,
+        "splatmap": 257,
+        "type": "TerrainRenderer"
+    },
+    "component040": {
+        "entity id": 20,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 106,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component041": {
+        "entity id": 20,
+        "material": 34,
+        "mesh": 107,
+        "serializationID": 108,
+        "splatmap": 258,
+        "type": "TerrainRenderer"
+    },
+    "component042": {
+        "entity id": 21,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 110,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component043": {
+        "entity id": 21,
+        "material": 34,
+        "mesh": 111,
+        "serializationID": 112,
+        "splatmap": 259,
+        "type": "TerrainRenderer"
+    },
+    "component044": {
+        "entity id": 22,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 114,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component045": {
+        "entity id": 22,
+        "material": 34,
+        "mesh": 115,
+        "serializationID": 116,
+        "splatmap": 260,
+        "type": "TerrainRenderer"
+    },
+    "component046": {
+        "entity id": 23,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 118,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component047": {
+        "entity id": 23,
+        "material": 34,
+        "mesh": 119,
+        "serializationID": 120,
+        "splatmap": 261,
+        "type": "TerrainRenderer"
+    },
+    "component048": {
+        "entity id": 24,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 122,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component049": {
+        "entity id": 24,
+        "material": 34,
+        "mesh": 123,
+        "serializationID": 124,
+        "splatmap": 262,
+        "type": "TerrainRenderer"
+    },
+    "component050": {
+        "entity id": 25,
+        "localPosition": {
+            "x": -100.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 126,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component051": {
+        "entity id": 25,
+        "material": 34,
+        "mesh": 127,
+        "serializationID": 128,
+        "splatmap": 263,
+        "type": "TerrainRenderer"
+    },
+    "component052": {
+        "entity id": 26,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 130,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component053": {
+        "entity id": 26,
+        "material": 34,
+        "mesh": 131,
+        "serializationID": 132,
+        "splatmap": 264,
+        "type": "TerrainRenderer"
+    },
+    "component054": {
+        "entity id": 27,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 134,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component055": {
+        "entity id": 27,
+        "material": 34,
+        "mesh": 135,
+        "serializationID": 136,
+        "splatmap": 265,
+        "type": "TerrainRenderer"
+    },
+    "component056": {
+        "entity id": 28,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 138,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component057": {
+        "entity id": 28,
+        "material": 34,
+        "mesh": 139,
+        "serializationID": 140,
+        "splatmap": 266,
+        "type": "TerrainRenderer"
+    },
+    "component058": {
+        "entity id": 29,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 142,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component059": {
+        "entity id": 29,
+        "material": 34,
+        "mesh": 143,
+        "serializationID": 144,
+        "splatmap": 267,
+        "type": "TerrainRenderer"
+    },
+    "component060": {
+        "entity id": 30,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 146,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component061": {
+        "entity id": 30,
+        "material": 34,
+        "mesh": 147,
+        "serializationID": 148,
+        "splatmap": 268,
+        "type": "TerrainRenderer"
+    },
+    "component062": {
+        "entity id": 31,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 150,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component063": {
+        "entity id": 31,
+        "material": 34,
+        "mesh": 151,
+        "serializationID": 152,
+        "splatmap": 269,
+        "type": "TerrainRenderer"
+    },
+    "component064": {
+        "entity id": 32,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 154,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component065": {
+        "entity id": 32,
+        "material": 34,
+        "mesh": 155,
+        "serializationID": 156,
+        "splatmap": 270,
+        "type": "TerrainRenderer"
+    },
+    "component066": {
+        "entity id": 33,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 158,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component067": {
+        "entity id": 33,
+        "material": 34,
+        "mesh": 159,
+        "serializationID": 160,
+        "splatmap": 271,
+        "type": "TerrainRenderer"
+    },
+    "component068": {
+        "entity id": 34,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 162,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component069": {
+        "entity id": 34,
+        "material": 34,
+        "mesh": 163,
+        "serializationID": 164,
+        "splatmap": 272,
+        "type": "TerrainRenderer"
+    },
+    "component070": {
+        "entity id": 35,
+        "localPosition": {
+            "x": -200.0,
+            "y": 0.0,
+            "z": 900.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 166,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component071": {
+        "entity id": 35,
+        "material": 34,
+        "mesh": 167,
+        "serializationID": 168,
+        "splatmap": 273,
+        "type": "TerrainRenderer"
+    },
+    "component072": {
+        "entity id": 36,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 170,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component073": {
+        "entity id": 36,
+        "material": 34,
+        "mesh": 171,
+        "serializationID": 172,
+        "splatmap": 274,
+        "type": "TerrainRenderer"
+    },
+    "component074": {
+        "entity id": 37,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 174,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component075": {
+        "entity id": 37,
+        "material": 34,
+        "mesh": 175,
+        "serializationID": 176,
+        "splatmap": 275,
+        "type": "TerrainRenderer"
+    },
+    "component076": {
+        "entity id": 38,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 178,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component077": {
+        "entity id": 38,
+        "material": 34,
+        "mesh": 179,
+        "serializationID": 180,
+        "splatmap": 276,
+        "type": "TerrainRenderer"
+    },
+    "component078": {
+        "entity id": 39,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 182,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component079": {
+        "entity id": 39,
+        "material": 34,
+        "mesh": 183,
+        "serializationID": 184,
+        "splatmap": 277,
+        "type": "TerrainRenderer"
+    },
+    "component080": {
+        "entity id": 40,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 186,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component081": {
+        "entity id": 40,
+        "material": 34,
+        "mesh": 187,
+        "serializationID": 188,
+        "splatmap": 278,
+        "type": "TerrainRenderer"
+    },
+    "component082": {
+        "entity id": 41,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 190,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component083": {
+        "entity id": 41,
+        "material": 34,
+        "mesh": 191,
+        "serializationID": 192,
+        "splatmap": 279,
+        "type": "TerrainRenderer"
+    },
+    "component084": {
+        "entity id": 42,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 194,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component085": {
+        "entity id": 42,
+        "material": 34,
+        "mesh": 195,
+        "serializationID": 196,
+        "splatmap": 280,
+        "type": "TerrainRenderer"
+    },
+    "component086": {
+        "entity id": 43,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 198,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component087": {
+        "entity id": 43,
+        "material": 34,
+        "mesh": 199,
+        "serializationID": 200,
+        "splatmap": 281,
+        "type": "TerrainRenderer"
+    },
+    "component088": {
+        "entity id": 44,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 202,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component089": {
+        "entity id": 44,
+        "material": 34,
+        "mesh": 203,
+        "serializationID": 204,
+        "splatmap": 282,
+        "type": "TerrainRenderer"
+    },
+    "component090": {
+        "entity id": 45,
+        "localPosition": {
+            "x": -300.0,
+            "y": 0.0,
+            "z": 900.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 206,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component091": {
+        "entity id": 45,
+        "material": 34,
+        "mesh": 207,
+        "serializationID": 208,
+        "splatmap": 283,
+        "type": "TerrainRenderer"
+    },
+    "component092": {
+        "entity id": 46,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 100.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 210,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component093": {
+        "entity id": 46,
+        "material": 34,
+        "mesh": 211,
+        "serializationID": 212,
+        "splatmap": 284,
+        "type": "TerrainRenderer"
+    },
+    "component094": {
+        "entity id": 47,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 200.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 214,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component095": {
+        "entity id": 47,
+        "material": 34,
+        "mesh": 215,
+        "serializationID": 216,
+        "splatmap": 285,
+        "type": "TerrainRenderer"
+    },
+    "component096": {
+        "entity id": 48,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 300.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 218,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component097": {
+        "entity id": 48,
+        "material": 34,
+        "mesh": 219,
+        "serializationID": 220,
+        "splatmap": 286,
+        "type": "TerrainRenderer"
+    },
+    "component098": {
+        "entity id": 49,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 400.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 222,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component099": {
+        "entity id": 49,
+        "material": 34,
+        "mesh": 223,
+        "serializationID": 224,
+        "splatmap": 287,
+        "type": "TerrainRenderer"
+    },
+    "component100": {
+        "entity id": 50,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 500.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 226,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component101": {
+        "entity id": 50,
+        "material": 34,
+        "mesh": 227,
+        "serializationID": 228,
+        "splatmap": 288,
+        "type": "TerrainRenderer"
+    },
+    "component102": {
+        "entity id": 51,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 600.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 230,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component103": {
+        "entity id": 51,
+        "material": 34,
+        "mesh": 231,
+        "serializationID": 232,
+        "splatmap": 289,
+        "type": "TerrainRenderer"
+    },
+    "component104": {
+        "entity id": 52,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 700.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 234,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component105": {
+        "entity id": 52,
+        "material": 34,
+        "mesh": 235,
+        "serializationID": 236,
+        "splatmap": 290,
+        "type": "TerrainRenderer"
+    },
+    "component106": {
+        "entity id": 53,
+        "localPosition": {
+            "x": -400.0,
+            "y": 0.0,
+            "z": 800.0
+        },
+        "localRotation": {
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 238,
+        "transform parentID": 36,
+        "type": "Transform"
+    },
+    "component107": {
+        "entity id": 53,
+        "material": 34,
+        "mesh": 239,
+        "serializationID": 240,
+        "splatmap": 291,
+        "type": "TerrainRenderer"
+    },
+    "cubemapHdr000": {
+        "backPath": "Resources/Textures/skybox_02/pz.hdr",
+        "bottomPath": "Resources/Textures/skybox_02/ny.hdr",
         "creationInfo": {
-            "format": 6408,
-            "generateMipmaps": true,
+            "format": 6407,
+            "generateMipmaps": false,
             "height": 2048,
             "magFilter": 9729,
             "minFilter": 9729,
             "width": 2048,
             "wrapMode": 33071
         },
-        "frontPath": "Resources/Textures/skybox_02/nz.png",
-        "leftPath": "Resources/Textures/skybox_02/nx.png",
-        "rightPath": "Resources/Textures/skybox_02/px.png",
-        "serializationID": 10,
-        "topPath": "Resources/Textures/skybox_02/py.png"
+        "frontPath": "Resources/Textures/skybox_02/nz.hdr",
+        "leftPath": "Resources/Textures/skybox_02/nx.hdr",
+        "rightPath": "Resources/Textures/skybox_02/px.hdr",
+        "serializationID": 9,
+        "topPath": "Resources/Textures/skybox_02/py.hdr"
     },
     "entity000": {
         "components": [
-            7,
-            9
-        ],
-        "id": 0,
-        "name": "Box001",
-        "serializationID": 6
-    },
-    "entity001": {
-        "components": [
-            14,
             15,
             16
         ],
+        "id": 0,
+        "name": "directionalLight",
+        "serializationID": 14
+    },
+    "entity001": {
+        "components": [
+            18,
+            19,
+            20
+        ],
         "id": 1,
         "name": "Camera",
-        "serializationID": 13
+        "serializationID": 17
     },
     "entity002": {
         "components": [
-            18,
-            19
+            36
         ],
         "id": 2,
-        "name": "cubeInstanced1",
-        "serializationID": 17
+        "name": "Terrain",
+        "serializationID": 35
     },
     "entity003": {
         "components": [
-            21,
-            22,
-            23
+            38,
+            40
         ],
         "id": 3,
-        "name": "cubeInstanced2",
-        "serializationID": 20
+        "name": "Terrain_(-100.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 37
     },
     "entity004": {
         "components": [
-            25,
-            26
+            42,
+            44
         ],
         "id": 4,
-        "name": "cubeInstanced3",
-        "serializationID": 24
+        "name": "Terrain_(-100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 41
     },
     "entity005": {
         "components": [
-            28,
-            29
+            46,
+            48
         ],
         "id": 5,
-        "name": "cubeInstanced4",
-        "serializationID": 27
+        "name": "Terrain_(-100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 45
     },
     "entity006": {
         "components": [
-            31,
-            32
+            50,
+            52
         ],
         "id": 6,
-        "name": "cubeInstanced5",
-        "serializationID": 30
+        "name": "Terrain_(-100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 49
     },
     "entity007": {
         "components": [
-            34,
-            35
+            54,
+            56
         ],
         "id": 7,
-        "name": "cubeInstanced6",
-        "serializationID": 33
+        "name": "Terrain_(-100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 53
+    },
+    "entity008": {
+        "components": [
+            58,
+            60
+        ],
+        "id": 8,
+        "name": "Terrain_(-100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 57
+    },
+    "entity009": {
+        "components": [
+            62,
+            64
+        ],
+        "id": 9,
+        "name": "Terrain_(0.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 61
+    },
+    "entity010": {
+        "components": [
+            66,
+            68
+        ],
+        "id": 10,
+        "name": "Terrain_(0.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 65
+    },
+    "entity011": {
+        "components": [
+            70,
+            72
+        ],
+        "id": 11,
+        "name": "Terrain_(0.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 69
+    },
+    "entity012": {
+        "components": [
+            74,
+            76
+        ],
+        "id": 12,
+        "name": "Terrain_(0.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 73
+    },
+    "entity013": {
+        "components": [
+            78,
+            80
+        ],
+        "id": 13,
+        "name": "Terrain_(0.0, 0.0, 300.0) (1).obj/defaultobject",
+        "serializationID": 77
+    },
+    "entity014": {
+        "components": [
+            82,
+            84
+        ],
+        "id": 14,
+        "name": "Terrain_(0.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 81
+    },
+    "entity015": {
+        "components": [
+            86,
+            88
+        ],
+        "id": 15,
+        "name": "Terrain_(0.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 85
+    },
+    "entity016": {
+        "components": [
+            90,
+            92
+        ],
+        "id": 16,
+        "name": "Terrain_(0.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 89
+    },
+    "entity017": {
+        "components": [
+            94,
+            96
+        ],
+        "id": 17,
+        "name": "Terrain_(100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 93
+    },
+    "entity018": {
+        "components": [
+            98,
+            100
+        ],
+        "id": 18,
+        "name": "Terrain_(100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 97
+    },
+    "entity019": {
+        "components": [
+            102,
+            104
+        ],
+        "id": 19,
+        "name": "Terrain_(100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 101
+    },
+    "entity020": {
+        "components": [
+            106,
+            108
+        ],
+        "id": 20,
+        "name": "Terrain_(100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 105
+    },
+    "entity021": {
+        "components": [
+            110,
+            112
+        ],
+        "id": 21,
+        "name": "Terrain_(100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 109
+    },
+    "entity022": {
+        "components": [
+            114,
+            116
+        ],
+        "id": 22,
+        "name": "Terrain_(100.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 113
+    },
+    "entity023": {
+        "components": [
+            118,
+            120
+        ],
+        "id": 23,
+        "name": "Terrain_(100.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 117
+    },
+    "entity024": {
+        "components": [
+            122,
+            124
+        ],
+        "id": 24,
+        "name": "Terrain_(100.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 121
+    },
+    "entity025": {
+        "components": [
+            126,
+            128
+        ],
+        "id": 25,
+        "name": "Terrain_(100.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 125
+    },
+    "entity026": {
+        "components": [
+            130,
+            132
+        ],
+        "id": 26,
+        "name": "Terrain_(200.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 129
+    },
+    "entity027": {
+        "components": [
+            134,
+            136
+        ],
+        "id": 27,
+        "name": "Terrain_(200.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 133
+    },
+    "entity028": {
+        "components": [
+            138,
+            140
+        ],
+        "id": 28,
+        "name": "Terrain_(200.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 137
+    },
+    "entity029": {
+        "components": [
+            142,
+            144
+        ],
+        "id": 29,
+        "name": "Terrain_(200.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 141
+    },
+    "entity030": {
+        "components": [
+            146,
+            148
+        ],
+        "id": 30,
+        "name": "Terrain_(200.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 145
+    },
+    "entity031": {
+        "components": [
+            150,
+            152
+        ],
+        "id": 31,
+        "name": "Terrain_(200.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 149
+    },
+    "entity032": {
+        "components": [
+            154,
+            156
+        ],
+        "id": 32,
+        "name": "Terrain_(200.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 153
+    },
+    "entity033": {
+        "components": [
+            158,
+            160
+        ],
+        "id": 33,
+        "name": "Terrain_(200.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 157
+    },
+    "entity034": {
+        "components": [
+            162,
+            164
+        ],
+        "id": 34,
+        "name": "Terrain_(200.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 161
+    },
+    "entity035": {
+        "components": [
+            166,
+            168
+        ],
+        "id": 35,
+        "name": "Terrain_(200.0, 0.0, 900.0).obj/defaultobject",
+        "serializationID": 165
+    },
+    "entity036": {
+        "components": [
+            170,
+            172
+        ],
+        "id": 36,
+        "name": "Terrain_(300.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 169
+    },
+    "entity037": {
+        "components": [
+            174,
+            176
+        ],
+        "id": 37,
+        "name": "Terrain_(300.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 173
+    },
+    "entity038": {
+        "components": [
+            178,
+            180
+        ],
+        "id": 38,
+        "name": "Terrain_(300.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 177
+    },
+    "entity039": {
+        "components": [
+            182,
+            184
+        ],
+        "id": 39,
+        "name": "Terrain_(300.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 181
+    },
+    "entity040": {
+        "components": [
+            186,
+            188
+        ],
+        "id": 40,
+        "name": "Terrain_(300.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 185
+    },
+    "entity041": {
+        "components": [
+            190,
+            192
+        ],
+        "id": 41,
+        "name": "Terrain_(300.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 189
+    },
+    "entity042": {
+        "components": [
+            194,
+            196
+        ],
+        "id": 42,
+        "name": "Terrain_(300.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 193
+    },
+    "entity043": {
+        "components": [
+            198,
+            200
+        ],
+        "id": 43,
+        "name": "Terrain_(300.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 197
+    },
+    "entity044": {
+        "components": [
+            202,
+            204
+        ],
+        "id": 44,
+        "name": "Terrain_(300.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 201
+    },
+    "entity045": {
+        "components": [
+            206,
+            208
+        ],
+        "id": 45,
+        "name": "Terrain_(300.0, 0.0, 900.0).obj/defaultobject",
+        "serializationID": 205
+    },
+    "entity046": {
+        "components": [
+            210,
+            212
+        ],
+        "id": 46,
+        "name": "Terrain_(400.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 209
+    },
+    "entity047": {
+        "components": [
+            214,
+            216
+        ],
+        "id": 47,
+        "name": "Terrain_(400.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 213
+    },
+    "entity048": {
+        "components": [
+            218,
+            220
+        ],
+        "id": 48,
+        "name": "Terrain_(400.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 217
+    },
+    "entity049": {
+        "components": [
+            222,
+            224
+        ],
+        "id": 49,
+        "name": "Terrain_(400.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 221
+    },
+    "entity050": {
+        "components": [
+            226,
+            228
+        ],
+        "id": 50,
+        "name": "Terrain_(400.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 225
+    },
+    "entity051": {
+        "components": [
+            230,
+            232
+        ],
+        "id": 51,
+        "name": "Terrain_(400.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 229
+    },
+    "entity052": {
+        "components": [
+            234,
+            236
+        ],
+        "id": 52,
+        "name": "Terrain_(400.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 233
+    },
+    "entity053": {
+        "components": [
+            238,
+            240
+        ],
+        "id": 53,
+        "name": "Terrain_(400.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 237
     },
     "material000": {
-        "cubemaps": {
-            "cubemap": 10
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "waterMat",
+        "renderingType": 1,
+        "serializationID": 8,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/water/Water_001_COLOR.png",
+            "normal": "Resources/Textures/water/Water_001_NORM.png",
+            "occRouMet": "Resources/Textures/water/Water_001_OccRouSpec.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material001": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "cubemap": 9
         },
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
+        "isSkybox": true,
         "mat4s": {
             "projection": [
                 0.0,
@@ -426,17 +2332,17 @@
                 0.0
             ],
             "viewStatic": [
-                -0.7384549379348755,
-                0.03058839961886406,
-                -0.6736087203025818,
+                -0.7996832132339478,
+                -0.24517014622688293,
+                0.5480859875679016,
                 0.0,
-                -1.862645149230957e-09,
-                0.998970627784729,
-                0.04536300152540207,
+                -2.9802318834981634e-08,
+                0.9128345251083374,
+                0.40832963585853577,
                 0.0,
-                0.674302875995636,
-                0.03349853307008743,
-                -0.7376947402954102,
+                -0.6004220247268677,
+                0.3265343904495239,
+                -0.7299785017967224,
                 0.0,
                 0.0,
                 0.0,
@@ -444,11 +2350,12 @@
                 1.0
             ]
         },
-        "name": "skyboxMat",
+        "name": "skyboxHdrMat",
         "renderingType": 0,
         "serializationID": 11,
-        "shaderName": "SkyboxCubemap",
+        "shaderName": "skyboxShader",
         "textures": {},
+        "vec2s": {},
         "vec3s": {
             "viewPos": [
                 0.0,
@@ -458,12 +2365,70 @@
         },
         "vec4s": {}
     },
-    "material001": {
+    "material002": {
         "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 12
+        },
         "floats": {},
-        "instancingEnabled": true,
+        "instancingEnabled": false,
         "ints": {},
+        "isSkybox": false,
         "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
             "projection": [
                 0.0,
                 0.0,
@@ -501,14 +2466,49 @@
                 0.0
             ]
         },
-        "name": "unlitInstancedMat",
+        "name": "terrainMat",
         "renderingType": 0,
-        "serializationID": 12,
-        "shaderName": "UnlitBillboardInstanced",
+        "serializationID": 34,
+        "shaderName": "terrainShader",
         "textures": {
-            "mainTex": "Resources/Textures/tex.png"
+            "diffuse0": "Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png",
+            "diffuse1": "Resources/Textures/rockGround/rock_ground_02_diff_2k.png",
+            "diffuse2": "Resources/Textures/rockGrass/rockGrass_diffuse.png",
+            "diffuse3": "Resources/Textures/white.png",
+            "directionalShadowMap": "",
+            "normal0": "Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png",
+            "normal1": "Resources/Textures/rockGround/rock_ground_02_nor_2k.png",
+            "normal2": "Resources/Textures/rockGrass/rockGrass_normal.png",
+            "normal3": "Resources/Textures/bump.png",
+            "orm0": "Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png",
+            "orm1": "Resources/Textures/rockGround/rock_ground_02_occRouMet.png",
+            "orm2": "Resources/Textures/occroumet.png",
+            "orm3": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {
+            "uv0scale": [
+                4.0,
+                4.0
+            ],
+            "uv1scale": [
+                10.0,
+                10.0
+            ],
+            "uv2scale": [
+                4.0,
+                4.0
+            ],
+            "uv3scale": [
+                1.0,
+                1.0
+            ]
         },
         "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
             "viewPos": [
                 0.0,
                 0.0,
@@ -516,19 +2516,27 @@
             ]
         },
         "vec4s": {
-            "color": [
-                0.25,
-                1.0,
-                1.0,
-                1.0
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
-    "material002": {
+    "material003": {
         "cubemaps": {},
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
+        "isSkybox": false,
         "mat4s": {
             "model": [
                 0.0,
@@ -569,15 +2577,16 @@
         },
         "name": "LoadingScreenMat",
         "renderingType": 1,
-        "serializationID": 41,
+        "serializationID": 296,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/loding.png"
         },
+        "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.800000011920929,
                 1.0,
                 1.0,
                 1.0
@@ -585,32 +2594,332 @@
         }
     },
     "mesh000": {
-        "filePath": "Resources/Models/Box.FBX",
-        "meshPath": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 8,
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, -100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 39,
+        "type": "MeshCustom"
+    },
+    "mesh001": {
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 43,
+        "type": "MeshCustom"
+    },
+    "mesh002": {
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 47,
+        "type": "MeshCustom"
+    },
+    "mesh003": {
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 51,
+        "type": "MeshCustom"
+    },
+    "mesh004": {
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 55,
+        "type": "MeshCustom"
+    },
+    "mesh005": {
+        "filePath": "Resources/Terrain/Terrain_(-100.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(-100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 59,
+        "type": "MeshCustom"
+    },
+    "mesh006": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, -100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, -100.0).obj/defaultobject",
+        "serializationID": 63,
+        "type": "MeshCustom"
+    },
+    "mesh007": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 67,
+        "type": "MeshCustom"
+    },
+    "mesh008": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 71,
+        "type": "MeshCustom"
+    },
+    "mesh009": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 75,
+        "type": "MeshCustom"
+    },
+    "mesh010": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 300.0) (1).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 300.0) (1).obj/defaultobject",
+        "serializationID": 79,
+        "type": "MeshCustom"
+    },
+    "mesh011": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 83,
+        "type": "MeshCustom"
+    },
+    "mesh012": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 87,
+        "type": "MeshCustom"
+    },
+    "mesh013": {
+        "filePath": "Resources/Terrain/Terrain_(0.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(0.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 91,
+        "type": "MeshCustom"
+    },
+    "mesh014": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 95,
+        "type": "MeshCustom"
+    },
+    "mesh015": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 99,
+        "type": "MeshCustom"
+    },
+    "mesh016": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 103,
+        "type": "MeshCustom"
+    },
+    "mesh017": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 107,
+        "type": "MeshCustom"
+    },
+    "mesh018": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 111,
+        "type": "MeshCustom"
+    },
+    "mesh019": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 115,
+        "type": "MeshCustom"
+    },
+    "mesh020": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 119,
+        "type": "MeshCustom"
+    },
+    "mesh021": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 123,
+        "type": "MeshCustom"
+    },
+    "mesh022": {
+        "filePath": "Resources/Terrain/Terrain_(100.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(100.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 127,
+        "type": "MeshCustom"
+    },
+    "mesh023": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 131,
+        "type": "MeshCustom"
+    },
+    "mesh024": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 135,
+        "type": "MeshCustom"
+    },
+    "mesh025": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 139,
+        "type": "MeshCustom"
+    },
+    "mesh026": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 143,
+        "type": "MeshCustom"
+    },
+    "mesh027": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 147,
+        "type": "MeshCustom"
+    },
+    "mesh028": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 151,
+        "type": "MeshCustom"
+    },
+    "mesh029": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 155,
+        "type": "MeshCustom"
+    },
+    "mesh030": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 159,
+        "type": "MeshCustom"
+    },
+    "mesh031": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 163,
+        "type": "MeshCustom"
+    },
+    "mesh032": {
+        "filePath": "Resources/Terrain/Terrain_(200.0, 0.0, 900.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(200.0, 0.0, 900.0).obj/defaultobject",
+        "serializationID": 167,
+        "type": "MeshCustom"
+    },
+    "mesh033": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 0.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 0.0).obj/defaultobject",
+        "serializationID": 171,
+        "type": "MeshCustom"
+    },
+    "mesh034": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 175,
+        "type": "MeshCustom"
+    },
+    "mesh035": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 179,
+        "type": "MeshCustom"
+    },
+    "mesh036": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 183,
+        "type": "MeshCustom"
+    },
+    "mesh037": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 187,
+        "type": "MeshCustom"
+    },
+    "mesh038": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 191,
+        "type": "MeshCustom"
+    },
+    "mesh039": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 195,
+        "type": "MeshCustom"
+    },
+    "mesh040": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 199,
+        "type": "MeshCustom"
+    },
+    "mesh041": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 203,
+        "type": "MeshCustom"
+    },
+    "mesh042": {
+        "filePath": "Resources/Terrain/Terrain_(300.0, 0.0, 900.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(300.0, 0.0, 900.0).obj/defaultobject",
+        "serializationID": 207,
+        "type": "MeshCustom"
+    },
+    "mesh043": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 100.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 100.0).obj/defaultobject",
+        "serializationID": 211,
+        "type": "MeshCustom"
+    },
+    "mesh044": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 200.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 200.0).obj/defaultobject",
+        "serializationID": 215,
+        "type": "MeshCustom"
+    },
+    "mesh045": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 300.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 300.0).obj/defaultobject",
+        "serializationID": 219,
+        "type": "MeshCustom"
+    },
+    "mesh046": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 400.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 400.0).obj/defaultobject",
+        "serializationID": 223,
+        "type": "MeshCustom"
+    },
+    "mesh047": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 500.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 500.0).obj/defaultobject",
+        "serializationID": 227,
+        "type": "MeshCustom"
+    },
+    "mesh048": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 600.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 600.0).obj/defaultobject",
+        "serializationID": 231,
+        "type": "MeshCustom"
+    },
+    "mesh049": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 700.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 700.0).obj/defaultobject",
+        "serializationID": 235,
+        "type": "MeshCustom"
+    },
+    "mesh050": {
+        "filePath": "Resources/Terrain/Terrain_(400.0, 0.0, 800.0).obj",
+        "meshPath": "Resources/Terrain/Terrain_(400.0, 0.0, 800.0).obj/defaultobject",
+        "serializationID": 239,
         "type": "MeshCustom"
     },
     "shader000": {
-        "fragmentShaderPath": "Resources/Shaders/UnlitTexture/UnlitTexture.frag",
-        "serializationID": 2,
-        "shaderName": "UnlitTexture",
-        "vertexShaderPath": "Resources/Shaders/UnlitTexture/UnlitTexture.vert"
+        "fragmentShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.frag",
+        "serializationID": 4,
+        "shaderName": "standardPbr",
+        "vertexShaderPath": "Resources/Shaders/StandardPBR/StandardPBR.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag",
-        "serializationID": 3,
-        "shaderName": "SkyboxCubemap",
+        "serializationID": 10,
+        "shaderName": "skyboxShader",
         "vertexShaderPath": "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert"
     },
     "shader002": {
-        "fragmentShaderPath": "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag",
-        "serializationID": 4,
-        "shaderName": "UnlitBillboardInstanced",
-        "vertexShaderPath": "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert"
+        "fragmentShaderPath": "Resources/Shaders/StandardTerrain/StandardTerrain.frag",
+        "serializationID": 21,
+        "shaderName": "terrainShader",
+        "vertexShaderPath": "Resources/Shaders/StandardTerrain/StandardTerrain.vert"
     },
     "shader003": {
         "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
-        "serializationID": 40,
+        "serializationID": 295,
         "shaderName": "UiStandard",
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
@@ -621,10 +2930,660 @@
             "minFilter": 9987,
             "wrapMode": 10497
         },
-        "filePath": "Resources/Textures/tex.png",
+        "filePath": "Resources/Textures/water/Water_001_COLOR.png",
         "serializationID": 5
     },
     "texture001": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/water/Water_001_NORM.png",
+        "serializationID": 6
+    },
+    "texture002": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/water/Water_001_OccRouSpec.png",
+        "serializationID": 7
+    },
+    "texture003": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png",
+        "serializationID": 22
+    },
+    "texture004": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png",
+        "serializationID": 23
+    },
+    "texture005": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png",
+        "serializationID": 24
+    },
+    "texture006": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/rockGround/rock_ground_02_diff_2k.png",
+        "serializationID": 25
+    },
+    "texture007": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/rockGround/rock_ground_02_nor_2k.png",
+        "serializationID": 26
+    },
+    "texture008": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/rockGround/rock_ground_02_occRouMet.png",
+        "serializationID": 27
+    },
+    "texture009": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/rockGrass/rockGrass_diffuse.png",
+        "serializationID": 28
+    },
+    "texture010": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/rockGrass/rockGrass_normal.png",
+        "serializationID": 29
+    },
+    "texture011": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/white.png",
+        "serializationID": 30
+    },
+    "texture012": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/black.png",
+        "serializationID": 31
+    },
+    "texture013": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/bump.png",
+        "serializationID": 32
+    },
+    "texture014": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/occroumet.png",
+        "serializationID": 33
+    },
+    "texture015": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, -100.0).png",
+        "serializationID": 241
+    },
+    "texture016": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 0.0).png",
+        "serializationID": 242
+    },
+    "texture017": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 100.0).png",
+        "serializationID": 243
+    },
+    "texture018": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 200.0).png",
+        "serializationID": 244
+    },
+    "texture019": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 300.0).png",
+        "serializationID": 245
+    },
+    "texture020": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 400.0).png",
+        "serializationID": 246
+    },
+    "texture021": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, -100.0).png",
+        "serializationID": 247
+    },
+    "texture022": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 0.0).png",
+        "serializationID": 248
+    },
+    "texture023": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 100.0).png",
+        "serializationID": 249
+    },
+    "texture024": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 200.0).png",
+        "serializationID": 250
+    },
+    "texture025": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 300.0) (1).png",
+        "serializationID": 251
+    },
+    "texture026": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 300.0).png",
+        "serializationID": 252
+    },
+    "texture027": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 400.0).png",
+        "serializationID": 253
+    },
+    "texture028": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(0.0, 0.0, 500.0).png",
+        "serializationID": 254
+    },
+    "texture029": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 0.0).png",
+        "serializationID": 255
+    },
+    "texture030": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 100.0).png",
+        "serializationID": 256
+    },
+    "texture031": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 200.0).png",
+        "serializationID": 257
+    },
+    "texture032": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 300.0).png",
+        "serializationID": 258
+    },
+    "texture033": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 400.0).png",
+        "serializationID": 259
+    },
+    "texture034": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 500.0).png",
+        "serializationID": 260
+    },
+    "texture035": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 600.0).png",
+        "serializationID": 261
+    },
+    "texture036": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 700.0).png",
+        "serializationID": 262
+    },
+    "texture037": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(100.0, 0.0, 800.0).png",
+        "serializationID": 263
+    },
+    "texture038": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 0.0).png",
+        "serializationID": 264
+    },
+    "texture039": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 100.0).png",
+        "serializationID": 265
+    },
+    "texture040": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 200.0).png",
+        "serializationID": 266
+    },
+    "texture041": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 300.0).png",
+        "serializationID": 267
+    },
+    "texture042": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 400.0).png",
+        "serializationID": 268
+    },
+    "texture043": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 500.0).png",
+        "serializationID": 269
+    },
+    "texture044": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 600.0).png",
+        "serializationID": 270
+    },
+    "texture045": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 700.0).png",
+        "serializationID": 271
+    },
+    "texture046": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 800.0).png",
+        "serializationID": 272
+    },
+    "texture047": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(200.0, 0.0, 900.0).png",
+        "serializationID": 273
+    },
+    "texture048": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 0.0).png",
+        "serializationID": 274
+    },
+    "texture049": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 100.0).png",
+        "serializationID": 275
+    },
+    "texture050": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 200.0).png",
+        "serializationID": 276
+    },
+    "texture051": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 300.0).png",
+        "serializationID": 277
+    },
+    "texture052": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 400.0).png",
+        "serializationID": 278
+    },
+    "texture053": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 500.0).png",
+        "serializationID": 279
+    },
+    "texture054": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 600.0).png",
+        "serializationID": 280
+    },
+    "texture055": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 700.0).png",
+        "serializationID": 281
+    },
+    "texture056": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 800.0).png",
+        "serializationID": 282
+    },
+    "texture057": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(300.0, 0.0, 900.0).png",
+        "serializationID": 283
+    },
+    "texture058": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 100.0).png",
+        "serializationID": 284
+    },
+    "texture059": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 200.0).png",
+        "serializationID": 285
+    },
+    "texture060": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 300.0).png",
+        "serializationID": 286
+    },
+    "texture061": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 400.0).png",
+        "serializationID": 287
+    },
+    "texture062": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 500.0).png",
+        "serializationID": 288
+    },
+    "texture063": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 600.0).png",
+        "serializationID": 289
+    },
+    "texture064": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 700.0).png",
+        "serializationID": 290
+    },
+    "texture065": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Splatmaps/Terrain_(400.0, 0.0, 800.0).png",
+        "serializationID": 291
+    },
+    "texture066": {
         "creationInfo": {
             "generateMipmaps": false,
             "magFilter": 9729,
@@ -632,6 +3591,6 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 38
+        "serializationID": 293
     }
 }

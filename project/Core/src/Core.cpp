@@ -9,8 +9,10 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
+#include "CubemapHdr.hpp"
 #include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
+#include "TerrainUtils.hpp"
 
 #include "glm/gtx/string_cast.hpp"
 
@@ -58,7 +60,7 @@ int Core::init()
 {
     xoshiro_Init();
     physicModule.init();
-    
+
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;
@@ -68,7 +70,7 @@ int Core::init()
 
     std::cout << "Henlo!" << std::endl;
     //TODO: GLFW Error callback
-    
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -104,13 +106,31 @@ int Core::init()
     messageBus.addReceiver( &uiModule );
     messageBus.addReceiver( &gamePlayModule );
 
+#pragma region Renderer
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = true;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo);
+
+    messageBus.addReceiver( &rendererModule );
+#pragma endregion
+
     // ! Scene loading
     if (recreateScene)
     {
         // ? -r
-        //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
     }
     else
     {
@@ -127,22 +147,6 @@ int Core::init()
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
-
-#pragma region Renderer
-
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
-    
-    messageBus.addReceiver( &rendererModule );
-#pragma endregion
 
     // TODO <make this function>
     // ! IK system initialize
@@ -177,6 +181,7 @@ int Core::init()
     //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
@@ -393,6 +398,7 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
+TerrainRendererSystem Core::terrainSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;

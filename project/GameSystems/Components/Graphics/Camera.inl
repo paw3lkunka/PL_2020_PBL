@@ -84,6 +84,11 @@ struct Camera : public Component
     /// @brief Camera's projection matrix, calculated for main camera only if dirty flag == true
     glm::mat4 projectionMatrix;
 
+    /**
+     * @brief Camera exposure used for hdr rendering
+     */
+    float exposure = 1.0f;
+
 private:
     CameraProjection projectionMode;
     ViewFrustum frustum;
