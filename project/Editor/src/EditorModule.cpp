@@ -188,6 +188,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(ToggleButton* temp = entityPtr->getComponentPtr<ToggleButton>())
+    {
+        if(ImGui::CollapsingHeader("Toggle Button"))
+        {
+            drawToggleButton(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -348,6 +356,19 @@ void EditorModule::drawButton(Button* button)
     ImGui::ColorEdit4("On Click color", (float*)&button->onClickColor);
     ImGui::ColorEdit4("Inactive color", (float*)&button->inactiveColor);
     ImGui::Checkbox("Active", &button->isActive);
+}
+
+void EditorModule::drawToggleButton(ToggleButton* toggleButtonPtr)
+{
+    ImGui::ColorEdit4("Base color ON", (float*)&toggleButtonPtr->baseColorOn);
+    ImGui::ColorEdit4("Highlighted color ON", (float*)&toggleButtonPtr->highlightedColorOn);
+    ImGui::ColorEdit4("On Click color ON", (float*)&toggleButtonPtr->onClickColorOn);
+    ImGui::ColorEdit4("Base color OFF", (float*)&toggleButtonPtr->baseColorOff);
+    ImGui::ColorEdit4("Highlighted color OFF", (float*)&toggleButtonPtr->highlightedColorOff);
+    ImGui::ColorEdit4("On Click color OFF", (float*)&toggleButtonPtr->onClickColorOff);
+
+    ImGui::ColorEdit4("Inactive color", (float*)&toggleButtonPtr->inactiveColor);
+    ImGui::Checkbox("Active", &toggleButtonPtr->isActive);
 }
 
 void EditorModule::drawText(TextRenderer* textRenderer)
