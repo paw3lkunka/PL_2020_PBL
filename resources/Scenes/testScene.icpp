@@ -202,7 +202,7 @@ TextureCreateInfo skyboxCreateInfo = {};
     objectModule.newEntity(2, "surface");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, -5.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, -20.0f, 0.0f };
             t->getLocalScaleModifiable() = {100, 0.5, 100};
             t->setParent(&sceneModule.rootNode);
 
@@ -217,7 +217,7 @@ TextureCreateInfo skyboxCreateInfo = {};
             bc->halfSize =  glm::vec3(100, 0.5, 100) * 0.5f;
     }
     
-    Entity* entity = objectModule.newEntity(6, "PhisicBasedInputTest");
+    Entity* entity = objectModule.newEntity(7, "PhysicBasedInputTest");
     {
         
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
@@ -263,6 +263,8 @@ TextureCreateInfo skyboxCreateInfo = {};
             rigidbody->ignoreGravity = true;
 
         Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
+
+        HydroBody* hydroBody = objectModule.newEmptyComponentForLastEntity<HydroBody>();
     }
 
     auto* hideout1 = objectModule.newEntity(5,"Hideout1");

@@ -432,11 +432,8 @@ UiRendererSystem Core::uiRendererSystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
-<<<<<<< HEAD
 HydroBodySystem Core::hydroBodySystem;
-=======
 SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
->>>>>>> 0e74b9cc3819c01eabf403768f0050dc563a9e4a

@@ -1,5 +1,7 @@
 #include "HydroBodySystem.hpp"
 
+#include <glm/gtx/string_cast.hpp>
+
 #include "Core.hpp"
 #include "Event.inl"
 #include "Message.inl"
@@ -11,7 +13,7 @@
 #include "Rigidbody.hpp"
 #include "MeshRenderer.inl"
 
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 #include "Hydro/Data/HullTriangles.hpp"
 #include "Hydro/Data/HydroTriangle.hpp"
 #include "Hydro/Math/HullMath.hpp"
@@ -77,7 +79,7 @@ void HydroBodySystem::fixedUpdate()
         {
             impulse.force += HydroPhysics::buoyancyForce(triangle);
             impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity);
-            //impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
+            impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
         }
         else
         {
@@ -98,6 +100,7 @@ void HydroBodySystem::fixedUpdate()
         }
 
         impulse.point = triangle.center; // - static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+        impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
 
         rb->impulses.push_back(impulse);
     }

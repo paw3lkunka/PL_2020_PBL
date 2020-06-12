@@ -1,8 +1,7 @@
 #include "Hydro/Physics.hpp"
 
 #include "Core.hpp"
-#include "Rigidbody.inl"
-#include "PhysicSystem.hpp"
+#include "Rigidbody.hpp"
 
 #include "Hydro/Data/HydroTriangle.hpp"
 #include "Hydro/Math/FloatMath.hpp"
@@ -14,14 +13,14 @@ glm::vec3 HydroPhysics::airResistanceForce(HydroTriangle triangle, glm::vec3 vel
     float length = (density * speed * speed * triangle.area * resistanceCoefficient) / 2.0f;
     glm::vec3 direction = -HydroFloatMath::normalizedProjectOnPlane(velocity, triangle.normal);
 
-    return direction * glm::abs(length) * resistanceCoefficient * Core::FIXED_TIME_STEP_F;
+    return direction * glm::abs(length) * resistanceCoefficient;
 }
 
 glm::vec3 HydroPhysics::buoyancyForce(HydroTriangle triangle, float density, bool upOnly, float buoyancyForceMultiplier)
 {
     //TODO: Proper water height for center
     float height = (triangle.hA + triangle.hB + triangle.hC) / 3.0f; 
-    float gravity = glm::length(PhysicSystem::G_CONST);
+    float gravity = GetCore().physicModule.GetWorld().getGravity().length();
 
     float length = density * gravity * height * triangle.area;
     glm::vec3 direction = -triangle.normal;
@@ -31,15 +30,15 @@ glm::vec3 HydroPhysics::buoyancyForce(HydroTriangle triangle, float density, boo
         direction.z = 0.0f;
     }
 
-    return direction * glm::abs(length) * buoyancyForceMultiplier * Core::FIXED_TIME_STEP_F;
+    return direction * glm::abs(length) * buoyancyForceMultiplier;
 }
 
 glm::vec3 HydroPhysics::pressureDragForce(HydroTriangle triangle, glm::vec3 velocity, float pressureDragCoefficient, float suctionDragCoefficient, float pressureFallOfPower, float suctionFallOfPower)
 {
     float speed = glm::length(velocity);
 
-    float cosNormalVelocity = glm::dot(triangle.normal, velocity) / ( glm::length(triangle.normal) * glm::length(velocity) );
-    float angleNormalVelocity = acosf(cosNormalVelocity) * 180.0f;
+    float cosNormalVelocity = glm::dot( glm::normalize(triangle.normal), glm::normalize(velocity) );
+    float angleNormalVelocity = glm::degrees( glm::acos(cosNormalVelocity) );
 
     float length;
     glm::vec3 direction;
@@ -47,15 +46,15 @@ glm::vec3 HydroPhysics::pressureDragForce(HydroTriangle triangle, glm::vec3 velo
     if(angleNormalVelocity <= 90.0f)
     {
         direction = -triangle.normal;
-        length = pressureDragCoefficient * speed * speed * triangle.area * powf( abs(cosNormalVelocity), pressureFallOfPower );
+        length = pressureDragCoefficient * speed * speed * triangle.area * glm::pow( glm::abs(cosNormalVelocity), pressureFallOfPower );
     }
     else if (angleNormalVelocity >= 90.0f)
     {
         direction = triangle.normal;
-        length = suctionDragCoefficient * speed * speed * triangle.area * pow( abs(cosNormalVelocity), suctionFallOfPower );
+        length = suctionDragCoefficient * speed * speed * triangle.area * glm::pow( glm::abs(cosNormalVelocity), suctionFallOfPower );
     }
 
-    return direction * glm::abs(length) * Core::FIXED_TIME_STEP_F;
+    return direction * glm::abs(length);
 }
 
 float viscousLastSpeedValue = 0.0f;
@@ -73,7 +72,7 @@ glm::vec3 HydroPhysics::viciousResistanceForce(HydroTriangle triangle, glm::vec3
 
     glm::vec3 direction = -HydroFloatMath::normalizedProjectOnPlane(velocity, triangle.normal);
     float length = (density * speed * speed * triangle.area * viscousResistanceCoefficientValue) / 2.0f;
-    return direction * glm::abs(length) * forceMultiply * Core::FIXED_TIME_STEP_F;
+    return direction * glm::abs(length) * forceMultiply;
 }
 
 float HydroPhysics::viscousResistanceCoefficient(float speed, float density, float viscosity)
