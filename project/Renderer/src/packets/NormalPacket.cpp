@@ -1,4 +1,5 @@
 #include "NormalPacket.hpp"
+#include "Material.hpp"
 
 void NormalPacket::render(glm::mat4& VP)
 {

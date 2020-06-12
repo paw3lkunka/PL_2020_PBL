@@ -742,12 +742,12 @@ void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
 void SceneWriter::saveMaterial(Material* assetPtr)
 {
     (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["isSkybox"] = assetPtr->isSkybox;
     (*json)[name]["shaderName"] = assetPtr->shader->shaderName;
     (*json)[name]["name"] = assetPtr->getName();
     (*json)[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
     (*json)[name]["renderingType"] = assetPtr->getRenderType();
 
-    childrenMap.clear();
     std::unordered_map<std::string, std::string> texMap;
     std::unordered_map<std::string, unsigned int> cubemaps;
     std::unordered_map<std::string, unsigned int> cubemapsHdr;
@@ -766,7 +766,7 @@ void SceneWriter::saveMaterial(Material* assetPtr)
             texMap[t.first] = t.second->filePath;
         }
     }
-    (*json)[name]["textures"] = childrenMap;
+    (*json)[name]["textures"] = texMap;
     (*json)[name]["cubemaps"] = cubemaps;
     (*json)[name]["cubemapsHdr"] = cubemapsHdr;
 
@@ -788,6 +788,18 @@ void SceneWriter::saveMaterial(Material* assetPtr)
 
     std::unordered_map<std::string, std::vector<float>> structMap;
     std::vector<float> floatVec;
+    for(auto v : assetPtr->vec2s)
+    {
+        floatVec.clear();
+        floatVec.push_back(v.second.x);
+        floatVec.push_back(v.second.y);
+        
+        structMap[v.first] = floatVec;
+    }
+    (*json)[name]["vec2s"] = structMap;
+
+    
+    structMap.clear();
     for(auto v : assetPtr->vec3s)
     {
         floatVec.clear();
@@ -797,7 +809,6 @@ void SceneWriter::saveMaterial(Material* assetPtr)
         
         structMap[v.first] = floatVec;
     }
-
     (*json)[name]["vec3s"] = structMap;
 
     structMap.clear();

@@ -1,6 +1,7 @@
 #include "SpritePacket.hpp"
 
 #include "RendererModule.hpp"
+#include "Material.hpp"
 
 void SpritePacket::render(glm::mat4& projection)
 {

@@ -106,15 +106,31 @@ int Core::init()
     messageBus.addReceiver( &uiModule );
     messageBus.addReceiver( &gamePlayModule );
 
+#pragma region Renderer
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = true;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo);
+
+    messageBus.addReceiver( &rendererModule );
+#pragma endregion
+
     // ! Scene loading
     if (recreateScene)
     {
         // ? -r
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
-        //#include "../../resources/Scenes/newScene.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
     }
     else
     {
@@ -132,23 +148,6 @@ int Core::init()
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
-
-#pragma region Renderer
-
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    // rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxHdrMat"));
-    
-    messageBus.addReceiver( &rendererModule );
-#pragma endregion
 
     // TODO <make this function>
     // ! IK system initialize

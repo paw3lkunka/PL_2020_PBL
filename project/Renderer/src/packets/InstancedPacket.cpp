@@ -1,6 +1,7 @@
 #include "InstancedPacket.hpp"
 
 #include "RendererModule.hpp"
+#include "Material.hpp"
 
 InstancedPacket::InstancedPacket(Mesh* mesh, Material* material) : RenderPacket(mesh, material) 
 {

@@ -57,7 +57,13 @@ public:
      * @param window GLFW window pointer
      * @param createInfo CreateInfoStruct with renderer parameters
      */
-    void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo, Material* skyboxMaterial = nullptr);
+    void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
+    /**
+     * @brief Set the skybox in the renderer
+     * 
+     * @param skyboxMaterial pointer to skybox material
+     */
+    void setSkybox(Material* skyboxMaterial);
     /**
      * @brief Render current render queue
      */

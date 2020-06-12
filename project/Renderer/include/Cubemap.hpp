@@ -30,6 +30,7 @@ public:
     std::string topPath;
     std::string bottomPath;
 
+
 private:
     unsigned char* front;
     unsigned char* left;

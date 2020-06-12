@@ -86,6 +86,7 @@ float GeometrySchlickGGX(float NdotV, float roughness);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 vec3 calculateNormal(sampler2D sampler, vec2 uv);
+vec3 getTriplanarBlend(vec3 norm);
 
 // ===== Lightning calculations =====
 vec3 calcDirectionalLight(DirectionalLight light);
@@ -96,23 +97,65 @@ void main()
     // Sampling the splatmap
     vec4 splatVal = texture(splatmap, Texcoord);
 
+	vec3 blend = getTriplanarBlend(Normal);
+
     // Sampling the textures by splatmap channel value
     // 0
-    vec3 albedo0 = pow(texture(diffuse0, Texcoord * uv0scale).rgb, vec3(2.2f));
-    vec3 norm0 = calculateNormal(normal0, Texcoord * uv0scale);
-    vec3 occRouMet0 = texture(orm0, Texcoord * uv0scale).rgb;
+	vec2 uv0s = uv0scale * 0.01;
+	vec3 albedo0x = pow(texture(diffuse0, FragPos.yz * uv0s).rgb, vec3(2.2f));
+	vec3 albedo0y = pow(texture(diffuse0, FragPos.xz * uv0s).rgb, vec3(2.2f));
+	vec3 albedo0z = pow(texture(diffuse0, FragPos.xy * uv0s).rgb, vec3(2.2f));
+    vec3 albedo0 = albedo0x * blend.x + albedo0y * blend.y + albedo0z * blend.z; 
+	vec3 norm0x = calculateNormal(normal0, FragPos.yz * uv0s);
+	vec3 norm0y = calculateNormal(normal0, FragPos.xz * uv0s);
+	vec3 norm0z = calculateNormal(normal0, FragPos.xy * uv0s);
+    vec3 norm0 = norm0x * blend.x + norm0y * blend.y + norm0z * blend.z;
+	vec3 occRouMet0x = texture(orm0, FragPos.yz * uv0s).rgb;
+	vec3 occRouMet0y = texture(orm0, FragPos.xz * uv0s).rgb;
+	vec3 occRouMet0z = texture(orm0, FragPos.xy * uv0s).rgb;
+    vec3 occRouMet0 = occRouMet0x * blend.x + occRouMet0y * blend.y + occRouMet0z * blend.z;
     // 1
-    vec3 albedo1 = pow(texture(diffuse1, Texcoord * uv1scale).rgb, vec3(2.2f));
-    vec3 norm1 = calculateNormal(normal1, Texcoord * uv1scale);
-    vec3 occRouMet1 = texture(orm1, Texcoord * uv1scale).rgb;
+	vec2 uv1s = uv1scale * 0.01;
+	vec3 albedo1x = pow(texture(diffuse1, FragPos.yz * uv1s).rgb, vec3(2.2f));
+	vec3 albedo1y = pow(texture(diffuse1, FragPos.xz * uv1s).rgb, vec3(2.2f));
+	vec3 albedo1z = pow(texture(diffuse1, FragPos.xy * uv1s).rgb, vec3(2.2f));
+    vec3 albedo1 = albedo1x * blend.x + albedo1y * blend.y + albedo1z * blend.z;
+	vec3 norm1x = calculateNormal(normal1, FragPos.yz * uv1s);
+	vec3 norm1y = calculateNormal(normal1, FragPos.xz * uv1s);
+	vec3 norm1z = calculateNormal(normal1, FragPos.xy * uv1s);
+    vec3 norm1 = norm1x * blend.x + norm1y * blend.y + norm1z * blend.z;
+    vec3 occRouMet1x = texture(orm1, FragPos.yz * uv1s).rgb;
+	vec3 occRouMet1y = texture(orm1, FragPos.xz * uv1s).rgb;
+	vec3 occRouMet1z = texture(orm1, FragPos.xy * uv1s).rgb;
+    vec3 occRouMet1 = occRouMet1x * blend.x + occRouMet1y * blend.y + occRouMet1z * blend.z;
     // 2
-    vec3 albedo2 = pow(texture(diffuse2, Texcoord * uv2scale).rgb, vec3(2.2f));
-    vec3 norm2 = calculateNormal(normal2, Texcoord * uv2scale);
-    vec3 occRouMet2 = texture(orm2, Texcoord * uv2scale).rgb;
+    vec2 uv2s = uv2scale * 0.01;
+	vec3 albedo2x = pow(texture(diffuse2, FragPos.yz * uv2s).rgb, vec3(2.2f));
+	vec3 albedo2y = pow(texture(diffuse2, FragPos.xz * uv2s).rgb, vec3(2.2f));
+	vec3 albedo2z = pow(texture(diffuse2, FragPos.xy * uv2s).rgb, vec3(2.2f));
+    vec3 albedo2 = albedo2x * blend.x + albedo2y * blend.y + albedo2z * blend.z; 
+	vec3 norm2x = calculateNormal(normal2, FragPos.yz * uv2s);
+	vec3 norm2y = calculateNormal(normal2, FragPos.xz * uv2s);
+	vec3 norm2z = calculateNormal(normal2, FragPos.xy * uv2s);
+    vec3 norm2 = norm2x * blend.x + norm2y * blend.y + norm2z * blend.z;
+	vec3 occRouMet2x = texture(orm2, FragPos.yz * uv2s).rgb;
+	vec3 occRouMet2y = texture(orm2, FragPos.xz * uv2s).rgb;
+	vec3 occRouMet2z = texture(orm2, FragPos.xy * uv2s).rgb;
+    vec3 occRouMet2 = occRouMet2x * blend.x + occRouMet2y * blend.y + occRouMet2z * blend.z;
     // 3
-    vec3 albedo3 = pow(texture(diffuse3, Texcoord * uv3scale).rgb, vec3(2.2f));
-    vec3 norm3 = calculateNormal(normal3, Texcoord * uv3scale);
-    vec3 occRouMet3 = texture(orm3, Texcoord * uv3scale).rgb;
+    vec2 uv3s = uv3scale * 0.01;
+	vec3 albedo3x = pow(texture(diffuse3, FragPos.yz * uv3s).rgb, vec3(2.2f));
+	vec3 albedo3y = pow(texture(diffuse3, FragPos.xz * uv3s).rgb, vec3(2.2f));
+	vec3 albedo3z = pow(texture(diffuse3, FragPos.xy * uv3s).rgb, vec3(2.2f));
+    vec3 albedo3 = albedo3x * blend.x + albedo3y * blend.y + albedo3z * blend.z; 
+	vec3 norm3x = calculateNormal(normal3, FragPos.yz * uv3s);
+	vec3 norm3y = calculateNormal(normal3, FragPos.xz * uv3s);
+	vec3 norm3z = calculateNormal(normal3, FragPos.xy * uv3s);
+    vec3 norm3 = norm3x * blend.x + norm3y * blend.y + norm3z * blend.z;
+	vec3 occRouMet3x = texture(orm3, FragPos.yz * uv3s).rgb;
+	vec3 occRouMet3y = texture(orm3, FragPos.xz * uv3s).rgb;
+	vec3 occRouMet3z = texture(orm3, FragPos.xy * uv3s).rgb;
+    vec3 occRouMet3 = occRouMet3x * blend.x + occRouMet3y * blend.y + occRouMet3z * blend.z;
 
     // Texture values get mixed based on splatmap color
     // For simplicity we assue the sum of splatmap colors never exceeds 1.0
@@ -141,7 +184,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = ambient * (1.0 - directionalShadow * 0.75) + Lo * (1.0 - directionalShadow);
+	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.95);
 
 	FragColor = vec4(color, 1.0);
 
@@ -276,4 +319,13 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
 	return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+}
+
+vec3 getTriplanarBlend(vec3 norm)
+{
+	vec3 blending = abs(norm);
+	blending = normalize(max(blending, 0.00001)); // Force weights to sum to 1.0
+	float b = (blending.x + blending.y + blending.z);
+	blending /= vec3(b, b, b);
+	return blending;
 }

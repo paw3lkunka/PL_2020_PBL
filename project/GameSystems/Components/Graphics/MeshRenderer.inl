@@ -2,8 +2,11 @@
 #define _MESHRENDERER_INL
 
 #include "Component.hpp"
-#include "Material.hpp"
-#include "Mesh.hpp"
+
+#include <glm/glm.hpp>
+
+class Material;
+class Mesh;
 
 /**
  * @brief Mesh rendering component

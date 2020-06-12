@@ -377,3 +377,8 @@ int Material::getTextureUnit(std::string name)
     }
     return -1;
 }
+
+void Material::setAsSkybox(bool option)
+{
+    isSkybox = option;
+}

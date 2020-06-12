@@ -1,5 +1,7 @@
 #include "TerrainPacket.hpp"
 
+#include "Material.hpp"
+
 void TerrainPacket::render(glm::mat4& VP)
 {
     material->use();

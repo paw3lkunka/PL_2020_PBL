@@ -50,8 +50,16 @@ Shader* ObjectMaker::newShader(std::string shaderName, const char* vertexShaderP
         if(geometryShaderPath != nullptr)
         {
             std::string geometryShaderData = objModPtr->assetReader.shaders[geometryShaderPath];
-            objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str(), serialize));
-            Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            Shader* shaderRef;
+            if (serialize)
+            {
+                objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str(), serialize));
+                shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            }
+            else
+            {
+                shaderRef = new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str(), serialize);
+            }
             shaderRef->vertexShaderPath = vertexShaderPath;
             shaderRef->fragmentShaderPath = fragmentShaderPath;
             shaderRef->geometryShaderPath = geometryShaderPath;
@@ -63,8 +71,16 @@ Shader* ObjectMaker::newShader(std::string shaderName, const char* vertexShaderP
         }
         else
         {
-            objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), nullptr, serialize));
-            Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            Shader* shaderRef;
+            if (serialize)
+            {
+                objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), nullptr, serialize));
+                shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
+            }
+            else
+            {
+                shaderRef = new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), nullptr, serialize);
+            }
             shaderRef->vertexShaderPath = vertexShaderPath;
             shaderRef->fragmentShaderPath = fragmentShaderPath;
 

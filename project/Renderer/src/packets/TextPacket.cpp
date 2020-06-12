@@ -1,6 +1,7 @@
 #include "TextPacket.hpp"
 
 #include "RendererModule.hpp"
+#include "Material.hpp"
 
 void TextPacket::render(glm::mat4& projection)
 {

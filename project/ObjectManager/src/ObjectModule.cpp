@@ -67,12 +67,8 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().uiModule.unloadScene();
     // ! clear message bus, for omitting messages between scenes
     GetCore().messageBus.clearBuffers();
-    // * setting serialization id for 1 (0 is scene root node)
-    ISerializable::nextID = 1;
-    //* reading scene
-    sceneReader.readScene(newScenePath);
 
-    // ! ----- Renderer initialization block -----
+     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
@@ -81,7 +77,14 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo, getMaterialPtrByName("skyboxMat"));
+    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo);
+
+    // * setting serialization id for 1 (0 is scene root node)
+    ISerializable::nextID = 1;
+    //* reading scene
+    sceneReader.readScene(newScenePath);
+
+
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
 

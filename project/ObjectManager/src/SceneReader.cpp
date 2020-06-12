@@ -124,6 +124,7 @@ void SceneReader::readCubemaps()
     for(int i = 0; i < cubemapsAmount; ++i)
     {
         name = setName("cubemap", i);
+
         frontPath = j->at(name).at("frontPath").get<std::string>();
         bottomPath = j->at(name).at("bottomPath").get<std::string>();
         leftPath = j->at(name).at("leftPath").get<std::string>();
@@ -199,7 +200,7 @@ void SceneReader::readMaterials()
         auto material = objModulePtr->newMaterial(shader, matName, (RenderType)renderingType, instancingEnabled);
         material->serializationID = j->at(name).at("serializationID").get<unsigned int>();
 
-
+        children.clear();
         j->at(name).at("cubemaps").get_to(children);
         for(auto iter : children)
         {
@@ -217,9 +218,12 @@ void SceneReader::readMaterials()
             material->setTexture(iter.first, cubemap);
         }
 
+        textures.clear();
         j->at(name).at("textures").get_to(textures);
+        std::cout << "Texture count for " << name << ": " << textures.size() << '\n';
         for(auto iter : textures)
         {
+            std::cout << "Texture at " << name << ": " << iter.first << '\n';
             std::string texPath = iter.second;
             auto texture = objModulePtr->objectContainer.getTexturePtrByFilePath(texPath.c_str());
             material->setTexture(iter.first, texture);
@@ -239,6 +243,15 @@ void SceneReader::readMaterials()
         for(auto iter : floats)
         {
             material->setFloat(iter.first, iter.second);
+        }
+
+        structMap.clear();
+        j->at(name).at("vec2s").get_to(structMap);
+        for(auto iter : structMap)
+        {
+            std::string uniName = iter.first;
+            glm::vec2 vector(iter.second[0], iter.second[1]);
+            material->setVec2(uniName, vector);
         }
 
         structMap.clear();
@@ -271,6 +284,11 @@ void SceneReader::readMaterials()
             
             glm::mat4 matrix(c0, c1, c2, c3);
             material->setMat4(uniName, matrix);
+        }
+
+        if (j->at(name).at("isSkybox").get<bool>())
+        {
+            GetCore().rendererModule.setSkybox(material);
         }
     }
 }

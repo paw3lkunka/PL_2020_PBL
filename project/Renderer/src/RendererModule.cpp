@@ -168,7 +168,7 @@ void RendererModule::receiveMessage(Message msg)
     }
 }
 
-void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo, Material* skyboxMaterial)
+void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo)
 {
     this->window = window;
     this->createInfo = createInfo;
@@ -252,25 +252,20 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
     glBindVertexArray(0);
+
     // * ===== Generate mesh for skybox rendering =====
+    glGenVertexArrays(1, &skyboxVao);
+    glGenBuffers(1, &skyboxVbo);
 
-    if (skyboxMaterial != nullptr)
-    {
-        glGenVertexArrays(1, &skyboxVao);
-        glGenBuffers(1, &skyboxVbo);
+    glBindVertexArray(skyboxVao);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
+    
+    glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), BuiltInShapes::cubeTri, GL_STATIC_DRAW);
 
-        glBindVertexArray(skyboxVao);
-        glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
-        
-        glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), BuiltInShapes::cubeTri, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        glBindVertexArray(0);
-
-        generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
-    }
+    glBindVertexArray(0);
 
     // * ===== Create framebuffer for depth map =====
     glGenFramebuffers(1, &depthMapFBO);
@@ -1148,4 +1143,15 @@ void RendererModule::drawQuad()
     glBindVertexArray(quadVao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+}
+
+void RendererModule::setSkybox(Material* skyboxMaterial)
+{
+    if (this->skyboxMaterial != nullptr)
+    {
+        this->skyboxMaterial->setAsSkybox(false);
+    }
+    skyboxMaterial->setAsSkybox(true);
+    this->skyboxMaterial = skyboxMaterial;
+    generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
 }

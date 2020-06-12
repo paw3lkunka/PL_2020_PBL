@@ -84,6 +84,12 @@ public:
      * @param VP View-projecion matrix
      */
     void setTransformMatrices(const glm::mat4& M, const glm::mat4& VP);
+    /**
+     * @brief Either set the material as skybox or not
+     * 
+     * @param option set or reset material as skybox
+     */
+    void setAsSkybox(bool option);
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);
@@ -133,6 +139,7 @@ public:
     int getTextureUnit(std::string name);
 
 private:
+    bool isSkybox = false;
     static unsigned int idCount;
     unsigned int ID;
     bool enableInstancing;
