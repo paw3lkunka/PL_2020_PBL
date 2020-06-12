@@ -11,5 +11,5 @@ uniform mat4 model;
 void main()
 {
     gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);
-    uv = vec2(vertex.z, vertex.w);
+    uv = vec2(vertex.z, 1.0 - vertex.w);
 }

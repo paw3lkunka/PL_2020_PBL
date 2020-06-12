@@ -8,7 +8,7 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
-#include "ScenesPaths.inl"
+#include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
 
 Core* Core::instance = nullptr;
@@ -98,15 +98,15 @@ int Core::init()
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &uiModule );
-    messageBus.addReceiver( &tmpExit );
+    messageBus.addReceiver( &gamePlayModule );
 
     // ! Scene loading
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -119,7 +119,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //some code here...
+
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -172,10 +172,11 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+    gamePlayModule.init();
 
 #pragma regnon attach systems
 
-    gameSystemsModule.addSystem(&hydroBodySystem);
+    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
@@ -192,6 +193,9 @@ int Core::init()
     gameSystemsModule.addSystem(&uiButtonSystem);
     gameSystemsModule.addSystem(&enemySystem);
     gameSystemsModule.addSystem(&sortingGroupSystem);
+    gameSystemsModule.addSystem(&toggleButtonSystem);
+    gameSystemsModule.addSystem(&cargoStorageSystem);
+    gameSystemsModule.addSystem(&cargoButtonSystem);
 
 #pragma endregion
 
@@ -298,12 +302,12 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    audioModule.cleanup();
     editorModule.onExit();
 
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
-    audioModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -397,3 +401,6 @@ UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
 SortingGroupSystem Core::sortingGroupSystem;
+ToggleButtonSystem Core::toggleButtonSystem;
+CargoStorageSystem Core::cargoStorageSystem;
+CargoButtonSystem Core::cargoButtonSystem;

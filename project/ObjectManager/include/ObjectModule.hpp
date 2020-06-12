@@ -14,6 +14,7 @@ enum class RenderType;
 struct Bounds;
 struct TextureCreateInfo;
 class Message;
+class GamePlayModule;
 
 #include "ObjectContainer.hpp"
 #include "ObjectMaker.hpp"
@@ -32,6 +33,7 @@ class ObjectModule : public IModule
     friend class SceneWriter;
     friend class SceneReader;
     friend class AssetReader;
+    friend class GamePlayModule;
 public: 
     /**
      * @brief Construct a new Object Module object
@@ -52,16 +54,6 @@ public:
      * @param msg message to receive
      */
     void receiveMessage(Message msg);
-
-    /**
-     * @brief comparsion cstrings
-     * 
-     * @param str1 first string
-     * @param str2 second string
-     * @return true strings are the same
-     * @return false strings aren't the same
-     */
-    bool compareStrings(const char* str1, const char* str2);
 
 #pragma region Scene Wrapper
     /**
@@ -137,6 +129,14 @@ public:
      */
     Texture* getTexturePtrByFilePath(const char* filePath) { return objectContainer.getTexturePtrByFilePath(filePath); }
 
+    /**
+     * @brief Get the Shader Ptr By Name 
+     * 
+     * @param shaderName name of shader
+     * @return Shader* pointer or nullptr if can't find
+     */
+    Shader* getShaderPtrByName(std::string shaderName) { return objectContainer.getShaderPtrByName(shaderName); }
+
     
     /**
      * @brief Get the Animation Ptr By Name
@@ -184,12 +184,13 @@ public:
     /**
      * @brief Checks if shader exist, if doesn't - makes it
      * 
+     * @param shaderName name of shader
      * @param vertexShaderPath path of vertex shader
      * @param fragmentShaderPath path of fragment shader
      * @param geometryShaderPath path of geometry shader (optional)
      * @return Shader* pointer to shader
      */
-    Shader* newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
+    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
 
     /**
      * @brief Checks if texture exist, if doesn't - makes it
@@ -260,10 +261,6 @@ private:
     AssetReader assetReader;
     SceneReader sceneReader;
     SceneWriter sceneWriter;
-
-    
-    bool compareStrings(std::string str1, std::string str2);
-    
 };
 
 #include "ObjectModule.ipp"

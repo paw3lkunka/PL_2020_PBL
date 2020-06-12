@@ -140,8 +140,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
-    internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
+    simpleDepth = new Shader("simpleDepth", depthVertexCode, depthFragmentCode, nullptr, false);
+    internalShaderError = new Shader("internalShaderError", depthVertexCode, internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====

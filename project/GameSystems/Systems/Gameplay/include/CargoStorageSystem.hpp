@@ -1,21 +1,19 @@
-#ifndef UIBUTTONSYSTEM_HPP_
-#define UIBUTTONSYSTEM_HPP_
+#ifndef CARGOSTORAGESYSTEM_HPP_
+#define CARGOSTORAGESYSTEM_HPP_
 
 #include "System.hpp"
 #include "IMsgReceiver.inl"
-#include "MouseDataStructures.inl"
-#include <glm/glm.hpp>
+#include <iterator>
+#include <list>
 
-struct Button;
-struct RectTransform;
-struct UiRenderer;
+struct CargoStorage;
+struct Cargo;
 
-//TODO documentation
-class UiButtonSystem : public System, public IMsgReceiver
+class CargoStorageSystem : public System, public IMsgReceiver
 {
 public:
-    UiButtonSystem() : System(false) {}
-    ~UiButtonSystem() = default;
+    CargoStorageSystem() = default;
+    ~CargoStorageSystem() = default;
 
     ///@brief inherited from IMsgReceiver
     void receiveMessage(Message msg);
@@ -31,13 +29,14 @@ public:
     /**
      * @brief Initializes processed entities, runs before first update
      */
-    virtual void start() {}
+    virtual void start() {};
+
     /**
      * @brief Contain logic of the system called in fixed time steps
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate() {}
+    virtual void fixedUpdate() {};
 
     /**
      * @brief Contain logic of the system runned once per frame
@@ -48,17 +47,7 @@ public:
 
 protected:
 private:
-    Button* buttonPtr;
-    UiRenderer* rendererPtr;
-    RectTransform* rectTransformPtr;
-    
-    ///@brief data of cursor (to find if cursor is over button)
-    CursorData lastCursorData;
-    ///@brief mouse button clicked flag
-    bool mouseButtonClicked = false;
-
-    ///@brief factor of lerping
-    float lerpFactor = 0.05f;
+    CargoStorage* cargoStoragePtr = nullptr;
 };
 
-#endif /* !UIBUTTONSYSTEM_HPP_ */
+#endif /* !CARGOSTORAGESYSTEM_HPP_ */

@@ -20,6 +20,7 @@
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
+#include "GamePlayModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -98,7 +99,7 @@ class Core
         /**
          * @brief Path to scene file.
          */
-        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
+        std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";
 #pragma endregion
 
 #pragma region Utilities
@@ -249,6 +250,11 @@ class Core
          * @return double 
          */
         double getCurrentFrameStart();
+
+        /**
+         * @brief is game paused flag
+         */
+        const bool isGamePaused() { return gamePaused; } 
 #pragma endregion
 
 #pragma region Modules
@@ -283,20 +289,8 @@ class Core
         ///@brief ui graph
         UiModule uiModule;
 
-        /**
-         * TODO Please, do something better here ;-;
-         * @brief safely close application, on ESC press
-         */
-        class : public IModule
-        {
-        virtual void receiveMessage(Message msg)
-            {
-                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-                {
-                    instance->close();
-                }
-            }
-        } tmpExit;
+        ///@brief gamePlay module
+        GamePlayModule gamePlayModule;
         
 #pragma endregion
 
@@ -321,6 +315,9 @@ class Core
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
         static SortingGroupSystem sortingGroupSystem;
+        static ToggleButtonSystem toggleButtonSystem;
+        static CargoStorageSystem cargoStorageSystem;
+        static CargoButtonSystem cargoButtonSystem;
 
 #pragma endregion
 
@@ -335,9 +332,11 @@ class Core
         static int windowWidth;
         static int windowHeight;
 
+        friend class GamePlayModule;
     private:
         static Core* instance;
-        GLFWwindow* window; 
+        GLFWwindow* window;
+        bool gamePaused = false;
 
         double currentFrameStart;
 
