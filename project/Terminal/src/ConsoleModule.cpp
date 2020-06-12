@@ -259,7 +259,7 @@ void ConsoleModule::receiveMessage(Message msg)
     {
         auto data = msg.getValue<AttackData>();
         std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
-                << (data.success ? " , un" : ", ") << "successfull, "
+                << (data.success ? ",   " : ", un") << "successfull, "
                 << "direction: " << glm::to_string(data.direction) << std::endl;
     }
         break;

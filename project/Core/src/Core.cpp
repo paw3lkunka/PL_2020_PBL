@@ -123,7 +123,6 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
