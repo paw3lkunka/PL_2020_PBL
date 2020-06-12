@@ -358,7 +358,7 @@ void SceneWriter::saveAudioSource(AudioSource* componentPtr)
     {
         childrenID.push_back(componentPtr->getListenersModifiable().at(j)->serializationID);
     }
-    (*json)[name]["listeners"] = childrenID; 
+    (*json)[name]["listeners"] = childrenID;
     (*json)[name]["clips"] = componentPtr->getClips();
     (*json)[name]["isRelativeToListener"] = componentPtr->getIsRelative();
     (*json)[name]["isLooping"] = componentPtr->getIsLooping();
@@ -409,7 +409,7 @@ void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 {
     (*json)[name]["type"] = "SphereCollider";
-    (*json)[name]["colliderType"] = componentPtr->type;
+    (*json)[name]["isTrigger"] = componentPtr->isTrigger;
     (*json)[name]["radius"] = componentPtr->radius;
     (*json)[name]["center"]["x"] = componentPtr->center.x;
     (*json)[name]["center"]["y"] = componentPtr->center.y;
@@ -419,7 +419,7 @@ void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
 void SceneWriter::saveBoxCollider(BoxCollider* componentPtr)
 {
     (*json)[name]["type"] = "BoxCollider";
-    (*json)[name]["colliderType"] = componentPtr->type;
+    (*json)[name]["isTrigger"] = componentPtr->isTrigger;
     (*json)[name]["center"]["x"] = componentPtr->center.x;
     (*json)[name]["center"]["y"] = componentPtr->center.y;
     (*json)[name]["center"]["z"] = componentPtr->center.z;
@@ -450,9 +450,7 @@ void SceneWriter::saveRigidbody(Rigidbody* componentPtr)
 {
     (*json)[name]["type"] = "Rigidbody";
     (*json)[name]["mass"] = componentPtr->mass;
-    (*json)[name]["momentOfInertia"]["0,0"] = componentPtr->momentOfInertia[0][0];
-    (*json)[name]["momentOfInertia"]["1,1"] = componentPtr->momentOfInertia[1][1];
-    (*json)[name]["momentOfInertia"]["2,2"] = componentPtr->momentOfInertia[2][2];
+    (*json)[name]["bodyType"] = componentPtr->type;;
     (*json)[name]["drag"] = componentPtr->drag;
     (*json)[name]["angularDrag"] = componentPtr->angularDrag;
     (*json)[name]["ignoreGravity"] = componentPtr->ignoreGravity;

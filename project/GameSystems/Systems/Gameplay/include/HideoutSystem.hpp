@@ -8,7 +8,7 @@
 
 class Hideout;
 class Kayak;
-class CollisionData;
+class TriggerData;
 
 /**
  * @brief Detects if kayak is hidden. 

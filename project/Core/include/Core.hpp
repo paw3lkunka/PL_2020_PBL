@@ -20,6 +20,7 @@
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
+#include "PhysicModule.hpp"
 #include "GamePlayModule.hpp"
 
 // * ECS
@@ -254,7 +255,7 @@ class Core
         /**
          * @brief is game paused flag
          */
-        const bool isGamePaused() { return gamePaused; } 
+        const bool isGamePaused() { return gamePaused; }
 #pragma endregion
 
 #pragma region Modules
@@ -289,9 +290,12 @@ class Core
         ///@brief ui graph
         UiModule uiModule;
 
+        ///@brief responsible for physic simulation
+        PhysicModule physicModule;
+
         ///@brief gamePlay module
         GamePlayModule gamePlayModule;
-        
+
 #pragma endregion
 
 #pragma region Systems
@@ -302,7 +306,6 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
-        static CollisionSystem collisionSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;

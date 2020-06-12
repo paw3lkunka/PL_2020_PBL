@@ -2,7 +2,7 @@
 #define _LIGHTSYSTEM_HPP
 
 #include "System.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Light.inl"
 
 //TODO documentation

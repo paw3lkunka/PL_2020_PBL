@@ -2,7 +2,7 @@
 #define SCENEMODULE_HPP_
 
 #include "IModule.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 
 #include <glm/glm.hpp>
 

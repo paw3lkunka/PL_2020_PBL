@@ -40,6 +40,11 @@ void ObjectModule::receiveMessage(Message msg)
 }
 
 
+void ObjectModule::cleanup()
+{
+    objectContainer.cleanup();
+}
+
 #pragma region Scene Wrapper
 void ObjectModule::saveScene(const char* filePath)
 {

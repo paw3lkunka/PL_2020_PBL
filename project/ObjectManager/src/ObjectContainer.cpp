@@ -8,7 +8,7 @@
 #include "Shader.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Font.hpp"
 #include "mesh/Mesh.hpp"
 #include "mesh/MeshCustom.hpp"
@@ -33,7 +33,7 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     fonts.reserve(16);
 }
 
-ObjectContainer::~ObjectContainer()
+void ObjectContainer::cleanup()
 {
     for(auto c : components)
     {

@@ -3,7 +3,7 @@
 #include "Core.hpp"
 #include "mesh/MeshCustom.hpp"
 #include "Message.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Bone.inl"
 #include "Skeleton.inl"
 #include "mesh/MeshDataStructures.inl"
@@ -269,7 +269,7 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
                 {
                     newAnim.addPositionKey(nodeBoneID, 
                         scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mTime,
-                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue));
+                        aiVectorToGlmVec3(scene->mAnimations[i]->mChannels[j]->mPositionKeys[k].mValue));
                 }
                 
                 for (size_t k = 0; k < scene->mAnimations[i]->mChannels[j]->mNumRotationKeys; k++)
@@ -283,7 +283,7 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
                 {
                     newAnim.addScaleKey(nodeBoneID, 
                         scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mTime,
-                        aiVectortoGlmVec3(scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue));
+                        aiVectorToGlmVec3(scene->mAnimations[i]->mChannels[j]->mScalingKeys[k].mValue));
                 }
             }
 

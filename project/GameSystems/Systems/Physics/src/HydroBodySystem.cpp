@@ -7,11 +7,11 @@
 
 #include "HydroBody.inl"
 #include "HydroAccelerator.inl"
-#include "Transform.inl"
-#include "Rigidbody.inl"
+#include "Transform.hh"
+#include "Rigidbody.hpp"
 #include "MeshRenderer.inl"
 #include "HydroDataStructures.hpp"
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 
 
 bool HydroBodySystem::assertEntity(Entity* entity)

@@ -1,4 +1,5 @@
 #include "Core.hpp"
+#include "Utils.hpp"
 #include "imgui.h"
 
 #include "xoshiro.h"
@@ -10,6 +11,8 @@
 #include "Material.hpp"
 #include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
+
+#include "glm/gtx/string_cast.hpp"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -54,7 +57,8 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 int Core::init()
 {
     xoshiro_Init();
-
+    physicModule.init();
+    
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;
@@ -141,30 +145,25 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
+    // TODO <make this function>
     // ! IK system initialize
-    BoneAttachData leftData;
-    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
+        BoneAttachData leftData;
+        leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+        leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
-    BoneAttachData rightData;
-    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
+        BoneAttachData rightData;
+        rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+        rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
-    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-    //gameSystemsModule.addSystem(&paddleIkSystem);
-
-#pragma region AudioModule demo - initialization
+        Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+        //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+        //gameSystemsModule.addSystem(&paddleIkSystem);
+    // TODO </make this function>
 
     audioModule.init();
 
-#pragma endregion
-
-#pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-#pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
@@ -180,7 +179,6 @@ int Core::init()
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
@@ -250,6 +248,10 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
+            if (!gamePaused)
+            {
+                physicModule.physicSimulation(gameSystemsModule.entities);
+            }
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -271,6 +273,8 @@ int Core::mainLoop()
 
         // ? IMGUI Window setting up
         editorModule.drawEditor();
+        //HACK i added this here, tu apply changes to model matrix;
+        sceneModule.updateTransforms();
 
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
@@ -308,6 +312,8 @@ void Core::cleanup()
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
+    physicModule.cleanup();
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -388,7 +394,6 @@ CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionSystem Core::collisionSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
