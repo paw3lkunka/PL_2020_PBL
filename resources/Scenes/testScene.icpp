@@ -37,6 +37,9 @@ TextureCreateInfo skyboxCreateInfo = {};
     }
 
     Material* rushesMat = objectModule.newMaterial(unlitColor, "RushesMat", RenderType::Transparent);
+    {
+        rushesMat->setVec4("color", glm::vec4(0.0f, 0.7f, 0.2f, 0.7f));
+    }
 
     objectModule.newEntity(4, "Camera");
     {
@@ -77,7 +80,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->mass = 10;
             rb->drag = 0.2f;
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -99,7 +101,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->drag = 0.2f;
         
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -121,7 +122,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->drag = 0.2f;
         
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -143,7 +143,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->drag = 0.2f;
         
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -165,7 +164,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->drag = 0.2f;
 
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = false;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -187,7 +185,6 @@ TextureCreateInfo skyboxCreateInfo = {};
             rb->drag = 0.2f;
         
             rb->angularDrag = 0.1f;
-            rb->ignoreGravity = true;
 
         auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
             bc->halfSize = {0.5f, 0.5f, 0.5f};
@@ -259,7 +256,7 @@ TextureCreateInfo skyboxCreateInfo = {};
         Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
     }
 
-    auto* hideout1 = objectModule.newEntity(4,"Hideout1");
+    auto* hideout1 = objectModule.newEntity(5,"Hideout1");
     {
         auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
             tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
@@ -272,19 +269,22 @@ TextureCreateInfo skyboxCreateInfo = {};
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;
         auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+        auto* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
     }
     
-    auto* hideout2 = objectModule.newEntity(4,"Hideout2");
+    auto* hideout2 = objectModule.newEntity(5,"Hideout2");
     {
         auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
             tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
             tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
+            tr->getLocalScaleModifiable() = {1.0f, 2.0f, 1.0f};
             tr->setParent(&sceneModule.rootNode);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize =  glm::vec3(0.5f, 0.5f, 0.5f);
+            bc->halfSize =  glm::vec3(0.5f, 1.0f, 0.5f);
             bc->isTrigger = true;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;
         auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+        auto* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
     }
