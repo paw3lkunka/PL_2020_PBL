@@ -86,6 +86,7 @@ private:
     void drawKayak(Kayak* kayakPtr);
     void drawEnemy(Enemy* enemyPtr);
     void drawCamera(Camera* camera);
+    void drawEnemyAttack(EnemyAttack* attackPtr);
     void drawButton(Button* button);
     void drawText(TextRenderer* textRenderer);
     void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);

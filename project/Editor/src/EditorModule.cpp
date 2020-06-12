@@ -148,6 +148,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(EnemyAttack* temp = entityPtr->getComponentPtr<EnemyAttack>())
+    {
+        if(ImGui::CollapsingHeader("EnemyAttack"))
+        {
+            drawEnemyAttack(temp);
+        }
+    }
+
     if(EnemyAnimation* temp = entityPtr->getComponentPtr<EnemyAnimation>())
     {
         if(ImGui::CollapsingHeader("EnemyAnimation"))
@@ -352,7 +360,7 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragFloat("Sight distance", &enemyPtr->sightDistance);
     ImGui::DragFloat("Sight angle", &enemyPtr->sightAngle);
     ImGui::DragInt("Detection counter", &enemyPtr->detectionCounter);
-    ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
+    ImGui::DragInt("Counter max value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
 }
@@ -361,6 +369,14 @@ void EditorModule::drawCamera(Camera* cameraPtr)
 {
     ImGui::DragFloat("Exposure", &cameraPtr->exposure);
     ImGui::DragFloat("Fov", &cameraPtr->getFrustumModifiable().fieldOfView);
+}
+
+void EditorModule::drawEnemyAttack(EnemyAttack* attackPtr)
+{
+    ImGui::DragInt("Attack counter", &attackPtr->attackCounter);
+    ImGui::DragInt("Increment value", &attackPtr->incrementValue);
+    ImGui::DragInt("Activation value", &attackPtr->activationValue);
+    ImGui::SliderFloat("Success chance", &attackPtr->successChance, 0.0f, 1.0f);
 }
 
 void EditorModule::drawButton(Button* button)
