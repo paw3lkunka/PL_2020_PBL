@@ -120,13 +120,13 @@ enum class Event : unsigned int
 #pragma endregion
 
 #pragma region COLLISIONS
-//TODO UPDATE
-    // Collision between DYNAMIC and DYNAMIC or KINEMATIC collider was detected. DATA: CollisionData {Collider* cause, Collider* target, vec3 separation}.
-    COLLSION_ENTER,
-    COLLSION_EXIT,
-    // DYNAMIC collider entered TRIGGER. DATA: TriggerData {Collider* cause, Collider* trigger}.
+    // Collision between two bodies started. DATA: CollisionData {Rigidbody* body1, Rigidbody* body2}.
+    COLLISION_ENTER,
+    // Collision between two bodies ended. DATA: CollisionData {Rigidbody* body1, Rigidbody* body2}.
+    COLLISION_EXIT,
+    // Body entered TRIGGER. DATA: TriggerData {Rigidbody* cause, Rigidbody* trigger}.
     TRIGGER_ENTER,
-    // DYNAMIC collider escaped TRIGGER; DATA: TriggerData {Collider* cause, Collider* trigger}.
+    // Body escaped TRIGGER. DATA: TriggerData {Rigidbody* cause, Rigidbody* trigger}.
     TRIGGER_EXIT,
 #pragma endregion
 
@@ -169,7 +169,7 @@ enum class Event : unsigned int
     RENDERER_LAST = RENDERER_SET_BONE_TRANSFORMS_PTR,
     RESOURCES_FIRST = LOAD_FILE,
     RESOURCES_LAST = SETUP_BONES,
-    COLLISIONS_FIRST = COLLSION_ENTER,
+    COLLISIONS_FIRST = COLLISION_ENTER,
     COLLISIONS_LAST = TRIGGER_EXIT,
     UI_FIRST = LOAD_SCENE,
     UI_LAST = LOAD_SCENE,

@@ -213,14 +213,14 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::AUDIO_SOURCE_REWIND:
         break;
 
-    case Event::COLLSION_ENTER:
+    case Event::COLLISION_ENTER:
     {
         auto tData = msg.getValue<CollisionData>();
         std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " detected" << std::endl;
     }
         break;
         
-    case Event::COLLSION_EXIT:
+    case Event::COLLISION_EXIT:
     {
         auto tData = msg.getValue<CollisionData>();
         std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;

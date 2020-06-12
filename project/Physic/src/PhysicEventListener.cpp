@@ -21,10 +21,10 @@ void PhysicEventListener::onContact(const rp3d::CollisionCallback::CallbackData&
         switch (contactPair.getEventType())
         {
             case rp3d::CollisionCallback::ContactPair::EventType::ContactStart:
-                GetCore().messageBus.sendMessage(Message(Event::COLLSION_ENTER, data));
+                GetCore().messageBus.sendMessage(Message(Event::COLLISION_ENTER, data));
                 break;
             case rp3d::CollisionCallback::ContactPair::EventType::ContactExit:
-                GetCore().messageBus.sendMessage(Message(Event::COLLSION_EXIT, data));
+                GetCore().messageBus.sendMessage(Message(Event::COLLISION_EXIT, data));
                 break;
         }
     }

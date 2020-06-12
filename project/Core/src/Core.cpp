@@ -248,7 +248,10 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
-            physicModule.physicSimulation(gameSystemsModule.entities);
+            if (!gamePaused)
+            {
+                physicModule.physicSimulation(gameSystemsModule.entities);
+            }
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -310,7 +313,7 @@ void Core::cleanup()
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
     physicModule.cleanup();
-    objectModule.cleanup(); // on master was removed by @Memowa_Policja
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
