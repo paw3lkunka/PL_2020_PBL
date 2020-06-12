@@ -5,6 +5,8 @@
 
 class Enemy;
 class Transform;
+class EnemyAnimation;
+class EnemyAttack;
 
 /**
  * @brief Determine whole enemy behaviour. 
@@ -19,12 +21,15 @@ protected:
     virtual void fixedUpdate();
 protected:
 private:
-    Enemy* enemyPtr;
-    Transform* enemyTransformPtr;
-    EnemyAnimation* enemyAnimationPtr;
+    //obligatory
+        Enemy* enemyPtr;
+        Transform* enemyTransformPtr;
+    //optional
+        EnemyAnimation* enemyAnimationPtr;
+        EnemyAttack* enemyAttackPtr;
 
     /**
-     * @brief Procedure of detecting kayak
+     * @brief Procedure of detecting kayak.
      * 
      * @param kayakPtr Pointer to kayak object - MUST NOT BE NULL!
      * @param enemyPos Position of enemy in world space.
@@ -33,12 +38,18 @@ private:
     void detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayakPos);
     
     /**
-     * @brief 
+     * @brief Animation of enemy - look at with lerp.
      * 
-     * @param kayakPtr Pointer to kayak object - MUST NOT BE NULL!
      * @param dir Direction to look at (normalized).
      */
-    void animation(Kayak* kayakPtr, glm::vec3 dir);
+    void animation(glm::vec3 dir);
+
+    /**
+     * @brief Procedure of attack.
+     * 
+     * @param dir Direction from enemy to player.
+     */
+    void attack(glm::vec3 dir);
 };
 
 #endif /* !ENEMIESSYSTEM_HPP_ */

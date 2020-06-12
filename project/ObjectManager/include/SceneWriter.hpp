@@ -57,7 +57,7 @@ private:
     std::unordered_map<std::string, unsigned int> childrenMap;
 
     ///@brief json object - parser to json
-    nlohmann::json j;
+    nlohmann::json* json;
 
     ///@brief name of actual object
     std::string name;
@@ -81,6 +81,13 @@ private:
     void saveRectTransform(RectTransform* componentPtr);
     void saveButton(Button* componentPtr);
     void saveHydroAccelerator(HydroAccelerator* componentPtr);
+    void saveUiSortingGroup(UiSortingGroup* componentPtr);
+    void saveToggleButton(ToggleButton* componentPtr);
+    void saveCargoButton(CargoButton* componentPtr);
+    void saveCargoStorage(CargoStorage* componentPtr);
+
+    // ! didn't call it in saveComponents
+    void saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser);
 
     // ? saving assets
     void saveMaterial(Material* assetPtr);
@@ -91,7 +98,7 @@ private:
     void saveFont(Font* assetPtr);
 
     // ? saving Messages
-    void saveMessage(std::string msgName, Message msg);
+    void saveMessage(std::string msgName, Message msg, std::string typeName = "onClickEvents");
 };
 
 #endif /* !SCENEWRITER_HPP_ */

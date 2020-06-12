@@ -274,3 +274,17 @@ int Material::getInt(std::string name)
     }
 }
 
+const glm::vec4& Material::getVec4(std::string name)
+{
+    std::unordered_map<std::string, glm::vec4>::iterator vecs4Iter = vec4s.find(name);
+    if (vecs4Iter != vec4s.end())
+    {
+        return vecs4Iter->second;
+    }
+    else
+    {
+        std::cout << "Cannot find this vector4: " << name << std::endl;
+        return glm::vec4(0.0f);
+    }
+}
+

@@ -39,24 +39,22 @@ void EditorModule::setup()
     // * index for combo list
     currentItem = 0;
     enumValue = 0;
-    /*
-    buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-    buttonShader = objectModule->getMaterialPtrByName("startMat")->getShaderPtr();
-    fontPtr = objectModule->getFontPtrByName("KosugiMaru-Regular");
-    textShader = objectModule->getMaterialPtrByName("TextMaterial")->getShaderPtr();
-    positionPointer = objectModule->newEntity(2, "pointerHelper");
-    {
-        UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
-        Material* mat = objectModule->newMaterial(buttonShader, "crossMat", RenderType::Transparent);
-        mat->setTexture("sprite", objectModule->getTexturePtrByFilePath("Resources/Sprites/cross.png"));
-        mat->setVec4("color", {1.0f, 0.0f, 1.0f, 0.9f});
-        uiR->material = mat;
+    // buttonSprite = objectModule->getTexturePtrByFilePath("Resources/Sprites/button_test.png");
+    // buttonShader = objectModule->getMaterialPtrByName("startMat")->getShaderPtr();
+    // fontPtr = objectModule->getFontPtrByName("KosugiMaru-Regular");
+    // textShader = objectModule->getMaterialPtrByName("TextMaterial")->getShaderPtr();
+    // positionPointer = objectModule->newEntity(2, "pointerHelper");
+    // {
+    //     UiRenderer* uiR = objectModule->newEmptyComponentForLastEntity<UiRenderer>();
+    //     Material* mat = objectModule->newMaterial(buttonShader, "crossMat", RenderType::Transparent);
+    //     mat->setTexture("sprite", objectModule->getTexturePtrByFilePath("Resources/Sprites/cross.png"));
+    //     mat->setVec4("color", {1.0f, 0.0f, 1.0f, 0.9f});
+    //     uiR->material = mat;
 
-        RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
-        rt->getSizeModifiable() = {50, 50};
-        GetCore().uiModule.rootNodes.push_back(rt);
-    }
-    */
+    //     RectTransform* rt = objectModule->newEmptyComponentForLastEntity<RectTransform>();
+    //     rt->getSizeModifiable() = {50, 50};
+    //     GetCore().uiModule.rootNodes.push_back(rt);
+    // }
 }
 
 void EditorModule::drawEditor()
@@ -182,6 +180,22 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(UiSortingGroup* temp = entityPtr->getComponentPtr<UiSortingGroup>())
+    {
+        if(ImGui::CollapsingHeader("Sorting Group"))
+        {
+            drawSortingGroup(temp);
+        }
+    }
+
+    if(ToggleButton* temp = entityPtr->getComponentPtr<ToggleButton>())
+    {
+        if(ImGui::CollapsingHeader("Toggle Button"))
+        {
+            drawToggleButton(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -206,16 +220,19 @@ std::string EditorModule::formatVec3(glm::vec3 vector)
 
 void EditorModule::drawTransform(Transform* transformPtr)
 {
+    bool updateReactT;
+
     //* transform variables
     glm::vec3 localRotation(0.0f);
 
     localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
 
     ImGui::Text("Local transform:");
-    ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+    updateReactT |= ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
     if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
     {
         transformPtr->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        updateReactT = true;
     }
     ImGui::DragFloat3("Scale: ", (float*)&transformPtr->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
     ImGui::NewLine();
@@ -282,27 +299,38 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
-    ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
-    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
+    //TODO check after physic backend change
+    bool changed = false, mass = false;
+
+    changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
+    changed |= mass = ImGui::DragFloat("Mass", &rBodyPtr->mass);
+    changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
+    changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+    
+    std::string bType = "ERROR";
+    switch (rBodyPtr->type)
     {
-        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
-        {
-            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
-        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
-        {
-            //TODO implement solid or hollow
-            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
+    case rp3d::BodyType::STATIC:
+        bType = "static";
+        break;
+
+    case rp3d::BodyType::KINEMATIC:
+        bType = "kinematic";
+        break;
+
+    case rp3d::BodyType::DYNAMIC:
+        bType = "dynamic";
+        break;
     }
-    ImGui::DragFloat("Drag", &rBodyPtr->drag);
-    ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+
+    ImGui::Text((std::string("Body type: ") + bType).c_str());
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
+
+    if (changed)
+    {
+        rBodyPtr->updateReactRB(mass);
+    }
 }
 
 void EditorModule::drawKayak(Kayak* kayakPtr)
@@ -330,6 +358,19 @@ void EditorModule::drawButton(Button* button)
     ImGui::Checkbox("Active", &button->isActive);
 }
 
+void EditorModule::drawToggleButton(ToggleButton* toggleButtonPtr)
+{
+    ImGui::ColorEdit4("Base color ON", (float*)&toggleButtonPtr->baseColorOn);
+    ImGui::ColorEdit4("Highlighted color ON", (float*)&toggleButtonPtr->highlightedColorOn);
+    ImGui::ColorEdit4("On Click color ON", (float*)&toggleButtonPtr->onClickColorOn);
+    ImGui::ColorEdit4("Base color OFF", (float*)&toggleButtonPtr->baseColorOff);
+    ImGui::ColorEdit4("Highlighted color OFF", (float*)&toggleButtonPtr->highlightedColorOff);
+    ImGui::ColorEdit4("On Click color OFF", (float*)&toggleButtonPtr->onClickColorOff);
+
+    ImGui::ColorEdit4("Inactive color", (float*)&toggleButtonPtr->inactiveColor);
+    ImGui::Checkbox("Active", &toggleButtonPtr->isActive);
+}
+
 void EditorModule::drawText(TextRenderer* textRenderer)
 {
     static std::string textBuf = textRenderer->mesh.text;
@@ -347,6 +388,11 @@ void EditorModule::drawText(TextRenderer* textRenderer)
 void EditorModule::drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr)
 {
     ImGui::SliderFloat("Lerp parameter", &enemyAnimationPtr->lerpParameter, 0.0f, 1.0f);
+}
+
+void EditorModule::drawSortingGroup(UiSortingGroup* sortingGroupPtr)
+{
+    ImGui::SliderFloat("Group Transparency: ", &sortingGroupPtr->groupTransparency, 0.0f, 1.0f);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)

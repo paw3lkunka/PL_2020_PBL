@@ -41,6 +41,10 @@ if(NOT EXISTS "libs/freetype2/CMakeLists.txt")
     execute_process(COMMAND git submodule update --init "libs/freetype2/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+if(NOT EXISTS "libs/reactphysics3d/CMakeLists.txt")
+    execute_process(COMMAND git submodule update --init "libs/reactphysics3d/" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 project( PBL )
 enable_language( CXX )
 
@@ -113,7 +117,6 @@ set(BUILD_DOCS OFF CACHE BOOL "" FORCE) #Assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
-
 add_subdirectory(libs/glad/)
 add_subdirectory(libs/glfw/)
 add_subdirectory(libs/glm/)
@@ -121,6 +124,7 @@ add_subdirectory(libs/openal-soft)
 add_subdirectory(libs/assimp/)
 add_subdirectory(libs/json/)
 add_subdirectory(libs/freetype2/)
+add_subdirectory(libs/reactphysics3d/)
 
 aux_source_directory( project                                   PROJECT_SRC)
 aux_source_directory( project/Core/src                          CORE_SRC)
@@ -136,6 +140,7 @@ aux_source_directory( project/Audio/src                         AUDIO_SRC)
 aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
 aux_source_directory( project/Input/src                         INPUT_SRC)
 aux_source_directory( project/MessageBus/src                    MESSAGE_BUS_SRC)
+aux_source_directory( project/Physic/src                        PHYSIC_BUS_SRC)
 aux_source_directory( project/Renderer/src                      RENDERER_SRC)
 aux_source_directory( project/Renderer/src/mesh                 RENDERER_MESH_SRC)
 aux_source_directory( project/Renderer/src/packets              RENDERER_PACKETS_SRC)
@@ -157,6 +162,7 @@ list(
         ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
+        ${PHYSIC_BUS_SRC}
         ${RENDERER_SRC}
         ${RENDERER_MESH_SRC}
         ${RENDERER_PACKETS_SRC}
@@ -201,6 +207,12 @@ add_library(imgui
         ${IMGUI_HEADERS}
 )
 
+add_library(xoshiro
+    STATIC
+        "libs/xoshiro/xoshiro256starstar.c"
+        "libs/xoshiro/xoshiro.h"
+)
+
 include_directories( 
     project
     project/Autogen/include
@@ -222,6 +234,7 @@ include_directories(
     project/ObjectManager/include
     project/Input/include
     project/MessageBus/include
+    project/Physic/include
     project/Renderer/include
     project/Renderer/include/mesh
     project/Renderer/include/packets
@@ -238,6 +251,8 @@ include_directories(
     libs/json/single_include/nlohmann
     libs/imgui/
     libs/freetype2/include
+    libs/xoshiro/
+    libs/reactphysics3d/include
     build/libs/assimp/include
 )
 
@@ -254,6 +269,8 @@ target_link_libraries(
     PUBLIC nlohmann_json::nlohmann_json
     PUBLIC imgui
     PUBLIC freetype
+    PUBLIC xoshiro
+    PUBLIC reactphysics3d
 )
 
 target_compile_options(lib PUBLIC -Wno-volatile)
@@ -261,6 +278,7 @@ target_compile_options(lib PUBLIC -Wno-volatile)
 #Disables library warnings
 target_compile_options(assimp PUBLIC -w)
 target_compile_options(OpenAL PUBLIC -w)
+target_compile_options(reactphysics3d PUBLIC -w)
 target_compile_options(glm INTERFACE -Wno-volatile)
 #FIXME Z jakiegoś powodu tylko u minie to działa, i tylko u mnie blokują one warningi.
 # W wolnej chwili wartoby sprawdzić, o co tu chodzi.

@@ -1,13 +1,18 @@
 #include "Core.hpp"
+#include "Utils.hpp"
 #include "imgui.h"
+
+#include "xoshiro.h"
 
 #include "Components.inc"
 #include "Systems.inc"
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
-#include "ScenesPaths.inl"
+#include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
+
+#include "glm/gtx/string_cast.hpp"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -51,6 +56,9 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 
 int Core::init()
 {
+    xoshiro_Init();
+    physicModule.init();
+    
     if( instance != nullptr )
     {
 		std::cerr << "Core already initialized" << std::endl;
@@ -94,15 +102,15 @@ int Core::init()
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &uiModule );
-    messageBus.addReceiver( &tmpExit );
+    messageBus.addReceiver( &gamePlayModule );
 
     // ! Scene loading
     if (recreateScene)
     {
         // ? -r
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -163,30 +171,25 @@ int Core::init()
     messageBus.addReceiver( &rendererModule );
 #pragma endregion
 
+    // TODO <make this function>
     // ! IK system initialize
-    BoneAttachData leftData;
-    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
+        BoneAttachData leftData;
+        leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+        leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
-    BoneAttachData rightData;
-    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
+        BoneAttachData rightData;
+        rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+        rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
-    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-    //gameSystemsModule.addSystem(&paddleIkSystem);
-
-#pragma region AudioModule demo - initialization
+        Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+        //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+        //gameSystemsModule.addSystem(&paddleIkSystem);
+    // TODO </make this function>
 
     audioModule.init();
 
-#pragma endregion
-
-#pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-#pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
@@ -194,13 +197,13 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+    gamePlayModule.init();
 
 #pragma regnon attach systems
 
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
-    gameSystemsModule.addSystem(&collisionSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     
     gameSystemsModule.addSystem(&hydroBodySystem);
@@ -215,6 +218,10 @@ int Core::init()
     gameSystemsModule.addSystem(&uiRendererSystem);
     gameSystemsModule.addSystem(&uiButtonSystem);
     gameSystemsModule.addSystem(&enemySystem);
+    gameSystemsModule.addSystem(&sortingGroupSystem);
+    gameSystemsModule.addSystem(&toggleButtonSystem);
+    gameSystemsModule.addSystem(&cargoStorageSystem);
+    gameSystemsModule.addSystem(&cargoButtonSystem);
 
 #pragma endregion
 
@@ -269,6 +276,10 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
+            if (!gamePaused)
+            {
+                physicModule.physicSimulation(gameSystemsModule.entities);
+            }
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -290,6 +301,8 @@ int Core::mainLoop()
 
         // ? IMGUI Window setting up
         editorModule.drawEditor();
+        //HACK i added this here, tu apply changes to model matrix;
+        sceneModule.updateTransforms();
 
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
@@ -321,12 +334,14 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    audioModule.cleanup();
     editorModule.onExit();
 
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
-    audioModule.cleanup();
+    physicModule.cleanup();
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -339,12 +354,74 @@ void Core::close()
     glfwSetWindowShouldClose(window,true);
 }
 
+int Core::randomInt()
+{
+    return xoshiro_next();
+}
+
+
+int Core::randomInt(int max)
+{
+    return xoshiro_next() % (max + 1);
+}
+
+int Core::randomInt(int min, int max)
+{
+    return min + (xoshiro_next() % (max + 1 - min));
+}
+
+float Core::randomFloat01R()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);
+
+    return number.f - 1.0f;
+}
+float Core::randomFloat01L()
+{
+    union
+    {
+        uint32_t i;
+        float f;
+    } number;
+
+    number.i = xoshiro_next();
+    number.i = 0x3F800000U | (number.i >> 9);;
+
+    return 2.0f - number.f;
+}
+
+float Core::randomFloatL(float max)
+{
+    return std::lerp(0, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float max)
+{
+    return std::lerp(0, max, randomFloat01R());
+}
+
+float Core::randomFloatL(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01L());
+}
+
+float Core::randomFloatR(float min, float max)
+{
+    return std::lerp(min, max, randomFloat01R());
+}
+
 CameraSystem Core::cameraSystem;
 CameraControlSystem Core::cameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionSystem Core::collisionSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
@@ -355,4 +432,11 @@ UiRendererSystem Core::uiRendererSystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
+<<<<<<< HEAD
 HydroBodySystem Core::hydroBodySystem;
+=======
+SortingGroupSystem Core::sortingGroupSystem;
+ToggleButtonSystem Core::toggleButtonSystem;
+CargoStorageSystem Core::cargoStorageSystem;
+CargoButtonSystem Core::cargoButtonSystem;
+>>>>>>> 0e74b9cc3819c01eabf403768f0050dc563a9e4a

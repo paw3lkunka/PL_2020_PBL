@@ -1,6 +1,7 @@
 #include "ConsoleModule.hpp"
 
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 #include "MessageBus.hpp"
 #include "Message.inl"
@@ -8,7 +9,7 @@
 #include "GamepadDataStructures.inl"
 #include "FileStructures.inl"
 #include "AssetStructers.inl"
-#include "CollisionDataStructures.inl"
+#include "EnemyDataStructures.inl"
 #include "mesh/MeshCustom.hpp"
 #include "AudioFile.hpp"
 #include "Components.inc"
@@ -212,25 +213,75 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::AUDIO_SOURCE_REWIND:
         break;
 
-    case Event::COLLSION_DETECT:
-        {
-        }
-        break;
-        
-    case Event::TRIGGER_ENTER:
+    case Event::COLLISION_ENTER:
     {
         auto tData = msg.getValue<CollisionData>();
-        std::cout << "Trigger: " << Name(tData.target) << " was entered by: " << Name(tData.cause) << std::endl;
+        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " detected" << std::endl;
+    }
+        break;
+        
+    case Event::COLLISION_EXIT:
+    {
+        auto tData = msg.getValue<CollisionData>();
+        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;
+    }
+        break;
+
+    case Event::TRIGGER_ENTER:
+    {
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.triggerBody) << " was entered by: " << Name(tData.causeBody) << std::endl;
     }
         break;
         
     case Event::TRIGGER_EXIT:
     {
-        auto tData = msg.getValue<CollisionData>();
-        std::cout << "Trigger: " << Name(tData.target) << " was exited by: " << Name(tData.cause) << std::endl;
+        auto tData = msg.getValue<TriggerData>();
+        std::cout << "Trigger: " << Name(tData.triggerBody) << " was exited by: " << Name(tData.causeBody) << std::endl;
     }
         break;
 
+    case Event::PLAYER_DETECTED:
+    {
+        auto EnemyPtr = msg.getValue<Component*>();
+        std::cout << "PLAYER_DETECTED by: " << Name(EnemyPtr) << std::endl;
+    }
+        break;
+        
+    case Event::PLAYER_ESCAPED:
+    {
+        auto EnemyPtr = msg.getValue<Component*>();
+        std::cout << "PLAYER_ESCAPED from: " << Name(EnemyPtr) << std::endl;
+    }
+        break;
+        
+    case Event::PLAYER_ATTACKED:
+    {
+        auto data = msg.getValue<AttackData>();
+        std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
+                << (data.success ? " , un" : ", ") << "successfull, "
+                << "direction: " << glm::to_string(data.direction) << std::endl;
+    }
+        break;
+
+    case Event::ADD_CARGO:
+        std::cout << "ADD_CARGO" << std::endl;
+    break;
+    case Event::REMOVE_CARGO:
+        std::cout << "REMOVE_CARGO" << std::endl;
+    break;
+
+    case Event::EXIT_GAME:
+        std::cout << "EXIT" << std::endl;
+    break;
+
+    case Event::PAUSE_GAME:
+        std::cout << "PAUSE" << std::endl;
+    break;
+
+    case Event::LOAD_SCENE:
+        std::cout << "LOAD_SCENE: " << msg.getValue<const char*>() << std::endl;
+    break;
     default:
         std::cout << "console here: Event with int value: " << (int)msg.getEvent() << " was thrown." << std::endl;
         break;

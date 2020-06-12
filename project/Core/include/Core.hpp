@@ -3,13 +3,6 @@
 
 #pragma region Includes
 
-// * System-depended
-#ifdef __linux__
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-#endif
-
 // * Other libs
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -27,6 +20,8 @@
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
+#include "PhysicModule.hpp"
+#include "GamePlayModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -105,8 +100,83 @@ class Core
         /**
          * @brief Path to scene file.
          */
-        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
+        std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";
 #pragma endregion
+
+#pragma region Utilities
+    public:
+        /**
+         * @brief Returns random int.
+         * 
+         * @return int random number.
+         */
+        int randomInt();
+
+        /**
+         * @brief Returns random int from [0, max] range.
+         * 
+         * @param max upper bound of range.
+         * @return int random number.
+         */
+        int randomInt(int max);
+
+        /**
+         * @brief Returns random int from [min, max] range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return int random number.
+         */
+        int randomInt(int min, int max);
+
+        /**
+         * @brief Returns random float from [0, max) range.
+         * 
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatL(float max);
+
+        /**
+         * @brief Returns random float from (0, max] range.
+         * 
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatR(float max);
+        
+        /**
+         * @brief Returns random float from [min, max) range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatL(float min, float max);
+        
+        /**
+         * @brief Returns random float from (min, max] range.
+         * 
+         * @param min lower bound of range.
+         * @param max upper bound of range.
+         * @return float random number.
+         */
+        float randomFloatR(float min, float max);
+
+        /**
+         * @brief Returns random float from [0, 1) range.
+         * 
+         * @return float random number.
+         */
+        float randomFloat01L();
+        
+        /**
+         * @brief Returns random float from (0, 1] range.
+         * 
+         * @return float random number.
+         */
+        float randomFloat01R();
+#pragma
 
 #pragma region Constants
     public:       
@@ -181,6 +251,11 @@ class Core
          * @return double 
          */
         double getCurrentFrameStart();
+
+        /**
+         * @brief is game paused flag
+         */
+        const bool isGamePaused() { return gamePaused; }
 #pragma endregion
 
 #pragma region Modules
@@ -215,23 +290,13 @@ class Core
         ///@brief ui graph
         UiModule uiModule;
 
-        /**
-         * TODO Please, do something better here ;-;
-         * @brief safely close application, on ESC press
-         */
-        class : public IModule
-        {
-        virtual void receiveMessage(Message msg)
-            {
-                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-                {
-                    instance->close();
-                }
-            }
-        } tmpExit;
-        
-#pragma endregion
+        ///@brief responsible for physic simulation
+        PhysicModule physicModule;
 
+        ///@brief gamePlay module
+        GamePlayModule gamePlayModule;
+
+#pragma endregion
 
 #pragma region Systems
 //TODO must be a better way, than static fields
@@ -241,7 +306,6 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
-        static CollisionSystem collisionSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;
@@ -255,6 +319,10 @@ class Core
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
         static HydroBodySystem hydroBodySystem;
+        static SortingGroupSystem sortingGroupSystem;
+        static ToggleButtonSystem toggleButtonSystem;
+        static CargoStorageSystem cargoStorageSystem;
+        static CargoButtonSystem cargoButtonSystem;
 
 #pragma endregion
 
@@ -269,9 +337,11 @@ class Core
         static int windowWidth;
         static int windowHeight;
 
+        friend class GamePlayModule;
     private:
         static Core* instance;
-        GLFWwindow* window; 
+        GLFWwindow* window;
+        bool gamePaused = false;
 
         double currentFrameStart;
 

@@ -8,7 +8,7 @@
 #include "Shader.hpp"
 #include "Cubemap.hpp"
 #include "Material.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Font.hpp"
 #include "mesh/Mesh.hpp"
 #include "mesh/MeshCustom.hpp"
@@ -25,15 +25,15 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     hasInstance = true;
     shaders.reserve(50);
     components.reserve(400);
-    entities.reserve(200);
+    entities.reserve(400);
     meshes.reserve(50);
     textures.reserve(50);
     cubemaps.reserve(10);
-    materials.reserve(30);
+    materials.reserve(50);
     fonts.reserve(16);
 }
 
-ObjectContainer::~ObjectContainer()
+void ObjectContainer::cleanup()
 {
     for(auto c : components)
     {
@@ -91,7 +91,7 @@ MeshCustom* ObjectContainer::getMeshCustomFromPath(const char* meshPath)
 {
     for(auto m : meshes)
     {
-        if(objModule->compareStrings(m->getMeshPath().c_str(), meshPath) && dynamic_cast<MeshCustom*>(m) != nullptr)
+        if((m->getMeshPath().compare(meshPath) == 0) && dynamic_cast<MeshCustom*>(m) != nullptr)
         {
             return dynamic_cast<MeshCustom*>(m);
         }
@@ -103,7 +103,7 @@ MeshSkinned* ObjectContainer::getMeshSkinnedFromPath(const char* meshPath)
 {
     for(auto m : meshes)
     {
-        if(objModule->compareStrings(m->getMeshPath().c_str(), meshPath) && dynamic_cast<MeshSkinned*>(m) != nullptr)
+        if((m->getMeshPath().compare(meshPath) == 0) && dynamic_cast<MeshSkinned*>(m) != nullptr)
         {
             return dynamic_cast<MeshSkinned*>(m);
         }
@@ -127,7 +127,7 @@ Entity* ObjectContainer::getEntityFromName(const char* name)
 {
     for(int i = 0; i < entities.size(); ++i)
     {
-        if(objModule->compareStrings(entities[i].getName().c_str(), name) )
+        if(entities[i].getName().compare(name) == 0 )
         {
             return &entities[i];
         }
@@ -223,7 +223,7 @@ Material* ObjectContainer::getMaterialFromName(const char* name)
 {
     for(auto m : materials)
     {
-        if(objModule->compareStrings(m->getName(), name))
+        if(strcmp(m->getName(), name) == 0)
         {
             return m;
         }
@@ -235,7 +235,7 @@ Texture* ObjectContainer::getTexturePtrByFilePath(const char* filePath)
 {
     for(Texture* t : textures)
     {
-        if(objModule->compareStrings(t->filePath.c_str(), filePath))
+        if(t->filePath.compare(filePath) == 0)
         {
             return t;
         }
@@ -265,13 +265,41 @@ Font* ObjectContainer::getFontPtrByName(const char* name)
     Font* font = nullptr;
     for(auto var : fonts)
     {
-        if (objModule->compareStrings(var->getName(), name))
+        if (strcmp(var->getName(), name) == 0)
         {
             font = var;
             break;
         }
     }
     return font;
+}
+
+Shader* ObjectContainer::getShaderPtrByName(std::string shaderName)
+{
+    Shader* shader = nullptr;
+    for(auto var : shaders)
+    {
+        if (var->shaderName.compare(shaderName) == 0)
+        {
+            shader = var;
+            break;
+        }
+    }
+    return shader;
+}
+
+Mesh* ObjectContainer::getMeshByMeshPath(std::string meshPath)
+{
+    Mesh* mesh = nullptr;
+    for(auto var : meshes)
+    {
+        if(meshPath.compare(var->getMeshPath()) == 0)
+        {
+            mesh = var;
+            break;
+        }
+    }
+    return mesh;
 }
 
 void ObjectContainer::unloadScene()

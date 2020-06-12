@@ -1,85 +1,76 @@
 #include "PhysicSystem.hpp"
 
 #include <glm/glm.hpp>
+#include <reactphysics3d/reactphysics3d.h>
 
 #include "Core.hpp"
+#include "Utils.hpp"
 #include "Entity.hpp"
 #include "Components.inc"
 
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/vec_swizzle.hpp> 
 
-glm::vec3 PhysicSystem::G_CONST = {0.0f, 980.665f, 0.0f};
-
 bool PhysicSystem::assertEntity(Entity* entity)
 {
     transformPtr = entity->getComponentPtr<Transform>();
     rBodyPtr = entity->getComponentPtr<Rigidbody>();
     colliderPtr = entity->getComponentPtr<Collider>();
-    return transformPtr && rBodyPtr;
+    return transformPtr && rBodyPtr && colliderPtr;
+}
+
+void PhysicSystem::start()
+{
+
+    rp3d::Transform reactTrb
+    (
+        Vec3Cast(transformPtr->getModelMatrix()[3]),
+        QuatCast(transformPtr->getWorldRotation())
+    );
+    rBodyPtr->reactRB = GetCore().physicModule.GetWorld().createRigidBody(reactTrb);
+    
+    colliderPtr->computeReactCS();
+
+    rp3d::Transform reactTc
+    (
+        Vec3Cast(colliderPtr->center),
+        rp3d::Quaternion::identity()
+    );
+
+    colliderPtr->reactCollider = rBodyPtr->reactRB->addCollider(colliderPtr->reactShape, reactTc);
+    colliderPtr->reactCollider->setIsTrigger(colliderPtr->isTrigger);
+
+    rBodyPtr->updateReactRB(true);
+
+    //Addresses of our components is stored in rp3d components as user data pointer.
+    rBodyPtr->reactRB->setUserData(rBodyPtr);
+    colliderPtr->reactCollider->setUserData(colliderPtr);
 }
 
 void PhysicSystem::fixedUpdate()
 {
-    force = {0,0,0};
-    torque = {0,0,0};
+    rBodyPtr->updateReactTransform(transformPtr);
 
-    if( auto* sphere = dynamic_cast<SphereCollider*>(colliderPtr) )
+    for (Impulse& i : rBodyPtr->impulses)
     {
-        for (Impulse& impulse : rBodyPtr->impulses)
-            applyImpulse(impulse, sphere);
+        switch (i.type)
+        {
+        case Impulse::CENTER_OF_MASS_FORCE:
+            rBodyPtr->reactRB->applyForceToCenterOfMass(Vec3Cast(i.force));
+            break;
+
+        case Impulse::WORLD_SPACE_FORCE:
+            rBodyPtr->reactRB->applyForceAtWorldPosition(Vec3Cast(i.force), Vec3Cast(i.point));
+            break;
+
+        case Impulse::LOCAL_SPACE_FORCE:
+            rBodyPtr->reactRB->applyForceAtLocalPosition(Vec3Cast(i.force), Vec3Cast(i.point));
+            break;
+
+        case Impulse::TORQUE:
+            rBodyPtr->reactRB->applyTorque(Vec3Cast(i.force));
+            break;
+        }
     }
-    else if( auto* box = dynamic_cast<BoxCollider*>(colliderPtr) )
-    {
-        for (Impulse& impulse : rBodyPtr->impulses)
-            applyImpulse(impulse, box, transformPtr);
-    }
-    else
-    {
-        for (Impulse& impulse : rBodyPtr->impulses)
-            applyImpulse(impulse);
-    }
-
-    if (!rBodyPtr->ignoreGravity)
-    {
-        force += -rBodyPtr->mass * G_CONST;
-    }
-
-    glm::vec3 acceleration = force / rBodyPtr->mass;
-    rBodyPtr->velocity += acceleration * Core::FIXED_TIME_STEP_F;
-
-    glm::vec3 angularAcceleration = rBodyPtr->momentOfInertia * torque;
-    rBodyPtr->angularVelocity += angularAcceleration * Core::FIXED_TIME_STEP_F;
-
-    rBodyPtr->velocity *= glm::exp(-rBodyPtr->drag * Core::FIXED_TIME_STEP_F);
-    rBodyPtr->angularVelocity *= glm::exp(-rBodyPtr->angularDrag * Core::FIXED_TIME_STEP_F);
-
-    //TODO VELOCITY W AUDIO
-
-    transformPtr->getLocalPositionModifiable() += glm::xyz(transformPtr->getToParentMatrix() * glm::vec4(rBodyPtr->velocity, 0.0f));
-    transformPtr->getLocalRotationModifiable() = glm::quat(rBodyPtr->angularVelocity) * transformPtr->getLocalRotation();
-
     rBodyPtr->impulses.clear();
-}
-
-void PhysicSystem::applyImpulse(Impulse impulse, SphereCollider* collider)
-{
-    //TODO check this
-    //FIXME NIE UWZGLĘDNIA SKALI!!!!!
-    force += impulse.force * collider->radius / (collider->radius + glm::length(impulse.point));
-    //torque += glm::cross(impulse.point, impulse.force);
-}
-
-void PhysicSystem::applyImpulse(Impulse impulse, BoxCollider* collider, Transform* transform)
-{
-    glm::vec3 msForce = transform->getToModelMatrix() * glm::vec4(impulse.force, 0.0f);
-    msForce = msForce * collider->halfSize / (collider->halfSize + impulse.point);
-    //TODO check this
-    force += glm::xyz(transform->getModelMatrix() * glm::vec4(msForce, 0.0f));
-    //torque += glm::cross(impulse.point, impulse.force);
-}
-
-void PhysicSystem::applyImpulse(Impulse impulse)
-{
-    force += impulse.force;
 }

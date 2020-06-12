@@ -517,10 +517,23 @@ objectModule.newEntity(2, "sampleSound");
             sphereSound->addComponent(rbSound);
         Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
-            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
-            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
-            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
+            keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
+            keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
         Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
             transform->setParent(&sceneModule.rootNode);
             transform->getLocalPositionModifiable().x = 50;
@@ -545,32 +558,6 @@ objectModule.newEntity(2, "sampleSound");
 
 // Box, and some fixes
 {
-    //Adding y axis
-    {
-        auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-            auto* map = pbit->getComponentPtr<PhysicalInputKeymap>();
-                Impulse up = {glm::vec3(0.0f, 50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                Impulse down = {glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                map->continuous.emplace(GLFW_KEY_Z, up);
-                map->continuous.emplace(GLFW_KEY_X, down);
-    }
-    //I fix
-    {
-        auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-            auto* rb1 = o1->getComponentPtr<Rigidbody>();
-            auto* sc1 = o1->getComponentPtr<SphereCollider>();
-            rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
-            
-        auto* o2 = objectModule.getEntityPtrByName("Sphere001");
-            auto* rb2 = o2->getComponentPtr<Rigidbody>();
-            auto* sc2 = o2->getComponentPtr<SphereCollider>();
-            rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
-            
-        auto* o3 = objectModule.getEntityPtrByName("sphereSound");
-            auto* rb3 = o3->getComponentPtr<Rigidbody>();
-            auto* sc3 = o3->getComponentPtr<SphereCollider>();
-            rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
-    }
     objectModule.newEntity(4, "TestBox");
     {
         auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -585,10 +572,8 @@ objectModule.newEntity(2, "sampleSound");
             rb->drag = 10;
             rb->ignoreGravity = false;
             rb->mass = 10;
-            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {0.5f, 0.5f, 0.5f};
-            bc->calculateVert();
+            bc->halfSize = {3.0f, 3.0f, 3.0f};
     }
 }
 
@@ -596,11 +581,9 @@ objectModule.newEntity(2, "sampleSound");
 //Added Rigidbody and HydroBody to the Kayak entity so it now floats 
 {
     auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
-        rigidbody->mass = 120.0f;
-        rigidbody->momentOfInertia = BoxMomentOfInertia(120.0f, 18.0f, 5.0f, 90.0f);
-        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
-        rigidbody->drag = 1.0f;
-        rigidbody->angularDrag = 1.0f;
+        rigidbody->mass = 60.0f;
+        rigidbody->drag = 3.0f;
+        rigidbody->angularDrag = 3.0f;
         rigidbody->ignoreGravity = true;
 
     auto boxCollider = objectModule.newEmptyComponent<BoxCollider>();
@@ -622,13 +605,10 @@ objectModule.newEntity(2, "sampleSound");
             t->getLocalPositionModifiable().y = -35;
             t->getLocalScaleModifiable() = {300, 50, 150};
             t->setParent(&sceneModule.rootNode);
-        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::KINEMATIC;
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();        
+            bc->halfSize = {150.0f, 25.0f, 75.0f};
         auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-            rb->mass = 2000.0f;
-            rb->ignoreGravity = true;
-            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
-            rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);
+            rb->type = rp3d::BodyType::STATIC;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = objectModule
@@ -663,7 +643,8 @@ objectModule.newEntity(2, "sampleSound");
             tr->getLocalScaleModifiable() = {20.0f, 10.0f, 20.0f};
             tr->setParent(&sceneModule.rootNode);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::TRIGGER;
+            bc->halfSize = {10.0f, 5.0f, 10.0f};
+            bc->isTrigger = true;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;
@@ -678,7 +659,8 @@ objectModule.newEntity(2, "sampleSound");
             tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
             tr->setParent(&sceneModule.rootNode);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::TRIGGER;
+            bc->halfSize = {5.0f, 10.0f, 5.0f};
+            bc->isTrigger = true;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;

@@ -4,7 +4,8 @@
 #include <glm/vec3.hpp>
 
 #include "Component.hpp"
-#include "Rigidbody.inl"
+
+#include "Rigidbody.hpp"
 
 //TODO documentation
 struct HydroAccelerator : public Component
