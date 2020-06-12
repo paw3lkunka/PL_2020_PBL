@@ -24,4 +24,4 @@
 	url = https://git.savannah.gnu.org/git/freetype/freetype2.git
 [submodule "libs/reactphysics3d"]
 	path = libs/reactphysics3d
-	url = 
+	url = https://github.com/DanielChappuis/reactphysics3d.git
