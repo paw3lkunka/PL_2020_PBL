@@ -120,21 +120,14 @@ int Core::init()
         // ? -u
         {
             //some code here...
-            /*
-            auto cameraArmPtr = objectModule.newEntity(2, "CameraArm");
-                auto armTransform = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    armTransform->setParent(&sceneModule.rootNode);
-                auto gameplayCameraPtr = objectModule.newEmptyComponentForLastEntity<GameplayCamera>();
-
+            
+            auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
             auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
-                gameplayCameraPtr->playerTransform = kayakPtr->getComponentPtr<Transform>();
+                tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
 
             auto cameraPtr = objectModule.getEntityPtrByName("Camera");
-            auto cameraTransform = cameraPtr->getComponentPtr<Transform>();
-                
-                gameplayCameraPtr->cameraTransform = cameraTransform;
-                cameraTransform->setParent(armTransform);
-            */
+                cameraPtr->addComponent(tpCameraPtr);
+                cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");

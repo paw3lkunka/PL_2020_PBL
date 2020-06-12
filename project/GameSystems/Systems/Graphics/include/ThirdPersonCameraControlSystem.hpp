@@ -8,6 +8,8 @@
 
 struct Transform;
 struct Camera;
+struct ThirdPersonCamera;
+struct SphereCollider;
 
 class ThirdPersonCameraControlSystem : public System, public IMsgReceiver
 {
@@ -22,13 +24,16 @@ public:
 private:
     Transform* transform;
     Camera* camera;
+    ThirdPersonCamera* tpCamera;
+    SphereCollider* collider;
 
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    float yaw = 0.0f;
-    float pitch = 20.0f;
-    float roll;
+    float angleAroundPlayer = 0.0f;
+    float pitch = -70.0f;
+    //float yaw = 0.0f;
+    //float roll = 0.0f;
 
     bool usingMouse = false;
+    float rotationSensitivity = 1.0f;
     float zoom = 0.0f;
 };
 

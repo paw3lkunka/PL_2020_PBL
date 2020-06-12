@@ -81,7 +81,7 @@ struct Camera : public Component
     /// @brief Main camera flag - only main camera is getting processed
     bool isMain;
     /// @brief 
-    CameraControl control;
+    CameraControl control = CameraControl::Free;
 
     /// @brief Camera's view matrix, calculated every frame for main camera
     glm::mat4 viewMatrix;

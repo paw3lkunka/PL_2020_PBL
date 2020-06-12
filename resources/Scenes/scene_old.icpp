@@ -360,7 +360,6 @@
     objectModule.newEntity(4, "Camera");
     {
         auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
-            c->control = CameraControl::Free;
         ViewFrustum& frustum = c->getFrustumModifiable();
             frustum.farPlane = 2500.0f;
             frustum.nearPlane = 0.1f;

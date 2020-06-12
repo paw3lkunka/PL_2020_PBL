@@ -135,7 +135,6 @@ void FreeCameraControlSystem::receiveMessage(Message msg)
 
 void FreeCameraControlSystem::fixedUpdate()
 {
-    
     glm::vec3 direction = glm::vec3(0.0f);
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));

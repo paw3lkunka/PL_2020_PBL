@@ -5,7 +5,19 @@
 
 struct FirstPersonCamera : public Component
 {
-    /* data */
+    FirstPersonCamera() = default;
+    virtual ~FirstPersonCamera() = default;
+
+    Transform* player;
+    glm::vec3 headOffset = { 0.0f, 20.0f, 0.0f};
+
+    float rotationSensitivity = 1.0f;
+
+    float minPitch;
+    float maxPitch;
+
+    float minYaw;
+    float maxYaw;
 };
 
 
