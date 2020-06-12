@@ -15,7 +15,7 @@ class Message;
 class MeshRendererSystem : public System
 {
 public:
-    MeshRendererSystem() = default;
+    MeshRendererSystem() : System(false) {}
     virtual ~MeshRendererSystem() = default;
 
 protected:

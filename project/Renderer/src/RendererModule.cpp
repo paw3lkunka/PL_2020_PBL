@@ -201,13 +201,13 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    internalShaderError = new Shader(BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
+    internalShaderError = new Shader("internalShaderError", BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
-    combineShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombine.frag");
-    blurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag");
-    gbufferShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag");
-    ssaoShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAO.frag");
-    ssaoBlurShader = GetCore().objectModule.newShader("Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAOblur.frag");
+    combineShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombine.frag", nullptr, false);
+    blurShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag", nullptr, false);
+    gbufferShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag", nullptr, false);
+    ssaoShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAO.frag", nullptr, false);
+    ssaoBlurShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAOblur.frag", nullptr, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -1072,7 +1072,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
 
-    Shader irradianceShader(BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
+    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
     irradianceShader.use();
     irradianceShader.setInt("environmentMap", 0);
     irradianceShader.setMat4("projection", captureProjection);

@@ -1,7 +1,7 @@
 #include "SkeletonSystem.hpp"
 
 #include "Skeleton.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Core.hpp"
 #include "Entity.hpp"
 

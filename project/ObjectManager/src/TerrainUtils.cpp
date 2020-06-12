@@ -4,7 +4,7 @@
 
 void TerrainUtils::loadAllTerrainChunks()
 {
-    auto terrainShader = GetCore().objectModule.newShader("Resources/Shaders/StandardTerrain/StandardTerrain.vert", "Resources/Shaders/StandardTerrain/StandardTerrain.frag");
+    auto terrainShader = GetCore().objectModule.newShader("terrainShader", "Resources/Shaders/StandardTerrain/StandardTerrain.vert", "Resources/Shaders/StandardTerrain/StandardTerrain.frag");
 
     TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;

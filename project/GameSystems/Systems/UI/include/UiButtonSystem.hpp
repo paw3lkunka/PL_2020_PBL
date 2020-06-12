@@ -14,7 +14,7 @@ struct UiRenderer;
 class UiButtonSystem : public System, public IMsgReceiver
 {
 public:
-    UiButtonSystem() = default;
+    UiButtonSystem() : System(false) {}
     ~UiButtonSystem() = default;
 
     ///@brief inherited from IMsgReceiver
@@ -37,24 +37,27 @@ public:
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate();
+    virtual void fixedUpdate() {}
 
     /**
      * @brief Contain logic of the system runned once per frame
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void frameUpdate() {}
+    virtual void frameUpdate();
 
 protected:
 private:
     Button* buttonPtr;
     UiRenderer* rendererPtr;
     RectTransform* rectTransformPtr;
+    
+    ///@brief data of cursor (to find if cursor is over button)
     CursorData lastCursorData;
+    ///@brief mouse button clicked flag
     bool mouseButtonClicked = false;
 
-    
+    ///@brief factor of lerping
     float lerpFactor = 0.05f;
 };
 

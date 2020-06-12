@@ -34,7 +34,7 @@ Entity* ObjectMaker::newEntity(int bufferSize, std::string name)
     return &objContainer->entities[objContainer->entities.size() - 1];
 }
 
-Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
+Shader* ObjectMaker::newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath, bool serialize)
 {
     bool loaded = true;
     loaded &= objModPtr->assetReader.loadShader(fragmentShaderPath);
@@ -50,7 +50,7 @@ Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmen
         if(geometryShaderPath != nullptr)
         {
             std::string geometryShaderData = objModPtr->assetReader.shaders[geometryShaderPath];
-            objContainer->shaders.push_back(new Shader(vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str()));
+            objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), geometryShaderData.c_str(), serialize));
             Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
             shaderRef->vertexShaderPath = vertexShaderPath;
             shaderRef->fragmentShaderPath = fragmentShaderPath;
@@ -63,7 +63,7 @@ Shader* ObjectMaker::newShader(const char* vertexShaderPath, const char* fragmen
         }
         else
         {
-            objContainer->shaders.push_back(new Shader(vertexShaderData.c_str(), fragmentShaderData.c_str()));
+            objContainer->shaders.push_back(new Shader(shaderName, vertexShaderData.c_str(), fragmentShaderData.c_str(), nullptr, serialize));
             Shader* shaderRef = objContainer->shaders[objContainer->shaders.size() - 1];
             shaderRef->vertexShaderPath = vertexShaderPath;
             shaderRef->fragmentShaderPath = fragmentShaderPath;

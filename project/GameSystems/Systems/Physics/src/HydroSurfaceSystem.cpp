@@ -6,7 +6,7 @@
 #include "Entity.hpp"
 
 #include "HydroSurface.inl"
-#include "Transform.inl"
+#include "Transform.hh"
 #include "MeshRenderer.inl"
 
 

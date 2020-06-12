@@ -1,5 +1,5 @@
 
-auto standardPbrShader = objectModule.newShader("Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
+auto standardPbrShader = objectModule.newShader("standardPbr", "Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
 
 TextureCreateInfo texCreateInfo = {};
 texCreateInfo.generateMipmaps = true;
@@ -28,7 +28,7 @@ CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skyb
                                                         "Resources/Textures/skybox_02/py.hdr",
                                                         "Resources/Textures/skybox_02/ny.hdr");
 
-auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+auto skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
 Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
 hdrSkyboxMat->setTexture("cubemap", hdrCubemap);

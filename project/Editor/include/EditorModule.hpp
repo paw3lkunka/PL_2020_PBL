@@ -90,6 +90,7 @@ private:
     void drawText(TextRenderer* textRenderer);
     void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
     void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
+    void drawToggleButton(ToggleButton* toggleButtonPtr);
 
     // ! Helper functions
     /**

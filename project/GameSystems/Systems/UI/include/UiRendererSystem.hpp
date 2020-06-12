@@ -14,7 +14,7 @@ class Message;
 class UiRendererSystem : public System
 {
 public:
-    UiRendererSystem() = default;
+    UiRendererSystem() : System(false) {}
     virtual ~UiRendererSystem() = default;
 
 protected:
