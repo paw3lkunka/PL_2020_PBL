@@ -8,6 +8,8 @@ uniform sampler2D scene;
 uniform sampler2D bloom0;
 uniform sampler2D bloom1;
 uniform sampler2D bloom2;
+uniform sampler2D bloom3;
+uniform sampler2D bloom4;
 uniform sampler2D ssao;
 
 uniform float exposure;
@@ -17,7 +19,7 @@ void main()
     const float gamma = 2.2;
 
     vec3 hdrColor = texture(scene, uv).rgb * texture(ssao, uv).r;
-    vec3 bloomColor = texture(bloom0, uv).rgb + texture(bloom1, uv).rgb * 0.5 + texture(bloom2, uv).rgb * 0.2;
+    vec3 bloomColor = texture(bloom0, uv).rgb * 0.25 + texture(bloom1, uv).rgb * 0.05 + texture(bloom2, uv).rgb * 0.02 + texture(bloom3, uv).rgb * 0.01 + texture(bloom4, uv).rgb * 0.005;
 
     hdrColor += bloomColor; // Additive blending
 

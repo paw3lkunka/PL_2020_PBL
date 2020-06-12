@@ -12,7 +12,7 @@
 #include "ScenesPaths.inl"
 #include "ModelsPaths.inl"
 
-#include <filesystem>
+#include "TerrainUtils.hpp"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -383,64 +383,6 @@ float Core::randomFloatL(float min, float max)
 float Core::randomFloatR(float min, float max)
 {
     return std::lerp(min, max, randomFloat01R());
-}
-
-void Core::loadAllTerrainChunks()
-{
-    auto terrainRoot = objectModule.getEntityPtrByName("Terrain")->getComponentPtr<Transform>();
-
-    namespace fs = std::filesystem;
-    std::string path = "Resources/Terrain";
-    for (auto& entry : fs::directory_iterator(path))
-    {
-        objectModule.newModel(entry.path().string().c_str());
-        std::string filename = entry.path().filename().string();
-        Entity* entity = objectModule.getEntityPtrByName((filename + "/defaultobject").c_str());
-        {
-            size_t start = filename.find_first_of('(') + 1;
-            size_t end = filename.find_first_of(')');
-            size_t size = end - start;
-            std::string parsePos = filename.substr(start, size);
-            std::string delimiter = ", ";
-            float positions[3];
-            int i = 0;
-            size_t pos;
-            std::string token;
-            while ((pos = parsePos.find(delimiter)) != std::string::npos)
-            {
-                token = parsePos.substr(0, pos);
-                positions[i] = std::stof(token);
-                parsePos.erase(0, pos + delimiter.length());
-                i++;
-            }
-            positions[i] = std::stof(parsePos);
-            
-            auto t = entity->getComponentPtr<Transform>();
-            t->getLocalPositionModifiable() = {-positions[0], positions[1], positions[2]};
-            t->setParent(terrainRoot);
-
-            auto mr = entity->getComponentPtr<TerrainRenderer>();
-                mr->material = objectModule.getMaterialPtrByName("terrainMat");
-        }
-    }
-    path = "Resources/Splatmaps";
-    for(auto& entry : fs::directory_iterator(path))
-    {
-        TextureCreateInfo ti = {};
-        ti.generateMipmaps = true;
-        ti.magFilter = GL_LINEAR;
-        ti.minFilter = GL_LINEAR_MIPMAP_LINEAR;
-        ti.wrapMode = GL_CLAMP_TO_EDGE;
-
-        Texture* splatTexture = objectModule.newTexture(entry.path().string().c_str(), ti);
-        std::string filename = entry.path().filename().string();
-        filename = filename.substr(0, filename.find_last_of('.'));
-        Entity* entity = objectModule.getEntityPtrByName((filename +  ".obj/defaultobject").c_str());
-        {
-            auto tr = entity->getComponentPtr<TerrainRenderer>();
-            tr->splatmap = splatTexture;
-        }
-    }
 }
 
 CameraSystem Core::cameraSystem;

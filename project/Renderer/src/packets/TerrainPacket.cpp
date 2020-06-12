@@ -2,11 +2,11 @@
 
 void TerrainPacket::render(glm::mat4& VP)
 {
-    material->setTransformMatrices(modelMatrix, VP);
-    int texUnit = material->getTextureUnit("splatmap");
     material->use();
+    int texUnit = material->getTextureUnit("splatmap");
     splatmap->bind(texUnit);
     material->getShaderPtr()->setInt("splatmap", texUnit);
+    material->setTransformMatrices(modelMatrix, VP);
     mesh->render();
 }
 

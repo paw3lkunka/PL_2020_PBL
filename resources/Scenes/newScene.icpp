@@ -1,13 +1,5 @@
 
-//objectModule.newModel("Resources/Terrain/Terrain_(0.0, 0.0, 0.0).obj");
-// objectModule.newModel("Resources/Terrain/Terrain(-100, 0, 100).obj");
-// objectModule.newModel("Resources/Terrain/Terrain(-100, 0, 0).obj");
-objectModule.newModel("Resources/Models/Box.FBX");
-objectModule.newModel("Resources/Models/Rocks/rocks_03.FBX");
-// objectModule.newModel("Resources/Terrain/Terrain(0, 0, 100).obj");
-
 auto standardPbrShader = objectModule.newShader("Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
-auto terrainShader = objectModule.newShader("Resources/Shaders/StandardTerrain/StandardTerrain.vert", "Resources/Shaders/StandardTerrain/StandardTerrain.frag");
 
 TextureCreateInfo texCreateInfo = {};
 texCreateInfo.generateMipmaps = true;
@@ -15,74 +7,9 @@ texCreateInfo.magFilter = GL_LINEAR;
 texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
 texCreateInfo.wrapMode = GL_REPEAT;
 
-//auto terrainSplatmap = objectModule.newTexture("Resources/Splatmaps/Terrain_splatmap_0.tga", texCreateInfo);
-
-auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png", texCreateInfo);
-auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
-auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
-
-auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_diff_2k.png", texCreateInfo);
-auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
-auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_occRouMet.png", texCreateInfo);
-
-auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rock/rock_04_diff_2k.png", texCreateInfo);
-auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
-auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_occRouMet.png", texCreateInfo);
-
-auto rockGrassDiffuse = objectModule.newTexture("Resources/Textures/rockGrass/rockGrass_diffuse.png", texCreateInfo);
-auto rockGrassNormal = objectModule.newTexture("Resources/Textures/rockGrass/rockGrass_normal.png", texCreateInfo);
-
 auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
 auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
-
-auto whiteTex = objectModule.newTexture("Resources/Textures/white.png", texCreateInfo);
-auto blackTex = objectModule.newTexture("Resources/Textures/black.png", texCreateInfo);
-auto bumpTex = objectModule.newTexture("Resources/Textures/bump.png", texCreateInfo);
-auto occroumetTex = objectModule.newTexture("Resources/Textures/occroumet.png", texCreateInfo);
-
-Material* terrainMat = objectModule.newMaterial(terrainShader, "terrainMat", RenderType::Opaque);
-//terrainMat->setTexture("splatmap", terrainSplatmap);
-glm::vec2 uv0s = {4.0f, 4.0f};
-terrainMat->setVec2("uv0scale", uv0s);
-terrainMat->setTexture("diffuse0", grass1Diffuse);
-terrainMat->setTexture("normal0", grass1Normal);
-terrainMat->setTexture("orm0", grass1Specular);
-glm::vec2 uv1s = {10.0f, 10.0f};
-terrainMat->setVec2("uv1scale", uv1s);
-terrainMat->setTexture("diffuse1", gravel1Diffuse);
-terrainMat->setTexture("normal1", gravel1Normal);
-terrainMat->setTexture("orm1", gravel1Specular);
-glm::vec2 uv2s = {4.0f, 4.0f};
-terrainMat->setVec2("uv2scale", uv2s);
-terrainMat->setTexture("diffuse2", rockGrassDiffuse);
-terrainMat->setTexture("normal2", rockGrassNormal);
-terrainMat->setTexture("orm2", occroumetTex);
-glm::vec2 uv3s = {1.0f, 1.0f};
-terrainMat->setVec2("uv3scale", uv3s);
-terrainMat->setTexture("diffuse3", whiteTex);
-terrainMat->setTexture("normal3", bumpTex);
-terrainMat->setTexture("orm3", occroumetTex);
-
-Material* whiteMat = objectModule.newMaterial(standardPbrShader, "whiteMat", RenderType::Opaque);
-whiteMat->setTexture("diffuse", whiteTex);
-whiteMat->setTexture("normal", bumpTex);
-whiteMat->setTexture("occRouMet", occroumetTex);
-
-Material* grassMat = objectModule.newMaterial(standardPbrShader, "grassMat", RenderType::Opaque);
-grassMat->setTexture("diffuse", grass1Diffuse);
-grassMat->setTexture("normal", grass1Normal);
-grassMat->setTexture("occRouMet", grass1Specular);
-
-Material* gravelMat = objectModule.newMaterial(standardPbrShader, "gravelMat", RenderType::Opaque);
-gravelMat->setTexture("diffuse", gravel1Diffuse);
-gravelMat->setTexture("normal", gravel1Normal);
-gravelMat->setTexture("occRouMet", gravel1Specular);
-
-Material* rocksMat = objectModule.newMaterial(standardPbrShader, "rocksMat", RenderType::Opaque);
-rocksMat->setTexture("diffuse", rocks1Diffuse);
-rocksMat->setTexture("normal", rocks1Normal);
-rocksMat->setTexture("occRouMet", rocks1Specular);
 
 Material* waterMat = objectModule.newMaterial(standardPbrShader, "waterMat", RenderType::Transparent);
 waterMat->setTexture("diffuse", water1Diffuse);
@@ -105,58 +32,6 @@ auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/Skyb
 
 Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
 hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-
-Entity* terrain = objectModule.newEntity(1, "Terrain");
-{
-    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-    t->getLocalPositionModifiable() = glm::vec3(50, -100, -50);
-    t->setParent(&sceneModule.rootNode);
-}
-
-{
-    Entity* entity = objectModule.getEntityPtrByName("rocks_03.FBX/rocks_03");
-    auto mr = entity->getComponentPtr<MeshRenderer>();
-        mr->material = whiteMat;
-
-    auto t = entity->getComponentPtr<Transform>();
-        t->setParent(terrain->getComponentPtr<Transform>());
-}
-
-// {
-//     Entity* entity = objectModule.getEntityPtrByName("Terrain_(0.0, 0.0, 0.0).obj/defaultobject");
-//     auto mr = entity->getComponentPtr<MeshRenderer>();
-//         mr->material = terrainMat;
-
-//     auto t = entity->getComponentPtr<Transform>();
-//         t->setParent(terrain->getComponentPtr<Transform>());
-// }
-
-// {
-//     Entity* entity = objectModule.getEntityPtrByName("Terrain(-100, 0, 100).obj/defaultobject");
-//     auto mr = entity->getComponentPtr<MeshRenderer>();
-//         mr->material = grassMat;
-
-//     auto t = entity->getComponentPtr<Transform>();
-//         t->setParent(terrain->getComponentPtr<Transform>());
-// }
-
-// {
-//     Entity* entity = objectModule.getEntityPtrByName("Terrain(-100, 0, 0).obj/defaultobject");
-//     auto mr = entity->getComponentPtr<MeshRenderer>();
-//         mr->material = grassMat;
-
-//     auto t = entity->getComponentPtr<Transform>();
-//         t->setParent(terrain->getComponentPtr<Transform>());
-// }
-
-// {
-//     Entity* entity = objectModule.getEntityPtrByName("Terrain(0, 0, 100).obj/defaultobject");
-//     auto mr = entity->getComponentPtr<MeshRenderer>();
-//         mr->material = grassMat;
-
-//     auto t = entity->getComponentPtr<Transform>();
-//         t->setParent(terrain->getComponentPtr<Transform>());
-// }
 
 objectModule.newEntity(2, "directionalLight");
 {
@@ -194,4 +69,4 @@ objectModule.newEntity(4, "Camera");
         li->getUpModifiable();
 }
 
-loadAllTerrainChunks();
+TerrainUtils::loadAllTerrainChunks();

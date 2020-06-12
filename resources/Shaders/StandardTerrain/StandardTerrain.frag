@@ -141,7 +141,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = ambient + Lo * (1.0 - directionalShadow * 0.7);
+	vec3 color = ambient * (1.0 - directionalShadow * 0.75) + Lo * (1.0 - directionalShadow);
 
 	FragColor = vec4(color, 1.0);
 
