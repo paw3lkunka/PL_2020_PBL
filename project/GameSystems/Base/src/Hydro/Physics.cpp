@@ -58,20 +58,20 @@ glm::vec3 HydroPhysics::pressureDragForce(HydroTriangle triangle, glm::vec3 velo
 }
 
 float viscousLastSpeedValue = 0.0f;
-float viscousResistanceCoefficientValue = 0.0f;
+//float viscousResistanceCoefficientValue = 0.0f;
 
-glm::vec3 HydroPhysics::viciousResistanceForce(HydroTriangle triangle, glm::vec3 velocity, float forceMultiply, float density, float viscosity)
+glm::vec3 HydroPhysics::viciousResistanceForce(HydroTriangle triangle, glm::vec3 velocity, float viscousResistanceCoefficient, float forceMultiply, float density, float viscosity)
 {
     float speed = glm::length(velocity);
 
-    if(HydroFloatMath::approximate(speed, viscousLastSpeedValue, 0.01f) == false)
-    {
-        viscousLastSpeedValue = speed;
-        viscousResistanceCoefficientValue = viscousResistanceCoefficient(speed, density, viscosity);
-    }
+    //if(HydroFloatMath::approximate(speed, viscousLastSpeedValue, 0.01f) == false)
+    //{
+    //    viscousLastSpeedValue = speed;
+    //    viscousResistanceCoefficientValue = viscousResistanceCoefficient(speed, density, viscosity);
+    //}
 
     glm::vec3 direction = -HydroFloatMath::normalizedProjectOnPlane(velocity, triangle.normal);
-    float length = (density * speed * speed * triangle.area * viscousResistanceCoefficientValue) / 2.0f;
+    float length = (density * speed * speed * triangle.area * viscousResistanceCoefficient) / 2.0f;
     return direction * glm::abs(length) * forceMultiply;
 }
 

@@ -39,13 +39,19 @@ namespace HydroPhysics
     glm::vec3 viciousResistanceForce
     (
         HydroTriangle triangle, 
-        glm::vec3 velocity, 
+        glm::vec3 velocity,
+        float viscousResistanceCoefficient,  
         float forceMultiply = HydroConstants::VISCOUS_FORCE_MULTIPLIER, 
         float density = HydroConstants::RHO_WATER, 
         float viscosity = HydroConstants::VISCOSITY_WATER
     );
     
-    float viscousResistanceCoefficient(float speed, float density, float viscosity);
+    float viscousResistanceCoefficient
+    (
+        float speed, 
+        float density = HydroConstants::RHO_WATER, 
+        float viscosity = HydroConstants::VISCOSITY_WATER
+    );
 };
 
 #endif // _HYDROPHYSICS_HPP
