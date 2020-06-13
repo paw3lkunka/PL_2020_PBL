@@ -30,7 +30,7 @@ enum class RenderType { Opaque, Transparent };
  *   For instancing to work properly, the shader must have the attribute "instancedModel" enabled on location 5.
  *   If the attribute doesn't exist, the material will display an error and fall back to normal rendering.
  */
-class Material: public ISerializable
+class Material : public ISerializable
 {
 friend class SceneWriter;
 public:

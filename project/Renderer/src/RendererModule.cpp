@@ -476,6 +476,11 @@ void RendererModule::render()
 
         glm::mat4 VP = glm::mat4(1.0f);
 
+        // ? +++++ Send time for use to shaders +++++
+        glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
+        float time = (float)GetCore().getCurrentFrameStart();
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &time);
+
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
         {
@@ -499,11 +504,6 @@ void RendererModule::render()
             glBindBuffer(GL_UNIFORM_BUFFER, shadowMappingBuffer);
 
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &VP);
-
-            // ? +++++ Send time for use to shaders +++++
-            glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
-            float time = (float)GetCore().getCurrentFrameStart();
-            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &time);
 
             // ? +++++ Render depth buffer for shadow mapping +++++
             glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);

@@ -22,15 +22,28 @@ layout (std140, binding = 3) uniform Directional
     DirectionalLight directionalLight;
 };
 
+layout (std140, binding = 5) uniform Time
+{
+    float _Time;
+};
+
+uniform vec2 uvScale = vec2(1.0, 1.0);
 uniform sampler2D diffuse;
 uniform sampler2D normal;
 uniform sampler2D occRouMet; // r - occlusion, g - roughness, b - metallic
 
 uniform sampler2D directionalShadowMap;
 uniform samplerCube irradianceMap;
-// uniform sampler2D ssaoMap;
 
-// uniform vec2 screenSize;
+// ===== Flow map configuration =====
+uniform sampler2D flowMap;
+uniform vec2 channelFlowDirection = vec2(1.0, -1.0);
+uniform float blendCycle = 1.0;
+uniform float cycleSpeed = 1.0;
+uniform float flowSpeed = 0.5;
+uniform sampler2D flowMapNoise;
+uniform vec2 flowNoiseSize = vec2(1.0, 1.0);
+uniform float flowNoiseInfluence = 0.5;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -66,9 +79,9 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 vec3 calcDirectionalLight(DirectionalLight light);
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir);
 
-vec3 calculateNormal()
+vec3 calculateNormal(sampler2D sampler, vec2 uv)
 {
-	vec3 normalValue = texture(normal, Texcoord).rgb; // Sample normal map texure
+	vec3 normalValue = texture(sampler, uv).rgb; // Sample normal map texure
 	normalValue = normalize(normalValue * 2.0f - 1.0f); // Transform from normalized 0.0 - 1.0 coordinates to -1.0 - 1.0
 	normalValue = normalize(TBN * normalValue); // multiply by TBN to get world space normals
 	return normalValue;
@@ -76,16 +89,40 @@ vec3 calculateNormal()
 
 void main() 
 { 
-	//vec2 NDC = gl_FragCoord.xy / screenSize;
+// Flowmap calculation
+    float halfCycle = blendCycle * 0.5;
+
+    float offset = texture(flowMapNoise, Texcoord * flowNoiseSize).r * flowNoiseInfluence;
+
+    float phase1 = mod(offset + _Time * cycleSpeed, blendCycle);
+    float phase2 = mod(offset + _Time * cycleSpeed + halfCycle, blendCycle);
+
+    vec2 flowTex = texture(flowMap, Texcoord).rg;
+    vec2 flow;
+    flow.x = flowTex.x * 2.0 - 1.0;
+    flow.y = flowTex.y * 2.0 - 1.0;
+    flow *= normalize(channelFlowDirection);
+
+    // TODO: normalmap strength influence
+
+    float blendFactor = abs(halfCycle - phase1) / halfCycle;
+    phase1 -= halfCycle;
+    phase2 -= halfCycle;
+
+    flow *= flowSpeed * uvScale;
+
+    vec2 layer1 = flow * phase1 + Texcoord;
+    vec2 layer2 = flow * phase2 + Texcoord;
 
 // Sampling the textures for further use
-	albedo = pow(texture(diffuse, Texcoord).rgb, vec3(2.2f)); // Converting texture from sRGB gamma space to linear by using pow()
-	metallic = texture(occRouMet, Texcoord).b;
-	roughness = texture(occRouMet, Texcoord).g;
-	ao = texture(occRouMet, Texcoord).r;// * texture(ssaoMap, NDC).r;
+    albedo = pow(mix(texture(diffuse, layer1), texture(diffuse, layer2), blendFactor).rgb, vec3(2.2f));
+	vec3 orm = mix(texture(occRouMet, layer1), texture(occRouMet, layer2), blendFactor).rgb;
+    metallic = orm.b;
+	roughness = orm.g;
+	ao = orm.r;
+	N = mix(calculateNormal(normal, layer1), calculateNormal(normal, layer2), blendFactor);
 
 // Properties shared between lights
-	N = calculateNormal();
 	V = normalize(viewPos - FragPos);
 
 	// Reflectace calculation at normal incidence (looking perpendicularly)

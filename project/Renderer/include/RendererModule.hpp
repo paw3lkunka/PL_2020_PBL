@@ -126,7 +126,7 @@ private:
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
-    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer;
+    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer, timeBuffer;
     
     Camera* cameraMain = nullptr;
     enum { TOP = 0, BOTTOM, LEFT, RIGHT, NEARP, FARP };

@@ -1,5 +1,6 @@
 
 auto standardPbrShader = objectModule.newShader("standardPbr", "Resources/Shaders/StandardPBR/StandardPBR.vert", "Resources/Shaders/StandardPBR/StandardPBR.frag");
+auto flowmapShader = objectModule.newShader("flowmapShader", "Resources/Shaders/FlowmapWater/FlowmapWater.vert", "Resources/Shaders/FlowmapWater/FlowmapWater.frag");
 
 TextureCreateInfo texCreateInfo = {};
 texCreateInfo.generateMipmaps = true;
@@ -10,11 +11,32 @@ texCreateInfo.wrapMode = GL_REPEAT;
 auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
 auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
+auto flowmap = objectModule.newTexture("Resources/Flowmaps/flowmap.png", texCreateInfo);
+auto noise = objectModule.newTexture("Resources/Flowmaps/noiseTexture.png", texCreateInfo);
 
-Material* waterMat = objectModule.newMaterial(standardPbrShader, "waterMat", RenderType::Transparent);
+Material* waterMat = objectModule.newMaterial(flowmapShader, "waterMat", RenderType::Transparent);
 waterMat->setTexture("diffuse", water1Diffuse);
 waterMat->setTexture("normal", water1Normal);
 waterMat->setTexture("occRouMet", water1OccRouSpec);
+waterMat->setTexture("flowMap", flowmap);
+waterMat->setVec2("channelFlowDirection", {1.0f, -1.0f});
+waterMat->setFloat("blendCycle", 1.0f);
+waterMat->setFloat("cycleSpeed", 1.0f);
+waterMat->setFloat("flowSpeed", 0.5f);
+waterMat->setTexture("flowMapNoise", noise);
+waterMat->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat->setFloat("flowNoiseInfluence", 0.5f);
+waterMat->setVec2("uvScale", {1.0f, 1.0f});
+
+objectModule.newModel("Resources/Models/Plane.obj");
+{
+    Entity* waterPlane0 = objectModule.getEntityPtrByName("Plane.obj/Plane");
+    auto mr = waterPlane0->getComponentPtr<MeshRenderer>();
+        mr->material = waterMat;
+
+    auto t = waterPlane0->getComponentPtr<Transform>();
+        t->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
+}
 
 TextureCreateInfo i = {};
 i.minFilter = GL_LINEAR;
