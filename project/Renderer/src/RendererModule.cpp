@@ -241,6 +241,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 4, shadowMappingBuffer, 0, sizeof(glm::mat4));
 
+    // * ===== Setup Uniform Buffer Object for time =====
+    glGenBuffers(1, &timeBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 5, timeBuffer, 0, sizeof(float));
+
     // * ===== Setup buffer for simple gizmo rendering =====
     glGenVertexArrays(1, &gizmoVao);
     glGenBuffers(1, &gizmoVbo);
@@ -491,6 +499,11 @@ void RendererModule::render()
             glBindBuffer(GL_UNIFORM_BUFFER, shadowMappingBuffer);
 
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &VP);
+
+            // ? +++++ Send time for use to shaders +++++
+            glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
+            float time = (float)GetCore().getCurrentFrameStart();
+            glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &time);
 
             // ? +++++ Render depth buffer for shadow mapping +++++
             glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
