@@ -685,6 +685,8 @@ void RendererModule::render()
 
         drawQuad();
 
+        glBindTexture(GL_TEXTURE_2D, 0);
+
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -729,7 +731,7 @@ void RendererModule::render()
         while(!transparentQueue.empty())
         {
             transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
-            opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
+            transparentQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
@@ -738,7 +740,11 @@ void RendererModule::render()
         bool horizontal = true, firstIteration = true, firstBloom = true;
         int amount = 9;
 
+        glActiveTexture(GL_TEXTURE0);
+
         blurShader->use();
+        blurShader->setInt("image", 0);
+
         for (size_t i = 0, j = 2; i < 10; i += 2, j *= 2)
         {
             glViewport(0, 0, Core::windowWidth / j, Core::windowHeight / j);
@@ -756,9 +762,9 @@ void RendererModule::render()
                 {
                     glBindTexture(GL_TEXTURE_2D, firstBloom ? blurBuffers[i - 2] : blurBuffers[i + !horizontal]);
                 }
-                
+
                 drawQuad();
-                
+
                 horizontal = !horizontal;
                 if (firstBloom)
                 {
