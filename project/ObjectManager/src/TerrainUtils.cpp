@@ -31,9 +31,9 @@ void TerrainUtils::loadAllTerrainChunks()
     Material* terrainMat = GetCore().objectModule.newMaterial(terrainShader, "terrainMat", RenderType::Opaque);
     glm::vec2 uv0s = {4.0f, 4.0f};
     terrainMat->setVec2("uv0scale", uv0s);
-    terrainMat->setTexture("diffuse0", grass1Diffuse);
-    terrainMat->setTexture("normal0", grass1Normal);
-    terrainMat->setTexture("orm0", grass1Specular);
+    terrainMat->setTexture("diffuse0", rockGrassDiffuse);
+    terrainMat->setTexture("normal0", rockGrassNormal);
+    terrainMat->setTexture("orm0", occroumetTex);
     glm::vec2 uv1s = {10.0f, 10.0f};
     terrainMat->setVec2("uv1scale", uv1s);
     terrainMat->setTexture("diffuse1", gravel1Diffuse);
@@ -41,9 +41,9 @@ void TerrainUtils::loadAllTerrainChunks()
     terrainMat->setTexture("orm1", gravel1Specular);
     glm::vec2 uv2s = {4.0f, 4.0f};
     terrainMat->setVec2("uv2scale", uv2s);
-    terrainMat->setTexture("diffuse2", rockGrassDiffuse);
-    terrainMat->setTexture("normal2", rockGrassNormal);
-    terrainMat->setTexture("orm2", occroumetTex);
+    terrainMat->setTexture("diffuse2", grass1Diffuse);
+    terrainMat->setTexture("normal2", grass1Normal);
+    terrainMat->setTexture("orm2", grass1Specular);
     glm::vec2 uv3s = {1.0f, 1.0f};
     terrainMat->setVec2("uv3scale", uv3s);
     terrainMat->setTexture("diffuse3", whiteTex);
