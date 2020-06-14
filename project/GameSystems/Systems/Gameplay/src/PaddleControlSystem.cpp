@@ -15,11 +15,12 @@ bool PaddleControlSystem::assertEntity(Entity* entity)
     paddlePtr = entity->getComponentPtr<Paddle>();
     transformPtr = entity->getComponentPtr<Transform>();
     hydroAcceleratorPtr = entity->getComponentPtr<HydroAccelerator>();
-    return (paddlePtr != nullptr && transformPtr != nullptr && hydroAcceleratorPtr != nullptr);
+    return (paddlePtr != nullptr && transformPtr != nullptr);
 }
 
 void PaddleControlSystem::fixedUpdate()
 {
+    glm::vec2 oldPosition2D = paddlePtr->position2D;
     if(keyboardInput)
     {
         inputRaw = glm::mix(inputRaw, interpolationTarget, 0.15f);
@@ -35,8 +36,33 @@ void PaddleControlSystem::fixedUpdate()
     float frontRot = glm::mix(eulerRot.x, paddlePtr->maxFrontRot, copysignf(paddlePtr->position2D.y * paddlePtr->position2D.x, paddlePtr->position2D.y));
     float sideRot = glm::mix(eulerRot.y, paddlePtr->maxSideRot, -paddlePtr->position2D.x);
 
-    hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition());
-    hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
+    if(hydroAcceleratorPtr != nullptr)
+    {
+        glm::vec2 tempPos = glm::abs(oldPosition2D - paddlePtr->position2D);
+        glm::vec2 tempInput = glm::abs(inputRaw);
+
+        if( tempPos.y < 0.001f || glm::abs(tempInput.x - tempInput.y) < 0.001f ) 
+        {
+            hydroAcceleratorPtr->velocity = glm::vec3(0.0f);
+            hydroAcceleratorPtr->angularVelocity = glm::vec3(0.0f);
+        }
+        else
+        {
+            hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition());
+            hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
+        }
+    }
+
+    /*
+    if(hydroAcceleratorPtr != nullptr)
+    {
+        hydroAcceleratorPtr->velocity = (newPos - hydroAcceleratorPtr->lastPos);
+        hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - hydroAcceleratorPtr->lastRot);
+
+        hydroAcceleratorPtr->lastPos = newPos;
+        hydroAcceleratorPtr->lastRot = glm::vec3(frontRot, sideRot, eulerRot.z);
+    }
+    */
 
     transformPtr->getLocalPositionModifiable() = newPos;
     transformPtr->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(frontRot, sideRot, eulerRot.z));
