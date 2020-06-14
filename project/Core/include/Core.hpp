@@ -339,6 +339,7 @@ class Core
         static ToggleButtonSystem toggleButtonSystem;
         static CargoStorageSystem cargoStorageSystem;
         static CargoButtonSystem cargoButtonSystem;
+        static ProgressBarSystem progressBarSystem;
 
 #pragma endregion
 

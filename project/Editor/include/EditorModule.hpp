@@ -92,6 +92,7 @@ private:
     void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
     void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
     void drawToggleButton(ToggleButton* toggleButtonPtr);
+    void drawProgressBar(ProgressBar* progressBarPtr);
 
     // ! Helper functions
     /**
