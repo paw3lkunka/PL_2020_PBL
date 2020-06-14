@@ -54,6 +54,11 @@ private:
      * @param dir Direction from enemy to player.
      */
     void attack(glm::vec3 dir);
+    
+    /**
+     * @brief Cleanup called, when attack routine was cancelled.
+     */
+    void attackClear();
 };
 
 #endif /* !ENEMIESSYSTEM_HPP_ */

@@ -143,6 +143,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
+            // some code here
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -178,13 +179,15 @@ int Core::init()
 
 #pragma regnon attach systems
 
-    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    
+    gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
+    
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -368,7 +371,7 @@ float Core::randomFloat01L()
     } number;
 
     number.i = xoshiro_next();
-    number.i = 0x3F800000U | (number.i >> 9);;
+    number.i = 0x3F800000U | (number.i >> 9);
 
     return 2.0f - number.f;
 }
@@ -406,10 +409,10 @@ PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
-HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
+HydroBodySystem Core::hydroBodySystem;
 SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
