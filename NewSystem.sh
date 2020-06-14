@@ -1,10 +1,21 @@
 #!sh
 
-_className=$1
-_fileCXX="$(dirname "$0")/project/GameSystems/Systems/src/$1.cpp"
-_fileHXX="$(dirname "$0")/project/GameSystems/Systems/include/$1.hpp"
+_folderName=$1
+_className=$2
+
+_folder="$(dirname "$0")/project/GameSystems/Systems/$_folderName"
+
+mkdir $_folder
+mkdir $_folder/src
+mkdir $_folder/include
+
+_fileCXX="$_folder/src/$_className.cpp"
+_fileHXX="$_folder/include/$_className.hpp"
+
 touch $_fileCXX
 touch $_fileHXX
+
+./Systems.sh
 
 echo -n > $_fileHXX
 echo -e "#ifndef "$_className"_hpp_sh
@@ -34,7 +45,6 @@ private:
 
 echo -n > $_fileCXX
 echo -e "#include \"ECS.inc\"
-#include \"Components.inc\"
 
 bool "$_className"::assertEntity(Entity* entity)
 {

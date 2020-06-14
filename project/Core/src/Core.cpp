@@ -1,4 +1,5 @@
 #include "Core.hpp"
+#include "Utils.hpp"
 #include "imgui.h"
 
 #include "xoshiro.h"
@@ -8,8 +9,12 @@
 #include "MomentOfInertia.hpp"
 
 #include "Material.hpp"
-#include "ScenesPaths.inl"
+#include "CubemapHdr.hpp"
+#include "ScenesPaths.hpp"
 #include "ModelsPaths.inl"
+#include "TerrainUtils.hpp"
+
+#include "glm/gtx/string_cast.hpp"
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -54,6 +59,7 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
 int Core::init()
 {
     xoshiro_Init();
+    physicModule.init();
 
     if( instance != nullptr )
     {
@@ -64,7 +70,7 @@ int Core::init()
 
     std::cout << "Henlo!" << std::endl;
     //TODO: GLFW Error callback
-    
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -98,15 +104,33 @@ int Core::init()
     messageBus.addReceiver( &audioModule );
     messageBus.addReceiver( &objectModule );
     messageBus.addReceiver( &uiModule );
-    messageBus.addReceiver( &tmpExit );
+    messageBus.addReceiver( &gamePlayModule );
+
+#pragma region Renderer
+
+    // ! ----- Renderer initialization block -----
+    RendererModuleCreateInfo rendererCreateInfo = {};
+    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
+    rendererCreateInfo.cullFace = true;
+    rendererCreateInfo.cullFaceMode = GL_BACK;
+    rendererCreateInfo.cullFrontFace = GL_CCW;
+    rendererCreateInfo.depthTest = true;
+    rendererCreateInfo.wireframeMode = false;
+    rendererModule.initialize(window, rendererCreateInfo);
+
+    messageBus.addReceiver( &rendererModule );
+#pragma endregion
 
     // ! Scene loading
     if (recreateScene)
     {
         // ? -r
         //#include "../../resources/Scenes/main_Menu.icpp"
-        #include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/selectCargoScene.icpp"
+        //#include "../../resources/Scenes/scene_old.icpp"
+        #include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/newScene.icpp"
     }
     else
     {
@@ -133,46 +157,25 @@ int Core::init()
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
-#pragma region Renderer
-
-    // ! ----- Renderer initialization block -----
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    rendererModule.initialize(window, rendererCreateInfo, objectModule.getMaterialPtrByName("skyboxMat"));
-    
-    messageBus.addReceiver( &rendererModule );
-#pragma endregion
-
+    // TODO <make this function>
     // ! IK system initialize
-    BoneAttachData leftData;
-    leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-    leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
+        BoneAttachData leftData;
+        leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+        leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
-    BoneAttachData rightData;
-    rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-    rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
+        BoneAttachData rightData;
+        rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+        rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
-    Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-    //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-    //gameSystemsModule.addSystem(&paddleIkSystem);
-
-#pragma region AudioModule demo - initialization
+        Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+        //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
+        //gameSystemsModule.addSystem(&paddleIkSystem);
+    // TODO </make this function>
 
     audioModule.init();
 
-#pragma endregion
-
-#pragma region Camera
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-#pragma endregion
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
@@ -180,10 +183,11 @@ int Core::init()
 
     // ! IMGUI initialize
     editorModule.init(window);
+    gamePlayModule.init();
 
 #pragma regnon attach systems
 
-    gameSystemsModule.addSystem(&hydroBodySystem);
+    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     
@@ -191,7 +195,7 @@ int Core::init()
     gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
     gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
     
-    gameSystemsModule.addSystem(&collisionSystem);
+    gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
     gameSystemsModule.addSystem(&physicSystem);
     gameSystemsModule.addSystem(&skeletonSystem);
@@ -204,6 +208,9 @@ int Core::init()
     gameSystemsModule.addSystem(&uiButtonSystem);
     gameSystemsModule.addSystem(&enemySystem);
     gameSystemsModule.addSystem(&sortingGroupSystem);
+    gameSystemsModule.addSystem(&toggleButtonSystem);
+    gameSystemsModule.addSystem(&cargoStorageSystem);
+    gameSystemsModule.addSystem(&cargoButtonSystem);
 
 #pragma endregion
 
@@ -258,6 +265,10 @@ int Core::mainLoop()
             // ! ----- FIXED UPDATE FUNCTION -----
             
             gameSystemsModule.run(System::FIXED);
+            if (!gamePaused)
+            {
+                physicModule.physicSimulation(gameSystemsModule.entities);
+            }
 
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
@@ -279,6 +290,8 @@ int Core::mainLoop()
 
         // ? IMGUI Window setting up
         editorModule.drawEditor();
+        //HACK i added this here, tu apply changes to model matrix;
+        sceneModule.updateTransforms();
 
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
@@ -310,12 +323,14 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
+    audioModule.cleanup();
     editorModule.onExit();
 
     //HACK: scene saving- uncomment when changing something in scene
     objectModule.saveScene("../resources/Scenes/savedScene.json");
 
-    audioModule.cleanup();
+    physicModule.cleanup();
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -398,7 +413,7 @@ ThirdPersonCameraControlSystem Core::thirdPersonCameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
-CollisionSystem Core::collisionSystem;
+TerrainRendererSystem Core::terrainSystem;
 PhysicalBasedInputSystem Core::physicalBasedInputSystem;
 PhysicSystem Core::physicSystem;
 SkeletonSystem Core::skeletonSystem;
@@ -411,3 +426,6 @@ UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
 SortingGroupSystem Core::sortingGroupSystem;
+ToggleButtonSystem Core::toggleButtonSystem;
+CargoStorageSystem Core::cargoStorageSystem;
+CargoButtonSystem Core::cargoButtonSystem;

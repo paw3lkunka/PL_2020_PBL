@@ -1,17 +1,10 @@
 #include "NormalPacket.hpp"
-
-#include "RendererModule.hpp"
+#include "Material.hpp"
 
 void NormalPacket::render(glm::mat4& VP)
 {
-    if (material->getID() != RendererModule::lastMatID)
-    {
-        material->use();
-        RendererModule::lastMatID = material->getID();
-    }
-    // TODO: switching between diferrent matrix usage
-    material->setModel(modelMatrix);
-    material->setMVP(modelMatrix, VP);
+    material->use();
+    material->setTransformMatrices(modelMatrix, VP);
     mesh->render();
 }
 

@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <glm/glm.hpp>
-#include "PhisicStructures.inl"
+#include "PhysicStructures.inl"
 
 /**
  * @brief keymap used by PhysicalBasedInputSystem

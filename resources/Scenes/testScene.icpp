@@ -1,7 +1,9 @@
-auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
+auto unlitTexture = objectModule.newShader("UnlitTexture", "Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
+auto skyboxShader = objectModule.newShader("SkyboxCubemap", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
+auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 
+objectModule.newAudioClip("Resources/Audios/shingeki.wav");
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -10,6 +12,7 @@ TextureCreateInfo texCreateInfo = {};
 auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
 objectModule.newModel("Resources/Models/Box.FBX");
+objectModule.newModel("Resources/Models/unit_sphere.FBX");
 
 TextureCreateInfo skyboxCreateInfo = {};
     skyboxCreateInfo.generateMipmaps = true;
@@ -26,11 +29,18 @@ TextureCreateInfo skyboxCreateInfo = {};
                                 "Resources/Textures/skybox_02/ny.png");
 
     Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-    skyboxMat->setCubemap("cubemap", cubemap);
+        skyboxMat->setTexture("cubemap", cubemap);
 
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
-    unlitInstancedMat->setTexture("mainTex", texture);
-    unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
+    {
+        unlitInstancedMat->setTexture("mainTex", texture);
+        unlitInstancedMat->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 0.25f));
+    }
+
+    Material* rushesMat = objectModule.newMaterial(unlitColor, "RushesMat", RenderType::Transparent);
+    {
+        rushesMat->setVec4("color", glm::vec4(0.0f, 0.7f, 0.2f, 0.7f));
+    }
 
     objectModule.newEntity(4, "Camera");
     {
@@ -49,7 +59,7 @@ TextureCreateInfo skyboxCreateInfo = {};
 
         auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
             li->getIsCurrentModifiable() = true;
-            li->getGainModifiable() = 1.0f;
+            li->getGainModifiable() = 0.5f;
             li->getVelocityModifiable();
             li->getPositionModifiable();
             li->getAtModifiable();
@@ -59,71 +69,256 @@ TextureCreateInfo skyboxCreateInfo = {};
     objectModule.newEntity(2, "cubeInstanced1");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 20.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 2.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
-    objectModule.newEntity(2, "cubeInstanced2");
+    objectModule.newEntity(5, "cubeInstanced2");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -20.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -2.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
+
+        auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+            so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
+            so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
+            so3->getIsRelativeModifiable() = true;
+            so3->getGainModifiable() = 0.1f;
+            so3->getIsLoopingModifiable() = true;
+            so3->autoPlay = true;
     }
 
     objectModule.newEntity(2, "cubeInstanced3");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 3.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced4");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 0.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -3.5f, 0.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced5");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { -30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { -3.5f, 1.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
     }
 
     objectModule.newEntity(2, "cubeInstanced6");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 30.5f, 10.0f, 10.0f };
-            t->getLocalScaleModifiable() *= 10;
+            t->getLocalPositionModifiable() = { 3.5f, 1.0f, 1.0f };
+            t->getLocalScaleModifiable();
             t->setParent(&sceneModule.rootNode);
 
         auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->mass = 10;
+            rb->drag = 0.2f;
+        
+            rb->angularDrag = 0.1f;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize = {0.5f, 0.5f, 0.5f};
+    }
+    
+    objectModule.newEntity(2, "surface");
+    {
+        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = { 0.0f, -5.0f, 0.0f };
+            t->getLocalScaleModifiable() = {100, 0.5, 100};
+            t->setParent(&sceneModule.rootNode);
+
+        auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+            mr->material = unlitInstancedMat;
+
+        auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->type = rp3d::BodyType::STATIC;
+
+        auto bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize =  glm::vec3(100, 0.5, 100) * 0.5f;
+    }
+    
+    Entity* entity = objectModule.newEntity(6, "PhisicBasedInputTest");
+    {
+        
+        PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
+            keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
+            keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+        Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+            transform->setParent(&sceneModule.rootNode);
+            transform->getLocalPositionModifiable().x = 5;
+            transform->getLocalScaleModifiable();
+
+        SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+            collider->radius = 1;
+
+        MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
+            Shader* shader = unlitColor;
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+                material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
+
+            meshRenderer->material = material;
+            meshRenderer->mesh = mesh;
+
+        Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rigidbody->drag = 0.2f;
+            rigidbody->angularDrag = 0.1;
+            rigidbody->mass = 10;
+            rigidbody->ignoreGravity = true;
+
+        Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
+    }
+
+    auto* hideout1 = objectModule.newEntity(5,"Hideout1");
+    {
+        auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+            tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
+            tr->getLocalScaleModifiable() = {2.0f, 1.0f, 2.0f};
+            tr->setParent(&sceneModule.rootNode);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize =  glm::vec3(1.0f, 0.5f, 1.0f);
+            bc->isTrigger = true;
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+            mr->material = rushesMat;
+        auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+        auto* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+    }
+    
+    auto* hideout2 = objectModule.newEntity(5,"Hideout2");
+    {
+        auto* tr = objectModule.newEmptyComponentForLastEntity<Transform>();
+            tr->getLocalPositionModifiable() = {5.0f, 0.0f, -5.0f};
+            tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
+            tr->getLocalScaleModifiable() = {1.0f, 2.0f, 1.0f};
+            tr->setParent(&sceneModule.rootNode);
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+            bc->halfSize =  glm::vec3(0.5f, 1.0f, 0.5f);
+            bc->isTrigger = true;
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+            mr->material = rushesMat;
+        auto* hid = objectModule.newEmptyComponentForLastEntity<Hideout>();
+        auto* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+    }
+
+    auto* enemy = objectModule.newEntity(4,"TMP enemy");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {3.0f, 0.0f, 3.0f};
+            t->getLocalScaleModifiable() = {1.0f, 2.0f, 1.0f};
+            t->setParent(&sceneModule.rootNode);
+
+        auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
+            e->detectionCounterMaxValue = 500;
+            e->sightDistance = 10.0f;
+            e->sightAngle = glm::pi<float>() / 4.0f;
+
+        auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
+            a->lerpParameter = 0.25f;
+
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
+    
+        auto* ea = objectModule.newEmptyComponentForLastEntity<EnemyAttack>();
+            ea->activationValue = 100;
+            ea->incrementValue = 1;
+            ea->successChance = 0.5f;
     }

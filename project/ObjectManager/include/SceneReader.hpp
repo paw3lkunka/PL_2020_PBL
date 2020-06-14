@@ -8,6 +8,7 @@ class AssetReader;
 class ObjectModule;
 struct Component;
 struct Button;
+class Message;
 
 class SceneReader
 {
@@ -22,11 +23,12 @@ private:
 
     static bool hasInstance;
 
-    nlohmann::json j;
+    nlohmann::json* j;
 
     void readShaders();
     void readTextures();
     void readCubemaps();
+    void readCubemapsHdr();
     void readMaterials();
     void readMeshes();
     void readFonts();
@@ -41,6 +43,7 @@ private:
     void readAudioListener(std::string name);
     void readCamera(std::string name);
     void readMeshRenderer(std::string name);
+    void readTerrainRenderer(std::string name);
     void readSphereCollider(std::string name);
     void readBoxCollider(std::string name);
     void readRigidbody(std::string name);
@@ -61,11 +64,17 @@ private:
     void readRectTransform(std::string name);
     void readButton(std::string name);
     void readUiSortingGroup(std::string name);
+    void readToggleButton(std::string name);
+    void readCargoButton(std::string name);
+    void readCargoStorage(std::string name);
+    
+    //! other purposes
+    void readCargo(std::string name);
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);
     void readRectTransformParents(std::string name);
-    void readButtonEvents(std::string name, Button* buttonPtr);
+    void readEvent(std::string name, std::string containerName, std::vector<Message>& messages);
 };
 
 #endif /* !SCENEREADER_HPP_ */

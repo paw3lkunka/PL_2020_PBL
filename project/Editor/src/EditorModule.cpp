@@ -148,6 +148,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(EnemyAttack* temp = entityPtr->getComponentPtr<EnemyAttack>())
+    {
+        if(ImGui::CollapsingHeader("EnemyAttack"))
+        {
+            drawEnemyAttack(temp);
+        }
+    }
+
     if(EnemyAnimation* temp = entityPtr->getComponentPtr<EnemyAnimation>())
     {
         if(ImGui::CollapsingHeader("EnemyAnimation"))
@@ -164,6 +172,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Camera* temp = entityPtr->getComponentPtr<Camera>())
+    {
+        if(ImGui::CollapsingHeader("Camera"))
+        {
+            drawCamera(temp);
+        }
+    }
+    
     if(Button* temp = entityPtr->getComponentPtr<Button>())
     {
         if(ImGui::CollapsingHeader("Button"))
@@ -185,6 +201,14 @@ void EditorModule::drawEditor()
         if(ImGui::CollapsingHeader("Sorting Group"))
         {
             drawSortingGroup(temp);
+        }
+    }
+
+    if(ToggleButton* temp = entityPtr->getComponentPtr<ToggleButton>())
+    {
+        if(ImGui::CollapsingHeader("Toggle Button"))
+        {
+            drawToggleButton(temp);
         }
     }
 
@@ -212,16 +236,19 @@ std::string EditorModule::formatVec3(glm::vec3 vector)
 
 void EditorModule::drawTransform(Transform* transformPtr)
 {
+    bool updateReactT;
+
     //* transform variables
     glm::vec3 localRotation(0.0f);
 
     localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
 
     ImGui::Text("Local transform:");
-    ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
+    updateReactT |= ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
     if(ImGui::DragFloat3("Rotation: ", (float*)&localRotation, 0.5f, -360.0f, 360.0f, "%.1f"))
     {
         transformPtr->getLocalRotationModifiable() = eulerToQuaternion(localRotation);
+        updateReactT = true;
     }
     ImGui::DragFloat3("Scale: ", (float*)&transformPtr->getLocalScaleModifiable(), 1.0f, 1.0f, 100.0f, "%.2f");
     ImGui::NewLine();
@@ -288,27 +315,38 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
-    ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
-    if( ImGui::DragFloat("Mass", &rBodyPtr->mass) )
+    //TODO check after physic backend change
+    bool changed = false, mass = false;
+
+    changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
+    changed |= mass = ImGui::DragFloat("Mass", &rBodyPtr->mass);
+    changed |= ImGui::DragFloat("Drag", &rBodyPtr->drag);
+    changed |= ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+
+    std::string bType = "ERROR";
+    switch (rBodyPtr->type)
     {
-        if (auto box = rBodyPtr->entityPtr->getComponentPtr<BoxCollider>())
-        {
-            glm::mat3 I = BoxMomentOfInertia(rBodyPtr->mass, box->halfSize * 2.0f);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
-        else if (auto sphere = rBodyPtr->entityPtr->getComponentPtr<SphereCollider>())
-        {
-            //TODO implement solid or hollow
-            glm::mat3 I = SphereMomentOfInertia(rBodyPtr->mass, sphere->radius);
-            rBodyPtr->momentOfInertia = I;
-            rBodyPtr->invertedMomentOfInertia = glm::inverse(I);
-        }
+    case rp3d::BodyType::STATIC:
+        bType = "static";
+        break;
+
+    case rp3d::BodyType::KINEMATIC:
+        bType = "kinematic";
+        break;
+
+    case rp3d::BodyType::DYNAMIC:
+        bType = "dynamic";
+        break;
     }
-    ImGui::DragFloat("Drag", &rBodyPtr->drag);
-    ImGui::DragFloat("Angular drag", &rBodyPtr->angularDrag);
+
+    ImGui::Text((std::string("Body type: ") + bType).c_str());
     ImGui::Text((std::string("Velocity: ") + formatVec3(rBodyPtr->velocity)).c_str());
     ImGui::Text((std::string("Angular velocity: ") + formatVec3(rBodyPtr->angularVelocity)).c_str());
+
+    if (changed)
+    {
+        rBodyPtr->updateReactRB(mass);
+    }
 }
 
 void EditorModule::drawKayak(Kayak* kayakPtr)
@@ -322,9 +360,23 @@ void EditorModule::drawEnemy(Enemy* enemyPtr)
     ImGui::DragFloat("Sight distance", &enemyPtr->sightDistance);
     ImGui::DragFloat("Sight angle", &enemyPtr->sightAngle);
     ImGui::DragInt("Detection counter", &enemyPtr->detectionCounter);
-    ImGui::DragInt("Counter max Value", &enemyPtr->detectionCounterMaxValue);
+    ImGui::DragInt("Counter max value", &enemyPtr->detectionCounterMaxValue);
     ImGui::DragInt("Positive step", &enemyPtr->detectionPositiveStep);
     ImGui::DragInt("Negative step", &enemyPtr->detectionNegativeStep);
+}
+
+void EditorModule::drawCamera(Camera* cameraPtr)
+{
+    ImGui::DragFloat("Exposure", &cameraPtr->exposure);
+    ImGui::DragFloat("Fov", &cameraPtr->getFrustumModifiable().fieldOfView);
+}
+
+void EditorModule::drawEnemyAttack(EnemyAttack* attackPtr)
+{
+    ImGui::DragInt("Attack counter", &attackPtr->attackCounter);
+    ImGui::DragInt("Increment value", &attackPtr->incrementValue);
+    ImGui::DragInt("Activation value", &attackPtr->activationValue);
+    ImGui::SliderFloat("Success chance", &attackPtr->successChance, 0.0f, 1.0f);
 }
 
 void EditorModule::drawButton(Button* button)
@@ -334,6 +386,19 @@ void EditorModule::drawButton(Button* button)
     ImGui::ColorEdit4("On Click color", (float*)&button->onClickColor);
     ImGui::ColorEdit4("Inactive color", (float*)&button->inactiveColor);
     ImGui::Checkbox("Active", &button->isActive);
+}
+
+void EditorModule::drawToggleButton(ToggleButton* toggleButtonPtr)
+{
+    ImGui::ColorEdit4("Base color ON", (float*)&toggleButtonPtr->baseColorOn);
+    ImGui::ColorEdit4("Highlighted color ON", (float*)&toggleButtonPtr->highlightedColorOn);
+    ImGui::ColorEdit4("On Click color ON", (float*)&toggleButtonPtr->onClickColorOn);
+    ImGui::ColorEdit4("Base color OFF", (float*)&toggleButtonPtr->baseColorOff);
+    ImGui::ColorEdit4("Highlighted color OFF", (float*)&toggleButtonPtr->highlightedColorOff);
+    ImGui::ColorEdit4("On Click color OFF", (float*)&toggleButtonPtr->onClickColorOff);
+
+    ImGui::ColorEdit4("Inactive color", (float*)&toggleButtonPtr->inactiveColor);
+    ImGui::Checkbox("Active", &toggleButtonPtr->isActive);
 }
 
 void EditorModule::drawText(TextRenderer* textRenderer)

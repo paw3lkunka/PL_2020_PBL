@@ -2,7 +2,7 @@
 #define _THIRDPERSONCAMERA_INL
 
 #include "Component.hpp"
-#include "Transform.inl"
+#include "Transform.hh"
 
 struct ThirdPersonCamera : public Component
 {

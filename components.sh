@@ -25,7 +25,7 @@ echo >> $_file1
 echo "#include \"Component.hpp\"" >> $_file1
 echo | tee -a $_file1 >> $_file2
 
-for _header in $(find $_path -name '*.hpp' -or -name '*.inl')
+for _header in $(find $_path -name '*.hpp' -or -name '*.inl' -or -name '*.hh')
 do
     echo "    #include \"$(basename $_header)\"" >> $_file1
     _class=$(echo $(basename $_header) | cut -f1 -d'.')

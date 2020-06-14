@@ -1,6 +1,7 @@
 #version 430 core
 
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
 
 layout (std140, binding = 0) uniform Camera
 {
@@ -26,6 +27,10 @@ uniform sampler2D normal;
 uniform sampler2D occRouMet; // r - occlusion, g - roughness, b - metallic
 
 uniform sampler2D directionalShadowMap;
+uniform samplerCube irradianceMap;
+// uniform sampler2D ssaoMap;
+
+// uniform vec2 screenSize;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -50,11 +55,13 @@ const vec2 jitter[9] = {
 // Global shader variables
 vec3 N, V, F0, albedo;
 float metallic, roughness, ao;
+float directionalShadow;
 
 float DistributionGGX(vec3 normal, vec3 halfway, float roughness);
 float GeometrySmith(vec3 normal, vec3 viewDir, vec3 lightDir, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 
 vec3 calcDirectionalLight(DirectionalLight light);
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir);
@@ -69,11 +76,13 @@ vec3 calculateNormal()
 
 void main() 
 { 
+	//vec2 NDC = gl_FragCoord.xy / screenSize;
+
 // Sampling the textures for further use
 	albedo = pow(texture(diffuse, Texcoord).rgb, vec3(2.2f)); // Converting texture from sRGB gamma space to linear by using pow()
 	metallic = texture(occRouMet, Texcoord).b;
 	roughness = texture(occRouMet, Texcoord).g;
-	ao = texture(occRouMet, Texcoord).r;
+	ao = texture(occRouMet, Texcoord).r;// * texture(ssaoMap, NDC).r;
 
 // Properties shared between lights
 	N = calculateNormal();
@@ -88,17 +97,28 @@ void main()
 // Directional light ------------------------------------------------------------------------
 	Lo += calcDirectionalLight(directionalLight);
 
-// Makeshift ambient lightning
-	vec3 ambient = vec3(0.01, 0.01, 0.01) * albedo;// * ao;//directionalLight.ambient.rgb * albedo * ao;
-	vec3 color = ambient + Lo;
-
-// HDR tonemapping
-	color = color / (color + vec3(1.0f));
-// Gamma correction
-	color = pow(color, vec3(1.0f / 2.2f));
+// Ambient light comes from convoluted cubemap irradiance
+	vec3 kS = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+	vec3 kD = 1.0 - kS;
+	kD *= 1.0 - metallic;
+	vec3 irradiance = texture(irradianceMap, N).rgb;
+	vec3 diff = irradiance * albedo;
+	vec3 ambient = (kD * diff) * ao;
+	vec3 color = ambient * (1.0 - directionalShadow * 0.75) + Lo * (1.0 - directionalShadow);
 
 	// TODO: Better alpha sampling
 	FragColor = vec4(color, texture(diffuse, Texcoord).a);
+
+	// Save to second MRT
+	float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+	if (brightness > 1.0)
+	{
+		BrightColor = vec4(FragColor.rgb, 1.0);
+	}
+	else
+	{
+		BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+	}
 }
 
 vec3 calcDirectionalLight(DirectionalLight light)
@@ -113,7 +133,7 @@ vec3 calcDirectionalLight(DirectionalLight light)
 	vec3 F = fresnelSchlick(max(dot(H, V), 0.0f), F0);
 
 	vec3 nominator = NDF * G * F;
-	float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f; // added 0.001f to prevent division by zero
+	float denominator = 4 * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f; // added 0.0001f to prevent division by zero
 	vec3 specular = nominator / denominator;
 
 	// Calculate specular/albedo distribution
@@ -125,9 +145,10 @@ vec3 calcDirectionalLight(DirectionalLight light)
 	float NdotL = max(dot(N, L), 0.0f);
 
     // Calculate shadow
-    float shadow = calcShadow(FragPosLightSpace, L);
+    directionalShadow = calcShadow(FragPosLightSpace, L);
 
-	return (1.0 - shadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
+	//return (1.0 - directionalShadow) * ((kD * albedo / PI + specular) * radiance * NdotL);
+	return ((kD * albedo / PI + specular) * radiance * NdotL);
 }
 
 float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
@@ -211,4 +232,9 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
 	cosTheta = min(cosTheta, 1.0f);
 	return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
+}
+
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+	return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }

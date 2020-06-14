@@ -9,7 +9,7 @@
 #include "Message.inl"
 #include "MouseDataStructures.inl"
 
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Camera.inl"
 #include "FirstPersonCamera.inl"
 

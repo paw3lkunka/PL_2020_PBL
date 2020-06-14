@@ -56,6 +56,7 @@ private:
 
     std::unordered_map<std::string, AudioFile> audioClips;
     std::unordered_map<std::string, TextureData> textures;
+    std::unordered_map<std::string, TextureHdrData> texturesHdr;
     std::unordered_map<std::string, std::string> shaders;
 
     // TODO: I dont have the patience to do it another way
@@ -64,6 +65,7 @@ private:
     //load files to storages methods
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
+    bool loadHdrTexture(std::string path);
     bool loadShader(std::string path);
     bool loadMesh(std::string path);
 
@@ -73,8 +75,8 @@ private:
     Animation* processAnimations(const aiScene* scene, std::string path);
     Mesh* createMesh(aiMesh* node, std::string path);
 
-    static inline glm::vec3 aiVectortoGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }
-    static inline glm::vec2 aiVectortoGlmVec2(const aiVector3D &v) { return glm::vec2(v.x, v.y); }
+    static inline glm::vec3 aiVectorToGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }
+    static inline glm::vec2 aiVectorToGlmVec2(const aiVector3D &v) { return glm::vec2(v.x, v.y); }
     static inline glm::quat aiQuaternionToGlmQuat(const aiQuaternion &q) { return glm::quat(q.w, q.x, q.y, q.z); }
     static inline glm::mat4 aiMatrixToGlmMat4(const aiMatrix4x4 &m) { return glm::transpose(glm::make_mat4(&m.a1)); }
     static inline glm::mat4 aiMatrixToGlmMat4(const aiMatrix3x3 &m) { return glm::transpose(glm::make_mat3(&m.a1)); }

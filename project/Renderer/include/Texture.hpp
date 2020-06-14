@@ -34,19 +34,20 @@ public:
      * @param filePath path to file from texture is loaded
      */
     Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath);
+    Texture(unsigned int externalID);
     Texture() = default;
     virtual ~Texture() = default;
 
     /**
      * @brief Initializes texture with data and options from createInfo
      */
-    void init();
+    virtual void init();
     /**
      * @brief Bind texture to provided texture unit
      * 
      * @param textureUnit Texture unit to set
      */
-    void bind(int textureUnit);
+    virtual void bind(int textureUnit) const;
     /**
      * @brief Get the the texture ID
      * 
@@ -54,9 +55,11 @@ public:
      */
     unsigned int getId();
 
-private:
+protected:
     unsigned int id;
     TextureCreateInfo info;
+
+private:
     unsigned char* data;
 };
 

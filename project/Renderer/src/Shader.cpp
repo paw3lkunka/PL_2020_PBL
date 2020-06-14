@@ -1,5 +1,56 @@
 #include "Shader.hpp"
 #include "ShaderExceptions.hpp"
+#include "RendererModule.hpp"
+
+Shader::Shader(std::string name, const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode, bool serialize)
+    : ISerializable(serialize), shaderName(name)
+{
+    // * Shader compilation ==============================================
+    unsigned int vertex, fragment, geometry;
+    int success;
+    char infoLog[512];
+    // TODO: Decide if the exceptions should be caught or left to crash xd
+    vertex = compileShader(vertexShaderCode, GL_VERTEX_SHADER);
+    fragment = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
+    if (geometryShaderCode != nullptr)
+    {
+        // Compile geometry shader only if the code is provided
+        geometry = compileShader(geometryShaderCode, GL_GEOMETRY_SHADER);
+    }
+
+    // * Shader program creation ==========================================
+    ID = glCreateProgram();
+    glAttachShader(ID, vertex);
+    glAttachShader(ID, fragment);
+    if (geometryShaderCode != nullptr)
+    {
+        glAttachShader(ID, geometry);
+    }
+
+    glLinkProgram(ID);
+
+    // Handle linking errors
+    glGetProgramiv(ID, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(ID, 512, nullptr, infoLog);
+        // TODO: Add message bus debug error log
+        
+        std::cerr << "Shader program linking error\n" << infoLog << '\n';
+    }
+
+    // Get info about shader variables
+    retrieveShaderInfo(GL_ACTIVE_ATTRIBUTES, attributes);
+    retrieveShaderInfo(GL_ACTIVE_UNIFORMS, uniforms);
+
+    // * Delete the unncecessary shader programs =========================
+    glDeleteShader(vertex);
+    glDeleteShader(fragment);
+    if (geometryShaderCode != nullptr)
+    {
+        glDeleteShader(geometry);
+    }
+}
 
 void Shader::setBool(const std::string& name, bool value) const
 {
@@ -12,6 +63,10 @@ void Shader::setInt(const std::string& name, int value) const
 void Shader::setFloat(const std::string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+void Shader::setVec2(const std::string& name, glm::vec2& vec) const
+{
+	glUniform2f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y);
 }
 void Shader::setVec3(const std::string& name, float x, float y, float z) const
 {
@@ -75,56 +130,6 @@ void Shader::setMat3(const char* name, const glm::mat3& mat) const
 	glUniformMatrix3fv(glGetUniformLocation(ID, name), 1, GL_FALSE, &mat[0][0]);
 }
 
-Shader::Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode, bool serialize) 
-    : ISerializable(serialize)
-{
-    // * Shader compilation ==============================================
-    unsigned int vertex, fragment, geometry;
-    int success;
-    char infoLog[512];
-    // TODO: Decide if the exceptions should be caught or left to crash xd
-    vertex = compileShader(vertexShaderCode, GL_VERTEX_SHADER);
-    fragment = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
-    if (geometryShaderCode != nullptr)
-    {
-        // Compile geometry shader only if the code is provided
-        geometry = compileShader(geometryShaderCode, GL_GEOMETRY_SHADER);
-    }
-
-    // * Shader program creation ==========================================
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    if (geometryShaderCode != nullptr)
-    {
-        glAttachShader(ID, geometry);
-    }
-
-    glLinkProgram(ID);
-
-    // Handle linking errors
-    glGetProgramiv(ID, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(ID, 512, nullptr, infoLog);
-        // TODO: Add message bus debug error log
-        
-        std::cerr << "Shader program linking error\n" << infoLog << '\n';
-    }
-
-    // Get info about shader variables
-    retrieveShaderInfo(GL_ACTIVE_ATTRIBUTES, attributes);
-    retrieveShaderInfo(GL_ACTIVE_UNIFORMS, uniforms);
-
-    // * Delete the unncecessary shader programs =========================
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
-    if (geometryShaderCode != nullptr)
-    {
-        glDeleteShader(geometry);
-    }
-}
-
 unsigned int Shader::compileShader(const char* shaderCode, GLenum shaderType)
 {
     unsigned int shader = glCreateShader(shaderType);
@@ -150,7 +155,11 @@ unsigned int Shader::compileShader(const char* shaderCode, GLenum shaderType)
 
 void Shader::use()
 {
-    glUseProgram(ID);
+    if (RendererModule::lastShaderID != ID)
+    {
+        RendererModule::lastShaderID = ID;
+        glUseProgram(ID);
+    }
 }
 
 void Shader::retrieveShaderInfo(GLenum shaderInfoType, std::unordered_map<std::string, GLenum>& buffer)

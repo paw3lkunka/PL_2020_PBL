@@ -20,8 +20,6 @@
     auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
 
     auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
-    
-    auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
     auto simpleLitShader = objectModule.newShader("Resources/Shaders/SimpleLit/SimpleLit.vert", "Resources/Shaders/SimpleLit/SimpleLit.frag");
 
@@ -48,22 +46,16 @@
     auto rocks3Normal = objectModule.newTexture("Resources/Models/Rocks/normal.tga", texCreateInfo);
 
     auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png", texCreateInfo);
-
     auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
-
     auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
 
     auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_diff_2k.png", texCreateInfo);
-
     auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
-
-    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_rough_ao_2k.png", texCreateInfo);
+    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_occRouMet.png", texCreateInfo);
 
     auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rock/rock_04_diff_2k.png", texCreateInfo);
-
     auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
-
-    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_rough_2k.png", texCreateInfo);
+    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_occRouMet.png", texCreateInfo);
 
     auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 
@@ -92,17 +84,6 @@
     skyboxCreateInfo.magFilter = GL_LINEAR;
     skyboxCreateInfo.minFilter = GL_LINEAR;
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-
-    auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox_02/nz.png", 
-                                "Resources/Textures/skybox_02/nx.png", 
-                                "Resources/Textures/skybox_02/px.png",
-                                "Resources/Textures/skybox_02/pz.png",
-                                "Resources/Textures/skybox_02/py.png",
-                                "Resources/Textures/skybox_02/ny.png");
-
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-    skyboxMat->setCubemap("cubemap", cubemap);
 
     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
@@ -139,10 +120,35 @@
 
 #pragma endregion
 
+#pragma region Skybox
+
+    {
+        TextureCreateInfo i = {};
+        i.minFilter = GL_LINEAR;
+        i.magFilter = GL_LINEAR;
+        i.wrapMode= GL_CLAMP_TO_EDGE;
+        i.generateMipmaps = false;
+        CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                                "Resources/Textures/skybox_02/nx.hdr", 
+                                                                "Resources/Textures/skybox_02/px.hdr",
+                                                                "Resources/Textures/skybox_02/pz.hdr",
+                                                                "Resources/Textures/skybox_02/py.hdr",
+                                                                "Resources/Textures/skybox_02/ny.hdr");
+        
+        Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+        
+        Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+        hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+        
+        GetCore().rendererModule.setSkybox(hdrSkyboxMat);
+    }
+
+#pragma endregion
+
 #pragma region Entities
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("barrel_biohazard");
+        Entity* entity = objectModule.getEntityPtrByName("Barrel_01.FBX/barrel_biohazard");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = barrel1Mat;
 
@@ -151,13 +157,13 @@
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("test_riverbed");
+        Entity* entity = objectModule.getEntityPtrByName("test_riverbed.FBX/test_riverbed");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = grassMat;
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("rocks_03");
+        Entity* entity = objectModule.getEntityPtrByName("rocks_03.FBX/rocks_03");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = simpleLitMat;
 
@@ -168,7 +174,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Surface");
         if(entity != nullptr)
         {
             auto mr = entity->getComponentPtr<MeshRenderer>();
@@ -190,7 +196,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Water");
+        auto entity = objectModule.getEntityPtrByName("Water.FBX/Water");
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
@@ -200,7 +206,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Cliffs");
+        auto entity = objectModule.getEntityPtrByName("Cliffs.FBX/Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = rocksMat;
 
@@ -209,7 +215,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Left_bank");
+        auto entity = objectModule.getEntityPtrByName("Left_bank.FBX/Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -218,7 +224,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Right_bank");
+        auto entity = objectModule.getEntityPtrByName("Right_bank.FBX/Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -227,7 +233,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Riverbed");
+        auto entity = objectModule.getEntityPtrByName("Riverbed.FBX/Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = gravelMat;
 
@@ -236,7 +242,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Joints");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = unlitSkinnedMat;
 
@@ -246,7 +252,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Sphere001");
+        auto entity = objectModule.getEntityPtrByName("unit_sphere.FBX/Sphere001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -262,7 +268,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Box001");
+        auto entity = objectModule.getEntityPtrByName("Box.FBX/Box001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -517,10 +523,23 @@ objectModule.newEntity(2, "sampleSound");
             sphereSound->addComponent(rbSound);
         Entity* entity = objectModule.newEntity(5, "PhisicBasedInputTest");
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,  0.0f,  50.0f };
-            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,  0.0f, -50.0f };
-            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,  0.0f,   0.0f };
-            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,  0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
+            keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
+            keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
+
+            keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
+            keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
         Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
             transform->setParent(&sceneModule.rootNode);
             transform->getLocalPositionModifiable().x = 50;
@@ -545,32 +564,6 @@ objectModule.newEntity(2, "sampleSound");
 
 // Box, and some fixes
 {
-    //Adding y axis
-    {
-        auto* pbit = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-            auto* map = pbit->getComponentPtr<PhysicalInputKeymap>();
-                Impulse up = {glm::vec3(0.0f, 50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                Impulse down = {glm::vec3(0.0f, -50.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
-                map->continuous.emplace(GLFW_KEY_Z, up);
-                map->continuous.emplace(GLFW_KEY_X, down);
-    }
-    //I fix
-    {
-        auto* o1 = objectModule.getEntityPtrByName("PhisicBasedInputTest");
-            auto* rb1 = o1->getComponentPtr<Rigidbody>();
-            auto* sc1 = o1->getComponentPtr<SphereCollider>();
-            rb1->momentOfInertia = SphereMomentOfInertia(rb1->mass, sc1->radius);
-            
-        auto* o2 = objectModule.getEntityPtrByName("Sphere001");
-            auto* rb2 = o2->getComponentPtr<Rigidbody>();
-            auto* sc2 = o2->getComponentPtr<SphereCollider>();
-            rb2->momentOfInertia = SphereMomentOfInertia(rb2->mass, sc2->radius);
-            
-        auto* o3 = objectModule.getEntityPtrByName("sphereSound");
-            auto* rb3 = o3->getComponentPtr<Rigidbody>();
-            auto* sc3 = o3->getComponentPtr<SphereCollider>();
-            rb3->momentOfInertia = SphereMomentOfInertia(rb3->mass, sc3->radius);
-    }
     objectModule.newEntity(4, "TestBox");
     {
         auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -585,10 +578,8 @@ objectModule.newEntity(2, "sampleSound");
             rb->drag = 10;
             rb->ignoreGravity = false;
             rb->mass = 10;
-            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 6.0f, 6.0f, 6.0f);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->halfSize = {0.5f, 0.5f, 0.5f};
-            bc->calculateVert();
+            bc->halfSize = {3.0f, 3.0f, 3.0f};
     }
 }
 
@@ -597,8 +588,6 @@ objectModule.newEntity(2, "sampleSound");
 {
     auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
         rigidbody->mass = 60.0f;
-        rigidbody->momentOfInertia = BoxMomentOfInertia(60.0f, 18.0f, 5.0f, 90.0f);
-        rigidbody->invertedMomentOfInertia = glm::inverse(rigidbody->momentOfInertia);
         rigidbody->drag = 3.0f;
         rigidbody->angularDrag = 3.0f;
         rigidbody->ignoreGravity = true;
@@ -617,13 +606,10 @@ objectModule.newEntity(2, "sampleSound");
             t->getLocalPositionModifiable().y = -35;
             t->getLocalScaleModifiable() = {300, 50, 150};
             t->setParent(&sceneModule.rootNode);
-        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::KINEMATIC;
+        auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();        
+            bc->halfSize = {150.0f, 25.0f, 75.0f};
         auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-            rb->mass = 2000.0f;
-            rb->ignoreGravity = true;
-            rb->momentOfInertia = BoxMomentOfInertia(rb->mass, 2.0f * bc->halfSize);
-            rb->invertedMomentOfInertia = glm::inverse(rb->momentOfInertia);
+            rb->type = rp3d::BodyType::STATIC;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
             mr->material = objectModule
@@ -658,7 +644,8 @@ objectModule.newEntity(2, "sampleSound");
             tr->getLocalScaleModifiable() = {20.0f, 10.0f, 20.0f};
             tr->setParent(&sceneModule.rootNode);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::TRIGGER;
+            bc->halfSize = {10.0f, 5.0f, 10.0f};
+            bc->isTrigger = true;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;
@@ -673,7 +660,8 @@ objectModule.newEntity(2, "sampleSound");
             tr->getLocalRotationModifiable() = glm::quat({0.0f, glm::pi<float>() / 4.0f, 0.0f});
             tr->setParent(&sceneModule.rootNode);
         auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
-            bc->type = Collider::Type::TRIGGER;
+            bc->halfSize = {5.0f, 10.0f, 5.0f};
+            bc->isTrigger = true;
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
             mr->material = rushesMat;

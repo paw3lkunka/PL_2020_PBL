@@ -1,6 +1,5 @@
 #include "HideoutSystem.hpp"
 
-#include "CollisionDataStructures.inl"
 #include "Components.inc"
 #include "Message.inl"
 #include "Core.hpp"
@@ -15,7 +14,7 @@ void HideoutSystem::receiveMessage(Message msg)
 {
     if (msg.getEvent() == Event::TRIGGER_ENTER || msg.getEvent() == Event::TRIGGER_EXIT)
     {
-        if (Kayak::get() && msg.getValue<CollisionData>().cause->entityPtr == Kayak::get()->entityPtr)
+        if (Kayak::get() && msg.getValue<TriggerData>().causeBody->entityPtr == Kayak::get()->entityPtr)
         {
             messages.push_back(msg);
         }
@@ -31,7 +30,7 @@ void HideoutSystem::fixedUpdate()
 {
     for (Message& msg : messages)
     {
-        if (msg.getValue<CollisionData>().target->entityPtr == hideoutPtr->entityPtr)
+        if (msg.getValue<TriggerData>().triggerBody->entityPtr == hideoutPtr->entityPtr)
         {
             switch (msg.getEvent())
             {

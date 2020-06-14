@@ -8,12 +8,14 @@ class Entity;
 class Shader;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 enum class FileType: unsigned int;
 enum class RenderType;
 struct Bounds;
 struct TextureCreateInfo;
 class Message;
+class GamePlayModule;
 
 #include "ObjectContainer.hpp"
 #include "ObjectMaker.hpp"
@@ -32,12 +34,16 @@ class ObjectModule : public IModule
     friend class SceneWriter;
     friend class SceneReader;
     friend class AssetReader;
+    friend class GamePlayModule;
 public: 
     /**
      * @brief Construct a new Object Module object
      */
     ObjectModule() : objectMaker(this), objectContainer(this), assetReader(this), sceneWriter(this), sceneReader(this) {}
     ~ObjectModule() = default;
+
+    //TODO documentation
+    void cleanup();
 
     /**
      * @brief Get the Entities Vector object from container
@@ -52,16 +58,6 @@ public:
      * @param msg message to receive
      */
     void receiveMessage(Message msg);
-
-    /**
-     * @brief comparsion cstrings
-     * 
-     * @param str1 first string
-     * @param str2 second string
-     * @return true strings are the same
-     * @return false strings aren't the same
-     */
-    bool compareStrings(const char* str1, const char* str2);
 
 #pragma region Scene Wrapper
     /**
@@ -137,6 +133,14 @@ public:
      */
     Texture* getTexturePtrByFilePath(const char* filePath) { return objectContainer.getTexturePtrByFilePath(filePath); }
 
+    /**
+     * @brief Get the Shader Ptr By Name 
+     * 
+     * @param shaderName name of shader
+     * @return Shader* pointer or nullptr if can't find
+     */
+    Shader* getShaderPtrByName(std::string shaderName) { return objectContainer.getShaderPtrByName(shaderName); }
+
     
     /**
      * @brief Get the Animation Ptr By Name
@@ -184,12 +188,13 @@ public:
     /**
      * @brief Checks if shader exist, if doesn't - makes it
      * 
+     * @param shaderName name of shader
      * @param vertexShaderPath path of vertex shader
      * @param fragmentShaderPath path of fragment shader
      * @param geometryShaderPath path of geometry shader (optional)
      * @return Shader* pointer to shader
      */
-    Shader* newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
+    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr, bool serialize = true);
 
     /**
      * @brief Checks if texture exist, if doesn't - makes it
@@ -201,7 +206,7 @@ public:
     Texture* newTexture(const char* filePath, TextureCreateInfo createInfo);
 
     /**
-     * @brief Checks if cubemap exist, if doesn't - makes it
+     * @brief Checks if cubemap exists, if doesn't - makes it
      * 
      * @param createInfo basic create info (without information from file like width, height)
      * @param frontPath front wall path
@@ -219,6 +224,27 @@ public:
                         const char* backPath,
                         const char* topPath,
                         const char* bottomPath);
+
+    /**
+     * @brief Checks if hdr cubemap exists, if doesn't - makes it
+     * 
+     * @param createInfo basic create info (without information from file like width, height)
+     * @param frontPath front wall path
+     * @param leftPath left wall path
+     * @param rightPath right wall path
+     * @param backPath back wall path
+     * @param topPath top wall path
+     * @param bottomPath bottom wall path
+     * @return CubemapHdr* pointer to hdr cubemap
+     */
+    CubemapHdr* newHdrCubemap(TextureCreateInfo createInfo, 
+                                const char* frontPath, 
+                                const char* leftPath, 
+                                const char* rightPath,
+                                const char* backPath,
+                                const char* topPath,
+                                const char* bottomPath);
+
 
     /**
      * @brief Checks if model was loaded before, if doesn't - loads it
@@ -260,10 +286,6 @@ private:
     AssetReader assetReader;
     SceneReader sceneReader;
     SceneWriter sceneWriter;
-
-    
-    bool compareStrings(std::string str1, std::string str2);
-    
 };
 
 #include "ObjectModule.ipp"

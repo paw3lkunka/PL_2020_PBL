@@ -10,10 +10,10 @@
 #include "MouseDataStructures.inl"
 #include "GamepadDataStructures.inl"
 
-#include "Transform.inl"
+#include "Transform.hh"
 #include "Camera.inl"
 #include "ThirdPersonCamera.inl"
-#include "SphereCollider.inl"
+#include "SphereCollider.hpp"
 
 bool ThirdPersonCameraControlSystem::assertEntity(Entity* entity)
 {

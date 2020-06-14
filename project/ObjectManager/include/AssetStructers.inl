@@ -9,4 +9,12 @@ struct TextureData
     unsigned char* data;
 };
 
+struct TextureHdrData
+{
+    int width = 0;
+    int height = 0;
+    int nrComponents = 0;
+    float* data;
+};
+
 #endif /* !ASSETSTRUCTERS_INL_ */

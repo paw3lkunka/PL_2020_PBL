@@ -20,6 +20,8 @@
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
+#include "PhysicModule.hpp"
+#include "GamePlayModule.hpp"
 
 // * ECS
 #include "Entity.hpp"
@@ -27,6 +29,7 @@
 #include "SystemsPreDeclarations.hxx"
 
 // * Others
+#include <filesystem>
 
 class Message;
 enum class Event : unsigned int;
@@ -98,7 +101,7 @@ class Core
         /**
          * @brief Path to scene file.
          */
-        std::string sceneFilePath = "Resources/Scenes/mainScene.json";
+        std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";
 #pragma endregion
 
 #pragma region Utilities
@@ -174,6 +177,20 @@ class Core
          * @return float random number.
          */
         float randomFloat01R();
+
+        /**
+         * @brief Choose randomly one of two values.
+         * 
+         * @tparam T type of values.
+         * @param obverse first value.
+         * @param reverse second value.
+         * @return float first value or second value.
+         */
+        template<typename T>
+        T coinToss(T obverse, T reverse)
+        {
+            return randomInt() > 0 ? obverse : reverse;
+        }
 #pragma
 
 #pragma region Constants
@@ -249,6 +266,11 @@ class Core
          * @return double 
          */
         double getCurrentFrameStart();
+
+        /**
+         * @brief is game paused flag
+         */
+        const bool isGamePaused() { return gamePaused; }
 #pragma endregion
 
 #pragma region Modules
@@ -283,21 +305,12 @@ class Core
         ///@brief ui graph
         UiModule uiModule;
 
-        /**
-         * TODO Please, do something better here ;-;
-         * @brief safely close application, on ESC press
-         */
-        class : public IModule
-        {
-        virtual void receiveMessage(Message msg)
-            {
-                if(msg.getEvent() == Event::KEY_PRESSED && msg.getValue<int>() == GLFW_KEY_ESCAPE)
-                {
-                    instance->close();
-                }
-            }
-        } tmpExit;
-        
+        ///@brief responsible for physic simulation
+        PhysicModule physicModule;
+
+        ///@brief gamePlay module
+        GamePlayModule gamePlayModule;
+
 #pragma endregion
 
 #pragma region Systems
@@ -310,7 +323,7 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
-        static CollisionSystem collisionSystem;
+        static TerrainRendererSystem terrainSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;
@@ -323,6 +336,9 @@ class Core
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
         static SortingGroupSystem sortingGroupSystem;
+        static ToggleButtonSystem toggleButtonSystem;
+        static CargoStorageSystem cargoStorageSystem;
+        static CargoButtonSystem cargoButtonSystem;
 
 #pragma endregion
 
@@ -337,9 +353,11 @@ class Core
         static int windowWidth;
         static int windowHeight;
 
+        friend class GamePlayModule;
     private:
         static Core* instance;
-        GLFWwindow* window; 
+        GLFWwindow* window;
+        bool gamePaused = false;
 
         double currentFrameStart;
 

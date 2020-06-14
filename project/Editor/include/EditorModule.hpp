@@ -59,7 +59,6 @@ private:
     ///@brief index for current element in combo list
     int currentItem;
 
-
     //HACK: Maybe other solution?
     ///@brief list of sorting types, according to enum class (the same order as in enum class)
     const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0RectTransform\0";
@@ -86,10 +85,13 @@ private:
     void drawRigidbody(Rigidbody* rBodyPtr);
     void drawKayak(Kayak* kayakPtr);
     void drawEnemy(Enemy* enemyPtr);
+    void drawCamera(Camera* camera);
+    void drawEnemyAttack(EnemyAttack* attackPtr);
     void drawButton(Button* button);
     void drawText(TextRenderer* textRenderer);
     void drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr);
     void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
+    void drawToggleButton(ToggleButton* toggleButtonPtr);
 
     // ! Helper functions
     /**

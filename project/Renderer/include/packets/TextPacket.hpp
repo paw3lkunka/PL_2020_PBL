@@ -1,7 +1,6 @@
 #ifndef _TEXTPACKET_HPP
 #define _TEXTPACKET_HPP
 
-#include "Material.hpp"
 #include "TextMesh.hpp"
 #include "UiPacket.inl"
 

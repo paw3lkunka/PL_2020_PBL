@@ -30,11 +30,13 @@ public:
     /**
      * @brief Construct a new Shader object
      * 
+     * @param name name of the shader
      * @param vertexShaderCode String with code contents of vertex shader
      * @param fragmentShaderCode String with code contents of fragment shader
-     * @param geometryShader String with code contents of geometry shader
+     * @param geometryShaderCode String with code contents of geometry shader
+     * @param serialize should it be serialized
      */
-    Shader(const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr, bool serialize = true);
+    Shader(std::string name, const char* vertexShaderCode, const char* fragmentShaderCode, const char* geometryShaderCode = nullptr, bool serialize = true);
 
     Shader() = default;
     /**
@@ -60,6 +62,8 @@ public:
 	void setInt(const std::string& name, int value) const;
     //TODO documentation
 	void setFloat(const std::string& name, float value) const;
+    //TODO documentation
+    void setVec2(const std::string& name, glm::vec2& vec) const;
     //TODO documentation
 	void setVec3(const std::string& name, float x, float y, float z) const;
     //TODO documentation
@@ -97,6 +101,7 @@ public:
     std::string vertexShaderPath = "";
     std::string fragmentShaderPath = "";
     std::string geometryShaderPath = "";
+    const std::string shaderName;
 
 private:
     std::unordered_map<std::string, GLenum> attributes;

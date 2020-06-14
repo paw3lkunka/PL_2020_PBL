@@ -5,6 +5,7 @@
 #include "Entity.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
+#include "CubemapHdr.hpp"
 #include "Material.hpp"
 #include "Font.hpp"
 #include "AssetStructers.inl"
@@ -36,31 +37,13 @@ void ObjectModule::receiveMessage(Message msg)
             }
         }
         break;
-        case Event::LOAD_SCENE:
-            unloadSceneAndLoadNew(msg.getValue<const char*>());
-        break;
     }
 }
 
-bool ObjectModule::compareStrings(const char* str1, const char* str2)
-{
-    return std::strcmp(str1, str2) == 0;
-}
 
-bool ObjectModule::compareStrings(std::string str1, std::string str2)
+void ObjectModule::cleanup()
 {
-    if(str1.length() != str2.length())
-    {
-        return false;
-    }
-    for(int i = 0; i < str1.length(); ++i)
-    {
-        if( str1[i] != str2[i])
-        {
-            return false;
-        }
-    }
-    return true;
+    objectContainer.cleanup();
 }
 
 #pragma region Scene Wrapper
@@ -76,7 +59,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
-    GetCore().audioModule.cleanup();
+    GetCore().audioModule.unloadScene();
     objectContainer.unloadScene();
     // ! removing all associations for scene root node
     GetCore().sceneModule.unloadScene();
@@ -84,12 +67,8 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().uiModule.unloadScene();
     // ! clear message bus, for omitting messages between scenes
     GetCore().messageBus.clearBuffers();
-    // * setting serialization id for 1 (0 is scene root node)
-    ISerializable::nextID = 1;
-    //* reading scene
-    sceneReader.readScene(newScenePath);
 
-    // ! ----- Renderer initialization block -----
+     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
@@ -98,7 +77,14 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo, getMaterialPtrByName("skyboxMat"));
+    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo);
+
+    // * setting serialization id for 1 (0 is scene root node)
+    ISerializable::nextID = 1;
+    //* reading scene
+    sceneReader.readScene(newScenePath);
+
+
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
 
@@ -107,7 +93,6 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().sceneModule.updateTransforms();
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
-    GetCore().audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }
@@ -128,17 +113,19 @@ Entity* ObjectModule::newEntity(int bufferSize, std::string name)
     return objectMaker.newEntity(bufferSize, name);
 }
 
-Shader* ObjectModule::newShader(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
-{   
-    for(Shader* s : objectContainer.shaders)
+Shader* ObjectModule::newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath, bool serialize)
+{
+    if (serialize)
     {
-        if(s->vertexShaderPath == std::string(vertexShaderPath) 
-        && s->fragmentShaderPath == std::string(fragmentShaderPath) )
+        for(Shader* s : objectContainer.shaders)
         {
-            return s;
+            if(shaderName.compare(s->shaderName) == 0)
+            {
+                return s;
+            }
         }
     }
-    return objectMaker.newShader(vertexShaderPath, fragmentShaderPath, geometryShaderPath);
+    return objectMaker.newShader(shaderName, vertexShaderPath, fragmentShaderPath, geometryShaderPath, serialize);
 }
 
 Texture* ObjectModule::newTexture(const char* filePath, TextureCreateInfo createInfo)
@@ -168,6 +155,21 @@ Cubemap* ObjectModule::newCubemap(TextureCreateInfo createInfo, const char* fron
     return objectMaker.newCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
+CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
+                    const char* rightPath, const char* backPath, const char* topPath, const char* bottomPath)
+{
+    for(CubemapHdr* c : objectContainer.hdrCubemaps)
+    {
+        if(c->frontPath == frontPath && c->backPath == backPath 
+        && c->leftPath == leftPath && c->rightPath == rightPath 
+        && c->bottomPath == bottomPath && c->topPath == topPath)
+        {
+            return c;
+        }
+    }
+    return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
+}
+
 void ObjectModule::newModel(const char* filePath)
 {
     for(auto m : objectContainer.meshes)
@@ -184,7 +186,7 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType
 {
     for(auto m : objectContainer.materials)
     {
-        if(compareStrings(m->getName(), name.c_str()))
+        if(strcmp(m->getName(), name.c_str()) == 0)
         {
             return m;
         }
@@ -201,7 +203,7 @@ Font* ObjectModule::newFont(const char* filePath, unsigned int size, std::string
 {
     for(auto f : objectContainer.fonts)
     {
-        if(compareStrings(f->getFontPath(), filePath))
+        if(strcmp(f->getFontPath(), filePath) == 0)
         {
             return f;
         }

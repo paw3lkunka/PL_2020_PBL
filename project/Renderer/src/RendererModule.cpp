@@ -1,13 +1,17 @@
 #include "RendererModule.hpp"
 
 #include "Message.inl"
-#include "mesh/MeshQuad.hpp"
+#include "MeshQuad.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include "CubemapHdr.hpp"
 #include "Core.hpp"
 #include "DistanceComparer.hpp"
 #include "UiRenderer.inl"
 #include "TextRenderer.inl"
+#include "TerrainRenderer.inl"
+#include "BuiltInShaders.inl"
+#include "BuiltInShapes.inl"
 
 #include <algorithm>
 
@@ -17,15 +21,16 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-unsigned int RendererModule::lastMatID = std::numeric_limits<unsigned int>::max();
-//unsigned int lastShaderID = std::numeric_limits<unsigned int>::max();
+unsigned int RendererModule::lastMatID = 0;
+unsigned int RendererModule::lastShaderID = 0;
 
 RendererModule::~RendererModule()
 {
     delete internalErrorMat;
     delete internalShaderError;
-    delete simpleDepth;
+    delete irradianceMap;
     delete directionalDepth;
+    delete ssaoMap;
 }
 
 void RendererModule::receiveMessage(Message msg)
@@ -56,6 +61,19 @@ void RendererModule::receiveMessage(Message msg)
                 normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
             }
             
+            break;
+        }
+        case Event::RENDERER_ADD_TERRAIN_TO_QUEUE:
+        {
+            TerrainRenderer* tr = msg.getValue<TerrainRenderer*>();
+            if (tr->material != nullptr)
+            {
+                terrainPackets.push_back(TerrainPacket(tr->terrainMesh, tr->material, tr->splatmap, tr->modelMatrix));
+            }
+            else
+            {
+                terrainPackets.push_back(TerrainPacket(tr->terrainMesh, internalErrorMat, tr->splatmap, tr->modelMatrix));
+            }
             break;
         }
         case Event::RENDERER_ADD_UI_TO_QUEUE:
@@ -105,16 +123,59 @@ void RendererModule::receiveMessage(Message msg)
                 frustumCullingEnabled = !frustumCullingEnabled;
             }
             break;
+
+        case Event::WINDOW_RESIZED:
+            glm::ivec2 size = msg.getValue<glm::ivec2>();
+            // Hdr framebuffers
+            glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+
+            // Bloom framebuffers
+            for (size_t i = 0, j = 2; i < 10; i += 2, j *= 2)
+            {
+                glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / j, size.y / j, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+                glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / j, size.y / j, 0, GL_RGBA, GL_FLOAT, nullptr);
+            }
+            // Gbuffers
+            glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+
+            // SSAO
+            glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
+            break;
     }
 }
 
-void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo, Material* skyboxMaterial)
+void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo)
 {
     this->window = window;
     this->createInfo = createInfo;
     this->skyboxMaterial = skyboxMaterial;
 
     normalPackets.reserve(DRAW_CALL_NORMAL_ALLOCATION);
+    terrainPackets.reserve(DRAW_CALL_TERRAIN_ALLOCATION);
     instancedPackets.reserve(DRAW_CALL_INSTANCED_ALLOCATION);
     spritePackets.reserve(DRAW_CALL_UI_ALLOCATION);
     textPackets.reserve(DRAW_CALL_TEXT_ALLOCATION);
@@ -140,9 +201,13 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    simpleDepth = new Shader(depthVertexCode, depthFragmentCode, nullptr, false);
-    internalShaderError = new Shader(depthVertexCode, internalErrorFragmentCode, nullptr, false);
+    internalShaderError = new Shader("internalShaderError", BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
+    combineShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombine.frag", nullptr, false);
+    blurShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag", nullptr, false);
+    gbufferShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag", nullptr, false);
+    ssaoShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAO.frag", nullptr, false);
+    ssaoBlurShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAOblur.frag", nullptr, false);
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glGenBuffers(1, &cameraBuffer);
@@ -187,68 +252,20 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
 
     glBindVertexArray(0);
+
     // * ===== Generate mesh for skybox rendering =====
+    glGenVertexArrays(1, &skyboxVao);
+    glGenBuffers(1, &skyboxVbo);
 
-    if (skyboxMaterial != nullptr)
-    {
-        glGenVertexArrays(1, &skyboxVao);
-        glGenBuffers(1, &skyboxVbo);
+    glBindVertexArray(skyboxVao);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
+    
+    glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), BuiltInShapes::cubeTri, GL_STATIC_DRAW);
 
-        glBindVertexArray(skyboxVao);
-        glBindBuffer(GL_ARRAY_BUFFER, skyboxVbo);
-        float skyboxVertices[] = 
-        {
-            // positions          
-            -1.0f,  1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-            -1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            -1.0f,  1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
-            1.0f,  1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f
-        };
-        glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        glBindVertexArray(0);
-    }
-
+    glBindVertexArray(0);
 
     // * ===== Create framebuffer for depth map =====
     glGenFramebuffers(1, &depthMapFBO);
@@ -264,20 +281,180 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     depthCreateInfo.wrapMode = GL_CLAMP_TO_BORDER;
     directionalDepth = new Texture(nullptr, depthCreateInfo, "");
 
-    // glGenTextures(1, &depthMap);
-    // glBindTexture(GL_TEXTURE_2D, depthMap);
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, , , 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    // float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+    // * ===== Create framebuffer for hdr rendering =====
+    glGenFramebuffers(1, &hdrFBO);
+
+    // Generate color attachment
+    glGenTextures(1, &hdrColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Generate bright color attachment
+    glGenTextures(1, &hdrBrightBuffer);
+    glBindTexture(GL_TEXTURE_2D, hdrBrightBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Generate depth renderbuffer
+    glGenRenderbuffers(1, &rboDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+
+    // Attach buffers
+    glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, hdrColorBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, hdrBrightBuffer, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+    unsigned int attachments[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, attachments);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Hdr framebuffer not complete!\n";
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // * ===== Framebuffers for ping pong gaussian blur =====
+    // TODO: Framebuffer for every color attachment should be more performant, maybe also use MRT to speed things up
+    glGenFramebuffers(10, blurFBO);
+    glGenTextures(10, blurBuffers);
+
+    for (size_t i = 0, j = 2; i < 10; i += 2, j *= 2)
+    {
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / j, GetCore().windowHeight / j, 0, GL_RGBA, GL_FLOAT, nullptr);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i], 0);
+
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[i+1]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / j, GetCore().windowHeight / j, 0, GL_RGBA, GL_FLOAT, nullptr);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i+1]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i+1], 0);
+    }
+
+    // * ===== Gbuffer framebuffer =====
+    glGenFramebuffers(1, &gbufferFBO);
+    glGenTextures(1, &gbufferPosition);
+    glGenTextures(1, &gbufferNormal);
+
+    glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferPosition, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormal, 0);
+
+    unsigned int gbufferAttachments[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, gbufferAttachments);
+
+    glGenRenderbuffers(1, &gbufferDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gbufferDepth);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Gbuffer framebuffer not complete!\n";
+    }
+
+    // * ===== SSAO kernel randomization =====
+    ssaoKernel.reserve(64);
+    for (size_t i = 0; i < 64; i++)
+    {
+        glm::vec3 sample = {
+            GetCore().randomFloat01R() * 2.0f - 1.0f,
+            GetCore().randomFloat01R() * 2.0f - 1.0f,
+            GetCore().randomFloat01R()
+        };
+        sample = glm::normalize(sample);
+        sample *= GetCore().randomFloat01R();
+
+        float scale = static_cast<float>(i) / 64.0f;
+        scale = glm::mix(0.1f, 1.0f, scale * scale);
+        sample *= scale;
+
+        ssaoKernel.push_back(sample);
+    }
+    
+    ssaoNoise.reserve(16);
+    for (size_t i = 0; i < 16; i++)
+    {
+        glm::vec3 noise = {
+            GetCore().randomFloat01R() * 2.0 - 1.0,
+            GetCore().randomFloat01R() * 2.0 - 1.0,
+            0.0f
+        };
+        ssaoNoise.push_back(noise);
+    }
+
+    glGenTextures(1, &ssaoNoiseTex);
+    glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 4, 4, 0, GL_RGB, GL_FLOAT, ssaoNoise.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // * ===== SSAO framebuffer init =====
+    glGenFramebuffers(1, &ssaoFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+
+    glGenTextures(1, &ssaoColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+
+    // Ssao blur
+    glGenFramebuffers(1, &ssaoBlurFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+    
+    glGenTextures(1, &ssaoColorBufferBlur);
+    glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
+    ssaoMap = new Texture(ssaoColorBufferBlur);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -294,9 +471,6 @@ void RendererModule::render()
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
         {
-            // I made copy instead of sneaky modification of matrix in transform.
-            // That was super unsafe, and now i see, that encapsulating matrices inside transform was a good idea.
-            //                                                                                  ~ Andrzej
             glm::mat4 lightMatrix = *directionalLight->modelMatrix;
             lightMatrix[3].x = cameraMain->getFrustum().position.x;
             lightMatrix[3].y = cameraMain->getFrustum().position.y;
@@ -305,7 +479,7 @@ void RendererModule::render()
             // ? ++++++ Send directional light matrices to UBO +++++
             glBindBuffer(GL_UNIFORM_BUFFER, cameraBuffer);
 
-            glm::mat4 directionalProjMat = glm::ortho(-512.0f, 512.0f, -512.0f, 512.0f, 2000.0f, -2000.0f);
+            glm::mat4 directionalProjMat = glm::ortho(-256.0f, 256.0f, -256.0f, 256.0f, 1000.0f, -1000.0f);
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &directionalProjMat);
             glm::mat4 directionalViewMat = glm::inverse(lightMatrix);
             glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &directionalViewMat);
@@ -327,10 +501,15 @@ void RendererModule::render()
             glClear(GL_DEPTH_BUFFER_BIT);
 
             // TODO: Culling for directional light shadow mapping
+            // * ===== Terrain packets shadow mapping ====
+            for(auto& packet : terrainPackets)
+            {
+                packet.render(VP);
+            }
+
             // * ===== Normal unordered packets shadow mapping =====
             for(auto& packet : normalPackets)
             {
-                // TODO: Transparent shadows
                 if (packet.material->getRenderType() == RenderType::Opaque)
                 {
                     packet.render(VP);
@@ -417,6 +596,15 @@ void RendererModule::render()
             }
         }
 
+        // * ===== Terrain packets =====
+        for(auto& packet : terrainPackets)
+        {
+            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            {
+                terrainQueue.push_back(&packet);
+            }
+        }
+
         // * ===== Instanced packets =====
         for(auto& packet : instancedPackets)
         {
@@ -438,23 +626,90 @@ void RendererModule::render()
                 opaqueQueue.push_back(&(packet.second));
             }
         }
-        //TODO: Remove if it's useless
-        //std::cout << "Rendering " << opaqueQueue.size() + transparentQueue.size() << " after culling.\n";
 
         // ? +++++ Sort the render queue +++++
         std::sort(opaqueQueue.begin(), opaqueQueue.end(), 
             [](RenderPacket* a, RenderPacket* b) { return a->material->getID() > b->material->getID(); });
 
-        // ? +++++ Execute (order 66) opaque rendering loop +++++
+        // ? +++++ Gbuffer rendering pass ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        for(auto& packet : terrainQueue)
+        {
+            packet->renderWithShader(gbufferShader, VP);
+        }
+
+        for(auto& packet : opaqueQueue)
+        {
+            packet->renderWithShader(gbufferShader, VP);
+        }
+
+        RendererModule::lastMatID = 0;
+
+        // ? +++++ SSAO rendering ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, gbufferPosition);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, gbufferNormal);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
+
+        ssaoShader->use();
+        for (size_t i = 0; i < 64; i++)
+        {
+            ssaoShader->setVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
+        }
+        ssaoShader->setMat4("projection", cameraMain->projectionMatrix);
+        glm::vec3 noiseScale = {GetCore().windowWidth / 4.0f, GetCore().windowHeight / 4.0f, 0.0f};
+        ssaoShader->setVec3("noiseScale", noiseScale);
+        ssaoShader->setFloat("radius", 10.5f);
+        ssaoShader->setFloat("bias", 0.025f);
+        ssaoShader->setInt("gPosition", 0);
+        ssaoShader->setInt("gNormal", 1);
+        ssaoShader->setInt("texNoise", 2);
+        drawQuad();
+
+        // Ssao blur
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+
+        ssaoBlurShader->use();
+        ssaoBlurShader->setInt("ssaoInput", 0);
+
+        drawQuad();
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
+        glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        // ! +++++ Terrain +++++
+        while(!terrainQueue.empty())
+        {
+            terrainQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            terrainQueue.front()->material->setTexture("irradianceMap", irradianceMap);
+            terrainQueue.front()->render(VP);
+            terrainQueue.pop_front();
+        }
+
+        // ! +++++ Opaque +++++
         while(!opaqueQueue.empty())
         {
-            // TODO: Send directional light shadow map via ubo
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
         }
 
-        // ? +++++ Render skybox with appropriate depth test function +++++
+        // ! +++++ Skybox +++++
 
         if (skyboxMaterial != nullptr)
         {
@@ -468,7 +723,7 @@ void RendererModule::render()
             glDepthFunc(GL_LESS);
         }
 
-        // ? +++++ Transparent rendering loop +++++
+        // ! +++++ Transparent +++++
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->getFrustum().position));
@@ -476,20 +731,87 @@ void RendererModule::render()
         while(!transparentQueue.empty())
         {
             transparentQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
+            transparentQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
 
+        // ? +++++ Rendering bloom ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        bool horizontal = true, firstIteration = true, firstBloom = true;
+        int amount = 9;
+
+        glActiveTexture(GL_TEXTURE0);
+
+        blurShader->use();
+        blurShader->setInt("image", 0);
+
+        for (size_t i = 0, j = 2; i < 10; i += 2, j *= 2)
+        {
+            glViewport(0, 0, Core::windowWidth / j, Core::windowHeight / j);
+
+            for (size_t k = 0; k < amount; k++)
+            {
+                glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i + horizontal]);
+                blurShader->setInt("horizontal", horizontal);
+                if (firstIteration)
+                {
+                    glBindTexture(GL_TEXTURE_2D, firstBloom ? hdrBrightBuffer : blurBuffers[i + !horizontal]);
+                    firstIteration = false;
+                }
+                else
+                {
+                    glBindTexture(GL_TEXTURE_2D, firstBloom ? blurBuffers[i - 2] : blurBuffers[i + !horizontal]);
+                }
+
+                drawQuad();
+
+                horizontal = !horizontal;
+                if (firstBloom)
+                {
+                    firstBloom = false;
+                }
+            }
+
+            firstBloom = true;
+            horizontal = true;
+        }
+
+        // ? +++++ Render to main frame ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // ! ----- Combine -----
+        combineShader->use();
+        combineShader->setInt("scene", 0);
+        combineShader->setInt("bloom0", 1);
+        combineShader->setInt("bloom1", 2);
+        combineShader->setInt("bloom2", 3);
+        combineShader->setInt("bloom3", 4);
+        combineShader->setInt("bloom4", 5);
+        combineShader->setInt("ssao", 6);
+        combineShader->setFloat("exposure", cameraMain->exposure);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[0]);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[2]);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[4]);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[6]);
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, blurBuffers[8]);
+        glActiveTexture(GL_TEXTURE6);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+        drawQuad();
+
         // ? +++++ Overlay UI rendering loop +++++
-        // Get screen ortho projection
         glm::mat4 orthoScreen = glm::ortho(0.0f, (float)Core::windowWidth, 0.0f, (float)Core::windowHeight);
 
         glDisable(GL_DEPTH_TEST);
         while(!uiQueue.empty())
         {
-            //static int temp = 0;
-            //temp %= 127;
-            //int character = GetCore().objectModule.getFontPtrByName("KosugiMaru-Regular")->getCharTex((char)temp++);
             uiQueue.front()->render(orthoScreen);
             uiQueue.pop_front();
         }
@@ -504,7 +826,10 @@ void RendererModule::render()
         glfwSwapBuffers(window);
 
         // ? +++++ Clear the render packets +++++
+        RendererModule::lastMatID = 0;
+        RendererModule::lastShaderID = 0;
         normalPackets.clear();
+        terrainPackets.clear();
         instancedPackets.clear();
         spritePackets.clear();
         textPackets.clear();
@@ -520,44 +845,25 @@ void RendererModule::calculateFrustumPlanes()
 
     glm::vec3 aux, point, normal;
 
-    // std::cout << "==================================================================================\n";
-
     frustumPlanes[NEARP][NORMAL] = frustum.front;
     frustumPlanes[NEARP][POINT] = nearCenter;
-    // std::cout << "Wektor((" << -frustum.front.x << ", " << -frustum.front.y << ", " << -frustum.front.z << "))\n(" 
-    // << nearCenter.x << ", " << nearCenter.y << ", " << nearCenter.z << ")\n";
 
     frustumPlanes[FARP][NORMAL] = -frustum.front;
     frustumPlanes[FARP][POINT] = farCenter;
-    // std::cout << "Wektor((" << frustum.front.x << ", " << frustum.front.y << ", " << frustum.front.z << "))\n(" 
-    // << farCenter.x << ", " << farCenter.y << ", " << farCenter.z << ")\n";
 
     point = nearCenter + frustum.up * frustum.Hnear / 2.0f;
-    //std::cout << "POINT: " << glm::to_string(point) << '\n';
-    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
     aux = point - frustum.position;
-    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
-    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
     normal = glm::normalize(glm::cross(aux, frustum.right));
     frustumPlanes[TOP][NORMAL] = normal;
     frustumPlanes[TOP][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter - frustum.up * frustum.Hnear / 2.0f;
-    //std::cout << "POINT: " << glm::to_string(point) << '\n';
-    //std::cout << "POS: " << glm::to_string(frustum.position) << '\n';
     aux = point - frustum.position;
-    //std::cout << "POINT - POS: " << glm::to_string(aux) << '\n';
     aux = glm::normalize(aux);
-    //std::cout << "NORM(POINT - POS): " << glm::to_string(aux) << '\n';
-    //normal = -glm::cross(frustum.right, aux);
     normal = glm::normalize(glm::cross(frustum.right, aux));
     frustumPlanes[BOTTOM][NORMAL] = normal;
     frustumPlanes[BOTTOM][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter - frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
@@ -565,18 +871,13 @@ void RendererModule::calculateFrustumPlanes()
     normal = glm::normalize(glm::cross(aux, frustum.up));
     frustumPlanes[LEFT][NORMAL] = normal;
     frustumPlanes[LEFT][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 
     point = nearCenter + frustum.right * frustum.Wnear / 2.0f;
     aux = point - frustum.position;
     aux = glm::normalize(aux);
-    // normal = -glm::cross(frustum.up, aux);
     normal = glm::normalize(glm::cross(frustum.up, aux));
     frustumPlanes[RIGHT][NORMAL] = normal;
     frustumPlanes[RIGHT][POINT] = point;
-    // std::cout << "Wektor((" << normal.x << ", " << normal.y << ", " << normal.z << "))\n(" 
-    // << point.x << ", " << point.y << ", " << point.z << ")\n";
 }
 
 bool RendererModule::objectInFrustum(Bounds& meshBounds, glm::mat4& modelMatrix)
@@ -725,4 +1026,138 @@ void RendererModule::calculateFrustumPoints()
     frustumPoints[5] = nearCenter + (frustum.up * frustum.Hnear/2.0f) + (frustum.right * frustum.Wnear/2.0f); // 1, 1, -1
     frustumPoints[6] = farCenter - (frustum.up * frustum.Hfar/2.0f) + (frustum.right * frustum.Wfar/2.0f); // 1, -1, 1
     frustumPoints[7] = farCenter + (frustum.up * frustum.Hfar/2.0f) - (frustum.right * frustum.Wfar/2.0f); // -1, 1, 1
+}
+
+void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned int dimensions)
+{
+    // ? +++++ Generate renderbuffers +++++
+    unsigned int captureFBO, captureRBO;
+    glGenFramebuffers(1, &captureFBO);
+    glGenRenderbuffers(1, &captureRBO);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // ? +++++ Generate textures for convoluted environment map +++++
+    unsigned int irrID;
+    glGenTextures(1, &irrID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, irrID);
+    for (size_t i = 0; i < 6; i++)
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, dimensions, dimensions, 0, GL_RGB, GL_FLOAT, nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+    irradianceMap = new CubemapHdr(irrID);
+
+    glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    glm::mat4 captureViews[] =
+    {
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+    };
+
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
+
+    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
+    irradianceShader.use();
+    irradianceShader.setInt("environmentMap", 0);
+    irradianceShader.setMat4("projection", captureProjection);
+    cubemap->bind(0);
+
+    glViewport(0, 0, dimensions, dimensions);
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glDisable(GL_CULL_FACE);
+    glDepthFunc(GL_LEQUAL);
+    for (size_t i = 0; i < 6; i++)
+    {
+        irradianceShader.setMat4("view", captureViews[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrID, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        drawCube();
+    }
+    glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void RendererModule::drawCube()
+{
+    static unsigned int cubeVao = 0;
+    static unsigned int cubeVbo = 0;
+
+    if (cubeVao == 0)
+    {
+        glGenVertexArrays(1, &cubeVao);
+        glGenBuffers(1, &cubeVbo);
+
+        glBindBuffer(GL_ARRAY_BUFFER, cubeVbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(BuiltInShapes::cubeNormUvTri), BuiltInShapes::cubeNormUvTri, GL_STATIC_DRAW);
+
+        glBindVertexArray(cubeVao);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    glBindVertexArray(cubeVao);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+}
+
+void RendererModule::drawQuad()
+{
+    static unsigned int quadVao = 0;
+    static unsigned int quadVbo = 0;
+    
+    if (quadVao == 0)
+    {
+        glGenVertexArrays(1, &quadVao);
+        glGenBuffers(1, &quadVbo);
+
+        glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(BuiltInShapes::quadVertices), BuiltInShapes::quadVertices, GL_STATIC_DRAW);
+
+        glBindVertexArray(quadVao);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
+
+    glBindVertexArray(quadVao);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindVertexArray(0);
+}
+
+void RendererModule::setSkybox(Material* skyboxMaterial)
+{
+    if (this->skyboxMaterial != nullptr)
+    {
+        this->skyboxMaterial->setAsSkybox(false);
+    }
+    skyboxMaterial->setAsSkybox(true);
+    this->skyboxMaterial = skyboxMaterial;
+    generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
 }

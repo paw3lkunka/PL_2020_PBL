@@ -1,6 +1,7 @@
 #include "InstancedPacket.hpp"
 
 #include "RendererModule.hpp"
+#include "Material.hpp"
 
 InstancedPacket::InstancedPacket(Mesh* mesh, Material* material) : RenderPacket(mesh, material) 
 {
@@ -11,11 +12,8 @@ InstancedPacket::InstancedPacket(Mesh* mesh, Material* material) : RenderPacket(
 
 void InstancedPacket::render(glm::mat4& VP)
 {
-    if (material->getID() != RendererModule::lastMatID)
-    {
-        material->use();
-        RendererModule::lastMatID = material->getID();
-    }
+    material->use();
+
     // TODO: sending MVP instead of model matrices
 
     for (size_t i = 0; i < instanceMatrices.size(); i++)
