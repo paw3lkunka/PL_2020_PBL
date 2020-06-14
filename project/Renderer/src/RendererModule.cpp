@@ -147,20 +147,20 @@ void RendererModule::receiveMessage(Message msg)
             }
             // Gbuffers
             glBindTexture(GL_TEXTURE_2D, gbufferPosition);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / 2, size.y / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, gbufferNormal);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / 2, size.y / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
 
             glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x / 2, size.y / 2);
 
             // SSAO
             glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x / 2, size.y / 2, 0, GL_RED, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x / 2, size.y / 2, 0, GL_RED, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, 0);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -369,14 +369,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glGenTextures(1, &gbufferNormal);
 
     glBindTexture(GL_TEXTURE_2D, gbufferPosition);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glBindTexture(GL_TEXTURE_2D, gbufferNormal);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -391,7 +391,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glGenRenderbuffers(1, &gbufferDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth / 2, GetCore().windowHeight / 2);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gbufferDepth);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -400,8 +400,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     }
 
     // * ===== SSAO kernel randomization =====
-    ssaoKernel.reserve(64);
-    for (size_t i = 0; i < 64; i++)
+    ssaoKernel.reserve(32);
+    for (size_t i = 0; i < 32; i++)
     {
         glm::vec3 sample = {
             GetCore().randomFloat01R() * 2.0f - 1.0f,
@@ -411,7 +411,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         sample = glm::normalize(sample);
         sample *= GetCore().randomFloat01R();
 
-        float scale = static_cast<float>(i) / 64.0f;
+        float scale = static_cast<float>(i) / 32.0f;
         scale = glm::mix(0.1f, 1.0f, scale * scale);
         sample *= scale;
 
@@ -444,7 +444,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glGenTextures(1, &ssaoColorBuffer);
     glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RED, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -456,7 +456,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     
     glGenTextures(1, &ssaoColorBufferBlur);
     glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RED, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
@@ -578,7 +578,7 @@ void RendererModule::render()
         }
 
         // ? +++++ Perform frustum culling +++++
-        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
+        glViewport(0, 0, Core::windowWidth / 2, Core::windowHeight / 2);
         glClear(createInfo.clearFlags);
 
         if (frustumCullingEnabled)
@@ -672,7 +672,7 @@ void RendererModule::render()
         glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
 
         ssaoShader->use();
-        for (size_t i = 0; i < 64; i++)
+        for (size_t i = 0; i < 32; i++)
         {
             ssaoShader->setVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
         }
@@ -701,6 +701,7 @@ void RendererModule::render()
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
