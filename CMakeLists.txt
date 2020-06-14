@@ -129,6 +129,7 @@ add_subdirectory(libs/reactphysics3d/)
 aux_source_directory( project                                   PROJECT_SRC)
 aux_source_directory( project/Core/src                          CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src              GAME_SRC)
+aux_source_directory( project/GameSystems/Components/src        COMPONENTS_SRC)
 aux_source_directory( project/GameSystems/Systems/Gameplay/src  GAMEPLAY_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/Graphics/src  GRAPHICS_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/Physics/src   PHYSICS_SYSTEM_SRC)
@@ -164,6 +165,7 @@ list(
         ${SCENE_SRC}
         ${EDITOR_SRC}
         ${UI_SRC}
+        ${COMPONENTS_SRC}
         ${GAMEPLAY_SYSTEM_SRC}
         ${GRAPHICS_SYSTEM_SRC}
         ${PHYSICS_SYSTEM_SRC}

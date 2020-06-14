@@ -1,9 +1,10 @@
 auto unlitTexture = objectModule.newShader("UnlitTexture", "Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-auto skyboxShader = objectModule.newShader("SkyboxCubemap", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
 auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 
 objectModule.newAudioClip("Resources/Audios/shingeki.wav");
+objectModule.newAudioClip("Resources/Audios/river.wav");
+
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -12,6 +13,7 @@ TextureCreateInfo texCreateInfo = {};
 auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
 objectModule.newModel("Resources/Models/Box.FBX");
+objectModule.newModel("Resources/Models/BoneBox.FBX");
 objectModule.newModel("Resources/Models/unit_sphere.FBX");
 
 TextureCreateInfo skyboxCreateInfo = {};
@@ -20,16 +22,23 @@ TextureCreateInfo skyboxCreateInfo = {};
     skyboxCreateInfo.minFilter = GL_LINEAR;
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
 
-    auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox_02/nz.png", 
-                                "Resources/Textures/skybox_02/nx.png", 
-                                "Resources/Textures/skybox_02/px.png",
-                                "Resources/Textures/skybox_02/pz.png",
-                                "Resources/Textures/skybox_02/py.png",
-                                "Resources/Textures/skybox_02/ny.png");
+    TextureCreateInfo i = {};
+    i.minFilter = GL_LINEAR;
+    i.magFilter = GL_LINEAR;
+    i.wrapMode= GL_CLAMP_TO_EDGE;
+    i.generateMipmaps = false;
+    CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                            "Resources/Textures/skybox_02/nx.hdr", 
+                                                            "Resources/Textures/skybox_02/px.hdr",
+                                                            "Resources/Textures/skybox_02/pz.hdr",
+                                                            "Resources/Textures/skybox_02/py.hdr",
+                                                            "Resources/Textures/skybox_02/ny.hdr");
 
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-        skyboxMat->setCubemap("cubemap", cubemap);
+    Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+    Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+        hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+        rendererModule.setSkybox(hdrSkyboxMat);
 
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
     {
@@ -250,7 +259,7 @@ TextureCreateInfo skyboxCreateInfo = {};
         MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
             Shader* shader = unlitColor;
-            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
                 material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
 
             meshRenderer->material = material;
@@ -321,4 +330,19 @@ TextureCreateInfo skyboxCreateInfo = {};
             ea->activationValue = 100;
             ea->incrementValue = 1;
             ea->successChance = 0.5f;
+    }
+
+    auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+            t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
+            //t->setParent(enemy->getComponentPtr<Transform>());
+            t->setParent(&sceneModule.rootNode);
+            
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);
+
+        auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
     }
