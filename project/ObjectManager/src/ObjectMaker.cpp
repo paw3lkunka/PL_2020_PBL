@@ -185,9 +185,9 @@ CubemapHdr* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo,
     throw AssetLoadingException("CubemapHdr");
 }
 
-void ObjectMaker::newModel(const char* filePath)
+void ObjectMaker::newModel(const char* filePath, bool createEntities)
 {
-    objModPtr->assetReader.loadMesh(filePath);
+    objModPtr->assetReader.loadMesh(filePath, createEntities);
 }
 
 Material* ObjectMaker::newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled)

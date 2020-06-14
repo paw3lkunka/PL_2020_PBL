@@ -184,7 +184,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.95);
+	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.9);
 
 	FragColor = vec4(color, 1.0);
 
@@ -240,9 +240,9 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
-	float bias = 0.0005 * tan(acos(dot(Normal, lightDir)));
-	bias = clamp(bias, 0.0, 0.01);
-	//float bias = 0.0005;
+	//float bias = 0.0005 * tan(acos(dot(Normal, lightDir)));
+	//bias = clamp(bias, 0.0, 0.01);
+	float bias = 0.0005;
     //float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
 	float shadow = 0.0;
@@ -252,7 +252,8 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
 		for(int y = -2; y <= 2; ++y)
 		{
 			// TODO: better shadow filtering
-			float pcfDepth = texture(directionalShadowMap, projCoords.xy + (vec2(x, y) + jitter[int(mod((x+2) + ((y+2)*5), 8))]) * texelSize).r; 
+			float pcfDepth = texture(directionalShadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+			//float pcfDepth = texture(directionalShadowMap, projCoords.xy + (vec2(x, y) + jitter[int(mod((x+2) + ((y+2)*5), 8))]) * texelSize).r; 
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}    
 	}

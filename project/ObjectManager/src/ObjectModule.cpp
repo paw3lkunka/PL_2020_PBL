@@ -170,7 +170,7 @@ CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char
     return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
-void ObjectModule::newModel(const char* filePath)
+void ObjectModule::newModel(const char* filePath, bool createEntities)
 {
     for(auto m : objectContainer.meshes)
     {
@@ -179,7 +179,7 @@ void ObjectModule::newModel(const char* filePath)
             return;
         }
     }
-    objectMaker.newModel(filePath);
+    objectMaker.newModel(filePath, createEntities);
 }
 
 Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled)

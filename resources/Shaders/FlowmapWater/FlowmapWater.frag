@@ -109,10 +109,10 @@ void main()
     phase1 -= halfCycle;
     phase2 -= halfCycle;
 
-    flow *= flowSpeed * uvScale;
+    flow *= flowSpeed * 10.0;
 
-    vec2 layer1 = flow * phase1 + Texcoord;
-    vec2 layer2 = flow * phase2 + Texcoord;
+    vec2 layer1 = flow * phase1 + Texcoord * 10.0;
+    vec2 layer2 = flow * phase2 + Texcoord * 10.0;
 
 // Sampling the textures for further use
     albedo = pow(mix(texture(diffuse, layer1), texture(diffuse, layer2), blendFactor).rgb, vec3(2.2f));

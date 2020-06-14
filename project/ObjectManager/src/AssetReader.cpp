@@ -122,8 +122,10 @@ bool AssetReader::loadShader(std::string path)
 }
 
 
-bool AssetReader::loadMesh(std::string path)
+bool AssetReader::loadMesh(std::string path, bool createEntities)
 {
+    makeEntities = createEntities;
+
     // ? +++++ Load the assimp scene from provided path +++++
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes);
     
@@ -135,11 +137,8 @@ bool AssetReader::loadMesh(std::string path)
     }
     else
     {
-        // std::cout << "Node structure:\n";
-        // displayNodeHierarchy(scene->mRootNode);
-
         globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
-        
+
         // * ----- Process and create entities with mesh renderers -----
         processNode(scene->mRootNode, scene, path);
 
@@ -160,6 +159,7 @@ bool AssetReader::loadMesh(std::string path)
         }   
     }
 
+    makeEntities = true;
     return true;
 }
 
@@ -167,56 +167,69 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
 {
     Transform* nodeTransform = nullptr;
     // ? +++++ Process meshes (if any) ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
-        // * ----- Create new entity with provided name -----
-        size_t index = path.find_last_of("/\\");
-        Entity* e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + node->mName.C_Str());
-
-        // * ----- Create transform and set parent -----
-        nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
-        
-        // HACK: Decomposing matrix and setting values individually
-        glm::mat4 localTransformMat = aiMatrixToGlmMat4(node->mTransformation);
-        glm::vec3 position, scale, skew;
-        glm::vec4 perspective;
-        glm::quat rotation;
-        glm::decompose(localTransformMat, scale, rotation, position, skew, perspective);
-
-        nodeTransform->getLocalPositionModifiable() = position;
-        nodeTransform->getLocalRotationModifiable() = rotation;
-        nodeTransform->getLocalScaleModifiable() = scale;
-        
-        if (parent != nullptr)
-        {
-            nodeTransform->setParent(parent);
-        }
-        else
-        {
-            nodeTransform->setParent(&GetCore().sceneModule.rootNode);
-        }
-
         Mesh* newMesh = createMesh(scene->mMeshes[node->mMeshes[i]], path);
 
-        // FIXME: If node contains more than one mesh, the entity receives more than one MeshRenderer
-        // ! and mesh renderer system is not equipped to handle this
-
-        std::string dirPath = path.substr(0, path.find_last_of("/\\"));
-        dirPath = dirPath.substr(dirPath.find_last_of("/\\") + 1);
-
-        if (dirPath == "Terrain")
+        // * ----- Create new entity with provided name -----
+        Entity* e = nullptr;
+        if (makeEntities)
         {
-            auto tr = objectModulePtr->newEmptyComponent<TerrainRenderer>();
-                tr->terrainMesh = newMesh;
-            e->addComponent(tr);
+            size_t index = path.find_last_of("/\\");
+            //e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + scene->mMeshes[node->mMeshes[i]]->mName.C_Str());
+            e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/mesh" + std::to_string(i));
+            std::cout << e->getName() << '\n';
+
+            // * ----- Create transform and set parent -----
+            nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
+            
+            // HACK: Decomposing matrix and setting values individually
+            glm::mat4 localTransformMat = aiMatrixToGlmMat4(node->mTransformation);
+            glm::vec3 position, scale, skew;
+            glm::vec4 perspective;
+            glm::quat rotation;
+            glm::decompose(localTransformMat, scale, rotation, position, skew, perspective);
+
+            nodeTransform->getLocalPositionModifiable() = position;
+            nodeTransform->getLocalRotationModifiable() = rotation;
+            nodeTransform->getLocalScaleModifiable() = scale;
+            
+            if (parent != nullptr)
+            {
+                nodeTransform->setParent(parent);
+            }
+            else
+            {
+                nodeTransform->setParent(&GetCore().sceneModule.rootNode);
+            }
+
+            std::string dirPath = path.substr(0, path.find_last_of("/\\"));
+            dirPath = dirPath.substr(dirPath.find_last_of("/\\") + 1);
+
+            // HACK: Making a terrain renderer based on folder name is basically a hack
+            if (dirPath == "Terrain")
+            {
+                auto tr = objectModulePtr->newEmptyComponent<TerrainRenderer>();
+                    tr->terrainMesh = newMesh;
+                e->addComponent(tr);
+            }
+            else
+            {
+                // * ----- Create mesh renderer and add created mesh -----
+                auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
+                    mr->mesh = newMesh;
+                e->addComponent(mr);
+            }
         }
-        else
-        {
-            // * ----- Create mesh renderer and add created mesh -----
-            auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
-                mr->mesh = newMesh;
-            e->addComponent(mr);
-        }
+    }
+
+    if (parent == nullptr && makeEntities && scene->mNumMeshes > 1)
+    {
+        size_t index = path.find_last_of("/\\");
+        Entity* e = objectModulePtr->newEntity(1, path.substr(index + 1));
+        nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
+        nodeTransform->setParent(&GetCore().sceneModule.rootNode);
     }
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++

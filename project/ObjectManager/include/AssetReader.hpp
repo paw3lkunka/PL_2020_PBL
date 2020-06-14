@@ -61,13 +61,14 @@ private:
 
     // TODO: I dont have the patience to do it another way
     glm::mat4 globalInverseTransform;
+    bool makeEntities = true;
 
     //load files to storages methods
     bool loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadHdrTexture(std::string path);
     bool loadShader(std::string path);
-    bool loadMesh(std::string path);
+    bool loadMesh(std::string path, bool createEntities = true);
 
     // TODO: Documentation
     bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);

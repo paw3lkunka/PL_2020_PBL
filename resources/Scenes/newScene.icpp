@@ -19,7 +19,7 @@ waterMat->setTexture("diffuse", water1Diffuse);
 waterMat->setTexture("normal", water1Normal);
 waterMat->setTexture("occRouMet", water1OccRouSpec);
 waterMat->setTexture("flowMap", flowmap);
-waterMat->setVec2("channelFlowDirection", {1.0f, -1.0f});
+waterMat->setVec2("channelFlowDirection", {-1.0f, 1.0f});
 waterMat->setFloat("blendCycle", 1.0f);
 waterMat->setFloat("cycleSpeed", 1.0f);
 waterMat->setFloat("flowSpeed", 0.5f);
@@ -30,13 +30,24 @@ waterMat->setVec2("uvScale", {1.0f, 1.0f});
 
 objectModule.newModel("Resources/Models/Plane.obj");
 {
-    Entity* waterPlane0 = objectModule.getEntityPtrByName("Plane.obj/Plane");
+    Entity* waterPlane0 = objectModule.getEntityPtrByName("Plane.obj/mesh0");
     auto mr = waterPlane0->getComponentPtr<MeshRenderer>();
         mr->material = waterMat;
 
     auto t = waterPlane0->getComponentPtr<Transform>();
         t->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
 }
+
+// objectModule.newModel("Resources/Models/Unity/Conifer Bare BOTD LOD1.obj");
+
+// Entity* leaves = objectModule.newEntity(2, "leaves");
+// {
+//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+//         t->setParent(&sceneModule.rootNode);
+
+//     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+//         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Unity/Conifer Bare BOTD LOD1.obj/Conifer Leaves BODT");
+// }
 
 TextureCreateInfo i = {};
 i.minFilter = GL_LINEAR;
@@ -94,3 +105,4 @@ objectModule.newEntity(4, "Camera");
 }
 
 TerrainUtils::loadAllTerrainChunks();
+TerrainUtils::loadExportedUnityModels();
