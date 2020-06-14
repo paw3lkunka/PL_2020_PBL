@@ -347,11 +347,6 @@ void SceneReader::readComponents()
             std::cout << "HydroAccelerator" << std::endl;
             readHydroAccelerator(name);
         }
-        //else if(componentType == "HydroSurface")
-        //{
-        //    std::cout << "HydroSurface" << std::endl;
-        //    readHydroSurface(name);
-        //}
         else if(componentType == "Kayak")
         {
             std::cout << "Kayak" << std::endl;
@@ -755,14 +750,6 @@ void SceneReader::readHydroAccelerator(std::string name)
 
     assignToEntity(name, hydroAccelerator);
 }
-
-//void SceneReader::readHydroSurface(std::string name)
-//{
-//    auto hydroSurface = objModulePtr->newEmptyComponent<HydroSurface>();
-//    hydroSurface->serializationID = j.at(name).at("serializationID").get<unsigned int>();
-//
-//    assignToEntity(name, hydroSurface);
-//}
 
 void SceneReader::readKayak(std::string name)
 {

@@ -68,8 +68,9 @@ void HydroBodySystem::fixedUpdate()
         rb = hydroAccelerator->rigidbody;
         velocity = hydroAccelerator->velocity;
     }
-
+    
     float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
+    glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
     std::vector<HydroTriangle> triangles =  HydroMeshParser::parse(meshRenderer->mesh, transform->getModelMatrix());
     HullTriangles hullTriangles = HullMath::cutHull(triangles);
@@ -86,25 +87,24 @@ void HydroBodySystem::fixedUpdate()
         }
         else
         {
-            /*
             velocity = TriangleMath::getCenterVelocity
             (
                 hydroAccelerator->velocity, 
                 hydroAccelerator->angularVelocity, 
                 triangle.center, 
-                static_cast<glm::vec3>(transform->getModelMatrix()[3])
+                centerPos
             );
-            */
 
-            glm::vec3 force = HydroPhysics::viciousResistanceForce(triangle, velocity, viscousCoefficient);
-            force.y = 0.0f;
+            impulse.force = velocity;
+            impulse.force.y = 0.0f;
 
-            impulse.force -= force;
-            
-            //impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
+            if(hydroAccelerator->velocity.y > 0.0f)
+            {
+                impulse.force *= -1.0f;
+            }
         }
 
-        impulse.point = triangle.center; // - static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+        impulse.point = triangle.center;
         impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
 
         rb->impulses.push_back(impulse);

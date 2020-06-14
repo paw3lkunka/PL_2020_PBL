@@ -105,6 +105,7 @@ void AudioModule::receiveMessage(Message msg)
         if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
         {
             alcPushCurrentContextChangesToDevice();
+            /*
             for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
             {
                 ALint state;
@@ -114,6 +115,7 @@ void AudioModule::receiveMessage(Message msg)
                     playingSources.erase(iter);
                 }
             }
+            */
         }
     }
     catch(AudioContextLevelException e)

@@ -1,11 +1,11 @@
 {
     "Amounts": {
-        "components": 99,
+        "components": 63,
         "cubemaps": 1,
-        "entities": 34,
+        "entities": 16,
         "fonts": 0,
-        "materials": 9,
-        "meshes": 7,
+        "materials": 7,
+        "meshes": 4,
         "shaders": 6,
         "textures": 2
     },
@@ -78,15 +78,15 @@
     "component005": {
         "entity id": 2,
         "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
+            "x": -9.724807739257813,
+            "y": 5.716059684753418,
+            "z": -54.99104309082031
         },
         "localRotation": {
-            "w": 0.7564173340797424,
-            "x": 0.0033005140721797943,
-            "y": -0.6540747284889221,
-            "z": 0.0028539577033370733
+            "w": -0.24408665299415588,
+            "x": 0.07532394677400589,
+            "y": 0.9238349795341492,
+            "z": 0.28509098291397095
         },
         "localScale": {
             "x": 1.0,
@@ -99,9 +99,9 @@
     },
     "component006": {
         "at": {
-            "x": 0.9894881844520569,
-            "y": 0.00872653629630804,
-            "z": -0.14435072243213654
+            "x": 0.4080432951450348,
+            "y": -0.5635252594947815,
+            "z": 0.7182896733283997
         },
         "entity id": 2,
         "gain": 0.5,
@@ -109,9 +109,9 @@
         "serializationID": 23,
         "type": "AudioListener",
         "up": {
-            "x": -0.008635131642222404,
-            "y": 0.9999619126319885,
-            "z": 0.0012597290333360434
+            "x": 0.2783476412296295,
+            "y": 0.8260989785194397,
+            "z": 0.489982932806015
         }
     },
     "component007": {
@@ -262,9 +262,9 @@
         },
         "localRotation": {
             "w": 0.9999791383743286,
-            "x": -0.0038771438412368298,
+            "x": -0.003877142909914255,
             "y": -0.00441453792154789,
-            "z": -0.00269256136380136
+            "z": -0.002692566253244877
         },
         "localScale": {
             "x": 1.0,
@@ -319,7 +319,7 @@
             "w": 0.9339166879653931,
             "x": -0.0005206306232139468,
             "y": 0.35749003291130066,
-            "z": 0.00047701597213745117
+            "z": 0.00047701600124128163
         },
         "localScale": {
             "x": 1.0,
@@ -427,9 +427,9 @@
         },
         "localRotation": {
             "w": 0.974068284034729,
-            "x": -0.0011403957614675164,
+            "x": -0.0011404042597860098,
             "y": 0.2262333482503891,
-            "z": -0.0028661114629358053
+            "z": -0.0028661151882261038
         },
         "localScale": {
             "x": 1.0,
@@ -620,15 +620,15 @@
     "component037": {
         "entity id": 10,
         "localPosition": {
-            "x": 3.7013771533966064,
-            "y": 65.76103210449219,
-            "z": -0.1262686848640442
+            "x": 4.060916900634766,
+            "y": -0.2016698569059372,
+            "z": -39.91237258911133
         },
         "localRotation": {
-            "w": 0.9758251905441284,
-            "x": 0.009151743724942207,
-            "y": 0.011767699383199215,
-            "z": -0.21804344654083252
+            "w": 0.9634066224098206,
+            "x": 0.038172099739313126,
+            "y": 0.2652101516723633,
+            "z": 0.007354414090514183
         },
         "localScale": {
             "x": 1.0,
@@ -674,11 +674,6 @@
         "type": "Kayak"
     },
     "component042": {
-        "entity id": 10,
-        "serializationID": 68,
-        "type": "HydroBody"
-    },
-    "component043": {
         "entity id": 11,
         "localPosition": {
             "x": 5.0,
@@ -696,11 +691,11 @@
             "y": 1.0,
             "z": 2.0
         },
-        "serializationID": 70,
+        "serializationID": 69,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component044": {
+    "component043": {
         "center": {
             "x": 0.0,
             "y": 0.0,
@@ -713,32 +708,32 @@
             "z": 1.0
         },
         "isTrigger": true,
-        "serializationID": 71,
+        "serializationID": 70,
         "type": "BoxCollider"
     },
-    "component045": {
+    "component044": {
         "entity id": 11,
         "material": "RushesMat",
         "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 72,
+        "serializationID": 71,
         "type": "MeshRenderer"
     },
-    "component046": {
+    "component045": {
         "entity id": 11,
-        "serializationID": 73,
+        "serializationID": 72,
         "type": "Hideout"
     },
-    "component047": {
+    "component046": {
         "angularDrag": 1.0,
         "bodyType": 2,
         "drag": 1.0,
         "entity id": 11,
         "ignoreGravity": false,
         "mass": 1.0,
-        "serializationID": 74,
+        "serializationID": 73,
         "type": "Rigidbody"
     },
-    "component048": {
+    "component047": {
         "entity id": 12,
         "localPosition": {
             "x": 5.0,
@@ -756,11 +751,11 @@
             "y": 2.0,
             "z": 1.0
         },
-        "serializationID": 76,
+        "serializationID": 75,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component049": {
+    "component048": {
         "center": {
             "x": 0.0,
             "y": 0.0,
@@ -773,42 +768,71 @@
             "z": 0.5
         },
         "isTrigger": true,
-        "serializationID": 77,
+        "serializationID": 76,
         "type": "BoxCollider"
     },
-    "component050": {
+    "component049": {
         "entity id": 12,
         "material": "RushesMat",
         "mesh": "Resources/Models/Box.FBX/Box001",
-        "serializationID": 78,
+        "serializationID": 77,
         "type": "MeshRenderer"
     },
-    "component051": {
+    "component050": {
         "entity id": 12,
-        "serializationID": 79,
+        "serializationID": 78,
         "type": "Hideout"
     },
-    "component052": {
+    "component051": {
         "angularDrag": 1.0,
         "bodyType": 2,
         "drag": 1.0,
         "entity id": 12,
         "ignoreGravity": false,
         "mass": 1.0,
-        "serializationID": 80,
+        "serializationID": 79,
         "type": "Rigidbody"
+    },
+    "component052": {
+        "entity id": 13,
+        "localPosition": {
+            "x": -11.21651840209961,
+            "y": -0.1949632614850998,
+            "z": -41.38534927368164
+        },
+        "localRotation": {
+            "w": -0.5721564888954163,
+            "x": 0.568344235420227,
+            "y": 0.41957131028175354,
+            "z": 0.4166313111782074
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 81,
+        "transform parentID": 0,
+        "type": "Transform"
     },
     "component053": {
         "entity id": 13,
+        "material": "kayakMat",
+        "mesh": "Resources/Models/Kayak_low_poly.FBX/Kayak",
+        "serializationID": 83,
+        "type": "MeshRenderer"
+    },
+    "component054": {
+        "entity id": 14,
         "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
+            "x": 2.802596928649634e-45,
+            "y": 9.80908925027372e-45,
+            "z": 5.605193857299268e-45
         },
         "localRotation": {
             "w": 1.0,
             "x": 0.0,
-            "y": 0.0,
+            "y": -1.401298464324817e-45,
             "z": 0.0
         },
         "localScale": {
@@ -816,540 +840,41 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 82,
-        "transform parentID": 146,
+        "serializationID": 85,
+        "transform parentID": 89,
         "type": "Transform"
-    },
-    "component054": {
-        "entity id": 13,
-        "material": "paddleMat",
-        "mesh": "Resources/Models/Kayak.FBX/Paddle",
-        "serializationID": 84,
-        "type": "MeshRenderer"
     },
     "component055": {
         "entity id": 14,
-        "localPosition": {
-            "x": 6.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 86,
-        "transform parentID": 82,
-        "type": "Transform"
+        "material": "paddleMat",
+        "mesh": "Resources/Models/Kayak_low_poly.FBX/Paddle",
+        "serializationID": 87,
+        "type": "MeshRenderer"
     },
     "component056": {
-        "entity id": 14,
-        "material": "attachMat",
-        "mesh": "Resources/Models/Kayak.FBX/Paddle_attach_left",
-        "serializationID": 88,
-        "type": "MeshRenderer"
+        "entity id": 15,
+        "localPosition": {
+            "x": 0.0,
+            "y": 0.25,
+            "z": 1.0
+        },
+        "localRotation": {
+            "w": 1.910685465164705e-15,
+            "x": 1.0,
+            "y": -4.371138828673793e-08,
+            "z": -4.371138828673793e-08
+        },
+        "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "serializationID": 89,
+        "transform parentID": 81,
+        "type": "Transform"
     },
     "component057": {
-        "entity id": 15,
-        "localPosition": {
-            "x": -6.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 90,
-        "transform parentID": 82,
-        "type": "Transform"
-    },
-    "component058": {
-        "entity id": 15,
-        "material": "attachMat",
-        "mesh": "Resources/Models/Kayak.FBX/Paddle_attach_right",
-        "serializationID": 92,
-        "type": "MeshRenderer"
-    },
-    "component059": {
-        "entity id": 16,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": 0.5,
-            "z": -0.5
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 94,
-        "transform parentID": 126,
-        "type": "Transform"
-    },
-    "component060": {
-        "entity id": 17,
-        "serializationID": 96,
-        "type": "Bone"
-    },
-    "component061": {
-        "entity id": 18,
-        "serializationID": 98,
-        "type": "Bone"
-    },
-    "component062": {
-        "entity id": 19,
-        "serializationID": 100,
-        "type": "Bone"
-    },
-    "component063": {
-        "entity id": 20,
-        "serializationID": 102,
-        "type": "Bone"
-    },
-    "component064": {
-        "entity id": 21,
-        "serializationID": 104,
-        "type": "Bone"
-    },
-    "component065": {
-        "entity id": 22,
-        "serializationID": 106,
-        "type": "Bone"
-    },
-    "component066": {
-        "entity id": 23,
-        "serializationID": 108,
-        "type": "Bone"
-    },
-    "component067": {
-        "entity id": 24,
-        "serializationID": 110,
-        "type": "Bone"
-    },
-    "component068": {
-        "entity id": 25,
-        "serializationID": 112,
-        "type": "Bone"
-    },
-    "component069": {
-        "entity id": 26,
-        "serializationID": 114,
-        "type": "Bone"
-    },
-    "component070": {
-        "entity id": 27,
-        "serializationID": 116,
-        "type": "Bone"
-    },
-    "component071": {
-        "entity id": 28,
-        "serializationID": 118,
-        "type": "Bone"
-    },
-    "component072": {
-        "entity id": 29,
-        "serializationID": 120,
-        "type": "Bone"
-    },
-    "component073": {
-        "entity id": 30,
-        "serializationID": 122,
-        "type": "Bone"
-    },
-    "component074": {
-        "entity id": 16,
-        "material": "playerMat",
-        "mesh": "Resources/Models/Kayak.FBX/Player",
-        "serializationID": 124,
-        "type": "MeshRenderer"
-    },
-    "component075": {
-        "entity id": 31,
-        "localPosition": {
-            "x": -13.000051498413086,
-            "y": 0.9311661124229431,
-            "z": -54.9986572265625
-        },
-        "localRotation": {
-            "w": -0.7071079015731812,
-            "x": 0.7071036100387573,
-            "y": 0.001063745585270226,
-            "z": -0.0013183107366785407
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 126,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component076": {
-        "entity id": 31,
-        "material": "kayakMat",
-        "mesh": "Resources/Models/Kayak.FBX/Kayak",
-        "serializationID": 128,
-        "type": "MeshRenderer"
-    },
-    "component077": {
-        "entity id": 17,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 129,
-        "transform parentID": 0,
-        "type": "Transform"
-    },
-    "component078": {
-        "entity id": 22,
-        "localPosition": {
-            "x": 5.121406555175781,
-            "y": -8.046627044677734e-07,
-            "z": 2.980232238769531e-07
-        },
-        "localRotation": {
-            "w": 0.9999762177467346,
-            "x": 3.374837433511857e-06,
-            "y": 1.2335884491676552e-07,
-            "z": 0.006896591279655695
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 130,
-        "transform parentID": 129,
-        "type": "Transform"
-    },
-    "component079": {
-        "entity id": 21,
-        "localPosition": {
-            "x": 1.2356185913085938,
-            "y": 4.023313522338867e-07,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 0.9999260902404785,
-            "x": 1.0207123340988389e-10,
-            "y": -2.3843750796004315e-07,
-            "z": -0.012156817130744457
-        },
-        "localScale": {
-            "x": 0.9999999403953552,
-            "y": 0.9999999403953552,
-            "z": 1.0
-        },
-        "serializationID": 131,
-        "transform parentID": 130,
-        "type": "Transform"
-    },
-    "component080": {
-        "entity id": 30,
-        "localPosition": {
-            "x": 3.6613874435424805,
-            "y": -2.2351741790771484e-07,
-            "z": -8.344650268554688e-07
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 132,
-        "transform parentID": 131,
-        "type": "Transform"
-    },
-    "component081": {
-        "entity id": 20,
-        "localPosition": {
-            "x": 5.121406555175781,
-            "y": 3.725290298461914e-09,
-            "z": 7.450580596923828e-08
-        },
-        "localRotation": {
-            "w": 0.7078816294670105,
-            "x": 4.799517228093464e-06,
-            "y": 4.800092938239686e-06,
-            "z": -0.7063311338424683
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 133,
-        "transform parentID": 129,
-        "type": "Transform"
-    },
-    "component082": {
-        "entity id": 26,
-        "localPosition": {
-            "x": 3.4143354892730713,
-            "y": 1.33514404296875e-05,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 134,
-        "transform parentID": 133,
-        "type": "Transform"
-    },
-    "component083": {
-        "entity id": 29,
-        "localPosition": {
-            "x": 3.5941925048828125,
-            "y": 9.5367431640625e-07,
-            "z": -5.960464477539063e-08
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 135,
-        "transform parentID": 134,
-        "type": "Transform"
-    },
-    "component084": {
-        "entity id": 27,
-        "localPosition": {
-            "x": 2.875237464904785,
-            "y": 9.5367431640625e-07,
-            "z": -1.4901161193847656e-08
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 136,
-        "transform parentID": 135,
-        "type": "Transform"
-    },
-    "component085": {
-        "entity id": 28,
-        "localPosition": {
-            "x": 1.7297258377075195,
-            "y": 4.76837158203125e-07,
-            "z": 0.0
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 137,
-        "transform parentID": 136,
-        "type": "Transform"
-    },
-    "component086": {
-        "entity id": 18,
-        "localPosition": {
-            "x": 5.121406555175781,
-            "y": 3.725290298461914e-09,
-            "z": 7.450580596923828e-08
-        },
-        "localRotation": {
-            "w": 0.7133436799049377,
-            "x": 7.308522981475107e-06,
-            "y": -7.19159834261518e-06,
-            "z": 0.7008143663406372
-        },
-        "localScale": {
-            "x": 0.9999999403953552,
-            "y": 0.9999999403953552,
-            "z": 1.0
-        },
-        "serializationID": 138,
-        "transform parentID": 129,
-        "type": "Transform"
-    },
-    "component087": {
-        "entity id": 19,
-        "localPosition": {
-            "x": 3.36961030960083,
-            "y": 1.9073486328125e-06,
-            "z": -2.8312206268310547e-07
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 139,
-        "transform parentID": 138,
-        "type": "Transform"
-    },
-    "component088": {
-        "entity id": 23,
-        "localPosition": {
-            "x": 3.683784008026123,
-            "y": -9.5367431640625e-07,
-            "z": 2.384185791015625e-07
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 140,
-        "transform parentID": 139,
-        "type": "Transform"
-    },
-    "component089": {
-        "entity id": 24,
-        "localPosition": {
-            "x": 2.83062744140625,
-            "y": -2.384185791015625e-06,
-            "z": 1.1920928955078125e-06
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 141,
-        "transform parentID": 140,
-        "type": "Transform"
-    },
-    "component090": {
-        "entity id": 25,
-        "localPosition": {
-            "x": 1.7070703506469727,
-            "y": -3.910064697265625e-05,
-            "z": -9.387731552124023e-07
-        },
-        "localRotation": {
-            "w": 1.0,
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 142,
-        "transform parentID": 141,
-        "type": "Transform"
-    },
-    "component091": {
-        "entity id": 32,
-        "serializationID": 144,
-        "type": "Skeleton"
-    },
-    "component092": {
-        "entity id": 33,
-        "localPosition": {
-            "x": 3.0,
-            "y": 0.0,
-            "z": -5.5
-        },
-        "localRotation": {
-            "w": 0.5,
-            "x": 0.5,
-            "y": 0.5,
-            "z": 0.5
-        },
-        "localScale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        },
-        "serializationID": 146,
-        "transform parentID": 94,
-        "type": "Transform"
-    },
-    "component093": {
-        "entity id": 13,
+        "entity id": 14,
         "maxFrontRot": -34.5,
         "maxPos": {
             "x": -0.44999998807907104,
@@ -1359,49 +884,49 @@
         "maxSideRot": 30.0,
         "maxSpeed": 0.0,
         "minSpeed": 0.0,
-        "serializationID": 148,
+        "serializationID": 91,
         "type": "Paddle"
     },
-    "component094": {
+    "component058": {
         "angularDrag": 0.10000000149011612,
         "bodyType": 2,
         "drag": 0.20000000298023224,
-        "entity id": 31,
+        "entity id": 13,
         "ignoreGravity": false,
-        "mass": 100000.0,
-        "serializationID": 152,
+        "mass": 150.0,
+        "serializationID": 93,
         "type": "Rigidbody"
     },
-    "component095": {
+    "component059": {
         "center": {
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
         },
-        "entity id": 31,
+        "entity id": 13,
         "halfSize": {
             "x": 5.0,
             "y": 15.0,
             "z": 2.0
         },
         "isTrigger": false,
-        "serializationID": 153,
+        "serializationID": 94,
         "type": "BoxCollider"
     },
-    "component096": {
-        "entity id": 31,
-        "serializationID": 154,
+    "component060": {
+        "entity id": 13,
+        "serializationID": 95,
         "type": "HydroBody"
     },
-    "component097": {
-        "entity id": 13,
-        "rigidbody": 152,
-        "serializationID": 155,
+    "component061": {
+        "entity id": 14,
+        "rigidbody": 93,
+        "serializationID": 96,
         "type": "HydroAccelerator"
     },
-    "component098": {
-        "entity id": 13,
-        "serializationID": 156,
+    "component062": {
+        "entity id": 14,
+        "serializationID": 97,
         "type": "HydroBody"
     },
     "cubemap000": {
@@ -1535,8 +1060,7 @@
             63,
             64,
             66,
-            67,
-            68
+            67
         ],
         "id": 10,
         "name": "PhysicBasedInputTest",
@@ -1544,220 +1068,59 @@
     },
     "entity011": {
         "components": [
+            69,
             70,
             71,
             72,
-            73,
-            74
+            73
         ],
         "id": 11,
         "name": "Hideout1",
-        "serializationID": 69
+        "serializationID": 68
     },
     "entity012": {
         "components": [
+            75,
             76,
             77,
             78,
-            79,
-            80
+            79
         ],
         "id": 12,
         "name": "Hideout2",
-        "serializationID": 75
+        "serializationID": 74
     },
     "entity013": {
         "components": [
-            82,
-            84,
-            148,
-            155,
-            156
+            81,
+            83,
+            95,
+            93,
+            94
         ],
         "id": 13,
-        "name": "Paddle",
-        "serializationID": 81
+        "name": "Kayak",
+        "serializationID": 80
     },
     "entity014": {
         "components": [
-            86,
-            88
+            85,
+            87,
+            91,
+            96,
+            97
         ],
         "id": 14,
-        "name": "Paddle_attach_left",
-        "serializationID": 85
+        "name": "Paddle",
+        "serializationID": 84
     },
     "entity015": {
         "components": [
-            90,
-            92
+            89
         ],
         "id": 15,
-        "name": "Paddle_attach_right",
-        "serializationID": 89
-    },
-    "entity016": {
-        "components": [
-            94,
-            124
-        ],
-        "id": 16,
-        "name": "Player",
-        "serializationID": 93
-    },
-    "entity017": {
-        "components": [
-            96,
-            129
-        ],
-        "id": 17,
-        "name": "Kayak.FBX/Spine",
-        "serializationID": 95
-    },
-    "entity018": {
-        "components": [
-            98,
-            138
-        ],
-        "id": 18,
-        "name": "Kayak.FBX/Shoulder_left",
-        "serializationID": 97
-    },
-    "entity019": {
-        "components": [
-            100,
-            139
-        ],
-        "id": 19,
-        "name": "Kayak.FBX/Arm_left",
-        "serializationID": 99
-    },
-    "entity020": {
-        "components": [
-            102,
-            133
-        ],
-        "id": 20,
-        "name": "Kayak.FBX/Shoulder_right",
-        "serializationID": 101
-    },
-    "entity021": {
-        "components": [
-            104,
-            131
-        ],
-        "id": 21,
-        "name": "Kayak.FBX/Head",
-        "serializationID": 103
-    },
-    "entity022": {
-        "components": [
-            106,
-            130
-        ],
-        "id": 22,
-        "name": "Kayak.FBX/Neck",
-        "serializationID": 105
-    },
-    "entity023": {
-        "components": [
-            108,
-            140
-        ],
-        "id": 23,
-        "name": "Kayak.FBX/Forearm_left",
-        "serializationID": 107
-    },
-    "entity024": {
-        "components": [
-            110,
-            141
-        ],
-        "id": 24,
-        "name": "Kayak.FBX/Hand_left",
-        "serializationID": 109
-    },
-    "entity025": {
-        "components": [
-            112,
-            142
-        ],
-        "id": 25,
-        "name": "Kayak.FBX/End_left",
-        "serializationID": 111
-    },
-    "entity026": {
-        "components": [
-            114,
-            134
-        ],
-        "id": 26,
-        "name": "Kayak.FBX/Arm_right",
-        "serializationID": 113
-    },
-    "entity027": {
-        "components": [
-            116,
-            136
-        ],
-        "id": 27,
-        "name": "Kayak.FBX/Hand_right",
-        "serializationID": 115
-    },
-    "entity028": {
-        "components": [
-            118,
-            137
-        ],
-        "id": 28,
-        "name": "Kayak.FBX/End_right",
-        "serializationID": 117
-    },
-    "entity029": {
-        "components": [
-            120,
-            135
-        ],
-        "id": 29,
-        "name": "Kayak.FBX/Forearm_right",
-        "serializationID": 119
-    },
-    "entity030": {
-        "components": [
-            122,
-            132
-        ],
-        "id": 30,
-        "name": "Kayak.FBX/Head_end",
-        "serializationID": 121
-    },
-    "entity031": {
-        "components": [
-            126,
-            128,
-            154,
-            152,
-            153
-        ],
-        "id": 31,
-        "name": "Kayak",
-        "serializationID": 125
-    },
-    "entity032": {
-        "components": [
-            144
-        ],
-        "id": 32,
-        "name": "Spine_skeleton",
-        "serializationID": 143
-    },
-    "entity033": {
-        "components": [
-            146
-        ],
-        "id": 33,
         "name": "PaddleIndirect",
-        "serializationID": 145
+        "serializationID": 88
     },
     "material000": {
         "cubemaps": {
@@ -1804,17 +1167,17 @@
                 0.0
             ],
             "viewStatic": [
-                0.14435622096061707,
-                -0.008635132573544979,
-                -0.9894881844520569,
+                -0.8694960474967957,
+                0.2783476710319519,
+                -0.40804335474967957,
                 0.0,
-                5.820766646458253e-10,
-                0.9999619126319885,
-                -0.00872653629630804,
+                -1.4901166522918174e-08,
+                0.8260988593101501,
+                0.5635252594947815,
                 0.0,
-                0.9895258545875549,
-                0.0012597296154126525,
-                0.14435076713562012,
+                0.4939400851726532,
+                0.4899829626083374,
+                -0.7182897925376892,
                 0.0,
                 0.0,
                 0.0,
@@ -2129,7 +1492,7 @@
         },
         "name": "paddleMat",
         "renderingType": 0,
-        "serializationID": 147,
+        "serializationID": 90,
         "shaderName": "UnlitColor",
         "textures": {},
         "vec3s": {
@@ -2209,191 +1572,9 @@
                 0.0
             ]
         },
-        "name": "attachMat",
-        "renderingType": 0,
-        "serializationID": 149,
-        "shaderName": "UnlitColor",
-        "textures": {},
-        "vec3s": {
-            "viewPos": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "vec4s": {
-            "color": [
-                1.0,
-                0.5210000276565552,
-                0.4779999852180481,
-                0.07800000160932541
-            ]
-        }
-    },
-    "material006": {
-        "cubemaps": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "mat4s": {
-            "MVP": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "finalTransform[0]": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "view": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "playerMat",
-        "renderingType": 0,
-        "serializationID": 150,
-        "shaderName": "UnlitSkinned",
-        "textures": {},
-        "vec3s": {
-            "viewPos": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "vec4s": {
-            "color": [
-                1.0,
-                0.878000020980835,
-                0.7490000128746033,
-                0.32100000977516174
-            ]
-        }
-    },
-    "material007": {
-        "cubemaps": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "mat4s": {
-            "MVP": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "view": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
         "name": "kayakMat",
         "renderingType": 0,
-        "serializationID": 151,
+        "serializationID": 92,
         "shaderName": "UnlitColor",
         "textures": {},
         "vec3s": {
@@ -2412,7 +1593,7 @@
             ]
         }
     },
-    "material008": {
+    "material006": {
         "cubemaps": {},
         "floats": {},
         "instancingEnabled": false,
@@ -2457,7 +1638,7 @@
         },
         "name": "LoadingScreenMat",
         "renderingType": 1,
-        "serializationID": 162,
+        "serializationID": 103,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/loding.png"
@@ -2485,33 +1666,15 @@
         "type": "MeshCustom"
     },
     "mesh002": {
-        "filePath": "Resources/Models/Kayak.FBX",
-        "meshPath": "Resources/Models/Kayak.FBX/Paddle",
-        "serializationID": 83,
+        "filePath": "Resources/Models/Kayak_low_poly.FBX",
+        "meshPath": "Resources/Models/Kayak_low_poly.FBX/Kayak",
+        "serializationID": 82,
         "type": "MeshCustom"
     },
     "mesh003": {
-        "filePath": "Resources/Models/Kayak.FBX",
-        "meshPath": "Resources/Models/Kayak.FBX/Paddle_attach_left",
-        "serializationID": 87,
-        "type": "MeshCustom"
-    },
-    "mesh004": {
-        "filePath": "Resources/Models/Kayak.FBX",
-        "meshPath": "Resources/Models/Kayak.FBX/Paddle_attach_right",
-        "serializationID": 91,
-        "type": "MeshCustom"
-    },
-    "mesh005": {
-        "filePath": "Resources/Models/Kayak.FBX",
-        "meshPath": "Resources/Models/Kayak.FBX/Player",
-        "serializationID": 123,
-        "type": "MeshSkinned"
-    },
-    "mesh006": {
-        "filePath": "Resources/Models/Kayak.FBX",
-        "meshPath": "Resources/Models/Kayak.FBX/Kayak",
-        "serializationID": 127,
+        "filePath": "Resources/Models/Kayak_low_poly.FBX",
+        "meshPath": "Resources/Models/Kayak_low_poly.FBX/Paddle",
+        "serializationID": 86,
         "type": "MeshCustom"
     },
     "shader000": {
@@ -2546,7 +1709,7 @@
     },
     "shader005": {
         "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
-        "serializationID": 161,
+        "serializationID": 102,
         "shaderName": "UiStandard",
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
@@ -2568,6 +1731,6 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 159
+        "serializationID": 100
     }
 }

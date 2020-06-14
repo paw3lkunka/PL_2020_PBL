@@ -123,33 +123,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
-
-            //auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
-            //auto hydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
-            //    hydroAccelerator->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
-
-            //auto paddlePtr = objectModule.getEntityPtrByName("Paddle");
-            //    paddlePtr->addComponent(hydroBody);
-            //    paddlePtr->addComponent(hydroAccelerator);
-
-            /*
-            auto hydroBodyLeft = objectModule.newEmptyComponent<HydroBody>();
-            auto hydroAcceleratorLeft = objectModule.newEmptyComponent<HydroAccelerator>();
-                hydroAcceleratorLeft->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
-
-            auto paddleLeftPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-                paddleLeftPtr->addComponent(hydroBodyLeft);
-                paddleLeftPtr->addComponent(hydroAcceleratorLeft);
-
-            auto hydroBodyRight = objectModule.newEmptyComponent<HydroBody>();
-            auto hydroAcceleratorRight = objectModule.newEmptyComponent<HydroAccelerator>();
-                hydroAcceleratorRight->rigidbody = kayakPtr->getComponentPtr<Rigidbody>();
-
-            auto paddleRightPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-                paddleRightPtr->addComponent(hydroBodyRight);
-                paddleRightPtr->addComponent(hydroAcceleratorRight);
-            */
+            // some code here
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
