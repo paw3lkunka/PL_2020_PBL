@@ -321,6 +321,7 @@ TextureCreateInfo skyboxCreateInfo = {};
 
         auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
             a->lerpParameter = 0.25f;
+            a->shootTrailTime = 0.05f;
 
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->material = objectModule.getMaterialPtrByName("KULA");

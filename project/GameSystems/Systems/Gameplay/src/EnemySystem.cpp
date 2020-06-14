@@ -86,15 +86,13 @@ void EnemySystem::animation(glm::vec3 dir)
     }
 }
 
-#define SHOOT_TIME_VERY_UGLY_TMP_DEFINE_MAKE_VARIABLE_INSTEAD_OF_THIS 0.05f
-
 void EnemySystem::attack(glm::vec3 dir)
 {
     if (enemyAttackPtr)
     {
         enemyAttackPtr->attackCounter += enemyAttackPtr->incrementValue;
 
-        if (enemyAttackPtr->attackCounter >= SHOOT_TIME_VERY_UGLY_TMP_DEFINE_MAKE_VARIABLE_INSTEAD_OF_THIS)
+        if (enemyAnimationPtr && enemyAttackPtr->attackCounter >= enemyAnimationPtr->shootTrailTime)
         {
             Shoot::get().entityPtr->getComponentPtr<Transform>()->getLocalPositionModifiable() = glm::vec3(NAN, NAN, NAN);
         }
@@ -120,7 +118,6 @@ void EnemySystem::attack(glm::vec3 dir)
             shootT->setParent(enemyTransformPtr);
             shootT->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
             shootT->getLocalRotationModifiable() = Y_180_DEG * (data.success ? glm::quat(1.0f, 0.0f, 0.0f, 0.0f) : glm::angleAxis( glm::radians(15.0f) * GetCore().coinToss(1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-
 
             GetCore().messageBus.sendMessage(Message(Event::PLAYER_ATTACKED, data));
         }
