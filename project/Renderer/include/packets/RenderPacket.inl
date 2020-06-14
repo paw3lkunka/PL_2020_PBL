@@ -3,8 +3,10 @@
 
 #include <glm/glm.hpp>
 
-#include "Material.hpp"
-#include "mesh/Mesh.hpp"
+#include "Mesh.hpp"
+
+class Material;
+class Shader;
 
 // TODO Documentation
 struct RenderPacket

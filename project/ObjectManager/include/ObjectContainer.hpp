@@ -17,6 +17,7 @@ class MeshSkinned;
 class MeshCustom;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 
 class ObjectMaker;
@@ -135,6 +136,14 @@ public:
     Cubemap* getCubemapFromSerializationID(unsigned int serializationID);
 
     /**
+     * @brief Get the hdr Cubemap by serialization ID 
+     * 
+     * @param serializationID of hdr cubemap
+     * @return CubemapHdr* pointer or nullptr if can't find
+     */
+    CubemapHdr* getCubemapHdrFromSerializationID(unsigned int serializationID);
+
+    /**
      * @brief Get the Material by serializaion ID
      * 
      * @param serializationID of material
@@ -206,6 +215,8 @@ private:
     std::vector<Texture*> textures;
     ///@brief cubemaps container.
     std::vector<Cubemap*> cubemaps;
+    ///@brief hdr cubemaps container.
+    std::vector<CubemapHdr*> hdrCubemaps;
     ///@brief materials container.
     std::vector<Material*> materials;
     ///@brief fonts container

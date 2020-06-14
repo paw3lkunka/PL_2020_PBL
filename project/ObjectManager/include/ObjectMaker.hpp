@@ -11,6 +11,7 @@ class Shader;
 class Entity;
 class Texture;
 class Cubemap;
+class CubemapHdr;
 class Material;
 class Animation;
 class Bone;
@@ -62,7 +63,7 @@ public:
      * @param geometryShaderPath path of geometry shader (optional)
      * @return Shader* pointer to shader
      */
-    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr);
+    Shader* newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath = nullptr, bool serialize = true);
 
     /**
      * @brief make new Texture and save to container
@@ -92,6 +93,21 @@ public:
                         const char* backPath,
                         const char* topPath,
                         const char* bottomPath);
+
+    /**
+     * @brief Make new cubemap and save to container
+     * 
+     * @param createInfo basic create info (without information from file like width, height)
+     * @param cubemapPath
+     * @return Cubemap* pointer to cubemap
+     */
+    CubemapHdr* newHdrCubemap(TextureCreateInfo createInfo, 
+                            const char* frontPath, 
+                            const char* leftPath, 
+                            const char* rightPath, 
+                            const char* backPath, 
+                            const char* topPath, 
+                            const char* bottomPath);
 
     /**
      * @brief read new meshes from model file

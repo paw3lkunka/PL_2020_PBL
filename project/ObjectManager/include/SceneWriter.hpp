@@ -11,6 +11,7 @@ class Material;
 class Texture;
 class Mesh;
 class Cubemap;
+class CubemapHdr;
 class Shader;
 class Font;
 class Message;
@@ -68,6 +69,7 @@ private:
     void saveAudioSource(AudioSource* componentPtr);
     void saveCamera(Camera* componentPtr);
     void saveMeshRenderer(MeshRenderer* componentPtr);
+    void saveTerrainRenderer(TerrainRenderer* componentPtr);
     void saveSphereCollider(SphereCollider* componentPtr);
     void saveBoxCollider(BoxCollider* componentPtr);
     void saveRigidbody(Rigidbody* componentPtr);
@@ -95,6 +97,7 @@ private:
     void saveMesh(Mesh* assetPtr);
     void saveShader(Shader* assetPtr);
     void saveCubemap(Cubemap* assetPtr);
+    void saveCubemapHdr(CubemapHdr* assetPtr);
     void saveFont(Font* assetPtr);
 
     // ? saving Messages

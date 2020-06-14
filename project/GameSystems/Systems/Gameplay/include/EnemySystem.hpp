@@ -29,7 +29,7 @@ private:
         EnemyAttack* enemyAttackPtr;
 
     /**
-     * @brief Procedure of detecting kayak.
+     * @brief Routine of detecting kayak.
      * 
      * @param kayakPtr Pointer to kayak object - MUST NOT BE NULL!
      * @param enemyPos Position of enemy in world space.
@@ -45,7 +45,7 @@ private:
     void animation(glm::vec3 dir);
 
     /**
-     * @brief Procedure of attack.
+     * @brief Attack routine.
      * 
      * @param dir Direction from enemy to player.
      */

@@ -29,6 +29,7 @@
 #include "SystemsPreDeclarations.hxx"
 
 // * Others
+#include <filesystem>
 
 class Message;
 enum class Event : unsigned int;
@@ -176,6 +177,20 @@ class Core
          * @return float random number.
          */
         float randomFloat01R();
+
+        /**
+         * @brief Choose randomly one of two values.
+         * 
+         * @tparam T type of values.
+         * @param obverse first value.
+         * @param reverse second value.
+         * @return float first value or second value.
+         */
+        template<typename T>
+        T coinToss(T obverse, T reverse)
+        {
+            return randomInt() > 0 ? obverse : reverse;
+        }
 #pragma
 
 #pragma region Constants
@@ -306,6 +321,7 @@ class Core
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
+        static TerrainRendererSystem terrainSystem;
         static PhysicalBasedInputSystem physicalBasedInputSystem;
         static PhysicSystem physicSystem;
         static SkeletonSystem skeletonSystem;

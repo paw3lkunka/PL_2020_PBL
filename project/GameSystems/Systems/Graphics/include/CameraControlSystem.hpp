@@ -43,7 +43,7 @@ public:
     /**
      * @brief Controlled camera speed
      */
-    float speed = 1.0f;
+    float speed = 0.1f;
     /**
      * @brief Mouse look sensitivity
      */

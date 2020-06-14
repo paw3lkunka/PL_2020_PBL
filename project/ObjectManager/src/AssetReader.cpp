@@ -75,6 +75,25 @@ bool AssetReader::loadTexture(std::string path)
     return false;
 }
 
+bool AssetReader::loadHdrTexture(std::string path)
+{
+    TextureHdrData tData;
+    tData.data = stbi_loadf(path.c_str(), &tData.width, &tData.height, &tData.nrComponents, 0);
+    if(tData.width != 0 && tData.height != 0 && tData.nrComponents != 0)
+    {
+        texturesHdr.insert( std::pair(path, tData) );
+        
+        std::unordered_map<std::string, TextureHdrData>::iterator iter = texturesHdr.find(path);
+        std::cout << "Tex hdr loaded: " << path << std::endl;
+        return iter != texturesHdr.end();
+    }
+    else
+    {
+        std::cerr << "Error while loading hdr texture " << path << std::endl;
+    }
+    return false;
+}
+
 bool AssetReader::loadShader(std::string path)
 {
     std::string buffer = "";
@@ -151,7 +170,8 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
         // * ----- Create new entity with provided name -----
-        Entity* e = objectModulePtr->newEntity(2, node->mName.C_Str());
+        size_t index = path.find_last_of("/\\");
+        Entity* e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + node->mName.C_Str());
 
         // * ----- Create transform and set parent -----
         nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
@@ -181,10 +201,22 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
         // FIXME: If node contains more than one mesh, the entity receives more than one MeshRenderer
         // ! and mesh renderer system is not equipped to handle this
 
-        // * ----- Create mesh renderer and add created mesh -----
-        auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
-            mr->mesh = newMesh;
-        e->addComponent(mr);
+        std::string dirPath = path.substr(0, path.find_last_of("/\\"));
+        dirPath = dirPath.substr(dirPath.find_last_of("/\\") + 1);
+
+        if (dirPath == "Terrain")
+        {
+            auto tr = objectModulePtr->newEmptyComponent<TerrainRenderer>();
+                tr->terrainMesh = newMesh;
+            e->addComponent(tr);
+        }
+        else
+        {
+            // * ----- Create mesh renderer and add created mesh -----
+            auto mr = objectModulePtr->newEmptyComponent<MeshRenderer>();
+                mr->mesh = newMesh;
+            e->addComponent(mr);
+        }
     }
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
@@ -200,7 +232,7 @@ Entity* AssetReader::processBone(aiNode* node, const aiScene* scene, std::string
 {
     // ? +++++ Check if node is considered a bone ++++++++++++++++++++++++++++++++++++++++++++++++
     std::string filename = path.substr(path.find_last_of("\\/") + 1);
-    Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + node->mName.C_Str()).c_str() );
+    Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + node->mName.C_Str() + "(bone)").c_str());
 
     if (e != nullptr)
     {
@@ -261,7 +293,7 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
             for (size_t j = 0; j < scene->mAnimations[i]->mNumChannels; j++)
             {
                 std::string filename = path.substr(path.find_last_of("\\/") + 1);
-                unsigned int nodeBoneID = objectModulePtr->getEntityPtrByName((filename + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str()).c_str())->getComponentPtr<Bone>()->boneID;
+                unsigned int nodeBoneID = objectModulePtr->getEntityPtrByName((filename + "/" + scene->mAnimations[i]->mChannels[j]->mNodeName.C_Str() + "(bone)").c_str())->getComponentPtr<Bone>()->boneID;
                 newAnim.addNode(nodeBoneID);
                 newAnim.findAnimNode(nodeBoneID)->animationLength = scene->mAnimations[i]->mDuration;
 
@@ -346,10 +378,10 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
 
         // XXX: I'm not sure if the insert will just do nothing if the key already exists (and that's what I want it to do) 
         // ! All bone names follow convention path/boneName to ensure uniqueness between diferrent models   
-        Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + mesh->mBones[i]->mName.C_Str()).c_str() );
+        Entity* e = objectModulePtr->getEntityPtrByName((filename + "/" + mesh->mBones[i]->mName.C_Str() + "(bone)").c_str() );
         if (e == nullptr)
         {
-            Entity* ent = objectModulePtr->newEntity(2, filename + "/" + mesh->mBones[i]->mName.C_Str());
+            Entity* ent = objectModulePtr->newEntity(2, filename + "/" + mesh->mBones[i]->mName.C_Str() + "(bone)");
             Bone* bone = objectModulePtr->newEmptyComponentForLastEntity<Bone>();
                 bone->boneID = globalBoneIndex;
                 bone->boneName = filename + "/" + mesh->mBones[i]->mName.C_Str();

@@ -5,6 +5,7 @@
 #include "Entity.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
+#include "CubemapHdr.hpp"
 #include "Material.hpp"
 #include "Font.hpp"
 #include "AssetStructers.inl"
@@ -66,12 +67,8 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().uiModule.unloadScene();
     // ! clear message bus, for omitting messages between scenes
     GetCore().messageBus.clearBuffers();
-    // * setting serialization id for 1 (0 is scene root node)
-    ISerializable::nextID = 1;
-    //* reading scene
-    sceneReader.readScene(newScenePath);
 
-    // ! ----- Renderer initialization block -----
+     // ! ----- Renderer initialization block -----
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
@@ -80,7 +77,14 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     rendererCreateInfo.cullFrontFace = GL_CCW;
     rendererCreateInfo.depthTest = true;
     rendererCreateInfo.wireframeMode = false;
-    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo, getMaterialPtrByName("skyboxMat"));
+    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo);
+
+    // * setting serialization id for 1 (0 is scene root node)
+    ISerializable::nextID = 1;
+    //* reading scene
+    sceneReader.readScene(newScenePath);
+
+
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
 
@@ -109,16 +113,19 @@ Entity* ObjectModule::newEntity(int bufferSize, std::string name)
     return objectMaker.newEntity(bufferSize, name);
 }
 
-Shader* ObjectModule::newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
-{   
-    for(Shader* s : objectContainer.shaders)
+Shader* ObjectModule::newShader(std::string shaderName, const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath, bool serialize)
+{
+    if (serialize)
     {
-        if(shaderName.compare(s->shaderName) == 0)
+        for(Shader* s : objectContainer.shaders)
         {
-            return s;
+            if(shaderName.compare(s->shaderName) == 0)
+            {
+                return s;
+            }
         }
     }
-    return objectMaker.newShader(shaderName, vertexShaderPath, fragmentShaderPath, geometryShaderPath);
+    return objectMaker.newShader(shaderName, vertexShaderPath, fragmentShaderPath, geometryShaderPath, serialize);
 }
 
 Texture* ObjectModule::newTexture(const char* filePath, TextureCreateInfo createInfo)
@@ -146,6 +153,21 @@ Cubemap* ObjectModule::newCubemap(TextureCreateInfo createInfo, const char* fron
         }
     }
     return objectMaker.newCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
+}
+
+CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char* frontPath, const char* leftPath, 
+                    const char* rightPath, const char* backPath, const char* topPath, const char* bottomPath)
+{
+    for(CubemapHdr* c : objectContainer.hdrCubemaps)
+    {
+        if(c->frontPath == frontPath && c->backPath == backPath 
+        && c->leftPath == leftPath && c->rightPath == rightPath 
+        && c->bottomPath == bottomPath && c->topPath == topPath)
+        {
+            return c;
+        }
+    }
+    return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
 void ObjectModule::newModel(const char* filePath)

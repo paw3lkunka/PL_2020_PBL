@@ -7,8 +7,9 @@
 #include "Material.hpp"
 #include "Texture.hpp"
 #include "Cubemap.hpp"
-#include "mesh/MeshCustom.hpp"
-#include "mesh/MeshSkinned.hpp"
+#include "CubemapHdr.hpp"
+#include "MeshCustom.hpp"
+#include "MeshSkinned.hpp"
 #include "Shader.hpp"
 #include "Entity.hpp"
 #include "Font.hpp"
@@ -41,6 +42,7 @@ void SceneWriter::saveScene(const char* filePath)
     (*json)["Amounts"]["meshes"] = objContainerPtr->meshes.size();
     (*json)["Amounts"]["textures"] = objContainerPtr->textures.size();
     (*json)["Amounts"]["cubemaps"] = objContainerPtr->cubemaps.size();
+    (*json)["Amounts"]["cubemapsHdr"] = objContainerPtr->hdrCubemaps.size();
     (*json)["Amounts"]["fonts"] = objContainerPtr->fonts.size();
     
     for( int i = 0; i < objContainerPtr->entities.size(); ++i)
@@ -153,6 +155,23 @@ void SceneWriter::saveScene(const char* filePath)
         saveCubemap(objContainerPtr->cubemaps[i]);
     }
 
+    for(int i = 0; i < objContainerPtr->hdrCubemaps.size(); ++i)
+    {
+        if(i < 10)
+        {
+            name = "cubemapHdr00" + std::to_string(i);
+        }
+        else if(i < 100)
+        {
+            name = "cubemapHdr0" + std::to_string(i);
+        }
+        else
+        {
+            name = "cubemapHdr" + std::to_string(i);
+        }
+        saveCubemapHdr(objContainerPtr->hdrCubemaps[i]);
+    }
+
     for(int i = 0; i < objContainerPtr->fonts.size(); ++i)
     {
         if(i < 10)
@@ -206,6 +225,10 @@ void SceneWriter::saveScene(const char* filePath)
         else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
             saveMeshRenderer(temp);
+        }
+        else if(TerrainRenderer* temp = dynamic_cast<TerrainRenderer*>(objContainerPtr->components[i]))
+        {
+            saveTerrainRenderer(temp);
         }
         else if(SphereCollider* temp = dynamic_cast<SphereCollider*>(objContainerPtr->components[i]))
         {
@@ -404,6 +427,17 @@ void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)
     }
     (*json)[name]["mesh"] = componentPtr->mesh->getMeshPath();
     
+}
+
+void SceneWriter::saveTerrainRenderer(TerrainRenderer* componentPtr)
+{
+    (*json)[name]["type"] = "TerrainRenderer";
+    if(componentPtr->material != nullptr)
+    {
+        (*json)[name]["material"] = componentPtr->material->serializationID;
+    }
+    (*json)[name]["mesh"] = componentPtr->terrainMesh->serializationID;
+    (*json)[name]["splatmap"] = componentPtr->splatmap->serializationID;
 }
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
@@ -708,26 +742,33 @@ void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
 void SceneWriter::saveMaterial(Material* assetPtr)
 {
     (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["isSkybox"] = assetPtr->isSkybox;
     (*json)[name]["shaderName"] = assetPtr->shader->shaderName;
     (*json)[name]["name"] = assetPtr->getName();
     (*json)[name]["instancingEnabled"] = assetPtr->isInstancingEnabled();
     (*json)[name]["renderingType"] = assetPtr->getRenderType();
-    childrenMap.clear();
-    for(auto c : assetPtr->cubemaps)
-    {
-        childrenMap[c.first] = c.second->serializationID;
-    }
-    (*json)[name]["cubemaps"] = childrenMap;
 
     std::unordered_map<std::string, std::string> texMap;
+    std::unordered_map<std::string, unsigned int> cubemaps;
+    std::unordered_map<std::string, unsigned int> cubemapsHdr;
     for(auto t : assetPtr->textures)
     {
-        if (t.second != nullptr)
+        if (dynamic_cast<Cubemap*>(t.second) != nullptr)
+        {
+            cubemaps[t.first] = t.second->serializationID;
+        }
+        else if (dynamic_cast<CubemapHdr*>(t.second) != nullptr)
+        {
+            cubemapsHdr[t.first] = t.second->serializationID;
+        }
+        else if (t.second != nullptr)
         {
             texMap[t.first] = t.second->filePath;
         }
     }
     (*json)[name]["textures"] = texMap;
+    (*json)[name]["cubemaps"] = cubemaps;
+    (*json)[name]["cubemapsHdr"] = cubemapsHdr;
 
     childrenMap.clear();
     for(auto i : assetPtr->ints)
@@ -747,6 +788,18 @@ void SceneWriter::saveMaterial(Material* assetPtr)
 
     std::unordered_map<std::string, std::vector<float>> structMap;
     std::vector<float> floatVec;
+    for(auto v : assetPtr->vec2s)
+    {
+        floatVec.clear();
+        floatVec.push_back(v.second.x);
+        floatVec.push_back(v.second.y);
+        
+        structMap[v.first] = floatVec;
+    }
+    (*json)[name]["vec2s"] = structMap;
+
+    
+    structMap.clear();
     for(auto v : assetPtr->vec3s)
     {
         floatVec.clear();
@@ -756,7 +809,6 @@ void SceneWriter::saveMaterial(Material* assetPtr)
         
         structMap[v.first] = floatVec;
     }
-
     (*json)[name]["vec3s"] = structMap;
 
     structMap.clear();
@@ -836,6 +888,24 @@ void SceneWriter::saveShader(Shader* assetPtr)
 }
 
 void SceneWriter::saveCubemap(Cubemap* assetPtr)
+{
+    (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["frontPath"] = assetPtr->frontPath;
+    (*json)[name]["backPath"] = assetPtr->backPath;
+    (*json)[name]["leftPath"] = assetPtr->leftPath;
+    (*json)[name]["rightPath"] = assetPtr->rightPath;
+    (*json)[name]["topPath"] = assetPtr->topPath;
+    (*json)[name]["bottomPath"] = assetPtr->bottomPath;
+    (*json)[name]["creationInfo"]["generateMipmaps"] = assetPtr->info.generateMipmaps;
+    (*json)[name]["creationInfo"]["format"] = assetPtr->info.format;
+    (*json)[name]["creationInfo"]["width"] = assetPtr->info.width;
+    (*json)[name]["creationInfo"]["height"] = assetPtr->info.height;
+    (*json)[name]["creationInfo"]["minFilter"] = assetPtr->info.minFilter;
+    (*json)[name]["creationInfo"]["magFilter"] = assetPtr->info.magFilter;
+    (*json)[name]["creationInfo"]["wrapMode"] = assetPtr->info.wrapMode;
+}
+
+void SceneWriter::saveCubemapHdr(CubemapHdr* assetPtr)
 {
     (*json)[name]["serializationID"] = assetPtr->serializationID;
     (*json)[name]["frontPath"] = assetPtr->frontPath;

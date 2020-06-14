@@ -12,6 +12,7 @@
 
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <map>
 #include <string>
 
 #include "Texture.hpp"
@@ -76,15 +77,28 @@ public:
      * @param name Uniform name, "model" by default
      */
     void setModel(const glm::mat4& M, std::string name = "model");
+    /**
+     * @brief Automatically sets both model and model-view-projection (MVP) matrix
+     * 
+     * @param M Model matrix
+     * @param VP View-projecion matrix
+     */
+    void setTransformMatrices(const glm::mat4& M, const glm::mat4& VP);
+    /**
+     * @brief Either set the material as skybox or not
+     * 
+     * @param option set or reset material as skybox
+     */
+    void setAsSkybox(bool option);
 
     /// @brief Set texture of given name in material
     void setTexture(std::string name, Texture* value);
-    /// @brief Set texture of given name in material
-    void setCubemap(std::string name, Cubemap* value);
     /// @brief Set int of given name in material
     void setInt(std::string name, int value);
     /// @brief Set float of given name in material
     void setFloat(std::string name, float value);
+    /// @brief Set vec2 of given name in material
+    void setVec2(std::string name, glm::vec2 value);
     /// @brief Set vec3 of given name in material
     void setVec3(std::string name, glm::vec3 value);
     /// @brief Set vec4 of given name in material
@@ -112,15 +126,20 @@ public:
     /// @brief Get int of given name
     int getInt(std::string name);
     /// @brief Get float of given name
-    float& getFloat(std::string name);
+    float getFloat(std::string name);
     /// @brief Get vec3 of given name
-    glm::vec3& getVec3(std::string name);
+    const glm::vec3* getVec3Ptr(std::string name);
     /// @brief Get vec4 of given name
-    const glm::vec4& getVec4(std::string name);
+    const glm::vec4* getVec4Ptr(std::string name);
     /// @brief Get mat4 of given name
-    glm::mat4& getMat4(std::string name);
+    const glm::mat4* getMat4Ptr(std::string name);
+    /// @brief Get texture of given name
+    const Texture* getTexturePtr(std::string name);
+    /// @brief Get unit id of specified texture
+    int getTextureUnit(std::string name);
 
 private:
+    bool isSkybox = false;
     static unsigned int idCount;
     unsigned int ID;
     bool enableInstancing;
@@ -128,12 +147,19 @@ private:
     Shader* shader;
     std::string name;
 
-    std::unordered_map<std::string, Texture*> textures;
-    std::unordered_map<std::string, Cubemap*> cubemaps;
+    bool texturesChanged = true;
+    std::map<std::string, Texture*> textures;
+    bool intsChanged = true;
     std::unordered_map<std::string, int> ints;
+    bool floatsChanged = true;
     std::unordered_map<std::string, float> floats;
+    bool vec2sChanged = true;
+    std::unordered_map<std::string, glm::vec2> vec2s;
+    bool vec3sChanged = true;
     std::unordered_map<std::string, glm::vec3> vec3s;
+    bool vec4sChanged = true;
     std::unordered_map<std::string, glm::vec4> vec4s;
+    bool mat4sChanged = true;
     std::unordered_map<std::string, glm::mat4> mat4s;
 };
 

@@ -63,6 +63,8 @@ public:
     //TODO documentation
 	void setFloat(const std::string& name, float value) const;
     //TODO documentation
+    void setVec2(const std::string& name, glm::vec2& vec) const;
+    //TODO documentation
 	void setVec3(const std::string& name, float x, float y, float z) const;
     //TODO documentation
 	void setVec3(const std::string& name, const glm::vec3& vec) const;

@@ -2,15 +2,16 @@
 #define _MESHRENDERERSYSTEM_HPP
 
 #include "System.hpp"
-#include "mesh/Mesh.hpp"
+#include "Mesh.hpp"
 #include "Material.hpp"
 
 struct MeshRenderer;
 struct Transform;
 class Message;
 
-
-    //TODO documentation
+/**
+ * @brief System for standard mesh sending info to renderer module
+ */
 class MeshRendererSystem : public System
 {
 public:

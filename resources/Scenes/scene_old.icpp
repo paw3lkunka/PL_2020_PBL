@@ -20,8 +20,6 @@
     auto unlitTexture = objectModule.newShader("Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
 
     auto unlitInstanced = objectModule.newShader("Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
-    
-    auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
     auto simpleLitShader = objectModule.newShader("Resources/Shaders/SimpleLit/SimpleLit.vert", "Resources/Shaders/SimpleLit/SimpleLit.frag");
 
@@ -48,22 +46,16 @@
     auto rocks3Normal = objectModule.newTexture("Resources/Models/Rocks/normal.tga", texCreateInfo);
 
     auto grass1Diffuse = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png", texCreateInfo);
-
     auto grass1Normal = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png", texCreateInfo);
-
     auto grass1Specular = objectModule.newTexture("Resources/Textures/grassRock/aerial_grass_rock_OccRoughMet_2k.png", texCreateInfo);
 
     auto gravel1Diffuse = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_diff_2k.png", texCreateInfo);
-
     auto gravel1Normal = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_nor_2k.png", texCreateInfo);
-
-    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_rough_ao_2k.png", texCreateInfo);
+    auto gravel1Specular = objectModule.newTexture("Resources/Textures/rockGround/rock_ground_02_occRouMet.png", texCreateInfo);
 
     auto rocks1Diffuse = objectModule.newTexture("Resources/Textures/rock/rock_04_diff_2k.png", texCreateInfo);
-
     auto rocks1Normal = objectModule.newTexture("Resources/Textures/rock/rock_04_nor_2k.png", texCreateInfo);
-
-    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_rough_2k.png", texCreateInfo);
+    auto rocks1Specular = objectModule.newTexture("Resources/Textures/rock/rock_04_occRouMet.png", texCreateInfo);
 
     auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
 
@@ -92,17 +84,6 @@
     skyboxCreateInfo.magFilter = GL_LINEAR;
     skyboxCreateInfo.minFilter = GL_LINEAR;
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
-
-    auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox_02/nz.png", 
-                                "Resources/Textures/skybox_02/nx.png", 
-                                "Resources/Textures/skybox_02/px.png",
-                                "Resources/Textures/skybox_02/pz.png",
-                                "Resources/Textures/skybox_02/py.png",
-                                "Resources/Textures/skybox_02/ny.png");
-
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-    skyboxMat->setCubemap("cubemap", cubemap);
 
     Material* cliffsMat = objectModule.newMaterial(unlitColor, "cliffsMat", RenderType::Opaque);
     cliffsMat->setVec4("color", glm::vec4(0.678f, 0.262f, 0.0f, 1.0f));
@@ -139,10 +120,32 @@
 
 #pragma endregion
 
+#pragma region Skybox
+
+    {
+        TextureCreateInfo i = {};
+        i.minFilter = GL_LINEAR;
+        i.magFilter = GL_LINEAR;
+        i.wrapMode= GL_CLAMP_TO_EDGE;
+        CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_03/nz.hdr", 
+                                                                "Resources/Textures/skybox_03/nx.hdr", 
+                                                                "Resources/Textures/skybox_03/px.hdr",
+                                                                "Resources/Textures/skybox_03/pz.hdr",
+                                                                "Resources/Textures/skybox_03/py.hdr",
+                                                                "Resources/Textures/skybox_03/ny.hdr");
+
+        auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+        Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+        hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+    }
+
+#pragma endregion
+
 #pragma region Entities
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("barrel_biohazard");
+        Entity* entity = objectModule.getEntityPtrByName("Barrel_01.FBX/barrel_biohazard");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = barrel1Mat;
 
@@ -151,13 +154,13 @@
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("test_riverbed");
+        Entity* entity = objectModule.getEntityPtrByName("test_riverbed.FBX/test_riverbed");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = grassMat;
     }
 
     {
-        Entity* entity = objectModule.getEntityPtrByName("rocks_03");
+        Entity* entity = objectModule.getEntityPtrByName("rocks_03.FBX/rocks_03");
             auto mr = entity->getComponentPtr<MeshRenderer>();
                 mr->material = simpleLitMat;
 
@@ -168,7 +171,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Surface");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Surface");
         if(entity != nullptr)
         {
             auto mr = entity->getComponentPtr<MeshRenderer>();
@@ -190,7 +193,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Water");
+        auto entity = objectModule.getEntityPtrByName("Water.FBX/Water");
 
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = waterMat;
@@ -200,7 +203,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Cliffs");
+        auto entity = objectModule.getEntityPtrByName("Cliffs.FBX/Cliffs");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = rocksMat;
 
@@ -209,7 +212,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Left_bank");
+        auto entity = objectModule.getEntityPtrByName("Left_bank.FBX/Left_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -218,7 +221,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Right_bank");
+        auto entity = objectModule.getEntityPtrByName("Right_bank.FBX/Right_bank");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = grassMat;
 
@@ -227,7 +230,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Riverbed");
+        auto entity = objectModule.getEntityPtrByName("Riverbed.FBX/Riverbed");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = gravelMat;
 
@@ -236,7 +239,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Alpha_Joints");
+        auto entity = objectModule.getEntityPtrByName("House Dancing.FBX/Alpha_Joints");
         auto mr = entity->getComponentPtr<MeshRenderer>();
             mr->material = unlitSkinnedMat;
 
@@ -246,7 +249,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Sphere001");
+        auto entity = objectModule.getEntityPtrByName("unit_sphere.FBX/Sphere001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {-10.5f,0.0f,10.0f};
             t->getLocalScaleModifiable() *= 10;
@@ -262,7 +265,7 @@
     }
 
     {
-        auto entity = objectModule.getEntityPtrByName("Box001");
+        auto entity = objectModule.getEntityPtrByName("Box.FBX/Box001");
         auto t = entity->getComponentPtr<Transform>();
             t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
             t->getLocalScaleModifiable() *= 10;

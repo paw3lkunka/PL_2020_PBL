@@ -168,6 +168,10 @@ void ConsoleModule::receiveMessage(Message msg)
         //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;
 
+    case Event::RENDERER_ADD_TERRAIN_TO_QUEUE:
+        //std::cout << "console here: RENDERER_ADD_TERRAIN_TO_QUEUE.\n";
+        break;
+
     case Event::RENDERER_ADD_UI_TO_QUEUE:
         //std::cout << "console here: RENDERER_ADD_MESH_TO_QUEUE.\n";
         break;
@@ -259,7 +263,7 @@ void ConsoleModule::receiveMessage(Message msg)
     {
         auto data = msg.getValue<AttackData>();
         std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
-                << (data.success ? " , un" : ", ") << "successfull, "
+                << (data.success ? ",   " : ", un") << "successfull, "
                 << "direction: " << glm::to_string(data.direction) << std::endl;
     }
         break;
