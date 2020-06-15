@@ -266,6 +266,10 @@ void ConsoleModule::receiveMessage(Message msg)
     }
         break;
 
+    case Event::HP_0:
+        std::cout << "          YOU DIED" << std::endl;
+        break;
+
     case Event::ADD_CARGO:
         std::cout << "ADD_CARGO" << std::endl;
     break;
