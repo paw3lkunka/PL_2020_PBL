@@ -68,6 +68,8 @@ private:
     void saveAudioListener(AudioListener* componentPtr);
     void saveAudioSource(AudioSource* componentPtr);
     void saveCamera(Camera* componentPtr);
+    void saveThirdPersonCamera(ThirdPersonCamera* componentPtr);
+    void saveFirstPersonCamera(FirstPersonCamera* componentPtr);
     void saveMeshRenderer(MeshRenderer* componentPtr);
     void saveTerrainRenderer(TerrainRenderer* componentPtr);
     void saveSphereCollider(SphereCollider* componentPtr);

@@ -42,6 +42,8 @@ private:
     void readAudioSource(std::string name);
     void readAudioListener(std::string name);
     void readCamera(std::string name);
+    void readThirdPersonCamera(std::string name);
+    void readFirstPersonCamera(std::string name);
     void readMeshRenderer(std::string name);
     void readTerrainRenderer(std::string name);
     void readSphereCollider(std::string name);
@@ -54,6 +56,7 @@ private:
     void readSkeleton(std::string name);
     void readHydroBody(std::string name);
     void readHydroAccelerator(std::string name);
+    void readHydroCurrent(std::string name);
     void readKayak(std::string name);
     void readHideout(std::string name);
     void readEnemy(std::string name);
