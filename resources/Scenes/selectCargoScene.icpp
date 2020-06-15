@@ -1,4 +1,5 @@
 objectModule.newAudioClip("Resources/Audios/river.wav");
+objectModule.newAudioClip("Resources/Audios/test.wav");
 objectModule.newEntity(4, "Camera");
 {
     auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
@@ -32,15 +33,26 @@ objectModule.newEntity(2, "RiverFlow");
         so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
         so3->getClipsModifiable().push_back("Resources/Audios/river.wav");
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.1f;
+        so3->getGainModifiable() = 0.3f;
+        so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
+}
+
+objectModule.newEntity(2, "Sound_1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
+        so3->getClipsModifiable().push_back("Resources/Audios/test.wav");
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.3f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 }
 
 {
-    auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
-    auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
-    auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 128, "KosugiMaru-Regular");
 
     TextureCreateInfo info = {};
     info.format = GL_RGBA;
@@ -49,11 +61,13 @@ objectModule.newEntity(2, "RiverFlow");
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
 
-    auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+    auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto josefin = objectModule.newFont("Resources/Fonts/JosefinSans-Regular.ttf", 128, "JosefinSans-Regular");
+    auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
+    auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    auto rect_2_1 = objectModule.newTexture("Resources/Sprites/rect_2_1.png", info);
+    auto rect_16_9 = objectModule.newTexture("Resources/Sprites/rect_16_9.png", info);
 
-    auto uiMaterial = objectModule.newMaterial(uiShader, "UiStandardMat", RenderType::Transparent);
-    uiMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.5f});
-    uiMaterial->setTexture("sprite", buttonTest);
 
     glm::vec4 baseColorOn = {0.184f, 0.772f, 0.149f, 0.8f};
     glm::vec4 highlightedColorOn = {0.368f, 0.862f, 0.337f, 0.8f};
@@ -65,7 +79,7 @@ objectModule.newEntity(2, "RiverFlow");
 
     glm::vec4 inactiveColor = {0.0f, 0.0f, 0.0f, 0.8f};
 
-    glm::vec2 textScale = {0.25f, 0.25f};
+    glm::vec2 textScale = {0.23f, 0.23f};
 
     auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
     textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
@@ -79,7 +93,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
-            mat->setTexture("sprite", buttonTest);
+            mat->setTexture("sprite", rect_16_9);
             mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
             ui->material = mat;
     }
@@ -95,7 +109,7 @@ objectModule.newEntity(2, "RiverFlow");
         auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
             cui->material = objectModule.newMaterial(textShader, "SelectCargoTextMat", RenderType::Transparent);
             cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-            cui->mesh.font = font;
+            cui->mesh.font = josefin;
             cui->mesh.text = "Select Cargo:";
     }
 
@@ -109,7 +123,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto mat = objectModule.newMaterial(uiShader, "PlayButton", RenderType::Opaque);
-            mat->setTexture("sprite", buttonTest);
+            mat->setTexture("sprite", rect_2_1);
             mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
             ui->material = mat;
 
@@ -124,13 +138,13 @@ objectModule.newEntity(2, "RiverFlow");
         {
             auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
             crt->getSizeModifiable() = {0.4f, 0.4f};
-            crt->getLocalPositionModifiable() = {-60.0f, -15.0f};
+            crt->getLocalPositionModifiable() = {-75.0f, -15.0f};
             crt->setParent(rt);
 
         auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
             cui->material = objectModule.newMaterial(textShader, "PlayText", RenderType::Transparent);
             cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-            cui->mesh.font = font;
+            cui->mesh.font = courier;
             cui->mesh.text = "Play!";
         }
     }
@@ -156,8 +170,8 @@ objectModule.newEntity(2, "RiverFlow");
                 tb->inactiveColor = inactiveColor;
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_1", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -172,7 +186,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo1NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -187,7 +201,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo1WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -202,7 +216,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo1IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -227,8 +241,8 @@ objectModule.newEntity(2, "RiverFlow");
                 tb->inactiveColor = inactiveColor;
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_2", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -243,7 +257,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo2NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -258,7 +272,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo2WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -273,7 +287,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo2IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -299,8 +313,8 @@ objectModule.newEntity(2, "RiverFlow");
                 
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_3", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -315,7 +329,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo3NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -330,7 +344,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo3WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -345,7 +359,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo3IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -371,8 +385,8 @@ objectModule.newEntity(2, "RiverFlow");
                 
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_4", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -387,7 +401,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo4NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -402,7 +416,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo4WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -417,7 +431,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo4IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -442,8 +456,8 @@ objectModule.newEntity(2, "RiverFlow");
                 tb->inactiveColor = inactiveColor;
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_5", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -458,7 +472,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo5NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -473,7 +487,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo5WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -488,7 +502,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo5IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -514,8 +528,8 @@ objectModule.newEntity(2, "RiverFlow");
                 
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_6", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -530,7 +544,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo6NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -545,7 +559,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo6WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -560,7 +574,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo6IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -586,8 +600,8 @@ objectModule.newEntity(2, "RiverFlow");
                 
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_7", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -602,7 +616,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo7NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -617,7 +631,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo7WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -632,7 +646,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo7IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -657,8 +671,8 @@ objectModule.newEntity(2, "RiverFlow");
                 tb->inactiveColor = inactiveColor;
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_8", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -673,7 +687,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo8NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -688,7 +702,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo8WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -703,7 +717,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo8IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
@@ -729,8 +743,8 @@ objectModule.newEntity(2, "RiverFlow");
                 
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = objectModule.getTexturePtrByFilePath("Resources/Sprites/button_test.png");
-                auto shader = objectModule.getMaterialPtrByName("UiStandardMat")->getShaderPtr();
+                auto tex = rect_2_1;
+                auto shader = uiShader;
                 uiR->material = objectModule.newMaterial(shader, "Toggle_9", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
             }
@@ -745,7 +759,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo9NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = josefin;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
@@ -760,7 +774,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo9WeightMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Weight";
 
                 tb->weightText = cui;
@@ -775,7 +789,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo9IncomeMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = font;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Income";
                 tb->incomeText = cui;
             }
