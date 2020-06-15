@@ -50,6 +50,9 @@ public:
 private:
     bool cameraChanged = true;
 
+    bool switchDebugCameraControl = false;
+    bool switchGameplayCameraControl = false;
+
     Transform* transform;
     Camera* camera;
 };

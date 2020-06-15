@@ -1,13 +1,14 @@
 #include "CameraSystem.hpp"
 
+#include <glm/gtx/string_cast.hpp>
+
 #include "Core.hpp"
 #include "Entity.hpp"
 
 #include "Camera.inl"
 #include "Transform.hh"
 #include "Message.inl"
-
-#include <glm/gtx/string_cast.hpp>
+#include "GamepadDataStructures.inl"
 
 Camera* CameraSystem::mainCamera = nullptr;
 
@@ -16,9 +17,37 @@ void CameraSystem::receiveMessage(Message msg)
     switch (msg.getEvent())
     {
         case Event::WINDOW_RESIZED:
-            glm::ivec2 window = msg.getValue<glm::ivec2>();
-            mainCamera->projectionChanged = true;
-            mainCamera->getFrustumModifiable().aspectRatio = (float)window.x / (float)window.y;
+            {
+                glm::ivec2 window = msg.getValue<glm::ivec2>();
+                mainCamera->projectionChanged = true;
+                mainCamera->getFrustumModifiable().aspectRatio = (float)window.x / (float)window.y;
+            }
+            break;
+
+        case Event::KEY_PRESSED:
+            {
+                switch(msg.getValue<int>())
+                {
+                    case GLFW_KEY_F1:
+                        switchDebugCameraControl = !switchDebugCameraControl;
+                        break;
+
+                    case GLFW_KEY_C:
+                        switchGameplayCameraControl = !switchGameplayCameraControl;
+                        break;
+                }
+            }
+            break;
+
+        case Event::GAMEPAD_BUTTON_PRESSED:
+            {
+                GamepadButtonData data = msg.getValue<GamepadButtonData>();
+                switch(data.buttonId)
+                {
+                    case GLFW_GAMEPAD_BUTTON_BACK:
+                        switchGameplayCameraControl = !switchGameplayCameraControl;
+                }
+            }
             break;
     }
 }
@@ -110,5 +139,38 @@ void CameraSystem::frameUpdate()
             // std::cout << "Cam right normalized: " << glm::to_string(frustum.right) << '\n';
         
         camera->projectionChanged = false;
+    }
+
+    if(switchDebugCameraControl)
+    {
+        CameraControl& control = camera->control;
+        if(control == CameraControl::Free)
+        {
+            control = CameraControl::ThirdPerson;
+        }
+        else
+        {
+            control = CameraControl::Free;
+        }
+        
+
+        switchDebugCameraControl = false;
+    }
+
+    if(switchGameplayCameraControl)
+    {
+        CameraControl& control = camera->control;
+        switch(control)
+        {
+            case CameraControl::ThirdPerson:
+                control = CameraControl::FirstPerson;
+                break;
+
+            case CameraControl::FirstPerson:
+                control = control = CameraControl::ThirdPerson;
+                break;
+        }
+
+        switchGameplayCameraControl = false;
     }
 }

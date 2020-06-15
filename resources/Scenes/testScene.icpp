@@ -37,7 +37,6 @@ hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
 
 GetCore().rendererModule.setSkybox(hdrSkyboxMat);
 
-
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
     {
         unlitInstancedMat->setTexture("mainTex", texture);
