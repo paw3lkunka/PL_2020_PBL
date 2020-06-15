@@ -60,6 +60,11 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
                     kayakPtr->isDetected++;    
                 }            
             }
+            else
+            {
+                attackClear();
+            }
+            
         }
         else
         {
@@ -92,25 +97,35 @@ void EnemySystem::attack(glm::vec3 dir)
     {
         enemyAttackPtr->attackCounter += enemyAttackPtr->incrementValue;
 
+        if (enemyAnimationPtr && enemyAttackPtr->attackCounter >= enemyAnimationPtr->shootTrailTime)
+        {
+            Shoot::get().entityPtr->getComponentPtr<Transform>()->getLocalPositionModifiable() = glm::vec3(NAN, NAN, NAN);
+        }
+
         if (enemyAttackPtr->attackCounter >= enemyAttackPtr->activationValue)
         {
             enemyAttackPtr->attackCounter -= enemyAttackPtr->activationValue;
+            
             AttackData data;
+                data.enemyPtr = enemyPtr;
+                data.success = GetCore().randomFloat01L() < enemyAttackPtr->successChance;
 
-            data.enemyPtr = enemyPtr;
-            if (GetCore().randomFloat01L() < enemyAttackPtr->successChance)
-            {
-                data.success = true;
-                data.direction = dir;
-            }
-            else
-            {
-                data.success = false;
-                glm::quat rot = glm::angleAxis( glm::radians(15.0f) * GetCore().coinToss(1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-                data.direction = glm::toMat4(rot) * glm::vec4(dir, 0.0f);
-            }
+            auto* shootT = Shoot::get().entityPtr->getComponentPtr<Transform>();
+                shootT->setParent(enemyTransformPtr);
+                shootT->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+                shootT->getLocalRotationModifiable() = Y_180_DEG * 
+                (
+                    data.success ? glm::quat(1.0f, 0.0f, 0.0f, 0.0f) : 
+                    glm::angleAxis( glm::radians(15.0f) * GetCore().coinToss(1.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+                );
 
             GetCore().messageBus.sendMessage(Message(Event::PLAYER_ATTACKED, data));
         }
     }
+}
+
+void EnemySystem::attackClear()
+{
+    Shoot::get().entityPtr->getComponentPtr<Transform>()->getLocalPositionModifiable() = glm::vec3(NAN, NAN, NAN);
+    enemyAttackPtr = 0;
 }

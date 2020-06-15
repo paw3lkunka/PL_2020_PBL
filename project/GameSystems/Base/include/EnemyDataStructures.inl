@@ -16,7 +16,7 @@ struct AttackData
     /**
      * @brief Attack direction. 
      */
-    glm::vec3 direction;
+    //glm::vec3 direction;
 
     /**
      * @brief if attack was successful. 
