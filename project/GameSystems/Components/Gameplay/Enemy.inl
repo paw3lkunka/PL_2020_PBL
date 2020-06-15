@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2020
-** pbl
-** File description:
-** Enemy
-*/
-
 #ifndef ENEMY__
 #define ENEMY__
 

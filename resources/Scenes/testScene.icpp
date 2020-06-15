@@ -4,6 +4,8 @@ auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitC
 auto unlitSkinned = objectModule.newShader("UnlitSkinned", "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
 objectModule.newAudioClip("Resources/Audios/shingeki.wav");
+objectModule.newAudioClip("Resources/Audios/river.wav");
+
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -12,6 +14,7 @@ TextureCreateInfo texCreateInfo = {};
 auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
 objectModule.newModel("Resources/Models/Box.FBX");
+objectModule.newModel("Resources/Models/BoneBox.FBX");
 objectModule.newModel("Resources/Models/unit_sphere.FBX");
 
 TextureCreateInfo skyboxCreateInfo = {};
@@ -33,7 +36,6 @@ Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", 
 hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
 
 GetCore().rendererModule.setSkybox(hdrSkyboxMat);
-
 
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
     {
@@ -254,7 +256,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
         MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
             Shader* shader = unlitColor;
-            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
                 material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
 
             meshRenderer->material = material;
@@ -425,6 +427,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
 
         auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
             a->lerpParameter = 0.25f;
+            a->shootTrailTime = 0.05f;
 
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->material = objectModule.getMaterialPtrByName("KULA");
@@ -434,4 +437,19 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             ea->activationValue = 100;
             ea->incrementValue = 1;
             ea->successChance = 0.5f;
+    }
+
+    auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+            t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
+            //t->setParent(enemy->getComponentPtr<Transform>());
+            t->setParent(&sceneModule.rootNode);
+            
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);
+
+        auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
     }

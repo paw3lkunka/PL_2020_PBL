@@ -32,8 +32,7 @@ Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders
 
 Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
 hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-
-GetCore().rendererModule.setSkybox(hdrSkyboxMat);
+rendererModule.setSkybox(hdrSkyboxMat);
 
 objectModule.newEntity(2, "directionalLight");
 {

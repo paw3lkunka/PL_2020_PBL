@@ -1,5 +1,5 @@
-#ifndef _CAMERACONTROLSYSTEM_HPP
-#define _CAMERACONTROLSYSTEM_HPP
+#ifndef _FREECAMERACONTROLSYSTEM_HPP
+#define _FREECAMERACONTROLSYSTEM_HPP
 
 #include "System.hpp"
 #include "IMsgReceiver.inl"
@@ -14,11 +14,11 @@ struct Camera;
  * @brief Camera control system responsible for simple input interpretation (fly around)
  * 
  */
-class CameraControlSystem : public System, public IMsgReceiver
+class FreeCameraControlSystem : public System, public IMsgReceiver
 {
 public:
-    CameraControlSystem() = default;
-    virtual ~CameraControlSystem() = default;
+    FreeCameraControlSystem() = default;
+    virtual ~FreeCameraControlSystem() = default;
 
     /**
      * @brief Searches for component with camera and transform
@@ -52,7 +52,7 @@ public:
 private:
     glm::vec3 movementVector = glm::vec3(0.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    float yaw = 0.0f;
+    float yaw = -90.0f;
     float pitch = 0.0f;
 
     bool usingMouse = false;
@@ -61,4 +61,4 @@ private:
     Camera* camera;
 };
 
-#endif // _CAMERACONTROLSYSTEM_HPP
+#endif // _FREECAMERACONTROLSYSTEM_HPP
