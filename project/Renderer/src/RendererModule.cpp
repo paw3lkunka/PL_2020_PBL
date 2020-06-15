@@ -648,13 +648,17 @@ void RendererModule::render()
         glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for(auto& packet : terrainQueue)
+        for(auto packet : terrainQueue)
         {
+            packet->material->getTexturePtr("diffuse0")->bind(0);
+            gbufferShader->setInt("diffuse", 0);
             packet->renderWithShader(gbufferShader, VP);
         }
 
-        for(auto& packet : opaqueQueue)
+        for(auto packet : opaqueQueue)
         {
+            packet->material->getTexturePtr("diffuse")->bind(0);
+            gbufferShader->setInt("diffuse", 0);
             packet->renderWithShader(gbufferShader, VP);
         }
 
@@ -717,10 +721,22 @@ void RendererModule::render()
         // ! +++++ Opaque +++++
         while(!opaqueQueue.empty())
         {
+            // HACK: Only one of the materials should be double sided
+            std::string matName = std::string(opaqueQueue.front()->material->getName());
+            bool doubleSided = matName == "Conifer Leaves BODT" ||
+                                matName == "Grass_rushes";
+            if (doubleSided)
+            {
+                glDisable(GL_CULL_FACE);
+            }
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
+            if (doubleSided)
+            {
+                glEnable(GL_CULL_FACE);
+            }
         }
 
         // ! +++++ Skybox +++++

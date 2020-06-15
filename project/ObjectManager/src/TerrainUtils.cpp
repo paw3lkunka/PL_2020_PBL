@@ -33,7 +33,7 @@ void TerrainUtils::loadAllTerrainChunks()
     auto occroumetTex = GetCore().objectModule.newTexture("Resources/Textures/occroumet.png", texCreateInfo);
 
     Material* terrainMat = GetCore().objectModule.newMaterial(terrainShader, "terrainMat", RenderType::Opaque);
-    glm::vec2 uv0s = {2.0f, 2.0f};
+    glm::vec2 uv0s = {4.0f, 4.0f};
     terrainMat->setVec2("uv0scale", uv0s);
     terrainMat->setTexture("diffuse0", rockGrassDiffuse);
     terrainMat->setTexture("normal0", rockGrassNormal);
@@ -142,6 +142,8 @@ void TerrainUtils::loadExportedUnityModels()
     if (exportInfo.is_open())
     {
         std::map<std::string, int> loadedModels;
+        std::vector<MeshRenderer*> currentSubmeshes;
+        int submeshIndex = 0;
         std::string modelPath = "";
         glm::vec3 position;
         glm::quat rotation;
@@ -154,6 +156,9 @@ void TerrainUtils::loadExportedUnityModels()
             index = line.find_first_of('$');
             if (index != std::string::npos)
             {
+                currentSubmeshes.clear();
+                submeshIndex = 0;
+
                 modelPath = line.substr(line.find_first_of(':') + 1);
                 std::getline(exportInfo, line);
                 position = stringToVec3(line);
@@ -188,8 +193,6 @@ void TerrainUtils::loadExportedUnityModels()
                             rootTransform->getLocalRotationModifiable() = rotation;
                             rootTransform->getLocalScaleModifiable() = scale;
                             rootTransform->setParent(propsRootTransform);
-                            //rootTransform->setParent(GetCore().objectModule.getEntityPtrByName("Terrain")->getComponentPtr<Transform>());
-                            //rootTransform->setParent(&GetCore().sceneModule.rootNode);
 
                     int entitiesToCreate = existingModel->getComponentPtr<Transform>()->children.size();
                     if (entitiesToCreate > 1)
@@ -203,6 +206,7 @@ void TerrainUtils::loadExportedUnityModels()
                             auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
                                 mr->mesh = child->entityPtr->getComponentPtr<MeshRenderer>()->mesh;
                                 mr->material = child->entityPtr->getComponentPtr<MeshRenderer>()->material;
+                            currentSubmeshes.push_back(mr);
                         }
                     }
                     else
@@ -210,6 +214,7 @@ void TerrainUtils::loadExportedUnityModels()
                         auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
                             mr->mesh = existingModel->getComponentPtr<MeshRenderer>()->mesh;
                             mr->material = existingModel->getComponentPtr<MeshRenderer>()->material;
+                        currentSubmeshes.push_back(mr);
                     }
                 }
                 else
@@ -220,18 +225,156 @@ void TerrainUtils::loadExportedUnityModels()
                         t->getLocalRotationModifiable() = rotation;
                         t->getLocalScaleModifiable() = scale;
                         t->setParent(propsRootTransform);
-                        //t->setParent(GetCore().objectModule.getEntityPtrByName("Terrain")->getComponentPtr<Transform>());
-                        //t->setParent(&GetCore().sceneModule.rootNode);
+
+                    int entitiesToCreate = t->children.size();
+                    if (entitiesToCreate > 1)
+                    {
+                        auto children = existingModel->getComponentPtr<Transform>()->children;
+                        for(auto child : children)
+                        {
+                            auto mr = child->entityPtr->getComponentPtr<MeshRenderer>();
+                            currentSubmeshes.push_back(mr);
+                        }
+                    }
+                    else
+                    {
+                        currentSubmeshes.push_back(existingModel->getComponentPtr<MeshRenderer>());
+                    }
                 }
-                
             }
-            
+
+            index = line.find_first_of('%');
+            std::cout << index << std::endl;
+            if (index != std::string::npos)
+            {
+                std::string materialName = line.substr(line.find_first_of(':') + 1);
+                auto materialPtr = GetCore().objectModule.getMaterialPtrByName(materialName.c_str());
+                if (materialPtr != nullptr)
+                {
+                    currentSubmeshes[submeshIndex]->material = materialPtr;
+                }
+                submeshIndex++;
+            }
         }
     }
     else
     {
         std::cerr << "exportinfo.txt file not found!\n";
     }
+}
+
+void TerrainUtils::createMaterialsForModels()
+{
+    Shader* pbr = GetCore().objectModule.getShaderPtrByName("standardPbr");
+    Shader* pbrCutout = GetCore().objectModule.newShader("standardPbrCutout", "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.vert", "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.frag");
+
+    TextureCreateInfo tci = {};
+    tci.generateMipmaps = true;
+    tci.magFilter = GL_LINEAR;
+    tci.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    tci.wrapMode = GL_REPEAT;
+
+    TextureCreateInfo tci_clamp = {};
+    tci_clamp.generateMipmaps = true;
+    tci_clamp.magFilter = GL_LINEAR;
+    tci_clamp.minFilter = GL_LINEAR_MIPMAP_LINEAR;
+    tci_clamp.wrapMode = GL_CLAMP_TO_EDGE;
+
+    auto emptyOccRouMet = GetCore().objectModule.newTexture("Resources/Textures/occroumet.png", tci);
+
+    auto albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png", tci);
+    auto normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Conifer Bark Array BODT-normal.png", tci);
+    auto occRouMet = GetCore().objectModule.newTexture("Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png", tci);
+
+    auto material = GetCore().objectModule.newMaterial(pbr, "Conifer Bark Array BODT", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    material = GetCore().objectModule.newMaterial(pbr, "Conifer Bark Simple BODT", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/BODT Conifer Branches-albedo.png", tci_clamp);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/BODT Conifer Branches-normal.png", tci_clamp);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "Conifer Leaves BODT", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_01", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_02_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_02_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_02", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_03_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_03_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_03", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_04_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_04_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_04", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_05_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_05_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_05", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_06", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_06", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_D.TGA", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_06_N.TGA", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "M_Rock_06", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/rushes-diffuse.tga", tci_clamp);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/rushes-normal.tga", tci_clamp);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "Grass_rushes", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", emptyOccRouMet);
 }
 
 glm::vec3 TerrainUtils::stringToVec3(std::string line)

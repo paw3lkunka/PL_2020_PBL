@@ -5,10 +5,10 @@
         "cubemapsHdr": 1,
         "entities": 105,
         "fonts": 0,
-        "materials": 4,
+        "materials": 14,
         "meshes": 65,
-        "shaders": 5,
-        "textures": 68
+        "shaders": 6,
+        "textures": 87
     },
     "component000": {
         "entity id": 0,
@@ -47,10 +47,10 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.21315144002437592,
-            "x": 0.037584349513053894,
-            "y": 0.9614638686180115,
-            "z": -0.16953203082084656
+            "w": 0.25427690148353577,
+            "x": 0.04827597737312317,
+            "y": 0.9489742517471313,
+            "z": -0.18016837537288666
         },
         "localScale": {
             "x": 1.0,
@@ -63,12 +63,12 @@
     },
     "component003": {
         "color": {
-            "b": 1.0,
-            "g": 1.0,
+            "b": 0.3499999940395355,
+            "g": 0.800000011920929,
             "r": 1.0
         },
         "entity id": 1,
-        "intensity": 1.0,
+        "intensity": 3.0,
         "lightType": 0,
         "serializationID": 23,
         "type": "Light"
@@ -86,15 +86,15 @@
     "component005": {
         "entity id": 2,
         "localPosition": {
-            "x": 2.663839340209961,
-            "y": 23.733991622924805,
-            "z": -25.42853355407715
+            "x": -17.120342254638672,
+            "y": 6.450161933898926,
+            "z": 1.4260942935943604
         },
         "localRotation": {
-            "w": -0.14770010113716125,
-            "x": 0.005674020852893591,
-            "y": 0.9882869124412537,
-            "z": 0.03796586021780968
+            "w": 0.2930942177772522,
+            "x": -0.02358178049325943,
+            "y": 0.9527139663696289,
+            "z": 0.07665348798036575
         },
         "localScale": {
             "x": 1.0,
@@ -107,9 +107,9 @@
     },
     "component006": {
         "at": {
-            "x": 0.29150933027267456,
-            "y": -0.07671843469142914,
-            "z": 0.9534865617752075
+            "x": -0.554854691028595,
+            "y": -0.15988107025623322,
+            "z": 0.8164401054382324
         },
         "entity id": 2,
         "gain": 1.0,
@@ -117,9 +117,9 @@
         "serializationID": 27,
         "type": "AudioListener",
         "up": {
-            "x": 0.022430244833230972,
-            "y": 0.997052788734436,
-            "z": 0.07336621731519699
+            "x": -0.0898667722940445,
+            "y": 0.9871363043785095,
+            "z": 0.1322343349456787
         }
     },
     "component007": {
@@ -1662,8 +1662,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 295,
-        "transform parentID": 359,
+        "serializationID": 325,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component109": {
@@ -1684,14 +1684,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 298,
-        "transform parentID": 295,
+        "serializationID": 328,
+        "transform parentID": 325,
         "type": "Transform"
     },
     "component110": {
         "entity id": 55,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Bare BOTD LOD1",
-        "serializationID": 299,
+        "serializationID": 329,
         "type": "MeshRenderer"
     },
     "component111": {
@@ -1712,14 +1713,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 302,
-        "transform parentID": 295,
+        "serializationID": 332,
+        "transform parentID": 325,
         "type": "Transform"
     },
     "component112": {
         "entity id": 56,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 303,
+        "serializationID": 333,
         "type": "MeshRenderer"
     },
     "component113": {
@@ -1740,8 +1742,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 305,
-        "transform parentID": 359,
+        "serializationID": 335,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component114": {
@@ -1762,14 +1764,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 308,
-        "transform parentID": 305,
+        "serializationID": 338,
+        "transform parentID": 335,
         "type": "Transform"
     },
     "component115": {
         "entity id": 58,
+        "material": "Conifer Bark Simple BODT",
         "mesh": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Medium BOTD LOD1",
-        "serializationID": 309,
+        "serializationID": 339,
         "type": "MeshRenderer"
     },
     "component116": {
@@ -1790,14 +1793,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 312,
-        "transform parentID": 305,
+        "serializationID": 342,
+        "transform parentID": 335,
         "type": "Transform"
     },
     "component117": {
         "entity id": 59,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 313,
+        "serializationID": 343,
         "type": "MeshRenderer"
     },
     "component118": {
@@ -1818,8 +1822,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 315,
-        "transform parentID": 359,
+        "serializationID": 345,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component119": {
@@ -1840,14 +1844,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 318,
-        "transform parentID": 315,
+        "serializationID": 348,
+        "transform parentID": 345,
         "type": "Transform"
     },
     "component120": {
         "entity id": 61,
+        "material": "Conifer Bark Simple BODT",
         "mesh": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Small BOTD LOD1",
-        "serializationID": 319,
+        "serializationID": 349,
         "type": "MeshRenderer"
     },
     "component121": {
@@ -1868,14 +1873,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 322,
-        "transform parentID": 315,
+        "serializationID": 352,
+        "transform parentID": 345,
         "type": "Transform"
     },
     "component122": {
         "entity id": 62,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 323,
+        "serializationID": 353,
         "type": "MeshRenderer"
     },
     "component123": {
@@ -1896,8 +1902,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 325,
-        "transform parentID": 359,
+        "serializationID": 355,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component124": {
@@ -1918,14 +1924,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 328,
-        "transform parentID": 325,
+        "serializationID": 358,
+        "transform parentID": 355,
         "type": "Transform"
     },
     "component125": {
         "entity id": 64,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Tall BOTD LOD1",
-        "serializationID": 329,
+        "serializationID": 359,
         "type": "MeshRenderer"
     },
     "component126": {
@@ -1946,14 +1953,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 332,
-        "transform parentID": 325,
+        "serializationID": 362,
+        "transform parentID": 355,
         "type": "Transform"
     },
     "component127": {
         "entity id": 65,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 333,
+        "serializationID": 363,
         "type": "MeshRenderer"
     },
     "component128": {
@@ -1974,14 +1982,15 @@
             "y": 7.897307872772217,
             "z": 8.979372024536133
         },
-        "serializationID": 336,
-        "transform parentID": 359,
+        "serializationID": 366,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component129": {
         "entity id": 66,
+        "material": "Grass_rushes",
         "mesh": "Resources/Models/Unity/Plane002.obj/Details (2)",
-        "serializationID": 337,
+        "serializationID": 367,
         "type": "MeshRenderer"
     },
     "component130": {
@@ -2002,14 +2011,15 @@
             "y": 5.632500171661377,
             "z": 5.632500171661377
         },
-        "serializationID": 340,
-        "transform parentID": 359,
+        "serializationID": 370,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component131": {
         "entity id": 67,
+        "material": "M_Rock_02",
         "mesh": "Resources/Models/Unity/Rock_02_LOD1.obj/Rock_02_LOD1",
-        "serializationID": 341,
+        "serializationID": 371,
         "type": "MeshRenderer"
     },
     "component132": {
@@ -2030,14 +2040,15 @@
             "y": 5.7708001136779785,
             "z": 5.7708001136779785
         },
-        "serializationID": 344,
-        "transform parentID": 359,
+        "serializationID": 374,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component133": {
         "entity id": 68,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 345,
+        "serializationID": 375,
         "type": "MeshRenderer"
     },
     "component134": {
@@ -2058,14 +2069,15 @@
             "y": 6.207699775695801,
             "z": 6.207699775695801
         },
-        "serializationID": 348,
-        "transform parentID": 359,
+        "serializationID": 378,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component135": {
         "entity id": 69,
+        "material": "M_Rock_04",
         "mesh": "Resources/Models/Unity/Rock_04_LOD1.obj/Rock_04_LOD1",
-        "serializationID": 349,
+        "serializationID": 379,
         "type": "MeshRenderer"
     },
     "component136": {
@@ -2086,14 +2098,15 @@
             "y": 4.228899955749512,
             "z": 4.2289018630981445
         },
-        "serializationID": 352,
-        "transform parentID": 359,
+        "serializationID": 382,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component137": {
         "entity id": 70,
+        "material": "M_Rock_05",
         "mesh": "Resources/Models/Unity/Rock_05_LOD1.obj/Rock_05_LOD1",
-        "serializationID": 353,
+        "serializationID": 383,
         "type": "MeshRenderer"
     },
     "component138": {
@@ -2114,14 +2127,15 @@
             "y": 4.4680938720703125,
             "z": 4.468094825744629
         },
-        "serializationID": 356,
-        "transform parentID": 359,
+        "serializationID": 386,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component139": {
         "entity id": 71,
+        "material": "M_Rock_06",
         "mesh": "Resources/Models/Unity/Rock_06_LOD1.obj/Rock_06_LOD1",
-        "serializationID": 357,
+        "serializationID": 387,
         "type": "MeshRenderer"
     },
     "component140": {
@@ -2142,7 +2156,7 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 359,
+        "serializationID": 389,
         "transform parentID": 0,
         "type": "Transform"
     },
@@ -2164,8 +2178,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 361,
-        "transform parentID": 359,
+        "serializationID": 391,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component142": {
@@ -2186,14 +2200,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 363,
-        "transform parentID": 361,
+        "serializationID": 393,
+        "transform parentID": 391,
         "type": "Transform"
     },
     "component143": {
         "entity id": 74,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 364,
+        "serializationID": 394,
         "type": "MeshRenderer"
     },
     "component144": {
@@ -2214,14 +2229,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 366,
-        "transform parentID": 361,
+        "serializationID": 396,
+        "transform parentID": 391,
         "type": "Transform"
     },
     "component145": {
         "entity id": 75,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Tall BOTD LOD1",
-        "serializationID": 367,
+        "serializationID": 397,
         "type": "MeshRenderer"
     },
     "component146": {
@@ -2242,8 +2258,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 369,
-        "transform parentID": 359,
+        "serializationID": 399,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component147": {
@@ -2264,14 +2280,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 371,
-        "transform parentID": 369,
+        "serializationID": 401,
+        "transform parentID": 399,
         "type": "Transform"
     },
     "component148": {
         "entity id": 77,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 372,
+        "serializationID": 402,
         "type": "MeshRenderer"
     },
     "component149": {
@@ -2292,14 +2309,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 374,
-        "transform parentID": 369,
+        "serializationID": 404,
+        "transform parentID": 399,
         "type": "Transform"
     },
     "component150": {
         "entity id": 78,
+        "material": "Conifer Bark Simple BODT",
         "mesh": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Small BOTD LOD1",
-        "serializationID": 375,
+        "serializationID": 405,
         "type": "MeshRenderer"
     },
     "component151": {
@@ -2320,8 +2338,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 377,
-        "transform parentID": 359,
+        "serializationID": 407,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component152": {
@@ -2342,14 +2360,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 379,
-        "transform parentID": 377,
+        "serializationID": 409,
+        "transform parentID": 407,
         "type": "Transform"
     },
     "component153": {
         "entity id": 80,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 380,
+        "serializationID": 410,
         "type": "MeshRenderer"
     },
     "component154": {
@@ -2370,14 +2389,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 382,
-        "transform parentID": 377,
+        "serializationID": 412,
+        "transform parentID": 407,
         "type": "Transform"
     },
     "component155": {
         "entity id": 81,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Bare BOTD LOD1",
-        "serializationID": 383,
+        "serializationID": 413,
         "type": "MeshRenderer"
     },
     "component156": {
@@ -2398,8 +2418,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 385,
-        "transform parentID": 359,
+        "serializationID": 415,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component157": {
@@ -2420,14 +2440,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 387,
-        "transform parentID": 385,
+        "serializationID": 417,
+        "transform parentID": 415,
         "type": "Transform"
     },
     "component158": {
         "entity id": 83,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 388,
+        "serializationID": 418,
         "type": "MeshRenderer"
     },
     "component159": {
@@ -2448,14 +2469,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 390,
-        "transform parentID": 385,
+        "serializationID": 420,
+        "transform parentID": 415,
         "type": "Transform"
     },
     "component160": {
         "entity id": 84,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Tall BOTD LOD1",
-        "serializationID": 391,
+        "serializationID": 421,
         "type": "MeshRenderer"
     },
     "component161": {
@@ -2476,8 +2498,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 393,
-        "transform parentID": 359,
+        "serializationID": 423,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component162": {
@@ -2498,14 +2520,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 395,
-        "transform parentID": 393,
+        "serializationID": 425,
+        "transform parentID": 423,
         "type": "Transform"
     },
     "component163": {
         "entity id": 86,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 396,
+        "serializationID": 426,
         "type": "MeshRenderer"
     },
     "component164": {
@@ -2526,14 +2549,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 398,
-        "transform parentID": 393,
+        "serializationID": 428,
+        "transform parentID": 423,
         "type": "Transform"
     },
     "component165": {
         "entity id": 87,
+        "material": "Conifer Bark Simple BODT",
         "mesh": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Medium BOTD LOD1",
-        "serializationID": 399,
+        "serializationID": 429,
         "type": "MeshRenderer"
     },
     "component166": {
@@ -2554,8 +2578,8 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 401,
-        "transform parentID": 359,
+        "serializationID": 431,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component167": {
@@ -2576,14 +2600,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 403,
-        "transform parentID": 401,
+        "serializationID": 433,
+        "transform parentID": 431,
         "type": "Transform"
     },
     "component168": {
         "entity id": 89,
+        "material": "Conifer Leaves BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 404,
+        "serializationID": 434,
         "type": "MeshRenderer"
     },
     "component169": {
@@ -2604,14 +2629,15 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 406,
-        "transform parentID": 401,
+        "serializationID": 436,
+        "transform parentID": 431,
         "type": "Transform"
     },
     "component170": {
         "entity id": 90,
+        "material": "Conifer Bark Array BODT",
         "mesh": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Bare BOTD LOD1",
-        "serializationID": 407,
+        "serializationID": 437,
         "type": "MeshRenderer"
     },
     "component171": {
@@ -2632,14 +2658,15 @@
             "y": 5.770801067352295,
             "z": 5.770802021026611
         },
-        "serializationID": 409,
-        "transform parentID": 359,
+        "serializationID": 439,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component172": {
         "entity id": 91,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 410,
+        "serializationID": 440,
         "type": "MeshRenderer"
     },
     "component173": {
@@ -2660,14 +2687,15 @@
             "y": 4.085713863372803,
             "z": 4.085714817047119
         },
-        "serializationID": 412,
-        "transform parentID": 359,
+        "serializationID": 442,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component174": {
         "entity id": 92,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 413,
+        "serializationID": 443,
         "type": "MeshRenderer"
     },
     "component175": {
@@ -2688,14 +2716,15 @@
             "y": 8.509095191955566,
             "z": 8.509095191955566
         },
-        "serializationID": 415,
-        "transform parentID": 359,
+        "serializationID": 445,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component176": {
         "entity id": 93,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 416,
+        "serializationID": 446,
         "type": "MeshRenderer"
     },
     "component177": {
@@ -2716,14 +2745,15 @@
             "y": 7.268700122833252,
             "z": 7.268700122833252
         },
-        "serializationID": 418,
-        "transform parentID": 359,
+        "serializationID": 448,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component178": {
         "entity id": 94,
+        "material": "M_Rock_02",
         "mesh": "Resources/Models/Unity/Rock_02_LOD1.obj/Rock_02_LOD1",
-        "serializationID": 419,
+        "serializationID": 449,
         "type": "MeshRenderer"
     },
     "component179": {
@@ -2744,14 +2774,15 @@
             "y": 4.085713863372803,
             "z": 4.085713863372803
         },
-        "serializationID": 421,
-        "transform parentID": 359,
+        "serializationID": 451,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component180": {
         "entity id": 95,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 422,
+        "serializationID": 452,
         "type": "MeshRenderer"
     },
     "component181": {
@@ -2772,14 +2803,15 @@
             "y": 8.568159103393555,
             "z": 8.568160057067871
         },
-        "serializationID": 424,
-        "transform parentID": 359,
+        "serializationID": 454,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component182": {
         "entity id": 96,
+        "material": "M_Rock_02",
         "mesh": "Resources/Models/Unity/Rock_02_LOD1.obj/Rock_02_LOD1",
-        "serializationID": 425,
+        "serializationID": 455,
         "type": "MeshRenderer"
     },
     "component183": {
@@ -2800,14 +2832,15 @@
             "y": 4.1992340087890625,
             "z": 4.1992340087890625
         },
-        "serializationID": 427,
-        "transform parentID": 359,
+        "serializationID": 457,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component184": {
         "entity id": 97,
+        "material": "M_Rock_05",
         "mesh": "Resources/Models/Unity/Rock_05_LOD1.obj/Rock_05_LOD1",
-        "serializationID": 428,
+        "serializationID": 458,
         "type": "MeshRenderer"
     },
     "component185": {
@@ -2828,14 +2861,15 @@
             "y": 4.085713863372803,
             "z": 4.085713863372803
         },
-        "serializationID": 430,
-        "transform parentID": 359,
+        "serializationID": 460,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component186": {
         "entity id": 98,
+        "material": "M_Rock_03",
         "mesh": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 431,
+        "serializationID": 461,
         "type": "MeshRenderer"
     },
     "component187": {
@@ -2856,14 +2890,15 @@
             "y": 4.228899955749512,
             "z": 4.228899955749512
         },
-        "serializationID": 433,
-        "transform parentID": 359,
+        "serializationID": 463,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component188": {
         "entity id": 99,
+        "material": "M_Rock_05",
         "mesh": "Resources/Models/Unity/Rock_05_LOD1.obj/Rock_05_LOD1",
-        "serializationID": 434,
+        "serializationID": 464,
         "type": "MeshRenderer"
     },
     "component189": {
@@ -2884,14 +2919,15 @@
             "y": 6.0301618576049805,
             "z": 6.0301618576049805
         },
-        "serializationID": 436,
-        "transform parentID": 359,
+        "serializationID": 466,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component190": {
         "entity id": 100,
+        "material": "M_Rock_06",
         "mesh": "Resources/Models/Unity/Rock_06_LOD1.obj/Rock_06_LOD1",
-        "serializationID": 437,
+        "serializationID": 467,
         "type": "MeshRenderer"
     },
     "component191": {
@@ -2912,14 +2948,15 @@
             "y": 9.333449363708496,
             "z": 9.333450317382813
         },
-        "serializationID": 439,
-        "transform parentID": 359,
+        "serializationID": 469,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component192": {
         "entity id": 101,
+        "material": "M_Rock_04",
         "mesh": "Resources/Models/Unity/Rock_04_LOD1.obj/Rock_04_LOD1",
-        "serializationID": 440,
+        "serializationID": 470,
         "type": "MeshRenderer"
     },
     "component193": {
@@ -2940,14 +2977,15 @@
             "y": 7.897307872772217,
             "z": 8.979372024536133
         },
-        "serializationID": 442,
-        "transform parentID": 359,
+        "serializationID": 472,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component194": {
         "entity id": 102,
+        "material": "Grass_rushes",
         "mesh": "Resources/Models/Unity/Plane002.obj/Details (2)",
-        "serializationID": 443,
+        "serializationID": 473,
         "type": "MeshRenderer"
     },
     "component195": {
@@ -2968,14 +3006,15 @@
             "y": 7.897312164306641,
             "z": 8.979373931884766
         },
-        "serializationID": 445,
-        "transform parentID": 359,
+        "serializationID": 475,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component196": {
         "entity id": 103,
+        "material": "Grass_rushes",
         "mesh": "Resources/Models/Unity/Plane002.obj/Details (2)",
-        "serializationID": 446,
+        "serializationID": 476,
         "type": "MeshRenderer"
     },
     "component197": {
@@ -2996,14 +3035,15 @@
             "y": 7.897307872772217,
             "z": 8.979372024536133
         },
-        "serializationID": 448,
-        "transform parentID": 359,
+        "serializationID": 478,
+        "transform parentID": 389,
         "type": "Transform"
     },
     "component198": {
         "entity id": 104,
+        "material": "Grass_rushes",
         "mesh": "Resources/Models/Unity/Plane002.obj/Details (2)",
-        "serializationID": 449,
+        "serializationID": 479,
         "type": "MeshRenderer"
     },
     "cubemapHdr000": {
@@ -3512,451 +3552,451 @@
     },
     "entity054": {
         "components": [
-            295
+            325
         ],
         "id": 54,
         "name": "Conifer Bare LOD1 Instance.obj",
-        "serializationID": 294
-    },
-    "entity055": {
-        "components": [
-            298,
-            299
-        ],
-        "id": 55,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh0",
-        "serializationID": 297
-    },
-    "entity056": {
-        "components": [
-            302,
-            303
-        ],
-        "id": 56,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh1",
-        "serializationID": 301
-    },
-    "entity057": {
-        "components": [
-            305
-        ],
-        "id": 57,
-        "name": "Conifer Medium LOD1 Instance.obj",
-        "serializationID": 304
-    },
-    "entity058": {
-        "components": [
-            308,
-            309
-        ],
-        "id": 58,
-        "name": "Conifer Medium LOD1 Instance.obj/mesh0",
-        "serializationID": 307
-    },
-    "entity059": {
-        "components": [
-            312,
-            313
-        ],
-        "id": 59,
-        "name": "Conifer Medium LOD1 Instance.obj/mesh1",
-        "serializationID": 311
-    },
-    "entity060": {
-        "components": [
-            315
-        ],
-        "id": 60,
-        "name": "Conifer Small LOD1 Instance.obj",
-        "serializationID": 314
-    },
-    "entity061": {
-        "components": [
-            318,
-            319
-        ],
-        "id": 61,
-        "name": "Conifer Small LOD1 Instance.obj/mesh0",
-        "serializationID": 317
-    },
-    "entity062": {
-        "components": [
-            322,
-            323
-        ],
-        "id": 62,
-        "name": "Conifer Small LOD1 Instance.obj/mesh1",
-        "serializationID": 321
-    },
-    "entity063": {
-        "components": [
-            325
-        ],
-        "id": 63,
-        "name": "Conifer Tall LOD1 Instance.obj",
         "serializationID": 324
     },
-    "entity064": {
+    "entity055": {
         "components": [
             328,
             329
         ],
-        "id": 64,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh0",
+        "id": 55,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh0",
         "serializationID": 327
     },
-    "entity065": {
+    "entity056": {
         "components": [
             332,
             333
         ],
-        "id": 65,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh1",
+        "id": 56,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh1",
         "serializationID": 331
     },
-    "entity066": {
+    "entity057": {
         "components": [
-            336,
-            337
+            335
         ],
-        "id": 66,
-        "name": "Plane002.obj/mesh0",
-        "serializationID": 335
+        "id": 57,
+        "name": "Conifer Medium LOD1 Instance.obj",
+        "serializationID": 334
     },
-    "entity067": {
+    "entity058": {
         "components": [
-            340,
-            341
+            338,
+            339
         ],
-        "id": 67,
-        "name": "Rock_02_LOD1.obj/mesh0",
-        "serializationID": 339
+        "id": 58,
+        "name": "Conifer Medium LOD1 Instance.obj/mesh0",
+        "serializationID": 337
     },
-    "entity068": {
+    "entity059": {
         "components": [
-            344,
+            342,
+            343
+        ],
+        "id": 59,
+        "name": "Conifer Medium LOD1 Instance.obj/mesh1",
+        "serializationID": 341
+    },
+    "entity060": {
+        "components": [
             345
         ],
-        "id": 68,
-        "name": "Rock_03_LOD1.obj/mesh0",
-        "serializationID": 343
+        "id": 60,
+        "name": "Conifer Small LOD1 Instance.obj",
+        "serializationID": 344
     },
-    "entity069": {
+    "entity061": {
         "components": [
             348,
             349
         ],
-        "id": 69,
-        "name": "Rock_04_LOD1.obj/mesh0",
+        "id": 61,
+        "name": "Conifer Small LOD1 Instance.obj/mesh0",
         "serializationID": 347
     },
-    "entity070": {
+    "entity062": {
         "components": [
             352,
             353
         ],
-        "id": 70,
-        "name": "Rock_05_LOD1.obj/mesh0",
+        "id": 62,
+        "name": "Conifer Small LOD1 Instance.obj/mesh1",
         "serializationID": 351
     },
-    "entity071": {
+    "entity063": {
         "components": [
-            356,
-            357
+            355
         ],
-        "id": 71,
-        "name": "Rock_06_LOD1.obj/mesh0",
-        "serializationID": 355
+        "id": 63,
+        "name": "Conifer Tall LOD1 Instance.obj",
+        "serializationID": 354
     },
-    "entity072": {
+    "entity064": {
         "components": [
+            358,
             359
         ],
-        "id": 72,
-        "name": "propsRoot",
-        "serializationID": 358
+        "id": 64,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh0",
+        "serializationID": 357
     },
-    "entity073": {
+    "entity065": {
         "components": [
-            361
+            362,
+            363
         ],
-        "id": 73,
-        "name": "Conifer Tall LOD1 Instance.obj 2",
-        "serializationID": 360
+        "id": 65,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh1",
+        "serializationID": 361
     },
-    "entity074": {
-        "components": [
-            363,
-            364
-        ],
-        "id": 74,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh1 2",
-        "serializationID": 362
-    },
-    "entity075": {
+    "entity066": {
         "components": [
             366,
             367
         ],
-        "id": 75,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh0 2",
+        "id": 66,
+        "name": "Plane002.obj/mesh0",
         "serializationID": 365
     },
-    "entity076": {
+    "entity067": {
         "components": [
-            369
+            370,
+            371
         ],
-        "id": 76,
-        "name": "Conifer Small LOD1 Instance.obj 2",
-        "serializationID": 368
+        "id": 67,
+        "name": "Rock_02_LOD1.obj/mesh0",
+        "serializationID": 369
     },
-    "entity077": {
-        "components": [
-            371,
-            372
-        ],
-        "id": 77,
-        "name": "Conifer Small LOD1 Instance.obj/mesh1 2",
-        "serializationID": 370
-    },
-    "entity078": {
+    "entity068": {
         "components": [
             374,
             375
         ],
-        "id": 78,
-        "name": "Conifer Small LOD1 Instance.obj/mesh0 2",
+        "id": 68,
+        "name": "Rock_03_LOD1.obj/mesh0",
         "serializationID": 373
     },
-    "entity079": {
+    "entity069": {
         "components": [
-            377
+            378,
+            379
         ],
-        "id": 79,
-        "name": "Conifer Bare LOD1 Instance.obj 2",
-        "serializationID": 376
+        "id": 69,
+        "name": "Rock_04_LOD1.obj/mesh0",
+        "serializationID": 377
     },
-    "entity080": {
-        "components": [
-            379,
-            380
-        ],
-        "id": 80,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh1 2",
-        "serializationID": 378
-    },
-    "entity081": {
+    "entity070": {
         "components": [
             382,
             383
         ],
-        "id": 81,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh0 2",
+        "id": 70,
+        "name": "Rock_05_LOD1.obj/mesh0",
         "serializationID": 381
     },
-    "entity082": {
+    "entity071": {
         "components": [
-            385
+            386,
+            387
         ],
-        "id": 82,
-        "name": "Conifer Tall LOD1 Instance.obj 3",
-        "serializationID": 384
+        "id": 71,
+        "name": "Rock_06_LOD1.obj/mesh0",
+        "serializationID": 385
     },
-    "entity083": {
+    "entity072": {
         "components": [
-            387,
-            388
+            389
         ],
-        "id": 83,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh1 3",
-        "serializationID": 386
+        "id": 72,
+        "name": "propsRoot",
+        "serializationID": 388
     },
-    "entity084": {
+    "entity073": {
         "components": [
-            390,
             391
         ],
-        "id": 84,
-        "name": "Conifer Tall LOD1 Instance.obj/mesh0 3",
-        "serializationID": 389
+        "id": 73,
+        "name": "Conifer Tall LOD1 Instance.obj 2",
+        "serializationID": 390
     },
-    "entity085": {
+    "entity074": {
         "components": [
-            393
+            393,
+            394
         ],
-        "id": 85,
-        "name": "Conifer Medium LOD1 Instance.obj 2",
+        "id": 74,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh1 2",
         "serializationID": 392
     },
-    "entity086": {
+    "entity075": {
         "components": [
-            395,
-            396
+            396,
+            397
         ],
-        "id": 86,
-        "name": "Conifer Medium LOD1 Instance.obj/mesh1 2",
-        "serializationID": 394
+        "id": 75,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh0 2",
+        "serializationID": 395
     },
-    "entity087": {
+    "entity076": {
         "components": [
-            398,
             399
         ],
-        "id": 87,
-        "name": "Conifer Medium LOD1 Instance.obj/mesh0 2",
-        "serializationID": 397
+        "id": 76,
+        "name": "Conifer Small LOD1 Instance.obj 2",
+        "serializationID": 398
     },
-    "entity088": {
+    "entity077": {
         "components": [
-            401
+            401,
+            402
         ],
-        "id": 88,
-        "name": "Conifer Bare LOD1 Instance.obj 3",
+        "id": 77,
+        "name": "Conifer Small LOD1 Instance.obj/mesh1 2",
         "serializationID": 400
     },
-    "entity089": {
+    "entity078": {
         "components": [
-            403,
-            404
+            404,
+            405
         ],
-        "id": 89,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh1 3",
-        "serializationID": 402
+        "id": 78,
+        "name": "Conifer Small LOD1 Instance.obj/mesh0 2",
+        "serializationID": 403
     },
-    "entity090": {
+    "entity079": {
         "components": [
-            406,
             407
         ],
-        "id": 90,
-        "name": "Conifer Bare LOD1 Instance.obj/mesh0 3",
-        "serializationID": 405
+        "id": 79,
+        "name": "Conifer Bare LOD1 Instance.obj 2",
+        "serializationID": 406
     },
-    "entity091": {
+    "entity080": {
         "components": [
             409,
             410
         ],
-        "id": 91,
-        "name": "Rock_03_LOD1.obj 2",
+        "id": 80,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh1 2",
         "serializationID": 408
     },
-    "entity092": {
+    "entity081": {
         "components": [
             412,
             413
         ],
-        "id": 92,
-        "name": "Rock_03_LOD1.obj 3",
+        "id": 81,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh0 2",
         "serializationID": 411
     },
-    "entity093": {
+    "entity082": {
         "components": [
-            415,
-            416
+            415
         ],
-        "id": 93,
-        "name": "Rock_03_LOD1.obj 4",
+        "id": 82,
+        "name": "Conifer Tall LOD1 Instance.obj 3",
         "serializationID": 414
     },
-    "entity094": {
+    "entity083": {
         "components": [
-            418,
-            419
+            417,
+            418
         ],
-        "id": 94,
-        "name": "Rock_02_LOD1.obj 2",
-        "serializationID": 417
+        "id": 83,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh1 3",
+        "serializationID": 416
     },
-    "entity095": {
+    "entity084": {
         "components": [
-            421,
-            422
+            420,
+            421
         ],
-        "id": 95,
-        "name": "Rock_03_LOD1.obj 5",
-        "serializationID": 420
+        "id": 84,
+        "name": "Conifer Tall LOD1 Instance.obj/mesh0 3",
+        "serializationID": 419
     },
-    "entity096": {
+    "entity085": {
         "components": [
-            424,
-            425
+            423
         ],
-        "id": 96,
-        "name": "Rock_02_LOD1.obj 3",
-        "serializationID": 423
+        "id": 85,
+        "name": "Conifer Medium LOD1 Instance.obj 2",
+        "serializationID": 422
     },
-    "entity097": {
+    "entity086": {
         "components": [
-            427,
-            428
+            425,
+            426
         ],
-        "id": 97,
-        "name": "Rock_05_LOD1.obj 2",
-        "serializationID": 426
+        "id": 86,
+        "name": "Conifer Medium LOD1 Instance.obj/mesh1 2",
+        "serializationID": 424
     },
-    "entity098": {
+    "entity087": {
         "components": [
-            430,
+            428,
+            429
+        ],
+        "id": 87,
+        "name": "Conifer Medium LOD1 Instance.obj/mesh0 2",
+        "serializationID": 427
+    },
+    "entity088": {
+        "components": [
             431
         ],
-        "id": 98,
-        "name": "Rock_03_LOD1.obj 6",
-        "serializationID": 429
+        "id": 88,
+        "name": "Conifer Bare LOD1 Instance.obj 3",
+        "serializationID": 430
     },
-    "entity099": {
+    "entity089": {
         "components": [
             433,
             434
         ],
-        "id": 99,
-        "name": "Rock_05_LOD1.obj 3",
+        "id": 89,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh1 3",
         "serializationID": 432
     },
-    "entity100": {
+    "entity090": {
         "components": [
             436,
             437
         ],
-        "id": 100,
-        "name": "Rock_06_LOD1.obj 2",
+        "id": 90,
+        "name": "Conifer Bare LOD1 Instance.obj/mesh0 3",
         "serializationID": 435
     },
-    "entity101": {
+    "entity091": {
         "components": [
             439,
             440
         ],
-        "id": 101,
-        "name": "Rock_04_LOD1.obj 2",
+        "id": 91,
+        "name": "Rock_03_LOD1.obj 2",
         "serializationID": 438
     },
-    "entity102": {
+    "entity092": {
         "components": [
             442,
             443
         ],
-        "id": 102,
-        "name": "Plane002.obj 2",
+        "id": 92,
+        "name": "Rock_03_LOD1.obj 3",
         "serializationID": 441
     },
-    "entity103": {
+    "entity093": {
         "components": [
             445,
             446
         ],
-        "id": 103,
-        "name": "Plane002.obj 3",
+        "id": 93,
+        "name": "Rock_03_LOD1.obj 4",
         "serializationID": 444
     },
-    "entity104": {
+    "entity094": {
         "components": [
             448,
             449
         ],
+        "id": 94,
+        "name": "Rock_02_LOD1.obj 2",
+        "serializationID": 447
+    },
+    "entity095": {
+        "components": [
+            451,
+            452
+        ],
+        "id": 95,
+        "name": "Rock_03_LOD1.obj 5",
+        "serializationID": 450
+    },
+    "entity096": {
+        "components": [
+            454,
+            455
+        ],
+        "id": 96,
+        "name": "Rock_02_LOD1.obj 3",
+        "serializationID": 453
+    },
+    "entity097": {
+        "components": [
+            457,
+            458
+        ],
+        "id": 97,
+        "name": "Rock_05_LOD1.obj 2",
+        "serializationID": 456
+    },
+    "entity098": {
+        "components": [
+            460,
+            461
+        ],
+        "id": 98,
+        "name": "Rock_03_LOD1.obj 6",
+        "serializationID": 459
+    },
+    "entity099": {
+        "components": [
+            463,
+            464
+        ],
+        "id": 99,
+        "name": "Rock_05_LOD1.obj 3",
+        "serializationID": 462
+    },
+    "entity100": {
+        "components": [
+            466,
+            467
+        ],
+        "id": 100,
+        "name": "Rock_06_LOD1.obj 2",
+        "serializationID": 465
+    },
+    "entity101": {
+        "components": [
+            469,
+            470
+        ],
+        "id": 101,
+        "name": "Rock_04_LOD1.obj 2",
+        "serializationID": 468
+    },
+    "entity102": {
+        "components": [
+            472,
+            473
+        ],
+        "id": 102,
+        "name": "Plane002.obj 2",
+        "serializationID": 471
+    },
+    "entity103": {
+        "components": [
+            475,
+            476
+        ],
+        "id": 103,
+        "name": "Plane002.obj 3",
+        "serializationID": 474
+    },
+    "entity104": {
+        "components": [
+            478,
+            479
+        ],
         "id": 104,
         "name": "Plane002.obj 4",
-        "serializationID": 447
+        "serializationID": 477
     },
     "material000": {
         "cubemaps": {},
@@ -4070,12 +4110,12 @@
         "serializationID": 11,
         "shaderName": "flowmapShader",
         "textures": {
-            "diffuse": "Resources/Textures/water/Water_001_COLOR.png",
+            "diffuse": "Resources/Textures/Unity/water_diffuse.png",
             "directionalShadowMap": "",
             "flowMap": "Resources/Flowmaps/flowmap.png",
             "flowMapNoise": "Resources/Flowmaps/noiseTexture.png",
-            "normal": "Resources/Textures/water/Water_001_NORM.png",
-            "occRouMet": "Resources/Textures/water/Water_001_OccRouSpec.png"
+            "normal": "Resources/Textures/Unity/water_normal.png",
+            "occRouMet": "Resources/Textures/Unity/water_occroumet.png"
         },
         "vec2s": {
             "channelFlowDirection": [
@@ -4161,17 +4201,17 @@
                 0.0
             ],
             "viewStatic": [
-                -0.9563050866127014,
-                0.02243024855852127,
-                -0.29150938987731934,
+                -0.8270794153213501,
+                -0.0898667648434639,
+                0.554854691028595,
                 0.0,
-                -0.0,
-                0.9970528483390808,
-                0.07671844214200974,
+                7.450581485102248e-09,
+                0.9871362447738647,
+                0.15988107025623322,
                 0.0,
-                0.2923710346221924,
-                0.07336622476577759,
-                -0.9534867405891418,
+                -0.5620852112770081,
+                0.13223432004451752,
+                -0.8164401054382324,
                 0.0,
                 0.0,
                 0.0,
@@ -4316,8 +4356,8 @@
         },
         "vec2s": {
             "uv0scale": [
-                2.0,
-                2.0
+                4.0,
+                4.0
             ],
             "uv1scale": [
                 10.0,
@@ -4360,6 +4400,1393 @@
         }
     },
     "material003": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Conifer Bark Array BODT",
+        "renderingType": 0,
+        "serializationID": 298,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/Conifer Bark Array BODT-normal.png",
+            "occRouMet": "Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material004": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Conifer Bark Simple BODT",
+        "renderingType": 0,
+        "serializationID": 299,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/Conifer Bark Array BODT-normal.png",
+            "occRouMet": "Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material005": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Conifer Leaves BODT",
+        "renderingType": 0,
+        "serializationID": 302,
+        "shaderName": "standardPbrCutout",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/BODT Conifer Branches-albedo.png",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/BODT Conifer Branches-normal.png",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material006": {
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_01",
+        "renderingType": 0,
+        "serializationID": 305,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_01_D.TGA",
+            "normal": "Resources/Textures/Unity/T_Rock_01_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material007": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_02",
+        "renderingType": 0,
+        "serializationID": 308,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_02_D.TGA",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/T_Rock_02_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material008": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_03",
+        "renderingType": 0,
+        "serializationID": 311,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_03_D.TGA",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/T_Rock_03_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material009": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_04",
+        "renderingType": 0,
+        "serializationID": 314,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_04_D.TGA",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/T_Rock_04_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material010": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_05",
+        "renderingType": 0,
+        "serializationID": 317,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_05_D.TGA",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/T_Rock_05_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material011": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "M_Rock_06",
+        "renderingType": 0,
+        "serializationID": 320,
+        "shaderName": "standardPbr",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/T_Rock_06_D.TGA",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/T_Rock_06_N.TGA",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material012": {
+        "cubemaps": {},
+        "cubemapsHdr": {
+            "irradianceMap": 19
+        },
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "MVP": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLightMatrix": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "view": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Grass_rushes",
+        "renderingType": 0,
+        "serializationID": 323,
+        "shaderName": "standardPbrCutout",
+        "textures": {
+            "diffuse": "Resources/Textures/Unity/rushes-diffuse.tga",
+            "directionalShadowMap": "",
+            "normal": "Resources/Textures/Unity/rushes-normal.tga",
+            "occRouMet": "Resources/Textures/occroumet.png"
+        },
+        "vec2s": {},
+        "vec3s": {
+            "directionalLight.direction": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "viewPos": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vec4s": {
+            "directionalLight.ambient": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "directionalLight.color": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material013": {
         "cubemaps": {},
         "cubemapsHdr": {},
         "floats": {},
@@ -4406,7 +5833,7 @@
         },
         "name": "LoadingScreenMat",
         "renderingType": 1,
-        "serializationID": 454,
+        "serializationID": 484,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/loding.png"
@@ -4731,85 +6158,85 @@
     "mesh051": {
         "filePath": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Bare BOTD LOD1",
-        "serializationID": 296,
+        "serializationID": 326,
         "type": "MeshCustom"
     },
     "mesh052": {
         "filePath": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Bare LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 300,
+        "serializationID": 330,
         "type": "MeshCustom"
     },
     "mesh053": {
         "filePath": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Medium BOTD LOD1",
-        "serializationID": 306,
+        "serializationID": 336,
         "type": "MeshCustom"
     },
     "mesh054": {
         "filePath": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Medium LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 310,
+        "serializationID": 340,
         "type": "MeshCustom"
     },
     "mesh055": {
         "filePath": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Small BOTD LOD1",
-        "serializationID": 316,
+        "serializationID": 346,
         "type": "MeshCustom"
     },
     "mesh056": {
         "filePath": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Small LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 320,
+        "serializationID": 350,
         "type": "MeshCustom"
     },
     "mesh057": {
         "filePath": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Tall BOTD LOD1",
-        "serializationID": 326,
+        "serializationID": 356,
         "type": "MeshCustom"
     },
     "mesh058": {
         "filePath": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj",
         "meshPath": "Resources/Models/Unity/Conifer Tall LOD1 Instance.obj/Conifer Leaves BODT",
-        "serializationID": 330,
+        "serializationID": 360,
         "type": "MeshCustom"
     },
     "mesh059": {
         "filePath": "Resources/Models/Unity/Plane002.obj",
         "meshPath": "Resources/Models/Unity/Plane002.obj/Details (2)",
-        "serializationID": 334,
+        "serializationID": 364,
         "type": "MeshCustom"
     },
     "mesh060": {
         "filePath": "Resources/Models/Unity/Rock_02_LOD1.obj",
         "meshPath": "Resources/Models/Unity/Rock_02_LOD1.obj/Rock_02_LOD1",
-        "serializationID": 338,
+        "serializationID": 368,
         "type": "MeshCustom"
     },
     "mesh061": {
         "filePath": "Resources/Models/Unity/Rock_03_LOD1.obj",
         "meshPath": "Resources/Models/Unity/Rock_03_LOD1.obj/Rock_03_LOD1",
-        "serializationID": 342,
+        "serializationID": 372,
         "type": "MeshCustom"
     },
     "mesh062": {
         "filePath": "Resources/Models/Unity/Rock_04_LOD1.obj",
         "meshPath": "Resources/Models/Unity/Rock_04_LOD1.obj/Rock_04_LOD1",
-        "serializationID": 346,
+        "serializationID": 376,
         "type": "MeshCustom"
     },
     "mesh063": {
         "filePath": "Resources/Models/Unity/Rock_05_LOD1.obj",
         "meshPath": "Resources/Models/Unity/Rock_05_LOD1.obj/Rock_05_LOD1",
-        "serializationID": 350,
+        "serializationID": 380,
         "type": "MeshCustom"
     },
     "mesh064": {
         "filePath": "Resources/Models/Unity/Rock_06_LOD1.obj",
         "meshPath": "Resources/Models/Unity/Rock_06_LOD1.obj/Rock_06_LOD1",
-        "serializationID": 354,
+        "serializationID": 384,
         "type": "MeshCustom"
     },
     "shader000": {
@@ -4837,8 +6264,14 @@
         "vertexShaderPath": "Resources/Shaders/StandardTerrain/StandardTerrain.vert"
     },
     "shader004": {
+        "fragmentShaderPath": "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.frag",
+        "serializationID": 294,
+        "shaderName": "standardPbrCutout",
+        "vertexShaderPath": "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.vert"
+    },
+    "shader005": {
         "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
-        "serializationID": 453,
+        "serializationID": 483,
         "shaderName": "UiStandard",
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
@@ -4849,7 +6282,7 @@
             "minFilter": 9987,
             "wrapMode": 10497
         },
-        "filePath": "Resources/Textures/water/Water_001_COLOR.png",
+        "filePath": "Resources/Textures/Unity/water_diffuse.png",
         "serializationID": 6
     },
     "texture001": {
@@ -4859,7 +6292,7 @@
             "minFilter": 9987,
             "wrapMode": 10497
         },
-        "filePath": "Resources/Textures/water/Water_001_NORM.png",
+        "filePath": "Resources/Textures/Unity/water_normal.png",
         "serializationID": 7
     },
     "texture002": {
@@ -4869,7 +6302,7 @@
             "minFilter": 9987,
             "wrapMode": 10497
         },
-        "filePath": "Resources/Textures/water/Water_001_OccRouSpec.png",
+        "filePath": "Resources/Textures/Unity/water_occroumet.png",
         "serializationID": 8
     },
     "texture003": {
@@ -5514,12 +6947,202 @@
     },
     "texture067": {
         "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png",
+        "serializationID": 295
+    },
+    "texture068": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/Conifer Bark Array BODT-normal.png",
+        "serializationID": 296
+    },
+    "texture069": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png",
+        "serializationID": 297
+    },
+    "texture070": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Textures/Unity/BODT Conifer Branches-albedo.png",
+        "serializationID": 300
+    },
+    "texture071": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Textures/Unity/BODT Conifer Branches-normal.png",
+        "serializationID": 301
+    },
+    "texture072": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_01_D.TGA",
+        "serializationID": 303
+    },
+    "texture073": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_01_N.TGA",
+        "serializationID": 304
+    },
+    "texture074": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_02_D.TGA",
+        "serializationID": 306
+    },
+    "texture075": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_02_N.TGA",
+        "serializationID": 307
+    },
+    "texture076": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_03_D.TGA",
+        "serializationID": 309
+    },
+    "texture077": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_03_N.TGA",
+        "serializationID": 310
+    },
+    "texture078": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_04_D.TGA",
+        "serializationID": 312
+    },
+    "texture079": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_04_N.TGA",
+        "serializationID": 313
+    },
+    "texture080": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_05_D.TGA",
+        "serializationID": 315
+    },
+    "texture081": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_05_N.TGA",
+        "serializationID": 316
+    },
+    "texture082": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_06_D.TGA",
+        "serializationID": 318
+    },
+    "texture083": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 10497
+        },
+        "filePath": "Resources/Textures/Unity/T_Rock_06_N.TGA",
+        "serializationID": 319
+    },
+    "texture084": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Textures/Unity/rushes-diffuse.tga",
+        "serializationID": 321
+    },
+    "texture085": {
+        "creationInfo": {
+            "generateMipmaps": true,
+            "magFilter": 9729,
+            "minFilter": 9987,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Textures/Unity/rushes-normal.tga",
+        "serializationID": 322
+    },
+    "texture086": {
+        "creationInfo": {
             "generateMipmaps": false,
             "magFilter": 9729,
             "minFilter": 9729,
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 451
+        "serializationID": 481
     }
 }

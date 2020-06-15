@@ -8,16 +8,17 @@ texCreateInfo.magFilter = GL_LINEAR;
 texCreateInfo.minFilter = GL_LINEAR_MIPMAP_LINEAR;
 texCreateInfo.wrapMode = GL_REPEAT;
 
-auto water1Diffuse = objectModule.newTexture("Resources/Textures/water/Water_001_COLOR.png", texCreateInfo);
-auto water1Normal = objectModule.newTexture("Resources/Textures/water/Water_001_NORM.png", texCreateInfo);
-auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
+auto water1Diffuse = objectModule.newTexture("Resources/Textures/Unity/water_diffuse.png", texCreateInfo);
+auto water1Normal = objectModule.newTexture("Resources/Textures/Unity/water_normal.png", texCreateInfo);
+auto emptyOccRouMet = objectModule.newTexture("Resources/Textures/Unity/water_occroumet.png", texCreateInfo);
+//auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
 auto flowmap = objectModule.newTexture("Resources/Flowmaps/flowmap.png", texCreateInfo);
 auto noise = objectModule.newTexture("Resources/Flowmaps/noiseTexture.png", texCreateInfo);
 
 Material* waterMat = objectModule.newMaterial(flowmapShader, "waterMat", RenderType::Transparent);
 waterMat->setTexture("diffuse", water1Diffuse);
 waterMat->setTexture("normal", water1Normal);
-waterMat->setTexture("occRouMet", water1OccRouSpec);
+waterMat->setTexture("occRouMet", emptyOccRouMet);
 waterMat->setTexture("flowMap", flowmap);
 waterMat->setVec2("channelFlowDirection", {-1.0f, 1.0f});
 waterMat->setFloat("blendCycle", 1.0f);
@@ -71,14 +72,14 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
 objectModule.newEntity(2, "directionalLight");
 {
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(155.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
-        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(20.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(150.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
+        t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(21.5f) , glm::vec3(1.0f, 0.0f, 0.0f));
         t->setParent(&sceneModule.rootNode);
 
     auto l = objectModule.newEmptyComponentForLastEntity<Light>();
         l->lightType = LightType::Directional;
-        l->intensity = 1.0f;
-        l->color = {1.0f, 1.0f, 1.0f};
+        l->intensity = 3.0f;
+        l->color = {1.0f, 0.8f, 0.35f};
 }
 
 objectModule.newEntity(4, "Camera");
@@ -105,4 +106,5 @@ objectModule.newEntity(4, "Camera");
 }
 
 TerrainUtils::loadAllTerrainChunks();
+TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();

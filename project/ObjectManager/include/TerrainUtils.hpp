@@ -15,6 +15,10 @@ namespace TerrainUtils
      */
     void loadExportedUnityModels();
     /**
+     * @brief Creates materials For Models object
+     */
+    void createMaterialsForModels();
+    /**
      * @brief Converts space-separated string to vec3
      * 
      * @return glm::vec3 parsed vector

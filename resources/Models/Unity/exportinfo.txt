@@ -2,62 +2,62 @@ $path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
 69.27857 101.9656 70.68715
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
 58.00366 101.7494 64.55307
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Simple BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
 -2.03 133.18 102.76
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
 284.2 103.1629 256.6
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Small LOD1 Instance.obj
 39.72 100.14 61.91
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Simple BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Small LOD1 Instance.obj
 75.54 102.91 81.01
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Simple BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
 31.20009 103.1629 65.53787
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
 33.5 124.71 91.37
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
 59.51 121.98 107.19
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Simple BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
 49.33 100.71 66.43
 1 0 0 0
 1 1 1
-%mat:Conifer Bark Array BODT
 %mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Rock_03_LOD1.obj
 3.4188 131.33 119.06
 1 0 0 0
