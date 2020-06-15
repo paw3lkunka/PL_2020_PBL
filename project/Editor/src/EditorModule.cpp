@@ -212,6 +212,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(ProgressBar* temp = entityPtr->getComponentPtr<ProgressBar>())
+    {
+        if(ImGui::CollapsingHeader("ProgressBar"))
+        {
+            drawProgressBar(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -423,6 +431,11 @@ void EditorModule::drawEnemyAnimation(EnemyAnimation* enemyAnimationPtr)
 void EditorModule::drawSortingGroup(UiSortingGroup* sortingGroupPtr)
 {
     ImGui::SliderFloat("Group Transparency: ", &sortingGroupPtr->groupTransparency, 0.0f, 1.0f);
+}
+
+void EditorModule::drawProgressBar(ProgressBar* progressBarPtr)
+{
+    ImGui::SliderFloat("Percentage: ", &progressBarPtr->percentage, 0.0f, 1.0f);
 }
 
 void EditorModule::sortEntities(SortingType sortingType)

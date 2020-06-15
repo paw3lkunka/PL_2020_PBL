@@ -17,5 +17,11 @@ struct EnemyAnimation : public Component
      *  > 1  - undefined
      */
     float lerpParameter = 1;
+
+    /**
+     * @brief Time of showing pullet trail.
+     * NOTE: Trails show always at least 1 frame.
+     */
+    float shootTrailTime = 0;
 };
 #endif

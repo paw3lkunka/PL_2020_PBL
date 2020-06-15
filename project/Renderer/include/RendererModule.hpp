@@ -59,6 +59,10 @@ public:
      */
     void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
     /**
+     * @brief Deletes all allocated buffers
+     */
+    void clean();
+    /**
      * @brief Set the skybox in the renderer
      * 
      * @param skyboxMaterial pointer to skybox material

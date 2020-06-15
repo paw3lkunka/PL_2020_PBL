@@ -1,9 +1,11 @@
 auto unlitTexture = objectModule.newShader("UnlitTexture", "Resources/Shaders/UnlitTexture/UnlitTexture.vert", "Resources/Shaders/UnlitTexture/UnlitTexture.frag");
-auto skyboxShader = objectModule.newShader("SkyboxCubemap", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.vert", "Resources/Shaders/UnlitBillboardInstanced/UnlitBillboardInstanced.frag");
 auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
+auto unlitSkinned = objectModule.newShader("UnlitSkinned", "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
 objectModule.newAudioClip("Resources/Audios/shingeki.wav");
+objectModule.newAudioClip("Resources/Audios/river.wav");
+
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -12,6 +14,7 @@ TextureCreateInfo texCreateInfo = {};
 auto texture = objectModule.newTexture("Resources/Textures/tex.png", texCreateInfo);
 
 objectModule.newModel("Resources/Models/Box.FBX");
+objectModule.newModel("Resources/Models/BoneBox.FBX");
 objectModule.newModel("Resources/Models/unit_sphere.FBX");
 
 TextureCreateInfo skyboxCreateInfo = {};
@@ -20,16 +23,19 @@ TextureCreateInfo skyboxCreateInfo = {};
     skyboxCreateInfo.minFilter = GL_LINEAR;
     skyboxCreateInfo.wrapMode = GL_CLAMP_TO_EDGE;
 
-    auto cubemap = objectModule.newCubemap(skyboxCreateInfo, 
-                                "Resources/Textures/skybox_02/nz.png", 
-                                "Resources/Textures/skybox_02/nx.png", 
-                                "Resources/Textures/skybox_02/px.png",
-                                "Resources/Textures/skybox_02/pz.png",
-                                "Resources/Textures/skybox_02/py.png",
-                                "Resources/Textures/skybox_02/ny.png");
+CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(skyboxCreateInfo,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                    "Resources/Textures/skybox_02/nx.hdr", 
+                                                    "Resources/Textures/skybox_02/px.hdr",
+                                                    "Resources/Textures/skybox_02/pz.hdr",
+                                                    "Resources/Textures/skybox_02/py.hdr",
+                                                    "Resources/Textures/skybox_02/ny.hdr");
 
-    Material* skyboxMat = objectModule.newMaterial(skyboxShader, "skyboxMat", RenderType::Opaque);
-        skyboxMat->setCubemap("cubemap", cubemap);
+Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+
+GetCore().rendererModule.setSkybox(hdrSkyboxMat);
 
     Material* unlitInstancedMat = objectModule.newMaterial(unlitInstanced, "unlitInstancedMat", RenderType::Opaque, true);
     {
@@ -202,7 +208,7 @@ TextureCreateInfo skyboxCreateInfo = {};
     objectModule.newEntity(2, "surface");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->getLocalPositionModifiable() = { 0.0f, -5.0f, 0.0f };
+            t->getLocalPositionModifiable() = { 0.0f, -20.0f, 0.0f };
             t->getLocalScaleModifiable() = {100, 0.5, 100};
             t->setParent(&sceneModule.rootNode);
 
@@ -217,7 +223,7 @@ TextureCreateInfo skyboxCreateInfo = {};
             bc->halfSize =  glm::vec3(100, 0.5, 100) * 0.5f;
     }
     
-    Entity* entity = objectModule.newEntity(6, "PhisicBasedInputTest");
+    Entity* entity = objectModule.newEntity(7, "PhysicBasedInputTest");
     {
         
         PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
@@ -250,7 +256,7 @@ TextureCreateInfo skyboxCreateInfo = {};
         MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
             Shader* shader = unlitColor;
-            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque);
+            Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
                 material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
 
             meshRenderer->material = material;
@@ -263,6 +269,8 @@ TextureCreateInfo skyboxCreateInfo = {};
             rigidbody->ignoreGravity = true;
 
         Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
+
+        //HydroBody* hydroBody = objectModule.newEmptyComponentForLastEntity<HydroBody>();
     }
 
     auto* hideout1 = objectModule.newEntity(5,"Hideout1");
@@ -298,6 +306,113 @@ TextureCreateInfo skyboxCreateInfo = {};
         auto* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
     }
 
+    {
+        objectModule.newModel("Resources/Models/Kayak_low_poly.FBX");
+        Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
+        {
+            auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+                t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
+                //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
+                t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
+        }
+
+        Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
+        paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = paddleMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->setParent(paddleIndirect->getComponentPtr<Transform>());
+
+            auto paddle = objectModule.newEmptyComponent<Paddle>();
+                paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
+                paddle->maxFrontRot = -34.5f;
+                paddle->maxSideRot = 30.0f;
+                entity->addComponent(paddle);
+        }
+
+        /*
+        Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat", RenderType::Opaque);
+        attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = attachMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle")->getComponentPtr<Transform>());
+                t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
+        }
+
+        {
+            auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = attachMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle")->getComponentPtr<Transform>());
+                t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
+        }
+        */
+
+        /*
+        Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
+        playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Player");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = playerMat;
+
+                auto t = entity->getComponentPtr<Transform>();
+                    t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
+                    t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
+            }
+        */
+
+        Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
+        kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
+        {
+            auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+            auto mr = entity->getComponentPtr<MeshRenderer>();
+                mr->material = kayakMat;
+
+            auto t = entity->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+                t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
+                t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
+                t->setParent(&sceneModule.rootNode);
+        }
+
+        // KAYAK MAN
+        auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
+            kayakRigidbody->drag = 0.2f;
+            kayakRigidbody->angularDrag = 0.1f;
+            kayakRigidbody->mass = 150.0f;
+            kayakRigidbody->ignoreGravity = false;
+
+        auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
+            kayakBoxCollider->halfSize = glm::vec3(5.0f, 15.0f, 2.0f);
+
+        auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
+        
+        auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+            kayakPtr->addComponent(kayakHydroBody);
+            kayakPtr->addComponent(kayakRigidbody);
+            kayakPtr->addComponent(kayakBoxCollider);
+
+        // PADDLE MAN
+        auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
+            paddleHydroAccelerator->rigidbody = kayakRigidbody;
+        auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
+
+        auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+            paddlePtr->addComponent(paddleHydroAccelerator);
+            paddlePtr->addComponent(paddleHydroBody);
+    }
+
     auto* enemy = objectModule.newEntity(4,"TMP enemy");
     {
         auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -312,6 +427,7 @@ TextureCreateInfo skyboxCreateInfo = {};
 
         auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
             a->lerpParameter = 0.25f;
+            a->shootTrailTime = 0.05f;
 
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->material = objectModule.getMaterialPtrByName("KULA");
@@ -321,4 +437,19 @@ TextureCreateInfo skyboxCreateInfo = {};
             ea->activationValue = 100;
             ea->incrementValue = 1;
             ea->successChance = 0.5f;
+    }
+
+    auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
+    {
+        auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+            t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
+            //t->setParent(enemy->getComponentPtr<Transform>());
+            t->setParent(&sceneModule.rootNode);
+            
+        auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            mr->material = objectModule.getMaterialPtrByName("KULA");
+            mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);
+
+        auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
     }

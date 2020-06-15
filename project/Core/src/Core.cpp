@@ -73,8 +73,9 @@ int Core::init()
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
     window = glfwCreateWindow(windowWidth, windowHeight, "PBL", NULL, NULL);
     if (window == NULL)
@@ -94,7 +95,17 @@ int Core::init()
 
     glViewport(0,0,windowWidth,windowHeight);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    
+
+    int flags; 
+    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
+        glDebugMessageCallback(glDebugOutput, nullptr);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    }
+
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
@@ -143,6 +154,20 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
+            //some code here...
+            // auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+
+            // auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
+            //     tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            //     //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            // auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+            //     fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+
+            // auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+            //     cameraPtr->addComponent(tpCameraPtr);
+            //     cameraPtr->addComponent(fpCameraPtr);
+            //     cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -178,13 +203,19 @@ int Core::init()
 
 #pragma regnon attach systems
 
-    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
+    
+    gameSystemsModule.addSystem(&freeCameraControlSystem);
+    gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
+    gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
+    
     gameSystemsModule.addSystem(&terrainSystem);
-    gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    
+    gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
+    
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -198,6 +229,7 @@ int Core::init()
     gameSystemsModule.addSystem(&toggleButtonSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
     gameSystemsModule.addSystem(&cargoButtonSystem);
+    gameSystemsModule.addSystem(&progressBarSystem);
 
 #pragma endregion
 
@@ -210,11 +242,6 @@ int Core::mainLoop()
     double previousFrameStart = glfwGetTime();
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
-
-#pragma region AudioModule demo
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
 
     // * ===== Game loop ===================================================
 
@@ -298,6 +325,53 @@ void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
     GetCore().getMessageBus().notify();
 }
 
+void APIENTRY Core::glDebugOutput(GLenum source, 
+                            GLenum type, 
+                            GLuint id, 
+                            GLenum severity, 
+                            GLsizei length, 
+                            const GLchar *message, 
+                            const GLvoid *userParam)
+{
+    // ignore non-significant error/warning codes
+    if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return; 
+
+    std::cout << "---------------" << std::endl;
+    std::cout << "Debug message (" << id << "): " <<  message << std::endl;
+
+    switch (source)
+    {
+        case GL_DEBUG_SOURCE_API:             std::cout << "Source: API"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   std::cout << "Source: Window System"; break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: std::cout << "Source: Shader Compiler"; break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:     std::cout << "Source: Third Party"; break;
+        case GL_DEBUG_SOURCE_APPLICATION:     std::cout << "Source: Application"; break;
+        case GL_DEBUG_SOURCE_OTHER:           std::cout << "Source: Other"; break;
+    } std::cout << std::endl;
+
+    switch (type)
+    {
+        case GL_DEBUG_TYPE_ERROR:               std::cout << "Type: Error"; break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cout << "Type: Deprecated Behaviour"; break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cout << "Type: Undefined Behaviour"; break; 
+        case GL_DEBUG_TYPE_PORTABILITY:         std::cout << "Type: Portability"; break;
+        case GL_DEBUG_TYPE_PERFORMANCE:         std::cout << "Type: Performance"; break;
+        case GL_DEBUG_TYPE_MARKER:              std::cout << "Type: Marker"; break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:          std::cout << "Type: Push Group"; break;
+        case GL_DEBUG_TYPE_POP_GROUP:           std::cout << "Type: Pop Group"; break;
+        case GL_DEBUG_TYPE_OTHER:               std::cout << "Type: Other"; break;
+    } std::cout << std::endl;
+    
+    switch (severity)
+    {
+        case GL_DEBUG_SEVERITY_HIGH:         std::cout << "Severity: high"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       std::cout << "Severity: medium"; break;
+        case GL_DEBUG_SEVERITY_LOW:          std::cout << "Severity: low"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: std::cout << "Severity: notification"; break;
+    } std::cout << std::endl;
+    std::cout << std::endl;
+}
+
 double Core::getCurrentFrameStart()
 {
     return currentFrameStart;
@@ -367,7 +441,7 @@ float Core::randomFloat01L()
     } number;
 
     number.i = xoshiro_next();
-    number.i = 0x3F800000U | (number.i >> 9);;
+    number.i = 0x3F800000U | (number.i >> 9);
 
     return 2.0f - number.f;
 }
@@ -393,7 +467,9 @@ float Core::randomFloatR(float min, float max)
 }
 
 CameraSystem Core::cameraSystem;
-CameraControlSystem Core::cameraControlSystem;
+FreeCameraControlSystem Core::freeCameraControlSystem;
+FirstPersonCameraControlSystem Core::firstPersonCameraControlSystem;
+ThirdPersonCameraControlSystem Core::thirdPersonCameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
@@ -405,11 +481,12 @@ PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
-HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
+HydroBodySystem Core::hydroBodySystem;
 SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
+ProgressBarSystem Core::progressBarSystem;

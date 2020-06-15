@@ -129,10 +129,14 @@ add_subdirectory(libs/reactphysics3d/)
 aux_source_directory( project                                   PROJECT_SRC)
 aux_source_directory( project/Core/src                          CORE_SRC)
 aux_source_directory( project/GameSystems/Base/src              GAME_SRC)
+aux_source_directory( project/GameSystems/Components/src        COMPONENTS_SRC)
 aux_source_directory( project/GameSystems/Systems/Gameplay/src  GAMEPLAY_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/Graphics/src  GRAPHICS_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/Physics/src   PHYSICS_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/UI/src        UI_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro        HYDRO_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Data   HYDRO_DATA_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Math   HYDRO_MATH_SRC)
 aux_source_directory( project/Audio/src                         AUDIO_SRC)
 aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
 aux_source_directory( project/Input/src                         INPUT_SRC)
@@ -150,6 +154,9 @@ list(
     APPEND SOURCE_FILES
         ${CORE_SRC}
         ${GAME_SRC}
+        ${HYDRO_SRC}
+        ${HYDRO_DATA_SRC}
+        ${HYDRO_MATH_SRC}
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
@@ -164,6 +171,7 @@ list(
         ${SCENE_SRC}
         ${EDITOR_SRC}
         ${UI_SRC}
+        ${COMPONENTS_SRC}
         ${GAMEPLAY_SYSTEM_SRC}
         ${GRAPHICS_SYSTEM_SRC}
         ${PHYSICS_SYSTEM_SRC}
@@ -212,6 +220,9 @@ include_directories(
     project/Autogen/include
     project/Core/include
     project/GameSystems/Base/include
+    project/GameSystems/Base/include/Hydro
+    project/GameSystems/Base/include/Hydro/Data
+    project/GameSystems/Base/include/Hydro/Math
     project/GameSystems/Components
     project/GameSystems/Components/Gameplay
     project/GameSystems/Components/Graphics

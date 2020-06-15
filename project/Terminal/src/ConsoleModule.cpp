@@ -201,6 +201,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
+        std::cout << "console here: AUDIO_SOURCE_UPDATE_ATTRIBUTES\n";
         break;
 
     case Event::AUDIO_SOURCE_PLAY:
@@ -218,31 +219,31 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::COLLISION_ENTER:
-    {
-        auto tData = msg.getValue<CollisionData>();
-        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " detected" << std::endl;
-    }
+    // {
+    //     auto tData = msg.getValue<CollisionData>();
+    //     std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " detected" << std::endl;
+    // }
         break;
         
     case Event::COLLISION_EXIT:
-    {
-        auto tData = msg.getValue<CollisionData>();
-        std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;
-    }
+    // {
+    //     auto tData = msg.getValue<CollisionData>();
+    //     std::cout << "Collision between: " << Name(tData.body1) << " and " << Name(tData.body2) << " is over" << std::endl;
+    // }
         break;
 
     case Event::TRIGGER_ENTER:
-    {
-        auto tData = msg.getValue<TriggerData>();
-        std::cout << "Trigger: " << Name(tData.triggerBody) << " was entered by: " << Name(tData.causeBody) << std::endl;
-    }
+    // {
+    //     auto tData = msg.getValue<TriggerData>();
+    //     std::cout << "Trigger: " << Name(tData.triggerBody) << " was entered by: " << Name(tData.causeBody) << std::endl;
+    // }
         break;
         
     case Event::TRIGGER_EXIT:
-    {
-        auto tData = msg.getValue<TriggerData>();
-        std::cout << "Trigger: " << Name(tData.triggerBody) << " was exited by: " << Name(tData.causeBody) << std::endl;
-    }
+    // {
+    //     auto tData = msg.getValue<TriggerData>();
+    //     std::cout << "Trigger: " << Name(tData.triggerBody) << " was exited by: " << Name(tData.causeBody) << std::endl;
+    // }
         break;
 
     case Event::PLAYER_DETECTED:
@@ -264,7 +265,7 @@ void ConsoleModule::receiveMessage(Message msg)
         auto data = msg.getValue<AttackData>();
         std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
                 << (data.success ? ",   " : ", un") << "successfull, "
-                << "direction: " << glm::to_string(data.direction) << std::endl;
+                << std::endl;// "direction: " << glm::to_string(data.direction) << std::endl;
     }
         break;
 

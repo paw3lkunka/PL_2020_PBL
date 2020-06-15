@@ -11,7 +11,7 @@
 struct HydroAccelerator : public Component
 {
     HydroAccelerator() = default;
-    ~HydroAccelerator() = default;
+    virtual ~HydroAccelerator() = default;
 
 //TODO documentation
     Rigidbody* rigidbody;
@@ -22,6 +22,5 @@ struct HydroAccelerator : public Component
 //TODO documentation
     glm::vec3 angularVelocity = glm::vec3(0.0f);
 };
-
 
 #endif // _HYDROACCELERATOR_INL

@@ -405,11 +405,6 @@ void SceneReader::readComponents()
             std::cout << "HydroBody" << std::endl;
             readHydroBody(name);
         }
-        else if(componentType == "HydroSurface")
-        {
-            std::cout << "HydroSurface" << std::endl;
-            readHydroSurface(name);
-        }
         else if(componentType == "HydroAccelerator")
         {
             std::cout << "HydroAccelerator" << std::endl;
@@ -702,15 +697,15 @@ void SceneReader::readTerrainRenderer(std::string name)
         auto renderer = dynamic_cast<TerrainRenderer*>(component);
         try
         {
-            unsigned int childID = j->at(name).at("material").get<unsigned int>();
-            renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+            std::string materialName = j->at(name).at("material").get<std::string>();
+            renderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
         }
         catch(nlohmann::detail::out_of_range)
         {
             renderer->material = nullptr;
         }
-        unsigned int texID = j->at(name).at("splatmap").get<unsigned int>();
-        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
+        std::string splatmapPath = j->at(name).at("splatmap").get<std::string>();
+        renderer->splatmap = objModulePtr->objectContainer.getTexturePtrByFilePath(splatmapPath.c_str());
         renderer->serializationID = serializationID;
         return;
     }
@@ -719,14 +714,14 @@ void SceneReader::readTerrainRenderer(std::string name)
         auto renderer = objModulePtr->newEmptyComponent<TerrainRenderer>();
         renderer->serializationID = serializationID;
 
-        unsigned int childID = j->at(name).at("material").get<unsigned int>();
-        renderer->material = objModulePtr->objectContainer.getMaterialFromSerializationID(childID);
+        std::string materialName = j->at(name).at("material").get<std::string>();
+        renderer->material = objModulePtr->objectContainer.getMaterialFromName(materialName.c_str());
 
-        childID = j->at(name).at("mesh").get<unsigned int>();
-        renderer->terrainMesh = objModulePtr->objectContainer.getMeshFromSerializationID(childID);
+        std::string meshPath = j->at(name).at("mesh").get<std::string>();
+        renderer->terrainMesh = objModulePtr->objectContainer.getMeshByMeshPath(meshPath);
 
-        unsigned int texID = j->at(name).at("splatmap").get<unsigned int>();
-        renderer->splatmap = objModulePtr->objectContainer.getTextureFromSerializationID(texID);
+        std::string splatmapPath = j->at(name).at("splatmap").get<std::string>();
+        renderer->splatmap = objModulePtr->objectContainer.getTexturePtrByFilePath(splatmapPath.c_str());
 
         assignToEntity(name, renderer);
     }
@@ -850,14 +845,6 @@ void SceneReader::readHydroBody(std::string name)
     hydroBody->serializationID = j->at(name).at("serializationID").get<unsigned int>();
 
     assignToEntity(name, hydroBody);
-}
-
-void SceneReader::readHydroSurface(std::string name)
-{
-    auto hydroSurface = objModulePtr->newEmptyComponent<HydroSurface>();
-    hydroSurface->serializationID = j->at(name).at("serializationID").get<unsigned int>();
-
-    assignToEntity(name, hydroSurface);
 }
 
 void SceneReader::readHydroAccelerator(std::string name)

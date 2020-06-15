@@ -28,7 +28,7 @@ public:
      * @param fontFace FreeType font face object
      */
     Font(FT_Face& fontFace, std::string fontPath, std::string name, unsigned int size);
-    virtual ~Font() = default;
+    virtual ~Font();
 
     /**
      * @brief Retrieve id of specific character texture

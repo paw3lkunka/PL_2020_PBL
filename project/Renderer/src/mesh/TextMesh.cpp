@@ -2,6 +2,12 @@
 
 #include "Font.hpp"
 
+TextMesh::~TextMesh()
+{
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+}
+
 void TextMesh::setup()
 {
     glGenVertexArrays(1, &vao);

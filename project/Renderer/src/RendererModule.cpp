@@ -650,15 +650,11 @@ void RendererModule::render()
 
         for(auto packet : terrainQueue)
         {
-            packet->material->getTexturePtr("diffuse0")->bind(0);
-            gbufferShader->setInt("diffuse", 0);
             packet->renderWithShader(gbufferShader, VP);
         }
 
         for(auto packet : opaqueQueue)
         {
-            packet->material->getTexturePtr("diffuse")->bind(0);
-            gbufferShader->setInt("diffuse", 0);
             packet->renderWithShader(gbufferShader, VP);
         }
 
@@ -864,6 +860,80 @@ void RendererModule::render()
         spritePackets.clear();
         textPackets.clear();
     }
+}
+
+void RendererModule::clean()
+{
+    //delete internalShaderError;
+    //delete internalErrorMat;
+
+    // * ===== Setup Uniform Buffer Object for camera =====
+    glDeleteBuffers(1, &cameraBuffer);
+
+    // * ===== Setup Uniform Buffer Object for bone info =====
+    glDeleteBuffers(1, &boneBuffer);
+
+    // * ===== Setup Uniform Buffer Object for directional light =====
+    glDeleteBuffers(1, &directionalLightBuffer);
+
+    // * ===== Setup Uniform Buffer Object for shadow mapping =====
+    glDeleteBuffers(1, &shadowMappingBuffer);
+
+    // * ===== Setup Uniform Buffer Object for time =====
+    glDeleteBuffers(1, &timeBuffer);
+
+    // * ===== Setup buffer for simple gizmo rendering =====
+    glDeleteVertexArrays(1, &gizmoVao);
+    glDeleteBuffers(1, &gizmoVbo);
+
+    // * ===== Generate mesh for skybox rendering =====
+    glDeleteVertexArrays(1, &skyboxVao);
+    glDeleteBuffers(1, &skyboxVbo);
+
+    // * ===== Create framebuffer for depth map =====
+    glDeleteFramebuffers(1, &depthMapFBO);
+
+    //delete directionalDepth;
+
+    // * ===== Create framebuffer for hdr rendering =====
+    glDeleteFramebuffers(1, &hdrFBO);
+
+    // Generate color attachment
+    glDeleteTextures(1, &hdrColorBuffer);
+
+    // Generate bright color attachment
+    glDeleteTextures(1, &hdrBrightBuffer);
+
+    // Generate depth renderbuffer
+    glDeleteRenderbuffers(1, &rboDepth);
+
+    // * ===== Framebuffers for ping pong gaussian blur =====
+    glDeleteFramebuffers(10, blurFBO);
+    glDeleteTextures(10, blurBuffers);
+
+    // * ===== Gbuffer framebuffer =====
+    glDeleteFramebuffers(1, &gbufferFBO);
+    glDeleteTextures(1, &gbufferPosition);
+    glDeleteTextures(1, &gbufferNormal);
+    glDeleteRenderbuffers(1, &gbufferDepth);
+
+    // * ===== SSAO kernel randomization =====
+    ssaoKernel.clear();
+    ssaoNoise.clear();
+
+    glDeleteTextures(1, &ssaoNoiseTex);
+
+    // * ===== SSAO framebuffer init =====
+    glDeleteFramebuffers(1, &ssaoFBO);
+
+    glDeleteTextures(1, &ssaoColorBuffer);
+
+    // Ssao blur
+    glDeleteFramebuffers(1, &ssaoBlurFBO);
+
+    glDeleteTextures(1, &ssaoColorBufferBlur);
+
+    //delete ssaoMap;
 }
 
 void RendererModule::calculateFrustumPlanes()

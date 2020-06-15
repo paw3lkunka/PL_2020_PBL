@@ -1,11 +1,11 @@
 {
     "Amounts": {
-        "components": 105,
+        "components": 96,
         "cubemaps": 0,
         "cubemapsHdr": 0,
         "entities": 43,
-        "fonts": 1,
-        "materials": 43,
+        "fonts": 2,
+        "materials": 41,
         "meshes": 0,
         "shaders": 2,
         "textures": 2
@@ -14,7 +14,7 @@
         "entity id": 0,
         "farPlane": 2500.0,
         "fieldOfView": 80.0,
-        "isMain": true,
+        "isMain": false,
         "nearPlane": 0.10000000149011612,
         "projectionMode": 0,
         "serializationID": 5,
@@ -28,9 +28,9 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
+            "w": 1.0,
             "x": 0.0,
-            "y": -0.7071067690849304,
+            "y": 0.0,
             "z": 0.0
         },
         "localScale": {
@@ -44,9 +44,9 @@
     },
     "component002": {
         "at": {
-            "x": 1.0,
-            "y": -0.0,
-            "z": -5.960465188081798e-08
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
         },
         "entity id": 0,
         "gain": 0.5,
@@ -95,7 +95,7 @@
             "z": 0.0
         },
         "entity id": 1,
-        "gain": 0.10000000149011612,
+        "gain": 0.30000001192092896,
         "isLooping": 1,
         "isRelativeToListener": 1,
         "listeners": [
@@ -125,13 +125,13 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 18,
+        "serializationID": 19,
         "type": "RectTransform"
     },
     "component006": {
         "entity id": 2,
         "material": "UiBg",
-        "serializationID": 19,
+        "serializationID": 20,
         "type": "UiRenderer"
     },
     "component007": {
@@ -149,14 +149,14 @@
             "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 22,
+        "serializationID": 23,
         "type": "RectTransform"
     },
     "component008": {
         "entity id": 3,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "SelectCargoTextMat",
-        "serializationID": 23,
+        "serializationID": 24,
         "text": "Select Cargo:",
         "type": "TextRenderer"
     },
@@ -175,13 +175,13 @@
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 27,
+        "serializationID": 28,
         "type": "RectTransform"
     },
     "component010": {
         "entity id": 4,
         "material": "PlayButton",
-        "serializationID": 28,
+        "serializationID": 29,
         "type": "UiRenderer"
     },
     "component011": {
@@ -217,7 +217,7 @@
                 "scene": "Resources/Scenes/gameScene.json"
             }
         },
-        "serializationID": 30,
+        "serializationID": 31,
         "type": "Button"
     },
     "component012": {
@@ -227,23 +227,23 @@
         },
         "entity id": 5,
         "localPosition": {
-            "x": -60.0,
+            "x": -75.0,
             "y": -15.0
         },
-        "parent": 27,
+        "parent": 28,
         "rectSize": {
             "x": 0.4000000059604645,
             "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 32,
+        "serializationID": 33,
         "type": "RectTransform"
     },
     "component013": {
         "entity id": 5,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "PlayText",
-        "serializationID": 33,
+        "serializationID": 34,
         "text": "Play!",
         "type": "TextRenderer"
     },
@@ -262,7 +262,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 37,
+        "serializationID": 38,
         "type": "RectTransform"
     },
     "component015": {
@@ -297,9 +297,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 53,
+        "incomeText": 54,
         "isActive": true,
-        "nameText": 43,
+        "nameText": 44,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -312,14 +312,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 38,
+        "serializationID": 39,
         "type": "CargoButton",
-        "weightText": 48
+        "weightText": 49
     },
     "component016": {
         "entity id": 6,
         "material": "Toggle_1",
-        "serializationID": 39,
+        "serializationID": 40,
         "type": "UiRenderer"
     },
     "component017": {
@@ -332,21 +332,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 37,
+        "parent": 38,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 42,
+        "serializationID": 43,
         "type": "RectTransform"
     },
     "component018": {
         "entity id": 7,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo1NameMat",
-        "serializationID": 43,
-        "text": "Letters",
+        "serializationID": 44,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component019": {
@@ -359,21 +359,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 37,
+        "parent": 38,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 47,
+        "serializationID": 48,
         "type": "RectTransform"
     },
     "component020": {
         "entity id": 8,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo1WeightMat",
-        "serializationID": 48,
-        "text": "Weight:0.20kg",
+        "serializationID": 49,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component021": {
@@ -386,21 +386,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 37,
+        "parent": 38,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 52,
+        "serializationID": 53,
         "type": "RectTransform"
     },
     "component022": {
         "entity id": 9,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo1IncomeMat",
-        "serializationID": 53,
-        "text": "Income:198.98$",
+        "serializationID": 54,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component023": {
@@ -418,7 +418,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 57,
+        "serializationID": 58,
         "type": "RectTransform"
     },
     "component024": {
@@ -453,9 +453,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 73,
+        "incomeText": 74,
         "isActive": true,
-        "nameText": 63,
+        "nameText": 64,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -468,14 +468,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 58,
+        "serializationID": 59,
         "type": "CargoButton",
-        "weightText": 68
+        "weightText": 69
     },
     "component025": {
         "entity id": 10,
         "material": "Toggle_2",
-        "serializationID": 59,
+        "serializationID": 60,
         "type": "UiRenderer"
     },
     "component026": {
@@ -488,21 +488,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 57,
+        "parent": 58,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 62,
+        "serializationID": 63,
         "type": "RectTransform"
     },
     "component027": {
         "entity id": 11,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo2NameMat",
-        "serializationID": 63,
-        "text": "Cigarettes",
+        "serializationID": 64,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component028": {
@@ -515,21 +515,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 57,
+        "parent": 58,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 67,
+        "serializationID": 68,
         "type": "RectTransform"
     },
     "component029": {
         "entity id": 12,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo2WeightMat",
-        "serializationID": 68,
-        "text": "Weight:0.44kg",
+        "serializationID": 69,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component030": {
@@ -542,21 +542,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 57,
+        "parent": 58,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 72,
+        "serializationID": 73,
         "type": "RectTransform"
     },
     "component031": {
         "entity id": 13,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo2IncomeMat",
-        "serializationID": 73,
-        "text": "Income:428.88$",
+        "serializationID": 74,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component032": {
@@ -574,7 +574,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 77,
+        "serializationID": 78,
         "type": "RectTransform"
     },
     "component033": {
@@ -609,9 +609,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 93,
+        "incomeText": 94,
         "isActive": true,
-        "nameText": 83,
+        "nameText": 84,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -624,14 +624,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 78,
+        "serializationID": 79,
         "type": "CargoButton",
-        "weightText": 88
+        "weightText": 89
     },
     "component034": {
         "entity id": 14,
         "material": "Toggle_3",
-        "serializationID": 79,
+        "serializationID": 80,
         "type": "UiRenderer"
     },
     "component035": {
@@ -644,21 +644,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 77,
+        "parent": 78,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 82,
+        "serializationID": 83,
         "type": "RectTransform"
     },
     "component036": {
         "entity id": 15,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo3NameMat",
-        "serializationID": 83,
-        "text": "Fake Documents",
+        "serializationID": 84,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component037": {
@@ -671,21 +671,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 77,
+        "parent": 78,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 87,
+        "serializationID": 88,
         "type": "RectTransform"
     },
     "component038": {
         "entity id": 16,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo3WeightMat",
-        "serializationID": 88,
-        "text": "Weight:2.19kg",
+        "serializationID": 89,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component039": {
@@ -698,21 +698,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 77,
+        "parent": 78,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 92,
+        "serializationID": 93,
         "type": "RectTransform"
     },
     "component040": {
         "entity id": 17,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo3IncomeMat",
-        "serializationID": 93,
-        "text": "Income:1209.27$",
+        "serializationID": 94,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component041": {
@@ -730,7 +730,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 97,
+        "serializationID": 98,
         "type": "RectTransform"
     },
     "component042": {
@@ -765,9 +765,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 113,
+        "incomeText": 114,
         "isActive": true,
-        "nameText": 103,
+        "nameText": 104,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -780,14 +780,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 98,
+        "serializationID": 99,
         "type": "CargoButton",
-        "weightText": 108
+        "weightText": 109
     },
     "component043": {
         "entity id": 18,
         "material": "Toggle_4",
-        "serializationID": 99,
+        "serializationID": 100,
         "type": "UiRenderer"
     },
     "component044": {
@@ -800,21 +800,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 97,
+        "parent": 98,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 102,
+        "serializationID": 103,
         "type": "RectTransform"
     },
     "component045": {
         "entity id": 19,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo4NameMat",
-        "serializationID": 103,
-        "text": "Letters",
+        "serializationID": 104,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component046": {
@@ -827,21 +827,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 97,
+        "parent": 98,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 107,
+        "serializationID": 108,
         "type": "RectTransform"
     },
     "component047": {
         "entity id": 20,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo4WeightMat",
-        "serializationID": 108,
-        "text": "Weight:0.98kg",
+        "serializationID": 109,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component048": {
@@ -854,21 +854,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 97,
+        "parent": 98,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 112,
+        "serializationID": 113,
         "type": "RectTransform"
     },
     "component049": {
         "entity id": 21,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo4IncomeMat",
-        "serializationID": 113,
-        "text": "Income:235.55$",
+        "serializationID": 114,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component050": {
@@ -886,7 +886,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 117,
+        "serializationID": 118,
         "type": "RectTransform"
     },
     "component051": {
@@ -921,9 +921,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 133,
+        "incomeText": 134,
         "isActive": true,
-        "nameText": 123,
+        "nameText": 124,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -936,14 +936,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 118,
+        "serializationID": 119,
         "type": "CargoButton",
-        "weightText": 128
+        "weightText": 129
     },
     "component052": {
         "entity id": 22,
         "material": "Toggle_5",
-        "serializationID": 119,
+        "serializationID": 120,
         "type": "UiRenderer"
     },
     "component053": {
@@ -956,21 +956,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 117,
+        "parent": 118,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 122,
+        "serializationID": 123,
         "type": "RectTransform"
     },
     "component054": {
         "entity id": 23,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo5NameMat",
-        "serializationID": 123,
-        "text": "Letters",
+        "serializationID": 124,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component055": {
@@ -983,21 +983,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 117,
+        "parent": 118,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 127,
+        "serializationID": 128,
         "type": "RectTransform"
     },
     "component056": {
         "entity id": 24,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo5WeightMat",
-        "serializationID": 128,
-        "text": "Weight:0.50kg",
+        "serializationID": 129,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component057": {
@@ -1010,21 +1010,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 117,
+        "parent": 118,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 132,
+        "serializationID": 133,
         "type": "RectTransform"
     },
     "component058": {
         "entity id": 25,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo5IncomeMat",
-        "serializationID": 133,
-        "text": "Income:102.75$",
+        "serializationID": 134,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component059": {
@@ -1042,7 +1042,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 137,
+        "serializationID": 138,
         "type": "RectTransform"
     },
     "component060": {
@@ -1077,9 +1077,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 153,
+        "incomeText": 154,
         "isActive": true,
-        "nameText": 143,
+        "nameText": 144,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -1092,14 +1092,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 138,
+        "serializationID": 139,
         "type": "CargoButton",
-        "weightText": 148
+        "weightText": 149
     },
     "component061": {
         "entity id": 26,
         "material": "Toggle_6",
-        "serializationID": 139,
+        "serializationID": 140,
         "type": "UiRenderer"
     },
     "component062": {
@@ -1112,21 +1112,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 137,
+        "parent": 138,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 142,
+        "serializationID": 143,
         "type": "RectTransform"
     },
     "component063": {
         "entity id": 27,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo6NameMat",
-        "serializationID": 143,
-        "text": "Cigarettes",
+        "serializationID": 144,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component064": {
@@ -1139,21 +1139,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 137,
+        "parent": 138,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 147,
+        "serializationID": 148,
         "type": "RectTransform"
     },
     "component065": {
         "entity id": 28,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo6WeightMat",
-        "serializationID": 148,
-        "text": "Weight:1.30kg",
+        "serializationID": 149,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component066": {
@@ -1166,21 +1166,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 137,
+        "parent": 138,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 152,
+        "serializationID": 153,
         "type": "RectTransform"
     },
     "component067": {
         "entity id": 29,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo6IncomeMat",
-        "serializationID": 153,
-        "text": "Income:284.93$",
+        "serializationID": 154,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component068": {
@@ -1198,7 +1198,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 157,
+        "serializationID": 158,
         "type": "RectTransform"
     },
     "component069": {
@@ -1233,9 +1233,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 173,
+        "incomeText": 174,
         "isActive": true,
-        "nameText": 163,
+        "nameText": 164,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -1248,14 +1248,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 158,
+        "serializationID": 159,
         "type": "CargoButton",
-        "weightText": 168
+        "weightText": 169
     },
     "component070": {
         "entity id": 30,
         "material": "Toggle_7",
-        "serializationID": 159,
+        "serializationID": 160,
         "type": "UiRenderer"
     },
     "component071": {
@@ -1268,21 +1268,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 157,
+        "parent": 158,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 162,
+        "serializationID": 163,
         "type": "RectTransform"
     },
     "component072": {
         "entity id": 31,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo7NameMat",
-        "serializationID": 163,
-        "text": "Letters",
+        "serializationID": 164,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component073": {
@@ -1295,21 +1295,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 157,
+        "parent": 158,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 167,
+        "serializationID": 168,
         "type": "RectTransform"
     },
     "component074": {
         "entity id": 32,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo7WeightMat",
-        "serializationID": 168,
-        "text": "Weight:0.36kg",
+        "serializationID": 169,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component075": {
@@ -1322,21 +1322,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 157,
+        "parent": 158,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 172,
+        "serializationID": 173,
         "type": "RectTransform"
     },
     "component076": {
         "entity id": 33,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo7IncomeMat",
-        "serializationID": 173,
-        "text": "Income:208.39$",
+        "serializationID": 174,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component077": {
@@ -1354,7 +1354,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 177,
+        "serializationID": 178,
         "type": "RectTransform"
     },
     "component078": {
@@ -1389,9 +1389,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 193,
+        "incomeText": 194,
         "isActive": true,
-        "nameText": 183,
+        "nameText": 184,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -1404,14 +1404,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 178,
+        "serializationID": 179,
         "type": "CargoButton",
-        "weightText": 188
+        "weightText": 189
     },
     "component079": {
         "entity id": 34,
         "material": "Toggle_8",
-        "serializationID": 179,
+        "serializationID": 180,
         "type": "UiRenderer"
     },
     "component080": {
@@ -1424,21 +1424,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 177,
+        "parent": 178,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 182,
+        "serializationID": 183,
         "type": "RectTransform"
     },
     "component081": {
         "entity id": 35,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo8NameMat",
-        "serializationID": 183,
-        "text": "Medicines",
+        "serializationID": 184,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component082": {
@@ -1451,21 +1451,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 177,
+        "parent": 178,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 187,
+        "serializationID": 188,
         "type": "RectTransform"
     },
     "component083": {
         "entity id": 36,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo8WeightMat",
-        "serializationID": 188,
-        "text": "Weight:1.07kg",
+        "serializationID": 189,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component084": {
@@ -1478,21 +1478,21 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 177,
+        "parent": 178,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 192,
+        "serializationID": 193,
         "type": "RectTransform"
     },
     "component085": {
         "entity id": 37,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo8IncomeMat",
-        "serializationID": 193,
-        "text": "Income:231.01$",
+        "serializationID": 194,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component086": {
@@ -1510,7 +1510,7 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 197,
+        "serializationID": 198,
         "type": "RectTransform"
     },
     "component087": {
@@ -1545,9 +1545,9 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 213,
+        "incomeText": 214,
         "isActive": true,
-        "nameText": 203,
+        "nameText": 204,
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5210000276565552,
@@ -1560,14 +1560,14 @@
             "g": 0.6430000066757202,
             "r": 0.1679999977350235
         },
-        "serializationID": 198,
+        "serializationID": 199,
         "type": "CargoButton",
-        "weightText": 208
+        "weightText": 209
     },
     "component088": {
         "entity id": 38,
         "material": "Toggle_9",
-        "serializationID": 199,
+        "serializationID": 200,
         "type": "UiRenderer"
     },
     "component089": {
@@ -1580,21 +1580,21 @@
             "x": -135.0,
             "y": 31.0
         },
-        "parent": 197,
+        "parent": 198,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 202,
+        "serializationID": 203,
         "type": "RectTransform"
     },
     "component090": {
         "entity id": 39,
-        "font": "KosugiMaru-Regular",
+        "font": "JosefinSans-Regular",
         "material": "Cargo9NameMat",
-        "serializationID": 203,
-        "text": "Food",
+        "serializationID": 204,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component091": {
@@ -1607,21 +1607,21 @@
             "x": -135.0,
             "y": -8.0
         },
-        "parent": 197,
+        "parent": 198,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 207,
+        "serializationID": 208,
         "type": "RectTransform"
     },
     "component092": {
         "entity id": 40,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo9WeightMat",
-        "serializationID": 208,
-        "text": "Weight:9.23kg",
+        "serializationID": 209,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component093": {
@@ -1634,72 +1634,27 @@
             "x": -135.0,
             "y": -51.0
         },
-        "parent": 197,
+        "parent": 198,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 0.23000000417232513,
+            "y": 0.23000000417232513
         },
         "rotation": 0.0,
-        "serializationID": 212,
+        "serializationID": 213,
         "type": "RectTransform"
     },
     "component094": {
         "entity id": 41,
-        "font": "KosugiMaru-Regular",
+        "font": "CourierNew",
         "material": "Cargo9IncomeMat",
-        "serializationID": 213,
-        "text": "Income:368.38$",
+        "serializationID": 214,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component095": {
         "entity id": 42,
-        "serializationID": 217,
+        "serializationID": 218,
         "type": "CargoStorage"
-    },
-    "component096": {
-        "entity id": 6,
-        "serializationID": 223,
-        "type": "Cargo"
-    },
-    "component097": {
-        "entity id": 10,
-        "serializationID": 224,
-        "type": "Cargo"
-    },
-    "component098": {
-        "entity id": 14,
-        "serializationID": 225,
-        "type": "Cargo"
-    },
-    "component099": {
-        "entity id": 18,
-        "serializationID": 226,
-        "type": "Cargo"
-    },
-    "component100": {
-        "entity id": 22,
-        "serializationID": 227,
-        "type": "Cargo"
-    },
-    "component101": {
-        "entity id": 26,
-        "serializationID": 228,
-        "type": "Cargo"
-    },
-    "component102": {
-        "entity id": 30,
-        "serializationID": 229,
-        "type": "Cargo"
-    },
-    "component103": {
-        "entity id": 34,
-        "serializationID": 230,
-        "type": "Cargo"
-    },
-    "component104": {
-        "entity id": 38,
-        "serializationID": 231,
-        "type": "Cargo"
     },
     "entity000": {
         "components": [
@@ -1722,394 +1677,391 @@
     },
     "entity002": {
         "components": [
-            18,
-            19
+            19,
+            20
         ],
         "id": 2,
         "name": "Ui_Menu_Background",
-        "serializationID": 17
+        "serializationID": 18
     },
     "entity003": {
         "components": [
-            22,
-            23
+            23,
+            24
         ],
         "id": 3,
         "name": "SelectCargoText",
-        "serializationID": 21
+        "serializationID": 22
     },
     "entity004": {
         "components": [
-            27,
             28,
-            30
+            29,
+            31
         ],
         "id": 4,
         "name": "PlayButton",
-        "serializationID": 26
+        "serializationID": 27
     },
     "entity005": {
         "components": [
-            32,
-            33
+            33,
+            34
         ],
         "id": 5,
         "name": "Playtext",
-        "serializationID": 31
+        "serializationID": 32
     },
     "entity006": {
         "components": [
-            37,
             38,
             39,
-            223
+            40
         ],
         "id": 6,
         "name": "CargoButton1",
-        "serializationID": 36
+        "serializationID": 37
     },
     "entity007": {
         "components": [
-            42,
-            43
+            43,
+            44
         ],
         "id": 7,
         "name": "Cargo1Name",
-        "serializationID": 41
+        "serializationID": 42
     },
     "entity008": {
         "components": [
-            47,
-            48
+            48,
+            49
         ],
         "id": 8,
         "name": "Cargo1Weight",
-        "serializationID": 46
+        "serializationID": 47
     },
     "entity009": {
         "components": [
-            52,
-            53
+            53,
+            54
         ],
         "id": 9,
         "name": "Cargo1Income",
-        "serializationID": 51
+        "serializationID": 52
     },
     "entity010": {
         "components": [
-            57,
             58,
             59,
-            224
+            60
         ],
         "id": 10,
         "name": "CargoButton2",
-        "serializationID": 56
+        "serializationID": 57
     },
     "entity011": {
         "components": [
-            62,
-            63
+            63,
+            64
         ],
         "id": 11,
         "name": "Cargo2Name",
-        "serializationID": 61
+        "serializationID": 62
     },
     "entity012": {
         "components": [
-            67,
-            68
+            68,
+            69
         ],
         "id": 12,
         "name": "Cargo2Weight",
-        "serializationID": 66
+        "serializationID": 67
     },
     "entity013": {
         "components": [
-            72,
-            73
+            73,
+            74
         ],
         "id": 13,
         "name": "Cargo2Income",
-        "serializationID": 71
+        "serializationID": 72
     },
     "entity014": {
         "components": [
-            77,
             78,
             79,
-            225
+            80
         ],
         "id": 14,
         "name": "CargoButton3",
-        "serializationID": 76
+        "serializationID": 77
     },
     "entity015": {
         "components": [
-            82,
-            83
+            83,
+            84
         ],
         "id": 15,
         "name": "Cargo3Name",
-        "serializationID": 81
+        "serializationID": 82
     },
     "entity016": {
         "components": [
-            87,
-            88
+            88,
+            89
         ],
         "id": 16,
         "name": "Cargo3Weight",
-        "serializationID": 86
+        "serializationID": 87
     },
     "entity017": {
         "components": [
-            92,
-            93
+            93,
+            94
         ],
         "id": 17,
         "name": "Cargo3Income",
-        "serializationID": 91
+        "serializationID": 92
     },
     "entity018": {
         "components": [
-            97,
             98,
             99,
-            226
+            100
         ],
         "id": 18,
         "name": "CargoButton4",
-        "serializationID": 96
+        "serializationID": 97
     },
     "entity019": {
         "components": [
-            102,
-            103
+            103,
+            104
         ],
         "id": 19,
         "name": "Cargo4Name",
-        "serializationID": 101
+        "serializationID": 102
     },
     "entity020": {
         "components": [
-            107,
-            108
+            108,
+            109
         ],
         "id": 20,
         "name": "Cargo4Weight",
-        "serializationID": 106
+        "serializationID": 107
     },
     "entity021": {
         "components": [
-            112,
-            113
+            113,
+            114
         ],
         "id": 21,
         "name": "Cargo4Income",
-        "serializationID": 111
+        "serializationID": 112
     },
     "entity022": {
         "components": [
-            117,
             118,
             119,
-            227
+            120
         ],
         "id": 22,
         "name": "CargoButton5",
-        "serializationID": 116
+        "serializationID": 117
     },
     "entity023": {
         "components": [
-            122,
-            123
+            123,
+            124
         ],
         "id": 23,
         "name": "Cargo5Name",
-        "serializationID": 121
+        "serializationID": 122
     },
     "entity024": {
         "components": [
-            127,
-            128
+            128,
+            129
         ],
         "id": 24,
         "name": "Cargo5Weight",
-        "serializationID": 126
+        "serializationID": 127
     },
     "entity025": {
         "components": [
-            132,
-            133
+            133,
+            134
         ],
         "id": 25,
         "name": "Cargo5Income",
-        "serializationID": 131
+        "serializationID": 132
     },
     "entity026": {
         "components": [
-            137,
             138,
             139,
-            228
+            140
         ],
         "id": 26,
         "name": "CargoButton6",
-        "serializationID": 136
+        "serializationID": 137
     },
     "entity027": {
         "components": [
-            142,
-            143
+            143,
+            144
         ],
         "id": 27,
         "name": "Cargo6Name",
-        "serializationID": 141
+        "serializationID": 142
     },
     "entity028": {
         "components": [
-            147,
-            148
+            148,
+            149
         ],
         "id": 28,
         "name": "Cargo6Weight",
-        "serializationID": 146
+        "serializationID": 147
     },
     "entity029": {
         "components": [
-            152,
-            153
+            153,
+            154
         ],
         "id": 29,
         "name": "Cargo6Income",
-        "serializationID": 151
+        "serializationID": 152
     },
     "entity030": {
         "components": [
-            157,
             158,
             159,
-            229
+            160
         ],
         "id": 30,
         "name": "CargoButton7",
-        "serializationID": 156
+        "serializationID": 157
     },
     "entity031": {
         "components": [
-            162,
-            163
+            163,
+            164
         ],
         "id": 31,
         "name": "Cargo7Name",
-        "serializationID": 161
+        "serializationID": 162
     },
     "entity032": {
         "components": [
-            167,
-            168
+            168,
+            169
         ],
         "id": 32,
         "name": "Cargo7Weight",
-        "serializationID": 166
+        "serializationID": 167
     },
     "entity033": {
         "components": [
-            172,
-            173
+            173,
+            174
         ],
         "id": 33,
         "name": "Cargo7Income",
-        "serializationID": 171
+        "serializationID": 172
     },
     "entity034": {
         "components": [
-            177,
             178,
             179,
-            230
+            180
         ],
         "id": 34,
         "name": "CargoButton8",
-        "serializationID": 176
+        "serializationID": 177
     },
     "entity035": {
         "components": [
-            182,
-            183
+            183,
+            184
         ],
         "id": 35,
         "name": "Cargo8Name",
-        "serializationID": 181
+        "serializationID": 182
     },
     "entity036": {
         "components": [
-            187,
-            188
+            188,
+            189
         ],
         "id": 36,
         "name": "Cargo8Weight",
-        "serializationID": 186
+        "serializationID": 187
     },
     "entity037": {
         "components": [
-            192,
-            193
+            193,
+            194
         ],
         "id": 37,
         "name": "Cargo8Income",
-        "serializationID": 191
+        "serializationID": 192
     },
     "entity038": {
         "components": [
-            197,
             198,
             199,
-            231
+            200
         ],
         "id": 38,
         "name": "CargoButton9",
-        "serializationID": 196
+        "serializationID": 197
     },
     "entity039": {
         "components": [
-            202,
-            203
+            203,
+            204
         ],
         "id": 39,
         "name": "Cargo9Name",
-        "serializationID": 201
+        "serializationID": 202
     },
     "entity040": {
         "components": [
-            207,
-            208
+            208,
+            209
         ],
         "id": 40,
         "name": "Cargo9Weight",
-        "serializationID": 206
+        "serializationID": 207
     },
     "entity041": {
         "components": [
-            212,
-            213
+            213,
+            214
         ],
         "id": 41,
         "name": "Cargo9Income",
-        "serializationID": 211
+        "serializationID": 212
     },
     "entity042": {
         "components": [
-            217
+            218
         ],
         "id": 42,
         "name": "CargoStorage",
-        "serializationID": 216
+        "serializationID": 217
     },
     "font000": {
-        "fontName": "KosugiMaru-Regular",
-        "fontPath": "Resources/Fonts/KosugiMaru-Regular.ttf",
+        "fontName": "JosefinSans-Regular",
+        "fontPath": "Resources/Fonts/JosefinSans-Regular.ttf",
+        "fontSize": 128,
+        "serializationID": 12
+    },
+    "font001": {
+        "fontName": "CourierNew",
+        "fontPath": "Resources/Fonts/CourierNew.ttf",
         "fontSize": 128,
         "serializationID": 13
     },
@@ -2158,21 +2110,19 @@
                 0.0
             ]
         },
-        "name": "UiStandardMat",
+        "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 15,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 17,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.5,
                 1.0,
-                1.0,
-                1.0
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -2221,19 +2171,21 @@
                 0.0
             ]
         },
-        "name": "TextMaterial",
-        "renderingType": 1,
-        "serializationID": 16,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "name": "UiBg",
+        "renderingType": 0,
+        "serializationID": 21,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_16_9.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0,
-                0.0,
-                0.0
+                0.0860000029206276,
+                0.5130000114440918,
+                0.7129999995231628
             ]
         }
     },
@@ -2264,39 +2216,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "UiBg",
-        "renderingType": 0,
-        "serializationID": 20,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "name": "SelectCargoTextMat",
+        "renderingType": 1,
+        "serializationID": 26,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0860000029206276,
-                0.5130000114440918,
-                0.7129999995231628
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -2327,37 +2277,39 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "SelectCargoTextMat",
-        "renderingType": 1,
-        "serializationID": 25,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "name": "PlayButton",
+        "renderingType": 0,
+        "serializationID": 30,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0,
-                0.0,
-                0.0
+                0.0860000029206276,
+                0.5130000114440918,
+                0.7129999995231628
             ]
         }
     },
@@ -2388,39 +2340,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "PlayButton",
-        "renderingType": 0,
-        "serializationID": 29,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "name": "PlayText",
+        "renderingType": 1,
+        "serializationID": 36,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.6999319195747375,
-                0.8779141902923584,
-                0.9009122252464294,
-                0.277972936630249
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -2451,34 +2401,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "PlayText",
+        "name": "Toggle_1",
         "renderingType": 1,
-        "serializationID": 35,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 41,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -2512,39 +2464,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_1",
+        "name": "Cargo1NameMat",
         "renderingType": 1,
-        "serializationID": 40,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 46,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -2575,27 +2525,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo1NameMat",
+        "name": "Cargo1WeightMat",
         "renderingType": 1,
-        "serializationID": 45,
+        "serializationID": 51,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2636,27 +2586,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo1WeightMat",
+        "name": "Cargo1IncomeMat",
         "renderingType": 1,
-        "serializationID": 50,
+        "serializationID": 56,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2697,34 +2647,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo1IncomeMat",
+        "name": "Toggle_2",
         "renderingType": 1,
-        "serializationID": 55,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 61,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -2758,39 +2710,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_2",
+        "name": "Cargo2NameMat",
         "renderingType": 1,
-        "serializationID": 60,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 66,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -2821,27 +2771,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo2NameMat",
+        "name": "Cargo2WeightMat",
         "renderingType": 1,
-        "serializationID": 65,
+        "serializationID": 71,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2882,27 +2832,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo2WeightMat",
+        "name": "Cargo2IncomeMat",
         "renderingType": 1,
-        "serializationID": 70,
+        "serializationID": 76,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2943,34 +2893,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo2IncomeMat",
+        "name": "Toggle_3",
         "renderingType": 1,
-        "serializationID": 75,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 81,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3004,39 +2956,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_3",
+        "name": "Cargo3NameMat",
         "renderingType": 1,
-        "serializationID": 80,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 86,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -3067,27 +3017,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo3NameMat",
+        "name": "Cargo3WeightMat",
         "renderingType": 1,
-        "serializationID": 85,
+        "serializationID": 91,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3095,9 +3045,9 @@
         "vec4s": {
             "color": [
                 1.0,
-                0.6000000238418579,
-                0.07800000160932541,
-                0.07800000160932541
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -3128,27 +3078,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo3WeightMat",
+        "name": "Cargo3IncomeMat",
         "renderingType": 1,
-        "serializationID": 90,
+        "serializationID": 96,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3189,34 +3139,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo3IncomeMat",
+        "name": "Toggle_4",
         "renderingType": 1,
-        "serializationID": 95,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 101,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3250,39 +3202,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_4",
+        "name": "Cargo4NameMat",
         "renderingType": 1,
-        "serializationID": 100,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 106,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -3313,27 +3263,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo4NameMat",
+        "name": "Cargo4WeightMat",
         "renderingType": 1,
-        "serializationID": 105,
+        "serializationID": 111,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3374,27 +3324,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo4WeightMat",
+        "name": "Cargo4IncomeMat",
         "renderingType": 1,
-        "serializationID": 110,
+        "serializationID": 116,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3435,34 +3385,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo4IncomeMat",
+        "name": "Toggle_5",
         "renderingType": 1,
-        "serializationID": 115,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 121,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3496,39 +3448,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_5",
+        "name": "Cargo5NameMat",
         "renderingType": 1,
-        "serializationID": 120,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 126,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -3559,27 +3509,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo5NameMat",
+        "name": "Cargo5WeightMat",
         "renderingType": 1,
-        "serializationID": 125,
+        "serializationID": 131,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3620,27 +3570,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo5WeightMat",
+        "name": "Cargo5IncomeMat",
         "renderingType": 1,
-        "serializationID": 130,
+        "serializationID": 136,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3681,34 +3631,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo5IncomeMat",
+        "name": "Toggle_6",
         "renderingType": 1,
-        "serializationID": 135,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 141,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3742,39 +3694,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_6",
+        "name": "Cargo6NameMat",
         "renderingType": 1,
-        "serializationID": 140,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 146,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -3805,27 +3755,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo6NameMat",
+        "name": "Cargo6WeightMat",
         "renderingType": 1,
-        "serializationID": 145,
+        "serializationID": 151,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3866,27 +3816,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo6WeightMat",
+        "name": "Cargo6IncomeMat",
         "renderingType": 1,
-        "serializationID": 150,
+        "serializationID": 156,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3927,34 +3877,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo6IncomeMat",
+        "name": "Toggle_7",
         "renderingType": 1,
-        "serializationID": 155,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 161,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3988,39 +3940,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_7",
+        "name": "Cargo7NameMat",
         "renderingType": 1,
-        "serializationID": 160,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 166,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -4051,27 +4001,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo7NameMat",
+        "name": "Cargo7WeightMat",
         "renderingType": 1,
-        "serializationID": 165,
+        "serializationID": 171,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4112,27 +4062,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo7WeightMat",
+        "name": "Cargo7IncomeMat",
         "renderingType": 1,
-        "serializationID": 170,
+        "serializationID": 176,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4173,34 +4123,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo7IncomeMat",
+        "name": "Toggle_8",
         "renderingType": 1,
-        "serializationID": 175,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 181,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -4234,39 +4186,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_8",
+        "name": "Cargo8NameMat",
         "renderingType": 1,
-        "serializationID": 180,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 186,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -4297,27 +4247,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo8NameMat",
+        "name": "Cargo8WeightMat",
         "renderingType": 1,
-        "serializationID": 185,
+        "serializationID": 191,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4358,27 +4308,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo8WeightMat",
+        "name": "Cargo8IncomeMat",
         "renderingType": 1,
-        "serializationID": 190,
+        "serializationID": 196,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4419,34 +4369,36 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo8IncomeMat",
+        "name": "Toggle_9",
         "renderingType": 1,
-        "serializationID": 195,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 201,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -4480,39 +4432,37 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Toggle_9",
+        "name": "Cargo9NameMat",
         "renderingType": 1,
-        "serializationID": 200,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 206,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.7999220490455627,
-                0.6899324655532837,
-                0.6899324655532837,
-                0.6899324655532837
+                1.0,
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -4543,27 +4493,27 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                -1.0,
                 0.0,
-                -1.0,
-                -1.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
-        "name": "Cargo9NameMat",
+        "name": "Cargo9WeightMat",
         "renderingType": 1,
-        "serializationID": 205,
+        "serializationID": 211,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4604,49 +4554,6 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0024999999441206455,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                -1.0,
-                0.0,
-                -1.0,
-                -1.0,
-                0.0,
-                1.0
-            ]
-        },
-        "name": "Cargo9WeightMat",
-        "renderingType": 1,
-        "serializationID": 210,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material041": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
                 0.0,
                 0.0,
                 0.0,
@@ -4663,29 +4570,11 @@
                 0.0,
                 0.0,
                 0.0
-            ],
-            "projection": [
-                0.0015625000232830644,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0024999999441206455,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                -1.0,
-                0.0,
-                -1.0,
-                -1.0,
-                0.0,
-                1.0
             ]
         },
         "name": "Cargo9IncomeMat",
         "renderingType": 1,
-        "serializationID": 215,
+        "serializationID": 216,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4696,69 +4585,6 @@
                 0.0,
                 0.0,
                 0.0
-            ]
-        }
-    },
-    "material042": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "LoadingScreenMat",
-        "renderingType": 1,
-        "serializationID": 221,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/loding.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.800000011920929,
-                1.0,
-                1.0,
-                1.0
             ]
         }
     },
@@ -4770,7 +4596,7 @@
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
-        "serializationID": 12,
+        "serializationID": 14,
         "shaderName": "TextStandard",
         "vertexShaderPath": "Resources/Shaders/TextStandard/TextStandard.vert"
     },
@@ -4781,8 +4607,8 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/button_test.png",
-        "serializationID": 14
+        "filePath": "Resources/Sprites/rect_2_1.png",
+        "serializationID": 15
     },
     "texture001": {
         "creationInfo": {
@@ -4791,7 +4617,7 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 219
+        "filePath": "Resources/Sprites/rect_16_9.png",
+        "serializationID": 16
     }
 }

@@ -2,6 +2,7 @@
 #define ENEMIESSYSTEM_HPP_
 
 #include "System.hpp"
+#include <glm/glm.hpp>
 
 class Enemy;
 class Transform;
@@ -14,12 +15,15 @@ class EnemyAttack;
 class EnemySystem : public System
 {
 public:
+    static constexpr glm::quat Y_180_DEG = glm::quat( 0.0f, 0.0f, 1.0f, 0.0f);
+
     EnemySystem() = default;
     virtual ~EnemySystem() = default;
+
 protected:
     virtual bool assertEntity(Entity* entity);
     virtual void fixedUpdate();
-protected:
+
 private:
     //obligatory
         Enemy* enemyPtr;
@@ -50,6 +54,11 @@ private:
      * @param dir Direction from enemy to player.
      */
     void attack(glm::vec3 dir);
+    
+    /**
+     * @brief Cleanup called, when attack routine was cancelled.
+     */
+    void attackClear();
 };
 
 #endif /* !ENEMIESSYSTEM_HPP_ */

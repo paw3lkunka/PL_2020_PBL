@@ -127,17 +127,20 @@
         i.minFilter = GL_LINEAR;
         i.magFilter = GL_LINEAR;
         i.wrapMode= GL_CLAMP_TO_EDGE;
-        CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_03/nz.hdr", 
-                                                                "Resources/Textures/skybox_03/nx.hdr", 
-                                                                "Resources/Textures/skybox_03/px.hdr",
-                                                                "Resources/Textures/skybox_03/pz.hdr",
-                                                                "Resources/Textures/skybox_03/py.hdr",
-                                                                "Resources/Textures/skybox_03/ny.hdr");
-
-        auto skyboxShader = objectModule.newShader("Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
-
+        i.generateMipmaps = false;
+        CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                                "Resources/Textures/skybox_02/nx.hdr", 
+                                                                "Resources/Textures/skybox_02/px.hdr",
+                                                                "Resources/Textures/skybox_02/pz.hdr",
+                                                                "Resources/Textures/skybox_02/py.hdr",
+                                                                "Resources/Textures/skybox_02/ny.hdr");
+        
+        Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+        
         Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
         hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+        
+        GetCore().rendererModule.setSkybox(hdrSkyboxMat);
     }
 
 #pragma endregion
@@ -580,7 +583,7 @@ objectModule.newEntity(2, "sampleSound");
     }
 }
 
-// PawelKunka - 2020-05-27 - 11:36
+// PawelKunka 
 //Added Rigidbody and HydroBody to the Kayak entity so it now floats 
 {
     auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
@@ -588,12 +591,17 @@ objectModule.newEntity(2, "sampleSound");
         rigidbody->drag = 3.0f;
         rigidbody->angularDrag = 3.0f;
         rigidbody->ignoreGravity = true;
+
+    auto boxCollider = objectModule.newEmptyComponent<BoxCollider>();
+        boxCollider->type = Collider::Type::DYNAMIC;
+        boxCollider->halfSize = glm::vec3(9.0f, 2.5f, 45.0f);
     
     auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
     
     auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
         kayakPtr->addComponent(hydroBody);
         kayakPtr->addComponent(rigidbody);
+        kayakPtr->addComponent(boxCollider);
 }
 
 // Surface - Andrzej 27.05

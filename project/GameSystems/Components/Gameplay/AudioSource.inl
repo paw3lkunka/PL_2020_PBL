@@ -194,7 +194,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to isLooping
      */
-    inline ALboolean& getIsLoopingModifiable() { dirty |= (1 << 4); return isLooping; }
+    inline ALboolean& getIsLoopingModifiable() { dirty |= (1 << 4); return isLooping;}
 
     /**
      * @brief WRITEONLY: Name (id) of the current buffer, unique in the device 
@@ -532,7 +532,6 @@ struct AudioSource : public Component
      */
     inline ALfloat& getByteOffsetModifiable() { dirty |= (1 << 18); return byteOffset; }
 
-    //HACK: temporary shit, i guess?
     bool autoPlay = false;
 
     private:

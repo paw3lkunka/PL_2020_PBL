@@ -105,15 +105,19 @@ void AudioModule::receiveMessage(Message msg)
         if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
         {
             alcPushCurrentContextChangesToDevice();
-            for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-            {
-                ALint state;
-                alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
-                if(state == AL_STOPPED)
-                {
-                    playingSources.erase(iter);
-                }
-            }
+            
+            // for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+            // {
+            //     if((*iter)->names.size() > 0 && !(*iter)->getIsLooping())
+            //     {
+            //         ALint state;
+            //         alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
+            //         if(state == AL_STOPPED)
+            //         {
+            //             playingSources.erase(iter);
+            //         }
+            //     }
+            // }
         }
     }
     catch(AudioContextLevelException e)

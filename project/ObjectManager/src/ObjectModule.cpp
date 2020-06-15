@@ -69,6 +69,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().messageBus.clearBuffers();
 
      // ! ----- Renderer initialization block -----
+    GetCore().rendererModule.clean();
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;

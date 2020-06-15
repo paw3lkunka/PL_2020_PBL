@@ -30,6 +30,7 @@
 
 // * Others
 #include <filesystem>
+#include <windows.h>
 
 class Message;
 enum class Event : unsigned int;
@@ -317,7 +318,9 @@ class Core
 //TODO must be a better way, than static fields
     public:
         static CameraSystem cameraSystem;
-        static CameraControlSystem cameraControlSystem;
+        static FreeCameraControlSystem freeCameraControlSystem;
+        static FirstPersonCameraControlSystem firstPersonCameraControlSystem;
+        static ThirdPersonCameraControlSystem thirdPersonCameraControlSystem;
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;
@@ -329,14 +332,17 @@ class Core
         static PaddleControlSystem paddleControlSystem;
         static PaddleIkSystem paddleIkSystem;
         static UiRendererSystem uiRendererSystem;
-        static HydroBodySystem hydroBodySystem;
+        
+        //TODO documentation
         static HideoutSystem hideoutSystem;
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
+        static HydroBodySystem hydroBodySystem;
         static SortingGroupSystem sortingGroupSystem;
         static ToggleButtonSystem toggleButtonSystem;
         static CargoStorageSystem cargoStorageSystem;
         static CargoButtonSystem cargoButtonSystem;
+        static ProgressBarSystem progressBarSystem;
 
 #pragma endregion
 
@@ -348,6 +354,8 @@ class Core
          * @param height resized window height provided by callback
          */
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+        static void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, 
+                            GLsizei length, const GLchar *message, const GLvoid *userParam);
         static int windowWidth;
         static int windowHeight;
 

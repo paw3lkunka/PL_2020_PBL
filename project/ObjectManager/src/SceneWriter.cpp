@@ -310,14 +310,14 @@ void SceneWriter::saveScene(const char* filePath)
         {
             (*json)[name]["type"] = "HydroBody";
         }
-        else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
-        {
-            (*json)[name]["type"] = "HydroSurface";
-        }
         else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
         {
             saveHydroAccelerator(temp);
         }
+        //else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
+        //{
+        //    j[name]["type"] = "HydroSurface";
+        //}
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
             (*json)[name]["type"] = "Kayak";
@@ -434,10 +434,10 @@ void SceneWriter::saveTerrainRenderer(TerrainRenderer* componentPtr)
     (*json)[name]["type"] = "TerrainRenderer";
     if(componentPtr->material != nullptr)
     {
-        (*json)[name]["material"] = componentPtr->material->serializationID;
+        (*json)[name]["material"] = componentPtr->material->name;
     }
-    (*json)[name]["mesh"] = componentPtr->terrainMesh->serializationID;
-    (*json)[name]["splatmap"] = componentPtr->splatmap->serializationID;
+    (*json)[name]["mesh"] = componentPtr->terrainMesh->getMeshPath();
+    (*json)[name]["splatmap"] = componentPtr->splatmap->filePath;
 }
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)

@@ -22,6 +22,9 @@ void PhysicModule::physicSimulation(std::vector<Entity>* entities)
     {
         if (auto* rb = e.getComponentPtr<Rigidbody>())
         {
+            rb->velocity = Vec3Cast( rb->reactRB->getLinearVelocity() );
+            rb->angularVelocity = Vec3Cast( rb->reactRB->getAngularVelocity() );
+            
             reactphysics3d::Transform reactT = rb->reactRB->getTransform();
 
             glm::vec3 pos = Vec3Cast(reactT.getPosition());
@@ -30,7 +33,7 @@ void PhysicModule::physicSimulation(std::vector<Entity>* entities)
             auto* tr = e.getComponentPtr<Transform>();
 
             tr->getLocalPositionModifiable() = tr->getToParentMatrix() * glm::vec4(pos, 1.0f);
-            tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());;
+            tr->getLocalRotationModifiable() = rot * glm::inverse(tr->getParent()->getWorldRotation());
         }
     }
 }

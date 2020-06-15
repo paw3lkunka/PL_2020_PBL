@@ -5,10 +5,10 @@
         "cubemapsHdr": 1,
         "entities": 105,
         "fonts": 0,
-        "materials": 14,
+        "materials": 13,
         "meshes": 65,
-        "shaders": 6,
-        "textures": 87
+        "shaders": 5,
+        "textures": 86
     },
     "component000": {
         "entity id": 0,
@@ -77,7 +77,7 @@
         "entity id": 2,
         "farPlane": 2500.0,
         "fieldOfView": 80.0,
-        "isMain": true,
+        "isMain": false,
         "nearPlane": 0.10000000149011612,
         "projectionMode": 0,
         "serializationID": 25,
@@ -86,15 +86,15 @@
     "component005": {
         "entity id": 2,
         "localPosition": {
-            "x": -14.908242225646973,
-            "y": 13.913193702697754,
-            "z": -17.343692779541016
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
         },
         "localRotation": {
-            "w": 0.10121767967939377,
-            "x": -0.011979901231825352,
-            "y": 0.987896740436554,
-            "z": 0.11692527681589127
+            "w": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
         },
         "localScale": {
             "x": 1.0,
@@ -107,9 +107,9 @@
     },
     "component006": {
         "at": {
-            "x": -0.19718369841575623,
-            "y": -0.23344531655311584,
-            "z": 0.9521669149398804
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
         },
         "entity id": 2,
         "gain": 1.0,
@@ -117,9 +117,9 @@
         "serializationID": 27,
         "type": "AudioListener",
         "up": {
-            "x": -0.047339629381895065,
-            "y": 0.9723700284957886,
-            "z": 0.2285950779914856
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
         }
     },
     "component007": {
@@ -168,10 +168,10 @@
     },
     "component009": {
         "entity id": 4,
-        "material": 41,
-        "mesh": 44,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, -100.0).obj/defaultobject",
         "serializationID": 47,
-        "splatmap": 244,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, -100.0).png",
         "type": "TerrainRenderer"
     },
     "component010": {
@@ -198,10 +198,10 @@
     },
     "component011": {
         "entity id": 5,
-        "material": 41,
-        "mesh": 48,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, 0.0).obj/defaultobject",
         "serializationID": 51,
-        "splatmap": 245,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 0.0).png",
         "type": "TerrainRenderer"
     },
     "component012": {
@@ -228,10 +228,10 @@
     },
     "component013": {
         "entity id": 6,
-        "material": 41,
-        "mesh": 52,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 55,
-        "splatmap": 246,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component014": {
@@ -258,10 +258,10 @@
     },
     "component015": {
         "entity id": 7,
-        "material": 41,
-        "mesh": 56,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 59,
-        "splatmap": 247,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component016": {
@@ -288,10 +288,10 @@
     },
     "component017": {
         "entity id": 8,
-        "material": 41,
-        "mesh": 60,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 63,
-        "splatmap": 248,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component018": {
@@ -318,10 +318,10 @@
     },
     "component019": {
         "entity id": 9,
-        "material": 41,
-        "mesh": 64,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(-100.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 67,
-        "splatmap": 249,
+        "splatmap": "Resources/Splatmaps/Terrain_(-100.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component020": {
@@ -348,10 +348,10 @@
     },
     "component021": {
         "entity id": 10,
-        "material": 41,
-        "mesh": 68,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, -100.0).obj/defaultobject",
         "serializationID": 71,
-        "splatmap": 250,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, -100.0).png",
         "type": "TerrainRenderer"
     },
     "component022": {
@@ -378,10 +378,10 @@
     },
     "component023": {
         "entity id": 11,
-        "material": 41,
-        "mesh": 72,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 0.0).obj/defaultobject",
         "serializationID": 75,
-        "splatmap": 251,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 0.0).png",
         "type": "TerrainRenderer"
     },
     "component024": {
@@ -408,10 +408,10 @@
     },
     "component025": {
         "entity id": 12,
-        "material": 41,
-        "mesh": 76,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 79,
-        "splatmap": 252,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component026": {
@@ -438,10 +438,10 @@
     },
     "component027": {
         "entity id": 13,
-        "material": 41,
-        "mesh": 80,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 83,
-        "splatmap": 253,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component028": {
@@ -468,10 +468,10 @@
     },
     "component029": {
         "entity id": 14,
-        "material": 41,
-        "mesh": 84,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 87,
-        "splatmap": 254,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component030": {
@@ -498,10 +498,10 @@
     },
     "component031": {
         "entity id": 15,
-        "material": 41,
-        "mesh": 88,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 91,
-        "splatmap": 255,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component032": {
@@ -528,10 +528,10 @@
     },
     "component033": {
         "entity id": 16,
-        "material": 41,
-        "mesh": 92,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(0.0, 0.0, 500.0).obj/defaultobject",
         "serializationID": 95,
-        "splatmap": 256,
+        "splatmap": "Resources/Splatmaps/Terrain_(0.0, 0.0, 500.0).png",
         "type": "TerrainRenderer"
     },
     "component034": {
@@ -558,10 +558,10 @@
     },
     "component035": {
         "entity id": 17,
-        "material": 41,
-        "mesh": 96,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 0.0).obj/defaultobject",
         "serializationID": 99,
-        "splatmap": 257,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 0.0).png",
         "type": "TerrainRenderer"
     },
     "component036": {
@@ -588,10 +588,10 @@
     },
     "component037": {
         "entity id": 18,
-        "material": 41,
-        "mesh": 100,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 103,
-        "splatmap": 258,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component038": {
@@ -618,10 +618,10 @@
     },
     "component039": {
         "entity id": 19,
-        "material": 41,
-        "mesh": 104,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 107,
-        "splatmap": 259,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component040": {
@@ -648,10 +648,10 @@
     },
     "component041": {
         "entity id": 20,
-        "material": 41,
-        "mesh": 108,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 111,
-        "splatmap": 260,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component042": {
@@ -678,10 +678,10 @@
     },
     "component043": {
         "entity id": 21,
-        "material": 41,
-        "mesh": 112,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 115,
-        "splatmap": 261,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component044": {
@@ -708,10 +708,10 @@
     },
     "component045": {
         "entity id": 22,
-        "material": 41,
-        "mesh": 116,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 500.0).obj/defaultobject",
         "serializationID": 119,
-        "splatmap": 262,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 500.0).png",
         "type": "TerrainRenderer"
     },
     "component046": {
@@ -738,10 +738,10 @@
     },
     "component047": {
         "entity id": 23,
-        "material": 41,
-        "mesh": 120,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 600.0).obj/defaultobject",
         "serializationID": 123,
-        "splatmap": 263,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 600.0).png",
         "type": "TerrainRenderer"
     },
     "component048": {
@@ -768,10 +768,10 @@
     },
     "component049": {
         "entity id": 24,
-        "material": 41,
-        "mesh": 124,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 700.0).obj/defaultobject",
         "serializationID": 127,
-        "splatmap": 264,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 700.0).png",
         "type": "TerrainRenderer"
     },
     "component050": {
@@ -798,10 +798,10 @@
     },
     "component051": {
         "entity id": 25,
-        "material": 41,
-        "mesh": 128,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(100.0, 0.0, 800.0).obj/defaultobject",
         "serializationID": 131,
-        "splatmap": 265,
+        "splatmap": "Resources/Splatmaps/Terrain_(100.0, 0.0, 800.0).png",
         "type": "TerrainRenderer"
     },
     "component052": {
@@ -828,10 +828,10 @@
     },
     "component053": {
         "entity id": 26,
-        "material": 41,
-        "mesh": 132,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 0.0).obj/defaultobject",
         "serializationID": 135,
-        "splatmap": 266,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 0.0).png",
         "type": "TerrainRenderer"
     },
     "component054": {
@@ -858,10 +858,10 @@
     },
     "component055": {
         "entity id": 27,
-        "material": 41,
-        "mesh": 136,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 139,
-        "splatmap": 267,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component056": {
@@ -888,10 +888,10 @@
     },
     "component057": {
         "entity id": 28,
-        "material": 41,
-        "mesh": 140,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 143,
-        "splatmap": 268,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component058": {
@@ -918,10 +918,10 @@
     },
     "component059": {
         "entity id": 29,
-        "material": 41,
-        "mesh": 144,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 147,
-        "splatmap": 269,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component060": {
@@ -948,10 +948,10 @@
     },
     "component061": {
         "entity id": 30,
-        "material": 41,
-        "mesh": 148,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 151,
-        "splatmap": 270,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component062": {
@@ -978,10 +978,10 @@
     },
     "component063": {
         "entity id": 31,
-        "material": 41,
-        "mesh": 152,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 500.0).obj/defaultobject",
         "serializationID": 155,
-        "splatmap": 271,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 500.0).png",
         "type": "TerrainRenderer"
     },
     "component064": {
@@ -1008,10 +1008,10 @@
     },
     "component065": {
         "entity id": 32,
-        "material": 41,
-        "mesh": 156,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 600.0).obj/defaultobject",
         "serializationID": 159,
-        "splatmap": 272,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 600.0).png",
         "type": "TerrainRenderer"
     },
     "component066": {
@@ -1038,10 +1038,10 @@
     },
     "component067": {
         "entity id": 33,
-        "material": 41,
-        "mesh": 160,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 700.0).obj/defaultobject",
         "serializationID": 163,
-        "splatmap": 273,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 700.0).png",
         "type": "TerrainRenderer"
     },
     "component068": {
@@ -1068,10 +1068,10 @@
     },
     "component069": {
         "entity id": 34,
-        "material": 41,
-        "mesh": 164,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 800.0).obj/defaultobject",
         "serializationID": 167,
-        "splatmap": 274,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 800.0).png",
         "type": "TerrainRenderer"
     },
     "component070": {
@@ -1098,10 +1098,10 @@
     },
     "component071": {
         "entity id": 35,
-        "material": 41,
-        "mesh": 168,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(200.0, 0.0, 900.0).obj/defaultobject",
         "serializationID": 171,
-        "splatmap": 275,
+        "splatmap": "Resources/Splatmaps/Terrain_(200.0, 0.0, 900.0).png",
         "type": "TerrainRenderer"
     },
     "component072": {
@@ -1128,10 +1128,10 @@
     },
     "component073": {
         "entity id": 36,
-        "material": 41,
-        "mesh": 172,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 0.0).obj/defaultobject",
         "serializationID": 175,
-        "splatmap": 276,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 0.0).png",
         "type": "TerrainRenderer"
     },
     "component074": {
@@ -1158,10 +1158,10 @@
     },
     "component075": {
         "entity id": 37,
-        "material": 41,
-        "mesh": 176,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 179,
-        "splatmap": 277,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component076": {
@@ -1188,10 +1188,10 @@
     },
     "component077": {
         "entity id": 38,
-        "material": 41,
-        "mesh": 180,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 183,
-        "splatmap": 278,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component078": {
@@ -1218,10 +1218,10 @@
     },
     "component079": {
         "entity id": 39,
-        "material": 41,
-        "mesh": 184,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 187,
-        "splatmap": 279,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component080": {
@@ -1248,10 +1248,10 @@
     },
     "component081": {
         "entity id": 40,
-        "material": 41,
-        "mesh": 188,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 191,
-        "splatmap": 280,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component082": {
@@ -1278,10 +1278,10 @@
     },
     "component083": {
         "entity id": 41,
-        "material": 41,
-        "mesh": 192,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 500.0).obj/defaultobject",
         "serializationID": 195,
-        "splatmap": 281,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 500.0).png",
         "type": "TerrainRenderer"
     },
     "component084": {
@@ -1308,10 +1308,10 @@
     },
     "component085": {
         "entity id": 42,
-        "material": 41,
-        "mesh": 196,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 600.0).obj/defaultobject",
         "serializationID": 199,
-        "splatmap": 282,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 600.0).png",
         "type": "TerrainRenderer"
     },
     "component086": {
@@ -1338,10 +1338,10 @@
     },
     "component087": {
         "entity id": 43,
-        "material": 41,
-        "mesh": 200,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 700.0).obj/defaultobject",
         "serializationID": 203,
-        "splatmap": 283,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 700.0).png",
         "type": "TerrainRenderer"
     },
     "component088": {
@@ -1368,10 +1368,10 @@
     },
     "component089": {
         "entity id": 44,
-        "material": 41,
-        "mesh": 204,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 800.0).obj/defaultobject",
         "serializationID": 207,
-        "splatmap": 284,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 800.0).png",
         "type": "TerrainRenderer"
     },
     "component090": {
@@ -1398,10 +1398,10 @@
     },
     "component091": {
         "entity id": 45,
-        "material": 41,
-        "mesh": 208,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(300.0, 0.0, 900.0).obj/defaultobject",
         "serializationID": 211,
-        "splatmap": 285,
+        "splatmap": "Resources/Splatmaps/Terrain_(300.0, 0.0, 900.0).png",
         "type": "TerrainRenderer"
     },
     "component092": {
@@ -1428,10 +1428,10 @@
     },
     "component093": {
         "entity id": 46,
-        "material": 41,
-        "mesh": 212,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 100.0).obj/defaultobject",
         "serializationID": 215,
-        "splatmap": 286,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 100.0).png",
         "type": "TerrainRenderer"
     },
     "component094": {
@@ -1458,10 +1458,10 @@
     },
     "component095": {
         "entity id": 47,
-        "material": 41,
-        "mesh": 216,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 200.0).obj/defaultobject",
         "serializationID": 219,
-        "splatmap": 287,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 200.0).png",
         "type": "TerrainRenderer"
     },
     "component096": {
@@ -1488,10 +1488,10 @@
     },
     "component097": {
         "entity id": 48,
-        "material": 41,
-        "mesh": 220,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 300.0).obj/defaultobject",
         "serializationID": 223,
-        "splatmap": 288,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 300.0).png",
         "type": "TerrainRenderer"
     },
     "component098": {
@@ -1518,10 +1518,10 @@
     },
     "component099": {
         "entity id": 49,
-        "material": 41,
-        "mesh": 224,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 400.0).obj/defaultobject",
         "serializationID": 227,
-        "splatmap": 289,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 400.0).png",
         "type": "TerrainRenderer"
     },
     "component100": {
@@ -1548,10 +1548,10 @@
     },
     "component101": {
         "entity id": 50,
-        "material": 41,
-        "mesh": 228,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 500.0).obj/defaultobject",
         "serializationID": 231,
-        "splatmap": 290,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 500.0).png",
         "type": "TerrainRenderer"
     },
     "component102": {
@@ -1578,10 +1578,10 @@
     },
     "component103": {
         "entity id": 51,
-        "material": 41,
-        "mesh": 232,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 600.0).obj/defaultobject",
         "serializationID": 235,
-        "splatmap": 291,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 600.0).png",
         "type": "TerrainRenderer"
     },
     "component104": {
@@ -1608,10 +1608,10 @@
     },
     "component105": {
         "entity id": 52,
-        "material": 41,
-        "mesh": 236,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 700.0).obj/defaultobject",
         "serializationID": 239,
-        "splatmap": 292,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 700.0).png",
         "type": "TerrainRenderer"
     },
     "component106": {
@@ -1638,10 +1638,10 @@
     },
     "component107": {
         "entity id": 53,
-        "material": 41,
-        "mesh": 240,
+        "material": "terrainMat",
+        "mesh": "Resources/Terrain/Terrain_(400.0, 0.0, 800.0).obj/defaultobject",
         "serializationID": 243,
-        "splatmap": 293,
+        "splatmap": "Resources/Splatmaps/Terrain_(400.0, 0.0, 800.0).png",
         "type": "TerrainRenderer"
     },
     "component108": {
@@ -4000,9 +4000,7 @@
     },
     "material000": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {
             "_Time": 0.0,
             "blendCycle": 1.0,
@@ -4111,7 +4109,6 @@
         "shaderName": "flowmapShader",
         "textures": {
             "diffuse": "Resources/Textures/Unity/water_diffuse.png",
-            "directionalShadowMap": "",
             "flowMap": "Resources/Flowmaps/flowmap.png",
             "flowMapNoise": "Resources/Flowmaps/noiseTexture.png",
             "normal": "Resources/Textures/Unity/water_normal.png",
@@ -4201,22 +4198,22 @@
                 0.0
             ],
             "viewStatic": [
-                -0.9792228937149048,
-                -0.04733961448073387,
-                0.19718369841575623,
-                0.0,
-                -3.7252898543727042e-09,
-                0.9723700284957886,
-                0.23344534635543823,
-                0.0,
-                -0.20278669893741608,
-                0.22859501838684082,
-                -0.9521668553352356,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                1.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             ]
         },
         "name": "skyboxHdrMat",
@@ -4236,9 +4233,7 @@
     },
     "material002": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -4344,7 +4339,6 @@
             "diffuse1": "Resources/Textures/rockGround/rock_ground_02_diff_2k.png",
             "diffuse2": "Resources/Textures/grassRock/aerial_grass_rock_diff_2k.png",
             "diffuse3": "Resources/Textures/white.png",
-            "directionalShadowMap": "",
             "normal0": "Resources/Textures/rockGrass/rockGrass_normal.png",
             "normal1": "Resources/Textures/rockGround/rock_ground_02_nor_2k.png",
             "normal2": "Resources/Textures/grassRock/aerial_grass_rock_nor_2k.png",
@@ -4401,9 +4395,7 @@
     },
     "material003": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -4506,7 +4498,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/Conifer Bark Array BODT-normal.png",
             "occRouMet": "Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png"
         },
@@ -4540,9 +4531,7 @@
     },
     "material004": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -4645,7 +4634,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/Conifer Bark Array BODT-normal.png",
             "occRouMet": "Resources/Textures/Unity/Conifer Bark Array BODT-occRouMet.png"
         },
@@ -4679,9 +4667,7 @@
     },
     "material005": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -4784,7 +4770,6 @@
         "shaderName": "standardPbrCutout",
         "textures": {
             "diffuse": "Resources/Textures/Unity/BODT Conifer Branches-albedo.png",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/BODT Conifer Branches-normal.png",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -4954,9 +4939,7 @@
     },
     "material007": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5059,7 +5042,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/T_Rock_02_D.TGA",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/T_Rock_02_N.TGA",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5093,9 +5075,7 @@
     },
     "material008": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5198,7 +5178,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/T_Rock_03_D.TGA",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/T_Rock_03_N.TGA",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5232,9 +5211,7 @@
     },
     "material009": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5337,7 +5314,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/T_Rock_04_D.TGA",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/T_Rock_04_N.TGA",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5371,9 +5347,7 @@
     },
     "material010": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5476,7 +5450,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/T_Rock_05_D.TGA",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/T_Rock_05_N.TGA",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5510,9 +5483,7 @@
     },
     "material011": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5615,7 +5586,6 @@
         "shaderName": "standardPbr",
         "textures": {
             "diffuse": "Resources/Textures/Unity/T_Rock_06_D.TGA",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/T_Rock_06_N.TGA",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5649,9 +5619,7 @@
     },
     "material012": {
         "cubemaps": {},
-        "cubemapsHdr": {
-            "irradianceMap": 19
-        },
+        "cubemapsHdr": {},
         "floats": {},
         "instancingEnabled": false,
         "ints": {},
@@ -5754,7 +5722,6 @@
         "shaderName": "standardPbrCutout",
         "textures": {
             "diffuse": "Resources/Textures/Unity/rushes-diffuse.tga",
-            "directionalShadowMap": "",
             "normal": "Resources/Textures/Unity/rushes-normal.tga",
             "occRouMet": "Resources/Textures/occroumet.png"
         },
@@ -5783,69 +5750,6 @@
                 0.0,
                 0.0,
                 0.0
-            ]
-        }
-    },
-    "material013": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "LoadingScreenMat",
-        "renderingType": 1,
-        "serializationID": 484,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/loding.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.800000011920929,
-                1.0,
-                1.0,
-                1.0
             ]
         }
     },
@@ -6268,12 +6172,6 @@
         "serializationID": 294,
         "shaderName": "standardPbrCutout",
         "vertexShaderPath": "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.vert"
-    },
-    "shader005": {
-        "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
-        "serializationID": 483,
-        "shaderName": "UiStandard",
-        "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
     "texture000": {
         "creationInfo": {
@@ -7134,15 +7032,5 @@
         },
         "filePath": "Resources/Textures/Unity/rushes-normal.tga",
         "serializationID": 322
-    },
-    "texture086": {
-        "creationInfo": {
-            "generateMipmaps": false,
-            "magFilter": 9729,
-            "minFilter": 9729,
-            "wrapMode": 33071
-        },
-        "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 481
     }
 }
