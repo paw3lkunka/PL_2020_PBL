@@ -11,7 +11,7 @@ struct ProgressBar : public Component
     ProgressBar() = default;
     ~ProgressBar() = default;
 
-    ///@brief progress in procents (0 - 1)
+    ///@brief progress in procents [0 - 1]
     float percentage = 1.0f;
 
     ///@brief last frame percentage
