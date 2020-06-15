@@ -29,8 +29,8 @@ struct ThirdPersonCamera : public Component
     float rotationSensitivity = 0.1f;
     float rotationLerp = 0.1f;
 
-    Rigidbody* playerRigidbody;
-    float maxIgnoredPlayerSpeed = 0.5f;
+    //Rigidbody* playerRigidbody;
+    //float maxIgnoredPlayerSpeed = 0.5f;
 };
 
 

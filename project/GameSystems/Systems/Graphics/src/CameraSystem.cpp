@@ -1,13 +1,14 @@
 #include "CameraSystem.hpp"
 
+#include <glm/gtx/string_cast.hpp>
+
 #include "Core.hpp"
 #include "Entity.hpp"
 
 #include "Camera.inl"
 #include "Transform.hh"
 #include "Message.inl"
-
-#include <glm/gtx/string_cast.hpp>
+#include "GamepadDataStructures.inl"
 
 Camera* CameraSystem::mainCamera = nullptr;
 
@@ -34,6 +35,17 @@ void CameraSystem::receiveMessage(Message msg)
                     case GLFW_KEY_C:
                         switchGameplayCameraControl = !switchGameplayCameraControl;
                         break;
+                }
+            }
+            break;
+
+        case Event::GAMEPAD_BUTTON_PRESSED:
+            {
+                GamepadButtonData data = msg.getValue<GamepadButtonData>();
+                switch(data.buttonId)
+                {
+                    case GLFW_GAMEPAD_BUTTON_BACK:
+                        switchGameplayCameraControl = !switchGameplayCameraControl;
                 }
             }
             break;

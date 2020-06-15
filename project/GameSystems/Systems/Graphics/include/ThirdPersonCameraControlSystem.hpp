@@ -34,6 +34,8 @@ private:
     bool usingMouse = false;
     float rotationSensitivity = 1.0f;
     float zoom = 0.0f;
+
+    glm::vec2 gamepadAxis = { 0.0f, 0.0f };
 };
 
 #endif // _THIRDPERSONCAMERACONTROLSYSTEM_HPP

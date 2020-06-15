@@ -30,6 +30,8 @@ private:
 
     bool usingMouse = false;
     float inputSensitivity = 1.0f;
+
+    glm::vec2 gamepadAxis = { 0.0f, 0.0f };
 };
 
 #endif // _FIRSTPERSONCAMERACONTROLSYSTEM_HPP

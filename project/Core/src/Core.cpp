@@ -148,7 +148,7 @@ int Core::init()
 
             auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
                 tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-                tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+                //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
 
             auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
                 fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();

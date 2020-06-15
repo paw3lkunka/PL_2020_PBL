@@ -52,7 +52,6 @@ void ThirdPersonCameraControlSystem::receiveMessage(Message msg)
                 {
                     CursorData cursorData = msg.getValue<CursorData>();
                     angleAroundPlayer += cursorData.xDelta * rotationSensitivity;
-                    angleAroundPlayer = glm::mod(angleAroundPlayer, 360.0f);
                     pitch -= cursorData.yDelta * rotationSensitivity;
                 }
             }
@@ -90,13 +89,26 @@ void ThirdPersonCameraControlSystem::receiveMessage(Message msg)
                 GamepadAxisData data = msg.getValue<GamepadAxisData>();
                 switch(data.axisId)
                 {
-                    case GLFW_GAMEPAD_AXIS_RIGHT_X:
-                        angleAroundPlayer += data.axisState * rotationSensitivity;
-                        angleAroundPlayer = glm::mod(angleAroundPlayer, 360.0f);
+                    case GLFW_GAMEPAD_AXIS_LEFT_X:
+                        if(glm::abs(data.axisState) > 0.25f)
+                        {
+                            gamepadAxis.x = data.axisState;
+                        }
+                        else
+                        {
+                            gamepadAxis.x = 0.0f;
+                        }
                         break;
 
-                    case GLFW_GAMEPAD_AXIS_RIGHT_Y:
-                        pitch -= data.axisState * rotationSensitivity;
+                    case GLFW_GAMEPAD_AXIS_LEFT_Y:
+                        if(glm::abs(data.axisState) > 0.25f)
+                        {
+                            gamepadAxis.y = data.axisState;
+                        }
+                        else
+                        {
+                            gamepadAxis.y = 0.0f;
+                        }
                         break;
                 }
             }
@@ -117,12 +129,27 @@ void ThirdPersonCameraControlSystem::receiveMessage(Message msg)
                 }
             }
             break;
+        
+        case Event::GAMEPAD_BUTTON_PRESSED:
+            {
+                GamepadButtonData data = msg.getValue<GamepadButtonData>();
+                switch(data.buttonId)
+                {
+                    case GLFW_GAMEPAD_BUTTON_BACK:
+                        angleAroundPlayer = 0.0f;
+                        pitch = -70.0f;
+                }
+            }
+            break;
     }
 }
 
 void ThirdPersonCameraControlSystem::fixedUpdate()
 {
     rotationSensitivity = tpCamera->rotationSensitivity;
+    angleAroundPlayer += gamepadAxis.x;
+    angleAroundPlayer = glm::mod(angleAroundPlayer, 360.0f);
+    pitch -= gamepadAxis.y;
     
     float& currentDistance = tpCamera->distance;
     float targetDistance = currentDistance + (zoom * tpCamera->zoomSensitivity);
