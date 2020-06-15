@@ -70,6 +70,22 @@ switch (msg.getEvent())
                     break;
             }
             break;
+
+        case Event::KEY_PRESSED:
+            {
+                switch (msg.getValue<int>())
+                {
+                    case GLFW_KEY_F1:
+                    case GLFW_KEY_C:
+                    case GLFW_KEY_V:
+                        {
+                            yaw = -90.0f;
+                            pitch = 0.0f;
+                        }
+                        break;
+                }
+            }
+            break;
     }
 }
 
@@ -79,15 +95,18 @@ void FirstPersonCameraControlSystem::fixedUpdate()
     yaw = glm::clamp(yaw, fpCamera->minYaw, fpCamera-> maxYaw);
     pitch = glm::clamp(pitch, fpCamera->minPitch, fpCamera->maxPitch);
 
-    glm::vec3 headPos = static_cast<glm::vec3>( fpCamera->player->getModelMatrix()[3] );
-    headPos += fpCamera->headOffset;
-    transform->getLocalPositionModifiable() = headPos;
+    glm::vec3 targetPosition = static_cast<glm::vec3>( fpCamera->player->getModelMatrix()[3] ) + fpCamera->headOffset;
+    glm::vec3& currentPosition = transform->getLocalPositionModifiable();
+    currentPosition.x = std::lerp(currentPosition.x, targetPosition.x, fpCamera->moveLerp);
+    currentPosition.y = std::lerp(currentPosition.y, targetPosition.y, fpCamera->moveLerp);
+    currentPosition.z = std::lerp(currentPosition.z, targetPosition.z, fpCamera->moveLerp);
 
     glm::vec3 direction = glm::vec3(0.0f);
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction = glm::normalize(direction);
-    glm::quat rotation = glm::quatLookAt(direction, glm::vec3(0.0f, 1.0f, 0.0f));
-    transform->getLocalRotationModifiable() = rotation;
+    glm::quat targetRotation = glm::quatLookAt(direction, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::quat& currentRotation = transform->getLocalRotationModifiable();
+    currentRotation = glm::slerp(currentRotation, targetRotation, fpCamera->rotationLerp);
 }

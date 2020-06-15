@@ -310,14 +310,14 @@ void SceneWriter::saveScene(const char* filePath)
         {
             (*json)[name]["type"] = "HydroBody";
         }
-        else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
-        {
-            (*json)[name]["type"] = "HydroSurface";
-        }
         else if(HydroAccelerator* temp = dynamic_cast<HydroAccelerator*>(objContainerPtr->components[i]))
         {
             saveHydroAccelerator(temp);
         }
+        //else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
+        //{
+        //    j[name]["type"] = "HydroSurface";
+        //}
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
             (*json)[name]["type"] = "Kayak";

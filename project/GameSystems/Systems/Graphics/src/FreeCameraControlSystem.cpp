@@ -57,7 +57,7 @@ void FreeCameraControlSystem::receiveMessage(Message msg)
                 case GLFW_KEY_LEFT_SHIFT:
                     speed *= 5.0f;
                     break;
-                case GLFW_KEY_C:
+                case GLFW_KEY_F2:
                     usingMouse = !usingMouse;
                     break;
             }

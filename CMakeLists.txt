@@ -133,6 +133,9 @@ aux_source_directory( project/GameSystems/Systems/Gameplay/src  GAMEPLAY_SYSTEM_
 aux_source_directory( project/GameSystems/Systems/Graphics/src  GRAPHICS_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/Physics/src   PHYSICS_SYSTEM_SRC)
 aux_source_directory( project/GameSystems/Systems/UI/src        UI_SYSTEM_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro        HYDRO_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Data   HYDRO_DATA_SRC)
+aux_source_directory( project/GameSystems/Base/src/Hydro/Math   HYDRO_MATH_SRC)
 aux_source_directory( project/Audio/src                         AUDIO_SRC)
 aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
 aux_source_directory( project/Input/src                         INPUT_SRC)
@@ -150,6 +153,9 @@ list(
     APPEND SOURCE_FILES
         ${CORE_SRC}
         ${GAME_SRC}
+        ${HYDRO_SRC}
+        ${HYDRO_DATA_SRC}
+        ${HYDRO_MATH_SRC}
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
@@ -212,6 +218,9 @@ include_directories(
     project/Autogen/include
     project/Core/include
     project/GameSystems/Base/include
+    project/GameSystems/Base/include/Hydro
+    project/GameSystems/Base/include/Hydro/Data
+    project/GameSystems/Base/include/Hydro/Math
     project/GameSystems/Components
     project/GameSystems/Components/Gameplay
     project/GameSystems/Components/Graphics

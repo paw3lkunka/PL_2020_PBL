@@ -583,7 +583,7 @@ objectModule.newEntity(2, "sampleSound");
     }
 }
 
-// PawelKunka - 2020-05-27 - 11:36
+// PawelKunka 
 //Added Rigidbody and HydroBody to the Kayak entity so it now floats 
 {
     auto rigidbody = objectModule.newEmptyComponent<Rigidbody>();
@@ -591,12 +591,17 @@ objectModule.newEntity(2, "sampleSound");
         rigidbody->drag = 3.0f;
         rigidbody->angularDrag = 3.0f;
         rigidbody->ignoreGravity = true;
+
+    auto boxCollider = objectModule.newEmptyComponent<BoxCollider>();
+        boxCollider->type = Collider::Type::DYNAMIC;
+        boxCollider->halfSize = glm::vec3(9.0f, 2.5f, 45.0f);
     
     auto hydroBody = objectModule.newEmptyComponent<HydroBody>();
     
     auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
         kayakPtr->addComponent(hydroBody);
         kayakPtr->addComponent(rigidbody);
+        kayakPtr->addComponent(boxCollider);
 }
 
 // Surface - Andrzej 27.05

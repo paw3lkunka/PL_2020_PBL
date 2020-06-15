@@ -10,6 +10,7 @@ struct Transform;
 struct Camera;
 struct ThirdPersonCamera;
 struct SphereCollider;
+struct Rigidbody;
 
 class ThirdPersonCameraControlSystem : public System, public IMsgReceiver
 {
@@ -29,8 +30,6 @@ private:
 
     float angleAroundPlayer = 0.0f;
     float pitch = -70.0f;
-    //float yaw = 0.0f;
-    //float roll = 0.0f;
 
     bool usingMouse = false;
     float rotationSensitivity = 1.0f;

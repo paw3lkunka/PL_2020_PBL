@@ -25,7 +25,7 @@ private:
     Camera* camera;
     FirstPersonCamera* fpCamera;
 
-    float yaw = 0.0f;
+    float yaw = -90.0f;
     float pitch = 0.0f;
 
     bool usingMouse = false;

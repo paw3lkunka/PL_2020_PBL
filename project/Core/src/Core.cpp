@@ -144,13 +144,18 @@ int Core::init()
         // ? -u
         {
             //some code here...
-            
+            auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+
             auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
-            auto kayakPtr = objectModule.getEntityPtrByName("Kayak");
                 tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+                tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+                fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
 
             auto cameraPtr = objectModule.getEntityPtrByName("Camera");
                 cameraPtr->addComponent(tpCameraPtr);
+                cameraPtr->addComponent(fpCameraPtr);
                 cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
@@ -187,7 +192,6 @@ int Core::init()
 
 #pragma regnon attach systems
 
-    //gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
     
@@ -197,7 +201,10 @@ int Core::init()
     
     gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
+    
+    gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
+    
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -381,7 +388,7 @@ float Core::randomFloat01L()
     } number;
 
     number.i = xoshiro_next();
-    number.i = 0x3F800000U | (number.i >> 9);;
+    number.i = 0x3F800000U | (number.i >> 9);
 
     return 2.0f - number.f;
 }
@@ -421,10 +428,10 @@ PaddleControlSystem Core::paddleControlSystem;
 PaddleIkSystem Core::paddleIkSystem;
 LightSystem Core::lightSystem;
 UiRendererSystem Core::uiRendererSystem;
-HydroBodySystem Core::hydroBodySystem;
 UiButtonSystem Core::uiButtonSystem;
 HideoutSystem Core::hideoutSystem;
 EnemySystem Core::enemySystem;
+HydroBodySystem Core::hydroBodySystem;
 SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;

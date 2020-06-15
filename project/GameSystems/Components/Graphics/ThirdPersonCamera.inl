@@ -10,11 +10,11 @@ struct ThirdPersonCamera : public Component
     virtual ~ThirdPersonCamera() = default;
 
     Transform* player;
-    glm::vec3 playerOffset = { 0.0f, 20.0f, 0.0f };
+    glm::vec3 playerOffset = { 0.0f, 0.75f, 0.0f };
 
-    float distance = 150.0f;
-    float minDistance = 50.0f;
-    float maxDistance = 300.0f;
+    float distance = 6.0f;
+    float minDistance = 3.0f;
+    float maxDistance = 10.0f;
 
     float angleAroundPlayer = 0.0f;
 
@@ -23,11 +23,14 @@ struct ThirdPersonCamera : public Component
 
     float moveLerp = 0.1f;
 
-    float zoomSensitivity = 150.0f;
+    float zoomSensitivity = 50.0f;
     float zoomLerp = 0.1f;
 
-    float rotationSensitivity = 0.2f;
+    float rotationSensitivity = 0.1f;
     float rotationLerp = 0.1f;
+
+    Rigidbody* playerRigidbody;
+    float maxIgnoredPlayerSpeed = 0.5f;
 };
 
 

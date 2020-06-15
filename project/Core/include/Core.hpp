@@ -331,10 +331,12 @@ class Core
         static PaddleControlSystem paddleControlSystem;
         static PaddleIkSystem paddleIkSystem;
         static UiRendererSystem uiRendererSystem;
-        static HydroBodySystem hydroBodySystem;
+        
+        //TODO documentation
         static HideoutSystem hideoutSystem;
         static UiButtonSystem uiButtonSystem;
         static EnemySystem enemySystem;
+        static HydroBodySystem hydroBodySystem;
         static SortingGroupSystem sortingGroupSystem;
         static ToggleButtonSystem toggleButtonSystem;
         static CargoStorageSystem cargoStorageSystem;
