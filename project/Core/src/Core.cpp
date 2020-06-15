@@ -99,6 +99,7 @@ int Core::init()
     inputModule.initialize(window);
 
     messageBus.addReceiver( &inputModule );    
+    messageBus.addReceiver( &callbacksModule );    
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
