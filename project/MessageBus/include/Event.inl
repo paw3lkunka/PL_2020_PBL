@@ -155,6 +155,8 @@ enum class Event : unsigned int
     PLAYER_ESCAPED,
     // Kayak was hitten by enemy, Data: AttackData { Enemy* pointer to enemy, vec3 direction, bool success}.
     PLAYER_ATTACKED,
+    // Kayak's hp drops to 0. Data: none.
+    HP_0,
 #pragma endregion
 
 
@@ -176,7 +178,7 @@ enum class Event : unsigned int
     UI_FIRST = LOAD_SCENE,
     UI_LAST = LOAD_SCENE,
     GAMEPLAY_FIRST = PLAYER_DETECTED,
-    GAMEPLAY_LAST = PLAYER_ATTACKED,
+    GAMEPLAY_LAST = HP_0,
 #pragma endregion
 
 };

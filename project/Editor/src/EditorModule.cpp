@@ -359,6 +359,10 @@ void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 
 void EditorModule::drawKayak(Kayak* kayakPtr)
 {
+    ImGui::DragFloat("Health points", &kayakPtr->hp);
+    ImGui::DragFloat("Damage factor", &kayakPtr->hitDamagefactor);
+    ImGui::DragFloat("Damage treshold", &kayakPtr->hitDamageTreshold);
+
     ImGui::Text(kayakPtr->isDetected ? "Detected (%i enemies)." : "Not detected.", kayakPtr->isDetected);
     ImGui::Text(kayakPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", kayakPtr->isHidden);
 }

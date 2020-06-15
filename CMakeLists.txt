@@ -138,6 +138,7 @@ aux_source_directory( project/GameSystems/Base/src/Hydro        HYDRO_SRC)
 aux_source_directory( project/GameSystems/Base/src/Hydro/Data   HYDRO_DATA_SRC)
 aux_source_directory( project/GameSystems/Base/src/Hydro/Math   HYDRO_MATH_SRC)
 aux_source_directory( project/Audio/src                         AUDIO_SRC)
+aux_source_directory( project/Callbacks/src                     CALLBACKS_SRC)
 aux_source_directory( project/ObjectManager/src                 OBJECTS_SRC)
 aux_source_directory( project/Input/src                         INPUT_SRC)
 aux_source_directory( project/MessageBus/src                    MESSAGE_BUS_SRC)
@@ -160,6 +161,7 @@ list(
         ${SYSTEMS_SRC}
         ${PROJECT_SRC}
         ${AUDIO_SRC}
+        ${CALLBACKS_SRC}
         ${OBJECTS_SRC}
         ${INPUT_SRC}
         ${MESSAGE_BUS_SRC}
@@ -233,6 +235,7 @@ include_directories(
     project/GameSystems/Systems/Physics/include
     project/GameSystems/Systems/UI/include
     project/Audio/include
+    project/Callbacks/include
     project/ObjectManager/include
     project/Input/include
     project/MessageBus/include
