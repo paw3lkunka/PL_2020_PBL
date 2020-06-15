@@ -453,3 +453,20 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
 
         auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
     }
+
+    // New camera modes by PawelKunka
+    {
+        auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+
+        auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
+            tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+        auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+            fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+
+        auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+            cameraPtr->addComponent(tpCameraPtr);
+            cameraPtr->addComponent(fpCameraPtr);
+            cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
+    }

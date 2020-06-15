@@ -144,19 +144,6 @@ int Core::init()
         // ? -u
         {
             //some code here...
-            auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-
-            auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
-                tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-                //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
-
-            auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
-                fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-
-            auto cameraPtr = objectModule.getEntityPtrByName("Camera");
-                cameraPtr->addComponent(tpCameraPtr);
-                cameraPtr->addComponent(fpCameraPtr);
-                cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
