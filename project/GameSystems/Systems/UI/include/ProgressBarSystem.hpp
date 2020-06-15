@@ -44,7 +44,6 @@ public:
 
 protected:
 private:
-
     ProgressBar* progressPtr;
     UiRenderer* rendererPtr;
 };
