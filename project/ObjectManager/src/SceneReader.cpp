@@ -1229,6 +1229,10 @@ void SceneReader::readEvent(std::string name, std::string containerName, std::ve
                 {
                     messages.push_back(Message(Event::LOAD_SCENE, Scenes::mainMenuScene));
                 }
+                else if(scene == Scenes::introScene)
+                {
+                    messages.push_back(Message(Event::LOAD_SCENE, Scenes::introScene));
+                }
             }
             break;
 

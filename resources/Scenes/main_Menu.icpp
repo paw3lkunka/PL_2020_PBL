@@ -116,7 +116,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->inactiveColor = inactiveColor;
             butt->highlightedColor = highlightedColor;
             butt->onClickColor = onClickColor;
-            butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::selectCargoScene));
+            butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::introScene));
 
         objectModule.newEntity(2, "Start_Button_Text");
         {

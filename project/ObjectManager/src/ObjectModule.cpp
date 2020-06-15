@@ -59,7 +59,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
-    GetCore().audioModule.unloadScene();
+    GetCore().audioModule.cleanup();
     objectContainer.unloadScene();
     // ! removing all associations for scene root node
     GetCore().sceneModule.unloadScene();
@@ -87,12 +87,12 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 
     // ! Finding main camera
     CameraSystem::setAsMain(getEntityPtrByName("Camera"));
-
     // ! some setup
     GetCore().gameSystemsModule.entities = getEntitiesVector();
     GetCore().sceneModule.updateTransforms();
     GetCore().uiModule.updateRectTransforms();
     GetCore().editorModule.setup();
+    GetCore().audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     GetCore().gameSystemsModule.run(System::START);
 }
@@ -132,7 +132,7 @@ Texture* ObjectModule::newTexture(const char* filePath, TextureCreateInfo create
 {
     for(Texture* t : objectContainer.textures)
     {
-        if(t->filePath == filePath)
+        if(t->filePath.compare(filePath) == 0)
         {
             return t;
         }
@@ -145,9 +145,12 @@ Cubemap* ObjectModule::newCubemap(TextureCreateInfo createInfo, const char* fron
 {
     for(Cubemap* c : objectContainer.cubemaps)
     {
-        if(c->frontPath == frontPath && c->backPath == backPath 
-        && c->leftPath == leftPath && c->rightPath == rightPath 
-        && c->bottomPath == bottomPath && c->topPath == topPath)
+        if((c->frontPath.compare(frontPath) == 0) 
+            && (c->backPath.compare(backPath) == 0)
+            && (c->leftPath.compare(leftPath) == 0) 
+            && (c->rightPath.compare(rightPath) == 0) 
+            && (c->bottomPath.compare(bottomPath) == 0) 
+            && (c->topPath.compare(topPath) == 0))
         {
             return c;
         }
@@ -160,9 +163,12 @@ CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char
 {
     for(CubemapHdr* c : objectContainer.hdrCubemaps)
     {
-        if(c->frontPath == frontPath && c->backPath == backPath 
-        && c->leftPath == leftPath && c->rightPath == rightPath 
-        && c->bottomPath == bottomPath && c->topPath == topPath)
+        if((c->frontPath.compare(frontPath) == 0) 
+            && (c->backPath.compare(backPath) == 0)
+            && (c->leftPath.compare(leftPath) == 0) 
+            && (c->rightPath.compare(rightPath) == 0) 
+            && (c->bottomPath.compare(bottomPath) == 0) 
+            && (c->topPath.compare(topPath) == 0))
         {
             return c;
         }
@@ -174,7 +180,7 @@ void ObjectModule::newModel(const char* filePath)
 {
     for(auto m : objectContainer.meshes)
     {
-        if(m->filePath == filePath)
+        if(m->filePath.compare(filePath) == 0)
         {
             return;
         }
