@@ -47,6 +47,15 @@ Font::Font(FT_Face& fontFace, std::string fontPath, std::string name, unsigned i
 
         chars.insert({c, character});
     }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+}
+
+Font::~Font()
+{
+    for(auto& glyph : chars)
+    {
+        glDeleteTextures(1, &glyph.second.textureID);
+    }
 }
 
 unsigned int Font::getCharTex(char c)

@@ -23,6 +23,21 @@ struct Kayak : public Component
     int isDetected = 0;
 
     /**
+     * @brief Maximum safe speed of kayak. If kayak hit rocks with higher velocity, damages will be applied;
+     */
+    float hitDamageTreshold = 1.0f;
+
+    /**
+     * @brief Defines, how much hp will be taken, if kayak will hit in rocks for each m/s above  
+     */
+    float hitDamagefactor = 1.0f;
+
+    /**
+     * @brief Health of kayak - if <= 0 kayak is destroyed;
+     */
+    float hp = 100.0f;
+
+    /**
      * @brief Construct a new Kayak object.
      * Set last created entity to this.
      */

@@ -29,7 +29,7 @@ Material::Material(Shader* shader, const char* name, RenderType renderType, bool
             floats[var.first] = 0.0f;
             break;
         case GL_FLOAT_VEC2:
-            vec2s[var.first] = glm::vec3(0);
+            vec2s[var.first] = glm::vec2(0);
             break;
         case GL_FLOAT_VEC3:
             vec3s[var.first] = glm::vec3(0);

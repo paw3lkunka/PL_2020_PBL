@@ -1,10 +1,13 @@
 #include "Texture.hpp"
 #include <iostream>
 
-Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath)
+Texture::Texture(unsigned char* data, TextureCreateInfo createInfo, std::string filePath, bool initTex)
     : IFileSystem(filePath), data(data), info(createInfo)
 {
-    init(); 
+    if (initTex)
+    {
+        init(); 
+    }
 }
 
 Texture::Texture(unsigned int externalID) : IFileSystem(""), data(nullptr)

@@ -14,12 +14,14 @@ public:
     //TODO Documentation
     MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath);
     MeshSkinned() = default;
-    ~MeshSkinned() = default;
+    virtual ~MeshSkinned();
 
     //TODO Documentation
     void setup();
     //TODO Documentation
     void render();
+    //TODO Documentation
+    void clean();
     //TODO Documentation
     void renderInstanced(int count, glm::mat4* instanceTransforms) {}
 

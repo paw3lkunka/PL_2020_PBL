@@ -17,6 +17,7 @@
 #include "RendererModule.hpp"
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
+#include "CallbacksModule.hpp"
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
@@ -311,6 +312,9 @@ class Core
         ///@brief gamePlay module
         GamePlayModule gamePlayModule;
 
+        //TODO: documentation
+        CallbacksModule callbacksModule;
+
 #pragma endregion
 
 #pragma region Systems
@@ -354,6 +358,8 @@ class Core
          * @param height resized window height provided by callback
          */
         static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+        static void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, 
+                            GLsizei length, const GLchar *message, const GLvoid *userParam);
         static int windowWidth;
         static int windowHeight;
 

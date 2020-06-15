@@ -69,6 +69,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     GetCore().messageBus.clearBuffers();
 
      // ! ----- Renderer initialization block -----
+    GetCore().rendererModule.clean();
     RendererModuleCreateInfo rendererCreateInfo = {};
     rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
     rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
@@ -170,7 +171,7 @@ CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char
     return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
-void ObjectModule::newModel(const char* filePath)
+void ObjectModule::newModel(const char* filePath, bool createEntities)
 {
     for(auto m : objectContainer.meshes)
     {
@@ -179,7 +180,7 @@ void ObjectModule::newModel(const char* filePath)
             return;
         }
     }
-    objectMaker.newModel(filePath);
+    objectMaker.newModel(filePath, createEntities);
 }
 
 Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled)

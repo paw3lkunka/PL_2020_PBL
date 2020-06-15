@@ -21,7 +21,7 @@ public:
     /**
      * @brief Destroy the Mesh object
      */
-    ~MeshCustom() = default;
+    virtual ~MeshCustom();
 
     /**
      * @brief Create buffers and fill them with mesh data
@@ -51,6 +51,11 @@ public:
     virtual std::vector<unsigned int>* getIndices();
 
 private:
+    /**
+     * @brief Clean created buffers
+     */
+    void clean();
+
     GLuint vao, vbo, ebo;
     GLuint instanceVbo;
 

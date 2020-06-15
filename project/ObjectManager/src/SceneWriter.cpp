@@ -490,10 +490,10 @@ void SceneWriter::saveTerrainRenderer(TerrainRenderer* componentPtr)
     (*json)[name]["type"] = "TerrainRenderer";
     if(componentPtr->material != nullptr)
     {
-        (*json)[name]["material"] = componentPtr->material->serializationID;
+        (*json)[name]["material"] = componentPtr->material->name;
     }
-    (*json)[name]["mesh"] = componentPtr->terrainMesh->serializationID;
-    (*json)[name]["splatmap"] = componentPtr->splatmap->serializationID;
+    (*json)[name]["mesh"] = componentPtr->terrainMesh->getMeshPath();
+    (*json)[name]["splatmap"] = componentPtr->splatmap->filePath;
 }
 
 void SceneWriter::saveSphereCollider(SphereCollider* componentPtr)
