@@ -21,7 +21,6 @@
 #include "Hydro/MeshParser.hpp"
 #include "Hydro/Physics.hpp"
 
-
 bool HydroBodySystem::assertEntity(Entity* entity)
 {
     hydroBody = entity->getComponentPtr<HydroBody>();
@@ -53,24 +52,47 @@ bool HydroBodySystem::assertEntity(Entity* entity)
     return true;
 }
 
+void HydroBodySystem::receiveMessage(Message msg)
+{
+    switch(msg.getEvent())
+    {
+        case Event::TRIGGER_ENTER:
+            {
+                TriggerData data = msg.getValue<TriggerData>();
+                HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
+                HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
+                if(body != nullptr && current != nullptr)
+                {
+                    body->targetCurrentVelocity = current->velocity;
+                    body->currentVelocityLerp = current->velocityLerp;
+                }
+            }
+            break;
+    }
+}
+
 void HydroBodySystem::fixedUpdate()
 {
+    glm::vec3& currentVelocity = hydroBody->currentVelocity;
+    currentVelocity.x = std::lerp(currentVelocity.x, hydroBody->targetCurrentVelocity.x, hydroBody->currentVelocityLerp);
+    currentVelocity.y = std::lerp(currentVelocity.y, hydroBody->targetCurrentVelocity.y, hydroBody->currentVelocityLerp);
+    currentVelocity.z = std::lerp(currentVelocity.z, hydroBody->targetCurrentVelocity.z, hydroBody->currentVelocityLerp);
+    
     Rigidbody* rb;
     glm::vec3 velocity;
+    float viscousCoefficient;
+    glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
     if(hydroAccelerator == nullptr)
     {
         rb = rigidbody;
-        velocity = rigidbody->velocity;
+        velocity = rigidbody->velocity - currentVelocity;
+        viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
     }
     else
     {
         rb = hydroAccelerator->rigidbody;
-        velocity = hydroAccelerator->velocity;
     }
-    
-    float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
-    glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
     std::vector<HydroTriangle> triangles =  HydroMeshParser::parse(meshRenderer->mesh, transform->getModelMatrix());
     HullTriangles hullTriangles = HullMath::cutHull(triangles);
@@ -95,7 +117,7 @@ void HydroBodySystem::fixedUpdate()
                 centerPos
             );
 
-            impulse.force = velocity;
+            impulse.force = velocity - currentVelocity;
             impulse.force.y = 0.0f;
 
             if(hydroAccelerator->velocity.y > 0.0f)
@@ -110,16 +132,13 @@ void HydroBodySystem::fixedUpdate()
         rb->impulses.push_back(impulse);
     }
 
-    /*
     for(HydroTriangle triangle : hullTriangles.abovewater)
     {
         Impulse impulse;
 
         impulse.force += HydroPhysics::airResistanceForce(triangle, velocity);
-
         impulse.point = triangle.center;
 
         rb->impulses.push_back(impulse);
     }
-    */
 }
