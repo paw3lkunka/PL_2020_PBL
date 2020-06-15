@@ -334,44 +334,6 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
                 entity->addComponent(paddle);
         }
 
-        /*
-        Material* attachMat = objectModule.newMaterial(unlitColor, "attachMat", RenderType::Opaque);
-        attachMat->setVec4("color", glm::vec4(0.521f, 0.478f, 0.078f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Paddle_attach_right");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = attachMat;
-
-            auto t = entity->getComponentPtr<Transform>();
-                t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle")->getComponentPtr<Transform>());
-                t->getLocalPositionModifiable() = glm::vec3(-6, 0, 0);
-        }
-
-        {
-            auto entity = objectModule.getEntityPtrByName("Paddle_attach_left");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = attachMat;
-
-            auto t = entity->getComponentPtr<Transform>();
-                t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle")->getComponentPtr<Transform>());
-                t->getLocalPositionModifiable() = glm::vec3(6, 0, 0);
-        }
-        */
-
-        /*
-        Material* playerMat = objectModule.newMaterial(unlitSkinned, "playerMat", RenderType::Opaque);
-        playerMat->setVec4("color", glm::vec4(0.878f, 0.749f, 0.321f, 1.0f));
-        {
-            auto entity = objectModule.getEntityPtrByName("Player");
-            auto mr = entity->getComponentPtr<MeshRenderer>();
-                mr->material = playerMat;
-
-                auto t = entity->getComponentPtr<Transform>();
-                    t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
-                    t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90, 0, 90));
-            }
-        */
-
         Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
         kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
         {
@@ -439,6 +401,78 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             ea->successChance = 0.5f;
     }
 
+// 
+auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
+auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/UiFading.vert", "Resources/Shaders/UiFading/UiFading.frag");
+
+
+    TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+
+auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
+
+
+
+    {
+        objectModule.newEntity(2, "Detection_Rate_Group");
+        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 1.0f);
+            buttonsRoot->getLocalPositionModifiable() = {0.0f, -70.0f};
+        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        uiModule.rootNodes.push_back(buttonsRoot);
+
+        objectModule.newEntity(2, "Detection_Rate_Bg");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getSizeModifiable() = {570, 60};
+                rt->setParent(buttonsRoot);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiShader, "Detection_Rate_Bg_Mat", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.811f, 0.815f, 0.949f, 1.0f});
+                ui->material = mat;
+        }
+
+        objectModule.newEntity(2, "Detection_Rate_text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-273.0f, 25.0f};
+                crt->getSizeModifiable() = {0.3f, 0.3f};
+                crt->setParent(buttonsRoot);
+
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = courier;
+                cui->mesh.text = "Detection Rate";
+        }
+
+        objectModule.newEntity(3, "ProgressBar");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {167.0f, 35.0f};
+                rt->getSizeModifiable() = {200, 50};
+                rt->setParent(buttonsRoot);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiFading, "Progress", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
+                ui->material = mat;
+
+            auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
+        }
+    }
+
     auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
     {
         auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -446,7 +480,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
             //t->setParent(enemy->getComponentPtr<Transform>());
             t->setParent(&sceneModule.rootNode);
-            
+
         auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
             mr->material = objectModule.getMaterialPtrByName("KULA");
             mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);

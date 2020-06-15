@@ -181,17 +181,17 @@ int Core::init()
 
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
-    
+
     gameSystemsModule.addSystem(&freeCameraControlSystem);
     gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
     gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
-    
+
     gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
-    
+
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
-    
+
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -205,6 +205,8 @@ int Core::init()
     gameSystemsModule.addSystem(&toggleButtonSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
     gameSystemsModule.addSystem(&cargoButtonSystem);
+    gameSystemsModule.addSystem(&detectionBarSystem);
+    gameSystemsModule.addSystem(&progressBarSystem);
 
 #pragma endregion
 
@@ -218,16 +220,12 @@ int Core::mainLoop()
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
 
-#pragma region AudioModule demo
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
-
     // * ===== Game loop ===================================================
 
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
+    detectionBarSystem.init("ProgressBar");
 
     // ! ----- START SYSTEM FUNCTION -----
 
@@ -277,6 +275,7 @@ int Core::mainLoop()
 
         // ! ----- FRAME UPDATE FUNCTION -----
 
+        detectionBarSystem.prepare();
         gameSystemsModule.run(System::FRAME);
         // Read message bus before rendering
         // TODO: Should transform update be here also?
@@ -423,3 +422,5 @@ SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
+DetectionBarSystem Core::detectionBarSystem;
+ProgressBarSystem Core::progressBarSystem;

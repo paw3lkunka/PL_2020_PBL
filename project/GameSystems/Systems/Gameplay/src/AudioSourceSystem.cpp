@@ -27,7 +27,7 @@ bool AudioSourceSystem::assertEntity(Entity* entity)
 
 void AudioSourceSystem::start()
 {
-    audioSource->getDirtyModifiable() = (1 << 20);
+    audioSource->getDirtyModifiable() |= (1 << 20);
     GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_INIT, audioSource));
 }
 

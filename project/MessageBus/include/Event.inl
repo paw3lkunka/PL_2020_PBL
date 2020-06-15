@@ -65,10 +65,10 @@ enum class Event : unsigned int
     AUDIO_SOURCE_STOP,
     // Audio Source, pause Source's offset where it is in buffer queue, DATA: AudioSource* .
     AUDIO_SOURCE_PAUSE,
-    // Audio Source, stop playing,set Source's offset on the beginning of buffer queue, DATA: AudioSource* .
-    AUDIO_SOURCE_REWIND,
     // Pause all playing audio sources
     AUDIO_SOURCE_PAUSE_ALL_PLAYING,
+    // Audio Source, stop playing,set Source's offset on the beginning of buffer queue, DATA: AudioSource* .
+    AUDIO_SOURCE_REWIND,
 #pragma endregion
 
 #pragma region WINDOW

@@ -52,30 +52,33 @@ void ToggleButtonSystem::frameUpdate()
             && Core::windowHeight - lastCursorData.yPos < (buttonPos.y + (buttonSize.y / 2.0f)))
         {
             //* if mouse clicked over button, change toggle flag and send appriopriate events
-            if(mouseButtonClicked && !toggleButtonPtr->isClicked) 
+            if(mouseButtonClicked) 
             {
                 targetColor = toggleButtonPtr->state ? toggleButtonPtr->onClickColorOn : toggleButtonPtr->onClickColorOff;
-                // * Send on activation messages if button switches to ON
-                if(toggleButtonPtr->state) 
+                if(!toggleButtonPtr->isClicked)
                 {
-                    for(auto m : toggleButtonPtr->onDeactivateEvents)
+                    // * Send on activation messages if button switches to ON
+                    if(toggleButtonPtr->state) 
                     {
-                        GetCore().messageBus.sendMessage(m);
+                        for(auto m : toggleButtonPtr->onDeactivateEvents)
+                        {
+                            GetCore().messageBus.sendMessage(m);
+                        }
                     }
-                }
-                // * Send on deactivation messages if button switches to OFF
-                else
-                {
-                    for(auto m : toggleButtonPtr->onActivateEvents)
+                    // * Send on deactivation messages if button switches to OFF
+                    else
                     {
-                        GetCore().messageBus.sendMessage(m);
+                        for(auto m : toggleButtonPtr->onActivateEvents)
+                        {
+                            GetCore().messageBus.sendMessage(m);
+                        }
                     }
+                    toggleButtonPtr->isClicked = true;
+                    toggleButtonPtr->state = !toggleButtonPtr->state;
                 }
-                toggleButtonPtr->isClicked = true;
-                toggleButtonPtr->state = !toggleButtonPtr->state;
             }
             //* if is over button, change color to highlighted
-            else if(!mouseButtonClicked)
+            else
             {
                 toggleButtonPtr->isClicked = false;
                 targetColor = toggleButtonPtr->state ? toggleButtonPtr->highlightedColorOn : toggleButtonPtr->highlightedColorOff;
