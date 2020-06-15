@@ -53,15 +53,17 @@ objectModule.newEntity(2, "RiverFlow");
     auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
     auto rect_2_1 = objectModule.newTexture("Resources/Sprites/rect_2_1.png", info);
     auto rect_16_9 = objectModule.newTexture("Resources/Sprites/rect_16_9.png", info);
-
+    auto cargo_button_b = objectModule.newTexture("Resources/Sprites/cargo_button_border.png", info);
+    auto cargo_button_i = objectModule.newTexture("Resources/Sprites/cargo_button_inside.png", info);
+    auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
 
     glm::vec4 baseColorOn = {0.184f, 0.772f, 0.149f, 0.8f};
     glm::vec4 highlightedColorOn = {0.368f, 0.862f, 0.337f, 0.8f};
     glm::vec4 onClickColorOn = {0.168f, 0.643f, 0.137f, 0.8f};
 
-    glm::vec4 baseColorOff = {0.690f, 0.690f, 0.690f, 0.8f};
-    glm::vec4 highlightedColorOff = {0.843f, 0.839f, 0.839f, 0.8f};
-    glm::vec4 onClickColorOff = {0.521f, 0.521f, 0.521f, 0.8f};
+    glm::vec4 baseColorOff = {0.0f, 0.0f, 0.0f, 0.8f};
+    glm::vec4 highlightedColorOff = {0.239f, 0.239f, 0.239f, 0.8f};
+    glm::vec4 onClickColorOff = {0.501f, 0.501f, 0.501f, 0.8f};
 
     glm::vec4 inactiveColor = {0.0f, 0.0f, 0.0f, 0.8f};
 
@@ -79,8 +81,8 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
-            mat->setTexture("sprite", rect_16_9);
-            mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
+            mat->setTexture("sprite", paperTex);
+            mat->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
             ui->material = mat;
     }
 
@@ -135,6 +137,8 @@ objectModule.newEntity(2, "RiverFlow");
         }
     }
 
+auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transparent);
+    bgBlack->setVec4("color", {0.0f, 0.0f, 0.0f, 0.8f});
 
     {        
         {   //cargo button 1
@@ -156,10 +160,20 @@ objectModule.newEntity(2, "RiverFlow");
                 tb->inactiveColor = inactiveColor;
             {
                 auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto tex = rect_2_1;
-                auto shader = uiShader;
-                uiR->material = objectModule.newMaterial(shader, "Toggle_1", RenderType::Transparent);
+                auto tex = cargo_button_b;
+                uiR->material = objectModule.newMaterial(uiShader, "Toggle_1", RenderType::Transparent);
                 uiR->material->setTexture("sprite", tex);
+            }
+
+            objectModule.newEntity(2, "CargoButton1Inside");
+            {
+                auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getSizeModifiable() = {300, 150};
+                crt->setParent(rt);
+
+                auto uiR = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                uiR->material = bgBlack;
+                uiR->material->setTexture("sprite", cargo_button_i);
             }
             
             objectModule.newEntity(2, "Cargo1Name");
@@ -172,7 +186,7 @@ objectModule.newEntity(2, "RiverFlow");
                 auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                     cui->material = objectModule.newMaterial(textShader, "Cargo1NameMat", RenderType::Transparent);
                     cui->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
-                    cui->mesh.font = josefin;
+                    cui->mesh.font = courier;
                     cui->mesh.text = "Name";
 
                 tb->nameText = cui;
