@@ -313,8 +313,7 @@ void Core::cleanup()
     audioModule.cleanup();
     editorModule.onExit();
 
-    //HACK: scene saving- uncomment when changing something in scene
-    objectModule.saveScene("../resources/Scenes/savedScene.json");
+    //objectModule.saveScene("../resources/Scenes/savedScene.json");
 
     physicModule.cleanup();
     objectModule.cleanup();
