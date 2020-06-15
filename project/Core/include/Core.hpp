@@ -31,7 +31,6 @@
 
 // * Others
 #include <filesystem>
-#include <windows.h>
 
 class Message;
 enum class Event : unsigned int;
