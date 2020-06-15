@@ -8,7 +8,7 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D texNoise;
 
-uniform vec3 samples[64];
+uniform vec3 samples[32];
 uniform mat4 projection;
 
 uniform vec3 noiseScale;
@@ -26,7 +26,7 @@ void main()
     mat3 TBN = mat3(tangent, bitangent, normal);
 
     float occlusion = 0.0;
-    for (int i = 0; i < 64; ++i)
+    for (int i = 0; i < 32; ++i)
     {
         // Get sample position
         vec3 samp = TBN * samples[i]; // from tangent to view space
@@ -43,7 +43,7 @@ void main()
         occlusion += (sampleDepth >= samp.z + bias ? 1.0 : 0.0) * rangeCheck;
     }
 
-    occlusion = 1.0 - (occlusion / 64);
+    occlusion = 1.0 - (occlusion / 32);
 
     FragColor = occlusion;
 }

@@ -12,7 +12,7 @@ class TextMesh : public Mesh
 {
 public:
     TextMesh() : Mesh("", "") {}
-    virtual ~TextMesh() = default;
+    virtual ~TextMesh();
 
     /**
      * @brief Create buffers

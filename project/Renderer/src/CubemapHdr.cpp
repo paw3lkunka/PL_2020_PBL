@@ -18,7 +18,7 @@ CubemapHdr::CubemapHdr(TextureCreateInfo createInfo,
     init();
 }
 
-CubemapHdr::CubemapHdr(unsigned int externalID) : Texture(nullptr, {}, "")
+CubemapHdr::CubemapHdr(unsigned int externalID) : Texture(nullptr, {}, "", false)
 {
     id = externalID;
 }

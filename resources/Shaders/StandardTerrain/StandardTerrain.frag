@@ -86,7 +86,10 @@ float GeometrySchlickGGX(float NdotV, float roughness);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 vec3 calculateNormal(sampler2D sampler, vec2 uv);
+vec3 unpackNormal(vec3 n);
 vec3 getTriplanarBlend(vec3 norm);
+vec3 getTriplanarNormal(sampler2D norm, vec2 uvscale, vec3 blend);
+vec3 NormalBlend_Whiteout(vec3 n1, vec3 n2);
 
 // ===== Lightning calculations =====
 vec3 calcDirectionalLight(DirectionalLight light);
@@ -101,15 +104,13 @@ void main()
 
     // Sampling the textures by splatmap channel value
     // 0
+	
 	vec2 uv0s = uv0scale * 0.01;
 	vec3 albedo0x = pow(texture(diffuse0, FragPos.yz * uv0s).rgb, vec3(2.2f));
 	vec3 albedo0y = pow(texture(diffuse0, FragPos.xz * uv0s).rgb, vec3(2.2f));
 	vec3 albedo0z = pow(texture(diffuse0, FragPos.xy * uv0s).rgb, vec3(2.2f));
     vec3 albedo0 = albedo0x * blend.x + albedo0y * blend.y + albedo0z * blend.z; 
-	vec3 norm0x = calculateNormal(normal0, FragPos.yz * uv0s);
-	vec3 norm0y = calculateNormal(normal0, FragPos.xz * uv0s);
-	vec3 norm0z = calculateNormal(normal0, FragPos.xy * uv0s);
-    vec3 norm0 = norm0x * blend.x + norm0y * blend.y + norm0z * blend.z;
+	vec3 norm0 = getTriplanarNormal(normal0, uv0s, blend);
 	vec3 occRouMet0x = texture(orm0, FragPos.yz * uv0s).rgb;
 	vec3 occRouMet0y = texture(orm0, FragPos.xz * uv0s).rgb;
 	vec3 occRouMet0z = texture(orm0, FragPos.xy * uv0s).rgb;
@@ -120,10 +121,7 @@ void main()
 	vec3 albedo1y = pow(texture(diffuse1, FragPos.xz * uv1s).rgb, vec3(2.2f));
 	vec3 albedo1z = pow(texture(diffuse1, FragPos.xy * uv1s).rgb, vec3(2.2f));
     vec3 albedo1 = albedo1x * blend.x + albedo1y * blend.y + albedo1z * blend.z;
-	vec3 norm1x = calculateNormal(normal1, FragPos.yz * uv1s);
-	vec3 norm1y = calculateNormal(normal1, FragPos.xz * uv1s);
-	vec3 norm1z = calculateNormal(normal1, FragPos.xy * uv1s);
-    vec3 norm1 = norm1x * blend.x + norm1y * blend.y + norm1z * blend.z;
+	vec3 norm1 = getTriplanarNormal(normal1, uv1s, blend);
     vec3 occRouMet1x = texture(orm1, FragPos.yz * uv1s).rgb;
 	vec3 occRouMet1y = texture(orm1, FragPos.xz * uv1s).rgb;
 	vec3 occRouMet1z = texture(orm1, FragPos.xy * uv1s).rgb;
@@ -134,10 +132,7 @@ void main()
 	vec3 albedo2y = pow(texture(diffuse2, FragPos.xz * uv2s).rgb, vec3(2.2f));
 	vec3 albedo2z = pow(texture(diffuse2, FragPos.xy * uv2s).rgb, vec3(2.2f));
     vec3 albedo2 = albedo2x * blend.x + albedo2y * blend.y + albedo2z * blend.z; 
-	vec3 norm2x = calculateNormal(normal2, FragPos.yz * uv2s);
-	vec3 norm2y = calculateNormal(normal2, FragPos.xz * uv2s);
-	vec3 norm2z = calculateNormal(normal2, FragPos.xy * uv2s);
-    vec3 norm2 = norm2x * blend.x + norm2y * blend.y + norm2z * blend.z;
+	vec3 norm2 = getTriplanarNormal(normal2, uv2s, blend);
 	vec3 occRouMet2x = texture(orm2, FragPos.yz * uv2s).rgb;
 	vec3 occRouMet2y = texture(orm2, FragPos.xz * uv2s).rgb;
 	vec3 occRouMet2z = texture(orm2, FragPos.xy * uv2s).rgb;
@@ -148,10 +143,7 @@ void main()
 	vec3 albedo3y = pow(texture(diffuse3, FragPos.xz * uv3s).rgb, vec3(2.2f));
 	vec3 albedo3z = pow(texture(diffuse3, FragPos.xy * uv3s).rgb, vec3(2.2f));
     vec3 albedo3 = albedo3x * blend.x + albedo3y * blend.y + albedo3z * blend.z; 
-	vec3 norm3x = calculateNormal(normal3, FragPos.yz * uv3s);
-	vec3 norm3y = calculateNormal(normal3, FragPos.xz * uv3s);
-	vec3 norm3z = calculateNormal(normal3, FragPos.xy * uv3s);
-    vec3 norm3 = norm3x * blend.x + norm3y * blend.y + norm3z * blend.z;
+	vec3 norm3 = getTriplanarNormal(normal3, uv3s, blend);
 	vec3 occRouMet3x = texture(orm3, FragPos.yz * uv3s).rgb;
 	vec3 occRouMet3y = texture(orm3, FragPos.xz * uv3s).rgb;
 	vec3 occRouMet3z = texture(orm3, FragPos.xy * uv3s).rgb;
@@ -165,6 +157,7 @@ void main()
     metallic = occRouMet0.b * splatVal.r + occRouMet1.b * splatVal.g + occRouMet2.b * splatVal.b + occRouMet3.b * splatVal.a;
 
 // Properties shared between lights
+	//N = NormalBlend_Whiteout(NormalBlend_Whiteout(NormalBlend_Whiteout(norm0* splatVal.r, norm1* splatVal.g), norm2 * splatVal.b), norm3 * splatVal.a);
 	N = norm0 * splatVal.r + norm1 * splatVal.g + norm2 * splatVal.b + norm3 * splatVal.a;
 	V = normalize(viewPos - FragPos);
 
@@ -184,7 +177,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.95);
+	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.9);
 
 	FragColor = vec4(color, 1.0);
 
@@ -240,9 +233,9 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
-	float bias = 0.0005 * tan(acos(dot(Normal, lightDir)));
-	bias = clamp(bias, 0.0, 0.01);
-	//float bias = 0.0005;
+	//float bias = 0.0005 * tan(acos(dot(Normal, lightDir)));
+	//bias = clamp(bias, 0.0, 0.01);
+	float bias = 0.0005;
     //float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
 	float shadow = 0.0;
@@ -252,6 +245,7 @@ float calcShadow(vec4 fragPosLightSpace, vec3 lightDir)
 		for(int y = -2; y <= 2; ++y)
 		{
 			// TODO: better shadow filtering
+			//float pcfDepth = texture(directionalShadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
 			float pcfDepth = texture(directionalShadowMap, projCoords.xy + (vec2(x, y) + jitter[int(mod((x+2) + ((y+2)*5), 8))]) * texelSize).r; 
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
 		}    
@@ -270,6 +264,13 @@ vec3 calculateNormal(sampler2D sampler, vec2 uv)
 	normalValue = normalize(normalValue * 2.0f - 1.0f); // Transform from normalized 0.0 - 1.0 coordinates to -1.0 - 1.0
 	normalValue = normalize(TBN * normalValue); // multiply by TBN to get world space normals
 	return normalValue;
+}
+
+vec3 unpackNormal(vec3 n)
+{
+	n = n * 2.0 - 1.0;
+	n = -n;
+	return n;
 }
 
 // Normal distribution function
@@ -323,9 +324,24 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 
 vec3 getTriplanarBlend(vec3 norm)
 {
-	vec3 blending = abs(norm);
-	blending = normalize(max(blending, 0.00001)); // Force weights to sum to 1.0
-	float b = (blending.x + blending.y + blending.z);
-	blending /= vec3(b, b, b);
-	return blending;
+	vec3 blend = abs(norm);
+	blend = max(blend - 0.2, 0.0);
+	blend /= dot(blend, vec3(1.0, 1.0, 1.0));
+	return blend;
+}
+
+vec3 getTriplanarNormal(sampler2D norm, vec2 uvscale, vec3 blend)
+{
+	vec3 norm0x = unpackNormal(texture(norm, FragPos.yz * uvscale).xyz);
+	vec3 norm0y = unpackNormal(texture(norm, FragPos.xz * uvscale).xyz);
+	vec3 norm0z = unpackNormal(texture(norm, FragPos.xy * uvscale).xyz);
+	norm0x = vec3(norm0x.xy + Normal.zy, abs(norm0x.z) * Normal.x);
+	norm0y = vec3(norm0y.xy + Normal.xz, abs(norm0y.z) * Normal.y);
+	norm0z = vec3(norm0z.xy + Normal.xy, abs(norm0z.z) * Normal.z);
+	return normalize(norm0x.zyx * blend.x + norm0y.xzy * blend.y + norm0z.xyz * blend.z);
+}
+
+vec3 NormalBlend_Whiteout(vec3 n1, vec3 n2)
+{
+	return normalize(vec3(n1.xy + n2.xy, n1.z * n2.z));    
 }

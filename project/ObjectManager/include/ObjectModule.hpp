@@ -252,7 +252,7 @@ public:
      * @param filePath to model
      * @param type type of meshes (skinned/ custom)
      */
-    void newModel(const char* filePath);
+    void newModel(const char* filePath, bool createEntities = true);
 
 
     /**

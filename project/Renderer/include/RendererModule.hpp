@@ -59,6 +59,10 @@ public:
      */
     void initialize(GLFWwindow* window, RendererModuleCreateInfo createInfo);
     /**
+     * @brief Deletes all allocated buffers
+     */
+    void clean();
+    /**
      * @brief Set the skybox in the renderer
      * 
      * @param skyboxMaterial pointer to skybox material
@@ -126,7 +130,7 @@ private:
     // * Bone zone
     std::map<int, glm::mat4>* bones = nullptr;
     // * UBO buffers
-    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer;
+    unsigned int cameraBuffer, boneBuffer, directionalLightBuffer, shadowMappingBuffer, timeBuffer;
     
     Camera* cameraMain = nullptr;
     enum { TOP = 0, BOTTOM, LEFT, RIGHT, NEARP, FARP };
