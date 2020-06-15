@@ -38,20 +38,6 @@ objectModule.newEntity(2, "RiverFlow");
         so3->autoPlay = true;
 }
 
-objectModule.newEntity(2, "Sound_1");
-{
-    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
-        t->setParent(&sceneModule.rootNode);
-    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/test.wav");
-        so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.3f;
-        so3->getIsLoopingModifiable() = true;
-        so3->autoPlay = true;
-}
-
 {
 
     TextureCreateInfo info = {};
