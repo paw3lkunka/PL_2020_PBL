@@ -435,3 +435,12 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             ea->incrementValue = 1;
             ea->successChance = 0.5f;
     }
+
+   // ! Dla andrzeja - progress bar
+    //? odkomentuj jak zmienisz scenę
+    // auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+    // textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+    // auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
+    // auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/UiFading.vert", "Resources/Shaders/UiFading/UiFading.frag");
+    // auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    // auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
