@@ -1,14 +1,14 @@
 {
     "Amounts": {
-        "components": 24,
+        "components": 26,
         "cubemaps": 0,
         "cubemapsHdr": 0,
-        "entities": 10,
-        "fonts": 1,
-        "materials": 7,
+        "entities": 11,
+        "fonts": 2,
+        "materials": 6,
         "meshes": 0,
-        "shaders": 2,
-        "textures": 3
+        "shaders": 3,
+        "textures": 8
     },
     "component000": {
         "entity id": 0,
@@ -28,9 +28,9 @@
             "z": 0.0
         },
         "localRotation": {
-            "w": 0.7071067690849304,
+            "w": 1.0,
             "x": 0.0,
-            "y": -0.7071067690849304,
+            "y": 2.1855694143368964e-08,
             "z": 0.0
         },
         "localScale": {
@@ -44,9 +44,9 @@
     },
     "component002": {
         "at": {
-            "x": 1.0,
+            "x": -4.371138828673793e-08,
             "y": -0.0,
-            "z": -5.960465188081798e-08
+            "z": -1.0
         },
         "entity id": 0,
         "gain": 1.0,
@@ -125,38 +125,40 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 19,
+        "serializationID": 25,
         "type": "RectTransform"
     },
     "component006": {
         "entity id": 2,
         "material": "UiBg",
-        "serializationID": 20,
+        "serializationID": 26,
         "type": "UiRenderer"
     },
     "component007": {
         "anchor": {
             "x": 0.0,
-            "y": 0.0
+            "y": 1.0
         },
         "entity id": 3,
         "localPosition": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 50.0,
+            "y": -150.0
         },
         "rectSize": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 1.0,
+            "y": 1.0
         },
         "rotation": 0.0,
-        "serializationID": 23,
+        "serializationID": 29,
         "type": "RectTransform"
     },
     "component008": {
         "entity id": 3,
-        "groupTransparency": 0.800000011920929,
-        "serializationID": 24,
-        "type": "UiSortingGroup"
+        "font": "JosefinSans-Regular",
+        "material": "TextMaterial",
+        "serializationID": 30,
+        "text": "Current",
+        "type": "TextRenderer"
     },
     "component009": {
         "anchor": {
@@ -165,50 +167,74 @@
         },
         "entity id": 4,
         "localPosition": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "rectSize": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "rotation": 0.0,
+        "serializationID": 33,
+        "type": "RectTransform"
+    },
+    "component010": {
+        "entity id": 4,
+        "groupTransparency": 0.800000011920929,
+        "serializationID": 34,
+        "type": "UiSortingGroup"
+    },
+    "component011": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 5,
+        "localPosition": {
             "x": 170.0,
             "y": 350.0
         },
-        "parent": 23,
+        "parent": 33,
         "rectSize": {
             "x": 250.0,
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 26,
+        "serializationID": 36,
         "type": "RectTransform"
     },
-    "component010": {
-        "entity id": 4,
+    "component012": {
+        "entity id": 5,
         "material": "startMat",
-        "serializationID": 27,
+        "serializationID": 37,
         "type": "UiRenderer"
     },
-    "component011": {
+    "component013": {
         "baseColor": {
             "a": 0.699999988079071,
-            "b": 0.19200000166893005,
-            "g": 0.5920000076293945,
-            "r": 0.125
+            "b": 0.7089999914169312,
+            "g": 0.7089999914169312,
+            "r": 0.7089999914169312
         },
-        "entity id": 4,
+        "entity id": 5,
         "highlightedColor": {
             "a": 0.699999988079071,
-            "b": 0.32899999618530273,
-            "g": 0.8579999804496765,
-            "r": 0.23899999260902405
+            "b": 0.8700000047683716,
+            "g": 0.8700000047683716,
+            "r": 0.8700000047683716
         },
         "inactiveColor": {
             "a": 0.699999988079071,
-            "b": 0.4350000023841858,
-            "g": 0.5879999995231628,
-            "r": 0.41100001335144043
+            "b": 0.10000000149011612,
+            "g": 0.10000000149011612,
+            "r": 0.10000000149011612
         },
         "isActive": true,
         "onClickColor": {
             "a": 0.699999988079071,
-            "b": 0.14900000393390656,
-            "g": 0.4860000014305115,
-            "r": 0.09399999678134918
+            "b": 0.5,
+            "g": 0.5,
+            "r": 0.5
         },
         "onClickEvents": {
             "e0": {
@@ -216,35 +242,8 @@
                 "scene": "Resources/Scenes/selectCargoScene.json"
             }
         },
-        "serializationID": 29,
+        "serializationID": 39,
         "type": "Button"
-    },
-    "component012": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 5,
-        "localPosition": {
-            "x": -76.0,
-            "y": -22.0
-        },
-        "parent": 26,
-        "rectSize": {
-            "x": 0.5,
-            "y": 0.5
-        },
-        "rotation": 0.0,
-        "serializationID": 31,
-        "type": "RectTransform"
-    },
-    "component013": {
-        "entity id": 5,
-        "font": "KosugiMaru-Regular",
-        "material": "TextMaterial",
-        "serializationID": 32,
-        "text": "Start",
-        "type": "TextRenderer"
     },
     "component014": {
         "anchor": {
@@ -253,50 +252,77 @@
         },
         "entity id": 6,
         "localPosition": {
+            "x": -77.0,
+            "y": -15.0
+        },
+        "parent": 36,
+        "rectSize": {
+            "x": 0.4000000059604645,
+            "y": 0.4000000059604645
+        },
+        "rotation": 0.0,
+        "serializationID": 41,
+        "type": "RectTransform"
+    },
+    "component015": {
+        "entity id": 6,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 42,
+        "text": "Start",
+        "type": "TextRenderer"
+    },
+    "component016": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 7,
+        "localPosition": {
             "x": 170.0,
             "y": 230.0
         },
-        "parent": 23,
+        "parent": 33,
         "rectSize": {
             "x": 250.0,
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 35,
+        "serializationID": 45,
         "type": "RectTransform"
     },
-    "component015": {
-        "entity id": 6,
+    "component017": {
+        "entity id": 7,
         "material": "optionsMat",
-        "serializationID": 36,
+        "serializationID": 46,
         "type": "UiRenderer"
     },
-    "component016": {
+    "component018": {
         "baseColor": {
             "a": 0.699999988079071,
-            "b": 0.09399999678134918,
-            "g": 0.5559999942779541,
-            "r": 0.9679999947547913
+            "b": 0.7089999914169312,
+            "g": 0.7089999914169312,
+            "r": 0.7089999914169312
         },
-        "entity id": 6,
+        "entity id": 7,
         "highlightedColor": {
             "a": 0.699999988079071,
-            "b": 0.5090000033378601,
-            "g": 0.7519999742507935,
-            "r": 0.972000002861023
+            "b": 0.8700000047683716,
+            "g": 0.8700000047683716,
+            "r": 0.8700000047683716
         },
         "inactiveColor": {
             "a": 0.699999988079071,
-            "b": 0.27000001072883606,
-            "g": 0.5249999761581421,
-            "r": 0.7490000128746033
+            "b": 0.10000000149011612,
+            "g": 0.10000000149011612,
+            "r": 0.10000000149011612
         },
         "isActive": true,
         "onClickColor": {
             "a": 0.699999988079071,
-            "b": 0.03099999949336052,
-            "g": 0.3919999897480011,
-            "r": 0.7049999833106995
+            "b": 0.5,
+            "g": 0.5,
+            "r": 0.5
         },
         "onClickEvents": {
             "e0": {
@@ -304,35 +330,8 @@
                 "event": 23
             }
         },
-        "serializationID": 38,
+        "serializationID": 48,
         "type": "Button"
-    },
-    "component017": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 7,
-        "localPosition": {
-            "x": -110.0,
-            "y": -22.0
-        },
-        "parent": 35,
-        "rectSize": {
-            "x": 0.5,
-            "y": 0.5
-        },
-        "rotation": 0.0,
-        "serializationID": 40,
-        "type": "RectTransform"
-    },
-    "component018": {
-        "entity id": 7,
-        "font": "KosugiMaru-Regular",
-        "material": "TextMaterial",
-        "serializationID": 41,
-        "text": "Options",
-        "type": "TextRenderer"
     },
     "component019": {
         "anchor": {
@@ -341,50 +340,77 @@
         },
         "entity id": 8,
         "localPosition": {
+            "x": -108.0,
+            "y": -15.0
+        },
+        "parent": 45,
+        "rectSize": {
+            "x": 0.4000000059604645,
+            "y": 0.4000000059604645
+        },
+        "rotation": 0.0,
+        "serializationID": 50,
+        "type": "RectTransform"
+    },
+    "component020": {
+        "entity id": 8,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 51,
+        "text": "Options",
+        "type": "TextRenderer"
+    },
+    "component021": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 9,
+        "localPosition": {
             "x": 170.0,
             "y": 111.0
         },
-        "parent": 23,
+        "parent": 33,
         "rectSize": {
             "x": 250.0,
             "y": 100.0
         },
         "rotation": 0.0,
-        "serializationID": 44,
+        "serializationID": 54,
         "type": "RectTransform"
     },
-    "component020": {
-        "entity id": 8,
+    "component022": {
+        "entity id": 9,
         "material": "exitMat",
-        "serializationID": 45,
+        "serializationID": 55,
         "type": "UiRenderer"
     },
-    "component021": {
+    "component023": {
         "baseColor": {
             "a": 0.699999988079071,
-            "b": 0.22699999809265137,
-            "g": 0.17599999904632568,
-            "r": 0.8230000138282776
+            "b": 0.7089999914169312,
+            "g": 0.7089999914169312,
+            "r": 0.7089999914169312
         },
-        "entity id": 8,
+        "entity id": 9,
         "highlightedColor": {
             "a": 0.699999988079071,
-            "b": 0.3840000033378601,
-            "g": 0.3370000123977661,
-            "r": 0.9010000228881836
+            "b": 0.8700000047683716,
+            "g": 0.8700000047683716,
+            "r": 0.8700000047683716
         },
         "inactiveColor": {
             "a": 0.699999988079071,
-            "b": 0.3880000114440918,
-            "g": 0.36000001430511475,
-            "r": 0.6980000138282776
+            "b": 0.10000000149011612,
+            "g": 0.10000000149011612,
+            "r": 0.10000000149011612
         },
         "isActive": true,
         "onClickColor": {
             "a": 0.699999988079071,
-            "b": 0.12099999934434891,
-            "g": 0.0860000029206276,
-            "r": 0.5519999861717224
+            "b": 0.5,
+            "g": 0.5,
+            "r": 0.5
         },
         "onClickEvents": {
             "e0": {
@@ -395,33 +421,33 @@
                 "event": 49
             }
         },
-        "serializationID": 47,
+        "serializationID": 57,
         "type": "Button"
     },
-    "component022": {
+    "component024": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 9,
+        "entity id": 10,
         "localPosition": {
-            "x": -61.0,
-            "y": -22.0
+            "x": -65.0,
+            "y": -16.0
         },
-        "parent": 44,
+        "parent": 54,
         "rectSize": {
-            "x": 0.5,
-            "y": 0.5
+            "x": 0.4000000059604645,
+            "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 49,
+        "serializationID": 59,
         "type": "RectTransform"
     },
-    "component023": {
-        "entity id": 9,
-        "font": "KosugiMaru-Regular",
+    "component025": {
+        "entity id": 10,
+        "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 50,
+        "serializationID": 60,
         "text": "Exit",
         "type": "TextRenderer"
     },
@@ -446,84 +472,99 @@
     },
     "entity002": {
         "components": [
-            19,
-            20
+            25,
+            26
         ],
         "id": 2,
         "name": "Ui_Menu_Background",
-        "serializationID": 18
+        "serializationID": 24
     },
     "entity003": {
         "components": [
-            23,
-            24
+            29,
+            30
         ],
         "id": 3,
-        "name": "Menu_Buttons",
-        "serializationID": 22
+        "name": "Title",
+        "serializationID": 28
     },
     "entity004": {
         "components": [
-            26,
-            27,
-            29
+            33,
+            34
         ],
         "id": 4,
-        "name": "Start_Button",
-        "serializationID": 25
+        "name": "Menu_Buttons",
+        "serializationID": 32
     },
     "entity005": {
         "components": [
-            31,
-            32
+            36,
+            37,
+            39
         ],
         "id": 5,
-        "name": "Start_Button_Text",
-        "serializationID": 30
+        "name": "Start_Button",
+        "serializationID": 35
     },
     "entity006": {
         "components": [
-            35,
-            36,
-            38
+            41,
+            42
         ],
         "id": 6,
-        "name": "Options_Button",
-        "serializationID": 34
+        "name": "Start_Button_Text",
+        "serializationID": 40
     },
     "entity007": {
         "components": [
-            40,
-            41
+            45,
+            46,
+            48
         ],
         "id": 7,
-        "name": "Options_Button_Text",
-        "serializationID": 39
+        "name": "Options_Button",
+        "serializationID": 44
     },
     "entity008": {
         "components": [
-            44,
-            45,
-            47
+            50,
+            51
         ],
         "id": 8,
-        "name": "Exit_Button",
-        "serializationID": 43
+        "name": "Options_Button_Text",
+        "serializationID": 49
     },
     "entity009": {
         "components": [
-            49,
-            50
+            54,
+            55,
+            57
         ],
         "id": 9,
+        "name": "Exit_Button",
+        "serializationID": 53
+    },
+    "entity010": {
+        "components": [
+            59,
+            60
+        ],
+        "id": 10,
         "name": "Exit_Button_Text",
-        "serializationID": 48
+        "serializationID": 58
     },
     "font000": {
-        "fontName": "KosugiMaru-Regular",
-        "fontPath": "Resources/Fonts/KosugiMaru-Regular.ttf",
+        "fontName": "JosefinSans-Regular",
+        "fontPath": "Resources/Fonts/JosefinSans-Regular.ttf",
         "fontSize": 128,
-        "serializationID": 13
+        "serializationID": 14
+    },
+    "font001": {
+        "fontName": "CourierNew",
+        "fontPath": "Resources/Fonts/CourierNew.ttf",
+        "fontSize": 128,
+        "serializationID": 15
     },
     "material000": {
         "cubemaps": {},
@@ -552,39 +593,37 @@
                 0.0
             ],
             "projection": [
+                0.0012499999720603228,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
+                0.0023894861806184053,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
+                -1.0,
                 0.0,
+                -1.0,
+                -1.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0
             ]
         },
-        "name": "UiStandardMat",
+        "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 16,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
+        "serializationID": 23,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.5,
                 1.0,
-                1.0,
-                1.0
+                0.0,
+                0.0,
+                0.0
             ]
         }
     },
@@ -615,12 +654,12 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
+                0.0012499999720603228,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
+                0.0023894861806184053,
                 0.0,
                 0.0,
                 0.0,
@@ -633,19 +672,21 @@
                 1.0
             ]
         },
-        "name": "TextMaterial",
-        "renderingType": 1,
-        "serializationID": 17,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "name": "UiBg",
+        "renderingType": 0,
+        "serializationID": 27,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_16_9.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0,
-                0.0,
-                0.0
+                0.0860000029206276,
+                0.5130000114440918,
+                0.7129999995231628
             ]
         }
     },
@@ -676,12 +717,12 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
+                0.0012499999720603228,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
+                0.0023894861806184053,
                 0.0,
                 0.0,
                 0.0,
@@ -694,21 +735,21 @@
                 1.0
             ]
         },
-        "name": "UiBg",
-        "renderingType": 0,
-        "serializationID": 21,
+        "name": "startMat",
+        "renderingType": 1,
+        "serializationID": 38,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
+            "sprite": "Resources/Sprites/rect_25_10.png"
         },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
-                0.0860000029206276,
-                0.5130000114440918,
-                0.7129999995231628
+                0.6999446153640747,
+                0.7089429497718811,
+                0.7089429497718811,
+                0.7089429497718811
             ]
         }
     },
@@ -739,12 +780,12 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
+                0.0012499999720603228,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
+                0.0023894861806184053,
                 0.0,
                 0.0,
                 0.0,
@@ -757,21 +798,21 @@
                 1.0
             ]
         },
-        "name": "startMat",
+        "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 28,
+        "serializationID": 47,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
+            "sprite": "Resources/Sprites/rect_25_10.png"
         },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.6999998092651367,
-                0.12499993294477463,
-                0.5919997692108154,
-                0.19199977815151215
+                0.6999446153640747,
+                0.7089429497718811,
+                0.7089429497718811,
+                0.7089429497718811
             ]
         }
     },
@@ -802,75 +843,12 @@
                 0.0
             ],
             "projection": [
-                0.0015625000232830644,
+                0.0012499999720603228,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0024999999441206455,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                -1.0,
-                0.0,
-                -1.0,
-                -1.0,
-                0.0,
-                1.0
-            ]
-        },
-        "name": "optionsMat",
-        "renderingType": 1,
-        "serializationID": 37,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.6999998092651367,
-                0.9679989218711853,
-                0.555999755859375,
-                0.09399985522031784
-            ]
-        }
-    },
-    "material005": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0015625000232830644,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0024999999441206455,
+                0.0023894861806184053,
                 0.0,
                 0.0,
                 0.0,
@@ -885,23 +863,23 @@
         },
         "name": "exitMat",
         "renderingType": 1,
-        "serializationID": 46,
+        "serializationID": 56,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/button_test.png"
+            "sprite": "Resources/Sprites/rect_25_10.png"
         },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                0.6999998092651367,
-                0.8229987025260925,
-                0.17599982023239136,
-                0.2269999235868454
+                0.6999446153640747,
+                0.7089429497718811,
+                0.7089429497718811,
+                0.7089429497718811
             ]
         }
     },
-    "material006": {
+    "material005": {
         "cubemaps": {},
         "cubemapsHdr": {},
         "floats": {},
@@ -948,7 +926,7 @@
         },
         "name": "LoadingScreenMat",
         "renderingType": 1,
-        "serializationID": 55,
+        "serializationID": 65,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/loding.png"
@@ -971,8 +949,14 @@
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
     "shader001": {
-        "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
+        "fragmentShaderPath": "Resources/Shaders/UiFading/UiFading.frag",
         "serializationID": 12,
+        "shaderName": "UiFading",
+        "vertexShaderPath": "Resources/Shaders/UiFading/UiFading.vert"
+    },
+    "shader002": {
+        "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
+        "serializationID": 13,
         "shaderName": "TextStandard",
         "vertexShaderPath": "Resources/Shaders/TextStandard/TextStandard.vert"
     },
@@ -984,7 +968,7 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/cross.png",
-        "serializationID": 14
+        "serializationID": 16
     },
     "texture001": {
         "creationInfo": {
@@ -993,8 +977,8 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/button_test.png",
-        "serializationID": 15
+        "filePath": "Resources/Sprites/rect_1_1.png",
+        "serializationID": 17
     },
     "texture002": {
         "creationInfo": {
@@ -1003,7 +987,57 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
+        "filePath": "Resources/Sprites/rect_2_1.png",
+        "serializationID": 18
+    },
+    "texture003": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_2_1_shadeless.png",
+        "serializationID": 19
+    },
+    "texture004": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_3_1.png",
+        "serializationID": 20
+    },
+    "texture005": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_25_10.png",
+        "serializationID": 21
+    },
+    "texture006": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_16_9.png",
+        "serializationID": 22
+    },
+    "texture007": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
         "filePath": "Resources/Sprites/loding.png",
-        "serializationID": 53
+        "serializationID": 63
     }
 }

@@ -127,9 +127,9 @@ int Core::init()
     {
         // ? -r
         //#include "../../resources/Scenes/main_Menu.icpp"
-        //#include "../../resources/Scenes/selectCargoScene.icpp"
+        #include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        #include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
         //#include "../../resources/Scenes/newScene.icpp"
     }
     else
@@ -218,6 +218,7 @@ int Core::init()
     gameSystemsModule.addSystem(&toggleButtonSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
     gameSystemsModule.addSystem(&cargoButtonSystem);
+    gameSystemsModule.addSystem(&progressBarSystem);
 
 #pragma endregion
 
@@ -230,11 +231,6 @@ int Core::mainLoop()
     double previousFrameStart = glfwGetTime();
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
-
-#pragma region AudioModule demo
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
 
     // * ===== Game loop ===================================================
 
@@ -436,3 +432,4 @@ SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
+ProgressBarSystem Core::progressBarSystem;

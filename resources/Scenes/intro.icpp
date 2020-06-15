@@ -1,0 +1,52 @@
+// Trying to make ends meet, you decide to take part in the lucrative river smuggling job. On a war-torn border, cargo transferring is more profitable than selling gold, but the risk is proportionally huge. You observe how the conflict between two countries unfolds, and on certain occasions interfere with it. The outcome of the war may be more dependent on your actions than you first come to believe.
+auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+auto font = objectModule.newFont("Resources/Fonts/KosugiMaru-Regular.ttf", 128, "KosugiMaru-Regular");
+
+
+objectModule.newEntity(4, "Camera");
+{
+    auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
+        ViewFrustum& frustum = c->getFrustumModifiable();
+            frustum.farPlane = 2500.0f;
+            frustum.nearPlane = 0.1f;
+            frustum.fieldOfView = 80.0f;
+            frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
+        c->getProjectionModeModifiable() = CameraProjection::Perspective;
+
+    
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+
+    auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
+        li->getIsCurrentModifiable() = true;
+        li->getGainModifiable() = 1.0f;
+        li->getVelocityModifiable();
+        li->getPositionModifiable();
+        li->getAtModifiable();
+        li->getUpModifiable();
+}
+
+TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+
+auto buttonTest = objectModule.newTexture("Resources/Sprites/button_test.png", info);
+
+objectModule.newEntity(2, "Background");
+{
+    auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        rt->getAnchorModifiable() = {0.5f, 0.5f};
+        rt->getSizeModifiable() = {1920, 1080};
+        uiModule.rootNodes.push_back(rt);
+
+    auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+        auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
+        mat->setTexture("sprite", buttonTest);
+        mat->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+        ui->material = mat;
+}
