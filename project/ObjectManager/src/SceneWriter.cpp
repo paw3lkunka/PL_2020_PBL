@@ -222,6 +222,14 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveCamera(temp);
         }
+        else if(ThirdPersonCamera* temp = dynamic_cast<ThirdPersonCamera*>(objContainerPtr->components[i]))
+        {
+            saveThirdPersonCamera(temp);
+        }
+        else if(FirstPersonCamera* temp = dynamic_cast<FirstPersonCamera*>(objContainerPtr->components[i]))
+        {
+            saveFirstPersonCamera(temp);
+        }
         else if(MeshRenderer* temp = dynamic_cast<MeshRenderer*>(objContainerPtr->components[i]))
         {
             saveMeshRenderer(temp);
@@ -314,10 +322,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveHydroAccelerator(temp);
         }
-        //else if(dynamic_cast<HydroSurface*>(objContainerPtr->components[i]))
-        //{
-        //    j[name]["type"] = "HydroSurface";
-        //}
+        else if(dynamic_cast<HydroCurrent*>(objContainerPtr->components[i]))
+        {
+            (*json)[name]["type"] = "HydroCurrent";
+        }
         else if(dynamic_cast<Kayak*>(objContainerPtr->components[i]))
         {
             (*json)[name]["type"] = "Kayak";
@@ -413,9 +421,57 @@ void SceneWriter::saveCamera(Camera* componentPtr)
     (*json)[name]["type"] = "Camera";
     (*json)[name]["projectionMode"] = componentPtr->getProjectionMode();
     (*json)[name]["isMain"] = componentPtr->isMain;
+    (*json)[name]["control"] = componentPtr->control;
     (*json)[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
     (*json)[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
     (*json)[name]["farPlane"] = componentPtr->getFrustum().farPlane;
+}
+
+
+void SceneWriter::saveThirdPersonCamera(ThirdPersonCamera* componentPtr)
+{
+    (*json)[name]["type"] = "ThirdPersonCamera";
+    
+    (*json)[name]["player"] = componentPtr->player->serializationID;
+    (*json)[name]["playerOffset"]["x"] = componentPtr->playerOffset.x;
+    (*json)[name]["playerOffset"]["y"] = componentPtr->playerOffset.y;
+    (*json)[name]["playerOffset"]["z"] = componentPtr->playerOffset.z;
+
+    (*json)[name]["distance"] = componentPtr->distance;
+    (*json)[name]["minDistance"] = componentPtr->minDistance;
+    (*json)[name]["maxDistance"] = componentPtr->maxDistance;
+
+    (*json)[name]["minPitch"] = componentPtr->minPitch;
+    (*json)[name]["maxPitch"] = componentPtr->maxPitch;
+
+    (*json)[name]["moveLerp"] = componentPtr->moveLerp;
+    
+    (*json)[name]["zoomSensitivity"] = componentPtr->zoomSensitivity;
+    (*json)[name]["zoomLerp"] = componentPtr->zoomLerp;
+
+    (*json)[name]["rotationSensitivity"] = componentPtr->rotationSensitivity;
+    (*json)[name]["rotationLerp"] = componentPtr->rotationLerp;
+}
+
+void SceneWriter::saveFirstPersonCamera(FirstPersonCamera* componentPtr)
+{
+    (*json)[name]["type"] = "FirstPersonCamera";
+
+    (*json)[name]["player"] = componentPtr->player->serializationID;
+    (*json)[name]["headOffset"]["x"] = componentPtr->headOffset.x;
+    (*json)[name]["headOffset"]["y"] = componentPtr->headOffset.y;
+    (*json)[name]["headOffset"]["z"] = componentPtr->headOffset.z;
+
+    (*json)[name]["rotationSensitivity"] = componentPtr->rotationSensitivity;
+
+    (*json)[name]["minPitch"] = componentPtr->minPitch;
+    (*json)[name]["maxPitch"] = componentPtr->maxPitch;
+
+    (*json)[name]["minYaw"] = componentPtr->minYaw;
+    (*json)[name]["maxYaw"] = componentPtr->maxYaw;
+
+    (*json)[name]["moveLerp"] = componentPtr->moveLerp;
+    (*json)[name]["rotationLerp"] = componentPtr->rotationLerp;
 }
 
 void SceneWriter::saveMeshRenderer(MeshRenderer* componentPtr)

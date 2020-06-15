@@ -350,6 +350,16 @@ void SceneReader::readComponents()
             std::cout << "Camera" << std::endl;
             readCamera(name);
         }
+        else if(componentType == "ThirdPersonCamera")
+        {
+            std::cout << "ThirdPersonCamera" << std::endl;
+            readThirdPersonCamera(name);
+        }
+        else if(componentType == "FirstPersonCamera")
+        {
+            std::cout << "FirstPersonCamera" << std::endl;
+            readFirstPersonCamera(name);
+        }
         else if(componentType == "MeshRenderer")
         {
             std::cout << "MeshRenderer" << std::endl;
@@ -409,6 +419,11 @@ void SceneReader::readComponents()
         {
             std::cout << "HydroAccelerator" << std::endl;
             readHydroAccelerator(name);
+        }
+        else if(componentType == "HydroCurrent")
+        {
+            std::cout << "HydroCurrent" << std::endl;
+            readHydroCurrent(name);
         }
         else if(componentType == "Kayak")
         {
@@ -644,8 +659,57 @@ void SceneReader::readCamera(std::string name)
     frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
     camera->getProjectionModeModifiable() = CameraProjection(j->at(name).at("projectionMode").get<int>());
     camera->isMain = j->at(name).at("isMain").get<bool>();
+    camera->control = j->at(name).at("control").get<CameraControl>();
 
     assignToEntity(name, camera);
+}
+
+void SceneReader::readThirdPersonCamera(std::string name)
+{
+    auto tpCamera = objModulePtr->newEmptyComponent<ThirdPersonCamera>();
+    tpCamera->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+    
+    tpCamera->player = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(j->at(name).at("player").get<unsigned int>()));
+    tpCamera->playerOffset.x = j->at(name).at("playerOffset").at("x").get<float>();
+    tpCamera->playerOffset.y = j->at(name).at("playerOffset").at("y").get<float>();
+    tpCamera->playerOffset.z = j->at(name).at("playerOffset").at("z").get<float>();
+
+    tpCamera->distance = j->at(name).at("distance").get<float>();
+    tpCamera->minDistance = j->at(name).at("minDistance").get<float>();
+    tpCamera->maxDistance = j->at(name).at("maxDistance").get<float>();
+
+    tpCamera->minPitch = j->at(name).at("minPitch").get<float>();
+    tpCamera->maxPitch = j->at(name).at("maxPitch").get<float>();
+
+    tpCamera->moveLerp = j->at(name).at("moveLerp").get<float>();
+    
+    tpCamera->zoomSensitivity = j->at(name).at("zoomSensitivity").get<float>();
+    tpCamera->zoomLerp = j->at(name).at("zoomLerp").get<float>();
+
+    tpCamera->rotationSensitivity = j->at(name).at("rotationSensitivity").get<float>();
+    tpCamera->rotationLerp = j->at(name).at("rotationLerp").get<float>();
+}
+
+void SceneReader::readFirstPersonCamera(std::string name)
+{
+    auto fpCamera = objModulePtr->newEmptyComponent<FirstPersonCamera>();
+    fpCamera->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+
+    fpCamera->player = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(j->at(name).at("player").get<unsigned int>()));
+    fpCamera->headOffset.x = j->at(name).at("headOffset").at("x").get<float>();
+    fpCamera->headOffset.y = j->at(name).at("headOffset").at("y").get<float>();
+    fpCamera->headOffset.z = j->at(name).at("headOffset").at("z").get<float>();
+
+    fpCamera->rotationSensitivity = j->at(name).at("rotationSensitivity").get<float>();
+
+    fpCamera->minPitch = j->at(name).at("minPitch").get<float>();
+    fpCamera->maxPitch = j->at(name).at("maxPitch").get<float>();
+
+    fpCamera->minYaw = j->at(name).at("minYaw").get<float>();
+    fpCamera->maxYaw = j->at(name).at("maxYaw").get<float>();
+
+    fpCamera->moveLerp = j->at(name).at("moveLerp").get<float>();
+    fpCamera->rotationLerp = j->at(name).at("rotationLerp").get<float>();
 }
 
 void SceneReader::readMeshRenderer(std::string name)
@@ -854,6 +918,14 @@ void SceneReader::readHydroAccelerator(std::string name)
     hydroAccelerator->rigidbody = dynamic_cast<Rigidbody*>( objModulePtr->objectContainer.getComponentFromSerializationID( j->at(name).at("rigidbody").get<unsigned int>() ) );
 
     assignToEntity(name, hydroAccelerator);
+}
+
+void SceneReader::readHydroCurrent(std::string name)
+{
+    auto hydroCurrent = objModulePtr->newEmptyComponent<HydroCurrent>();
+    hydroCurrent->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+
+    assignToEntity(name, hydroCurrent);
 }
 
 void SceneReader::readKayak(std::string name)

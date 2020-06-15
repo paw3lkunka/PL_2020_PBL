@@ -86,7 +86,7 @@ void HydroBodySystem::fixedUpdate()
     if(hydroAccelerator == nullptr)
     {
         rb = rigidbody;
-        velocity = rigidbody->velocity - currentVelocity;
+        velocity = rigidbody->velocity + currentVelocity;
         viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
     }
     else
@@ -117,7 +117,7 @@ void HydroBodySystem::fixedUpdate()
                 centerPos
             );
 
-            impulse.force = velocity - currentVelocity;
+            impulse.force = velocity + currentVelocity;
             impulse.force.y = 0.0f;
 
             if(hydroAccelerator->velocity.y > 0.0f)
