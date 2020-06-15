@@ -317,7 +317,9 @@ class Core
 //TODO must be a better way, than static fields
     public:
         static CameraSystem cameraSystem;
-        static CameraControlSystem cameraControlSystem;
+        static FreeCameraControlSystem freeCameraControlSystem;
+        static FirstPersonCameraControlSystem firstPersonCameraControlSystem;
+        static ThirdPersonCameraControlSystem thirdPersonCameraControlSystem;
         static AudioSourceSystem audioSourceSystem;
         static AudioListenerSystem audioListenerSystem;
         static MeshRendererSystem rendererSystem;

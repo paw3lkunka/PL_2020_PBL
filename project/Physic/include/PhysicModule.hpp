@@ -8,17 +8,24 @@
 
 class Entity;
 
-//TODO: documentation
+/**
+ * @brief Module responsible for phisic simulation.
+ * Wrapper for global rp3d objects. 
+ */
 class PhysicModule
 {
     public:
         PhysicModule() = default;
         virtual ~PhysicModule() = default;
 
-        //TODO: documentation
+        /**
+         * @brief Initialize module by creating PhysicsWorld.
+         */
         void init();
 
-        //TODO: documentation
+        /**
+         * @brief Destroys PhysicsWorld releasing all resources. 
+         */
         void cleanup();
 
         /**
@@ -26,11 +33,18 @@ class PhysicModule
          */
         void physicSimulation(std::vector<Entity>* entities);
 
-        
-        //TODO: documentation
+        /**
+         * @brief Get the PhysicsWorld instance
+         * 
+         * @return rp3d::PhysicsWorld& 
+         */
         inline rp3d::PhysicsWorld& GetWorld() { return *physicsWorld; }
 
-        //TODO: documentation
+        /**
+         * @brief Get the PhysicsCommon instance
+         * 
+         * @return rp3d::PhysicsCommon& 
+         */
         inline rp3d::PhysicsCommon& GetCommon() { return physicsCommon; }
         
     private:

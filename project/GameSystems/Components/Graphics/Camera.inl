@@ -7,6 +7,8 @@
 
 enum class CameraProjection { Perspective, Orthographic };
 
+enum class CameraControl { None, Free, FirstPerson, ThirdPerson };
+
 /**
  * @brief Struct with camera's view frustum info
  * Elements which must be initialized:
@@ -78,6 +80,8 @@ struct Camera : public Component
     bool projectionChanged = true;
     /// @brief Main camera flag - only main camera is getting processed
     bool isMain;
+    /// @brief 
+    CameraControl control = CameraControl::Free;
 
     /// @brief Camera's view matrix, calculated every frame for main camera
     glm::mat4 viewMatrix;

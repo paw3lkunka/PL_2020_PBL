@@ -143,7 +143,20 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            // some code here
+            //some code here...
+            auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+
+            auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
+                tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+                //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+            auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+                fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+
+            auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+                cameraPtr->addComponent(tpCameraPtr);
+                cameraPtr->addComponent(fpCameraPtr);
+                cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -181,13 +194,17 @@ int Core::init()
 
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
+
+    gameSystemsModule.addSystem(&freeCameraControlSystem);
+    gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
+    gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
+
     gameSystemsModule.addSystem(&terrainSystem);
-    gameSystemsModule.addSystem(&cameraControlSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
-    
+
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
-    
+
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -215,11 +232,6 @@ int Core::mainLoop()
     double previousFrameStart = glfwGetTime();
     //HACK temporary solution, should be 0 n start
     double lag = FIXED_TIME_STEP;
-
-#pragma region AudioModule demo
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sampleSound")->getComponentPtr<AudioSource>()) );
-        // messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, objectModule.getEntityPtrByName("sphereSound")->getComponentPtr<AudioSource>()));
-#pragma endregion
 
     // * ===== Game loop ===================================================
 
@@ -401,7 +413,9 @@ float Core::randomFloatR(float min, float max)
 }
 
 CameraSystem Core::cameraSystem;
-CameraControlSystem Core::cameraControlSystem;
+FreeCameraControlSystem Core::freeCameraControlSystem;
+FirstPersonCameraControlSystem Core::firstPersonCameraControlSystem;
+ThirdPersonCameraControlSystem Core::thirdPersonCameraControlSystem;
 AudioSourceSystem Core::audioSourceSystem;
 AudioListenerSystem Core::audioListenerSystem;
 MeshRendererSystem Core::rendererSystem;
