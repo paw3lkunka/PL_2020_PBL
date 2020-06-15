@@ -12,8 +12,8 @@ void TextPacket::render(glm::mat4& projection)
     model[0][1] = modelMatrix[0][1];
     model[1][0] = modelMatrix[1][0];
     model[1][1] = modelMatrix[1][1];
-    material->getShaderPtr()->setMat3("model", modelMatrix);
-    material->getShaderPtr()->setInt("sprite", 0);
     material->use();
+    material->getShaderPtr()->setMat4("model", model);
+    material->getShaderPtr()->setInt("sprite", 0);
     mesh->render();
 }

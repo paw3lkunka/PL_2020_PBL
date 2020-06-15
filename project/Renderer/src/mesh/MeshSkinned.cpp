@@ -14,6 +14,18 @@ MeshSkinned::MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsign
     setup();
 }
 
+MeshSkinned::~MeshSkinned()
+{
+    
+}
+
+void MeshSkinned::clean()
+{
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
+}
+
 void MeshSkinned::setup()
 {
     // ===== Generate buffers =====

@@ -147,20 +147,20 @@ void RendererModule::receiveMessage(Message msg)
             }
             // Gbuffers
             glBindTexture(GL_TEXTURE_2D, gbufferPosition);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / 2, size.y / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, gbufferNormal);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x, size.y, 0, GL_RGBA, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, size.x / 2, size.y / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
 
             glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x, size.y);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, size.x / 2, size.y / 2);
 
             // SSAO
             glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x / 2, size.y / 2, 0, GL_RED, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x, size.y, 0, GL_RED, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size.x / 2, size.y / 2, 0, GL_RED, GL_FLOAT, nullptr);
 
             glBindTexture(GL_TEXTURE_2D, 0);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -240,6 +240,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 4, shadowMappingBuffer, 0, sizeof(glm::mat4));
+
+    // * ===== Setup Uniform Buffer Object for time =====
+    glGenBuffers(1, &timeBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 5, timeBuffer, 0, sizeof(float));
 
     // * ===== Setup buffer for simple gizmo rendering =====
     glGenVertexArrays(1, &gizmoVao);
@@ -361,14 +369,14 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glGenTextures(1, &gbufferNormal);
 
     glBindTexture(GL_TEXTURE_2D, gbufferPosition);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glBindTexture(GL_TEXTURE_2D, gbufferNormal);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RGBA, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -383,7 +391,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glGenRenderbuffers(1, &gbufferDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, gbufferDepth);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth, GetCore().windowHeight);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetCore().windowWidth / 2, GetCore().windowHeight / 2);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gbufferDepth);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -392,8 +400,8 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     }
 
     // * ===== SSAO kernel randomization =====
-    ssaoKernel.reserve(64);
-    for (size_t i = 0; i < 64; i++)
+    ssaoKernel.reserve(32);
+    for (size_t i = 0; i < 32; i++)
     {
         glm::vec3 sample = {
             GetCore().randomFloat01R() * 2.0f - 1.0f,
@@ -403,7 +411,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
         sample = glm::normalize(sample);
         sample *= GetCore().randomFloat01R();
 
-        float scale = static_cast<float>(i) / 64.0f;
+        float scale = static_cast<float>(i) / 32.0f;
         scale = glm::mix(0.1f, 1.0f, scale * scale);
         sample *= scale;
 
@@ -436,7 +444,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     glGenTextures(1, &ssaoColorBuffer);
     glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RED, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -448,7 +456,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     
     glGenTextures(1, &ssaoColorBufferBlur);
     glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth, GetCore().windowHeight, 0, GL_RED, GL_FLOAT, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, GetCore().windowWidth / 2, GetCore().windowHeight / 2, 0, GL_RED, GL_FLOAT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
@@ -467,6 +475,11 @@ void RendererModule::render()
         ImGui::Render();
 
         glm::mat4 VP = glm::mat4(1.0f);
+
+        // ? +++++ Send time for use to shaders +++++
+        glBindBuffer(GL_UNIFORM_BUFFER, timeBuffer);
+        float time = (float)GetCore().getCurrentFrameStart();
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &time);
 
         // ? +++++ Shadow mapping section +++++
         if (directionalLight != nullptr)
@@ -565,7 +578,7 @@ void RendererModule::render()
         }
 
         // ? +++++ Perform frustum culling +++++
-        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
+        glViewport(0, 0, Core::windowWidth / 2, Core::windowHeight / 2);
         glClear(createInfo.clearFlags);
 
         if (frustumCullingEnabled)
@@ -635,12 +648,12 @@ void RendererModule::render()
         glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for(auto& packet : terrainQueue)
+        for(auto packet : terrainQueue)
         {
             packet->renderWithShader(gbufferShader, VP);
         }
 
-        for(auto& packet : opaqueQueue)
+        for(auto packet : opaqueQueue)
         {
             packet->renderWithShader(gbufferShader, VP);
         }
@@ -659,7 +672,7 @@ void RendererModule::render()
         glBindTexture(GL_TEXTURE_2D, ssaoNoiseTex);
 
         ssaoShader->use();
-        for (size_t i = 0; i < 64; i++)
+        for (size_t i = 0; i < 32; i++)
         {
             ssaoShader->setVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
         }
@@ -688,6 +701,7 @@ void RendererModule::render()
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
+        glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -703,10 +717,22 @@ void RendererModule::render()
         // ! +++++ Opaque +++++
         while(!opaqueQueue.empty())
         {
+            // HACK: Only one of the materials should be double sided
+            std::string matName = std::string(opaqueQueue.front()->material->getName());
+            bool doubleSided = matName == "Conifer Leaves BODT" ||
+                                matName == "Grass_rushes";
+            if (doubleSided)
+            {
+                glDisable(GL_CULL_FACE);
+            }
             opaqueQueue.front()->material->setTexture("directionalShadowMap", directionalDepth);
             opaqueQueue.front()->material->setTexture("irradianceMap", irradianceMap);
             opaqueQueue.front()->render(VP);
             opaqueQueue.pop_front();
+            if (doubleSided)
+            {
+                glEnable(GL_CULL_FACE);
+            }
         }
 
         // ! +++++ Skybox +++++
@@ -834,6 +860,80 @@ void RendererModule::render()
         spritePackets.clear();
         textPackets.clear();
     }
+}
+
+void RendererModule::clean()
+{
+    //delete internalShaderError;
+    //delete internalErrorMat;
+
+    // * ===== Setup Uniform Buffer Object for camera =====
+    glDeleteBuffers(1, &cameraBuffer);
+
+    // * ===== Setup Uniform Buffer Object for bone info =====
+    glDeleteBuffers(1, &boneBuffer);
+
+    // * ===== Setup Uniform Buffer Object for directional light =====
+    glDeleteBuffers(1, &directionalLightBuffer);
+
+    // * ===== Setup Uniform Buffer Object for shadow mapping =====
+    glDeleteBuffers(1, &shadowMappingBuffer);
+
+    // * ===== Setup Uniform Buffer Object for time =====
+    glDeleteBuffers(1, &timeBuffer);
+
+    // * ===== Setup buffer for simple gizmo rendering =====
+    glDeleteVertexArrays(1, &gizmoVao);
+    glDeleteBuffers(1, &gizmoVbo);
+
+    // * ===== Generate mesh for skybox rendering =====
+    glDeleteVertexArrays(1, &skyboxVao);
+    glDeleteBuffers(1, &skyboxVbo);
+
+    // * ===== Create framebuffer for depth map =====
+    glDeleteFramebuffers(1, &depthMapFBO);
+
+    //delete directionalDepth;
+
+    // * ===== Create framebuffer for hdr rendering =====
+    glDeleteFramebuffers(1, &hdrFBO);
+
+    // Generate color attachment
+    glDeleteTextures(1, &hdrColorBuffer);
+
+    // Generate bright color attachment
+    glDeleteTextures(1, &hdrBrightBuffer);
+
+    // Generate depth renderbuffer
+    glDeleteRenderbuffers(1, &rboDepth);
+
+    // * ===== Framebuffers for ping pong gaussian blur =====
+    glDeleteFramebuffers(10, blurFBO);
+    glDeleteTextures(10, blurBuffers);
+
+    // * ===== Gbuffer framebuffer =====
+    glDeleteFramebuffers(1, &gbufferFBO);
+    glDeleteTextures(1, &gbufferPosition);
+    glDeleteTextures(1, &gbufferNormal);
+    glDeleteRenderbuffers(1, &gbufferDepth);
+
+    // * ===== SSAO kernel randomization =====
+    ssaoKernel.clear();
+    ssaoNoise.clear();
+
+    glDeleteTextures(1, &ssaoNoiseTex);
+
+    // * ===== SSAO framebuffer init =====
+    glDeleteFramebuffers(1, &ssaoFBO);
+
+    glDeleteTextures(1, &ssaoColorBuffer);
+
+    // Ssao blur
+    glDeleteFramebuffers(1, &ssaoBlurFBO);
+
+    glDeleteTextures(1, &ssaoColorBufferBlur);
+
+    //delete ssaoMap;
 }
 
 void RendererModule::calculateFrustumPlanes()

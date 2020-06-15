@@ -11,6 +11,19 @@ MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> i
     setup();
 }
 
+MeshCustom::~MeshCustom()
+{
+    //clean();
+}
+
+void MeshCustom::clean()
+{
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &instanceVbo);
+    glDeleteBuffers(1, &ebo);
+}
+
 void MeshCustom::setup()
 {
     // ===== Generate new buffers =====

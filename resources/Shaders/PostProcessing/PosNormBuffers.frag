@@ -7,8 +7,15 @@ in vec2 Texcoord;
 in vec3 FragPosView;
 in vec3 NormalView;
 
+uniform sampler2D diffuse;
+
 void main()
 {
+    if (texture(diffuse, Texcoord).a < 0.3)
+	{
+		discard;
+	}
+
     gViewSpacePos = FragPosView;
     gViewSpaceNormal = normalize(NormalView);
 }
