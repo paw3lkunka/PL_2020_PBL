@@ -1,8 +1,6 @@
 #include "MessageBus.hpp"
 
-#ifndef NDEBUG
 #include <iostream>
-#endif
 
 #include "IModule.inl"
 #include "Message.inl"
@@ -25,11 +23,8 @@ void MessageBus::sendMessage(Message msg)
 		activeBuffer->push_back(msg);
 	}
 	else
-	{		
-//TODO discuss
-#ifndef NDEBUG
-		std::cerr << "Message buffer overflow\n";
-#endif
+	{
+		std::cout << "Message buffer overflow\n";
 		notify();
 	}
 }

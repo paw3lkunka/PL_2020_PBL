@@ -155,19 +155,6 @@ int Core::init()
         // ? -u
         {
             //some code here...
-            // auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-
-            // auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
-            //     tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-            //     //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
-
-            // auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
-            //     fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-
-            // auto cameraPtr = objectModule.getEntityPtrByName("Camera");
-            //     cameraPtr->addComponent(tpCameraPtr);
-            //     cameraPtr->addComponent(fpCameraPtr);
-            //     cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -205,17 +192,17 @@ int Core::init()
 
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
-    
+
     gameSystemsModule.addSystem(&freeCameraControlSystem);
     gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
     gameSystemsModule.addSystem(&thirdPersonCameraControlSystem);
-    
+
     gameSystemsModule.addSystem(&terrainSystem);
     gameSystemsModule.addSystem(&physicalBasedInputSystem);
-    
+
     gameSystemsModule.addSystem(&hydroBodySystem);
     gameSystemsModule.addSystem(&physicSystem);
-    
+
     gameSystemsModule.addSystem(&skeletonSystem);
     gameSystemsModule.addSystem(&paddleControlSystem);
     gameSystemsModule.addSystem(&audioListenerSystem);
@@ -229,6 +216,7 @@ int Core::init()
     gameSystemsModule.addSystem(&toggleButtonSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
     gameSystemsModule.addSystem(&cargoButtonSystem);
+    gameSystemsModule.addSystem(&detectionBarSystem);
     gameSystemsModule.addSystem(&progressBarSystem);
 
 #pragma endregion
@@ -248,6 +236,7 @@ int Core::mainLoop()
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
+    detectionBarSystem.init("ProgressBar");
 
     // ! ----- START SYSTEM FUNCTION -----
 
@@ -297,6 +286,7 @@ int Core::mainLoop()
 
         // ! ----- FRAME UPDATE FUNCTION -----
 
+        detectionBarSystem.prepare();
         gameSystemsModule.run(System::FRAME);
         // Read message bus before rendering
         // TODO: Should transform update be here also?
@@ -489,4 +479,5 @@ SortingGroupSystem Core::sortingGroupSystem;
 ToggleButtonSystem Core::toggleButtonSystem;
 CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
+DetectionBarSystem Core::detectionBarSystem;
 ProgressBarSystem Core::progressBarSystem;
