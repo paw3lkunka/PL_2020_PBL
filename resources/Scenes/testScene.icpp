@@ -356,7 +356,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             kayakRigidbody->ignoreGravity = false;
 
         auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
-            kayakBoxCollider->halfSize = glm::vec3(5.0f, 15.0f, 2.0f);
+            kayakBoxCollider->halfSize = glm::vec3(0.5f, 1.50f, 0.2f);
 
         auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
         

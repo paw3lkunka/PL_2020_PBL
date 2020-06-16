@@ -33,7 +33,7 @@ void PaddleControlSystem::fixedUpdate()
     newPos.z = copysignf( abs(glm::mix(startPosition.y, paddlePtr->maxPos.y, -paddlePtr->position2D.x)), paddlePtr->maxPos.y);
 
     glm::vec3 eulerRot = glm::eulerAngles(startRotation) * 180.0f / glm::pi<float>();
-    float frontRot = glm::mix(eulerRot.x, paddlePtr->maxFrontRot, copysignf(paddlePtr->position2D.y * paddlePtr->position2D.x, paddlePtr->position2D.y));
+    float frontRot = glm::mix(eulerRot.x, paddlePtr->maxFrontRot, copysignf(paddlePtr->position2D.y * paddlePtr->position2D.x, -paddlePtr->position2D.y));
     float sideRot = glm::mix(eulerRot.y, paddlePtr->maxSideRot, -paddlePtr->position2D.x);
 
     if(hydroAcceleratorPtr != nullptr)
@@ -49,20 +49,10 @@ void PaddleControlSystem::fixedUpdate()
         else
         {
             hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition());
+
             hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
         }
     }
-
-    /*
-    if(hydroAcceleratorPtr != nullptr)
-    {
-        hydroAcceleratorPtr->velocity = (newPos - hydroAcceleratorPtr->lastPos);
-        hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - hydroAcceleratorPtr->lastRot);
-
-        hydroAcceleratorPtr->lastPos = newPos;
-        hydroAcceleratorPtr->lastRot = glm::vec3(frontRot, sideRot, eulerRot.z);
-    }
-    */
 
     transformPtr->getLocalPositionModifiable() = newPos;
     transformPtr->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(frontRot, sideRot, eulerRot.z));

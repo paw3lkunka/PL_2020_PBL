@@ -109,6 +109,8 @@ void HydroBodySystem::fixedUpdate()
     else
     {
         rb = hydroAccelerator->rigidbody;
+        Transform* tran = rb->entityPtr->getComponentPtr<Transform>();
+        //glm::vec3 handlingPowerUp = hydroAccelerator->handling * static_cast<glm::vec3>( tran->getModelMatrix()[0] );
         glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
         for(HydroTriangle triangle : hullTriangles.underwater)
@@ -129,7 +131,8 @@ void HydroBodySystem::fixedUpdate()
             {
                 impulse.force *= -1.0f;
             }
-            impulse.force *= hydroAccelerator->powerUp;
+            impulse.force *= hydroAccelerator->acceleratorionMultiplier;
+            //impulse.force += handlingPowerUp;
 
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
