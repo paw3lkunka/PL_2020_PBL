@@ -919,6 +919,7 @@ void SceneWriter::saveTexture(Texture* assetPtr)
 void SceneWriter::saveMesh(Mesh* assetPtr)
 {
     (*json)[name]["serializationID"] = assetPtr->serializationID;
+    (*json)[name]["customName"] = assetPtr->customName;
     (*json)[name]["meshPath"] = assetPtr->getMeshPath();
     (*json)[name]["filePath"] = assetPtr->filePath;
     if(dynamic_cast<MeshCustom*>(assetPtr) != nullptr)

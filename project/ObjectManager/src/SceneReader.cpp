@@ -298,22 +298,23 @@ void SceneReader::readMeshes()
     std::string name;
     int meshesAmount = j->at("Amounts").at("meshes");
     std::string filePath, meshPath;
+    bool customName;
     for(int i = 0; i < meshesAmount; ++i)
     {
         name = setName("mesh", i);
         filePath = j->at(name).at("filePath").get<std::string>();
         meshPath = j->at(name).at("meshPath").get<std::string>();
-
+        customName = j->at(name).at("customName").get<bool>();
         auto meshType = j->at(name).at("type").get<std::string>();
         if(meshType == "MeshCustom")
         {
-            objModulePtr->newModel(filePath.c_str());
+            objModulePtr->newModel(filePath.c_str(), customName);
             auto mesh = objModulePtr->getMeshCustomPtrByPath(meshPath.c_str());
             mesh->serializationID = j->at(name).at("serializationID").get<unsigned int>();
         }
         else if(meshType == "MeshSkinned")
         {
-            objModulePtr->newModel(filePath.c_str());
+            objModulePtr->newModel(filePath.c_str(), customName);
             auto mesh = objModulePtr->getMeshSkinnedPtrByPath(meshPath.c_str());
             mesh->serializationID = j->at(name).at("serializationID").get<unsigned int>();
         }
@@ -1223,7 +1224,7 @@ void SceneReader::readTransformParents(std::string name)
         if(parentID != 0)
         {
             std::cout << "PARENT ID: " << parentID << '\n';
-            std::cout << "Entity name: " << Name(objModulePtr->objectContainer.getComponentFromSerializationID(parentID)) << '\n';
+            //std::cout << "Entity name: " << Name(objModulePtr->objectContainer.getComponentFromSerializationID(parentID)) << '\n';
             auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
             trans->setParent(parentTrans);
         }

@@ -11,7 +11,7 @@ class Font;
 class TextMesh : public Mesh
 {
 public:
-    TextMesh() : Mesh("", "") {}
+    TextMesh() : Mesh("", "", false) {}
     virtual ~TextMesh();
 
     /**
