@@ -14,7 +14,7 @@ bool EnemySystem::assertEntity(Entity* entity)
         enemyAnimationPtr = entity->getComponentPtr<EnemyAnimation>();
         enemyAttackPtr = entity->getComponentPtr<EnemyAttack>();
 
-	return enemyPtr && enemyTransformPtr;
+	return enemyPtr && enemyTransformPtr && Kayak::get();
 }
 
 void EnemySystem::fixedUpdate()

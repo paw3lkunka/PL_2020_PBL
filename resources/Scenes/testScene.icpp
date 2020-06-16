@@ -402,7 +402,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             ea->successChance = 0.5f;
     }
 
-// 
+#pragma region UI
 auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
 auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
 auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
@@ -523,6 +523,7 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
             auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
         }
     }
+#pragma endregion
 
     auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
     {
