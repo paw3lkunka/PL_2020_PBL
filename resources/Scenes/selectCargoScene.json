@@ -1,16 +1,17 @@
 {
     "Amounts": {
-        "components": 96,
+        "components": 114,
         "cubemaps": 0,
         "cubemapsHdr": 0,
-        "entities": 43,
+        "entities": 52,
         "fonts": 2,
-        "materials": 41,
+        "materials": 23,
         "meshes": 0,
         "shaders": 2,
-        "textures": 2
+        "textures": 6
     },
     "component000": {
+        "camControl": 1,
         "entity id": 0,
         "farPlane": 2500.0,
         "fieldOfView": 80.0,
@@ -125,13 +126,13 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 19,
+        "serializationID": 23,
         "type": "RectTransform"
     },
     "component006": {
         "entity id": 2,
         "material": "UiBg",
-        "serializationID": 20,
+        "serializationID": 24,
         "type": "UiRenderer"
     },
     "component007": {
@@ -149,67 +150,67 @@
             "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 23,
+        "serializationID": 27,
         "type": "RectTransform"
     },
     "component008": {
         "entity id": 3,
         "font": "JosefinSans-Regular",
-        "material": "SelectCargoTextMat",
-        "serializationID": 24,
+        "material": "TextMaterial",
+        "serializationID": 28,
         "text": "Select Cargo:",
         "type": "TextRenderer"
     },
     "component009": {
         "anchor": {
             "x": 0.5,
-            "y": 0.0
+            "y": 0.5
         },
         "entity id": 4,
         "localPosition": {
-            "x": 0.0,
-            "y": 100.0
+            "x": 11.0,
+            "y": -292.0
         },
         "rectSize": {
-            "x": 200.0,
+            "x": 250.0,
             "y": 100.0
         },
-        "rotation": 0.0,
-        "serializationID": 28,
+        "rotation": -0.0872664600610733,
+        "serializationID": 31,
         "type": "RectTransform"
     },
     "component010": {
         "entity id": 4,
-        "material": "PlayButton",
-        "serializationID": 29,
+        "material": "optionsMat",
+        "serializationID": 32,
         "type": "UiRenderer"
     },
     "component011": {
         "baseColor": {
-            "a": 0.699999988079071,
-            "b": 0.27799999713897705,
-            "g": 0.9010000228881836,
-            "r": 0.878000020980835
+            "a": 1.0,
+            "b": 0.06599999964237213,
+            "g": 0.06599999964237213,
+            "r": 0.7329999804496765
         },
         "entity id": 4,
         "highlightedColor": {
-            "a": 0.699999988079071,
-            "b": 0.49399998784065247,
-            "g": 0.9290000200271606,
-            "r": 0.9129999876022339
+            "a": 1.0,
+            "b": 0.07800000160932541,
+            "g": 0.07800000160932541,
+            "r": 0.8579999804496765
         },
         "inactiveColor": {
-            "a": 0.699999988079071,
-            "b": 0.31700000166893005,
-            "g": 0.4819999933242798,
-            "r": 0.4779999852180481
+            "a": 1.0,
+            "b": 0.06599999964237213,
+            "g": 0.06599999964237213,
+            "r": 0.7329999804496765
         },
         "isActive": true,
         "onClickColor": {
-            "a": 0.699999988079071,
-            "b": 0.11299999803304672,
-            "g": 0.7490000128746033,
-            "r": 0.7250000238418579
+            "a": 1.0,
+            "b": 0.06599999964237213,
+            "g": 0.06599999964237213,
+            "r": 0.6539999842643738
         },
         "onClickEvents": {
             "e0": {
@@ -217,7 +218,7 @@
                 "scene": "Resources/Scenes/gameScene.json"
             }
         },
-        "serializationID": 31,
+        "serializationID": 34,
         "type": "Button"
     },
     "component012": {
@@ -227,24 +228,24 @@
         },
         "entity id": 5,
         "localPosition": {
-            "x": -75.0,
+            "x": -61.0,
             "y": -15.0
         },
-        "parent": 28,
+        "parent": 31,
         "rectSize": {
             "x": 0.4000000059604645,
             "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 33,
+        "serializationID": 36,
         "type": "RectTransform"
     },
     "component013": {
         "entity id": 5,
         "font": "CourierNew",
-        "material": "PlayText",
-        "serializationID": 34,
-        "text": "Play!",
+        "material": "Stamp",
+        "serializationID": 37,
+        "text": "PLAY",
         "type": "TextRenderer"
     },
     "component014": {
@@ -254,42 +255,42 @@
         },
         "entity id": 6,
         "localPosition": {
-            "x": 0.0,
-            "y": 250.0
+            "x": -350.0,
+            "y": 240.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 38,
+        "serializationID": 42,
         "type": "RectTransform"
     },
     "component015": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
         "entity id": 6,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -297,29 +298,29 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 54,
+        "incomeText": 56,
         "isActive": true,
-        "nameText": 44,
+        "nameText": 51,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 39,
+        "serializationID": 43,
         "type": "CargoButton",
-        "weightText": 49
+        "weightText": 60
     },
     "component016": {
         "entity id": 6,
         "material": "Toggle_1",
-        "serializationID": 40,
+        "serializationID": 44,
         "type": "UiRenderer"
     },
     "component017": {
@@ -329,25 +330,23 @@
         },
         "entity id": 7,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 38,
+        "parent": 42,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 43,
+        "serializationID": 47,
         "type": "RectTransform"
     },
     "component018": {
         "entity id": 7,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo1NameMat",
-        "serializationID": 44,
-        "text": "Name",
-        "type": "TextRenderer"
+        "material": "BgBlack",
+        "serializationID": 48,
+        "type": "UiRenderer"
     },
     "component019": {
         "anchor": {
@@ -357,23 +356,23 @@
         "entity id": 8,
         "localPosition": {
             "x": -135.0,
-            "y": -8.0
+            "y": 31.0
         },
-        "parent": 38,
+        "parent": 42,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 48,
+        "serializationID": 50,
         "type": "RectTransform"
     },
     "component020": {
         "entity id": 8,
         "font": "CourierNew",
-        "material": "Cargo1WeightMat",
-        "serializationID": 49,
-        "text": "Weight",
+        "material": "Cargo1NameMat",
+        "serializationID": 51,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component021": {
@@ -383,69 +382,96 @@
         },
         "entity id": 9,
         "localPosition": {
-            "x": -135.0,
-            "y": -51.0
+            "x": -9.0,
+            "y": -0.0
         },
-        "parent": 38,
+        "parent": 42,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 53,
+        "serializationID": 55,
         "type": "RectTransform"
     },
     "component022": {
         "entity id": 9,
         "font": "CourierNew",
-        "material": "Cargo1IncomeMat",
-        "serializationID": 54,
+        "material": "TextMaterial",
+        "serializationID": 56,
         "text": "Income",
         "type": "TextRenderer"
     },
     "component023": {
         "anchor": {
-            "x": 0.5,
-            "y": 0.5
+            "x": 0.0,
+            "y": 0.0
         },
         "entity id": 10,
         "localPosition": {
-            "x": -350.0,
-            "y": 250.0
+            "x": -4.0,
+            "y": -38.0
+        },
+        "parent": 42,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 59,
+        "type": "RectTransform"
+    },
+    "component024": {
+        "entity id": 10,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 60,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component025": {
+        "anchor": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "entity id": 11,
+        "localPosition": {
+            "x": 0.0,
+            "y": 240.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 58,
+        "serializationID": 63,
         "type": "RectTransform"
     },
-    "component024": {
+    "component026": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
-        "entity id": 10,
+        "entity id": 11,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -453,57 +479,30 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 74,
+        "incomeText": 77,
         "isActive": true,
-        "nameText": 64,
+        "nameText": 72,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 59,
+        "serializationID": 64,
         "type": "CargoButton",
-        "weightText": 69
-    },
-    "component025": {
-        "entity id": 10,
-        "material": "Toggle_2",
-        "serializationID": 60,
-        "type": "UiRenderer"
-    },
-    "component026": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 11,
-        "localPosition": {
-            "x": -135.0,
-            "y": 31.0
-        },
-        "parent": 58,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 63,
-        "type": "RectTransform"
+        "weightText": 81
     },
     "component027": {
         "entity id": 11,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo2NameMat",
-        "serializationID": 64,
-        "text": "Name",
-        "type": "TextRenderer"
+        "material": "Toggle_2",
+        "serializationID": 65,
+        "type": "UiRenderer"
     },
     "component028": {
         "anchor": {
@@ -512,13 +511,13 @@
         },
         "entity id": 12,
         "localPosition": {
-            "x": -135.0,
-            "y": -8.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 58,
+        "parent": 63,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
         "serializationID": 68,
@@ -526,11 +525,9 @@
     },
     "component029": {
         "entity id": 12,
-        "font": "CourierNew",
-        "material": "Cargo2WeightMat",
+        "material": "BgBlack",
         "serializationID": 69,
-        "text": "Weight",
-        "type": "TextRenderer"
+        "type": "UiRenderer"
     },
     "component030": {
         "anchor": {
@@ -539,69 +536,123 @@
         },
         "entity id": 13,
         "localPosition": {
-            "x": -135.0,
-            "y": -51.0
+            "x": -133.0,
+            "y": 29.0
         },
-        "parent": 58,
+        "parent": 63,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 73,
+        "serializationID": 71,
         "type": "RectTransform"
     },
     "component031": {
         "entity id": 13,
         "font": "CourierNew",
-        "material": "Cargo2IncomeMat",
-        "serializationID": 74,
-        "text": "Income",
+        "material": "Cargo2NameMat",
+        "serializationID": 72,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component032": {
         "anchor": {
-            "x": 0.5,
-            "y": 0.5
+            "x": 0.0,
+            "y": 0.0
         },
         "entity id": 14,
         "localPosition": {
+            "x": -10.0,
+            "y": -3.0
+        },
+        "parent": 63,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 76,
+        "type": "RectTransform"
+    },
+    "component033": {
+        "entity id": 14,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 77,
+        "text": "Income",
+        "type": "TextRenderer"
+    },
+    "component034": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 15,
+        "localPosition": {
+            "x": -5.0,
+            "y": -40.0
+        },
+        "parent": 63,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 80,
+        "type": "RectTransform"
+    },
+    "component035": {
+        "entity id": 15,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 81,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component036": {
+        "anchor": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "entity id": 16,
+        "localPosition": {
             "x": 350.0,
-            "y": 250.0
+            "y": 240.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 78,
+        "serializationID": 84,
         "type": "RectTransform"
     },
-    "component033": {
+    "component037": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
-        "entity id": 14,
+        "entity id": 16,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -609,84 +660,30 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 94,
+        "incomeText": 98,
         "isActive": true,
-        "nameText": 84,
+        "nameText": 93,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 79,
+        "serializationID": 85,
         "type": "CargoButton",
-        "weightText": 89
-    },
-    "component034": {
-        "entity id": 14,
-        "material": "Toggle_3",
-        "serializationID": 80,
-        "type": "UiRenderer"
-    },
-    "component035": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 15,
-        "localPosition": {
-            "x": -135.0,
-            "y": 31.0
-        },
-        "parent": 78,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 83,
-        "type": "RectTransform"
-    },
-    "component036": {
-        "entity id": 15,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo3NameMat",
-        "serializationID": 84,
-        "text": "Name",
-        "type": "TextRenderer"
-    },
-    "component037": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 16,
-        "localPosition": {
-            "x": -135.0,
-            "y": -8.0
-        },
-        "parent": 78,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 88,
-        "type": "RectTransform"
+        "weightText": 102
     },
     "component038": {
         "entity id": 16,
-        "font": "CourierNew",
-        "material": "Cargo3WeightMat",
-        "serializationID": 89,
-        "text": "Weight",
-        "type": "TextRenderer"
+        "material": "Toggle_3",
+        "serializationID": 86,
+        "type": "UiRenderer"
     },
     "component039": {
         "anchor": {
@@ -695,69 +692,148 @@
         },
         "entity id": 17,
         "localPosition": {
-            "x": -135.0,
-            "y": -51.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 78,
+        "parent": 84,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 93,
+        "serializationID": 89,
         "type": "RectTransform"
     },
     "component040": {
         "entity id": 17,
+        "material": "BgBlack",
+        "serializationID": 90,
+        "type": "UiRenderer"
+    },
+    "component041": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 18,
+        "localPosition": {
+            "x": -132.0,
+            "y": 31.0
+        },
+        "parent": 84,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 92,
+        "type": "RectTransform"
+    },
+    "component042": {
+        "entity id": 18,
         "font": "CourierNew",
-        "material": "Cargo3IncomeMat",
-        "serializationID": 94,
+        "material": "Cargo3NameMat",
+        "serializationID": 93,
+        "text": "Name",
+        "type": "TextRenderer"
+    },
+    "component043": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 19,
+        "localPosition": {
+            "x": -7.0,
+            "y": 1.0
+        },
+        "parent": 84,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 97,
+        "type": "RectTransform"
+    },
+    "component044": {
+        "entity id": 19,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 98,
         "text": "Income",
         "type": "TextRenderer"
     },
-    "component041": {
+    "component045": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 20,
+        "localPosition": {
+            "x": -1.0,
+            "y": -37.0
+        },
+        "parent": 84,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 101,
+        "type": "RectTransform"
+    },
+    "component046": {
+        "entity id": 20,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 102,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component047": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 18,
+        "entity id": 21,
         "localPosition": {
-            "x": 0.0,
-            "y": 50.0
+            "x": -350.0,
+            "y": 40.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 98,
+        "serializationID": 105,
         "type": "RectTransform"
     },
-    "component042": {
+    "component048": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
-        "entity id": 18,
+        "entity id": 21,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -765,311 +841,180 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 114,
+        "incomeText": 119,
         "isActive": true,
-        "nameText": 104,
+        "nameText": 114,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 99,
+        "serializationID": 106,
         "type": "CargoButton",
-        "weightText": 109
+        "weightText": 123
     },
-    "component043": {
-        "entity id": 18,
+    "component049": {
+        "entity id": 21,
         "material": "Toggle_4",
-        "serializationID": 100,
+        "serializationID": 107,
         "type": "UiRenderer"
     },
-    "component044": {
+    "component050": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 19,
+        "entity id": 22,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 98,
+        "parent": 105,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 103,
+        "serializationID": 110,
         "type": "RectTransform"
     },
-    "component045": {
-        "entity id": 19,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo4NameMat",
-        "serializationID": 104,
-        "text": "Name",
-        "type": "TextRenderer"
+    "component051": {
+        "entity id": 22,
+        "material": "BgBlack",
+        "serializationID": 111,
+        "type": "UiRenderer"
     },
-    "component046": {
+    "component052": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 20,
+        "entity id": 23,
         "localPosition": {
-            "x": -135.0,
-            "y": -8.0
+            "x": -133.0,
+            "y": 33.0
         },
-        "parent": 98,
+        "parent": 105,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 108,
-        "type": "RectTransform"
-    },
-    "component047": {
-        "entity id": 20,
-        "font": "CourierNew",
-        "material": "Cargo4WeightMat",
-        "serializationID": 109,
-        "text": "Weight",
-        "type": "TextRenderer"
-    },
-    "component048": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 21,
-        "localPosition": {
-            "x": -135.0,
-            "y": -51.0
-        },
-        "parent": 98,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
         "serializationID": 113,
         "type": "RectTransform"
     },
-    "component049": {
-        "entity id": 21,
+    "component053": {
+        "entity id": 23,
         "font": "CourierNew",
-        "material": "Cargo4IncomeMat",
+        "material": "Cargo4NameMat",
         "serializationID": 114,
-        "text": "Income",
+        "text": "Name",
         "type": "TextRenderer"
     },
-    "component050": {
+    "component054": {
         "anchor": {
-            "x": 0.5,
-            "y": 0.5
+            "x": 0.0,
+            "y": 0.0
         },
-        "entity id": 22,
+        "entity id": 24,
         "localPosition": {
-            "x": -350.0,
-            "y": 50.0
+            "x": -6.0,
+            "y": 3.0
         },
+        "parent": 105,
         "rectSize": {
-            "x": 300.0,
-            "y": 150.0
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
         "serializationID": 118,
         "type": "RectTransform"
     },
-    "component051": {
-        "baseColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
-        },
-        "baseColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
-        },
-        "entity id": 22,
-        "highlightedColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
-        },
-        "highlightedColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
-        },
-        "inactiveColor": {
-            "a": 0.800000011920929,
-            "b": 0.0,
-            "g": 0.0,
-            "r": 0.0
-        },
-        "incomeText": 134,
-        "isActive": true,
-        "nameText": 124,
-        "onClickColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
-        },
-        "onClickColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
-        },
-        "serializationID": 119,
-        "type": "CargoButton",
-        "weightText": 129
-    },
-    "component052": {
-        "entity id": 22,
-        "material": "Toggle_5",
-        "serializationID": 120,
-        "type": "UiRenderer"
-    },
-    "component053": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 23,
-        "localPosition": {
-            "x": -135.0,
-            "y": 31.0
-        },
-        "parent": 118,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 123,
-        "type": "RectTransform"
-    },
-    "component054": {
-        "entity id": 23,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo5NameMat",
-        "serializationID": 124,
-        "text": "Name",
-        "type": "TextRenderer"
-    },
     "component055": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 24,
-        "localPosition": {
-            "x": -135.0,
-            "y": -8.0
-        },
-        "parent": 118,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 128,
-        "type": "RectTransform"
-    },
-    "component056": {
         "entity id": 24,
         "font": "CourierNew",
-        "material": "Cargo5WeightMat",
-        "serializationID": 129,
-        "text": "Weight",
-        "type": "TextRenderer"
-    },
-    "component057": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 25,
-        "localPosition": {
-            "x": -135.0,
-            "y": -51.0
-        },
-        "parent": 118,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 133,
-        "type": "RectTransform"
-    },
-    "component058": {
-        "entity id": 25,
-        "font": "CourierNew",
-        "material": "Cargo5IncomeMat",
-        "serializationID": 134,
+        "material": "TextMaterial",
+        "serializationID": 119,
         "text": "Income",
         "type": "TextRenderer"
     },
-    "component059": {
+    "component056": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 25,
+        "localPosition": {
+            "x": -7.0,
+            "y": -35.0
+        },
+        "parent": 105,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 122,
+        "type": "RectTransform"
+    },
+    "component057": {
+        "entity id": 25,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 123,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component058": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
         },
         "entity id": 26,
         "localPosition": {
-            "x": 350.0,
-            "y": 50.0
+            "x": 0.0,
+            "y": 40.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 138,
+        "serializationID": 126,
         "type": "RectTransform"
     },
-    "component060": {
+    "component059": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
         "entity id": 26,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -1077,155 +1022,180 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 154,
+        "incomeText": 140,
         "isActive": true,
-        "nameText": 144,
+        "nameText": 135,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 139,
+        "serializationID": 127,
         "type": "CargoButton",
-        "weightText": 149
+        "weightText": 144
     },
-    "component061": {
+    "component060": {
         "entity id": 26,
-        "material": "Toggle_6",
-        "serializationID": 140,
+        "material": "Toggle_5",
+        "serializationID": 128,
         "type": "UiRenderer"
     },
-    "component062": {
+    "component061": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
         "entity id": 27,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 138,
+        "parent": 126,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
+        },
+        "rotation": 0.0,
+        "serializationID": 131,
+        "type": "RectTransform"
+    },
+    "component062": {
+        "entity id": 27,
+        "material": "BgBlack",
+        "serializationID": 132,
+        "type": "UiRenderer"
+    },
+    "component063": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 28,
+        "localPosition": {
+            "x": -124.0,
+            "y": 33.0
+        },
+        "parent": 126,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 134,
+        "type": "RectTransform"
+    },
+    "component064": {
+        "entity id": 28,
+        "font": "CourierNew",
+        "material": "Cargo5NameMat",
+        "serializationID": 135,
+        "text": "Name",
+        "type": "TextRenderer"
+    },
+    "component065": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 29,
+        "localPosition": {
+            "x": -8.0,
+            "y": 0.0
+        },
+        "parent": 126,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 139,
+        "type": "RectTransform"
+    },
+    "component066": {
+        "entity id": 29,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 140,
+        "text": "Income",
+        "type": "TextRenderer"
+    },
+    "component067": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 30,
+        "localPosition": {
+            "x": -2.0,
+            "y": -37.0
+        },
+        "parent": 126,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
         "serializationID": 143,
         "type": "RectTransform"
     },
-    "component063": {
-        "entity id": 27,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo6NameMat",
-        "serializationID": 144,
-        "text": "Name",
-        "type": "TextRenderer"
-    },
-    "component064": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 28,
-        "localPosition": {
-            "x": -135.0,
-            "y": -8.0
-        },
-        "parent": 138,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 148,
-        "type": "RectTransform"
-    },
-    "component065": {
-        "entity id": 28,
+    "component068": {
+        "entity id": 30,
         "font": "CourierNew",
-        "material": "Cargo6WeightMat",
-        "serializationID": 149,
+        "material": "TextMaterial",
+        "serializationID": 144,
         "text": "Weight",
         "type": "TextRenderer"
     },
-    "component066": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 29,
-        "localPosition": {
-            "x": -135.0,
-            "y": -51.0
-        },
-        "parent": 138,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 153,
-        "type": "RectTransform"
-    },
-    "component067": {
-        "entity id": 29,
-        "font": "CourierNew",
-        "material": "Cargo6IncomeMat",
-        "serializationID": 154,
-        "text": "Income",
-        "type": "TextRenderer"
-    },
-    "component068": {
+    "component069": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 30,
+        "entity id": 31,
         "localPosition": {
-            "x": 0.0,
-            "y": -150.0
+            "x": 350.0,
+            "y": 40.0
         },
         "rectSize": {
             "x": 300.0,
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 158,
+        "serializationID": 147,
         "type": "RectTransform"
     },
-    "component069": {
+    "component070": {
         "baseColorOff": {
             "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
         },
         "baseColorOn": {
             "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
         },
-        "entity id": 30,
+        "entity id": 31,
         "highlightedColorOff": {
             "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
         },
         "highlightedColorOn": {
             "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
         },
         "inactiveColor": {
             "a": 0.800000011920929,
@@ -1233,427 +1203,683 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 174,
+        "incomeText": 161,
         "isActive": true,
-        "nameText": 164,
+        "nameText": 156,
         "onClickColorOff": {
             "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
         },
         "onClickColorOn": {
             "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
         },
-        "serializationID": 159,
+        "serializationID": 148,
         "type": "CargoButton",
-        "weightText": 169
-    },
-    "component070": {
-        "entity id": 30,
-        "material": "Toggle_7",
-        "serializationID": 160,
-        "type": "UiRenderer"
+        "weightText": 165
     },
     "component071": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
         "entity id": 31,
-        "localPosition": {
-            "x": -135.0,
-            "y": 31.0
-        },
-        "parent": 158,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 163,
-        "type": "RectTransform"
+        "material": "Toggle_6",
+        "serializationID": 149,
+        "type": "UiRenderer"
     },
     "component072": {
-        "entity id": 31,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo7NameMat",
-        "serializationID": 164,
-        "text": "Name",
-        "type": "TextRenderer"
-    },
-    "component073": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
         "entity id": 32,
         "localPosition": {
-            "x": -135.0,
-            "y": -8.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 158,
+        "parent": 147,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
+        },
+        "rotation": 0.0,
+        "serializationID": 152,
+        "type": "RectTransform"
+    },
+    "component073": {
+        "entity id": 32,
+        "material": "BgBlack",
+        "serializationID": 153,
+        "type": "UiRenderer"
+    },
+    "component074": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 33,
+        "localPosition": {
+            "x": -135.0,
+            "y": 34.0
+        },
+        "parent": 147,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 155,
+        "type": "RectTransform"
+    },
+    "component075": {
+        "entity id": 33,
+        "font": "CourierNew",
+        "material": "Cargo6NameMat",
+        "serializationID": 156,
+        "text": "Name",
+        "type": "TextRenderer"
+    },
+    "component076": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 34,
+        "localPosition": {
+            "x": -3.0,
+            "y": 0.0
+        },
+        "parent": 147,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 160,
+        "type": "RectTransform"
+    },
+    "component077": {
+        "entity id": 34,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 161,
+        "text": "Income",
+        "type": "TextRenderer"
+    },
+    "component078": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 35,
+        "localPosition": {
+            "x": 2.0,
+            "y": -35.0
+        },
+        "parent": 147,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 164,
+        "type": "RectTransform"
+    },
+    "component079": {
+        "entity id": 35,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 165,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component080": {
+        "anchor": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "entity id": 36,
+        "localPosition": {
+            "x": -350.0,
+            "y": -160.0
+        },
+        "rectSize": {
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
         "serializationID": 168,
         "type": "RectTransform"
     },
-    "component074": {
-        "entity id": 32,
-        "font": "CourierNew",
-        "material": "Cargo7WeightMat",
+    "component081": {
+        "baseColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "baseColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
+        },
+        "entity id": 36,
+        "highlightedColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
+        },
+        "highlightedColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
+        },
+        "inactiveColor": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "incomeText": 182,
+        "isActive": true,
+        "nameText": 177,
+        "onClickColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
+        },
+        "onClickColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
+        },
         "serializationID": 169,
-        "text": "Weight",
-        "type": "TextRenderer"
+        "type": "CargoButton",
+        "weightText": 186
     },
-    "component075": {
+    "component082": {
+        "entity id": 36,
+        "material": "Toggle_7",
+        "serializationID": 170,
+        "type": "UiRenderer"
+    },
+    "component083": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 33,
+        "entity id": 37,
         "localPosition": {
-            "x": -135.0,
-            "y": -51.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 158,
+        "parent": 168,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
         "serializationID": 173,
         "type": "RectTransform"
     },
-    "component076": {
-        "entity id": 33,
-        "font": "CourierNew",
-        "material": "Cargo7IncomeMat",
+    "component084": {
+        "entity id": 37,
+        "material": "BgBlack",
         "serializationID": 174,
-        "text": "Income",
-        "type": "TextRenderer"
-    },
-    "component077": {
-        "anchor": {
-            "x": 0.5,
-            "y": 0.5
-        },
-        "entity id": 34,
-        "localPosition": {
-            "x": -350.0,
-            "y": -150.0
-        },
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 178,
-        "type": "RectTransform"
-    },
-    "component078": {
-        "baseColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
-        },
-        "baseColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
-        },
-        "entity id": 34,
-        "highlightedColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
-        },
-        "highlightedColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
-        },
-        "inactiveColor": {
-            "a": 0.800000011920929,
-            "b": 0.0,
-            "g": 0.0,
-            "r": 0.0
-        },
-        "incomeText": 194,
-        "isActive": true,
-        "nameText": 184,
-        "onClickColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
-        },
-        "onClickColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
-        },
-        "serializationID": 179,
-        "type": "CargoButton",
-        "weightText": 189
-    },
-    "component079": {
-        "entity id": 34,
-        "material": "Toggle_8",
-        "serializationID": 180,
         "type": "UiRenderer"
     },
-    "component080": {
+    "component085": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 35,
+        "entity id": 38,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": -120.0,
+            "y": 38.0
         },
-        "parent": 178,
+        "parent": 168,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 183,
+        "serializationID": 176,
         "type": "RectTransform"
     },
-    "component081": {
-        "entity id": 35,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo8NameMat",
-        "serializationID": 184,
+    "component086": {
+        "entity id": 38,
+        "font": "CourierNew",
+        "material": "Cargo7NameMat",
+        "serializationID": 177,
         "text": "Name",
         "type": "TextRenderer"
     },
-    "component082": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 36,
-        "localPosition": {
-            "x": -135.0,
-            "y": -8.0
-        },
-        "parent": 178,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 188,
-        "type": "RectTransform"
-    },
-    "component083": {
-        "entity id": 36,
-        "font": "CourierNew",
-        "material": "Cargo8WeightMat",
-        "serializationID": 189,
-        "text": "Weight",
-        "type": "TextRenderer"
-    },
-    "component084": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 37,
-        "localPosition": {
-            "x": -135.0,
-            "y": -51.0
-        },
-        "parent": 178,
-        "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
-        },
-        "rotation": 0.0,
-        "serializationID": 193,
-        "type": "RectTransform"
-    },
-    "component085": {
-        "entity id": 37,
-        "font": "CourierNew",
-        "material": "Cargo8IncomeMat",
-        "serializationID": 194,
-        "text": "Income",
-        "type": "TextRenderer"
-    },
-    "component086": {
-        "anchor": {
-            "x": 0.5,
-            "y": 0.5
-        },
-        "entity id": 38,
-        "localPosition": {
-            "x": 350.0,
-            "y": -150.0
-        },
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 198,
-        "type": "RectTransform"
-    },
     "component087": {
-        "baseColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.6899999976158142,
-            "g": 0.6899999976158142,
-            "r": 0.6899999976158142
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
         },
-        "baseColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.14900000393390656,
-            "g": 0.7720000147819519,
-            "r": 0.18400000035762787
+        "entity id": 39,
+        "localPosition": {
+            "x": 5.0,
+            "y": -3.0
         },
-        "entity id": 38,
-        "highlightedColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.8389999866485596,
-            "g": 0.8389999866485596,
-            "r": 0.8429999947547913
+        "parent": 168,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
         },
-        "highlightedColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.3370000123977661,
-            "g": 0.8619999885559082,
-            "r": 0.36800000071525574
-        },
-        "inactiveColor": {
-            "a": 0.800000011920929,
-            "b": 0.0,
-            "g": 0.0,
-            "r": 0.0
-        },
-        "incomeText": 214,
-        "isActive": true,
-        "nameText": 204,
-        "onClickColorOff": {
-            "a": 0.800000011920929,
-            "b": 0.5210000276565552,
-            "g": 0.5210000276565552,
-            "r": 0.5210000276565552
-        },
-        "onClickColorOn": {
-            "a": 0.800000011920929,
-            "b": 0.13699999451637268,
-            "g": 0.6430000066757202,
-            "r": 0.1679999977350235
-        },
-        "serializationID": 199,
-        "type": "CargoButton",
-        "weightText": 209
+        "rotation": 0.0,
+        "serializationID": 181,
+        "type": "RectTransform"
     },
     "component088": {
-        "entity id": 38,
-        "material": "Toggle_9",
-        "serializationID": 200,
-        "type": "UiRenderer"
+        "entity id": 39,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 182,
+        "text": "Income",
+        "type": "TextRenderer"
     },
     "component089": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 39,
+        "entity id": 40,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": -1.0,
+            "y": -39.0
         },
-        "parent": 198,
+        "parent": 168,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 0.25,
+            "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 203,
+        "serializationID": 185,
         "type": "RectTransform"
     },
     "component090": {
-        "entity id": 39,
-        "font": "JosefinSans-Regular",
-        "material": "Cargo9NameMat",
-        "serializationID": 204,
-        "text": "Name",
+        "entity id": 40,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 186,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component091": {
         "anchor": {
-            "x": 0.0,
-            "y": 0.0
+            "x": 0.5,
+            "y": 0.5
         },
-        "entity id": 40,
+        "entity id": 41,
         "localPosition": {
-            "x": -135.0,
-            "y": -8.0
+            "x": 0.0,
+            "y": -160.0
         },
-        "parent": 198,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 208,
+        "serializationID": 189,
         "type": "RectTransform"
     },
     "component092": {
-        "entity id": 40,
-        "font": "CourierNew",
-        "material": "Cargo9WeightMat",
-        "serializationID": 209,
-        "text": "Weight",
-        "type": "TextRenderer"
+        "baseColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "baseColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
+        },
+        "entity id": 41,
+        "highlightedColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
+        },
+        "highlightedColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
+        },
+        "inactiveColor": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "incomeText": 203,
+        "isActive": true,
+        "nameText": 198,
+        "onClickColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
+        },
+        "onClickColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
+        },
+        "serializationID": 190,
+        "type": "CargoButton",
+        "weightText": 207
     },
     "component093": {
+        "entity id": 41,
+        "material": "Toggle_8",
+        "serializationID": 191,
+        "type": "UiRenderer"
+    },
+    "component094": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 41,
+        "entity id": 42,
         "localPosition": {
-            "x": -135.0,
-            "y": -51.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 198,
+        "parent": 189,
         "rectSize": {
-            "x": 0.23000000417232513,
-            "y": 0.23000000417232513
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 213,
+        "serializationID": 194,
         "type": "RectTransform"
-    },
-    "component094": {
-        "entity id": 41,
-        "font": "CourierNew",
-        "material": "Cargo9IncomeMat",
-        "serializationID": 214,
-        "text": "Income",
-        "type": "TextRenderer"
     },
     "component095": {
         "entity id": 42,
+        "material": "BgBlack",
+        "serializationID": 195,
+        "type": "UiRenderer"
+    },
+    "component096": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 43,
+        "localPosition": {
+            "x": -132.0,
+            "y": 38.0
+        },
+        "parent": 189,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 197,
+        "type": "RectTransform"
+    },
+    "component097": {
+        "entity id": 43,
+        "font": "CourierNew",
+        "material": "Cargo8NameMat",
+        "serializationID": 198,
+        "text": "Name",
+        "type": "TextRenderer"
+    },
+    "component098": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 44,
+        "localPosition": {
+            "x": -11.0,
+            "y": 5.0
+        },
+        "parent": 189,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 202,
+        "type": "RectTransform"
+    },
+    "component099": {
+        "entity id": 44,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 203,
+        "text": "Income",
+        "type": "TextRenderer"
+    },
+    "component100": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 45,
+        "localPosition": {
+            "x": -12.0,
+            "y": -37.0
+        },
+        "parent": 189,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 206,
+        "type": "RectTransform"
+    },
+    "component101": {
+        "entity id": 45,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 207,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component102": {
+        "anchor": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "entity id": 46,
+        "localPosition": {
+            "x": 350.0,
+            "y": -160.0
+        },
+        "rectSize": {
+            "x": 300.0,
+            "y": 150.0
+        },
+        "rotation": 0.0,
+        "serializationID": 210,
+        "type": "RectTransform"
+    },
+    "component103": {
+        "baseColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "baseColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.0820000022649765,
+            "g": 0.6740000247955322,
+            "r": 0.19599999487400055
+        },
+        "entity id": 46,
+        "highlightedColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.36000001430511475,
+            "g": 0.36000001430511475,
+            "r": 0.36000001430511475
+        },
+        "highlightedColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.10499999672174454,
+            "g": 0.8700000047683716,
+            "r": 0.25
+        },
+        "inactiveColor": {
+            "a": 0.800000011920929,
+            "b": 0.0,
+            "g": 0.0,
+            "r": 0.0
+        },
+        "incomeText": 224,
+        "isActive": true,
+        "nameText": 219,
+        "onClickColorOff": {
+            "a": 0.800000011920929,
+            "b": 0.5009999871253967,
+            "g": 0.5009999871253967,
+            "r": 0.5009999871253967
+        },
+        "onClickColorOn": {
+            "a": 0.800000011920929,
+            "b": 0.05400000140070915,
+            "g": 0.3840000033378601,
+            "r": 0.11699999868869781
+        },
+        "serializationID": 211,
+        "type": "CargoButton",
+        "weightText": 228
+    },
+    "component104": {
+        "entity id": 46,
+        "material": "Toggle_9",
+        "serializationID": 212,
+        "type": "UiRenderer"
+    },
+    "component105": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 47,
+        "localPosition": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "parent": 210,
+        "rectSize": {
+            "x": 300.0,
+            "y": 150.0
+        },
+        "rotation": 0.0,
+        "serializationID": 215,
+        "type": "RectTransform"
+    },
+    "component106": {
+        "entity id": 47,
+        "material": "BgBlack",
+        "serializationID": 216,
+        "type": "UiRenderer"
+    },
+    "component107": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 48,
+        "localPosition": {
+            "x": -130.0,
+            "y": 30.0
+        },
+        "parent": 210,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
         "serializationID": 218,
+        "type": "RectTransform"
+    },
+    "component108": {
+        "entity id": 48,
+        "font": "CourierNew",
+        "material": "Cargo9NameMat",
+        "serializationID": 219,
+        "text": "Name",
+        "type": "TextRenderer"
+    },
+    "component109": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 49,
+        "localPosition": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "parent": 210,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 223,
+        "type": "RectTransform"
+    },
+    "component110": {
+        "entity id": 49,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 224,
+        "text": "Income",
+        "type": "TextRenderer"
+    },
+    "component111": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 50,
+        "localPosition": {
+            "x": 5.0,
+            "y": -31.0
+        },
+        "parent": 210,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 227,
+        "type": "RectTransform"
+    },
+    "component112": {
+        "entity id": 50,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 228,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component113": {
+        "entity id": 51,
+        "serializationID": 231,
         "type": "CargoStorage"
     },
     "entity000": {
@@ -1677,95 +1903,95 @@
     },
     "entity002": {
         "components": [
-            19,
-            20
-        ],
-        "id": 2,
-        "name": "Ui_Menu_Background",
-        "serializationID": 18
-    },
-    "entity003": {
-        "components": [
             23,
             24
         ],
+        "id": 2,
+        "name": "Ui_Menu_Background",
+        "serializationID": 22
+    },
+    "entity003": {
+        "components": [
+            27,
+            28
+        ],
         "id": 3,
         "name": "SelectCargoText",
-        "serializationID": 22
+        "serializationID": 26
     },
     "entity004": {
         "components": [
-            28,
-            29,
-            31
+            31,
+            32,
+            34
         ],
         "id": 4,
-        "name": "PlayButton",
-        "serializationID": 27
+        "name": "Play_Button",
+        "serializationID": 30
     },
     "entity005": {
         "components": [
-            33,
-            34
+            36,
+            37
         ],
         "id": 5,
-        "name": "Playtext",
-        "serializationID": 32
+        "name": "Play_Button_Text",
+        "serializationID": 35
     },
     "entity006": {
         "components": [
-            38,
-            39,
-            40
-        ],
-        "id": 6,
-        "name": "CargoButton1",
-        "serializationID": 37
-    },
-    "entity007": {
-        "components": [
+            42,
             43,
             44
         ],
+        "id": 6,
+        "name": "CargoButton1",
+        "serializationID": 41
+    },
+    "entity007": {
+        "components": [
+            47,
+            48
+        ],
         "id": 7,
-        "name": "Cargo1Name",
-        "serializationID": 42
+        "name": "CargoButton1Inside",
+        "serializationID": 46
     },
     "entity008": {
         "components": [
-            48,
-            49
+            50,
+            51
         ],
         "id": 8,
-        "name": "Cargo1Weight",
-        "serializationID": 47
+        "name": "Cargo1Name",
+        "serializationID": 49
     },
     "entity009": {
         "components": [
-            53,
-            54
+            55,
+            56
         ],
         "id": 9,
         "name": "Cargo1Income",
-        "serializationID": 52
+        "serializationID": 54
     },
     "entity010": {
         "components": [
-            58,
             59,
             60
         ],
         "id": 10,
-        "name": "CargoButton2",
-        "serializationID": 57
+        "name": "Cargo1Weight",
+        "serializationID": 58
     },
     "entity011": {
         "components": [
             63,
-            64
+            64,
+            65
         ],
         "id": 11,
-        "name": "Cargo2Name",
+        "name": "CargoButton2",
         "serializationID": 62
     },
     "entity012": {
@@ -1774,284 +2000,365 @@
             69
         ],
         "id": 12,
-        "name": "Cargo2Weight",
+        "name": "CargoButton2Inside",
         "serializationID": 67
     },
     "entity013": {
         "components": [
-            73,
-            74
+            71,
+            72
         ],
         "id": 13,
-        "name": "Cargo2Income",
-        "serializationID": 72
+        "name": "Cargo2Name",
+        "serializationID": 70
     },
     "entity014": {
         "components": [
-            78,
-            79,
-            80
+            76,
+            77
         ],
         "id": 14,
-        "name": "CargoButton3",
-        "serializationID": 77
+        "name": "Cargo2Income",
+        "serializationID": 75
     },
     "entity015": {
         "components": [
-            83,
-            84
+            80,
+            81
         ],
         "id": 15,
-        "name": "Cargo3Name",
-        "serializationID": 82
+        "name": "Cargo2Weight",
+        "serializationID": 79
     },
     "entity016": {
         "components": [
-            88,
-            89
+            84,
+            85,
+            86
         ],
         "id": 16,
-        "name": "Cargo3Weight",
-        "serializationID": 87
+        "name": "CargoButton3",
+        "serializationID": 83
     },
     "entity017": {
         "components": [
-            93,
-            94
+            89,
+            90
         ],
         "id": 17,
-        "name": "Cargo3Income",
-        "serializationID": 92
+        "name": "CargoButton3Inside",
+        "serializationID": 88
     },
     "entity018": {
         "components": [
-            98,
-            99,
-            100
+            92,
+            93
         ],
         "id": 18,
-        "name": "CargoButton4",
-        "serializationID": 97
+        "name": "Cargo3Name",
+        "serializationID": 91
     },
     "entity019": {
         "components": [
-            103,
-            104
+            97,
+            98
         ],
         "id": 19,
-        "name": "Cargo4Name",
-        "serializationID": 102
+        "name": "Cargo3Income",
+        "serializationID": 96
     },
     "entity020": {
         "components": [
-            108,
-            109
+            101,
+            102
         ],
         "id": 20,
-        "name": "Cargo4Weight",
-        "serializationID": 107
+        "name": "Cargo3Weight",
+        "serializationID": 100
     },
     "entity021": {
+        "components": [
+            105,
+            106,
+            107
+        ],
+        "id": 21,
+        "name": "CargoButton4",
+        "serializationID": 104
+    },
+    "entity022": {
+        "components": [
+            110,
+            111
+        ],
+        "id": 22,
+        "name": "CargoButton4Inside",
+        "serializationID": 109
+    },
+    "entity023": {
         "components": [
             113,
             114
         ],
-        "id": 21,
-        "name": "Cargo4Income",
-        "serializationID": 112
-    },
-    "entity022": {
-        "components": [
-            118,
-            119,
-            120
-        ],
-        "id": 22,
-        "name": "CargoButton5",
-        "serializationID": 117
-    },
-    "entity023": {
-        "components": [
-            123,
-            124
-        ],
         "id": 23,
-        "name": "Cargo5Name",
-        "serializationID": 122
+        "name": "Cargo4Name",
+        "serializationID": 112
     },
     "entity024": {
         "components": [
-            128,
-            129
+            118,
+            119
         ],
         "id": 24,
-        "name": "Cargo5Weight",
-        "serializationID": 127
+        "name": "Cargo4Income",
+        "serializationID": 117
     },
     "entity025": {
         "components": [
-            133,
-            134
+            122,
+            123
         ],
         "id": 25,
-        "name": "Cargo5Income",
-        "serializationID": 132
+        "name": "Cargo4Weight",
+        "serializationID": 121
     },
     "entity026": {
         "components": [
-            138,
+            126,
+            127,
+            128
+        ],
+        "id": 26,
+        "name": "CargoButton5",
+        "serializationID": 125
+    },
+    "entity027": {
+        "components": [
+            131,
+            132
+        ],
+        "id": 27,
+        "name": "CargoButton5Inside",
+        "serializationID": 130
+    },
+    "entity028": {
+        "components": [
+            134,
+            135
+        ],
+        "id": 28,
+        "name": "Cargo5Name",
+        "serializationID": 133
+    },
+    "entity029": {
+        "components": [
             139,
             140
         ],
-        "id": 26,
-        "name": "CargoButton6",
-        "serializationID": 137
+        "id": 29,
+        "name": "Cargo5Income",
+        "serializationID": 138
     },
-    "entity027": {
+    "entity030": {
         "components": [
             143,
             144
         ],
-        "id": 27,
-        "name": "Cargo6Name",
-        "serializationID": 142
-    },
-    "entity028": {
-        "components": [
-            148,
-            149
-        ],
-        "id": 28,
-        "name": "Cargo6Weight",
-        "serializationID": 147
-    },
-    "entity029": {
-        "components": [
-            153,
-            154
-        ],
-        "id": 29,
-        "name": "Cargo6Income",
-        "serializationID": 152
-    },
-    "entity030": {
-        "components": [
-            158,
-            159,
-            160
-        ],
         "id": 30,
-        "name": "CargoButton7",
-        "serializationID": 157
+        "name": "Cargo5Weight",
+        "serializationID": 142
     },
     "entity031": {
         "components": [
-            163,
-            164
+            147,
+            148,
+            149
         ],
         "id": 31,
-        "name": "Cargo7Name",
-        "serializationID": 162
+        "name": "CargoButton6",
+        "serializationID": 146
     },
     "entity032": {
         "components": [
-            168,
-            169
+            152,
+            153
         ],
         "id": 32,
-        "name": "Cargo7Weight",
-        "serializationID": 167
+        "name": "CargoButton6Inside",
+        "serializationID": 151
     },
     "entity033": {
+        "components": [
+            155,
+            156
+        ],
+        "id": 33,
+        "name": "Cargo6Name",
+        "serializationID": 154
+    },
+    "entity034": {
+        "components": [
+            160,
+            161
+        ],
+        "id": 34,
+        "name": "Cargo6Income",
+        "serializationID": 159
+    },
+    "entity035": {
+        "components": [
+            164,
+            165
+        ],
+        "id": 35,
+        "name": "Cargo6Weight",
+        "serializationID": 163
+    },
+    "entity036": {
+        "components": [
+            168,
+            169,
+            170
+        ],
+        "id": 36,
+        "name": "CargoButton7",
+        "serializationID": 167
+    },
+    "entity037": {
         "components": [
             173,
             174
         ],
-        "id": 33,
-        "name": "Cargo7Income",
-        "serializationID": 172
-    },
-    "entity034": {
-        "components": [
-            178,
-            179,
-            180
-        ],
-        "id": 34,
-        "name": "CargoButton8",
-        "serializationID": 177
-    },
-    "entity035": {
-        "components": [
-            183,
-            184
-        ],
-        "id": 35,
-        "name": "Cargo8Name",
-        "serializationID": 182
-    },
-    "entity036": {
-        "components": [
-            188,
-            189
-        ],
-        "id": 36,
-        "name": "Cargo8Weight",
-        "serializationID": 187
-    },
-    "entity037": {
-        "components": [
-            193,
-            194
-        ],
         "id": 37,
-        "name": "Cargo8Income",
-        "serializationID": 192
+        "name": "CargoButton7Inside",
+        "serializationID": 172
     },
     "entity038": {
         "components": [
-            198,
-            199,
-            200
+            176,
+            177
         ],
         "id": 38,
-        "name": "CargoButton9",
-        "serializationID": 197
+        "name": "Cargo7Name",
+        "serializationID": 175
     },
     "entity039": {
         "components": [
-            203,
-            204
+            181,
+            182
         ],
         "id": 39,
-        "name": "Cargo9Name",
-        "serializationID": 202
+        "name": "Cargo7Income",
+        "serializationID": 180
     },
     "entity040": {
         "components": [
-            208,
-            209
+            185,
+            186
         ],
         "id": 40,
-        "name": "Cargo9Weight",
-        "serializationID": 207
+        "name": "Cargo7Weight",
+        "serializationID": 184
     },
     "entity041": {
         "components": [
-            213,
-            214
+            189,
+            190,
+            191
         ],
         "id": 41,
-        "name": "Cargo9Income",
-        "serializationID": 212
+        "name": "CargoButton8",
+        "serializationID": 188
     },
     "entity042": {
         "components": [
-            218
+            194,
+            195
         ],
         "id": 42,
-        "name": "CargoStorage",
+        "name": "CargoButton8Inside",
+        "serializationID": 193
+    },
+    "entity043": {
+        "components": [
+            197,
+            198
+        ],
+        "id": 43,
+        "name": "Cargo8Name",
+        "serializationID": 196
+    },
+    "entity044": {
+        "components": [
+            202,
+            203
+        ],
+        "id": 44,
+        "name": "Cargo8Income",
+        "serializationID": 201
+    },
+    "entity045": {
+        "components": [
+            206,
+            207
+        ],
+        "id": 45,
+        "name": "Cargo8Weight",
+        "serializationID": 205
+    },
+    "entity046": {
+        "components": [
+            210,
+            211,
+            212
+        ],
+        "id": 46,
+        "name": "CargoButton9",
+        "serializationID": 209
+    },
+    "entity047": {
+        "components": [
+            215,
+            216
+        ],
+        "id": 47,
+        "name": "CargoButton9Inside",
+        "serializationID": 214
+    },
+    "entity048": {
+        "components": [
+            218,
+            219
+        ],
+        "id": 48,
+        "name": "Cargo9Name",
         "serializationID": 217
+    },
+    "entity049": {
+        "components": [
+            223,
+            224
+        ],
+        "id": 49,
+        "name": "Cargo9Income",
+        "serializationID": 222
+    },
+    "entity050": {
+        "components": [
+            227,
+            228
+        ],
+        "id": 50,
+        "name": "Cargo9Weight",
+        "serializationID": 226
+    },
+    "entity051": {
+        "components": [
+            231
+        ],
+        "id": 51,
+        "name": "CargoStorage",
+        "serializationID": 230
     },
     "font000": {
         "fontName": "JosefinSans-Regular",
@@ -2112,7 +2419,7 @@
         },
         "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 17,
+        "serializationID": 21,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2173,19 +2480,19 @@
         },
         "name": "UiBg",
         "renderingType": 0,
-        "serializationID": 21,
+        "serializationID": 25,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_16_9.png"
+            "sprite": "Resources/Sprites/paper.png"
         },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0860000029206276,
-                0.5130000114440918,
-                0.7129999995231628
+                1.0,
+                1.0,
+                1.0
             ]
         }
     },
@@ -2234,19 +2541,21 @@
                 0.0
             ]
         },
-        "name": "SelectCargoTextMat",
+        "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 26,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 33,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_border.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
+                0.5,
                 1.0,
                 0.0,
-                0.0,
-                0.0
+                1.0
             ]
         }
     },
@@ -2295,21 +2604,19 @@
                 0.0
             ]
         },
-        "name": "PlayButton",
-        "renderingType": 0,
-        "serializationID": 30,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
-        },
+        "name": "Stamp",
+        "renderingType": 1,
+        "serializationID": 39,
+        "shaderName": "TextStandard",
+        "textures": {},
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
                 1.0,
-                0.0860000029206276,
-                0.5130000114440918,
-                0.7129999995231628
+                0.7329999804496765,
+                0.06599999964237213,
+                0.06599999964237213
             ]
         }
     },
@@ -2358,16 +2665,18 @@
                 0.0
             ]
         },
-        "name": "PlayText",
+        "name": "BgBlack",
         "renderingType": 1,
-        "serializationID": 36,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 40,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/cargo_button_inside.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.800000011920929,
                 0.0,
                 0.0,
                 0.0
@@ -2421,10 +2730,10 @@
         },
         "name": "Toggle_1",
         "renderingType": 1,
-        "serializationID": 41,
+        "serializationID": 45,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
+            "sprite": "Resources/Sprites/cargo_button_border.png"
         },
         "vec2s": {},
         "vec3s": {},
@@ -2484,7 +2793,7 @@
         },
         "name": "Cargo1NameMat",
         "renderingType": 1,
-        "serializationID": 46,
+        "serializationID": 53,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2543,16 +2852,18 @@
                 0.0
             ]
         },
-        "name": "Cargo1WeightMat",
+        "name": "Toggle_2",
         "renderingType": 1,
-        "serializationID": 51,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 66,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/cargo_button_border.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -2604,9 +2915,9 @@
                 0.0
             ]
         },
-        "name": "Cargo1IncomeMat",
+        "name": "Cargo2NameMat",
         "renderingType": 1,
-        "serializationID": 56,
+        "serializationID": 74,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2665,12 +2976,12 @@
                 0.0
             ]
         },
-        "name": "Toggle_2",
+        "name": "Toggle_3",
         "renderingType": 1,
-        "serializationID": 61,
+        "serializationID": 87,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
+            "sprite": "Resources/Sprites/cargo_button_border.png"
         },
         "vec2s": {},
         "vec3s": {},
@@ -2728,9 +3039,9 @@
                 0.0
             ]
         },
-        "name": "Cargo2NameMat",
+        "name": "Cargo3NameMat",
         "renderingType": 1,
-        "serializationID": 66,
+        "serializationID": 95,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2789,16 +3100,18 @@
                 0.0
             ]
         },
-        "name": "Cargo2WeightMat",
+        "name": "Toggle_4",
         "renderingType": 1,
-        "serializationID": 71,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 108,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/cargo_button_border.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -2850,9 +3163,9 @@
                 0.0
             ]
         },
-        "name": "Cargo2IncomeMat",
+        "name": "Cargo4NameMat",
         "renderingType": 1,
-        "serializationID": 76,
+        "serializationID": 116,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2911,12 +3224,12 @@
                 0.0
             ]
         },
-        "name": "Toggle_3",
+        "name": "Toggle_5",
         "renderingType": 1,
-        "serializationID": 81,
+        "serializationID": 129,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
+            "sprite": "Resources/Sprites/cargo_button_border.png"
         },
         "vec2s": {},
         "vec3s": {},
@@ -2974,9 +3287,9 @@
                 0.0
             ]
         },
-        "name": "Cargo3NameMat",
+        "name": "Cargo5NameMat",
         "renderingType": 1,
-        "serializationID": 86,
+        "serializationID": 137,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3035,16 +3348,18 @@
                 0.0
             ]
         },
-        "name": "Cargo3WeightMat",
+        "name": "Toggle_6",
         "renderingType": 1,
-        "serializationID": 91,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 150,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/cargo_button_border.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3096,9 +3411,9 @@
                 0.0
             ]
         },
-        "name": "Cargo3IncomeMat",
+        "name": "Cargo6NameMat",
         "renderingType": 1,
-        "serializationID": 96,
+        "serializationID": 158,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3157,12 +3472,12 @@
                 0.0
             ]
         },
-        "name": "Toggle_4",
+        "name": "Toggle_7",
         "renderingType": 1,
-        "serializationID": 101,
+        "serializationID": 171,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
+            "sprite": "Resources/Sprites/cargo_button_border.png"
         },
         "vec2s": {},
         "vec3s": {},
@@ -3220,9 +3535,9 @@
                 0.0
             ]
         },
-        "name": "Cargo4NameMat",
+        "name": "Cargo7NameMat",
         "renderingType": 1,
-        "serializationID": 106,
+        "serializationID": 179,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3281,16 +3596,18 @@
                 0.0
             ]
         },
-        "name": "Cargo4WeightMat",
+        "name": "Toggle_8",
         "renderingType": 1,
-        "serializationID": 111,
-        "shaderName": "TextStandard",
-        "textures": {},
+        "serializationID": 192,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/cargo_button_border.png"
+        },
         "vec2s": {},
         "vec3s": {},
         "vec4s": {
             "color": [
-                1.0,
+                0.0,
                 0.0,
                 0.0,
                 0.0
@@ -3342,9 +3659,9 @@
                 0.0
             ]
         },
-        "name": "Cargo4IncomeMat",
+        "name": "Cargo8NameMat",
         "renderingType": 1,
-        "serializationID": 116,
+        "serializationID": 200,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3403,12 +3720,12 @@
                 0.0
             ]
         },
-        "name": "Toggle_5",
+        "name": "Toggle_9",
         "renderingType": 1,
-        "serializationID": 121,
+        "serializationID": 213,
         "shaderName": "UiStandard",
         "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
+            "sprite": "Resources/Sprites/cargo_button_border.png"
         },
         "vec2s": {},
         "vec3s": {},
@@ -3466,1115 +3783,9 @@
                 0.0
             ]
         },
-        "name": "Cargo5NameMat",
-        "renderingType": 1,
-        "serializationID": 126,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material023": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo5WeightMat",
-        "renderingType": 1,
-        "serializationID": 131,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material024": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo5IncomeMat",
-        "renderingType": 1,
-        "serializationID": 136,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material025": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Toggle_6",
-        "renderingType": 1,
-        "serializationID": 141,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material026": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo6NameMat",
-        "renderingType": 1,
-        "serializationID": 146,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material027": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo6WeightMat",
-        "renderingType": 1,
-        "serializationID": 151,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material028": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo6IncomeMat",
-        "renderingType": 1,
-        "serializationID": 156,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material029": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Toggle_7",
-        "renderingType": 1,
-        "serializationID": 161,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material030": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo7NameMat",
-        "renderingType": 1,
-        "serializationID": 166,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material031": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo7WeightMat",
-        "renderingType": 1,
-        "serializationID": 171,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material032": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo7IncomeMat",
-        "renderingType": 1,
-        "serializationID": 176,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material033": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Toggle_8",
-        "renderingType": 1,
-        "serializationID": 181,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material034": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo8NameMat",
-        "renderingType": 1,
-        "serializationID": 186,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material035": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo8WeightMat",
-        "renderingType": 1,
-        "serializationID": 191,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material036": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo8IncomeMat",
-        "renderingType": 1,
-        "serializationID": 196,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material037": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Toggle_9",
-        "renderingType": 1,
-        "serializationID": 201,
-        "shaderName": "UiStandard",
-        "textures": {
-            "sprite": "Resources/Sprites/rect_2_1.png"
-        },
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material038": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
         "name": "Cargo9NameMat",
         "renderingType": 1,
-        "serializationID": 206,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material039": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo9WeightMat",
-        "renderingType": 1,
-        "serializationID": 211,
-        "shaderName": "TextStandard",
-        "textures": {},
-        "vec2s": {},
-        "vec3s": {},
-        "vec4s": {
-            "color": [
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        }
-    },
-    "material040": {
-        "cubemaps": {},
-        "cubemapsHdr": {},
-        "floats": {},
-        "instancingEnabled": false,
-        "ints": {},
-        "isSkybox": false,
-        "mat4s": {
-            "model": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "projection": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "name": "Cargo9IncomeMat",
-        "renderingType": 1,
-        "serializationID": 216,
+        "serializationID": 221,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4619,5 +3830,45 @@
         },
         "filePath": "Resources/Sprites/rect_16_9.png",
         "serializationID": 16
+    },
+    "texture002": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/cargo_button_border.png",
+        "serializationID": 17
+    },
+    "texture003": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/cargo_button_inside.png",
+        "serializationID": 18
+    },
+    "texture004": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/paper.png",
+        "serializationID": 19
+    },
+    "texture005": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_border.png",
+        "serializationID": 20
     }
 }

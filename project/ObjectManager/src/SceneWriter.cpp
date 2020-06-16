@@ -421,7 +421,7 @@ void SceneWriter::saveCamera(Camera* componentPtr)
     (*json)[name]["type"] = "Camera";
     (*json)[name]["projectionMode"] = componentPtr->getProjectionMode();
     (*json)[name]["isMain"] = componentPtr->isMain;
-    (*json)[name]["control"] = componentPtr->control;
+    (*json)[name]["camControl"] = componentPtr->control;
     (*json)[name]["fieldOfView"] = componentPtr->getFrustum().fieldOfView;
     (*json)[name]["nearPlane"] = componentPtr->getFrustum().nearPlane;
     (*json)[name]["farPlane"] = componentPtr->getFrustum().farPlane;
