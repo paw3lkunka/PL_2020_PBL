@@ -312,7 +312,6 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
         {
             auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
                 t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
-                //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
                 t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
                 t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
         }

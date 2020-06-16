@@ -80,35 +80,41 @@ void HydroBodySystem::fixedUpdate()
     
     Rigidbody* rb;
     glm::vec3 velocity;
-    float viscousCoefficient;
-    glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+
+    std::vector<HydroTriangle> triangles =  HydroMeshParser::parse(meshRenderer->mesh, transform->getModelMatrix());
+    HullTriangles hullTriangles = HullMath::cutHull(triangles);
 
     if(hydroAccelerator == nullptr)
     {
         rb = rigidbody;
         velocity = rigidbody->velocity + currentVelocity;
-        viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
+        float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
+
+        for(HydroTriangle triangle : hullTriangles.underwater)
+        {
+            Impulse impulse;
+            
+            impulse.force += HydroPhysics::buoyancyForce(triangle);
+            impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity, viscousCoefficient);
+            impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
+            
+            impulse.point = triangle.center;
+            impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
+
+            rb->impulses.push_back(impulse);
+        }
+
+        velocity = rb->velocity;
     }
     else
     {
         rb = hydroAccelerator->rigidbody;
-    }
+        glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
 
-    std::vector<HydroTriangle> triangles =  HydroMeshParser::parse(meshRenderer->mesh, transform->getModelMatrix());
-    HullTriangles hullTriangles = HullMath::cutHull(triangles);
-
-    for(HydroTriangle triangle : hullTriangles.underwater)
-    {
-        Impulse impulse;
-
-        if(hydroAccelerator == nullptr)
+        for(HydroTriangle triangle : hullTriangles.underwater)
         {
-            impulse.force += HydroPhysics::buoyancyForce(triangle);
-            impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity, viscousCoefficient);
-            impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
-        }
-        else
-        {
+            Impulse impulse;
+
             velocity = TriangleMath::getCenterVelocity
             (
                 hydroAccelerator->velocity, 
@@ -119,17 +125,18 @@ void HydroBodySystem::fixedUpdate()
 
             impulse.force = velocity + currentVelocity;
             impulse.force.y = 0.0f;
-
             if(hydroAccelerator->velocity.y > 0.0f)
             {
                 impulse.force *= -1.0f;
             }
+
+            impulse.point = triangle.center;
+            impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
+
+            rb->impulses.push_back(impulse);
         }
 
-        impulse.point = triangle.center;
-        impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
-
-        rb->impulses.push_back(impulse);
+        velocity = hydroAccelerator->velocity;
     }
 
     for(HydroTriangle triangle : hullTriangles.abovewater)
