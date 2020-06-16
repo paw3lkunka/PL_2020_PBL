@@ -198,7 +198,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
-        std::cout << "console here: AUDIO_SOURCE_UPDATE_ATTRIBUTES\n";
+        //std::cout << "console here: AUDIO_SOURCE_UPDATE_ATTRIBUTES\n";
         break;
 
     case Event::AUDIO_SOURCE_PLAY:

@@ -5,8 +5,8 @@
 
 int main( int argc, char * argv[] )
 {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    // std::ios_base::sync_with_stdio(false);
+    // std::cin.tie(NULL);
     
     Core core;
 
@@ -27,6 +27,10 @@ int main( int argc, char * argv[] )
         else if( std::strcmp(argv[i], "-f") == 0 || std::strcmp(argv[i], "--file") == 0 )
         {
             core.sceneFilePath = argv[++i];
+        }
+        else if( std::strcmp(argv[i], "-d") == 0 || std::strcmp(argv[i], "--debug") == 0 )
+        {
+            core.debugOpengl = true;
         }
         else
         {
