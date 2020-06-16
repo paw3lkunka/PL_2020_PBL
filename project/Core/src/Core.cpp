@@ -157,6 +157,9 @@ int Core::init()
     else
     {
         // ? none, or -f
+        {
+            //various shit.
+        }
         objectModule.readScene(sceneFilePath);
     }
 
@@ -165,7 +168,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            
+
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");

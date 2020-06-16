@@ -30,7 +30,7 @@ waterMat->setVec2("flowNoiseSize", {1.0f, 1.0f});
 waterMat->setFloat("flowNoiseInfluence", 0.5f);
 waterMat->setVec2("uvScale", {1.0f, 1.0f});
 
-objectModule.newModel("Resources/Models/unit_sphere.FBX");
+//objectModule.newModel("Resources/Models/unit_sphere.FBX");
 
 objectModule.newModel("Resources/Models/Plane.obj");
 {
@@ -178,58 +178,7 @@ objectModule.newEntity(4, "Camera");
     }
 }
 
-
-// Entity* entity = objectModule.newEntity(7, "PhysicBasedInputTest");
-// {
-    
-//     PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-//         keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
-//         keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//         keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
-//         keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//         keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
-//         keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//         keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
-//         keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//         keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
-//         keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//         keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
-//         keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-//     Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         transform->setParent(&sceneModule.rootNode);
-//         transform->getLocalPositionModifiable().x = 5;
-//         transform->getLocalScaleModifiable();
-
-//     SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-//         collider->radius = 1;
-
-//     MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//         MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
-//         Shader* shader = unlitColor;
-//         Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
-//             material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
-
-//         meshRenderer->material = material;
-//         meshRenderer->mesh = mesh;
-
-//     Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-//         rigidbody->drag = 0.2f;
-//         rigidbody->angularDrag = 0.1;
-//         rigidbody->mass = 10;
-//         rigidbody->ignoreGravity = true;
-
-//     Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
-
-//     //HydroBody* hydroBody = objectModule.newEmptyComponentForLastEntity<HydroBody>();
-// }
-
-//TerrainUtils::loadAllTerrainChunks();
+TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
@@ -343,14 +292,12 @@ TerrainUtils::importColliders();
         }
     }
 }
-//temporary enemy model
-objectModule.newModel("Resources/Models/Box.FBX");
-// shoot trail
-objectModule.newModel("Resources/Models/BoneBox.FBX");
 
 // ENEMY
 {
     {
+        //temporary enemy model
+        objectModule.newModel("Resources/Models/Box.FBX");
         
         auto* enemy = objectModule.getEntityPtrByName("Box.FBX/Box001");
         {
@@ -360,7 +307,7 @@ objectModule.newModel("Resources/Models/BoneBox.FBX");
                 t->setParent(&sceneModule.rootNode);
             auto* e = objectModule.newEmptyComponent<Enemy>();
                 e->detectionCounterMaxValue = 500;
-                e->sightDistance = 10.0f;
+                e->sightDistance = 55.0f;
                 e->sightAngle = glm::pi<float>() / 4.0f;
                 enemy->addComponent(e);
             auto* a = objectModule.newEmptyComponent<EnemyAnimation>();
@@ -371,11 +318,13 @@ objectModule.newModel("Resources/Models/BoneBox.FBX");
                 mr->material = objectModule.getMaterialPtrByName("KULA");
         
             auto* ea = objectModule.newEmptyComponent<EnemyAttack>();
-                ea->activationValue = 100;
+                ea->activationValue = 30;
                 ea->incrementValue = 1;
-                ea->successChance = 0.5f;
+                ea->successChance = 0.1f;
                 enemy->addComponent(ea);
         }
+        // shoot trail
+        objectModule.newModel("Resources/Models/BoneBox.FBX");
         
         auto* shootTrail = objectModule.getEntityPtrByName("BoneBox.FBX/Box001");
         {
