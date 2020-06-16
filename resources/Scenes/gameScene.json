@@ -1,14 +1,14 @@
 {
     "Amounts": {
-        "components": 321,
+        "components": 339,
         "cubemaps": 0,
         "cubemapsHdr": 1,
-        "entities": 164,
-        "fonts": 0,
-        "materials": 15,
+        "entities": 172,
+        "fonts": 1,
+        "materials": 19,
         "meshes": 68,
-        "shaders": 6,
-        "textures": 87
+        "shaders": 9,
+        "textures": 88
     },
     "component000": {
         "entity id": 0,
@@ -4856,6 +4856,216 @@
         "serializationID": 667,
         "type": "MeshRenderer"
     },
+    "component321": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 164,
+        "localPosition": {
+            "x": 290.0,
+            "y": 0.0
+        },
+        "rectSize": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "rotation": 0.0,
+        "serializationID": 675,
+        "type": "RectTransform"
+    },
+    "component322": {
+        "entity id": 164,
+        "groupTransparency": 0.800000011920929,
+        "serializationID": 676,
+        "type": "UiSortingGroup"
+    },
+    "component323": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 165,
+        "localPosition": {
+            "x": 0.0,
+            "y": 35.0
+        },
+        "parent": 675,
+        "rectSize": {
+            "x": 570.0,
+            "y": 60.0
+        },
+        "rotation": 0.0,
+        "serializationID": 678,
+        "type": "RectTransform"
+    },
+    "component324": {
+        "entity id": 165,
+        "material": "Detection_Rate_Bg_Mat",
+        "serializationID": 679,
+        "type": "UiRenderer"
+    },
+    "component325": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 166,
+        "localPosition": {
+            "x": -273.0,
+            "y": 25.0
+        },
+        "parent": 675,
+        "rectSize": {
+            "x": 0.30000001192092896,
+            "y": 0.30000001192092896
+        },
+        "rotation": 0.0,
+        "serializationID": 684,
+        "type": "RectTransform"
+    },
+    "component326": {
+        "entity id": 166,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 685,
+        "text": "Detection Rate",
+        "type": "TextRenderer"
+    },
+    "component327": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 167,
+        "localPosition": {
+            "x": 167.0,
+            "y": 35.0
+        },
+        "parent": 675,
+        "rectSize": {
+            "x": 200.0,
+            "y": 50.0
+        },
+        "rotation": 0.0,
+        "serializationID": 688,
+        "type": "RectTransform"
+    },
+    "component328": {
+        "entity id": 167,
+        "material": "Progress",
+        "serializationID": 689,
+        "type": "UiRenderer"
+    },
+    "component329": {
+        "entity id": 167,
+        "serializationID": 693
+    },
+    "component330": {
+        "anchor": {
+            "x": 1.0,
+            "y": 0.0
+        },
+        "entity id": 168,
+        "localPosition": {
+            "x": -290.0,
+            "y": 0.0
+        },
+        "rectSize": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "rotation": 0.0,
+        "serializationID": 695,
+        "type": "RectTransform"
+    },
+    "component331": {
+        "entity id": 168,
+        "groupTransparency": 0.800000011920929,
+        "serializationID": 696,
+        "type": "UiSortingGroup"
+    },
+    "component332": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 169,
+        "localPosition": {
+            "x": 0.0,
+            "y": 35.0
+        },
+        "parent": 695,
+        "rectSize": {
+            "x": 570.0,
+            "y": 60.0
+        },
+        "rotation": 0.0,
+        "serializationID": 698,
+        "type": "RectTransform"
+    },
+    "component333": {
+        "entity id": 169,
+        "material": "Detection_Rate_Bg_Mat",
+        "serializationID": 699,
+        "type": "UiRenderer"
+    },
+    "component334": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 170,
+        "localPosition": {
+            "x": -273.0,
+            "y": 25.0
+        },
+        "parent": 695,
+        "rectSize": {
+            "x": 0.30000001192092896,
+            "y": 0.30000001192092896
+        },
+        "rotation": 0.0,
+        "serializationID": 703,
+        "type": "RectTransform"
+    },
+    "component335": {
+        "entity id": 170,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 704,
+        "text": "Health",
+        "type": "TextRenderer"
+    },
+    "component336": {
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 171,
+        "localPosition": {
+            "x": 167.0,
+            "y": 35.0
+        },
+        "parent": 695,
+        "rectSize": {
+            "x": 200.0,
+            "y": 50.0
+        },
+        "rotation": 0.0,
+        "serializationID": 707,
+        "type": "RectTransform"
+    },
+    "component337": {
+        "entity id": 171,
+        "material": "Progress2",
+        "serializationID": 708,
+        "type": "UiRenderer"
+    },
+    "component338": {
+        "entity id": 171,
+        "serializationID": 712
+    },
     "cubemapHdr000": {
         "backPath": "Resources/Textures/skybox_02/pz.hdr",
         "bottomPath": "Resources/Textures/skybox_02/ny.hdr",
@@ -6342,6 +6552,86 @@
         "id": 163,
         "name": "Plane002.obj 40",
         "serializationID": 665
+    },
+    "entity164": {
+        "components": [
+            675,
+            676
+        ],
+        "id": 164,
+        "name": "Detection_Rate_Group",
+        "serializationID": 674
+    },
+    "entity165": {
+        "components": [
+            678,
+            679
+        ],
+        "id": 165,
+        "name": "Detection_Rate_Bg",
+        "serializationID": 677
+    },
+    "entity166": {
+        "components": [
+            684,
+            685
+        ],
+        "id": 166,
+        "name": "Detection_Rate_text",
+        "serializationID": 683
+    },
+    "entity167": {
+        "components": [
+            688,
+            689,
+            693
+        ],
+        "id": 167,
+        "name": "DetectionProgressBar",
+        "serializationID": 687
+    },
+    "entity168": {
+        "components": [
+            695,
+            696
+        ],
+        "id": 168,
+        "name": "Health_Bar_Group",
+        "serializationID": 694
+    },
+    "entity169": {
+        "components": [
+            698,
+            699
+        ],
+        "id": 169,
+        "name": "Health_Bar_Bg",
+        "serializationID": 697
+    },
+    "entity170": {
+        "components": [
+            703,
+            704
+        ],
+        "id": 170,
+        "name": "Health_Bar_text",
+        "serializationID": 702
+    },
+    "entity171": {
+        "components": [
+            707,
+            708,
+            712
+        ],
+        "id": 171,
+        "name": "Health_Bar",
+        "serializationID": 706
+    },
+    "font000": {
+        "fontName": "CourierNew",
+        "fontPath": "Resources/Fonts/CourierNew.ttf",
+        "fontSize": 128,
+        "serializationID": 671
     },
     "material000": {
         "cubemaps": {},
@@ -8268,6 +8558,260 @@
             ]
         }
     },
+    "material015": {
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "TextMaterial",
+        "renderingType": 1,
+        "serializationID": 670,
+        "shaderName": "TextStandard",
+        "textures": {},
+        "vec2s": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "material016": {
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {},
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Detection_Rate_Bg_Mat",
+        "renderingType": 1,
+        "serializationID": 682,
+        "shaderName": "UiStandard",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1_shadeless.png"
+        },
+        "vec2s": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.8109999895095825,
+                0.8149999976158142,
+                0.9490000009536743
+            ]
+        }
+    },
+    "material017": {
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {
+            "fadingPercentage": 0.0
+        },
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Progress",
+        "renderingType": 1,
+        "serializationID": 692,
+        "shaderName": "UiFading",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1_shadeless.png"
+        },
+        "vec2s": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.8859999775886536,
+                0.07000000029802322,
+                0.07000000029802322
+            ]
+        }
+    },
+    "material018": {
+        "cubemaps": {},
+        "cubemapsHdr": {},
+        "floats": {
+            "fadingPercentage": 0.0
+        },
+        "instancingEnabled": false,
+        "ints": {},
+        "isSkybox": false,
+        "mat4s": {
+            "model": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "projection": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "name": "Progress2",
+        "renderingType": 1,
+        "serializationID": 711,
+        "shaderName": "UiFading",
+        "textures": {
+            "sprite": "Resources/Sprites/rect_2_1_shadeless.png"
+        },
+        "vec2s": {},
+        "vec3s": {},
+        "vec4s": {
+            "color": [
+                1.0,
+                0.8859999775886536,
+                0.07000000029802322,
+                0.07000000029802322
+            ]
+        }
+    },
     "mesh000": {
         "customName": false,
         "filePath": "Resources/Models/Plane.obj",
@@ -8779,6 +9323,24 @@
         "serializationID": 324,
         "shaderName": "standardPbrCutout",
         "vertexShaderPath": "Resources/Shaders/StandardPBRCutout/StandardPBRCutout.vert"
+    },
+    "shader006": {
+        "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
+        "serializationID": 668,
+        "shaderName": "UiStandard",
+        "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
+    },
+    "shader007": {
+        "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
+        "serializationID": 669,
+        "shaderName": "TextStandard",
+        "vertexShaderPath": "Resources/Shaders/TextStandard/TextStandard.vert"
+    },
+    "shader008": {
+        "fragmentShaderPath": "Resources/Shaders/UiFading/UiFading.frag",
+        "serializationID": 672,
+        "shaderName": "UiFading",
+        "vertexShaderPath": "Resources/Shaders/UiFading/UiFading.vert"
     },
     "texture000": {
         "creationInfo": {
@@ -9649,5 +10211,15 @@
         },
         "filePath": "Resources/Textures/Unity/rushes-normal.tga",
         "serializationID": 352
+    },
+    "texture087": {
+        "creationInfo": {
+            "generateMipmaps": false,
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapMode": 33071
+        },
+        "filePath": "Resources/Sprites/rect_2_1_shadeless.png",
+        "serializationID": 673
     }
 }
