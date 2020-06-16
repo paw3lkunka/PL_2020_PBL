@@ -170,7 +170,7 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
 
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
-        std::string meshName;
+        std::string meshName = "aaaaa";
         if (customName)
         {
             meshName = "mesh" + std::to_string(i);
@@ -189,9 +189,6 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
             size_t index = path.find_last_of("/\\");
 
             e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + meshName);
-
-
-            std::cout << e->getName() << '\n';
 
             // * ----- Create transform and set parent -----
             nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
@@ -240,8 +237,12 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     {
         size_t index = path.find_last_of("/\\");
         Entity* e = objectModulePtr->newEntity(1, path.substr(index + 1));
-        nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();
-        nodeTransform->setParent(&GetCore().sceneModule.rootNode);
+        if(e->getComponentPtr<Transform>() == nullptr)
+        {
+            nodeTransform = objectModulePtr->newEmptyComponent<Transform>();
+            nodeTransform->setParent(&GetCore().sceneModule.rootNode);
+            e->addComponent(nodeTransform);
+        }
     }
 
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++

@@ -74,5 +74,6 @@ void GamePlayModule::reloadScene(std::string name)
     GetCore().inputModule.clearFlags();
 
     GetCore().objectModule.unloadSceneAndLoadNew(name);
+    
     GetCore().messageBus.notify();
 }

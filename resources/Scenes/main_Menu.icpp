@@ -102,7 +102,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "startMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
@@ -136,7 +136,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "optionsMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
@@ -170,7 +170,7 @@ objectModule.newEntity(2, "RiverFlow");
         
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "exitMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
