@@ -148,8 +148,8 @@ int Core::init()
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
         //#include "../../resources/Scenes/testScene.icpp"
-        //#include "../../resources/Scenes/newScene.icpp"
-        #include "../../resources/Scenes/intro.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
+        //#include "../../resources/Scenes/intro.icpp"
     }
     else
     {

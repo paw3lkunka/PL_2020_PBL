@@ -40,17 +40,6 @@ objectModule.newModel("Resources/Models/Plane.obj");
         t->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
 }
 
-// objectModule.newModel("Resources/Models/Unity/Conifer Bare BOTD LOD1.obj");
-
-// Entity* leaves = objectModule.newEntity(2, "leaves");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->setParent(&sceneModule.rootNode);
-
-//     auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-//         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Unity/Conifer Bare BOTD LOD1.obj/Conifer Leaves BODT");
-// }
-
 TextureCreateInfo i = {};
 i.minFilter = GL_LINEAR;
 i.magFilter = GL_LINEAR;
@@ -105,91 +94,91 @@ objectModule.newEntity(4, "Camera");
         li->getUpModifiable();
 }
 
-{
-    objectModule.newModel("Resources/Models/Kayak_low_poly.FBX");
-    Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
-    {
-        auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
-            //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
-    }
+// {
+//     objectModule.newModel("Resources/Models/Kayak_low_poly.FBX");
+//     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
+//     {
+//         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+//             t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
+//             //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
+//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
+//             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
+//     }
 
-    Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
-    paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
-    {
-        auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = paddleMat;
+//     Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
+//     paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+//     {
+//         auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+//         auto mr = entity->getComponentPtr<MeshRenderer>();
+//             mr->material = paddleMat;
 
-        auto t = entity->getComponentPtr<Transform>();
-            t->setParent(paddleIndirect->getComponentPtr<Transform>());
+//         auto t = entity->getComponentPtr<Transform>();
+//             t->setParent(paddleIndirect->getComponentPtr<Transform>());
 
-        auto paddle = objectModule.newEmptyComponent<Paddle>();
-            paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
-            paddle->maxFrontRot = -34.5f;
-            paddle->maxSideRot = 30.0f;
-            entity->addComponent(paddle);
-    }
+//         auto paddle = objectModule.newEmptyComponent<Paddle>();
+//             paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
+//             paddle->maxFrontRot = -34.5f;
+//             paddle->maxSideRot = 30.0f;
+//             entity->addComponent(paddle);
+//     }
 
-    Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
-    kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
-    {
-        auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = kayakMat;
+//     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
+//     kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
+//     {
+//         auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+//         auto mr = entity->getComponentPtr<MeshRenderer>();
+//             mr->material = kayakMat;
 
-        auto t = entity->getComponentPtr<Transform>();
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
-            t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
-            t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
-            t->setParent(&sceneModule.rootNode);
-    }
+//         auto t = entity->getComponentPtr<Transform>();
+//             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
+//             t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
+//             t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
+//             t->setParent(&sceneModule.rootNode);
+//     }
 
-    // KAYAK MAN
-    auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
-        kayakRigidbody->drag = 0.2f;
-        kayakRigidbody->angularDrag = 0.1f;
-        kayakRigidbody->mass = 150.0f;
-        kayakRigidbody->ignoreGravity = false;
+//     // KAYAK MAN
+//     auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
+//         kayakRigidbody->drag = 0.2f;
+//         kayakRigidbody->angularDrag = 0.1f;
+//         kayakRigidbody->mass = 150.0f;
+//         kayakRigidbody->ignoreGravity = false;
 
-    auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
-        kayakBoxCollider->halfSize = glm::vec3(5.0f, 15.0f, 2.0f);
+//     auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
+//         kayakBoxCollider->halfSize = glm::vec3(5.0f, 15.0f, 2.0f);
 
-    auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
+//     auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
     
-    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-        kayakPtr->addComponent(kayakHydroBody);
-        kayakPtr->addComponent(kayakRigidbody);
-        kayakPtr->addComponent(kayakBoxCollider);
+//     auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+//         kayakPtr->addComponent(kayakHydroBody);
+//         kayakPtr->addComponent(kayakRigidbody);
+//         kayakPtr->addComponent(kayakBoxCollider);
 
-    // PADDLE MAN
-    auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
-        paddleHydroAccelerator->rigidbody = kayakRigidbody;
-    auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
+//     // PADDLE MAN
+//     auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
+//         paddleHydroAccelerator->rigidbody = kayakRigidbody;
+//     auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
 
-    auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
-        paddlePtr->addComponent(paddleHydroAccelerator);
-        paddlePtr->addComponent(paddleHydroBody);
-}
+//     auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+//         paddlePtr->addComponent(paddleHydroAccelerator);
+//         paddlePtr->addComponent(paddleHydroBody);
+// }
 
-{
-    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+// {
+//     auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
 
-    auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
-        tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-        //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+//     auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
+//         tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+//         //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
 
-    auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
-        fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+//     auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+//         fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
 
-    auto cameraPtr = objectModule.getEntityPtrByName("Camera");
-        cameraPtr->addComponent(tpCameraPtr);
-        cameraPtr->addComponent(fpCameraPtr);
-        cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
-}
+//     auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+//         cameraPtr->addComponent(tpCameraPtr);
+//         cameraPtr->addComponent(fpCameraPtr);
+//         cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
+// }
 
-TerrainUtils::loadAllTerrainChunks();
+//TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
