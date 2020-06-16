@@ -42,9 +42,6 @@ public:
     AssetReader(ObjectModule* objModule);
     ~AssetReader() = default;
 
-    // HACK: F-you all model formats for not specifying submesh names explictly and you assimp for getting them magically from air
-    static bool customMeshNames;
-
 private:
     ObjectModule* objectModulePtr;
 
@@ -71,13 +68,13 @@ private:
     bool loadTexture(std::string path);
     bool loadHdrTexture(std::string path);
     bool loadShader(std::string path);
-    bool loadMesh(std::string path, bool createEntities = true);
+    bool loadMesh(std::string path, bool customName, bool createEntities = true);
 
     // TODO: Documentation
-    bool processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
+    bool processNode(aiNode* node, const aiScene* scene, std::string path, bool customName, Transform* parent = nullptr);
     Entity* processBone(aiNode* node, const aiScene* scene, std::string path, Transform* parent = nullptr);
     Animation* processAnimations(const aiScene* scene, std::string path);
-    Mesh* createMesh(aiMesh* node, std::string path);
+    Mesh* createMesh(aiMesh* node, std::string path, std::string meshName, bool customName);
 
     static inline glm::vec3 aiVectorToGlmVec3(const aiVector3D &v) { return glm::vec3(v.x, v.y, v.z); }
     static inline glm::vec2 aiVectorToGlmVec2(const aiVector3D &v) { return glm::vec2(v.x, v.y); }

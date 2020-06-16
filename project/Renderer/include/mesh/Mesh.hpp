@@ -19,7 +19,7 @@ public:
      * @param meshFilePath 
      * @param meshPath 
      */
-    Mesh(std::string meshFilePath, std::string meshPath, bool serialize = true);
+    Mesh(std::string meshFilePath, std::string meshPath, bool customName, bool serialize = true);
 
     /**
      * @brief Pure virtual render function for use with various render calls 
@@ -63,6 +63,11 @@ public:
      * @brief Bounds of the mesh
      */
     Bounds bounds;
+
+    /**
+     * @brief Does this mesh use custom made name?
+     */
+    bool customName;
 
 private:
     static unsigned int idcount;

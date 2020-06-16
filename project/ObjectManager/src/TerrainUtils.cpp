@@ -115,8 +115,6 @@ void TerrainUtils::loadAllTerrainChunks()
 
 void TerrainUtils::loadExportedUnityModels()
 {
-    AssetReader::customMeshNames = true;
-
     namespace fs = std::filesystem;
     std::string path = "Resources/Models/Unity/";
 
@@ -263,8 +261,6 @@ void TerrainUtils::loadExportedUnityModels()
     {
         std::cerr << "exportinfo.txt file not found!\n";
     }
-
-    AssetReader::customMeshNames = false;
 }
 
 void TerrainUtils::createMaterialsForModels()

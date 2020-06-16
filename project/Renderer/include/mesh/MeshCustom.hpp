@@ -13,7 +13,7 @@ class MeshCustom : public Mesh
 {
 public:
     //TODO Documentation
-    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath);
+    MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath, bool customName);
     /**
      * @brief Construct a new Mesh object by default (we need this for MessageBus for some reason)
      */
