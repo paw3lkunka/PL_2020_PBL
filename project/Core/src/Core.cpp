@@ -144,10 +144,10 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/newScene.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
         //#include "../../resources/Scenes/intro.icpp"
     }
     else if (testScene)
@@ -165,52 +165,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //temporary enemy model
-            objectModule.newModel("Resources/Models/Box.FBX");
             
-            auto* enemy = objectModule.newEntity(4,"TMP enemy");
-            {
-                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable() = {3.0f, 0.0f, 3.0f};
-                    t->getLocalScaleModifiable() = {1.0f, 2.0f, 1.0f};
-                    t->setParent(&sceneModule.rootNode);
-
-                auto* e = objectModule.newEmptyComponentForLastEntity<Enemy>();
-                    e->detectionCounterMaxValue = 500;
-                    e->sightDistance = 10.0f;
-                    e->sightAngle = glm::pi<float>() / 4.0f;
-
-                auto* a = objectModule.newEmptyComponentForLastEntity<EnemyAnimation>();
-                    a->lerpParameter = 0.25f;
-                    a->shootTrailTime = 0.05f;
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->material = objectModule.getMaterialPtrByName("KULA");
-                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
-            
-                auto* ea = objectModule.newEmptyComponentForLastEntity<EnemyAttack>();
-                    ea->activationValue = 100;
-                    ea->incrementValue = 1;
-                    ea->successChance = 0.5f;
-            }
-            
-            // shoot trail
-            objectModule.newModel("Resources/Models/BoneBox.FBX");
-
-            auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
-            {
-                auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-                    t->getLocalPositionModifiable() = {NAN, NAN, NAN};
-                    t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
-                    //t->setParent(enemy->getComponentPtr<Transform>());
-                    t->setParent(&sceneModule.rootNode);
-
-                auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-                    mr->material = objectModule.getMaterialPtrByName("KULA");
-                    mr->mesh = objectModule.getMeshCustomPtrByPath(Models::UnitBox);
-
-                auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
-            }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
