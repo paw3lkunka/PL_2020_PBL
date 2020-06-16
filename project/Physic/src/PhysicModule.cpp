@@ -22,6 +22,7 @@ void PhysicModule::physicSimulation(std::vector<Entity>* entities)
     {
         if (auto* rb = e.getComponentPtr<Rigidbody>())
         {
+            // FIXME: IF RIGIDBODY HAS NO COLLIDER THIS THROWS A SEGFAULT
             rb->velocity = Vec3Cast( rb->reactRB->getLinearVelocity() );
             rb->angularVelocity = Vec3Cast( rb->reactRB->getAngularVelocity() );
             

@@ -126,6 +126,10 @@ void TerrainUtils::loadExportedUnityModels()
         {
             exportInfoPath = entry;
         }
+        else if (entry.path().filename().string() == "colliders.txt")
+        {
+            // do nothing
+        }
         else
         {
             GetCore().objectModule.newModel(entry.path().string().c_str(), true);

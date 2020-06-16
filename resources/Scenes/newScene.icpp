@@ -107,132 +107,236 @@ objectModule.newEntity(4, "Camera");
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
     }
 
-    Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
-    paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
-    {
-        auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
-            mr->material = paddleMat;
-
-        auto t = entity->getComponentPtr<Transform>();
-            t->setParent(paddleIndirect->getComponentPtr<Transform>());
-
-        auto paddle = objectModule.newEmptyComponent<Paddle>();
-            paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
-            paddle->maxFrontRot = -34.5f;
-            paddle->maxSideRot = 30.0f;
-            entity->addComponent(paddle);
-    }
-
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
+    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
     kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
     {
-        auto entity = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-        auto mr = entity->getComponentPtr<MeshRenderer>();
+        auto mr = kayakPtr->getComponentPtr<MeshRenderer>();
             mr->material = kayakMat;
 
-        auto t = entity->getComponentPtr<Transform>();
+        auto t = kayakPtr->getComponentPtr<Transform>();
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
             t->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
             t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
             t->setParent(&sceneModule.rootNode);
-    }
 
-    // KAYAK MAN
-    auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
-        kayakRigidbody->drag = 0.2f;
-        kayakRigidbody->angularDrag = 0.1f;
-        kayakRigidbody->mass = 150.0f;
-        kayakRigidbody->ignoreGravity = false;
+        // KAYAK MAN
+        auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
+            kayakRigidbody->drag = 0.2f;
+            kayakRigidbody->angularDrag = 0.1f;
+            kayakRigidbody->mass = 150.0f;
+            kayakRigidbody->ignoreGravity = false;
+            kayakPtr->addComponent(kayakRigidbody);
 
     auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
         kayakBoxCollider->halfSize = glm::vec3(1.0f, 3.0f, 0.5f);
+            kayakPtr->addComponent(kayakBoxCollider);
 
-    auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
+        auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
+            kayakPtr->addComponent(kayakHydroBody);
+
+
+        Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
+        paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
+        auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+        {
+            auto mr = paddlePtr->getComponentPtr<MeshRenderer>();
+                mr->material = paddleMat;
+
+            auto t = paddlePtr->getComponentPtr<Transform>();
+                t->setParent(paddleIndirect->getComponentPtr<Transform>());
+
+            auto paddle = objectModule.newEmptyComponent<Paddle>();
+                paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
+                paddle->maxFrontRot = -34.5f;
+                paddle->maxSideRot = 30.0f;
+                paddlePtr->addComponent(paddle);
+
+            // PADDLE MAN
+            auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
+                paddleHydroAccelerator->rigidbody = kayakRigidbody;
+                paddlePtr->addComponent(paddleHydroAccelerator);
+
+            auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
+                paddlePtr->addComponent(paddleHydroBody);
+        }
+
+        auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
+            tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+
+        auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
+            fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+
+        auto cameraPtr = objectModule.getEntityPtrByName("Camera");
+            cameraPtr->addComponent(tpCameraPtr);
+            cameraPtr->addComponent(fpCameraPtr);
+            cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
+    }
+}
+
+
+// Entity* entity = objectModule.newEntity(7, "PhysicBasedInputTest");
+// {
     
-    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
-        kayakPtr->addComponent(kayakHydroBody);
-        kayakPtr->addComponent(kayakRigidbody);
-        kayakPtr->addComponent(kayakBoxCollider);
+//     PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
+//         keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
+//         keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
 
-    // PADDLE MAN
-    auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
-        paddleHydroAccelerator->rigidbody = kayakRigidbody;
-    auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
+//         keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
+//         keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
 
-    auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
-        paddlePtr->addComponent(paddleHydroAccelerator);
-        paddlePtr->addComponent(paddleHydroBody);
-}
+//         keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
+//         keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
 
-{
-    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+//         keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
+//         keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
 
-    auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
-        tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
-        //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
+//         keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
+//         keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
 
-    auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
-        fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+//         keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
+//         keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
 
-    auto cameraPtr = objectModule.getEntityPtrByName("Camera");
-        cameraPtr->addComponent(tpCameraPtr);
-        cameraPtr->addComponent(fpCameraPtr);
-        cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
-}
+//     Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+//         transform->setParent(&sceneModule.rootNode);
+//         transform->getLocalPositionModifiable().x = 5;
+//         transform->getLocalScaleModifiable();
 
+//     SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+//         collider->radius = 1;
 
-Entity* entity = objectModule.newEntity(7, "PhysicBasedInputTest");
-{
-    
-    PhysicalInputKeymap* keymap = objectModule.newEmptyComponentForLastEntity<PhysicalInputKeymap>();
-        keymap->continuous[GLFW_KEY_UP   ].force = {   0.0f,   0.0f,  50.0f };
-        keymap->continuous[GLFW_KEY_UP   ].type = Impulse::CENTER_OF_MASS_FORCE;
+//     MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+//         MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
+//         Shader* shader = unlitColor;
+//         Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
+//             material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
 
-        keymap->continuous[GLFW_KEY_DOWN ].force = {   0.0f,   0.0f, -50.0f };
-        keymap->continuous[GLFW_KEY_DOWN ].type = Impulse::CENTER_OF_MASS_FORCE;
+//         meshRenderer->material = material;
+//         meshRenderer->mesh = mesh;
 
-        keymap->continuous[GLFW_KEY_LEFT ].force = {  50.0f,   0.0f,   0.0f };
-        keymap->continuous[GLFW_KEY_LEFT ].type = Impulse::CENTER_OF_MASS_FORCE;
+//     Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+//         rigidbody->drag = 0.2f;
+//         rigidbody->angularDrag = 0.1;
+//         rigidbody->mass = 10;
+//         rigidbody->ignoreGravity = true;
 
-        keymap->continuous[GLFW_KEY_RIGHT].force = { -50.0f,   0.0f,   0.0f };
-        keymap->continuous[GLFW_KEY_RIGHT].type = Impulse::CENTER_OF_MASS_FORCE;
+//     Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
 
-        keymap->continuous[GLFW_KEY_Z    ].force = {   0.0f,  50.0f,   0.0f };
-        keymap->continuous[GLFW_KEY_Z    ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-        keymap->continuous[GLFW_KEY_X    ].force = {   0.0f, -50.0f,   0.0f };
-        keymap->continuous[GLFW_KEY_X    ].type = Impulse::CENTER_OF_MASS_FORCE;
-
-    Transform* transform = objectModule.newEmptyComponentForLastEntity<Transform>();
-        transform->setParent(&sceneModule.rootNode);
-        transform->getLocalPositionModifiable().x = 5;
-        transform->getLocalScaleModifiable();
-
-    SphereCollider* collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
-        collider->radius = 1;
-
-    MeshRenderer* meshRenderer = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-        MeshCustom* mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/unit_sphere.FBX/Sphere001");
-        Shader* shader = unlitColor;
-        Material* material = objectModule.newMaterial(shader, "KULA", RenderType::Opaque, false);
-            material->setVec4("color", glm::vec4(0.6f, 0.3f, 0.3f, 1.0f));
-
-        meshRenderer->material = material;
-        meshRenderer->mesh = mesh;
-
-    Rigidbody* rigidbody = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
-        rigidbody->drag = 0.2f;
-        rigidbody->angularDrag = 0.1;
-        rigidbody->mass = 10;
-        rigidbody->ignoreGravity = true;
-
-    Kayak* kayak = objectModule.newEmptyComponentForLastEntity<Kayak>();
-
-    //HydroBody* hydroBody = objectModule.newEmptyComponentForLastEntity<HydroBody>();
-}
+//     //HydroBody* hydroBody = objectModule.newEmptyComponentForLastEntity<HydroBody>();
+// }
 
 TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
+
+//Game UI
+{
+    // Assets
+    auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
+    auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+    textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+    auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
+    auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/UiFading.vert", "Resources/Shaders/UiFading/UiFading.frag");
+    TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+    auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
+
+    // Detection rate
+    {
+        objectModule.newEntity(2, "Detection_Rate_Group");
+        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            buttonsRoot->getAnchorModifiable() = glm::vec2(0.0f, 0.0f);
+            buttonsRoot->getLocalPositionModifiable() = {290.0f, 0.0f};
+        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        uiModule.rootNodes.push_back(buttonsRoot);
+        objectModule.newEntity(2, "Detection_Rate_Bg");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getSizeModifiable() = {570, 60};
+                rt->setParent(buttonsRoot);
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiShader, "Detection_Rate_Bg_Mat", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.811f, 0.815f, 0.949f, 1.0f});
+                ui->material = mat;
+        }
+        objectModule.newEntity(2, "Detection_Rate_text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-273.0f, 25.0f};
+                crt->getSizeModifiable() = {0.3f, 0.3f};
+                crt->setParent(buttonsRoot);
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = courier;
+                cui->mesh.text = "Detection Rate";
+        }
+        objectModule.newEntity(3, "DetectionProgressBar");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {167.0f, 35.0f};
+                rt->getSizeModifiable() = {200, 50};
+                rt->setParent(buttonsRoot);
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiFading, "Progress", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
+                ui->material = mat;
+            auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
+        }
+    }
+    
+    // Health
+    {
+        objectModule.newEntity(2, "Health_Bar_Group");
+        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            buttonsRoot->getAnchorModifiable() = glm::vec2(1.0f, 0.0f);
+            buttonsRoot->getLocalPositionModifiable() = {-290.0f, 0.0f};
+        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        uiModule.rootNodes.push_back(buttonsRoot);
+        objectModule.newEntity(2, "Health_Bar_Bg");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getSizeModifiable() = {570, 60};
+                rt->setParent(buttonsRoot);
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiShader, "Detection_Rate_Bg_Mat", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.811f, 0.815f, 0.949f, 1.0f});
+                ui->material = mat;
+        }
+        objectModule.newEntity(2, "Health_Bar_text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-273.0f, 25.0f};
+                crt->getSizeModifiable() = {0.3f, 0.3f};
+                crt->setParent(buttonsRoot);
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = courier;
+                cui->mesh.text = "Health";
+        }
+        objectModule.newEntity(3, "Health_Bar");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {167.0f, 35.0f};
+                rt->getSizeModifiable() = {200, 50};
+                rt->setParent(buttonsRoot);
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiFading, "Progress2", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
+                ui->material = mat;
+            auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
+        }
+    }
+}

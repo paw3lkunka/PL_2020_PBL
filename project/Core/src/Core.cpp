@@ -147,9 +147,12 @@ int Core::init()
         //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
         #include "../../resources/Scenes/newScene.icpp"
         //#include "../../resources/Scenes/intro.icpp"
+    }
+    else if (testScene)
+    {
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -162,7 +165,20 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            //some code here...
+            // auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
+            // {
+            //     auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+            //         t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+            //         t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
+            //         //t->setParent(enemy->getComponentPtr<Transform>());
+            //         t->setParent(&sceneModule.rootNode);
+
+            //     auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+            //         mr->material = objectModule.getMaterialPtrByName("KULA");
+            //         mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);
+
+            //     auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
+            // }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -244,7 +260,8 @@ int Core::mainLoop()
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
-    detectionBarSystem.init("ProgressBar");
+    detectionBarSystem.init("DetectionProgressBar");
+    callbacksModule.init("Health_Bar");
 
     // ! ----- START SYSTEM FUNCTION -----
 
