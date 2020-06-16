@@ -270,7 +270,7 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveEnemyAnimation(temp);
         }
-        else if(EnemyAttack* temp =  = dynamic_cast<EnemyAttack*>(objContainerPtr->components[i]))
+        else if(EnemyAttack* temp = dynamic_cast<EnemyAttack*>(objContainerPtr->components[i]))
         {
             saveEnemyAttack(temp);
         }

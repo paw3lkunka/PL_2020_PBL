@@ -28,9 +28,8 @@ uniform sampler2D occRouMet; // r - occlusion, g - roughness, b - metallic
 
 uniform sampler2D directionalShadowMap;
 uniform samplerCube irradianceMap;
-// uniform sampler2D ssaoMap;
 
-// uniform vec2 screenSize;
+uniform float cutoff;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -79,7 +78,7 @@ void main()
 	//vec2 NDC = gl_FragCoord.xy / screenSize;
 
 // Sampling the textures for further use
-	if (texture(diffuse, Texcoord).a < 0.3)
+	if (texture(diffuse, Texcoord).a < cutoff)
 	{
 		discard;
 	}

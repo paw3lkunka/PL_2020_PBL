@@ -307,6 +307,7 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.3f);
 
     albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_D.TGA", tci);
     normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_N.TGA", tci);
@@ -379,6 +380,7 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.5f);
 }
 
 void TerrainUtils::importColliders()
@@ -393,7 +395,7 @@ void TerrainUtils::importColliders()
     colliderInfo.open("Resources/Models/Unity/colliders.txt", std::ios::in);
     if (colliderInfo.is_open())
     {
-        GetCore().objectModule.newModel("Resources/Models/Box.FBX", false, false);
+        //GetCore().objectModule.newModel("Resources/Models/Box.FBX", false, false);
         std::string line;
         glm::vec3 position;
         glm::quat rotation;
