@@ -1,6 +1,10 @@
 #include "GamePlayModule.hpp"
 #include "Message.inl"
 #include "Core.hpp"
+#include "ScenesPaths.hpp"
+#include "TerrainUtils.hpp"
+#include "Components.inc"
+#include "CubemapHdr.hpp"
 
 #include "ECS.inc"
 
@@ -74,7 +78,19 @@ void GamePlayModule::reloadScene(std::string name)
     GetCore().rendererModule.render();
     GetCore().inputModule.clearFlags();
 
-    GetCore().objectModule.unloadSceneAndLoadNew(name);
+    if(name.compare(Scenes::gameScene) == 0) //HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    {
+        ObjectModule& objectModule = GetCore().objectModule;
+        RendererModule& rendererModule = GetCore().rendererModule;
+        SceneModule& sceneModule = GetCore().sceneModule;
+        UiModule& uiModule = GetCore().uiModule;
+        #include "../../resources/Scenes/newScene.icpp"
+    }
+    else
+    {
+        GetCore().objectModule.unloadSceneAndLoadNew(name);
+    }
+    
     
     GetCore().messageBus.notify();
     

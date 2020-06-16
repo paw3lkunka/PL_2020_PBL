@@ -85,6 +85,7 @@ class Core
     friend void InfoLog(std::string log);
     friend void WarningLog(const char* log);
     friend void ErrorLog(const char* log);
+    friend class GamePlayModule;
 #pragma endregion
 
 #pragma region setup
@@ -373,7 +374,6 @@ class Core
         static int windowWidth;
         static int windowHeight;
 
-        friend class GamePlayModule;
     private:
         static Core* instance;
         GLFWwindow* window;
