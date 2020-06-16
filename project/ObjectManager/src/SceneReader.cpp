@@ -659,7 +659,7 @@ void SceneReader::readCamera(std::string name)
     frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
     camera->getProjectionModeModifiable() = CameraProjection(j->at(name).at("projectionMode").get<int>());
     camera->isMain = j->at(name).at("isMain").get<bool>();
-    camera->control = j->at(name).at("control").get<CameraControl>();
+    camera->control = CameraControl(j->at(name).at("camControl").get<int>());
 
     assignToEntity(name, camera);
 }

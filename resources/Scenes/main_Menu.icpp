@@ -54,7 +54,6 @@ objectModule.newEntity(2, "RiverFlow");
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
 
-    objectModule.newTexture("Resources/Sprites/cross.png", info);
     auto rect_1_1 = objectModule.newTexture("Resources/Sprites/rect_1_1.png", info);
     auto rect_2_1 = objectModule.newTexture("Resources/Sprites/rect_2_1.png", info);
     auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
