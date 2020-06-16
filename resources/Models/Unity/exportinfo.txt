@@ -1,21 +1,39 @@
 $path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
-69.27857 101.9656 70.68715
+69.27857 101.6 70.68715
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
-58.00366 101.7494 64.55307
+58.00366 101.147 64.55307
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Simple BODT
+$path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
+136.22 100.69 118.87
+1 0 0 0
+1 1 1
+%mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
 -2.03 133.18 102.76
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Array BODT
+$path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
+136.7 101.147 128.43
+-0.1645752 0.07765379 -0.983299 0.002827754
+0.9999998 1 0.9999998
+%mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
+$path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
+142.41 101.147 122.77
+0.9994904 0 0 -0.03192299
+0.9999999 0.9999999 1
+%mat:Conifer Leaves BODT
+%mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
 284.2 103.1629 256.6
 1 0 0 0
@@ -28,6 +46,12 @@ $path:Resources/Models/Unity/Conifer Small LOD1 Instance.obj
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Simple BODT
+$path:Resources/Models/Unity/Conifer Tall LOD1 Instance.obj
+144.16 100.69 134.6
+0.8568372 0 -0.5155871 0
+1 1 1
+%mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Small LOD1 Instance.obj
 75.54 102.91 81.01
 1 0 0 0
@@ -35,7 +59,7 @@ $path:Resources/Models/Unity/Conifer Small LOD1 Instance.obj
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
-31.20009 103.1629 65.53787
+31.20009 102.28 65.53787
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
@@ -53,15 +77,30 @@ $path:Resources/Models/Unity/Conifer Medium LOD1 Instance.obj
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1 Instance.obj
-49.33 100.71 66.43
+49.33 100.86 66.43
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Array BODT
+$path:Resources/Models/Unity/Rock_02_LOD1.obj
+6.194041 100.9774 1.762823
+0.984699 0.1645295 -0.05719581 0.005159502
+5.6325 5.6325 5.6325
+%mat:M_Rock_02
+$path:Resources/Models/Unity/Rock_05_LOD1.obj
+16.85819 109.41 -19.52
+0.4500904 -0.4255797 -0.4316867 -0.6557036
+4.228901 4.228901 4.2289
+%mat:M_Rock_05
 $path:Resources/Models/Unity/Rock_03_LOD1.obj
 3.4188 131.33 119.06
 1 0 0 0
 5.7708 5.7708 5.7708
+%mat:M_Rock_03
+$path:Resources/Models/Unity/Rock_03_LOD1.obj
+25.73 100.3 -19.28
+0.7093812 0 0.7048252 0
+4.085715 4.085714 4.085715
 %mat:M_Rock_03
 $path:Resources/Models/Unity/Rock_03_LOD1.obj
 -26.77361 158.7994 134.8587
@@ -93,6 +132,21 @@ $path:Resources/Models/Unity/Rock_04_LOD1.obj
 1 0 0 0
 6.2077 6.2077 6.2077
 %mat:M_Rock_04
+$path:Resources/Models/Unity/Rock_03_LOD1.obj
+8.697845 102.6 -23.56
+0.5015414 0.4984533 0.49832 -0.5016751
+4.085715 4.085715 4.085715
+%mat:M_Rock_03
+$path:Resources/Models/Unity/Rock_03_LOD1.obj
+7.64 99.66 -17.97
+-0.09370001 0.2781 -0.7310459 0.6159973
+4.085714 4.085714 4.085714
+%mat:M_Rock_03
+$path:Resources/Models/Unity/Rock_03_LOD1.obj
+24.06 100.77 -9.92
+0.8164251 0.4161559 0.3981299 0.04191484
+4.085714 4.085714 4.085714
+%mat:M_Rock_03
 $path:Resources/Models/Unity/Rock_02_LOD1.obj
 4.072601 101.1874 586.0648
 0.9733757 0 0.2292155 0
@@ -156,5 +210,185 @@ $path:Resources/Models/Unity/Plane002.obj
 $path:Resources/Models/Unity/Plane002.obj
 78.77 105.08 66.08
 2.211023E-07 -0.9099665 5.378861E-07 -0.4146816
+8.979372 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+122.59 105.73 104.91
+3.95108E-07 -0.6461266 4.267285E-07 -0.7632302
+8.979371 7.897308 8.979371
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+124.4798 105.73 104.4298
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+124.907 105.73 106.6276
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+128.5962 105.73 105.4684
+3.133282E-07 -0.99534 3.942935E-07 -0.09642687
+8.979373 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+127.5206 105.73 107.475
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+130.21 105.73 108.6989
+3.133282E-07 -0.99534 3.942935E-07 -0.09642687
+8.979373 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+121.93 105.73 111.03
+2.864326E-07 -0.4533755 5.061265E-07 -0.8913196
+8.979374 7.897308 8.979373
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+123.835 105.73 111.4462
+4.511381E-07 -0.7469404 3.669906E-07 -0.6648911
+8.979374 7.89731 8.979375
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+123.2337 105.73 113.6028
+4.511381E-07 -0.7469404 3.669906E-07 -0.6648911
+8.979374 7.89731 8.979375
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+127.0516 105.73 114.2168
+3.81643E-07 -0.9465188 5.787157E-07 -0.3226489
+8.979372 7.89731 8.979374
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+125.1918 105.73 115.5301
+4.511381E-07 -0.7469404 3.669906E-07 -0.6648911
+8.979374 7.89731 8.979375
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+127.0494 105.73 117.828
+3.81643E-07 -0.9465188 5.787157E-07 -0.3226489
+8.979372 7.89731 8.979374
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+130.47 105.73 109.55
+3.95108E-07 -0.6461266 4.267285E-07 -0.7632302
+8.979371 7.897308 8.979371
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+132.3598 105.73 109.0698
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+132.787 105.73 111.2676
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+136.4762 105.73 110.1084
+3.133282E-07 -0.99534 3.942935E-07 -0.09642687
+8.979373 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+135.4006 105.73 112.115
+5.234187E-07 -0.8797795 2.53457E-07 -0.4753821
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+138.09 105.73 113.3389
+3.133282E-07 -0.99534 3.942935E-07 -0.09642687
+8.979373 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+90.49 105.08 84.63
+2.233315E-07 -0.3426228 5.369643E-07 -0.939473
+8.979373 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+92.24 105.08 85.49
+4.036083E-07 -0.6613423 4.186979E-07 -0.7500843
+8.979374 7.89731 8.979374
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+91.14 105.08 87.44
+4.036083E-07 -0.6613423 4.186979E-07 -0.7500843
+8.979374 7.89731 8.979374
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+94.7 105.08 88.95
+4.093248E-07 -0.9007217 6.630798E-07 -0.4343965
+8.979372 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+92.58 105.08 89.78
+4.036083E-07 -0.6613423 4.186979E-07 -0.7500843
+8.979374 7.89731 8.979374
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+93.83357 105.08 92.45567
+4.093248E-07 -0.9007217 6.630798E-07 -0.4343965
+8.979372 7.897307 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+121.9 105.73 107.08
+3.416828E-07 -0.5510001 4.705959E-07 -0.8345052
+8.979373 7.897308 8.979373
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+123.8498 105.73 107.0587
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+123.7471 105.73 109.2952
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+127.6055 105.73 109.038
+3.507083E-07 -0.9768668 4.921526E-07 -0.2138488
+8.979372 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+126.0874 105.73 110.7346
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+128.4126 105.73 112.5578
+3.507083E-07 -0.9768668 4.921526E-07 -0.2138488
+8.979372 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+113.95 105.73 103.04
+3.416828E-07 -0.5510001 4.705959E-07 -0.8345052
+8.979373 7.897308 8.979373
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+115.8998 105.73 103.0187
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+115.7971 105.73 105.2552
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+119.6555 105.73 104.998
+3.507083E-07 -0.9768668 4.921526E-07 -0.2138488
+8.979372 7.897308 8.979372
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+118.1374 105.73 106.6946
+4.896468E-07 -0.8171573 3.137733E-07 -0.5764149
+8.979373 7.897312 8.979376
+%mat:Grass_rushes
+$path:Resources/Models/Unity/Plane002.obj
+120.4626 105.73 108.5178
+3.507083E-07 -0.9768668 4.921526E-07 -0.2138488
 8.979372 7.897308 8.979372
 %mat:Grass_rushes

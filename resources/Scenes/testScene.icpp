@@ -84,6 +84,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             mr->material = unlitInstancedMat;
 
         auto rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+            rb->ignoreGravity = true;
             rb->mass = 10;
             rb->drag = 0.2f;
             rb->angularDrag = 0.1f;
@@ -362,8 +363,8 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
         
         auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
             kayakPtr->addComponent(kayakHydroBody);
-            kayakPtr->addComponent(kayakRigidbody);
             kayakPtr->addComponent(kayakBoxCollider);
+            kayakPtr->addComponent(kayakRigidbody);
 
         // PADDLE MAN
         auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();

@@ -10,13 +10,16 @@ void CallbacksModule::receiveMessage(Message msg)
     {
         case Event::COLLISION_ENTER:
         {
-            auto data = msg.getValue<CollisionData>();
-            bool valid = false;
-            valid |= data.body1->entityPtr == Kayak::get()->entityPtr;
-            valid |= data.body2->entityPtr == Kayak::get()->entityPtr;
-            if (valid)
+            if (Kayak::get() != nullptr)
             {
-                rocksHit();
+                auto data = msg.getValue<CollisionData>();
+                bool valid = false;
+                valid |= data.body1->entityPtr == Kayak::get()->entityPtr;
+                valid |= data.body2->entityPtr == Kayak::get()->entityPtr;
+                if (valid)
+                {
+                    rocksHit();
+                }
             }
         }
             return;

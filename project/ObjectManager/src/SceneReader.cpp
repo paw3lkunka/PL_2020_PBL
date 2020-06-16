@@ -555,6 +555,7 @@ void SceneReader::readTransform(std::string name)
     }
     trans->serializationID = serializationID;
 
+    std::cout << "READ TRANSFORM ID: " << serializationID << '\n';
 
     tempVec.x = j->at(name).at("localPosition").at("x").get<float>();
     tempVec.y = j->at(name).at("localPosition").at("y").get<float>();
@@ -1217,9 +1218,12 @@ void SceneReader::readTransformParents(std::string name)
     auto trans = entity->getComponentPtr<Transform>();
     try
     {
+        std::cout << "&&&&&& Read transform parent: " << name << '\n';
         auto parentID = j->at(name).at("transform parentID").get<unsigned int>();
         if(parentID != 0)
         {
+            std::cout << "PARENT ID: " << parentID << '\n';
+            std::cout << "Entity name: " << Name(objModulePtr->objectContainer.getComponentFromSerializationID(parentID)) << '\n';
             auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
             trans->setParent(parentTrans);
         }
