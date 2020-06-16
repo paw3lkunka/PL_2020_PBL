@@ -141,8 +141,11 @@ int Core::init()
         //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/testScene.icpp"
         #include "../../resources/Scenes/newScene.icpp"
+    }
+    else if (testScene)
+    {
+        #include "../../resources/Scenes/testScene.icpp"
     }
     else
     {
@@ -237,7 +240,8 @@ int Core::mainLoop()
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
-    detectionBarSystem.init("ProgressBar");
+    detectionBarSystem.init("DetectionProgressBar");
+    callbacksModule.init("Health_Bar");
 
     // ! ----- START SYSTEM FUNCTION -----
 

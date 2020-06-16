@@ -20,6 +20,10 @@ int main( int argc, char * argv[] )
         {
             core.recreateScene = true;
         }
+        else if( std::strcmp(argv[i], "-t") == 0 || std::strcmp(argv[i], "--test") == 0 )
+        {
+            core.testScene = true;
+        }
         else if( std::strcmp(argv[i], "-f") == 0 || std::strcmp(argv[i], "--file") == 0 )
         {
             core.sceneFilePath = argv[++i];

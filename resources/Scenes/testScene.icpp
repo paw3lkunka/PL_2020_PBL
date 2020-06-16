@@ -419,8 +419,6 @@ auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/U
 
 auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
 
-
-
     {
         objectModule.newEntity(2, "Detection_Rate_Group");
         auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
@@ -456,7 +454,59 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
                 cui->mesh.text = "Detection Rate";
         }
 
-        objectModule.newEntity(3, "ProgressBar");
+        objectModule.newEntity(3, "DetectionProgressBar");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {167.0f, 35.0f};
+                rt->getSizeModifiable() = {200, 50};
+                rt->setParent(buttonsRoot);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiFading, "Progress", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
+                ui->material = mat;
+
+            auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
+        }
+    }
+    
+    {
+        objectModule.newEntity(2, "Health_Bar_Group");
+        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 1.0f);
+            buttonsRoot->getLocalPositionModifiable() = {0.0f, -70.0f};
+        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        uiModule.rootNodes.push_back(buttonsRoot);
+
+        objectModule.newEntity(2, "Health_Bar_Bg");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getSizeModifiable() = {570, 60};
+                rt->setParent(buttonsRoot);
+
+            auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                auto mat = objectModule.newMaterial(uiShader, "Detection_Rate_Bg_Mat", RenderType::Transparent);
+                mat->setTexture("sprite", rect_shadeless);
+                mat->setVec4("color", {0.811f, 0.815f, 0.949f, 1.0f});
+                ui->material = mat;
+        }
+
+        objectModule.newEntity(2, "Health_Bar_text");
+        {
+            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                crt->getLocalPositionModifiable() = {-273.0f, 25.0f};
+                crt->getSizeModifiable() = {0.3f, 0.3f};
+                crt->setParent(buttonsRoot);
+
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial;
+                cui->mesh.font = courier;
+                cui->mesh.text = "Health";
+        }
+
+        objectModule.newEntity(3, "Health_Bar");
         {
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
                 rt->getLocalPositionModifiable() = {167.0f, 35.0f};

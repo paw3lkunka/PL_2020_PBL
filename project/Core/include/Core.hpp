@@ -95,9 +95,14 @@ class Core
         bool updateScene = false;
 
         /**
-         * @brief Creat scene from old_scene instead of loading file.
+         * @brief Creat scene from new_scene instead of loading file.
          */
         bool recreateScene = false;
+        
+        /**
+         * @brief Creat scene from test_scene instead of loading file.
+         */
+        bool testScene = false;
 
         /**
          * @brief Path to scene file.
