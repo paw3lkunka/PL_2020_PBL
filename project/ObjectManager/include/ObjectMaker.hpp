@@ -23,6 +23,7 @@ struct TextureCreateInfo;
 
 class ObjectMaker
 {
+    friend class ObjectModule;
 public:
     ObjectMaker(ObjectModule* objectmodulePtr);
     ObjectMaker() = default;
@@ -115,7 +116,7 @@ public:
      * @param filePath to model
      * @param type type of meshes (skinned/ custom)
      */
-    void newModel(const char* filePath, bool createEntities = true);
+    void newModel(const char* filePath, bool customName, bool createEntities = true);
 
     /**
      * @brief make new mesh and save it to container
@@ -130,7 +131,7 @@ public:
      * @return T* type of mesh
      */
     template<typename T, typename U>
-    T* newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string& filePath, std::string meshName);
+    T* newMesh(std::vector<U> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string& filePath, std::string meshName, bool customName);
 
     /**
      * @brief make new material and save it to container

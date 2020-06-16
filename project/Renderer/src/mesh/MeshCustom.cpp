@@ -3,7 +3,7 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
-MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath) : Mesh(meshFilePath, meshPath)
+MeshCustom::MeshCustom(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath, bool customName) : Mesh(meshFilePath, meshPath, customName)
 {
     this->vertices = vertices;
     this->indices = indices;
