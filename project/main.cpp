@@ -24,6 +24,10 @@ int main( int argc, char * argv[] )
         {
             core.sceneFilePath = argv[++i];
         }
+        else if( std::strcmp(argv[i], "-d") == 0 || std::strcmp(argv[i], "--debug") == 0 )
+        {
+            core.debugOpengl = true;
+        }
         else
         {
             std::cerr << "ERROR - unknown parameter: " << argv[i] << std::endl;

@@ -100,6 +100,11 @@ class Core
         bool recreateScene = false;
 
         /**
+         * @brief Enable opengl debugging options
+         */
+        bool debugOpengl = false;
+
+        /**
          * @brief Path to scene file.
          */
         std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";
