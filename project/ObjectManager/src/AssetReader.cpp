@@ -30,6 +30,7 @@
 
 bool AssetReader::hasInstance = false;
 unsigned int AssetReader::bonesAmount = 0;
+bool AssetReader::customMeshNames = false;
 
 AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
 {
@@ -177,8 +178,14 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
         if (makeEntities)
         {
             size_t index = path.find_last_of("/\\");
-            //e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + scene->mMeshes[node->mMeshes[i]]->mName.C_Str());
-            e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/mesh" + std::to_string(i));
+            if (!customMeshNames)
+            {
+                e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + scene->mMeshes[node->mMeshes[i]]->mName.C_Str());
+            }
+            else
+            {
+                e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/mesh" + std::to_string(i));
+            }
             std::cout << e->getName() << '\n';
 
             // * ----- Create transform and set parent -----

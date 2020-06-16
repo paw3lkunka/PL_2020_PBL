@@ -42,6 +42,9 @@ public:
     AssetReader(ObjectModule* objModule);
     ~AssetReader() = default;
 
+    // HACK: F-you all model formats for not specifying submesh names explictly and you assimp for getting them magically from air
+    static bool customMeshNames;
+
 private:
     ObjectModule* objectModulePtr;
 

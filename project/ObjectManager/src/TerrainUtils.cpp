@@ -65,7 +65,7 @@ void TerrainUtils::loadAllTerrainChunks()
     {
         GetCore().objectModule.newModel(entry.path().string().c_str());
         std::string filename = entry.path().filename().string();
-        Entity* entity = GetCore().objectModule.getEntityPtrByName((filename + "/mesh0").c_str());
+        Entity* entity = GetCore().objectModule.getEntityPtrByName((filename + "/defaultobject").c_str());
         {
             size_t start = filename.find_first_of('(') + 1;
             size_t end = filename.find_first_of(')');
@@ -105,7 +105,7 @@ void TerrainUtils::loadAllTerrainChunks()
         Texture* splatTexture = GetCore().objectModule.newTexture(entry.path().string().c_str(), ti);
         std::string filename = entry.path().filename().string();
         filename = filename.substr(0, filename.find_last_of('.'));
-        Entity* entity = GetCore().objectModule.getEntityPtrByName((filename +  ".obj/mesh0").c_str());
+        Entity* entity = GetCore().objectModule.getEntityPtrByName((filename +  ".obj/defaultobject").c_str());
         {
             auto tr = entity->getComponentPtr<TerrainRenderer>();
             tr->splatmap = splatTexture;
@@ -115,6 +115,8 @@ void TerrainUtils::loadAllTerrainChunks()
 
 void TerrainUtils::loadExportedUnityModels()
 {
+    AssetReader::customMeshNames = true;
+
     namespace fs = std::filesystem;
     std::string path = "Resources/Models/Unity/";
 
@@ -261,6 +263,8 @@ void TerrainUtils::loadExportedUnityModels()
     {
         std::cerr << "exportinfo.txt file not found!\n";
     }
+
+    AssetReader::customMeshNames = false;
 }
 
 void TerrainUtils::createMaterialsForModels()

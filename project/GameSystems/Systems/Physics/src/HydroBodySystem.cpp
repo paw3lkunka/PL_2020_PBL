@@ -139,13 +139,14 @@ void HydroBodySystem::fixedUpdate()
         velocity = hydroAccelerator->velocity;
     }
 
-    for(HydroTriangle triangle : hullTriangles.abovewater)
-    {
-        Impulse impulse;
+    // FIXME: This for is causing segfault in rp3d physics for some reason
+    // for(HydroTriangle triangle : hullTriangles.abovewater)
+    // {
+    //     Impulse impulse;
 
-        impulse.force += HydroPhysics::airResistanceForce(triangle, velocity);
-        impulse.point = triangle.center;
+    //     impulse.force += HydroPhysics::airResistanceForce(triangle, velocity);
+    //     impulse.point = triangle.center;
 
-        rb->impulses.push_back(impulse);
-    }
+    //     rb->impulses.push_back(impulse);
+    // }
 }
