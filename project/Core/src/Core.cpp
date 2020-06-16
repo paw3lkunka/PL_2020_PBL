@@ -144,10 +144,10 @@ int Core::init()
     if (recreateScene)
     {
         // ? -r
-        #include "../../resources/Scenes/main_Menu.icpp"
+        //#include "../../resources/Scenes/main_Menu.icpp"
         //#include "../../resources/Scenes/selectCargoScene.icpp"
         //#include "../../resources/Scenes/scene_old.icpp"
-        //#include "../../resources/Scenes/newScene.icpp"
+        #include "../../resources/Scenes/newScene.icpp"
         //#include "../../resources/Scenes/intro.icpp"
     }
     else if (testScene)
@@ -157,6 +157,9 @@ int Core::init()
     else
     {
         // ? none, or -f
+        {
+            //various shit.
+        }
         objectModule.readScene(sceneFilePath);
     }
 
@@ -165,20 +168,7 @@ int Core::init()
         // ! Manual extension of scene
         // ? -u
         {
-            // auto* shootTrail = objectModule.newEntity(4,"Shoot trail");
-            // {
-            //     auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            //         t->getLocalPositionModifiable() = {NAN, NAN, NAN};
-            //         t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
-            //         //t->setParent(enemy->getComponentPtr<Transform>());
-            //         t->setParent(&sceneModule.rootNode);
 
-            //     auto* mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
-            //         mr->material = objectModule.getMaterialPtrByName("KULA");
-            //         mr->mesh = objectModule.getMeshCustomPtrByPath(Models::BoneBox);
-
-            //     auto* st = objectModule.newEmptyComponentForLastEntity<Shoot>();
-            // }
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");

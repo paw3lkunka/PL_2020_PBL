@@ -22,9 +22,9 @@ Kayak* Kayak::get()
 
 Transform* Kayak::getTransform()
 {
-    if (kayakTransformPtr == nullptr)
+    if (kayakTransformPtr == nullptr && lastInstance != nullptr)
     {
-        kayakTransformPtr = Kayak::lastInstance->entityPtr->getComponentPtr<Transform>();
+        kayakTransformPtr = Kayak::lastInstance->entityPtr->getComponentPtr<Transform>();      
     }
 
     return kayakTransformPtr;

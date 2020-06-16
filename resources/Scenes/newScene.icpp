@@ -409,6 +409,9 @@ objectModule.newEntity(4, "Camera");
 
         auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
             kayakPtr->addComponent(kayakHydroBody);
+            
+    auto* kayakComponent = objectModule.newEmptyComponentForLastEntity<Kayak>();
+            kayakPtr->addComponent(kayakComponent);
 
 
         Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
@@ -561,6 +564,55 @@ TerrainUtils::importColliders();
                 mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
                 ui->material = mat;
             auto pb = objectModule.newEmptyComponentForLastEntity<ProgressBar>();
+        }
+    }
+}
+
+// ENEMY
+{
+    {
+        //temporary enemy model
+        objectModule.newModel("Resources/Models/Box.FBX");
+        
+        auto* enemy = objectModule.getEntityPtrByName("Box.FBX/Box001");
+        {
+            auto* t = enemy->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {-196.0f, 20.0f, 240.0f};
+                t->getLocalScaleModifiable() = {2.5f, 5.0f, 2.5f};
+                t->setParent(&sceneModule.rootNode);
+            auto* e = objectModule.newEmptyComponent<Enemy>();
+                e->detectionCounterMaxValue = 500;
+                e->sightDistance = 55.0f;
+                e->sightAngle = glm::pi<float>() / 4.0f;
+                enemy->addComponent(e);
+            auto* a = objectModule.newEmptyComponent<EnemyAnimation>();
+                a->lerpParameter = 0.25f;
+                a->shootTrailTime = 0.05f;
+                enemy->addComponent(a);
+            auto* mr = enemy->getComponentPtr<MeshRenderer>();
+                mr->material = objectModule.getMaterialPtrByName("KULA");
+        
+            auto* ea = objectModule.newEmptyComponent<EnemyAttack>();
+                ea->activationValue = 30;
+                ea->incrementValue = 1;
+                ea->handicap = 5;
+                ea->successChance = 0.1f;
+                enemy->addComponent(ea);
+        }
+        // shoot trail
+        objectModule.newModel("Resources/Models/BoneBox.FBX");
+        
+        auto* shootTrail = objectModule.getEntityPtrByName("BoneBox.FBX/Box001");
+        {
+            auto* t = shootTrail->getComponentPtr<Transform>();
+                t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+                t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
+                //t->setParent(enemy->getComponentPtr<Transform>());
+                t->setParent(&sceneModule.rootNode);
+            auto* mr = shootTrail->getComponentPtr<MeshRenderer>();
+                mr->material = objectModule.getMaterialPtrByName("KULA");
+            auto* st = objectModule.newEmptyComponent<Shoot>();
+                shootTrail->addComponent(st);
         }
     }
 }

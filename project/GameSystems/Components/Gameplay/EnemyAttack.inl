@@ -27,5 +27,10 @@ struct EnemyAttack : public Component
      * @brief Chance fo successfull hit;
      */
     float successChance = 0.2;
+
+    /**
+     * @brief Defines amount of first shoots, that will surely miss.
+     */
+    float handicap = 0;
 };
 #endif
