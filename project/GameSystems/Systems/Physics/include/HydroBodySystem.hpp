@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "System.hpp"
+#include "IMsgReceiver.inl"
 
 class Entity;
 
@@ -18,15 +19,17 @@ struct MeshRenderer;
 
 struct HullTriangles;
 struct HydroTriangle;
+struct Message;
 
 //TODO documentation
-class HydroBodySystem : public System
+class HydroBodySystem : public System, public IMsgReceiver
 {
     public:
         HydroBodySystem() = default;
         virtual ~HydroBodySystem() = default;
         
         virtual bool assertEntity(Entity* entity);
+        virtual void receiveMessage(Message msg);
         virtual void fixedUpdate();
 
     private:

@@ -504,3 +504,21 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
             cameraPtr->addComponent(fpCameraPtr);
             cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
     }
+
+    {
+        auto currentPtr = objectModule.newEntity(4, "Current");
+        {
+            auto transform = objectModule.newEmptyComponentForLastEntity<Transform>();
+                transform->setParent(&sceneModule.rootNode);
+            
+            objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+
+            auto collider = objectModule.newEmptyComponentForLastEntity<SphereCollider>();
+                collider->isTrigger = true;
+                collider->radius = 15.0f;
+            
+            auto hydroCurrent = objectModule.newEmptyComponentForLastEntity<HydroCurrent>();
+                hydroCurrent->velocity = { 1.0f, 0.0f, 1.0f };
+                hydroCurrent->velocityLerp = 0.1f;
+        }
+    }
