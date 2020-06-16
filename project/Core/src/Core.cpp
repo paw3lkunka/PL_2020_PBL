@@ -143,6 +143,9 @@ int Core::init()
         //#include "../../resources/Scenes/scene_old.icpp"
         #include "../../resources/Scenes/testScene.icpp"
         //#include "../../resources/Scenes/newScene.icpp"
+        //#include "../../resources/Scenes/testScene.icpp"
+        //#include "../../resources/Scenes/newScene.icpp"
+        //#include "../../resources/Scenes/intro.icpp"
     }
     else
     {
@@ -377,8 +380,6 @@ void Core::cleanup()
 {
     audioModule.cleanup();
     editorModule.onExit();
-
-    //objectModule.saveScene("../resources/Scenes/savedScene.json");
 
     physicModule.cleanup();
     objectModule.cleanup();
