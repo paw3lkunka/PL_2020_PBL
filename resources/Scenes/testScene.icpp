@@ -423,8 +423,8 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
     {
         objectModule.newEntity(2, "Detection_Rate_Group");
         auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 1.0f);
-            buttonsRoot->getLocalPositionModifiable() = {0.0f, -70.0f};
+            buttonsRoot->getAnchorModifiable() = glm::vec2(0.0f, 0.0f);
+            buttonsRoot->getLocalPositionModifiable() = {290.0f, 0.0f};
         objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
         uiModule.rootNodes.push_back(buttonsRoot);
 
@@ -475,8 +475,8 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
     {
         objectModule.newEntity(2, "Health_Bar_Group");
         auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 1.0f);
-            buttonsRoot->getLocalPositionModifiable() = {0.0f, -70.0f};
+            buttonsRoot->getAnchorModifiable() = glm::vec2(1.0f, 0.0f);
+            buttonsRoot->getLocalPositionModifiable() = {-290.0f, 0.0f};
         objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
         uiModule.rootNodes.push_back(buttonsRoot);
 
@@ -515,7 +515,7 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
                 rt->setParent(buttonsRoot);
 
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
-                auto mat = objectModule.newMaterial(uiFading, "Progress", RenderType::Transparent);
+                auto mat = objectModule.newMaterial(uiFading, "Progress2", RenderType::Transparent);
                 mat->setTexture("sprite", rect_shadeless);
                 mat->setVec4("color", {0.886f, 0.070f, 0.070f, 1.0f});
                 ui->material = mat;

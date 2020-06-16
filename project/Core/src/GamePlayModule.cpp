@@ -2,8 +2,7 @@
 #include "Message.inl"
 #include "Core.hpp"
 
-#include "Entity.hpp"
-#include "Components.inc"
+#include "ECS.inc"
 
 void GamePlayModule::receiveMessage(Message msg)
 {
@@ -65,6 +64,8 @@ void GamePlayModule::init()
 
 void GamePlayModule::reloadScene(std::string name)
 {
+    //TODO MAKE ONSCENELOAD & ONSCENE UNLOAD IN CORE
+
     GetCore().uiModule.rootNodes.push_back(loadingScreenEntity->getComponentPtr<RectTransform>());
     GetCore().objectModule.objectContainer.entities.push_back(*loadingScreenEntity);
     GetCore().uiModule.updateRectTransforms();
@@ -75,4 +76,7 @@ void GamePlayModule::reloadScene(std::string name)
 
     GetCore().objectModule.unloadSceneAndLoadNew(name);
     GetCore().messageBus.notify();
+    
+    GetCore().detectionBarSystem.init("DetectionProgressBar");
+    GetCore().callbacksModule.init("Health_Bar");
 }
