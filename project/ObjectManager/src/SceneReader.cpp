@@ -690,6 +690,8 @@ void SceneReader::readThirdPersonCamera(std::string name)
 
     tpCamera->rotationSensitivity = j->at(name).at("rotationSensitivity").get<float>();
     tpCamera->rotationLerp = j->at(name).at("rotationLerp").get<float>();
+    
+    assignToEntity(name, tpCamera);
 }
 
 void SceneReader::readFirstPersonCamera(std::string name)
@@ -712,6 +714,8 @@ void SceneReader::readFirstPersonCamera(std::string name)
 
     fpCamera->moveLerp = j->at(name).at("moveLerp").get<float>();
     fpCamera->rotationLerp = j->at(name).at("rotationLerp").get<float>();
+
+    assignToEntity(name, fpCamera);
 }
 
 void SceneReader::readMeshRenderer(std::string name)
@@ -1219,12 +1223,9 @@ void SceneReader::readTransformParents(std::string name)
     auto trans = entity->getComponentPtr<Transform>();
     try
     {
-        std::cout << "&&&&&& Read transform parent: " << name << '\n';
         auto parentID = j->at(name).at("transform parentID").get<unsigned int>();
         if(parentID != 0)
         {
-            std::cout << "PARENT ID: " << parentID << '\n';
-            //std::cout << "Entity name: " << Name(objModulePtr->objectContainer.getComponentFromSerializationID(parentID)) << '\n';
             auto parentTrans = dynamic_cast<Transform*>(objModulePtr->objectContainer.getComponentFromSerializationID(parentID));
             trans->setParent(parentTrans);
         }

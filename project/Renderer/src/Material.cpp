@@ -151,7 +151,7 @@ void Material::use()
             mat4sChanged = false;
         }
     }
-    else if (shader == nullptr)
+    else
     {
         std::cerr << "Material " << name << " has no shader!\n";
     }

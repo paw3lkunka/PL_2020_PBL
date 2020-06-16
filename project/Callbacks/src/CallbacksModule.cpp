@@ -1,8 +1,17 @@
 #include "CallbacksModule.hpp"
 #include "MessageBus.hpp"
 #include "PhysicStructures.inl"
-#include "Rigidbody.hpp"
-#include "Kayak.hpp"
+#include "ECS.inc"
+
+
+void CallbacksModule::init(const char* hpBarName)
+{
+    Entity* e = GetCore().objectModule.getEntityPtrByName(hpBarName);
+    if (e)
+    {
+        healthbarPtr = e->getComponentPtr<ProgressBar>();
+    }
+}
 
 void CallbacksModule::receiveMessage(Message msg)
 {
@@ -35,6 +44,12 @@ void CallbacksModule::rocksHit()
     if (base > 0)
     {
         kayak->hp -= kayak->hitDamagefactor * base;
+        kayak->hp = std::max(kayak->hp, 0.0f);
+
+        if (healthbarPtr)
+        {
+            healthbarPtr->percentage = kayak->hp / kayak->maxHp;
+        }
 
         if (kayak->hp <= 0)
         {
