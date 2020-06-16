@@ -12,34 +12,309 @@ texCreateInfo.wrapMode = GL_REPEAT;
 auto water1Diffuse = objectModule.newTexture("Resources/Textures/Unity/water_diffuse.png", texCreateInfo);
 auto water1Normal = objectModule.newTexture("Resources/Textures/Unity/water_normal.png", texCreateInfo);
 auto emptyOccRouMet = objectModule.newTexture("Resources/Textures/Unity/water_occroumet.png", texCreateInfo);
-//auto water1OccRouSpec = objectModule.newTexture("Resources/Textures/water/Water_001_OccRouSpec.png", texCreateInfo);
-auto flowmap = objectModule.newTexture("Resources/Flowmaps/flowmap.png", texCreateInfo);
 auto noise = objectModule.newTexture("Resources/Flowmaps/noiseTexture.png", texCreateInfo);
+auto flowmap_0_0_0 = objectModule.newTexture("Resources/Flowmaps/Plane_(0.0, 0.0, 0.0).png", texCreateInfo);
+auto flowmap_0_0_m1 = objectModule.newTexture("Resources/Flowmaps/Plane_(0.0, 0.0, -100.0).png", texCreateInfo);
+auto flowmap_1_0_0 = objectModule.newTexture("Resources/Flowmaps/Plane_(100.0, 0.0, 0.0).png", texCreateInfo);
+auto flowmap_1_0_1 = objectModule.newTexture("Resources/Flowmaps/Plane_(100.0, 0.0, 100.0).png", texCreateInfo);
+auto flowmap_1_0_3 = objectModule.newTexture("Resources/Flowmaps/Plane_(100.0, 0.0, 300.0).png", texCreateInfo);
+auto flowmap_2_0_1 = objectModule.newTexture("Resources/Flowmaps/Plane_(200.0, 0.0, 100.0).png", texCreateInfo);
+auto flowmap_2_0_2 = objectModule.newTexture("Resources/Flowmaps/Plane_(200.0, 0.0, 200.0).png", texCreateInfo);
+auto flowmap_2_0_3 = objectModule.newTexture("Resources/Flowmaps/Plane_(200.0, 0.0, 300.0).png", texCreateInfo);
+auto flowmap_3_0_1 = objectModule.newTexture("Resources/Flowmaps/Plane_(300.0, 0.0, 100.0).png", texCreateInfo);
+auto flowmap_3_0_2 = objectModule.newTexture("Resources/Flowmaps/Plane_(300.0, 0.0, 200.0).png", texCreateInfo);
+auto flowmap_3_0_3 = objectModule.newTexture("Resources/Flowmaps/Plane_(300.0, 0.0, 300.0).png", texCreateInfo);
 
-Material* waterMat = objectModule.newMaterial(flowmapShader, "waterMat", RenderType::Transparent);
-waterMat->setTexture("diffuse", water1Diffuse);
-waterMat->setTexture("normal", water1Normal);
-waterMat->setTexture("occRouMet", emptyOccRouMet);
-waterMat->setTexture("flowMap", flowmap);
-waterMat->setVec2("channelFlowDirection", {-1.0f, 1.0f});
-waterMat->setFloat("blendCycle", 1.0f);
-waterMat->setFloat("cycleSpeed", 1.0f);
-waterMat->setFloat("flowSpeed", 0.5f);
-waterMat->setTexture("flowMapNoise", noise);
-waterMat->setVec2("flowNoiseSize", {1.0f, 1.0f});
-waterMat->setFloat("flowNoiseInfluence", 0.5f);
-waterMat->setVec2("uvScale", {1.0f, 1.0f});
+Material* waterMat_3_0_3 = objectModule.newMaterial(flowmapShader, "waterMat_3_0_3", RenderType::Transparent);
+waterMat_3_0_3->setTexture("diffuse", water1Diffuse);
+waterMat_3_0_3->setTexture("normal", water1Normal);
+waterMat_3_0_3->setTexture("occRouMet", emptyOccRouMet);
+waterMat_3_0_3->setTexture("flowMap", flowmap_3_0_3);
+waterMat_3_0_3->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_3_0_3->setFloat("blendCycle", 1.0f);
+waterMat_3_0_3->setFloat("cycleSpeed", 1.0f);
+waterMat_3_0_3->setFloat("flowSpeed", 0.5f);
+waterMat_3_0_3->setTexture("flowMapNoise", noise);
+waterMat_3_0_3->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_3_0_3->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_3_0_3->setVec2("uvScale", {1.0f, 1.0f});
 
-//objectModule.newModel("Resources/Models/unit_sphere.FBX");
+Material* waterMat_3_0_2 = objectModule.newMaterial(flowmapShader, "waterMat_3_0_2", RenderType::Transparent);
+waterMat_3_0_2->setTexture("diffuse", water1Diffuse);
+waterMat_3_0_2->setTexture("normal", water1Normal);
+waterMat_3_0_2->setTexture("occRouMet", emptyOccRouMet);
+waterMat_3_0_2->setTexture("flowMap", flowmap_3_0_2);
+waterMat_3_0_2->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_3_0_2->setFloat("blendCycle", 1.0f);
+waterMat_3_0_2->setFloat("cycleSpeed", 1.0f);
+waterMat_3_0_2->setFloat("flowSpeed", 0.5f);
+waterMat_3_0_2->setTexture("flowMapNoise", noise);
+waterMat_3_0_2->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_3_0_2->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_3_0_2->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_3_0_1 = objectModule.newMaterial(flowmapShader, "waterMat_3_0_1", RenderType::Transparent);
+waterMat_3_0_1->setTexture("diffuse", water1Diffuse);
+waterMat_3_0_1->setTexture("normal", water1Normal);
+waterMat_3_0_1->setTexture("occRouMet", emptyOccRouMet);
+waterMat_3_0_1->setTexture("flowMap", flowmap_3_0_1);
+waterMat_3_0_1->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_3_0_1->setFloat("blendCycle", 1.0f);
+waterMat_3_0_1->setFloat("cycleSpeed", 1.0f);
+waterMat_3_0_1->setFloat("flowSpeed", 0.5f);
+waterMat_3_0_1->setTexture("flowMapNoise", noise);
+waterMat_3_0_1->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_3_0_1->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_3_0_1->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_2_0_3 = objectModule.newMaterial(flowmapShader, "waterMat_2_0_3", RenderType::Transparent);
+waterMat_2_0_3->setTexture("diffuse", water1Diffuse);
+waterMat_2_0_3->setTexture("normal", water1Normal);
+waterMat_2_0_3->setTexture("occRouMet", emptyOccRouMet);
+waterMat_2_0_3->setTexture("flowMap", flowmap_2_0_3);
+waterMat_2_0_3->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_2_0_3->setFloat("blendCycle", 1.0f);
+waterMat_2_0_3->setFloat("cycleSpeed", 1.0f);
+waterMat_2_0_3->setFloat("flowSpeed", 0.5f);
+waterMat_2_0_3->setTexture("flowMapNoise", noise);
+waterMat_2_0_3->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_2_0_3->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_2_0_3->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_2_0_2 = objectModule.newMaterial(flowmapShader, "waterMat_2_0_2", RenderType::Transparent);
+waterMat_2_0_2->setTexture("diffuse", water1Diffuse);
+waterMat_2_0_2->setTexture("normal", water1Normal);
+waterMat_2_0_2->setTexture("occRouMet", emptyOccRouMet);
+waterMat_2_0_2->setTexture("flowMap", flowmap_2_0_2);
+waterMat_2_0_2->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_2_0_2->setFloat("blendCycle", 1.0f);
+waterMat_2_0_2->setFloat("cycleSpeed", 1.0f);
+waterMat_2_0_2->setFloat("flowSpeed", 0.5f);
+waterMat_2_0_2->setTexture("flowMapNoise", noise);
+waterMat_2_0_2->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_2_0_2->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_2_0_2->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_2_0_1 = objectModule.newMaterial(flowmapShader, "waterMat_2_0_1", RenderType::Transparent);
+waterMat_2_0_1->setTexture("diffuse", water1Diffuse);
+waterMat_2_0_1->setTexture("normal", water1Normal);
+waterMat_2_0_1->setTexture("occRouMet", emptyOccRouMet);
+waterMat_2_0_1->setTexture("flowMap", flowmap_2_0_1);
+waterMat_2_0_1->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_2_0_1->setFloat("blendCycle", 1.0f);
+waterMat_2_0_1->setFloat("cycleSpeed", 1.0f);
+waterMat_2_0_1->setFloat("flowSpeed", 0.5f);
+waterMat_2_0_1->setTexture("flowMapNoise", noise);
+waterMat_2_0_1->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_2_0_1->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_2_0_1->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_1_0_3 = objectModule.newMaterial(flowmapShader, "waterMat_1_0_3", RenderType::Transparent);
+waterMat_1_0_3->setTexture("diffuse", water1Diffuse);
+waterMat_1_0_3->setTexture("normal", water1Normal);
+waterMat_1_0_3->setTexture("occRouMet", emptyOccRouMet);
+waterMat_1_0_3->setTexture("flowMap", flowmap_1_0_3);
+waterMat_1_0_3->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_1_0_3->setFloat("blendCycle", 1.0f);
+waterMat_1_0_3->setFloat("cycleSpeed", 1.0f);
+waterMat_1_0_3->setFloat("flowSpeed", 0.5f);
+waterMat_1_0_3->setTexture("flowMapNoise", noise);
+waterMat_1_0_3->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_1_0_3->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_1_0_3->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_1_0_1 = objectModule.newMaterial(flowmapShader, "waterMat_1_0_1", RenderType::Transparent);
+waterMat_1_0_1->setTexture("diffuse", water1Diffuse);
+waterMat_1_0_1->setTexture("normal", water1Normal);
+waterMat_1_0_1->setTexture("occRouMet", emptyOccRouMet);
+waterMat_1_0_1->setTexture("flowMap", flowmap_1_0_1);
+waterMat_1_0_1->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_1_0_1->setFloat("blendCycle", 1.0f);
+waterMat_1_0_1->setFloat("cycleSpeed", 1.0f);
+waterMat_1_0_1->setFloat("flowSpeed", 0.5f);
+waterMat_1_0_1->setTexture("flowMapNoise", noise);
+waterMat_1_0_1->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_1_0_1->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_1_0_1->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_1_0_0 = objectModule.newMaterial(flowmapShader, "waterMat_1_0_0", RenderType::Transparent);
+waterMat_1_0_0->setTexture("diffuse", water1Diffuse);
+waterMat_1_0_0->setTexture("normal", water1Normal);
+waterMat_1_0_0->setTexture("occRouMet", emptyOccRouMet);
+waterMat_1_0_0->setTexture("flowMap", flowmap_1_0_0);
+waterMat_1_0_0->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_1_0_0->setFloat("blendCycle", 1.0f);
+waterMat_1_0_0->setFloat("cycleSpeed", 1.0f);
+waterMat_1_0_0->setFloat("flowSpeed", 0.5f);
+waterMat_1_0_0->setTexture("flowMapNoise", noise);
+waterMat_1_0_0->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_1_0_0->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_1_0_0->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_0_0_m1 = objectModule.newMaterial(flowmapShader, "waterMat_0_0_m1", RenderType::Transparent);
+waterMat_0_0_m1->setTexture("diffuse", water1Diffuse);
+waterMat_0_0_m1->setTexture("normal", water1Normal);
+waterMat_0_0_m1->setTexture("occRouMet", emptyOccRouMet);
+waterMat_0_0_m1->setTexture("flowMap", flowmap_0_0_m1);
+waterMat_0_0_m1->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_0_0_m1->setFloat("blendCycle", 1.0f);
+waterMat_0_0_m1->setFloat("cycleSpeed", 1.0f);
+waterMat_0_0_m1->setFloat("flowSpeed", 0.5f);
+waterMat_0_0_m1->setTexture("flowMapNoise", noise);
+waterMat_0_0_m1->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_0_0_m1->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_0_0_m1->setVec2("uvScale", {1.0f, 1.0f});
+
+Material* waterMat_0_0_0 = objectModule.newMaterial(flowmapShader, "waterMat_0_0_0", RenderType::Transparent);
+waterMat_0_0_0->setTexture("diffuse", water1Diffuse);
+waterMat_0_0_0->setTexture("normal", water1Normal);
+waterMat_0_0_0->setTexture("occRouMet", emptyOccRouMet);
+waterMat_0_0_0->setTexture("flowMap", flowmap_0_0_0);
+waterMat_0_0_0->setVec2("channelFlowDirection", {-1.0f, 1.0f});
+waterMat_0_0_0->setFloat("blendCycle", 1.0f);
+waterMat_0_0_0->setFloat("cycleSpeed", 1.0f);
+waterMat_0_0_0->setFloat("flowSpeed", 0.5f);
+waterMat_0_0_0->setTexture("flowMapNoise", noise);
+waterMat_0_0_0->setVec2("flowNoiseSize", {1.0f, 1.0f});
+waterMat_0_0_0->setFloat("flowNoiseInfluence", 0.5f);
+waterMat_0_0_0->setVec2("uvScale", {1.0f, 1.0f});
+
+objectModule.newEntity(1, "WaterPlanesRoot");
+auto waterRoot = objectModule.newEmptyComponentForLastEntity<Transform>();
+    waterRoot->getLocalPositionModifiable() = {50.0f, -0.5f, -50.0f};
+    waterRoot->setParent(&sceneModule.rootNode);
+
 
 objectModule.newModel("Resources/Models/Plane.obj");
 {
     Entity* waterPlane0 = objectModule.getEntityPtrByName("Plane.obj/Plane");
     auto mr = waterPlane0->getComponentPtr<MeshRenderer>();
-        mr->material = waterMat;
+        mr->material = waterMat_0_0_0;
 
     auto t = waterPlane0->getComponentPtr<Transform>();
-        t->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
+        t->getLocalPositionModifiable() = {0.0f, 0.0f, 0.0f};
+        t->setParent(waterRoot);
+}
+
+objectModule.newEntity(2, "WaterPlane_0_0_m1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {0.0f, 0.0f, -100.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_0_0_m1;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_1_0_0");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-100.0f, 0.0f, 0.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_1_0_0;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_1_0_1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-100.0f, 0.0f, 100.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_1_0_1;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_1_0_3");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-100.0f, 0.0f, 300.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_1_0_3;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_1_0_3");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-100.0f, 0.0f, 300.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_1_0_3;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_2_0_1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-200.0f, 0.0f, 100.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_2_0_1;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_2_0_2");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-200.0f, 0.0f, 200.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_2_0_2;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_2_0_3");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-200.0f, 0.0f, 300.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_2_0_3;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_3_0_1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-300.0f, 0.0f, 100.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_3_0_1;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_3_0_2");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-300.0f, 0.0f, 200.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_3_0_2;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
+}
+
+objectModule.newEntity(2, "WaterPlane_3_0_3");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = {-300.0f, 0.0f, 300.0f};
+        t->setParent(waterRoot);
+
+    auto mr = objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+        mr->material = waterMat_3_0_3;
+        mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
 TextureCreateInfo i = {};
