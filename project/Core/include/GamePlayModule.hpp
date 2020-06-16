@@ -22,7 +22,11 @@ protected:
 private:
     Entity* loadingScreenEntity;
 
+    Entity* pauseScreenEntity;
+
     void reloadScene(std::string name);
+
+    
 };
 
 #endif /* !GAMEPLAYMODULE_HPP_ */
