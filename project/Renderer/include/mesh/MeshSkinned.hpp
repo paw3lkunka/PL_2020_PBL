@@ -12,7 +12,7 @@ class MeshSkinned : public Mesh
 {
 public:
     //TODO Documentation
-    MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath);
+    MeshSkinned(std::vector<VertexSkinned> vertices, std::vector<unsigned int> indices, Bounds bounds, std::string meshFilePath, std::string meshPath, bool customName);
     MeshSkinned() = default;
     virtual ~MeshSkinned();
 

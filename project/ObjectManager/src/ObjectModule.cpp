@@ -82,6 +82,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 
     // * setting serialization id for 1 (0 is scene root node)
     ISerializable::nextID = 1;
+    ObjectMaker::nextID = 0;
     //* reading scene
     sceneReader.readScene(newScenePath);
 
@@ -177,7 +178,7 @@ CubemapHdr* ObjectModule::newHdrCubemap(TextureCreateInfo createInfo, const char
     return objectMaker.newHdrCubemap(createInfo, frontPath, leftPath, rightPath, backPath, topPath, bottomPath);
 }
 
-void ObjectModule::newModel(const char* filePath, bool createEntities)
+void ObjectModule::newModel(const char* filePath, bool customName, bool createEntities)
 {
     for(auto m : objectContainer.meshes)
     {
@@ -186,7 +187,7 @@ void ObjectModule::newModel(const char* filePath, bool createEntities)
             return;
         }
     }
-    objectMaker.newModel(filePath, createEntities);
+    objectMaker.newModel(filePath, customName, createEntities);
 }
 
 Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType renderingType, bool instancingEnabled)

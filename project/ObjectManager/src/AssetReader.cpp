@@ -30,7 +30,6 @@
 
 bool AssetReader::hasInstance = false;
 unsigned int AssetReader::bonesAmount = 0;
-bool AssetReader::customMeshNames = false;
 
 AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule) 
 {
@@ -123,7 +122,7 @@ bool AssetReader::loadShader(std::string path)
 }
 
 
-bool AssetReader::loadMesh(std::string path, bool createEntities)
+bool AssetReader::loadMesh(std::string path, bool customName, bool createEntities)
 {
     makeEntities = createEntities;
 
@@ -141,7 +140,7 @@ bool AssetReader::loadMesh(std::string path, bool createEntities)
         globalInverseTransform = glm::inverse(aiMatrixToGlmMat4(scene->mRootNode->mTransformation));
 
         // * ----- Process and create entities with mesh renderers -----
-        processNode(scene->mRootNode, scene, path);
+        processNode(scene->mRootNode, scene, path, customName);
 
         // * ----- Process and create bones -----
         Entity* rootBone = processBone(scene->mRootNode, scene, path);
@@ -164,28 +163,34 @@ bool AssetReader::loadMesh(std::string path, bool createEntities)
     return true;
 }
 
-bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string path, Transform* parent)
+bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string path, bool customName, Transform* parent)
 {
     Transform* nodeTransform = nullptr;
     // ? +++++ Process meshes (if any) ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     for (size_t i = 0; i < node->mNumMeshes; i++)
     {
-        Mesh* newMesh = createMesh(scene->mMeshes[node->mMeshes[i]], path);
+        std::string meshName;
+        if (customName)
+        {
+            meshName = "mesh" + std::to_string(i);
+        }
+        else
+        {
+            meshName = scene->mMeshes[node->mMeshes[i]]->mName.C_Str();
+        }
+
+        Mesh* newMesh = createMesh(scene->mMeshes[node->mMeshes[i]], path, meshName, customName);
 
         // * ----- Create new entity with provided name -----
         Entity* e = nullptr;
         if (makeEntities)
         {
             size_t index = path.find_last_of("/\\");
-            if (!customMeshNames)
-            {
-                e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + scene->mMeshes[node->mMeshes[i]]->mName.C_Str());
-            }
-            else
-            {
-                e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/mesh" + std::to_string(i));
-            }
+
+            e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + meshName);
+
+
             std::cout << e->getName() << '\n';
 
             // * ----- Create transform and set parent -----
@@ -242,7 +247,7 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
     // ? +++++ Recursively call process node for all the children nodes +++++++++++++++++++++++
     for (int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene, path, nodeTransform);
+        processNode(node->mChildren[i], scene, path, customName, nodeTransform);
     }
 
     return true;
@@ -354,7 +359,7 @@ Animation* AssetReader::processAnimations(const aiScene* scene, std::string path
     }
 }
 
-Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
+Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path, std::string meshName, bool customName)
 {
     std::list<glm::vec3> positions;
     std::list<glm::vec3> normals;
@@ -474,7 +479,7 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
 
         // * ----- Add mesh to resource container -----
         // ! ===== Return appropriate mesh pointer =====
-        return objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, bounds, path, mesh->mName.C_Str());
+        return objectModulePtr->objectMaker.newMesh<MeshCustom, Vertex>(vertices, indices, bounds, path, meshName, customName);
     }
     else
     {
@@ -545,7 +550,7 @@ Mesh* AssetReader::createMesh(aiMesh* mesh, std::string path)
 
         // * ----- Add mesh to resource container -----
         // ! ===== Return appropriate mesh pointer =====
-        return objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, bounds, path, mesh->mName.C_Str());
+        return objectModulePtr->objectMaker.newMesh<MeshSkinned, VertexSkinned>(vertices, indices, bounds, path, meshName, customName);
     }
 }
 

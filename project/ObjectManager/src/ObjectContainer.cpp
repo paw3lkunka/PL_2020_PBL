@@ -158,14 +158,19 @@ Entity* ObjectContainer::getEntityFromSerializationID(unsigned int serialization
 
 Component* ObjectContainer::getComponentFromSerializationID(unsigned int serializationID)
 {
+    Component* sejakas = nullptr;
     for(auto c : components)
     {
+        //std::cout << "Looking for ID " << serializationID << ", checking ID " << c->serializationID << '\n'; 
         if(c->serializationID == serializationID)
         {
-            return c;
+            //std::cout << "SERIALIZATION ID " << serializationID << "FOUND!\n";
+            sejakas = c;
+            //std::cout << "GetComponentFromSerializationID: " << serializationID << " sejakas is null: " << (sejakas == nullptr) << '\n';
+            break;
         }
     }
-    return nullptr;
+    return sejakas;
 }
 
 Shader* ObjectContainer::getShaderFromSerializationID(unsigned int serializationID)
