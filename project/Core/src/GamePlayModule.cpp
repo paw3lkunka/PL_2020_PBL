@@ -1,10 +1,6 @@
 #include "GamePlayModule.hpp"
 #include "Message.inl"
 #include "Core.hpp"
-#include "ScenesPaths.hpp"
-#include "TerrainUtils.hpp"
-#include "Components.inc"
-#include "CubemapHdr.hpp"
 
 #include "ECS.inc"
 
@@ -41,29 +37,8 @@ void GamePlayModule::receiveMessage(Message msg)
 void GamePlayModule::init()
 {
     ObjectModule& om = GetCore().objectModule;
-    //loadingScreenEntity = om.newEntity(2, "LoadingScreen");
-    loadingScreenEntity = new Entity(-1, 2, "LoadingScreen");
-    TextureCreateInfo info = {};
-    info.format = GL_RGBA;
-    info.generateMipmaps = false;
-    info.magFilter = GL_LINEAR;
-    info.minFilter = GL_LINEAR;
-    info.wrapMode = GL_CLAMP_TO_EDGE;
-    auto tex = om.newTexture("Resources/Sprites/loding.png", info);
-    //auto uiRenderer = om.newEmptyComponentForLastEntity<UiRenderer>();
-    auto uiRenderer = new UiRenderer();
-    Shader* sh = om.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
-    uiRenderer->material = om.newMaterial(sh, "LoadingScreenMat", RenderType::Transparent);
-    uiRenderer->material->setVec4("color", {1.0f, 1.0f, 1.0f, 0.8f});
-    uiRenderer->material->setTexture("sprite", tex);
-
-    loadingScreenEntity->addComponent(uiRenderer);
-    auto rt = new RectTransform();
-    //auto rt = om.newEmptyComponentForLastEntity<RectTransform>();
-    rt->getAnchorModifiable() = {0.5f, 0.5f};
-    rt->getSizeModifiable() = {1920, 1080};
-    //GetCore().uiModule.rootNodes.push_back(rt);
-    loadingScreenEntity->addComponent(rt);
+    initLoadingScreen(om);
+    initPauseScreen(om);
 }
 
 void GamePlayModule::reloadScene(std::string name)
@@ -78,22 +53,38 @@ void GamePlayModule::reloadScene(std::string name)
     GetCore().rendererModule.render();
     GetCore().inputModule.clearFlags();
 
-    if(name.compare(Scenes::gameScene) == 0) //HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    {
-        ObjectModule& objectModule = GetCore().objectModule;
-        RendererModule& rendererModule = GetCore().rendererModule;
-        SceneModule& sceneModule = GetCore().sceneModule;
-        UiModule& uiModule = GetCore().uiModule;
-        #include "../../resources/Scenes/newScene.icpp"
-    }
-    else
-    {
-        GetCore().objectModule.unloadSceneAndLoadNew(name);
-    }
+    GetCore().objectModule.unloadSceneAndLoadNew(name);
     
     
     GetCore().messageBus.notify();
     
     GetCore().detectionBarSystem.init("DetectionProgressBar");
     GetCore().callbacksModule.init("Health_Bar");
+}
+
+void GamePlayModule::initLoadingScreen(ObjectModule& om)
+{
+    loadingScreenEntity = new Entity(-1, 2, "LoadingScreen");
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+    auto tex = om.newTexture("Resources/Sprites/loding.png", info);
+    auto uiRenderer = new UiRenderer();
+    uiStandard = om.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
+    uiRenderer->material = om.newMaterial(uiStandard, "LoadingScreenMat", RenderType::Transparent);
+    uiRenderer->material->setVec4("color", {1.0f, 1.0f, 1.0f, 0.8f});
+    uiRenderer->material->setTexture("sprite", tex);
+
+    loadingScreenEntity->addComponent(uiRenderer);
+    auto rt = new RectTransform();
+    rt->getAnchorModifiable() = {0.5f, 0.5f};
+    rt->getSizeModifiable() = {1920, 1080};
+    loadingScreenEntity->addComponent(rt);
+}
+
+void GamePlayModule::initPauseScreen(ObjectModule& om)
+{
+
 }
