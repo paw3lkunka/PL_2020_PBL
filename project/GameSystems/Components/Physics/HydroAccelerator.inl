@@ -22,7 +22,7 @@ struct HydroAccelerator : public Component
 //TODO documentation
     glm::vec3 angularVelocity = glm::vec3(0.0f);
 
-    float handling = 10.0f;
+    float handlingMultiplier = 0.2f;
     float acceleratorionMultiplier = 2.0f;
 };
 

@@ -127,7 +127,7 @@ objectModule.newEntity(4, "Camera");
             kayakPtr->addComponent(kayakRigidbody);
 
         auto kayakBoxCollider = objectModule.newEmptyComponent<BoxCollider>();
-            kayakBoxCollider->halfSize = glm::vec3(5.0f, 15.0f, 2.0f);
+            kayakBoxCollider->halfSize = glm::vec3(0.39f, 1.65f, 0.15f);
             kayakPtr->addComponent(kayakBoxCollider);
 
         auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();

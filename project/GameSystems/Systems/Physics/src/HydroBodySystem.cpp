@@ -106,12 +106,14 @@ void HydroBodySystem::fixedUpdate()
 
         velocity = rb->velocity;
     }
-    else
+    else if(glm::abs( glm::length(hydroAccelerator->velocity) ) > 0.001f)
     {
         rb = hydroAccelerator->rigidbody;
-        Transform* tran = rb->entityPtr->getComponentPtr<Transform>();
-        //glm::vec3 handlingPowerUp = hydroAccelerator->handling * static_cast<glm::vec3>( tran->getModelMatrix()[0] );
         glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+        Transform* kayakTran = rb->entityPtr->getComponentPtr<Transform>();
+        glm::vec3 accelerationDirection = glm::normalize( static_cast<glm::vec3>( -kayakTran->getModelMatrix()[1] ) );
+        accelerationDirection *= hydroAccelerator->acceleratorionMultiplier;
+        accelerationDirection.y = 0.0f;
 
         for(HydroTriangle triangle : hullTriangles.underwater)
         {
@@ -131,11 +133,19 @@ void HydroBodySystem::fixedUpdate()
             {
                 impulse.force *= -1.0f;
             }
-            impulse.force *= hydroAccelerator->acceleratorionMultiplier;
-            //impulse.force += handlingPowerUp;
+            impulse.force *= hydroAccelerator->handlingMultiplier;
 
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
+
+            rb->impulses.push_back(impulse);
+
+            impulse.force = accelerationDirection * glm::length(velocity);
+            if(hydroAccelerator->velocity.y > 0.0f)
+            {
+                impulse.force *= -1.0f;
+            }
+            impulse.type = Impulse::Type::CENTER_OF_MASS_FORCE;
 
             rb->impulses.push_back(impulse);
         }
