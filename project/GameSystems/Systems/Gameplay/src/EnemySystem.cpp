@@ -108,7 +108,15 @@ void EnemySystem::attack(glm::vec3 dir)
             
             AttackData data;
                 data.enemyPtr = enemyPtr;
-                data.success = GetCore().randomFloat01L() < enemyAttackPtr->successChance;
+                if (enemyAttackPtr->handicap-- < 0)
+                {
+                    data.success = GetCore().randomFloat01L() < enemyAttackPtr->successChance;
+                }
+                else
+                {
+                    data.success = false;
+                }
+                
 
             auto* shootT = Shoot::get().entityPtr->getComponentPtr<Transform>();
                 shootT->setParent(enemyTransformPtr);

@@ -320,6 +320,7 @@ TerrainUtils::importColliders();
             auto* ea = objectModule.newEmptyComponent<EnemyAttack>();
                 ea->activationValue = 30;
                 ea->incrementValue = 1;
+                ea->handicap = 5;
                 ea->successChance = 0.1f;
                 enemy->addComponent(ea);
         }
