@@ -18,6 +18,12 @@
 #include <assimp/scene.h>
 #include <assimp/anim.h>
 
+// !TEMP SHIT
+#include "ScenesPaths.hpp"
+#include "TerrainUtils.hpp"
+#include "Components.inc"
+#include "CubemapHdr.hpp"
+
 std::vector<Entity>* ObjectModule::getEntitiesVector()
 {
     return &objectContainer.entities;
@@ -83,8 +89,20 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
     // * setting serialization id for 1 (0 is scene root node)
     ISerializable::nextID = 1;
     ObjectMaker::nextID = 0;
-    //* reading scene
-    sceneReader.readScene(newScenePath);
+
+    if(newScenePath.compare(Scenes::gameScene) == 0) //HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    {
+        ObjectModule& objectModule = GetCore().objectModule;
+        RendererModule& rendererModule = GetCore().rendererModule;
+        SceneModule& sceneModule = GetCore().sceneModule;
+        UiModule& uiModule = GetCore().uiModule;
+        #include "../../resources/Scenes/newScene.icpp"
+    }
+    else
+    {
+        //* reading scene
+        sceneReader.readScene(newScenePath);
+    }
 
 
     // ! Finding main camera

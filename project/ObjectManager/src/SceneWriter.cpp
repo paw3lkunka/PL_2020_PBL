@@ -270,6 +270,10 @@ void SceneWriter::saveScene(const char* filePath)
         {
             saveEnemyAnimation(temp);
         }
+        else if(EnemyAttack* temp = dynamic_cast<EnemyAttack*>(objContainerPtr->components[i]))
+        {
+            saveEnemyAttack(temp);
+        }
         else if(UiRenderer* temp = dynamic_cast<UiRenderer*>(objContainerPtr->components[i]))
         {
             saveUiRenderer(temp);
@@ -333,6 +337,14 @@ void SceneWriter::saveScene(const char* filePath)
         else if(dynamic_cast<Hideout*>(objContainerPtr->components[i]))
         {
             (*json)[name]["type"] = "Hideout";
+        }
+        else if(dynamic_cast<ProgressBar*>(objContainerPtr->components[i]))
+        {
+            (*json)[name]["type"] = "ProgressBar";
+        }
+        else if(dynamic_cast<Shoot*>(objContainerPtr->components[i]))
+        {
+            (*json)[name]["type"] = "Shoot";
         }
     }
 
@@ -789,6 +801,15 @@ void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
 
         delete temp;
     }
+}
+
+void SceneWriter::saveEnemyAttack(EnemyAttack* componentPtr)
+{
+    (*json)[name]["type"] = "EnemyAttack";
+    (*json)[name]["attackCounter"] = componentPtr->attackCounter;
+    (*json)[name]["incrementValue"] = componentPtr->incrementValue;
+    (*json)[name]["activationValue"] = componentPtr->activationValue;
+    (*json)[name]["successChance"] = componentPtr->successChance;
 }
 
 #pragma endregion

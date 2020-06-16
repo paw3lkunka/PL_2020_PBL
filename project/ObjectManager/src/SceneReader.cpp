@@ -481,6 +481,21 @@ void SceneReader::readComponents()
             std::cout << "CargoStorage" << std::endl;
             readCargoStorage(name);
         }
+        else if(componentType == "ProgressBar")
+        {
+            std::cout << "ProgressBar" << std::endl;
+            readProgressBar(name);
+        }
+        else if(componentType == "EnemyAttack")
+        {
+            std::cout << "EnemyAttack" << std::endl;
+            readEnemyAttack(name);
+        }
+        else if(componentType == "Shoot")
+        {
+            std::cout << "Shoot" << std::endl;
+            readShoot(name);
+        }
     }
 
     for(int i = 0; i < componentsAmount; ++i)
@@ -1172,6 +1187,33 @@ void SceneReader::readCargoStorage(std::string name)
     auto cargoStorage = objModulePtr->newEmptyComponent<CargoStorage>();
     cargoStorage->serializationID = j->at(name).at("serializationID").get<unsigned int>();
     assignToEntity(name, cargoStorage);
+}
+
+void SceneReader::readProgressBar(std::string name)
+{
+    auto progressBar = objModulePtr->newEmptyComponent<ProgressBar>();
+    progressBar->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+    assignToEntity(name, progressBar);
+}
+
+void SceneReader::readShoot(std::string name)
+{
+    auto shoot = objModulePtr->newEmptyComponent<Shoot>();
+    shoot->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+    assignToEntity(name, shoot);
+}
+
+void SceneReader::readEnemyAttack(std::string name)
+{
+    auto enemyAttack = objModulePtr->newEmptyComponent<EnemyAttack>();
+    enemyAttack->serializationID = j->at(name).at("serializationID").get<unsigned int>();
+
+    enemyAttack->attackCounter = j->at(name).at("attackCounter").get<int>();
+    enemyAttack->incrementValue = j->at(name).at("incrementValue").get<int>();
+    enemyAttack->activationValue = j->at(name).at("activationValue").get<int>();
+    enemyAttack->successChance = j->at(name).at("successChance").get<float>();
+
+    assignToEntity(name, enemyAttack);
 }
 
 void SceneReader::assignToEntity(std::string name, Component* component)
