@@ -129,6 +129,7 @@ void HydroBodySystem::fixedUpdate()
             {
                 impulse.force *= -1.0f;
             }
+            impulse.force *= hydroAccelerator->powerUp;
 
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
