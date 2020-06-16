@@ -89,6 +89,7 @@ private:
     void saveToggleButton(ToggleButton* componentPtr);
     void saveCargoButton(CargoButton* componentPtr);
     void saveCargoStorage(CargoStorage* componentPtr);
+    void saveEnemyAttack(EnemyAttack* componentPtr);
 
     // ! didn't call it in saveComponents
     void saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser);
