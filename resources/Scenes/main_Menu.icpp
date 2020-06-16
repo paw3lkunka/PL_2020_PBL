@@ -54,12 +54,8 @@ objectModule.newEntity(2, "RiverFlow");
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
 
-    auto rect_1_1 = objectModule.newTexture("Resources/Sprites/rect_1_1.png", info);
-    auto rect_2_1 = objectModule.newTexture("Resources/Sprites/rect_2_1.png", info);
-    auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
-    auto rect_3_1 = objectModule.newTexture("Resources/Sprites/rect_3_1.png", info);
-    auto rect_25_10 = objectModule.newTexture("Resources/Sprites/rect_25_10.png", info);
-    auto rect_16_9 = objectModule.newTexture("Resources/Sprites/rect_16_9.png", info);
+    auto rect_border = objectModule.newTexture("Resources/Sprites/rect_border.png", info);
+    auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
 
     auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
     textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
@@ -73,8 +69,8 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto mat = objectModule.newMaterial(uiShader, "UiBg", RenderType::Opaque);
-            mat->setTexture("sprite", rect_16_9);
-            mat->setVec4("color", {0.086f, 0.513f, 0.713f, 1.0f});
+            mat->setTexture("sprite", paperTex);
+            mat->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
             ui->material = mat;
     }
 
@@ -106,7 +102,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "startMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
@@ -140,7 +136,7 @@ objectModule.newEntity(2, "RiverFlow");
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "optionsMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
@@ -174,7 +170,7 @@ objectModule.newEntity(2, "RiverFlow");
         
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
             auto buttMaterial = objectModule.newMaterial(uiShader, "exitMat", RenderType::Transparent);
-            buttMaterial->setTexture("sprite", rect_25_10);
+            buttMaterial->setTexture("sprite", rect_border);
             buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
             ui->material = buttMaterial;
         
