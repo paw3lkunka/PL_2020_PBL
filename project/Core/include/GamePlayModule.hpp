@@ -3,8 +3,10 @@
 
 #include "IModule.inl"
 #include <string>
+#include "Texture.hpp"
 
 class Entity;
+class Shader;
 
 class GamePlayModule : public IModule
 {
@@ -21,12 +23,16 @@ public:
 protected:
 private:
     Entity* loadingScreenEntity;
-
     Entity* pauseScreenEntity;
+
+    Shader* uiStandard;
+
+    TextureCreateInfo info = {};
 
     void reloadScene(std::string name);
 
-    
+    void initLoadingScreen(ObjectModule& om);
+    void initPauseScreen(ObjectModule& om);
 };
 
 #endif /* !GAMEPLAYMODULE_HPP_ */
