@@ -6,7 +6,7 @@
 
 void CallbacksModule::init(const char* hpBarName)
 {
-    Entity* e = GetCore().objectModule.getEntityPtrByName("Health_Bar");
+    Entity* e = GetCore().objectModule.getEntityPtrByName(hpBarName);
     if (e)
     {
         healthbarPtr = e->getComponentPtr<ProgressBar>();
