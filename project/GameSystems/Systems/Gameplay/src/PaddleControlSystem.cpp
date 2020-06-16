@@ -50,7 +50,7 @@ void PaddleControlSystem::fixedUpdate()
         {
             hydroAcceleratorPtr->velocity = (newPos - transformPtr->getLocalPosition()) * hydroAcceleratorPtr->powerUp;
             hydroAcceleratorPtr->angularVelocity = (glm::vec3(frontRot, sideRot, eulerRot.z) - eulerRot);
-            hydroAcceleratorPtr->angularVelocity.z *= hydroAcceleratorPtr->handling;
+            hydroAcceleratorPtr->angularVelocity.y *= hydroAcceleratorPtr->handling;
         }
     }
 
