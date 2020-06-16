@@ -42,10 +42,10 @@ objectModule.newEntity(2, "RiverFlow");
     auto josefin = objectModule.newFont("Resources/Fonts/JosefinSans-Regular.ttf", 128, "JosefinSans-Regular");
     auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
 
-    glm::vec4 baseColor = glm::vec4(0.709f, 0.709f, 0.709f, 0.7f);
-    glm::vec4 inactiveColor = glm::vec4(0.1f, 0.1f, 0.1f, 0.7f);
-    glm::vec4 highlightedColor = glm::vec4(0.870f, 0.870f, 0.870f, 0.7f);
-    glm::vec4 onClickColor = glm::vec4(0.5f, 0.5f, 0.5f, 0.7f);
+    glm::vec4 baseColor = {0.733f, 0.066f, 0.066f, 1.0f};
+    glm::vec4 inactiveColor = {0.733f, 0.066f, 0.066f, 1.0f};
+    glm::vec4 highlightedColor = {0.858f, 0.078f, 0.078f, 1.0f};
+    glm::vec4 onClickColor = {0.654f, 0.066f, 0.066f, 1.0f};
 
     TextureCreateInfo info = {};
     info.format = GL_RGBA;
@@ -58,7 +58,9 @@ objectModule.newEntity(2, "RiverFlow");
     auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
 
     auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
-    textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+    textMaterial->setVec4("color", baseColor);
+    auto textMaterialBlack = objectModule.newMaterial(textShader, "TextMaterialBlack", RenderType::Transparent);
+    textMaterialBlack->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
 
     objectModule.newEntity(2, "Ui_Menu_Background");
     {
@@ -83,7 +85,7 @@ objectModule.newEntity(2, "RiverFlow");
                 uiModule.rootNodes.push_back(crt);
 
             auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
-                cui->material = textMaterial;
+                cui->material = textMaterialBlack;
                 cui->mesh.font = josefin;
                 cui->mesh.text = "Current";
         }
@@ -96,8 +98,9 @@ objectModule.newEntity(2, "RiverFlow");
     objectModule.newEntity(3, "Start_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {170, 350};
+            rt->getLocalPositionModifiable() = {168, 357};
             rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->getLocalRotationModifiable() = glm::radians(1.0f);
             rt->setParent(buttonsRoot);
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
@@ -130,8 +133,9 @@ objectModule.newEntity(2, "RiverFlow");
     objectModule.newEntity(3, "Options_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {170, 230};
+            rt->getLocalPositionModifiable() = {180, 230};
             rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->getLocalRotationModifiable() = glm::radians(1.5f);
             rt->setParent(buttonsRoot);
 
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
@@ -164,8 +168,9 @@ objectModule.newEntity(2, "RiverFlow");
     objectModule.newEntity(3, "Exit_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rt->getLocalPositionModifiable() = {170, 111};
+            rt->getLocalPositionModifiable() = {161, 105};
             rt->getSizeModifiable() = {250.0f, 100.0f};
+            rt->getLocalRotationModifiable() = glm::radians(0.5f);
             rt->setParent(buttonsRoot);
         
         auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();

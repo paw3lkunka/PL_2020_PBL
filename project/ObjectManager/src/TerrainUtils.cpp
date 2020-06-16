@@ -27,6 +27,10 @@ void TerrainUtils::loadAllTerrainChunks()
     auto rockGrassDiffuse = GetCore().objectModule.newTexture("Resources/Textures/rockGrass/rockGrass_diffuse.png", texCreateInfo);
     auto rockGrassNormal = GetCore().objectModule.newTexture("Resources/Textures/rockGrass/rockGrass_normal.png", texCreateInfo);
 
+    auto sand1Diffuse = GetCore().objectModule.newTexture("Resources/Textures/Unity/Sand_albedo.png", texCreateInfo);
+    auto sand1Normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Sand_normal.png", texCreateInfo);
+    auto sand1Specular = GetCore().objectModule.newTexture("Resources/Textures/Unity/Sand_occroumet.png", texCreateInfo);
+
     auto whiteTex = GetCore().objectModule.newTexture("Resources/Textures/white.png", texCreateInfo);
     auto blackTex = GetCore().objectModule.newTexture("Resources/Textures/black.png", texCreateInfo);
     auto bumpTex = GetCore().objectModule.newTexture("Resources/Textures/bump.png", texCreateInfo);
@@ -48,11 +52,11 @@ void TerrainUtils::loadAllTerrainChunks()
     terrainMat->setTexture("diffuse2", grass1Diffuse);
     terrainMat->setTexture("normal2", grass1Normal);
     terrainMat->setTexture("orm2", grass1Specular);
-    glm::vec2 uv3s = {1.0f, 1.0f};
+    glm::vec2 uv3s = {8.0f, 8.0f};
     terrainMat->setVec2("uv3scale", uv3s);
-    terrainMat->setTexture("diffuse3", whiteTex);
-    terrainMat->setTexture("normal3", bumpTex);
-    terrainMat->setTexture("orm3", occroumetTex);
+    terrainMat->setTexture("diffuse3", sand1Diffuse);
+    terrainMat->setTexture("normal3", sand1Normal);
+    terrainMat->setTexture("orm3", sand1Specular);
 
     Entity* terrain = GetCore().objectModule.newEntity(1, "Terrain");
     auto terrainRoot = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -125,6 +129,10 @@ void TerrainUtils::loadExportedUnityModels()
         if (entry.path().filename().string() == "exportinfo.txt")
         {
             exportInfoPath = entry;
+        }
+        else if (entry.path().filename().string() == "colliders.txt")
+        {
+            // do nothing
         }
         else
         {
@@ -303,6 +311,7 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.3f);
 
     albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_D.TGA", tci);
     normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/T_Rock_01_N.TGA", tci);
@@ -375,6 +384,65 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.7f);
+}
+
+void TerrainUtils::importColliders()
+{
+    Entity* colliders = GetCore().objectModule.newEntity(1, "collidersRoot");
+    auto collidersRoot = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
+        collidersRoot->getLocalPositionModifiable() = glm::vec3(50, -100, -50);
+        collidersRoot->setParent(&GetCore().sceneModule.rootNode);
+
+
+    std::fstream colliderInfo;
+    colliderInfo.open("Resources/Models/Unity/colliders.txt", std::ios::in);
+    if (colliderInfo.is_open())
+    {
+        //GetCore().objectModule.newModel("Resources/Models/Box.FBX", false, false);
+        std::string line;
+        glm::vec3 position;
+        glm::quat rotation;
+        glm::vec3 halfSize;
+        size_t index = 0;
+        int i = 0;
+
+        while(std::getline(colliderInfo, line))
+        {
+            index = line.find_first_of('$');
+            if (index != std::string::npos)
+            {
+                std::getline(colliderInfo, line);
+                position = stringToVec3(line);
+                position.x = -position.x;
+                std::getline(colliderInfo, line);
+                rotation = stringToQuat(line);
+                std::getline(colliderInfo, line);
+                halfSize = stringToVec3(line);
+                // float temp = halfSize.x;
+                // halfSize.x = halfSize.z;
+                // halfSize.z = temp;
+
+                Entity* colliderEntity = GetCore().objectModule.newEntity(3, "ImpCollider" + std::to_string(i++));
+
+                auto t = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable() = position;
+                    t->getLocalRotationModifiable() = rotation;
+                    t->getLocalScaleModifiable() = halfSize * 2.0f;
+                    t->setParent(collidersRoot);
+                // auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                //     mr->mesh = GetCore().objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+                auto col = GetCore().objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    col->halfSize = halfSize;
+                auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                    rb->type = rp3d::BodyType::STATIC;
+            }
+        }
+    }
+    else
+    {
+        std::cout << "Unable to read colliders!!!!\n";
+    }
 }
 
 glm::vec3 TerrainUtils::stringToVec3(std::string line)

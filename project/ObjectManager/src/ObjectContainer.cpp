@@ -25,10 +25,10 @@ ObjectContainer::ObjectContainer(ObjectModule* objModule) : objModule(objModule)
     }
     hasInstance = true;
     shaders.reserve(50);
-    components.reserve(400);
-    entities.reserve(400);
-    meshes.reserve(50);
-    textures.reserve(50);
+    components.reserve(1500);
+    entities.reserve(600);
+    meshes.reserve(150);
+    textures.reserve(200);
     cubemaps.reserve(10);
     hdrCubemaps.reserve(10);
     materials.reserve(50);

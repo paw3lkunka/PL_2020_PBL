@@ -69,6 +69,9 @@ private:
     void readToggleButton(std::string name);
     void readCargoButton(std::string name);
     void readCargoStorage(std::string name);
+    void readProgressBar(std::string name);
+    void readShoot(std::string name);
+    void readEnemyAttack(std::string name);
     
     //! other purposes
     void readCargo(std::string name);

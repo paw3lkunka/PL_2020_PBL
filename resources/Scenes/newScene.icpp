@@ -30,6 +30,8 @@ waterMat->setVec2("flowNoiseSize", {1.0f, 1.0f});
 waterMat->setFloat("flowNoiseInfluence", 0.5f);
 waterMat->setVec2("uvScale", {1.0f, 1.0f});
 
+//objectModule.newModel("Resources/Models/unit_sphere.FBX");
+
 objectModule.newModel("Resources/Models/Plane.obj");
 {
     Entity* waterPlane0 = objectModule.getEntityPtrByName("Plane.obj/Plane");
@@ -113,8 +115,8 @@ objectModule.newEntity(4, "Camera");
             mr->material = kayakMat;
 
         auto t = kayakPtr->getComponentPtr<Transform>();
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90, 0, 0));
-            t->getLocalPositionModifiable() = glm::vec3(-13, 0, -55);
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
             t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
             t->setParent(&sceneModule.rootNode);
 
@@ -176,6 +178,7 @@ objectModule.newEntity(4, "Camera");
 TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
+TerrainUtils::importColliders();
 
 //Game UI
 {
