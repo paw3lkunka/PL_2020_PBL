@@ -19,6 +19,10 @@ namespace TerrainUtils
      */
     void createMaterialsForModels();
     /**
+     * @brief Imports box colliders from Unity
+     */
+    void importColliders();
+    /**
      * @brief Converts space-separated string to vec3
      * 
      * @return glm::vec3 parsed vector
