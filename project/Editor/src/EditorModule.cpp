@@ -446,11 +446,9 @@ void EditorModule::sortEntities(SortingType sortingType)
 {
     entities.clear();
 
-    int entitiesSize = (*objectModule->getEntitiesVector()).size();
-
-    for(int i = 0; i < entitiesSize; ++i)
+    for(auto a : (*objectModule->getEntitiesVector()))
     {
-        Entity* temp = objectModule->getEntityPtrByID(i);
+        Entity* temp = &a;
         switch(sortingType)
         {
             case SortingType::TRANSFORM_WITHOUT_BONES:
@@ -502,14 +500,15 @@ void EditorModule::sortEntities(SortingType sortingType)
                 }
             break;
         }
-        insertEntityToList(i);
+        insertEntityToList(temp);
     }
 
     if(entities.size() == 0)
     {
-        for(int i = 0; i < entitiesSize; ++i)
+        for(auto a : (*objectModule->getEntitiesVector()))
         {
-            insertEntityToList(i);
+            Entity* temp = &a;
+            insertEntityToList(temp);
             enumValue = 0;
         }
     }
@@ -530,13 +529,16 @@ unsigned int EditorModule::getEntityIdFromCombo(int chosenField)
     return std::stoi(idString);
 }
 
-void EditorModule::insertEntityToList(unsigned int id)
+void EditorModule::insertEntityToList(Entity* entity)
 {
-    entities += "ID ";
-    entities += std::to_string(id);
-    entities += " Name: ";
-    entities += objectModule->getEntityPtrByID(id)->getName();
-    entities += char(0);
+    if(entity != nullptr)
+    {
+        entities += "ID ";
+        entities += std::to_string(entity->getId());
+        entities += " Name: ";
+        entities += entity->getName();
+        entities += char(0);
+    }
 }
 
 void EditorModule::drawMaker()

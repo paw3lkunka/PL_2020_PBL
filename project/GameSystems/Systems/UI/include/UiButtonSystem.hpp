@@ -11,7 +11,7 @@ struct RectTransform;
 struct UiRenderer;
 
 //TODO documentation
-class UiButtonSystem : public System, public IMsgReceiver
+class UiButtonSystem : public IMsgReceiver, public System
 {
 public:
     UiButtonSystem() : System(false) {}

@@ -12,6 +12,7 @@ bool UiButtonSystem::assertEntity(Entity* entity)
     return (buttonPtr != nullptr) && (rendererPtr != nullptr) && (rectTransformPtr != nullptr);
 }
 
+#include <glm/gtx/string_cast.hpp>
 void UiButtonSystem::frameUpdate()
 {
     if(buttonPtr->isActive) //check if button is active

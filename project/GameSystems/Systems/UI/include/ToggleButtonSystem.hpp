@@ -14,7 +14,7 @@ struct RectTransform;
 class ToggleButtonSystem : public System, public IMsgReceiver
 {
 public:
-    ToggleButtonSystem() = default;
+    ToggleButtonSystem() : System(false) {};
     ~ToggleButtonSystem() = default;
 
     ///@brief inherited from IMsgReceiver
