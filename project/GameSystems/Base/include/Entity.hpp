@@ -84,6 +84,11 @@ public:
     T* getComponentPtr(int n = 0) const;
     
     virtual ~Entity() = default;
+
+    bool operator== (const Entity& other)
+    {
+        return (this->id == other.id) && (this->name.compare(other.name) == 0);
+    }
 protected:
 private:
     /**

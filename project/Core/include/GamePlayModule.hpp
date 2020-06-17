@@ -22,8 +22,8 @@ public:
 
 protected:
 private:
-    Entity* loadingScreenEntity;
-    Entity* pauseScreenEntity;
+    Entity* loadingScreenEntity = nullptr;
+    Entity* pauseScreenEntity = nullptr;
 
     Shader* uiStandard;
 
@@ -33,6 +33,9 @@ private:
 
     void initLoadingScreen(ObjectModule& om);
     void initPauseScreen(ObjectModule& om);
+
+    void pauseGame();
+
 };
 
 #endif /* !GAMEPLAYMODULE_HPP_ */

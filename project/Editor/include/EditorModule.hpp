@@ -123,7 +123,7 @@ private:
      * 
      * @param id entity id to insert
      */
-    void insertEntityToList(unsigned int id);
+    void insertEntityToList(Entity* entity);
 };
 
 #endif /* !EDITORMODULE_HPP_ */

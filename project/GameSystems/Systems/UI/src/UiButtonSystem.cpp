@@ -12,11 +12,13 @@ bool UiButtonSystem::assertEntity(Entity* entity)
     return (buttonPtr != nullptr) && (rendererPtr != nullptr) && (rectTransformPtr != nullptr);
 }
 
+#include <glm/gtx/string_cast.hpp>
 void UiButtonSystem::frameUpdate()
 {
     if(buttonPtr->isActive) //check if button is active
     {
         glm::ivec2 buttonPos = rectTransformPtr->getScreenPosition();
+        std::cout << rectTransformPtr->entityPtr->getName() << " " << glm::to_string(buttonPos) << std::endl;
         glm::ivec2 buttonSize = rectTransformPtr->getSize();
         // * check if mouse pointer is in button
         if( lastCursorData.xPos > (buttonPos.x - (buttonSize.x / 2.0f))
