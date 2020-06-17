@@ -92,7 +92,7 @@ void GamePlayModule::initPauseScreen(ObjectModule& om)
     auto bg = om.newTexture("Resources/Sprites/paper.png", info);
     auto uiRenderer = new UiRenderer();
     uiRenderer->material = om.newMaterial(uiStandard, "PauseScreenMat", RenderType::Transparent);
-    uiRenderer->material->setVec4("color", {0.0f, 1.0f, 1.0f, 0.8f});
+    uiRenderer->material->setVec4("color", {1.0f, 1.0f, 1.0f, 0.8f});
     uiRenderer->material->setTexture("sprite", bg);
 
     pauseScreenEntity->addComponent(uiRenderer);
@@ -126,8 +126,7 @@ void GamePlayModule::initPauseScreen(ObjectModule& om)
         auto rect_border = om.newTexture("Resources/Sprites/rect_border.png", info);
         glm::vec4 baseColor = {0.733f, 0.066f, 0.066f, 1.0f};
         glm::vec4 inactiveColor = {0.733f, 0.066f, 0.066f, 1.0f};
-        glm::vec4 highlightedColor = {0.0f, 0.078f, 0.078f, 1.0f};
-        //glm::vec4 highlightedColor = {0.858f, 0.078f, 0.078f, 1.0f};
+        glm::vec4 highlightedColor = {0.858f, 0.078f, 0.078f, 1.0f};
         glm::vec4 onClickColor = {0.654f, 0.066f, 0.066f, 1.0f};
 
         auto textMaterial = om.newMaterial(textShader, "buttonsText", RenderType::Transparent);
