@@ -251,7 +251,7 @@ int Core::mainLoop()
     uiModule.updateRectTransforms();
     editorModule.setup();
     detectionBarSystem.init("DetectionProgressBar");
-    callbacksModule.init("Health_Bar");
+    callbacksModule.init("Health_Bar", 30.0f);
 
     // ! ----- START SYSTEM FUNCTION -----
 

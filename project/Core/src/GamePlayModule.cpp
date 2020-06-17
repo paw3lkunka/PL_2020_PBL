@@ -59,7 +59,7 @@ void GamePlayModule::reloadScene(std::string name)
     GetCore().messageBus.notify();
     
     GetCore().detectionBarSystem.init("DetectionProgressBar");
-    GetCore().callbacksModule.init("Health_Bar");
+    GetCore().callbacksModule.init("Health_Bar", 30.0f);
 }
 
 void GamePlayModule::initLoadingScreen(ObjectModule& om)

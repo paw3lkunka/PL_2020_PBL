@@ -1,16 +1,19 @@
 #include "CallbacksModule.hpp"
 #include "MessageBus.hpp"
 #include "PhysicStructures.inl"
+#include "EnemyDataStructures.inl"
 #include "ECS.inc"
 
 
-void CallbacksModule::init(const char* hpBarName)
+void CallbacksModule::init(const char* hpBarName, float bulletDamage)
 {
     Entity* e = GetCore().objectModule.getEntityPtrByName(hpBarName);
     if (e)
     {
         healthbarPtr = e->getComponentPtr<ProgressBar>();
     }
+
+    this->bulletDamage = bulletDamage;
 }
 
 void CallbacksModule::receiveMessage(Message msg)
@@ -29,6 +32,15 @@ void CallbacksModule::receiveMessage(Message msg)
                 {
                     rocksHit();
                 }
+            }
+        }
+            return;
+
+        case Event::PLAYER_ATTACKED:
+        {
+            if (msg.getValue<AttackData>().success)
+            {
+                bulletHit();
             }
         }
             return;
@@ -55,5 +67,22 @@ void CallbacksModule::rocksHit()
         {
             GetCore().messageBus.sendMessage(Message(Event::HP_0));
         }
+    }
+}
+
+void CallbacksModule::bulletHit()
+{
+    auto kayak = Kayak::get();
+    
+    kayak->hp -= bulletDamage;
+    
+    if (healthbarPtr)
+    {
+        healthbarPtr->percentage = kayak->hp / kayak->maxHp;
+    }
+
+    if (kayak->hp <= 0)
+    {
+        GetCore().messageBus.sendMessage(Message(Event::HP_0));
     }
 }
