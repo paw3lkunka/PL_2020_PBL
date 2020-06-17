@@ -13,7 +13,7 @@ class Message;
 class TerrainRendererSystem : public System
 {
 public:
-    TerrainRendererSystem() = default;
+    TerrainRendererSystem() : System(false) {}
     virtual ~TerrainRendererSystem() = default;
 
 protected:

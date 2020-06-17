@@ -472,7 +472,7 @@ void RendererModule::render()
     {
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        ImGui::Render();
+        //ImGui::Render();
 
         glm::mat4 VP = glm::mat4(1.0f);
 
@@ -846,7 +846,7 @@ void RendererModule::render()
 
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);

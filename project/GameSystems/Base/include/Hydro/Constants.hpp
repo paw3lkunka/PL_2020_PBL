@@ -15,7 +15,7 @@ namespace HydroConstants
 
     /// @brief Water viscosity for 18 Celsius degree temperature
     constexpr float VISCOSITY_WATER = 0.00001002f; // 0.010533f in [cm^2 / s]
-    constexpr float VISCOUS_FORCE_MULTIPLIER = 3.0f;
+    constexpr float VISCOUS_FORCE_MULTIPLIER = 7.0f;
     
     constexpr float PRESSURE_DRAG_COEFFICIENT = 1.0f;
     constexpr float PRESSURE_FALL_OF_POWER = 0.5f;
