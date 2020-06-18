@@ -115,8 +115,7 @@ int Core::init()
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
-    messageBus.addReceiver( &inputModule );    
-    messageBus.addReceiver( &callbacksModule );    
+    messageBus.addReceiver( &inputModule ); 
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
@@ -196,11 +195,12 @@ int Core::init()
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    gamePlayModule.initScreens();
+
     uiModule.init();
 
     // ! IMGUI initialize
     editorModule.init(window);
-    gamePlayModule.init();
 
 #pragma regnon attach systems
 
@@ -251,7 +251,7 @@ int Core::mainLoop()
     uiModule.updateRectTransforms();
     editorModule.setup();
     detectionBarSystem.init("DetectionProgressBar");
-    callbacksModule.init("Health_Bar", 30.0f);
+    gamePlayModule.init("Health_Bar", 30.0f);
 
     // ! ----- START SYSTEM FUNCTION -----
 

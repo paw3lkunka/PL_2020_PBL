@@ -7,6 +7,7 @@
 
 class Entity;
 class Shader;
+struct ProgressBar;
 
 class GamePlayModule : public IModule
 {
@@ -18,7 +19,10 @@ public:
     virtual void receiveMessage(Message msg);
 
     ///@brief initialize module
-    void init();
+    void init(const char* hpBarName, float bulletDamage);
+
+    ///@brief initialize screens
+    void initScreens();
 
 protected:
 private:
@@ -36,8 +40,25 @@ private:
     void initPauseScreen(ObjectModule& om);
     void initYouDieScreen(ObjectModule& om);
 
+    ///@brief show pause screen
     void pauseGame();
+    ///@brief show you died screen
     void youDied();
+
+    /**
+     * @brief Called, when kayak hit obsticles.
+     * Also sets health bar - if present.
+     */
+    void rocksHit();
+
+    /**
+     * @brief Called, when kayak is hitten by bullet.
+     * Also sets health bar - if present.
+     */
+    void bulletHit();
+    
+    ProgressBar* healthbarPtr = nullptr;
+    float bulletDamage = 100.0f;
 };
 
 #endif /* !GAMEPLAYMODULE_HPP_ */

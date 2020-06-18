@@ -2,6 +2,7 @@
 #include "Message.inl"
 #include "Core.hpp"
 #include "ScenesPaths.hpp"
+#include "EnemyDataStructures.inl"
 
 #include "ECS.inc"
 
@@ -9,6 +10,27 @@ void GamePlayModule::receiveMessage(Message msg)
 {
     switch(msg.getEvent())
     {
+        case Event::COLLISION_ENTER:
+            if (Kayak::get() != nullptr)
+            {
+                auto data = msg.getValue<CollisionData>();
+                bool valid = false;
+                valid |= data.body1->entityPtr == Kayak::get()->entityPtr;
+                valid |= data.body2->entityPtr == Kayak::get()->entityPtr;
+                if (valid)
+                {
+                    rocksHit();
+                }
+            }
+        break;
+
+        case Event::PLAYER_ATTACKED:
+            if (msg.getValue<AttackData>().success)
+            {
+                bulletHit();
+            }
+        break;
+
         case Event::EXIT_GAME:
             Core::instance->close();
         break;
@@ -47,7 +69,18 @@ void GamePlayModule::receiveMessage(Message msg)
     }
 }
 
-void GamePlayModule::init()
+void GamePlayModule::init(const char* hpBarName, float bulletDamage)
+{
+    Entity* e = GetCore().objectModule.getEntityPtrByName(hpBarName);
+    if (e)
+    {
+        healthbarPtr = e->getComponentPtr<ProgressBar>();
+    }
+
+    this->bulletDamage = bulletDamage;
+}
+
+void GamePlayModule::initScreens()
 {
     ObjectModule& om = GetCore().objectModule;
 
@@ -80,7 +113,7 @@ void GamePlayModule::reloadScene(std::string name)
     GetCore().messageBus.notify();
     
     GetCore().detectionBarSystem.init("DetectionProgressBar");
-    GetCore().callbacksModule.init("Health_Bar", 30.0f);
+    init("Health_Bar", 30.0f);
 }
 
 void GamePlayModule::initLoadingScreen(ObjectModule& om)
@@ -208,7 +241,6 @@ void GamePlayModule::initPauseScreen(ObjectModule& om)
                 butt->inactiveColor = inactiveColor;
                 butt->highlightedColor = highlightedColor;
                 butt->onClickColor = onClickColor;
-                butt->onClickEvents.push_back(Message(Event::PAUSE_GAME));
                 butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::mainMenuScene));
                 entity->addComponent(butt);
         }
@@ -297,7 +329,6 @@ void GamePlayModule::initYouDieScreen(ObjectModule& om)
                 butt->inactiveColor = inactiveColor;
                 butt->highlightedColor = highlightedColor;
                 butt->onClickColor = onClickColor;
-                butt->onClickEvents.push_back(Message(Event::PAUSE_GAME));
                 butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::mainMenuScene));
                 butt->isActive = true;
                 entity->addComponent(butt);
@@ -433,5 +464,45 @@ void GamePlayModule::youDied()
                 }
             }
         }
+    }
+}
+
+void GamePlayModule::rocksHit()
+{
+    auto kayak = Kayak::get();
+    float velocity = glm::length(kayak->entityPtr->getComponentPtr<Rigidbody>()->velocity);
+    float base = velocity - kayak->hitDamageTreshold;
+
+    if (base > 0)
+    {
+        kayak->hp -= kayak->hitDamagefactor * base;
+        kayak->hp = std::max(kayak->hp, 0.0f);
+
+        if (healthbarPtr)
+        {
+            healthbarPtr->percentage = kayak->hp / kayak->maxHp;
+        }
+
+        if (kayak->hp <= 0)
+        {
+            GetCore().messageBus.sendMessage(Message(Event::HP_0));
+        }
+    }
+}
+
+void GamePlayModule::bulletHit()
+{
+    auto kayak = Kayak::get();
+    
+    kayak->hp -= bulletDamage;
+    
+    if (healthbarPtr)
+    {
+        healthbarPtr->percentage = kayak->hp / kayak->maxHp;
+    }
+
+    if (kayak->hp <= 0)
+    {
+        GetCore().messageBus.sendMessage(Message(Event::HP_0));
     }
 }
