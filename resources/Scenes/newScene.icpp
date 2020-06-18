@@ -398,7 +398,7 @@ objectModule.newEntity(4, "Camera");
         // KAYAK MAN
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
             kayakRigidbody->drag = 0.2f;
-            kayakRigidbody->angularDrag = 0.1f;
+            kayakRigidbody->angularDrag = 0.25f;
             kayakRigidbody->mass = 150.0f;
             kayakRigidbody->ignoreGravity = false;
             kayakPtr->addComponent(kayakRigidbody);

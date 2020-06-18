@@ -472,7 +472,7 @@ void RendererModule::render()
     {
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        //ImGui::Render();
+        ImGui::Render();
 
         glm::mat4 VP = glm::mat4(1.0f);
 
@@ -816,6 +816,26 @@ void RendererModule::render()
         combineShader->setInt("bloom4", 5);
         combineShader->setInt("ssao", 6);
         combineShader->setFloat("exposure", cameraMain->exposure);
+        if (Kayak::get() != nullptr)
+        {
+            static float hideFactor = 0.0f;
+            static float lerpTime = 0.0f;
+            if (Kayak::get()->isHidden > 0 && hideFactor < 1.0f)
+            {
+                lerpTime += 0.05f;
+            }
+            else if (lerpTime > 0.0f)
+            {
+                lerpTime -= 0.05f;
+            }
+            hideFactor = glm::mix(0.0f, 1.0f, lerpTime);
+            combineShader->setFloat("vignette", hideFactor);
+        }
+        else
+        {
+            combineShader->setFloat("vignette", 0.0f);
+        }
+        
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
         glActiveTexture(GL_TEXTURE1);
@@ -846,7 +866,7 @@ void RendererModule::render()
 
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
