@@ -419,9 +419,6 @@ void TerrainUtils::importColliders()
                 rotation = stringToQuat(line);
                 std::getline(colliderInfo, line);
                 halfSize = stringToVec3(line);
-                // float temp = halfSize.x;
-                // halfSize.x = halfSize.z;
-                // halfSize.z = temp;
 
                 Entity* colliderEntity = GetCore().objectModule.newEntity(3, "ImpCollider" + std::to_string(i++));
 
@@ -436,6 +433,54 @@ void TerrainUtils::importColliders()
                     col->halfSize = halfSize;
                 auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
                     rb->type = rp3d::BodyType::STATIC;
+            }
+        }
+    }
+    else
+    {
+        std::cout << "Unable to read colliders!!!!\n";
+    }
+
+    std::fstream hideSpotInfo;
+    hideSpotInfo.open("Resources/hideColliders.txt", std::ios::in);
+    if (hideSpotInfo.is_open())
+    {
+        //GetCore().objectModule.newModel("Resources/Models/Box.FBX", false, false);
+        std::string line;
+        glm::vec3 position;
+        glm::quat rotation;
+        glm::vec3 halfSize;
+        size_t index = 0;
+        int i = 0;
+
+        while(std::getline(hideSpotInfo, line))
+        {
+            index = line.find_first_of('$');
+            if (index != std::string::npos)
+            {
+                std::getline(hideSpotInfo, line);
+                position = stringToVec3(line);
+                position.x = -position.x;
+                std::getline(hideSpotInfo, line);
+                rotation = stringToQuat(line);
+                std::getline(hideSpotInfo, line);
+                halfSize = stringToVec3(line);
+
+                Entity* colliderEntity = GetCore().objectModule.newEntity(4, "HideZone" + std::to_string(i++));
+
+                auto t = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable() = position;
+                    t->getLocalRotationModifiable() = rotation;
+                    t->getLocalScaleModifiable() = halfSize * 2.0f;
+                    t->setParent(collidersRoot);
+                // auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                //     mr->mesh = GetCore().objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+                auto col = GetCore().objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    col->halfSize = halfSize;
+                    col->isTrigger = true;
+                auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                    rb->type = rp3d::BodyType::STATIC;
+                auto hs = GetCore().objectModule.newEmptyComponentForLastEntity<Hideout>();
             }
         }
     }

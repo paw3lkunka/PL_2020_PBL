@@ -104,7 +104,7 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diff = irradiance * albedo;
 	vec3 ambient = (kD * diff) * ao;
-	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.95);
+	vec3 color = (ambient + Lo) * (1.0 - directionalShadow * 0.7);
 
 	// TODO: Better alpha sampling
 	FragColor = vec4(color, texture(diffuse, Texcoord).a);
