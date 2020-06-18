@@ -330,11 +330,20 @@ Mesh* ObjectContainer::getMeshByMeshPath(std::string meshPath)
 
 void ObjectContainer::unloadScene()
 {
-    for(int i = components.size() - 1; i > 0; --i)
+    for(auto c : components)
     {
-        delete components[i];
-        components[i] = nullptr;
+        delete c;
+        c = nullptr;
     }
     components.clear();
+
+    //HACK: i don't like it, but for now it should be
+    for(auto m : meshes)
+    {
+        delete m;
+        m = nullptr;
+    }
+    meshes.clear();
+
     entities.clear();
 }

@@ -65,28 +65,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
-    //TODO uncomment when ready
-    //GetCore().audioModule.unloadScene();
     objectContainer.unloadScene();
-    // ! removing all associations for scene root node
-    GetCore().sceneModule.unloadScene();
-    // ! removing all root nodes from UI
-    GetCore().uiModule.unloadScene();
-    // ! clear message bus, for omitting messages between scenes
-    GetCore().messageBus.clearBuffers();
-    GetCore().rendererModule.cleanAllPointers();
-    
-    // GetCore().rendererModule.clean();
-    //  // ! ----- Renderer initialization block -----
-    // RendererModuleCreateInfo rendererCreateInfo = {};
-    // rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    // rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    // rendererCreateInfo.cullFace = true;
-    // rendererCreateInfo.cullFaceMode = GL_BACK;
-    // rendererCreateInfo.cullFrontFace = GL_CCW;
-    // rendererCreateInfo.depthTest = true;
-    // rendererCreateInfo.wireframeMode = false;
-    // GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo);
 
     // * setting serialization id for 1 (0 is scene root node)
     ISerializable::nextID = 1;

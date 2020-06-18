@@ -189,6 +189,7 @@ bool AssetReader::processNode(aiNode* node, const aiScene* scene, std::string pa
             size_t index = path.find_last_of("/\\");
 
             e = objectModulePtr->newEntity(2, path.substr(index + 1) + "/" + meshName);
+            std::cout << "Mesh entity:" << path.substr(index + 1) + "/" + meshName << std::endl;
 
             // * ----- Create transform and set parent -----
             nodeTransform = objectModulePtr->newEmptyComponentForLastEntity<Transform>();

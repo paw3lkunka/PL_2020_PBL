@@ -376,7 +376,8 @@ class Core
         bool gamePaused = false;
 
         double currentFrameStart;
-
+        void sceneUnload();
+        void sceneInit();
 };
 
 #endif /* !CORE_HPP_ */

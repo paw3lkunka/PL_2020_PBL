@@ -93,32 +93,19 @@ void GamePlayModule::initScreens()
 
 void GamePlayModule::reloadScene(std::string name)
 {
-    //TODO MAKE ONSCENELOAD & ONSCENE UNLOAD IN CORE
-
     GetCore().uiModule.rootNodes.push_back(loadingScreenEntity->getComponentPtr<RectTransform>());
     GetCore().objectModule.objectContainer.entities.push_back(*loadingScreenEntity);
     GetCore().uiModule.updateRectTransforms();
     GetCore().gameSystemsModule.run(System::FRAME);
     GetCore().messageBus.notify();
     GetCore().rendererModule.render();
-    GetCore().inputModule.clearFlags();
+    healthbarPtr = nullptr;
 
+    GetCore().sceneUnload();
+    // ! clear message bus, for omitting messages between scenes
+    GetCore().messageBus.clearBuffers();
     GetCore().objectModule.unloadSceneAndLoadNew(name);
-    
-    // ! Finding main camera
-    CameraSystem::setAsMain(GetCore().objectModule.getEntityPtrByName("Camera"));
-    // ! some setup
-    GetCore().sceneModule.updateTransforms();
-    GetCore().uiModule.updateRectTransforms();
-    GetCore().editorModule.setup();
-    //GetCore().audioModule.init();
-    // ! ----- START SYSTEM FUNCTION -----
-    GetCore().gameSystemsModule.run(System::START);
-    GetCore().messageBus.notify();
-    
-    
-    GetCore().detectionBarSystem.init("DetectionProgressBar");
-    init("Health_Bar", 30.0f);
+    GetCore().sceneInit();
 }
 
 void GamePlayModule::initLoadingScreen(ObjectModule& om)

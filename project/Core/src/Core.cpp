@@ -322,6 +322,38 @@ int Core::mainLoop()
     return 0;
 }
 
+void Core::sceneUnload()
+{
+    inputModule.clearFlags();
+    physicModule.cleanup();
+    //TODO uncomment when ready
+    //audioModule.unloadScene();
+    // ! removing all associations for scene root node
+    sceneModule.unloadScene();
+    // ! removing all root nodes from UI
+    uiModule.unloadScene();
+    rendererModule.cleanAllPointers();
+}
+
+void Core::sceneInit()
+{
+    physicModule.init();
+    // ! Finding main camera
+    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
+    // ! some setup
+    sceneModule.updateTransforms();
+    uiModule.updateRectTransforms();
+    editorModule.setup();
+    //audioModule.init();
+    // ! ----- START SYSTEM FUNCTION -----
+    gameSystemsModule.run(System::START);
+    messageBus.notify();
+    
+    
+    detectionBarSystem.init("DetectionProgressBar");
+    gamePlayModule.init("Health_Bar", 30.0f);
+}
+
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -390,7 +422,7 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
-    audioModule.cleanup();
+    //audioModule.cleanup();
     editorModule.onExit();
 
     physicModule.cleanup();
