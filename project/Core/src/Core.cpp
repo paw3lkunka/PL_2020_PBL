@@ -115,8 +115,7 @@ int Core::init()
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
 
-    messageBus.addReceiver( &inputModule );    
-    messageBus.addReceiver( &callbacksModule );    
+    messageBus.addReceiver( &inputModule ); 
     messageBus.addReceiver( &consoleModule );
     messageBus.addReceiver( &gameSystemsModule );
     messageBus.addReceiver( &audioModule );
@@ -189,18 +188,20 @@ int Core::init()
         //gameSystemsModule.addSystem(&paddleIkSystem);
     // TODO </make this function>
 
-    audioModule.init();
+    //TODO uncomment when ready
+    //audioModule.init();
 
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
 
     gameSystemsModule.entities = objectModule.getEntitiesVector();
 
+    gamePlayModule.initScreens();
+
     uiModule.init();
 
     // ! IMGUI initialize
     editorModule.init(window);
-    gamePlayModule.init();
 
 #pragma regnon attach systems
 
@@ -251,7 +252,7 @@ int Core::mainLoop()
     uiModule.updateRectTransforms();
     editorModule.setup();
     detectionBarSystem.init("DetectionProgressBar");
-    callbacksModule.init("Health_Bar", 30.0f);
+    gamePlayModule.init("Health_Bar", 30.0f);
 
     // ! ----- START SYSTEM FUNCTION -----
 
@@ -319,6 +320,38 @@ int Core::mainLoop()
     }    
 
     return 0;
+}
+
+void Core::sceneUnload()
+{
+    inputModule.clearFlags();
+    physicModule.cleanup();
+    //TODO uncomment when ready
+    //audioModule.unloadScene();
+    // ! removing all associations for scene root node
+    sceneModule.unloadScene();
+    // ! removing all root nodes from UI
+    uiModule.unloadScene();
+    rendererModule.cleanAllPointers();
+}
+
+void Core::sceneInit()
+{
+    physicModule.init();
+    // ! Finding main camera
+    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
+    // ! some setup
+    sceneModule.updateTransforms();
+    uiModule.updateRectTransforms();
+    editorModule.setup();
+    //audioModule.init();
+    // ! ----- START SYSTEM FUNCTION -----
+    gameSystemsModule.run(System::START);
+    messageBus.notify();
+    
+    
+    detectionBarSystem.init("DetectionProgressBar");
+    gamePlayModule.init("Health_Bar", 30.0f);
 }
 
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
@@ -389,7 +422,7 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
-    audioModule.cleanup();
+    //audioModule.cleanup();
     editorModule.onExit();
 
     physicModule.cleanup();

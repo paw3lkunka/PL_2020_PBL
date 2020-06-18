@@ -17,6 +17,5 @@ void System::process(Entity* entity, UpdateType updateType)
             case FRAME:
                 return frameUpdate();
         }
-
     }
 }

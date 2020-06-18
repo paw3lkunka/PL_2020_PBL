@@ -14,122 +14,122 @@
 
 void AudioModule::receiveMessage(Message msg)
 {
-    try
-    {
-        switch (msg.getEvent())
-        {
-        case Event::AUDIO_SOURCE_INIT:
-            sources.push_back(msg.getValue<AudioSource*>());
-        break;
-        case Event::AUDIO_LISTENER_INIT:
-        {
-            auto audioListenerPtr = msg.getValue<AudioListener*>();
-            audioListenerInitHandler(audioListenerPtr);
-        }
-            break;
+    // try
+    // {
+    //     switch (msg.getEvent())
+    //     {
+    //     case Event::AUDIO_SOURCE_INIT:
+    //         sources.push_back(msg.getValue<AudioSource*>());
+    //     break;
+    //     case Event::AUDIO_LISTENER_INIT:
+    //     {
+    //         auto audioListenerPtr = msg.getValue<AudioListener*>();
+    //         audioListenerInitHandler(audioListenerPtr);
+    //     }
+    //         break;
 
-        case Event::AUDIO_LISTENER_UPDATE:
-        {
-            auto audioListenerPtr = msg.getValue<AudioListener*>();
-            audioListenerUpdateHandler(audioListenerPtr);
-        }
-            break;
+    //     case Event::AUDIO_LISTENER_UPDATE:
+    //     {
+    //         auto audioListenerPtr = msg.getValue<AudioListener*>();
+    //         audioListenerUpdateHandler(audioListenerPtr);
+    //     }
+    //         break;
 
-        case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
-        {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourceUpdateListenersHandler(audioSourcePtr);
-        }
-            break;
+    //     case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
+    //     {
+    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourceUpdateListenersHandler(audioSourcePtr);
+    //     }
+    //         break;
 
-        case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
-        {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourceUpdateAttributesHandler(audioSourcePtr);
-        }
-            break;
+    //     case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
+    //     {
+    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourceUpdateAttributesHandler(audioSourcePtr);
+    //     }
+    //         break;
 
-        case Event::RECEIVE_AUDIO_DATA:
-        {
-            auto audioFile = msg.getValue<AudioFile*>();
-            receiveAudioDataHandler(audioFile);
-        }
-            break;
+    //     case Event::RECEIVE_AUDIO_DATA:
+    //     {
+    //         auto audioFile = msg.getValue<AudioFile*>();
+    //         receiveAudioDataHandler(audioFile);
+    //     }
+    //         break;
 
-        case Event::AUDIO_SOURCE_PLAY:
-        {
-            AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourcePlayHandler(audioSourcePtr);
-        }
-            break;
+    //     case Event::AUDIO_SOURCE_PLAY:
+    //     {
+    //         AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourcePlayHandler(audioSourcePtr);
+    //     }
+    //         break;
 
-        case Event::AUDIO_SOURCE_STOP:
-        {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourceStopHandler(audioSourcePtr);
-        }
-            break;
+    //     case Event::AUDIO_SOURCE_STOP:
+    //     {
+    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourceStopHandler(audioSourcePtr);
+    //     }
+    //         break;
 
-        case Event::AUDIO_SOURCE_PAUSE:
-        {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourcePauseHandler(audioSourcePtr);
-        }
-            break;
+    //     case Event::AUDIO_SOURCE_PAUSE:
+    //     {
+    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourcePauseHandler(audioSourcePtr);
+    //     }
+    //         break;
         
-        case Event::AUDIO_SOURCE_REWIND:
-        {
-            auto audioSourcePtr = msg.getValue<AudioSource*>();
-            audioSourceRewindHandler(audioSourcePtr);
-        }
-            break;
-        case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
-            paused = !paused;
-            if(paused)
-            {
-                for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-                {
-                    audioSourcePauseHandler(*iter);
-                }
-            }
-            else
-            {
-                for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-                {
-                    audioSourcePlayHandler(*iter);
-                }
-            }
-        break;
-        }
+    //     case Event::AUDIO_SOURCE_REWIND:
+    //     {
+    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
+    //         audioSourceRewindHandler(audioSourcePtr);
+    //     }
+    //         break;
+    //     case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
+    //         paused = !paused;
+    //         if(paused)
+    //         {
+    //             for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+    //             {
+    //                 audioSourcePauseHandler(*iter);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+    //             {
+    //                 audioSourcePlayHandler(*iter);
+    //             }
+    //         }
+    //     break;
+    //     }
 
-        if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
-        {
-            alcPushCurrentContextChangesToDevice();
+    //     if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
+    //     {
+    //         alcPushCurrentContextChangesToDevice();
             
-            // for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-            // {
-            //     if((*iter)->names.size() > 0 && !(*iter)->getIsLooping())
-            //     {
-            //         ALint state;
-            //         alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
-            //         if(state == AL_STOPPED)
-            //         {
-            //             playingSources.erase(iter);
-            //         }
-            //     }
-            // }
-        }
-    }
-    catch(AudioContextLevelException e)
-    {
-        std::cerr << e.what();
-    }
-    catch(AudioDeviceLevelException e)
-    {
-        std::cerr << e.what();
-    }
-    catch(const std::exception& e)
-    {}
+    //         for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
+    //         {
+    //             if((*iter)->names.size() > 0 && !(*iter)->getIsLooping())
+    //             {
+    //                 ALint state;
+    //                 alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
+    //                 if(state == AL_STOPPED)
+    //                 {
+    //                     playingSources.erase(iter);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // catch(AudioContextLevelException e)
+    // {
+    //     std::cerr << e.what();
+    // }
+    // catch(AudioDeviceLevelException e)
+    // {
+    //     std::cerr << e.what();
+    // }
+    // catch(const std::exception& e)
+    // {}
 }
 
 void AudioModule::init()

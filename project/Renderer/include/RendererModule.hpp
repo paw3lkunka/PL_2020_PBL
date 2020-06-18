@@ -63,6 +63,10 @@ public:
      */
     void clean();
     /**
+     * @brief Clean all pointers method
+     */
+    void cleanAllPointers();
+    /**
      * @brief Set the skybox in the renderer
      * 
      * @param skyboxMaterial pointer to skybox material

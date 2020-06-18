@@ -17,7 +17,6 @@
 #include "RendererModule.hpp"
 #include "SceneModule.hpp"
 #include "AudioModule.hpp"
-#include "CallbacksModule.hpp"
 #include "ObjectModule.hpp"
 #include "EditorModule.hpp"
 #include "UiModule.hpp"
@@ -323,9 +322,6 @@ class Core
         ///@brief gamePlay module
         GamePlayModule gamePlayModule;
 
-        //TODO: documentation
-        CallbacksModule callbacksModule;
-
 #pragma endregion
 
 #pragma region Systems
@@ -380,7 +376,8 @@ class Core
         bool gamePaused = false;
 
         double currentFrameStart;
-
+        void sceneUnload();
+        void sceneInit();
 };
 
 #endif /* !CORE_HPP_ */

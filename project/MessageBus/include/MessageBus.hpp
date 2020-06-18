@@ -5,7 +5,6 @@
 
 #include "Message.inl"
 class IModule;
-class ObjectModule;
 
 /**
  * @brief Bus conecting modules and allowing them to comunicate bay sending and receiving messages 
@@ -68,7 +67,7 @@ private:
     std::vector<Message>* inactiveBuffer = &messagesBuffer1;
 
     ///@brief friendship declaration to clear buffers on scene load
-    friend class ObjectModule;
+    friend class GamePlayModule;
     /**
      * @brief clearing all buffers, on scene load
      */

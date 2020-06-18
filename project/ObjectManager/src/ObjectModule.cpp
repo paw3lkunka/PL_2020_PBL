@@ -65,26 +65,7 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
-    GetCore().audioModule.cleanup();
     objectContainer.unloadScene();
-    // ! removing all associations for scene root node
-    GetCore().sceneModule.unloadScene();
-    // ! removing all root nodes from UI
-    GetCore().uiModule.unloadScene();
-    // ! clear message bus, for omitting messages between scenes
-    GetCore().messageBus.clearBuffers();
-
-     // ! ----- Renderer initialization block -----
-    GetCore().rendererModule.clean();
-    RendererModuleCreateInfo rendererCreateInfo = {};
-    rendererCreateInfo.clearColor = glm::vec3(0.0f, 1.0f, 0.0f);
-    rendererCreateInfo.clearFlags = GL_DEPTH_BUFFER_BIT;
-    rendererCreateInfo.cullFace = true;
-    rendererCreateInfo.cullFaceMode = GL_BACK;
-    rendererCreateInfo.cullFrontFace = GL_CCW;
-    rendererCreateInfo.depthTest = true;
-    rendererCreateInfo.wireframeMode = false;
-    GetCore().rendererModule.initialize(GetCore().getWindowPtr(), rendererCreateInfo);
 
     // * setting serialization id for 1 (0 is scene root node)
     ISerializable::nextID = 1;
@@ -104,17 +85,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
         sceneReader.readScene(newScenePath);
     }
 
-
-    // ! Finding main camera
-    CameraSystem::setAsMain(getEntityPtrByName("Camera"));
-    // ! some setup
     GetCore().gameSystemsModule.entities = getEntitiesVector();
-    GetCore().sceneModule.updateTransforms();
-    GetCore().uiModule.updateRectTransforms();
-    GetCore().editorModule.setup();
-    GetCore().audioModule.init();
-    // ! ----- START SYSTEM FUNCTION -----
-    GetCore().gameSystemsModule.run(System::START);
 }
 #pragma endregion
 
