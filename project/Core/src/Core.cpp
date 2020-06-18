@@ -188,7 +188,8 @@ int Core::init()
         //gameSystemsModule.addSystem(&paddleIkSystem);
     // TODO </make this function>
 
-    audioModule.init();
+    //TODO uncomment when ready
+    //audioModule.init();
 
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));

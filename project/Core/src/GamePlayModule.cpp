@@ -38,10 +38,6 @@ void GamePlayModule::receiveMessage(Message msg)
         case Event::KEY_PRESSED:
             if(msg.getValue<int>() == GLFW_KEY_ESCAPE)
             {
-                Core::instance->messageBus.sendMessage(Message(Event::EXIT_GAME));
-            }
-            if(msg.getValue<int>() == GLFW_KEY_P)
-            {
                 Core::instance->messageBus.sendMessage(Message(Event::PAUSE_GAME));
             }
         break;
@@ -109,8 +105,17 @@ void GamePlayModule::reloadScene(std::string name)
 
     GetCore().objectModule.unloadSceneAndLoadNew(name);
     
-    
+    // ! Finding main camera
+    CameraSystem::setAsMain(GetCore().objectModule.getEntityPtrByName("Camera"));
+    // ! some setup
+    GetCore().sceneModule.updateTransforms();
+    GetCore().uiModule.updateRectTransforms();
+    GetCore().editorModule.setup();
+    //GetCore().audioModule.init();
+    // ! ----- START SYSTEM FUNCTION -----
+    GetCore().gameSystemsModule.run(System::START);
     GetCore().messageBus.notify();
+    
     
     GetCore().detectionBarSystem.init("DetectionProgressBar");
     init("Health_Bar", 30.0f);
@@ -493,16 +498,18 @@ void GamePlayModule::rocksHit()
 void GamePlayModule::bulletHit()
 {
     auto kayak = Kayak::get();
-    
-    kayak->hp -= bulletDamage;
-    
-    if (healthbarPtr)
+    if(kayak != nullptr)
     {
-        healthbarPtr->percentage = kayak->hp / kayak->maxHp;
-    }
+        kayak->hp -= bulletDamage;
+        
+        if (healthbarPtr)
+        {
+            healthbarPtr->percentage = kayak->hp / kayak->maxHp;
+        }
 
-    if (kayak->hp <= 0)
-    {
-        GetCore().messageBus.sendMessage(Message(Event::HP_0));
+        if (kayak->hp <= 0)
+        {
+            GetCore().messageBus.sendMessage(Message(Event::HP_0));
+        }
     }
 }

@@ -703,7 +703,7 @@ void RendererModule::render()
         // ? +++++ Bind hdr framebuffer for color pass +++++++++++++++++++++++++++++++++++++++++++++++++++
         glViewport(0, 0, Core::windowWidth, Core::windowHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         // ! +++++ Terrain +++++
         while(!terrainQueue.empty())
@@ -884,8 +884,8 @@ void RendererModule::render()
 
 void RendererModule::clean()
 {
-    //delete internalShaderError;
-    //delete internalErrorMat;
+    delete internalShaderError;
+    delete internalErrorMat;
 
     // * ===== Setup Uniform Buffer Object for camera =====
     glDeleteBuffers(1, &cameraBuffer);
@@ -954,6 +954,12 @@ void RendererModule::clean()
     glDeleteTextures(1, &ssaoColorBufferBlur);
 
     //delete ssaoMap;
+
+}
+void RendererModule::cleanAllPointers()
+{
+    directionalLight = nullptr;
+    cameraMain = nullptr;
 }
 
 void RendererModule::calculateFrustumPlanes()
