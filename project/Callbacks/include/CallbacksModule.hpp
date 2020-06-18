@@ -20,7 +20,7 @@ class CallbacksModule : public IModule
          * @param hpBarName name of health bar entity.
          * TODO - may use create data, when list of parameters will be to long
          */
-        void init(const char* hpBarName);
+        void init(const char* hpBarName, float bulletDamage);
 
         virtual void receiveMessage(Message msg);
         
@@ -30,8 +30,15 @@ class CallbacksModule : public IModule
          * Also sets health bar - if present.
          */
         void rocksHit();
+
+        /**
+         * @brief Called, when kayak is hitten by bullet.
+         * Also sets health bar - if present.
+         */
+        void bulletHit();
         
         ProgressBar* healthbarPtr = nullptr;
+        float bulletDamage = 100.0f;
 };
 
 #endif /* !CALLBACKS_HPP_ */

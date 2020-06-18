@@ -13,7 +13,7 @@ class Camera;
 class CameraSystem : public System, public IMsgReceiver
 {
 public:
-    CameraSystem() = default;
+    CameraSystem() : System(false) {}
     virtual ~CameraSystem() = default;
 
     static Camera* mainCamera;

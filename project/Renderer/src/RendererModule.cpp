@@ -472,7 +472,7 @@ void RendererModule::render()
     {
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        ImGui::Render();
+        //ImGui::Render();
 
         glm::mat4 VP = glm::mat4(1.0f);
 
@@ -719,8 +719,8 @@ void RendererModule::render()
         {
             // HACK: Only one of the materials should be double sided
             std::string matName = std::string(opaqueQueue.front()->material->getName());
-            bool doubleSided = matName == "Conifer Leaves BODT" ||
-                                matName == "Grass_rushes";
+            bool doubleSided = matName == "Conifer Leaves BODT"
+                            || matName == "Grass_rushes";
             if (doubleSided)
             {
                 glDisable(GL_CULL_FACE);
@@ -846,7 +846,7 @@ void RendererModule::render()
 
         //TODO Remove if it became useless
         // !IMGUI RENDER
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // ? +++++ Swap buffers for double-buffering +++++
         glfwSwapBuffers(window);
