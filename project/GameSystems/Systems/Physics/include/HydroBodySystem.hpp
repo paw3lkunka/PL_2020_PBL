@@ -38,6 +38,8 @@ class HydroBodySystem : public System, public IMsgReceiver
         Transform* transform;
         Rigidbody* rigidbody;
         MeshRenderer* meshRenderer;
+
+        void recalculateCurrentForBody(HydroBody* body);
 };
 
 #endif // _HYDROBODYSYSTEM_HPP
