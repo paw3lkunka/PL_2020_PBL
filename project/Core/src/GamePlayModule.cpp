@@ -105,7 +105,6 @@ void GamePlayModule::reloadScene(std::string name)
     // ! clear message bus, for omitting messages between scenes
     GetCore().messageBus.clearBuffers();
     GetCore().objectModule.unloadSceneAndLoadNew(name);
-    std::cout << "Init\n";
     GetCore().sceneInit();
 }
 

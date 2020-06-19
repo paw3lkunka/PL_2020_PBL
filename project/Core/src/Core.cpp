@@ -275,10 +275,8 @@ int Core::mainLoop()
             inputModule.captureControllersInput();
 
         // ? +++++ FIXED UPDATE LOOP +++++
-        std::cout << "Fixed\n";
         while(lag >= FIXED_TIME_STEP)
         {
-            std::cout << "In Fixed\n";
             // Read message bus messages
             messageBus.notify();
 
@@ -287,10 +285,8 @@ int Core::mainLoop()
             gameSystemsModule.run(System::FIXED);
             if (!gamePaused)
             {
-                std::cout << "Physic\n";
                 physicModule.physicSimulation(gameSystemsModule.entities);
             }
-            std::cout << "transforms\n";
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
             uiModule.updateRectTransforms();
@@ -303,18 +299,15 @@ int Core::mainLoop()
         }
 
         // ! ----- FRAME UPDATE FUNCTION -----
-        std::cout << "Frame\n";
         detectionBarSystem.prepare();
         gameSystemsModule.run(System::FRAME);
         // Read message bus before rendering
         // TODO: Should transform update be here also?
         messageBus.notify();
-        std::cout << "Imgui\n";
         // ? IMGUI Window setting up
         editorModule.drawEditor();
         //HACK i added this here, tu apply changes to model matrix;
         sceneModule.updateTransforms();
-        std::cout << "render\n";
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
         // Clear input flags at the end of frame
@@ -340,24 +333,18 @@ void Core::sceneUnload()
 
 void Core::sceneInit()
 {
-    std::cout << "Physic init\n";
     physicModule.init();
     // ! Finding main camera
-    std::cout << "Camera init\n";
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
     // ! some setup
-    std::cout << "transforms init\n";
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
     //audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
-    std::cout << "System start\n";
     gameSystemsModule.run(System::START);
-    std::cout << "Notify \n";
     messageBus.notify();
     
-    std::cout << "bars init\n";
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);
 }

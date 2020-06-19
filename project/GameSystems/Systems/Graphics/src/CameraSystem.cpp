@@ -65,7 +65,6 @@ bool CameraSystem::setAsMain(Entity* entity)
     Camera* cameraTmp = entity->getComponentPtr<Camera>();
     if (transformTmp != nullptr && cameraTmp != nullptr)
     {
-        std::cout << "camera is not nullptr\n";
         if (mainCamera != nullptr)
         {
             mainCamera->isMain = false;
