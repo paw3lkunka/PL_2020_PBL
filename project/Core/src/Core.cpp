@@ -275,7 +275,6 @@ int Core::mainLoop()
             inputModule.captureControllersInput();
 
         // ? +++++ FIXED UPDATE LOOP +++++
-
         while(lag >= FIXED_TIME_STEP)
         {
             // Read message bus messages
@@ -288,7 +287,6 @@ int Core::mainLoop()
             {
                 physicModule.physicSimulation(gameSystemsModule.entities);
             }
-
             // Traverse the scene graph and update transforms
             sceneModule.updateTransforms();
             uiModule.updateRectTransforms();
@@ -301,18 +299,15 @@ int Core::mainLoop()
         }
 
         // ! ----- FRAME UPDATE FUNCTION -----
-
         detectionBarSystem.prepare();
         gameSystemsModule.run(System::FRAME);
         // Read message bus before rendering
         // TODO: Should transform update be here also?
         messageBus.notify();
-
         // ? IMGUI Window setting up
         editorModule.drawEditor();
         //HACK i added this here, tu apply changes to model matrix;
         sceneModule.updateTransforms();
-
         // ? +++++ RENDER CURRENT FRAME +++++
         rendererModule.render();
         // Clear input flags at the end of frame
@@ -333,6 +328,7 @@ void Core::sceneUnload()
     // ! removing all root nodes from UI
     uiModule.unloadScene();
     rendererModule.cleanAllPointers();
+    CameraSystem::mainCamera = nullptr;
 }
 
 void Core::sceneInit()
@@ -348,7 +344,6 @@ void Core::sceneInit()
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
-    
     
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);

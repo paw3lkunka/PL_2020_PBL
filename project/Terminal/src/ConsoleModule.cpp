@@ -79,32 +79,32 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::GAMEPAD_CONNECTED:
-        std::cout << "console here: GAMEPAD_CONNECTED. id: " << msg.getValue<int>() << std::endl;
+        // std::cout << "console here: GAMEPAD_CONNECTED. id: " << msg.getValue<int>() << std::endl;
         break;
         
     case Event::GAMEPAD_DISCONNECTED:
-        std::cout << "console here: GAMEPAD_DISCONNECTED. id: " << msg.getValue<int>() << std::endl;
+        // std::cout << "console here: GAMEPAD_DISCONNECTED. id: " << msg.getValue<int>() << std::endl;
         break;
     
     case Event::GAMEPAD_BUTTON_PRESSED:
-    {
-        auto gData = msg.getValue<GamepadButtonData>();
-        std::cout << "console here: GAMEPAD_BUTTON_PRESSED. gamepad: " << gData.gamepadId << ", button: " << gData.buttonId << std::endl;
-    }
+    // {
+    //     auto gData = msg.getValue<GamepadButtonData>();
+    //     std::cout << "console here: GAMEPAD_BUTTON_PRESSED. gamepad: " << gData.gamepadId << ", button: " << gData.buttonId << std::endl;
+    // }
         break;
 
     case Event::GAMEPAD_BUTTON_RELEASED:
-    {
-        auto gData = msg.getValue<GamepadButtonData>();
-        std::cout << "console here: GAMEPAD_BUTTON_RELEASED. gamepad: " << gData.gamepadId << ", button: " << gData.buttonId << std::endl;
-    }
+    // {
+    //     auto gData = msg.getValue<GamepadButtonData>();
+    //     std::cout << "console here: GAMEPAD_BUTTON_RELEASED. gamepad: " << gData.gamepadId << ", button: " << gData.buttonId << std::endl;
+    // }
         break;
 
     case Event::GAMEPAD_AXIS_CHANGED:
-    {
-        auto gData = msg.getValue<GamepadAxisData>();
-        std::cout << "console here: GAMEPAD_AXIS_CHANGED. gamepad: " << gData.gamepadId << ", axis: " << gData.axisId << ", value: " << gData.axisState << std::endl;
-    }
+    // {
+    //     auto gData = msg.getValue<GamepadAxisData>();
+    //     std::cout << "console here: GAMEPAD_AXIS_CHANGED. gamepad: " << gData.gamepadId << ", axis: " << gData.axisId << ", value: " << gData.axisState << std::endl;
+    // }
         break;  
 
     case Event::LOAD_FILE:
@@ -213,6 +213,8 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::AUDIO_SOURCE_REWIND:
+        break;
+    case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
         break;
 
     case Event::COLLISION_ENTER:
