@@ -63,8 +63,21 @@ void HydroBodySystem::receiveMessage(Message msg)
                 HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
                 if(body != nullptr && current != nullptr)
                 {
-                    body->targetCurrentVelocity = current->velocity;
-                    body->currentVelocityLerp = current->velocityLerp;
+                    body->currents.push_back(current);
+                    recalculateCurrentForBody(body);
+                }
+            }
+            break;
+
+        case Event::TRIGGER_EXIT:
+            {
+                TriggerData data = msg.getValue<TriggerData>();
+                HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
+                HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
+                if(body != nullptr && current != nullptr)
+                {
+                    body->currents.remove(current);
+                    recalculateCurrentForBody(body);
                 }
             }
             break;
@@ -87,7 +100,7 @@ void HydroBodySystem::fixedUpdate()
     if(hydroAccelerator == nullptr)
     {
         rb = rigidbody;
-        velocity = rigidbody->velocity + currentVelocity;
+        velocity = rigidbody->velocity - currentVelocity;
         float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
 
         for(HydroTriangle triangle : hullTriangles.underwater)
@@ -127,7 +140,7 @@ void HydroBodySystem::fixedUpdate()
                 centerPos
             );
 
-            impulse.force = velocity + currentVelocity;
+            impulse.force = velocity - currentVelocity;
             impulse.force.y = 0.0f;
             if(hydroAccelerator->velocity.y > 0.0f)
             {
@@ -163,4 +176,17 @@ void HydroBodySystem::fixedUpdate()
 
     //     rb->impulses.push_back(impulse);
     // }
+}
+
+void HydroBodySystem::recalculateCurrentForBody(HydroBody* body)
+{
+    glm::vec3 newCurrentVelocity(0.0f);
+
+    for(HydroCurrent* current : body->currents)
+    {
+        newCurrentVelocity += current->velocity;
+    }
+    newCurrentVelocity /= body->currents.size();
+
+    body->targetCurrentVelocity = newCurrentVelocity;
 }
