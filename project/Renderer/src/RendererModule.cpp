@@ -61,8 +61,9 @@ void RendererModule::receiveMessage(Message msg)
                 normalPackets.push_back(NormalPacket(mr->mesh, internalErrorMat, mr->modelMatrix));
             }
             
-            break;
         }
+        break;
+
         case Event::RENDERER_ADD_TERRAIN_TO_QUEUE:
         {
             TerrainRenderer* tr = msg.getValue<TerrainRenderer*>();
@@ -74,8 +75,9 @@ void RendererModule::receiveMessage(Message msg)
             {
                 terrainPackets.push_back(TerrainPacket(tr->terrainMesh, internalErrorMat, tr->splatmap, tr->modelMatrix));
             }
-            break;
         }
+        break;
+
         case Event::RENDERER_ADD_UI_TO_QUEUE:
         {
             UiRenderer* uiElementToAdd = msg.getValue<UiRenderer*>();
@@ -90,8 +92,9 @@ void RendererModule::receiveMessage(Message msg)
                 textPackets.push_back(TextPacket(&textElementToAdd->mesh, textElementToAdd->material, textElementToAdd->modelMatrix));
                 uiQueue.push_back(&textPackets.back());
             }
-            break;
         }
+        break;
+
         case Event::RENDERER_ADD_LIGHT:
         {
             Light* lightToAdd = msg.getValue<Light*>();
@@ -109,8 +112,9 @@ void RendererModule::receiveMessage(Message msg)
                     std::cerr << "Spot lights not yet implemented.\n";
                     break;
             }
-            break;
         }
+        break;
+
         case Event::RENDERER_SET_MAIN_CAMERA:
             cameraMain = msg.getValue<Camera*>();
             break;
@@ -125,6 +129,7 @@ void RendererModule::receiveMessage(Message msg)
             break;
 
         case Event::WINDOW_RESIZED:
+        {
             glm::ivec2 size = msg.getValue<glm::ivec2>();
             // Hdr framebuffers
             glBindTexture(GL_TEXTURE_2D, hdrColorBuffer);
@@ -164,7 +169,8 @@ void RendererModule::receiveMessage(Message msg)
 
             glBindTexture(GL_TEXTURE_2D, 0);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
-            break;
+        }
+        break;
     }
 }
 
@@ -874,6 +880,7 @@ void RendererModule::render()
         // ? +++++ Clear the render packets +++++
         RendererModule::lastMatID = 0;
         RendererModule::lastShaderID = 0;
+        
         normalPackets.clear();
         terrainPackets.clear();
         instancedPackets.clear();
