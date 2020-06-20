@@ -25,12 +25,23 @@ void CargoStorageSystem::receiveMessage(Message msg)
                     cargoStoragePtr->cargosStored.push_back(cargoToAdd);
                     cargoStoragePtr->weightSum += cargoToAdd->weight;
                     cargoStoragePtr->incomeSum += cargoToAdd->income;
-                    std::cout << "Required: " << std::to_string(cargoStoragePtr->cargosStoredSize) << "now: " << std::to_string(cargoStoragePtr->cargosStored.size()) << "\n";
                     if(cargoStoragePtr->cargosStoredSize == cargoStoragePtr->cargosStored.size())
                     {
-                        std::cout << "cargo mass add\n";
                         cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoStoragePtr->weightSum;
                         cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+                    }
+                }
+
+                // Cargo has not transform - select cargo scene
+                if(cargoToAdd->entityPtr->getComponentPtr<CargoButton>() != nullptr) 
+                {
+                    auto e = GetCore().objectModule.getEntityPtrByName("Play_Button");
+                    if(e != nullptr)
+                    {
+                        if(cargoStoragePtr->cargosStored.size() > 1)
+                        {
+                            e->getComponentPtr<Button>()->isActive = true;
+                        }
                     }
                 }
             }
@@ -49,6 +60,19 @@ void CargoStorageSystem::receiveMessage(Message msg)
                 {
                     std::cerr << "Cargo don't exist!" << std::endl;
                 }
+
+                // Cargo has not transform - select cargo scene
+                if(cargoToRemove->entityPtr->getComponentPtr<CargoButton>() != nullptr) 
+                {
+                    auto e = GetCore().objectModule.getEntityPtrByName("Play_Button");
+                    if(e != nullptr)
+                    {
+                        if(cargoStoragePtr->cargosStored.size() < 1)
+                        {
+                            e->getComponentPtr<Button>()->isActive = false;
+                        }
+                    }
+                }
             }
             break;
         }
@@ -59,6 +83,7 @@ void CargoStorageSystem::init(CargoStorage* cs)
 {
     if(cs != nullptr)
     {
+        std::cout << "Init" << std::endl;
         cargoStoragePtr = cs;
     }
 }

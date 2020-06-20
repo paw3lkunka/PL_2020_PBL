@@ -210,7 +210,7 @@ class Core
         static constexpr glm::mat4 IDENTITY_MAT = glm::mat4(1);
 
         /// @brief defines initial window width.
-        static constexpr int INIT_WINDOW_WIDTH = 1280;
+        static constexpr int INIT_WINDOW_WIDTH = 1440;
         
         /// @brief defines window hight.
         static constexpr int INIT_WINDOW_HEIGHT = 800;
