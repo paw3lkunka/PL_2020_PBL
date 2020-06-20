@@ -220,6 +220,14 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(Cargo* temp = entityPtr->getComponentPtr<Cargo>())
+    {
+        if(ImGui::CollapsingHeader("Cargo"))
+        {
+            drawCargo(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -411,6 +419,13 @@ void EditorModule::drawToggleButton(ToggleButton* toggleButtonPtr)
 
     ImGui::ColorEdit4("Inactive color", (float*)&toggleButtonPtr->inactiveColor);
     ImGui::Checkbox("Active", &toggleButtonPtr->isActive);
+}
+
+void EditorModule::drawCargo(Cargo* cargo)
+{
+    ImGui::Text(cargo->name.c_str());
+    ImGui::Text(("Weight: " + std::to_string(cargo->weight)).c_str());
+    ImGui::Text(("Income: " + std::to_string(cargo->income)).c_str());
 }
 
 void EditorModule::drawText(TextRenderer* textRenderer)

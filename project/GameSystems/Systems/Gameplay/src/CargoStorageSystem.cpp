@@ -25,6 +25,13 @@ void CargoStorageSystem::receiveMessage(Message msg)
                     cargoStoragePtr->cargosStored.push_back(cargoToAdd);
                     cargoStoragePtr->weightSum += cargoToAdd->weight;
                     cargoStoragePtr->incomeSum += cargoToAdd->income;
+                    std::cout << "Required: " << std::to_string(cargoStoragePtr->cargosStoredSize) << "now: " << std::to_string(cargoStoragePtr->cargosStored.size()) << "\n";
+                    if(cargoStoragePtr->cargosStoredSize == cargoStoragePtr->cargosStored.size())
+                    {
+                        std::cout << "cargo mass add\n";
+                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoStoragePtr->weightSum;
+                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+                    }
                 }
             }
             break;
@@ -48,13 +55,10 @@ void CargoStorageSystem::receiveMessage(Message msg)
     }
 }
 
-bool CargoStorageSystem::assertEntity(Entity* entity)
+void CargoStorageSystem::init(CargoStorage* cs)
 {
-    cargoStoragePtr = entity->getComponentPtr<CargoStorage>();
-    return cargoStoragePtr != nullptr;
-}
-
-void CargoStorageSystem::frameUpdate()
-{
-
+    if(cs != nullptr)
+    {
+        cargoStoragePtr = cs;
+    }
 }

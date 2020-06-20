@@ -354,6 +354,7 @@ class Core
         static CargoButtonSystem cargoButtonSystem;
         static DetectionBarSystem detectionBarSystem;
         static ProgressBarSystem progressBarSystem;
+        static CargoSystem cargoSystem;
 
 #pragma endregion
 

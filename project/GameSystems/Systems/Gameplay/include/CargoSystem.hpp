@@ -1,22 +1,16 @@
-#ifndef CARGOSTORAGESYSTEM_HPP_
-#define CARGOSTORAGESYSTEM_HPP_
+#ifndef CARGOSYSTEM_HPP_
+#define CARGOSYSTEM_HPP_
 
 #include "System.hpp"
-#include "IMsgReceiver.inl"
-#include <iterator>
-#include <list>
 
-struct CargoStorage;
 struct Cargo;
+struct Transform;
 
-class CargoStorageSystem : public System, public IMsgReceiver
+class CargoSystem : public System
 {
 public:
-    CargoStorageSystem() = default;
-    ~CargoStorageSystem() = default;
-
-    ///@brief inherited from IMsgReceiver
-    void receiveMessage(Message msg);
+    CargoSystem() = default;
+    ~CargoSystem() = default;
 
     /**
      * @brief Checks, if given Entity contain all required components
@@ -24,19 +18,12 @@ public:
      * @param entity pointer to asserted entity
      * @returns if entity has all required components
      */
-    virtual bool assertEntity(Entity* entity) {return false;}
-
-    /**
-     * @brief initialize system
-     * 
-     * @param cs pointer for CargoStorage
-     */
-    void init(CargoStorage* cs);
+    virtual bool assertEntity(Entity* entity);
 
     /**
      * @brief Initializes processed entities, runs before first update
      */
-    virtual void start() {}
+    virtual void start();
 
     /**
      * @brief Contain logic of the system called in fixed time steps
@@ -50,11 +37,13 @@ public:
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void frameUpdate() {}
+    virtual void frameUpdate() {};
 
 protected:
 private:
-    CargoStorage* cargoStoragePtr = nullptr;
+
+    Cargo* cargoPtr;
+    Transform* transformPtr;
 };
 
-#endif /* !CARGOSTORAGESYSTEM_HPP_ */
+#endif /* !CARGOSYSTEM_HPP_ */

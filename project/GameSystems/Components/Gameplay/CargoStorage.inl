@@ -13,6 +13,7 @@ public:
     ~CargoStorage() = default;
 
     std::list<Cargo*> cargosStored;
+    int cargosStoredSize;
 
     float weightLimit = 30.0f;
 

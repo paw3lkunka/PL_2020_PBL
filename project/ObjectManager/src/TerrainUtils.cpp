@@ -175,9 +175,6 @@ void TerrainUtils::loadExportedUnityModels()
                 rotation = stringToQuat(line);
                 std::getline(exportInfo, line);
                 scale = stringToVec3(line);
-                std::cout << "Position: " << glm::to_string(position) << '\n';
-                std::cout << "Rotation: " << glm::to_string(rotation) << '\n';
-                std::cout << "Scale: " << glm::to_string(scale) << '\n';
 
                 std::string modelName = modelPath.substr(modelPath.find_last_of("/\\") + 1);
                 Entity* existingModel = GetCore().objectModule.getEntityPtrByName(modelName.c_str());
@@ -252,7 +249,6 @@ void TerrainUtils::loadExportedUnityModels()
             }
 
             index = line.find_first_of('%');
-            std::cout << index << std::endl;
             if (index != std::string::npos)
             {
                 std::string materialName = line.substr(line.find_first_of(':') + 1);

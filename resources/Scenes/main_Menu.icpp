@@ -56,6 +56,9 @@ objectModule.newEntity(2, "RiverFlow");
 
     auto rect_border = objectModule.newTexture("Resources/Sprites/rect_border.png", info);
     auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
+    auto photo = objectModule.newTexture("Resources/Sprites/thePhoto.png", info);
+    auto photo2 = objectModule.newTexture("Resources/Sprites/thePhoto2.png", info);
+    auto photo3 = objectModule.newTexture("Resources/Sprites/thePhoto3.png", info);
 
     auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
     textMaterial->setVec4("color", baseColor);
@@ -77,18 +80,63 @@ objectModule.newEntity(2, "RiverFlow");
     }
 
     objectModule.newEntity(2, "Title");
-        {
-            auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                crt->getLocalPositionModifiable() = {50, -150.0f};
-                crt->getAnchorModifiable() = {0.0f, 1.0f};
-                crt->getSizeModifiable() = {1.0f, 1.0f};
-                uiModule.rootNodes.push_back(crt);
+    {
+        auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            crt->getLocalPositionModifiable() = {30, -180.0f};
+            crt->getAnchorModifiable() = {0.0f, 1.0f};
+            crt->getSizeModifiable() = {1.25f, 1.25f};
+            uiModule.rootNodes.push_back(crt);
 
-            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
-                cui->material = textMaterialBlack;
-                cui->mesh.font = josefin;
-                cui->mesh.text = "Current";
-        }
+        auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+            cui->material = textMaterialBlack;
+            cui->mesh.font = josefin;
+            cui->mesh.text = "Current";
+    }
+
+    objectModule.newEntity(2, "photo");
+    {
+        auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            crt->getLocalPositionModifiable() = {243.0f, 103.0f};
+            crt->getAnchorModifiable() = {0.5f, 0.5f};
+            crt->getSizeModifiable() = {450.0f, 450.0f};
+            crt->getLocalRotationModifiable() = glm::radians(1.0f);
+            uiModule.rootNodes.push_back(crt);
+
+        auto cui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            cui->material = objectModule.newMaterial(uiShader, "photomat", RenderType::Transparent);
+            cui->material->setTexture("sprite", photo);
+            cui->material->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+    }
+
+    objectModule.newEntity(2, "photo2");
+    {
+        auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            crt->getLocalPositionModifiable() = {535.0f, -185.0f};
+            crt->getAnchorModifiable() = {0.5f, 0.5f};
+            crt->getSizeModifiable() = {450.0f, 450.0f};
+            crt->getLocalRotationModifiable() = glm::radians(-2.5f);
+            uiModule.rootNodes.push_back(crt);
+
+        auto cui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            cui->material = objectModule.newMaterial(uiShader, "photo2Mat", RenderType::Transparent);
+            cui->material->setTexture("sprite", photo2);
+            cui->material->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+    }
+
+    objectModule.newEntity(2, "photo3");
+    {
+        auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+            crt->getLocalPositionModifiable() = {-65.0f, -134.0f};
+            crt->getAnchorModifiable() = {0.5f, 0.5f};
+            crt->getSizeModifiable() = {450.0f, 450.0f};
+            crt->getLocalRotationModifiable() = glm::radians(2.5f);
+            uiModule.rootNodes.push_back(crt);
+
+        auto cui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            cui->material = objectModule.newMaterial(uiShader, "photo3Mat", RenderType::Transparent);
+            cui->material->setTexture("sprite", photo3);
+            cui->material->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+    }
 {
     objectModule.newEntity(2, "Menu_Buttons");
     auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
