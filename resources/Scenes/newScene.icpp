@@ -181,7 +181,7 @@ waterMat_0_0_0->setVec2("uvScale", {1.0f, 1.0f});
 
 objectModule.newEntity(1, "WaterPlanesRoot");
 auto waterRoot = objectModule.newEmptyComponentForLastEntity<Transform>();
-    waterRoot->getLocalPositionModifiable() = {50.0f, -0.5f, -50.0f};
+    waterRoot->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
     waterRoot->setParent(&sceneModule.rootNode);
 
 
@@ -428,9 +428,9 @@ objectModule.newEntity(4, "Camera");
                 t->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
-                paddle->maxFrontRot = -34.5f;
-                paddle->maxSideRot = 30.0f;
+                paddle->maxPos = glm::vec3(-0.3f, 0.6f, -0.6f);
+                paddle->maxFrontRot = -45f;
+                paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
 
             // PADDLE MAN
