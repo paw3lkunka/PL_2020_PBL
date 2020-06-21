@@ -17,7 +17,7 @@ struct Component : public ISerializable
     /**
      * @brief points on this components Entity - shouldn't be assinging manually
      */
-    Entity* entityPtr;
+    Entity* entityPtr = nullptr;
 };
 
 /**

@@ -17,6 +17,9 @@ public:
     ~SceneReader() = default;
 
     void readScene(std::string filePath);
+
+    //! other purposes
+    void readCargo(std::string fileName);
 protected:
 private:
     ObjectModule* objModulePtr;
@@ -72,9 +75,7 @@ private:
     void readProgressBar(std::string name);
     void readShoot(std::string name);
     void readEnemyAttack(std::string name);
-    
-    //! other purposes
-    void readCargo(std::string name);
+
 
     void assignToEntity(std::string name, Component* component);
     void readTransformParents(std::string name);

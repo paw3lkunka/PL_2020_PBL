@@ -399,7 +399,7 @@ objectModule.newEntity(4, "Camera");
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
             kayakRigidbody->drag = 0.2f;
             kayakRigidbody->angularDrag = 0.25f;
-            kayakRigidbody->mass = 150.0f;
+            kayakRigidbody->mass = 120.0f;
             kayakRigidbody->ignoreGravity = false;
             kayakPtr->addComponent(kayakRigidbody);
 
@@ -410,9 +410,12 @@ objectModule.newEntity(4, "Camera");
         auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
             kayakPtr->addComponent(kayakHydroBody);
             
-    auto* kayakComponent = objectModule.newEmptyComponentForLastEntity<Kayak>();
+        auto* kayakComponent = objectModule.newEmptyComponent<Kayak>();
             kayakPtr->addComponent(kayakComponent);
-
+        
+        auto* storage = objectModule.newEmptyComponent<CargoStorage>();
+            kayakPtr->addComponent(storage);
+        Core::cargoStorageSystem.init(storage);
 
         Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
         paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));

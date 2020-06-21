@@ -93,6 +93,7 @@ private:
     void drawSortingGroup(UiSortingGroup* sortingGroupPtr);
     void drawToggleButton(ToggleButton* toggleButtonPtr);
     void drawProgressBar(ProgressBar* progressBarPtr);
+    void drawCargo(Cargo* cargo);
 
     // ! Helper functions
     /**
