@@ -8,6 +8,8 @@
 
 struct CargoStorage;
 struct Cargo;
+struct TextRenderer;
+struct UiSortingGroup;
 
 class CargoStorageSystem : public System, public IMsgReceiver
 {
@@ -34,6 +36,14 @@ public:
     void init(CargoStorage* cs);
 
     /**
+     * @brief initialize some texts
+     * 
+     * @param weightText text for weights
+     * @param incomeText text for income
+     */
+    void initTexts(TextRenderer* weightText, TextRenderer* incomeText, UiSortingGroup* warningGroup);
+
+    /**
      * @brief Initializes processed entities, runs before first update
      */
     virtual void start() {}
@@ -55,6 +65,9 @@ public:
 protected:
 private:
     CargoStorage* cargoStoragePtr = nullptr;
+    TextRenderer* weightText = nullptr;
+    TextRenderer* incomeText = nullptr;
+    UiSortingGroup* warningGroup = nullptr;
 };
 
 #endif /* !CARGOSTORAGESYSTEM_HPP_ */

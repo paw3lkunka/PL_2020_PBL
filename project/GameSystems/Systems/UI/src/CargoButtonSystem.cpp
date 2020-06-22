@@ -4,10 +4,27 @@
 #include "CargoButton.inl"
 #include "CargoDataStructures.inl"
 #include "Core.hpp"
+#include "Texture.hpp"
 
 #include <sstream>
 #include <iomanip>
 #include <ios>
+
+void CargoButtonSystem::init()
+{
+    TextureCreateInfo info = {};
+    info.format = GL_RGBA;
+    info.generateMipmaps = false;
+    info.magFilter = GL_LINEAR;
+    info.minFilter = GL_LINEAR;
+    info.wrapMode = GL_CLAMP_TO_EDGE;
+
+    stampSprite = GetCore().objectModule.newTexture("Resources/Sprites/penaltyStamp.png", info);
+    auto sh = GetCore().objectModule.getShaderPtrByName("UiStandard");
+    stampMaterial = GetCore().objectModule.newMaterial(sh, "CargoRiskyMat", RenderType::Transparent);
+    stampMaterial->setTexture("sprite", stampSprite);
+    stampMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 0.7f});
+}
 
 bool CargoButtonSystem::assertEntity(Entity* entity)
 {
@@ -31,11 +48,17 @@ void CargoButtonSystem::start()
     cargoButtonPtr->nameText->mesh.text = cargo->name;
     if(cargo->isRisky)
     {
-        cargoButtonPtr->nameText->material->setVec4("color", {0.6f, 0.078f, 0.078f, 1.0f});
-    }
-    else
-    {
-        cargoButtonPtr->nameText->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+        auto ent = GetCore().objectModule.newEntity(2, Name(cargo) + "_RiskyStamp");
+        auto rect = GetCore().objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        rect->setParent(cargo->entityPtr->getComponentPtr<RectTransform>());
+        rect->getLocalPositionModifiable() = {-129.0f + (4.0f - GetCore().randomFloatL(8.0f)), 
+                                                57.0f + (4.5f - GetCore().randomFloatL(9.0f))};
+
+        rect->getLocalRotationModifiable() = glm::radians(-20.0f + (10 - GetCore().randomFloatL(20.0f)));
+
+        rect->getSizeModifiable() = {120, 120};
+        auto render = GetCore().objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+            render->material = stampMaterial;
     }
 
     std::stringstream ss;

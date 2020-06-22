@@ -25,14 +25,14 @@ namespace Cargos
 {
     const CargoType baseCargos[] =
     {
-        CargoType("Food", false, {3, 15}, {100, 500}),
-        CargoType("Letters", true, {0.5, 2}, {50, 600}),
-        CargoType("Alcohol", false, {5, 15}, {200, 1100}),
-        CargoType("Cigarettes", false, {0.4, 3}, {250, 500}),
-        CargoType("Medicines", false, {0.5, 4}, {100, 600}),
-        CargoType("Weapon", true, {15, 70}, {300, 2500}),
-        CargoType("Jewelry", false, {5, 10}, {300, 1000}),
-        CargoType("Fake Documents", true, {0.8, 7}, {600, 2000})
+        CargoType("Food", false, {3, 15}, {20, 100}),
+        CargoType("Letters", true, {0.5, 2}, {10, 120}),
+        CargoType("Alcohol", false, {5, 15}, {30, 200}),
+        CargoType("Cigarettes", false, {0.4, 3}, {10, 150}),
+        CargoType("Medicines", false, {0.5, 4}, {25, 125}),
+        CargoType("Weapon", true, {15, 70}, {40, 300}),
+        CargoType("Jewelry", false, {5, 10}, {25, 250}),
+        CargoType("Fake Documents", true, {0.8, 7}, {15, 160})
     };
     
     const int baseCargosSize = 8;

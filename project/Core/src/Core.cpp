@@ -166,6 +166,7 @@ int Core::init()
     {
         // ! Manual extension of scene
         // ? -u
+        
         {
 
         }
@@ -237,6 +238,7 @@ int Core::init()
 
 #pragma endregion
 
+    cargoButtonSystem.init();
     // Everything is ok.
     return 0;
 }
@@ -342,12 +344,27 @@ void Core::sceneInit()
     uiModule.updateRectTransforms();
     editorModule.setup();
     //audioModule.init();
+    // ! cargo storage system initialize - must be before system start and notify!
+    auto e = objectModule.getEntityPtrByName("AllWeightText");
+    if(e != nullptr)
+    {
+        cargoStorageSystem.initTexts(
+                e->getComponentPtr<TextRenderer>(), 
+                objectModule.getEntityPtrByName("AllIncomeText")->getComponentPtr<TextRenderer>(),
+                objectModule.getEntityPtrByName("group1")->getComponentPtr<UiSortingGroup>());
+    }
+    else
+    {
+        cargoStorageSystem.initTexts(nullptr, nullptr, nullptr);
+    }
+
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
     
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);
+    
 }
 
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
