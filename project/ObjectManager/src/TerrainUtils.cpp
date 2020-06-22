@@ -380,7 +380,7 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
-    material->setFloat("cutoff", 0.7f);
+    material->setFloat("cutoff", 0.25f);
 }
 
 void TerrainUtils::importColliders()

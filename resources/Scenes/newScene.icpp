@@ -429,7 +429,7 @@ objectModule.newEntity(4, "Camera");
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
                 paddle->maxPos = glm::vec3(-0.3f, 0.6f, -0.6f);
-                paddle->maxFrontRot = -45f;
+                paddle->maxFrontRot = -45.0f;
                 paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
 

@@ -209,7 +209,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     internalShaderError = new Shader("internalShaderError", BuiltInShaders::baseVertexCode, BuiltInShaders::internalErrorFragmentCode, nullptr, false);
     internalErrorMat = new Material(internalShaderError, "internalErrorMat", RenderType::Opaque, false, false);
-    combineShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombine.frag", nullptr, false);
+    combineShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/AllCombineFXAA.frag", nullptr, false);
     blurShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/GaussianBlur.frag", nullptr, false);
     gbufferShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/ViewSpaceValues.vert", "Resources/Shaders/PostProcessing/PosNormBuffers.frag", nullptr, false);
     ssaoShader = GetCore().objectModule.newShader("", "Resources/Shaders/PostProcessing/Quad.vert", "Resources/Shaders/PostProcessing/SSAO.frag", nullptr, false);
@@ -725,8 +725,7 @@ void RendererModule::render()
         {
             // HACK: Only one of the materials should be double sided
             std::string matName = std::string(opaqueQueue.front()->material->getName());
-            bool doubleSided = matName == "Conifer Leaves BODT"
-                            || matName == "Grass_rushes";
+            bool doubleSided = matName == "Conifer Leaves BODT" || matName == "Grass_rushes";
             if (doubleSided)
             {
                 glDisable(GL_CULL_FACE);
@@ -758,6 +757,7 @@ void RendererModule::render()
         // ! +++++ Transparent +++++
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDepthMask(GL_FALSE);
         std::sort(transparentQueue.begin(), transparentQueue.end(), DistanceComparer(cameraMain->getFrustum().position));
 
         while(!transparentQueue.empty())
@@ -767,6 +767,8 @@ void RendererModule::render()
             transparentQueue.front()->render(VP);
             transparentQueue.pop_front();
         }
+        glDepthMask(GL_TRUE);
+        glEnable(GL_CULL_FACE);
 
         // ? +++++ Rendering bloom ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         bool horizontal = true, firstIteration = true, firstBloom = true;
