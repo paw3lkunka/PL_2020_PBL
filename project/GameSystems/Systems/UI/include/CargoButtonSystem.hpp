@@ -4,12 +4,20 @@
 #include "System.hpp"
 
 struct CargoButton;
+class Texture;
+class Material;
 
 class CargoButtonSystem : public System
 {
 public:
     CargoButtonSystem() = default;
     ~CargoButtonSystem() = default;
+
+    /**
+     * @brief initialize cargo button system
+     * reading textures and shaders for risk stamp
+     */
+    void init();
 
     /**
      * @brief Checks, if given Entity contain all required components
@@ -41,6 +49,9 @@ public:
 protected:
 private:
     CargoButton* cargoButtonPtr;
+
+    Texture* stampSprite;
+    Material* stampMaterial;
 };
 
 #endif /* !CARGOBUTTONSYSTEM_HPP_ */
