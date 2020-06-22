@@ -14,14 +14,11 @@ struct AudioSource : public Component
     AudioSource() = default;
     virtual ~AudioSource() = default;
 
-    /// READONLY: Names (ids) corresponding to listeners vector 
-    // std::unordered_map<AudioListener*, ALuint> names = {};
-
     /// READONLY: Name (id) of the source in OpenAL
     ALuint name;
 
-    /// READONLY: Collection of currently kept buffers queue on the device
-    //std::vector<ALuint> currentQueue = {};
+    /// @brief Audio clip only to be set in scene file
+    std::string audioClip;
 
     /**
      * @brief Dirty flag indicating which Source's attributes must be updated on device level
@@ -46,8 +43,6 @@ struct AudioSource : public Component
      * 1 << 16 flag: secOffset
      * 1 << 17 flag: sampleOffset
      * 1 << 18 flag: byteOffset
-     * 1 << 19 flag: clips (buffers queued)
-    //  * 1 << 20 flag: listeners (contexts and source names)
      * 
      * @returns Value of dirty flag
      */
@@ -76,54 +71,10 @@ struct AudioSource : public Component
      * 1 << 16 flag: secOffset
      * 1 << 17 flag: sampleOffset
      * 1 << 18 flag: byteOffset
-     * 1 << 19 flag: clips (buffers queued)
-    //  * 1 << 20 flag: listeners (contexts and source names)
      * 
      * @returns Reference to dirty flag
      */
     ALuint& getDirtyModifiable() { return dirty; }
-
-    // /**
-    //  * @brief Audio Listeners pointers it belongs to
-    //  * 
-    //  * @returns Value of vector of listeners pointers
-    //  */
-    // std::vector<AudioListener*> getListeners() { return listeners; }
-
-    // /**
-    //  * @brief Audio Listeners pointers it belongs to
-    //  * 
-    //  * @returns Reference to vector of listeners pointers
-    //  */
-    // std::vector<AudioListener*>& getListenersModifiable() { dirty |= (1 << 20); return listeners; }
-
-    // /**
-    //  * @brief Paths to AudioClips queued to play for the source
-    //  * 
-    //  * @returns Value of vector of paths to audio clips
-    //  */
-    // std::vector<std::string>& getClips() { return clips; }
-
-    // /**
-    //  * @brief Paths to AudioClips queued to play for the source
-    //  * 
-    //  * @returns Reference to vector of paths to audio clips
-    //  */
-    // std::vector<std::string>& getClipsModifiable() { dirty |= (1 << 19); return clips; }
-
-    /**
-     * @brief Path to AudioClip queued to play for the source
-     * 
-     * @returns Value of path of audio clip
-     */
-    std::string getAudioClip() { return audioClip; }
-
-    /**
-     * @brief Path to AudioClip queued to play for the source
-     * 
-     * @returns Reference to the path of audio clip
-     */
-    std::string& getAudioClipModifiable() { dirty |= (1 << 19); return audioClip; }
 
     /**
      * @brief Source's Position vector
@@ -552,14 +503,7 @@ struct AudioSource : public Component
     bool autoPlay = false;
 
     private:
-
-        ALuint dirty = (1 << 20);
-
-        // std::vector<AudioListener*> listeners = {};
-
-        //std::vector<std::string> clips = {};
-
-        std::string audioClip;
+        ALint dirty = 0;
 
         glm::vec3 position = {0.0f, 0.0f, 0.0f};
 

@@ -28,7 +28,6 @@ struct AudioListener : public Component
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
      * 1 << 3 flag: orientation ("at" and "up" vectors)
-    //  * 1 << 4 flag: isCurrent (currently processed context)
      * 
      * @returns Value of dirty flag
      */
@@ -42,7 +41,6 @@ struct AudioListener : public Component
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
      * 1 << 3 flag: orientation ("at" and "up" vectors)
-     * 1 << 4 flag: isCurrent (currently processed context)
      * 
      * @returns Reference to dirty flag
      */
@@ -152,28 +150,6 @@ struct AudioListener : public Component
      */
     glm::vec3& getUpModifiable() { dirty |= (1 << 3); return up; }
 
-    // /**
-    //  * @brief READ: Flag saying if AudioListener's context is currently processed one.
-    //  * 
-    //  * Set it to TRUE if you want to switch currently processed context.
-    //  * 
-    //  * If it is currently processed and you set it to FALSE, none context will be processed.
-    //  * 
-    //  * @returns Value of isCurrent flag
-    //  */
-    // ALboolean getIsCurrent() { return isCurrent; }
-
-    // /**
-    //  * @brief WRITE: Flag saying if AudioListener's context is currently processed one.
-    //  * 
-    //  * Set it to TRUE if you want to switch currently processed context.
-    //  * 
-    //  * If it is currently processed and you set it to FALSE, none context will be processed.
-    //  * 
-    //  * @returns Reference to isCurrent flag
-    //  */
-    // ALboolean& getIsCurrentModifiable() { dirty |= (1 << 4); return isCurrent; }
-
     private:
 
         ALubyte dirty = 0;
@@ -186,8 +162,6 @@ struct AudioListener : public Component
         
         glm::vec3 at  = {0.0f, 0.0f, -1.0f};
         glm::vec3 up = {0.0f, 1.0f, 0.0f};
-        
-        // ALboolean isCurrent = false;
 };
 
 #endif /* !AUDIOLISTENER_HPP_ */

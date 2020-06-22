@@ -340,7 +340,6 @@ void Core::sceneInit()
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
-    //audioModule.init();
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
