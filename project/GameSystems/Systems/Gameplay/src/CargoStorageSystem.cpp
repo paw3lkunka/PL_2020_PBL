@@ -52,6 +52,14 @@ void CargoStorageSystem::receiveMessage(Message msg)
                 }
             }
             break;
+
+            case Event::COLLISION_ENTER:
+                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
+                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
+                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
+                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
+                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
+            break;
         }
         if(msg.getEvent() >= Event::CARGO_FIRST && msg.getEvent() <= Event::CARGO_LAST)
         {
