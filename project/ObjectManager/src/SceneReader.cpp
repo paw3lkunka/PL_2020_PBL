@@ -1349,7 +1349,7 @@ void SceneReader::readCargo(std::string fileName)
     }
     file.close();
 
-    Transform* cargoStorage = objModulePtr->getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>();
+    Transform* cargoStorage = objModulePtr->getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>();
     for(int i = 0; true; ++i)
     {
         try

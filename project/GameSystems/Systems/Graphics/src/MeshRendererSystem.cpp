@@ -10,7 +10,12 @@ bool MeshRendererSystem::assertEntity(Entity* entity)
 {
     meshRenderer = entity->getComponentPtr<MeshRenderer>();
     transform = entity->getComponentPtr<Transform>();
-    return (meshRenderer != nullptr && transform != nullptr);
+    bool shouldRender = false;
+    if (meshRenderer != nullptr)
+    {
+        shouldRender = meshRenderer->shouldRender;
+    }
+    return (shouldRender && meshRenderer != nullptr && transform != nullptr);
 }
 
 void MeshRendererSystem::frameUpdate()
