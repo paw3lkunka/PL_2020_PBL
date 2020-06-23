@@ -372,6 +372,34 @@ objectModule.newEntity(4, "Camera");
     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         soMusic->audioClip = "Resources/Audios/shingeki.wav";
         soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 0.01f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
+
+objectModule.newEntity(2, "TestAudioSource1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 1.0f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
+
+objectModule.newEntity(2, "TestAudioSource2");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
+
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
         soMusic->getGainModifiable() = 1.0f;
         soMusic->getIsLoopingModifiable() = true;
         soMusic->autoPlay = true;

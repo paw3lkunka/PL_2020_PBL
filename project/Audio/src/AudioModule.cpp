@@ -53,6 +53,15 @@ void AudioModule::receiveMessage(Message msg)
             }
             break;
 
+            case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+            {
+                AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceStopHandler(audioSourcePtr);
+                audioSourceRewindHandler(audioSourcePtr);
+                audioSourcePlayHandler(audioSourcePtr);
+            }
+            break;
+
             case Event::AUDIO_SOURCE_STOP:
             {
                 auto audioSourcePtr = msg.getValue<AudioSource*>();
@@ -105,16 +114,6 @@ void AudioModule::receiveMessage(Message msg)
         if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
         {
             alcPushCurrentContextChangesToDevice();
-            
-            for(auto it = playingSources.begin(); it != playingSources.end(); it++)
-            {
-                ALint state;
-                alGetSourcei( (*it)->name, AL_SOURCE_STATE, &state );
-                if(state == AL_STOPPED)
-                {
-                    playingSources.erase(it);
-                }
-            }
         }
     }
     catch(AudioContextLevelException e)
@@ -159,6 +158,7 @@ void AudioModule::sceneInit()
         }
         alcMakeContextCurrent(listener->context);
         alcCheckErrors();
+        alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
         //Create all needed buffers for AudioSources
         for(auto it = audioBuffers.begin(); it != audioBuffers.end(); it++)
@@ -183,6 +183,8 @@ void AudioModule::sceneInit()
             ALuint* buffer = &( audioBuffers.find(source->audioClip)->second );
             alSourceQueueBuffers(source->name, 1, buffer);
             alCheckErrors();
+
+            audioSourceUpdateHandler(source);
 
             if(source->autoPlay)
             {
@@ -525,10 +527,10 @@ void AudioModule::audioSourceUpdateHandler(AudioSource* audioSourcePtr)
 
 void AudioModule::audioSourcePlayHandler(AudioSource* audioSourcePtr)   
 {
-    // if(std::find(playingSources.begin(), playingSources.end(), audioSourcePtr) == playingSources.end())
-    // {
-    //     playingSources.push_back(audioSourcePtr);
-    // }
+    if(std::find(playingSources.begin(), playingSources.end(), audioSourcePtr) == playingSources.end())
+    {
+        playingSources.push_back(audioSourcePtr);
+    }
     
     alSourcePlay(audioSourcePtr->name);
     alCheckErrors();
@@ -538,12 +540,14 @@ void AudioModule::audioSourceStopHandler(AudioSource* audioSourcePtr)
 {
     alSourceStop(audioSourcePtr->name);
     alCheckErrors();
+    playingSources.erase( std::find( playingSources.begin(), playingSources.end(), audioSourcePtr ) );
 }
 
 void AudioModule::audioSourcePauseHandler(AudioSource* audioSourcePtr)
 {
     alSourcePause(audioSourcePtr->name);
     alCheckErrors();
+    playingSources.erase( std::find( playingSources.begin(), playingSources.end(), audioSourcePtr ) );
 }
 
 void AudioModule::audioSourceRewindHandler(AudioSource* audioSourcePtr)

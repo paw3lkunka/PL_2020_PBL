@@ -59,6 +59,8 @@ enum class Event : unsigned int
     AUDIO_SOURCE_UPDATE,
     // Audio Source, play Source's buffer queue starting where offset is, DATA: AudioSource* .
     AUDIO_SOURCE_PLAY,
+    // Audio Source, play one shot with Source's buffer, DATA: AudioSource* .
+    AUDIO_SOURCE_PLAY_ONE_SHOT,
     // Audio Source, stop playing, stop Source's offset where it is in buffer queued, DATA: AudioSource* .
     AUDIO_SOURCE_STOP,
     // Audio Source, pause Source's offset where it is in buffer queue, DATA: AudioSource* .

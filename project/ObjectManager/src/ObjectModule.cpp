@@ -43,7 +43,6 @@ void ObjectModule::receiveMessage(Message msg)
     }
 }
 
-
 void ObjectModule::cleanup()
 {
     objectContainer.cleanup();
