@@ -17,6 +17,11 @@ struct MeshRenderer : public Component
     virtual ~MeshRenderer() = default;
 
     /**
+     * @brief Check if the mesh should get sent to the renderer
+     */
+    bool shouldRender = true;
+
+    /**
      * @brief The model matrix of this mesh
      */
     glm::mat4 modelMatrix;
