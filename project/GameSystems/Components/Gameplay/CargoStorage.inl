@@ -13,8 +13,10 @@ public:
     ~CargoStorage() = default;
 
     std::list<Cargo*> cargosStored;
+    std::list<Cargo*> cargosLost;
+    int cargosStoredSize;
 
-    float weightLimit = 30.0f;
+    float weightLimit = 70.0f;
 
     float weightSum = 0.0f;
     float incomeSum = 0.0f;

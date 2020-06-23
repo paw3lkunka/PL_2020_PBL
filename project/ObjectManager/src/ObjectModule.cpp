@@ -23,6 +23,7 @@
 #include "TerrainUtils.hpp"
 #include "Components.inc"
 #include "CubemapHdr.hpp"
+#include "CargoStorageSystem.hpp"
 
 std::vector<Entity>* ObjectModule::getEntitiesVector()
 {
@@ -60,6 +61,10 @@ void ObjectModule::readScene(std::string path)
 
 void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
 {
+    if(newScenePath.compare(Scenes::gameScene) == 0)
+    {
+        sceneWriter.saveChosenCargos(getEntityPtrByName("CargoStorage")->getComponentPtr<CargoStorage>());
+    }
     objectContainer.unloadScene();
 
     // * setting serialization id for 1 (0 is scene root node)
@@ -73,6 +78,7 @@ void ObjectModule::unloadSceneAndLoadNew(std::string newScenePath)
         SceneModule& sceneModule = GetCore().sceneModule;
         UiModule& uiModule = GetCore().uiModule;
         #include "../../resources/Scenes/newScene.icpp"
+        sceneReader.readCargo("Resources/chosenCargos.json");
     }
     else
     {

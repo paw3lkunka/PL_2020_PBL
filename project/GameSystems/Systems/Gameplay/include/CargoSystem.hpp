@@ -1,23 +1,16 @@
-#ifndef CARGOBUTTONSYSTEM_HPP_
-#define CARGOBUTTONSYSTEM_HPP_
+#ifndef CARGOSYSTEM_HPP_
+#define CARGOSYSTEM_HPP_
 
 #include "System.hpp"
 
-struct CargoButton;
-class Texture;
-class Material;
+struct Cargo;
+struct Transform;
 
-class CargoButtonSystem : public System
+class CargoSystem : public System
 {
 public:
-    CargoButtonSystem() = default;
-    ~CargoButtonSystem() = default;
-
-    /**
-     * @brief initialize cargo button system
-     * reading textures and shaders for risk stamp
-     */
-    void init();
+    CargoSystem() = default;
+    ~CargoSystem() = default;
 
     /**
      * @brief Checks, if given Entity contain all required components
@@ -48,10 +41,9 @@ public:
 
 protected:
 private:
-    CargoButton* cargoButtonPtr;
 
-    Texture* stampSprite;
-    Material* stampMaterial;
+    Cargo* cargoPtr;
+    Transform* transformPtr;
 };
 
-#endif /* !CARGOBUTTONSYSTEM_HPP_ */
+#endif /* !CARGOSYSTEM_HPP_ */

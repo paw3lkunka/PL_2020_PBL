@@ -774,26 +774,6 @@ void SceneWriter::saveCargoButton(CargoButton* componentPtr)
 void SceneWriter::saveCargoStorage(CargoStorage* componentPtr)
 {
     (*json)[name]["type"] = "CargoStorage";
-    if(componentPtr->entityPtr->getComponentPtr<Transform>() == nullptr)
-    {
-        nlohmann::json* temp = new nlohmann::json();
-        int i = 0;
-        for(auto cargo : componentPtr->cargosStored)
-        {
-            std::string cargoName = "c" + std::to_string(i++);
-            saveCargo(cargo, cargoName, temp);
-        }
-
-
-        std::ofstream file("Resources/Scenes/chosenCargos.json");
-        if(file.good())
-        {
-            file << std::setw(4) << *temp;
-        }
-        file.close();
-
-        delete temp;
-    }
 }
 
 void SceneWriter::saveEnemyAttack(EnemyAttack* componentPtr)
@@ -1034,3 +1014,27 @@ void SceneWriter::saveMessage(std::string msgName, Message msg, std::string type
     }
 }
 #pragma endregion
+
+void SceneWriter::saveChosenCargos(CargoStorage* componentPtr)
+{
+    if(componentPtr->entityPtr->getComponentPtr<Transform>() == nullptr)
+    {
+        nlohmann::json* temp = new nlohmann::json();
+        int i = 0;
+        for(auto cargo : componentPtr->cargosStored)
+        {
+            std::string cargoName = "c" + std::to_string(i++);
+            saveCargo(cargo, cargoName, temp);
+        }
+
+
+        std::ofstream file("Resources/chosenCargos.json");
+        if(file.good())
+        {
+            file << std::setw(4) << *temp;
+        }
+        file.close();
+
+        delete temp;
+    }
+}

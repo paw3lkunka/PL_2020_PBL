@@ -181,7 +181,7 @@ waterMat_0_0_0->setVec2("uvScale", {1.0f, 1.0f});
 
 objectModule.newEntity(1, "WaterPlanesRoot");
 auto waterRoot = objectModule.newEmptyComponentForLastEntity<Transform>();
-    waterRoot->getLocalPositionModifiable() = {50.0f, -0.5f, -50.0f};
+    waterRoot->getLocalPositionModifiable() = {50.0f, 0.0f, -50.0f};
     waterRoot->setParent(&sceneModule.rootNode);
 
 
@@ -398,7 +398,7 @@ objectModule.newEntity(4, "Camera");
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
             kayakRigidbody->drag = 0.2f;
             kayakRigidbody->angularDrag = 0.25f;
-            kayakRigidbody->mass = 150.0f;
+            kayakRigidbody->mass = 120.0f;
             kayakRigidbody->ignoreGravity = false;
             kayakPtr->addComponent(kayakRigidbody);
 
@@ -409,9 +409,12 @@ objectModule.newEntity(4, "Camera");
         auto kayakHydroBody = objectModule.newEmptyComponent<HydroBody>();
             kayakPtr->addComponent(kayakHydroBody);
             
-    auto* kayakComponent = objectModule.newEmptyComponentForLastEntity<Kayak>();
+        auto* kayakComponent = objectModule.newEmptyComponent<Kayak>();
             kayakPtr->addComponent(kayakComponent);
-
+        
+        auto* storage = objectModule.newEmptyComponent<CargoStorage>();
+            kayakPtr->addComponent(storage);
+        Core::cargoStorageSystem.init(storage);
 
         Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
         paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
@@ -424,9 +427,9 @@ objectModule.newEntity(4, "Camera");
                 t->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(-0.45f, 0.9f, -1.75f);
-                paddle->maxFrontRot = -34.5f;
-                paddle->maxSideRot = 30.0f;
+                paddle->maxPos = glm::vec3(-0.3f, 0.6f, -0.6f);
+                paddle->maxFrontRot = -45.0f;
+                paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
 
             // PADDLE MAN

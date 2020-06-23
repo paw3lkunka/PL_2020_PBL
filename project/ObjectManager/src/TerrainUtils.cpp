@@ -60,7 +60,7 @@ void TerrainUtils::loadAllTerrainChunks()
 
     Entity* terrain = GetCore().objectModule.newEntity(1, "Terrain");
     auto terrainRoot = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
-    terrainRoot->getLocalPositionModifiable() = glm::vec3(50, -100, -50);
+    terrainRoot->getLocalPositionModifiable() = glm::vec3(50, -99.5, -50);
     terrainRoot->setParent(&GetCore().sceneModule.rootNode);
 
     namespace fs = std::filesystem;
@@ -143,7 +143,7 @@ void TerrainUtils::loadExportedUnityModels()
     Entity* propsRoot = GetCore().objectModule.newEntity(1, "propsRoot");
     auto propsRootTransform = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
         propsRootTransform->setParent(&GetCore().sceneModule.rootNode);
-        propsRootTransform->getLocalPositionModifiable() = glm::vec3(50, -100, -50);
+        propsRootTransform->getLocalPositionModifiable() = glm::vec3(50, -99.5, -50);
 
     std::fstream exportInfo;
     exportInfo.open(exportInfoPath.path().string().c_str(), std::ios::in);
@@ -175,9 +175,6 @@ void TerrainUtils::loadExportedUnityModels()
                 rotation = stringToQuat(line);
                 std::getline(exportInfo, line);
                 scale = stringToVec3(line);
-                std::cout << "Position: " << glm::to_string(position) << '\n';
-                std::cout << "Rotation: " << glm::to_string(rotation) << '\n';
-                std::cout << "Scale: " << glm::to_string(scale) << '\n';
 
                 std::string modelName = modelPath.substr(modelPath.find_last_of("/\\") + 1);
                 Entity* existingModel = GetCore().objectModule.getEntityPtrByName(modelName.c_str());
@@ -252,7 +249,6 @@ void TerrainUtils::loadExportedUnityModels()
             }
 
             index = line.find_first_of('%');
-            std::cout << index << std::endl;
             if (index != std::string::npos)
             {
                 std::string materialName = line.substr(line.find_first_of(':') + 1);
@@ -384,14 +380,14 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("diffuse", albedo);
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
-    material->setFloat("cutoff", 0.7f);
+    material->setFloat("cutoff", 0.25f);
 }
 
 void TerrainUtils::importColliders()
 {
     Entity* colliders = GetCore().objectModule.newEntity(1, "collidersRoot");
     auto collidersRoot = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
-        collidersRoot->getLocalPositionModifiable() = glm::vec3(50, -100, -50);
+        collidersRoot->getLocalPositionModifiable() = glm::vec3(50, -99.5, -50);
         collidersRoot->setParent(&GetCore().sceneModule.rootNode);
 
 

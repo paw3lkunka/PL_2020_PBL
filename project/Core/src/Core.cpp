@@ -166,6 +166,7 @@ int Core::init()
     {
         // ! Manual extension of scene
         // ? -u
+        
         {
 
         }
@@ -187,9 +188,6 @@ int Core::init()
         //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
         //gameSystemsModule.addSystem(&paddleIkSystem);
     // TODO </make this function>
-
-    //TODO uncomment when ready
-    //audioModule.init();
 
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
@@ -229,6 +227,7 @@ int Core::init()
     gameSystemsModule.addSystem(&enemySystem);
     gameSystemsModule.addSystem(&sortingGroupSystem);
     gameSystemsModule.addSystem(&toggleButtonSystem);
+    gameSystemsModule.addSystem(&cargoSystem);
     gameSystemsModule.addSystem(&cargoStorageSystem);
     gameSystemsModule.addSystem(&cargoButtonSystem);
     gameSystemsModule.addSystem(&detectionBarSystem);
@@ -237,6 +236,7 @@ int Core::init()
 #pragma endregion
 
     audioModule.init();
+    cargoButtonSystem.init();
 
     // Everything is ok.
     return 0;
@@ -338,10 +338,28 @@ void Core::sceneInit()
     physicModule.init();
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
+    
     // ! some setup
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
+
+    // ! cargo storage system initialize - must be before system start and notify!
+    auto e = objectModule.getEntityPtrByName("AllWeightText");
+    if (e != nullptr)
+    {
+        cargoStorageSystem.initTexts
+        (
+            e->getComponentPtr<TextRenderer>(), 
+            objectModule.getEntityPtrByName("AllIncomeText")->getComponentPtr<TextRenderer>(),
+            objectModule.getEntityPtrByName("group1")->getComponentPtr<UiSortingGroup>()
+        );
+    }
+    else
+    {
+        cargoStorageSystem.initTexts(nullptr, nullptr, nullptr);
+    }
+
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
@@ -350,6 +368,7 @@ void Core::sceneInit()
     
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);
+    
 }
 
 void Core::framebufferSizeCallback(GLFWwindow* window, int width, int height)
@@ -420,7 +439,6 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
-    //audioModule.cleanup();
     editorModule.onExit();
 
     physicModule.cleanup();
@@ -526,3 +544,4 @@ CargoStorageSystem Core::cargoStorageSystem;
 CargoButtonSystem Core::cargoButtonSystem;
 DetectionBarSystem Core::detectionBarSystem;
 ProgressBarSystem Core::progressBarSystem;
+CargoSystem Core::cargoSystem;

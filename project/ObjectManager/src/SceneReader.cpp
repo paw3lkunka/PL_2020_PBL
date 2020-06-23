@@ -8,6 +8,7 @@
 #include "Camera.inl"
 #include "Font.hpp"
 #include "ScenesPaths.hpp"
+#include "CargoStorageSystem.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -1055,16 +1056,6 @@ void SceneReader::readUiSortingGroup(std::string name)
     assignToEntity(name, sortingGroup);
 }
 
-void SceneReader::readCargo(std::string name)
-{
-    auto cargo = objModulePtr->newEmptyComponent<Cargo>();
-    cargo->name = j->at(name).at("name").get<std::string>();
-    cargo->isRisky = j->at(name).at("isRisky").get<bool>();
-    cargo->weight = j->at(name).at("weight").get<float>();
-    cargo->income = j->at(name).at("income").get<float>();
-    assignToEntity(name, cargo);
-}
-
 void SceneReader::readToggleButton(std::string name)
 {
     auto button = objModulePtr->newEmptyComponent<ToggleButton>();
@@ -1171,6 +1162,7 @@ void SceneReader::readCargoStorage(std::string name)
     auto cargoStorage = objModulePtr->newEmptyComponent<CargoStorage>();
     cargoStorage->serializationID = j->at(name).at("serializationID").get<unsigned int>();
     assignToEntity(name, cargoStorage);
+    Core::cargoStorageSystem.init(cargoStorage);
 }
 
 void SceneReader::readProgressBar(std::string name)
@@ -1342,6 +1334,51 @@ void SceneReader::readEvent(std::string name, std::string containerName, std::ve
 
             case Event::EXIT_GAME:
                 messages.push_back(Message(Event::EXIT_GAME));
+            break;
+        }
+    }
+}
+
+void SceneReader::readCargo(std::string fileName)
+{
+    nlohmann::json* cargos = new nlohmann::json();
+    std::ifstream file(fileName);
+    if(file.good())
+    {
+        file >> *cargos;
+    }
+    file.close();
+
+    Transform* cargoStorage = objModulePtr->getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>();
+    for(int i = 0; true; ++i)
+    {
+        try
+        {
+            std::string cargoName = "c" + std::to_string(i);
+            
+            auto cargo = objModulePtr->newEmptyComponent<Cargo>();
+            cargo->name = cargos->at(cargoName).at("name").get<std::string>();
+            cargo->isRisky = cargos->at(cargoName).at("isRisky").get<bool>();
+            cargo->weight = cargos->at(cargoName).at("weight").get<float>();
+            cargo->income = cargos->at(cargoName).at("income").get<float>();
+            Entity* cargoEntity = objModulePtr->newEntity(2, "Cargo" + std::to_string(i));
+            cargoEntity->addComponent(cargo);
+
+            auto transform = objModulePtr->newEmptyComponent<Transform>();
+            if(cargoStorage != nullptr)
+            {
+                transform->setParent(cargoStorage);
+            }
+            else
+            {
+                transform->setParent(&GetCore().sceneModule.rootNode);
+            }
+            cargoEntity->addComponent(transform);
+            cargoStorage->entityPtr->getComponentPtr<CargoStorage>()->cargosStoredSize = i + 1;
+            std::cout << "Read Cargo\n";
+        }
+        catch(nlohmann::detail::out_of_range)
+        {
             break;
         }
     }

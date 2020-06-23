@@ -177,6 +177,8 @@ enum class Event : unsigned int
     UI_LAST = LOAD_SCENE,
     GAMEPLAY_FIRST = PLAYER_DETECTED,
     GAMEPLAY_LAST = HP_0,
+    CARGO_FIRST = ADD_CARGO,
+    CARGO_LAST = REMOVE_CARGO,
 #pragma endregion
 
 };

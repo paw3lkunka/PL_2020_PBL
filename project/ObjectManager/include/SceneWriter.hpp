@@ -41,6 +41,13 @@ public:
      */
     void saveScene(const char* filePath);
 
+    /**
+     * @brief save chosen by player cargos
+     * 
+     * @param componentPtr pointer for cargo storage
+     */
+    void saveChosenCargos(CargoStorage* componentPtr);
+
 protected:
 private:
 
@@ -93,6 +100,7 @@ private:
 
     // ! didn't call it in saveComponents
     void saveCargo(Cargo* componentPtr, std::string cargoName, nlohmann::json* parser);
+    
 
     // ? saving assets
     void saveMaterial(Material* assetPtr);
