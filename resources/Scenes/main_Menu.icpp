@@ -1,4 +1,3 @@
-objectModule.newAudioClip("Resources/Audios/river.wav");
 objectModule.newEntity(4, "Camera");
 {
     auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
@@ -15,7 +14,6 @@ objectModule.newEntity(4, "Camera");
         t->setParent(&sceneModule.rootNode);
 
     auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
-        li->getIsCurrentModifiable() = true;
         li->getGainModifiable() = 1.0f;
         li->getVelocityModifiable();
         li->getPositionModifiable();
@@ -28,12 +26,13 @@ objectModule.newEntity(2, "RiverFlow");
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
         t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
         t->setParent(&sceneModule.rootNode);
+    
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/river.wav");
+        so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 2.0f;
+        so3->getGainModifiable() = 1.0f;
         so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 }
 
     auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");

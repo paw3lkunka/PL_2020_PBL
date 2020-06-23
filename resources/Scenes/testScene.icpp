@@ -3,9 +3,6 @@ auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resourc
 auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 auto unlitSkinned = objectModule.newShader("UnlitSkinned", "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
-objectModule.newAudioClip("Resources/Audios/shingeki.wav");
-objectModule.newAudioClip("Resources/Audios/river.wav");
-
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;

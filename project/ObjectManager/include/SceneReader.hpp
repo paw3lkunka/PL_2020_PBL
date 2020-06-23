@@ -29,8 +29,6 @@ private:
 
     nlohmann::json* j;
 
-    //std::vector<std::string> audioClips;
-
     void readShaders();
     void readTextures();
     void readCubemaps();

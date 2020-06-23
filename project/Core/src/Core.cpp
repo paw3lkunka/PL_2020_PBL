@@ -258,13 +258,11 @@ int Core::mainLoop()
 
     // ! ----- START SYSTEM FUNCTION -----
 
-    gameSystemsModule.run(System::START);
-    
-    if (recreateScene)
-    {
-        messageBus.notify();
-        audioModule.sceneInit();
-    }
+    // gameSystemsModule.run(System::START);
+    // messageBus.notify();
+    // audioModule.sceneInit();
+    // TODO: Is this working every time? It should indeed
+    sceneInit();
     
     //Main loop
     while (!glfwWindowShouldClose(window))

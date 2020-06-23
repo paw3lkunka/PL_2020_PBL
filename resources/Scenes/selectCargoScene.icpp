@@ -1,5 +1,3 @@
-objectModule.newAudioClip("Resources/Audios/river.wav");
-objectModule.newAudioClip("Resources/Audios/test.wav");
 objectModule.newEntity(4, "Camera");
 {
     auto c = objectModule.newEmptyComponentForLastEntity<Camera>();

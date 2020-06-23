@@ -245,6 +245,7 @@ void AudioModule::sceneUnload()
         }
         alcDestroyContext(listener->context);
         alcCheckErrors();
+        listener = nullptr;
     }
     catch(AudioContextLevelException& e)
     {
