@@ -503,7 +503,7 @@ struct AudioSource : public Component
     bool autoPlay = false;
 
     private:
-        ALint dirty = 0;
+        ALuint dirty = 0;
 
         glm::vec3 position = {0.0f, 0.0f, 0.0f};
 

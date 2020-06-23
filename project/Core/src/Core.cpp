@@ -236,6 +236,8 @@ int Core::init()
 
 #pragma endregion
 
+    audioModule.init();
+
     // Everything is ok.
     return 0;
 }
@@ -321,8 +323,8 @@ void Core::sceneUnload()
 {
     inputModule.clearFlags();
     physicModule.cleanup();
-    //TODO uncomment when ready
-    //audioModule.unloadScene();
+    
+    audioModule.sceneUnload();
     // ! removing all associations for scene root node
     sceneModule.unloadScene();
     // ! removing all root nodes from UI
@@ -343,6 +345,8 @@ void Core::sceneInit()
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
+
+    audioModule.sceneInit();
     
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);
@@ -421,6 +425,7 @@ void Core::cleanup()
 
     physicModule.cleanup();
     objectModule.cleanup();
+    audioModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

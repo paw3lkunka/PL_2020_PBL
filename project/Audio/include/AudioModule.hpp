@@ -86,7 +86,7 @@ class AudioModule : public IModule
          * Create all sources.
          * Create all buffers.
          */
-        void loadScene();
+        void sceneInit();
 
         /**
          * @brief Unloads current scene
@@ -95,7 +95,7 @@ class AudioModule : public IModule
          * Release all sources.
          * Release all buffers.
          */
-        void unloadScene();
+        void sceneUnload();
 
         /**
          * @brief Clean up AudioModule
@@ -113,7 +113,7 @@ class AudioModule : public IModule
         /// @brief Pointer used to operate on sound device 
         ALCdevice* device = nullptr;
 
-        AudioListener* listener;
+        AudioListener* listener = nullptr;
 
         std::vector<AudioSource*> sources = {};
         
@@ -176,11 +176,11 @@ class AudioModule : public IModule
         /// @brief Handles AUDIO_LISTENER_UPDATE event
         void audioListenerUpdateHandler(AudioListener* audioListenerPtr);
 
-        /// @brief Handles AUDIO_SOURCE_UPDATE_LISTENERS event
-        void audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr);
+        /// @brief Handles AUDIO_SOURCE_INIT event
+        void audioSourceInitHandler(AudioSource* audioSourcePtr);
 
-        /// @brief Handles AUDIO_SOURCE_UPDATE_ATTRIBUTES event
-        void audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr);
+        /// @brief Handles AUDIO_SOURCE_UPDATE event
+        void audioSourceUpdateHandler(AudioSource* audioSourcePtr);
 
         /// @brief Handles AUDIO_SOURCE_PLAY event
         void audioSourcePlayHandler(AudioSource* audioSourcePtr);    

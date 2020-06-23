@@ -3,6 +3,7 @@
 
 #include <json.hpp>
 #include <string>
+#include <vector>
 
 class AssetReader;
 class ObjectModule;
@@ -24,6 +25,8 @@ private:
     static bool hasInstance;
 
     nlohmann::json* j;
+
+    //std::vector<std::string> audioClips;
 
     void readShaders();
     void readTextures();

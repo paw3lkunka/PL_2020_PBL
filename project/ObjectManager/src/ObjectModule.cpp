@@ -35,12 +35,7 @@ void ObjectModule::receiveMessage(Message msg)
     {
         case Event::QUERY_AUDIO_DATA:
         {
-            std::unordered_map<std::string, AudioFile>::iterator iter = assetReader.audioClips.find(msg.getValue<const char*>());
-
-            if(iter != assetReader.audioClips.end())
-            {
-                GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, &iter->second ) );
-            }
+            newAudioClip( msg.getValue<const char*>() );
         }
         break;
     }
@@ -193,7 +188,15 @@ Material* ObjectModule::newMaterial(Shader* shader, std::string name, RenderType
 
 void ObjectModule::newAudioClip(const char* filePath)
 {
-    assetReader.loadAudioClip(filePath);
+    AudioFile* data = assetReader.loadAudioClip(filePath);
+    
+    if(data == nullptr)
+    {
+        std::cout << "WARNING: Failed to load audio file: " << filePath << std::endl;
+        return;
+    }
+
+    GetCore().getMessageBus().sendMessage( Message( Event::RECEIVE_AUDIO_DATA, data ) );
 }
 
 Font* ObjectModule::newFont(const char* filePath, unsigned int size, std::string name)
