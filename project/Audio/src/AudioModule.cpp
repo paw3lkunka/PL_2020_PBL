@@ -165,7 +165,7 @@ void AudioModule::sceneInit()
         {
             alGenBuffers(1, &it->second);
             alCheckErrors();
-            GetCore().getMessageBus().sendMessage( Message(Event::QUERY_AUDIO_DATA, &it->first) );
+            GetCore().getMessageBus().sendMessage( Message(Event::QUERY_AUDIO_DATA, &(it->first)) );
         }
 
         // Send QUERY_AUDIO_DATA
@@ -183,6 +183,11 @@ void AudioModule::sceneInit()
             ALuint* buffer = &( audioBuffers.find(source->audioClip)->second );
             alSourceQueueBuffers(source->name, 1, buffer);
             alCheckErrors();
+
+            if(source->autoPlay)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, source) );
+            }
         }
 
         alcPushCurrentContextChangesToDevice();
@@ -557,22 +562,6 @@ void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
     }
 
     loadAudioFileDataToBuffer(buffer->second, audioFilePtr->getChannelsCount(), audioFilePtr->getSampleRate(), audioFilePtr->getBitsPerSample(), &audioFilePtr->data, audioFilePtr->getSize());
-}
-
-#pragma endregion
-
-#pragma region Event helpers
-
-void AudioModule::audioSourceUpdateBufferHelper(AudioSource* audioSourcePtr)
-{
-    auto buffer = audioBuffers.find(audioSourcePtr->audioClip);
-    alSourceQueueBuffers(audioSourcePtr->name, 1, &buffer->second);
-    alCheckErrors();
-    
-    if(audioSourcePtr->autoPlay)
-    {
-        GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr));
-    }
 }
 
 #pragma endregion

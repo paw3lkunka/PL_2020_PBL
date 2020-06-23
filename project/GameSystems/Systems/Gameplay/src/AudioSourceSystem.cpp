@@ -32,11 +32,6 @@ void AudioSourceSystem::start()
 
 void AudioSourceSystem::frameUpdate()
 {
-    // if(audioSource->getDirty() & (1 << 20))
-    // {
-    //     GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
-    // }
-
     if(transform)
     {
         auto position = glm::xyz(transform->getModelMatrix()[3]);

@@ -36,7 +36,8 @@ void ObjectModule::receiveMessage(Message msg)
     {
         case Event::QUERY_AUDIO_DATA:
         {
-            newAudioClip( msg.getValue<const char*>() );
+            const char* fileName = msg.getValue<std::string*>()->c_str();
+            newAudioClip( fileName );
         }
         break;
     }

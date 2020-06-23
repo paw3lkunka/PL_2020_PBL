@@ -259,6 +259,13 @@ int Core::mainLoop()
     // ! ----- START SYSTEM FUNCTION -----
 
     gameSystemsModule.run(System::START);
+    
+    if (recreateScene)
+    {
+        messageBus.notify();
+        audioModule.sceneInit();
+    }
+    
     //Main loop
     while (!glfwWindowShouldClose(window))
     {

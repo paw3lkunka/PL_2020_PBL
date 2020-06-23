@@ -105,7 +105,7 @@ enum class Event : unsigned int
     // Texture data to send to renderer module. DATA: TextureData* {int width, height, nrComponents, unsigned char* data}
     RECEIVE_TEXTURE_DATA,
 
-    // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
+    // Query FROM Audio Module to Resource Module. DATA: std::string* filepath;
     QUERY_AUDIO_DATA,
     // Audio data to send to Audio module. DATA: AudioFile* data;
     RECEIVE_AUDIO_DATA,
