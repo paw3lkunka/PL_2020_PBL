@@ -373,13 +373,22 @@ objectModule.newEntity(4, "Camera");
 
 {
     objectModule.newModel("Resources/Models/Kayak_final/Final_physics_meshes.FBX");
+
+    Entity* attachLeft = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_left");
+    Entity* attachRight = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_right");
+    {
+        auto mrl = attachLeft->getComponentPtr<MeshRenderer>();
+            mrl->shouldRender = false;
+        auto mrr = attachRight->getComponentPtr<MeshRenderer>();
+            mrr->shouldRender = false;
+    }
+
     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>());
-            //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 0.0f, 180.0f));
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.3f);
     }
 
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
@@ -432,8 +441,8 @@ objectModule.newEntity(4, "Camera");
                 paddleTransform->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(-0.3f, 0.6f, -0.6f);
-                paddle->maxFrontRot = -45.0f;
+                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.3f);
+                paddle->maxFrontRot = 45.0f;
                 paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
 
@@ -459,7 +468,7 @@ objectModule.newEntity(4, "Camera");
             cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
     }
 
-        // ! NJU KAJAK
+    // ! NJU KAJAK
     {
         // * MATERIALS
         auto kayakDiffuse = objectModule.newTexture("Resources/Models/Kayak_final/Kayak_and_paddle_textured_albedo.tga", texCreateInfo);
@@ -489,6 +498,13 @@ objectModule.newEntity(4, "Camera");
             auto t = testPaddle->getComponentPtr<Transform>();
                 t->setParent(paddleTransform);
         }
+    }
+
+    // ! NJU POSTAC
+    {
+        objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
+
+        Entity* testKayak = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Kayak_fixed_collapsed");
     }
 }
 
