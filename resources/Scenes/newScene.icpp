@@ -562,12 +562,14 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = body->getComponentPtr<MeshRenderer>();
                 mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
         }
 
         Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
         {
             auto mr = eyes->getComponentPtr<MeshRenderer>();
                 mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
         }
 
         Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
@@ -579,6 +581,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = eyelashes->getComponentPtr<MeshRenderer>();
                 mr->material = eyelashesMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
@@ -594,6 +597,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = gloves->getComponentPtr<MeshRenderer>();
                 mr->material = gloveMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
@@ -609,6 +613,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = hats->getComponentPtr<MeshRenderer>();
                 mr->material = hatMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
@@ -624,6 +629,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = masks->getComponentPtr<MeshRenderer>();
                 mr->material = maskMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
@@ -639,6 +645,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = tops->getComponentPtr<MeshRenderer>();
                 mr->material = topMat;
+                mr->mesh->frustumCulling = false;
         }
     }
 }

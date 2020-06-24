@@ -69,6 +69,11 @@ public:
      */
     bool customName;
 
+    /**
+     * @brief Should this mesh be checked for frustum culling?
+     */
+    bool frustumCulling = true;
+
 private:
     static unsigned int idcount;
     unsigned int ID;
