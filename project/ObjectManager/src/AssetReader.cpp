@@ -130,7 +130,7 @@ bool AssetReader::loadMesh(std::string path, bool customName, bool createEntitie
     makeEntities = createEntities;
 
     // ? +++++ Load the assimp scene from provided path +++++
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_GenBoundingBoxes | aiProcess_LimitBoneWeights);
     
     // Check for assimp errors and display them
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)

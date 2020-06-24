@@ -45,10 +45,20 @@ mat3 calculateTBN(vec3 normal, vec3 tangent)
 
 void main() 
 {
-	FragPos = vec3(model * vec4(position, 1.0));
-	Normal = mat3(transpose(inverse(model))) * normal;
+	mat4 boneTransform = finalTransform[boneIDs[0]] * weights[0];
+    boneTransform += finalTransform[boneIDs[1]] * weights[1];
+    boneTransform += finalTransform[boneIDs[2]] * weights[2];
+    boneTransform += finalTransform[boneIDs[3]] * weights[3];
+
+	vec4 posLocal = boneTransform * vec4(position, 1.0);
+	vec3 normalLocal = vec3(boneTransform * vec4(normal, 0.0));
+	vec3 tangentLocal = vec3(boneTransform * vec4(tangent, 0.0));
+
 	Texcoord = texcoord;
-	TBN = calculateTBN(normal, tangent);
+	
+	FragPos = vec3(model * posLocal);
+	Normal = mat3(transpose(inverse(model))) * normalLocal;
+	TBN = calculateTBN(normalLocal, tangentLocal);
     FragPosLightSpace = directionalLightMatrix * vec4(FragPos, 1.0);
-	gl_Position = MVP * vec4(position, 1.0);
+	gl_Position = MVP * posLocal;
 }
