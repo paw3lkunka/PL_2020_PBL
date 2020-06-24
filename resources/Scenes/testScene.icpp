@@ -3,9 +3,6 @@ auto unlitInstanced = objectModule.newShader("UnlitBillboardInstanced", "Resourc
 auto unlitColor = objectModule.newShader("UnlitColor", "Resources/Shaders/UnlitColor/UnlitColor.vert", "Resources/Shaders/UnlitColor/UnlitColor.frag");
 auto unlitSkinned = objectModule.newShader("UnlitSkinned", "Resources/Shaders/UnlitSkinned/UnlitSkinned.vert", "Resources/Shaders/UnlitSkinned/UnlitSkinned.frag");
 
-objectModule.newAudioClip("Resources/Audios/shingeki.wav");
-objectModule.newAudioClip("Resources/Audios/river.wav");
-
 TextureCreateInfo texCreateInfo = {};
     texCreateInfo.generateMipmaps = true;
     texCreateInfo.magFilter = GL_LINEAR;
@@ -64,7 +61,6 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             t->setParent(&sceneModule.rootNode);
 
         auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
-            li->getIsCurrentModifiable() = true;
             li->getGainModifiable() = 0.5f;
             li->getVelocityModifiable();
             li->getPositionModifiable();
@@ -114,8 +110,7 @@ GetCore().rendererModule.setSkybox(hdrSkyboxMat);
             bc->halfSize = {0.5f, 0.5f, 0.5f};
 
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-            so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
+            so3->audioClip = "Resources/Audios/shingeki.wav";
             so3->getIsRelativeModifiable() = true;
             so3->getGainModifiable() = 0.1f;
             so3->getIsLoopingModifiable() = true;

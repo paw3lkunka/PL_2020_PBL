@@ -80,12 +80,22 @@ class AudioModule : public IModule
         void init();
 
         /**
+         * @brief Loads current scene
+         * 
+         * Create the context.
+         * Create all sources.
+         * Create all buffers.
+         */
+        void sceneInit();
+
+        /**
          * @brief Unloads current scene
          * 
-         * Release all the contexts.
+         * Release the context.
+         * Release all sources.
          * Release all buffers.
          */
-        void unloadScene();
+        void sceneUnload();
 
         /**
          * @brief Clean up AudioModule
@@ -103,10 +113,10 @@ class AudioModule : public IModule
         /// @brief Pointer used to operate on sound device 
         ALCdevice* device = nullptr;
 
-        /// @brief Vector of all contexts existing on the device. Used for cleanup.
-        std::vector<ALCcontext*> contexts = {};
+        AudioListener* listener = nullptr;
 
         std::vector<AudioSource*> sources = {};
+        
         ///@brief all playing sources - helpful while pausing
         std::vector<AudioSource*> playingSources = {};
 
@@ -114,29 +124,12 @@ class AudioModule : public IModule
         bool paused = false;
 
         /**
-         * @brief Pointer to currently processed AudioListener
-         * 
-         * If it is nullptr no AudioListener (context) is processed thus no sound is processed.
-         * 
-         * If a diffrent AudioListener's "isCurrent" flag is set it will be replaced and its "isCurrent" will be unset.
-         */
-        AudioListener* currentListener = nullptr;
-
-        /**
          * @brief Unordered map of AudioClips' paths and their buffers
          * 
          * FIRST: Path to the file from /Resources folder
          * SECOND: Name (id) of the buffer
          */
-        std::unordered_map<std::string, ALuint> clips = {};
-
-        /**
-         * @brief Unordered map of buffer names and their queue counters
-         * 
-         * FIRST: Name (id) of the buffer
-         * SECOND: Queues it is in counter
-         */
-        std::unordered_map<ALuint, ALint> queueCounters = {};
+        std::unordered_map<std::string, ALuint> audioBuffers = {};
 
         /// @brief Push all accepted changes to device at once
         void alcPushCurrentContextChangesToDevice();
@@ -147,7 +140,7 @@ class AudioModule : public IModule
         /// @brief Suspend current context
         void alcSuspendCurrentContext();
 
-        #pragma region OpenAL errors checkers
+#pragma region OpenAL errors checkers
 
         /**
          * @brief Check if any OpenAL context errors occurred
@@ -173,9 +166,9 @@ class AudioModule : public IModule
          */
         void alcCheckErrorsImpl(ALCdevice* device, const std::string& filename, const std::uint_fast32_t line);
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Event Handlers
+#pragma region Event Handlers
 
         /// @brief Handles AUDIO_LISTENER_INIT event
         void audioListenerInitHandler(AudioListener* audioListenerPtr);
@@ -183,11 +176,11 @@ class AudioModule : public IModule
         /// @brief Handles AUDIO_LISTENER_UPDATE event
         void audioListenerUpdateHandler(AudioListener* audioListenerPtr);
 
-        /// @brief Handles AUDIO_SOURCE_UPDATE_LISTENERS event
-        void audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr);
+        /// @brief Handles AUDIO_SOURCE_INIT event
+        void audioSourceInitHandler(AudioSource* audioSourcePtr);
 
-        /// @brief Handles AUDIO_SOURCE_UPDATE_ATTRIBUTES event
-        void audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr);
+        /// @brief Handles AUDIO_SOURCE_UPDATE event
+        void audioSourceUpdateHandler(AudioSource* audioSourcePtr);
 
         /// @brief Handles AUDIO_SOURCE_PLAY event
         void audioSourcePlayHandler(AudioSource* audioSourcePtr);    
@@ -204,9 +197,9 @@ class AudioModule : public IModule
         ///@brief Handles RECEIVE_AUDIO_DATA event
         void receiveAudioDataHandler(AudioFile* audioFilePtr);
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Event helpers
+#pragma region Event helpers
 
         /// @brief Sets chosen AudioListener as current
         void audioListenerSetAsCurrentHelper(AudioListener* audioListenerPtr);
@@ -218,11 +211,11 @@ class AudioModule : public IModule
          * Finally new queue is set.
          * 
          */
-        void audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr); 
+        void audioSourceUpdateBufferHelper(AudioSource* audioSourcePtr); 
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Buffers methods
+#pragma region Buffers methods
 
         /**
          * @brief Load AudioClip to buffer using standard accessible values of a clip
@@ -253,9 +246,9 @@ class AudioModule : public IModule
          */
         void setBufferData(ALuint bufferId, ALenum format, ALvoid* data, ALsizei size, ALsizei frequency);
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Listener Getters
+#pragma region Listener Getters
         
         /**
          * @brief Get the Listener Position
@@ -292,9 +285,9 @@ class AudioModule : public IModule
          */
         void getListenerOrientation(glm::vec3* at, glm::vec3* up);
         
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Source Getters
+#pragma region Source Getters
 
         /**
          * @brief Get the Source Position 
@@ -572,9 +565,9 @@ class AudioModule : public IModule
          */
         ALuint getSourceBuffersProcessedCount(ALuint sourceId);
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Listener Setters
+#pragma region Listener Setters
 
         /**
          * @brief Set the Listener Position 
@@ -611,9 +604,9 @@ class AudioModule : public IModule
          */
         void setListenerOrientation(glm::vec3 at, glm::vec3 up);
 
-        #pragma endregion
+#pragma endregion
 
-        #pragma region Source Setters
+#pragma region Source Setters
 
         /**
          * @brief Set the Source Position 
@@ -846,7 +839,7 @@ class AudioModule : public IModule
          */
         void setSourceByteOffset(ALuint sourceId, ALfloat byteOffset);
 
-        #pragma endregion
+#pragma endregion
 };
 
 #endif /* !AUDIOMODULE_HPP_ */

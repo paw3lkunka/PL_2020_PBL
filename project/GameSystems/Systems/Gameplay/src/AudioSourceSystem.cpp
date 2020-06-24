@@ -27,17 +27,11 @@ bool AudioSourceSystem::assertEntity(Entity* entity)
 
 void AudioSourceSystem::start()
 {
-    audioSource->getDirtyModifiable() |= (1 << 20);
     GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_INIT, audioSource));
 }
 
 void AudioSourceSystem::frameUpdate()
 {
-    if(audioSource->getDirty() & (1 << 20))
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_LISTENERS, audioSource) );
-    }
-
     if(transform)
     {
         auto position = glm::xyz(transform->getModelMatrix()[3]);
@@ -57,6 +51,6 @@ void AudioSourceSystem::frameUpdate()
     
     if(audioSource->getDirty())
     {
-        GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES, audioSource) );
+        GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_UPDATE, audioSource) );
     }
 }

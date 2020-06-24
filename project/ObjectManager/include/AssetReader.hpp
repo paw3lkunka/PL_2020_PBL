@@ -64,7 +64,7 @@ private:
     bool makeEntities = true;
 
     //load files to storages methods
-    bool loadAudioClip(std::string path);
+    AudioFile* loadAudioClip(std::string path);
     bool loadTexture(std::string path);
     bool loadHdrTexture(std::string path);
     bool loadShader(std::string path);

@@ -51,7 +51,6 @@
         },
         "entity id": 0,
         "gain": 1.0,
-        "isCurrent": 1,
         "serializationID": 7,
         "type": "AudioListener",
         "up": {
@@ -83,10 +82,8 @@
         "type": "Transform"
     },
     "component004": {
-        "autoPlay": false,
-        "clips": [
-            "Resources/Audios/river.wav"
-        ],
+        "audioClip": "Resources/Audios/river.wav",
+        "autoPlay": true,
         "coneInnerAngle": 360.0,
         "coneOuterAngle": 360.0,
         "coneOuterGain": 0.0,
@@ -96,12 +93,9 @@
             "z": 0.0
         },
         "entity id": 1,
-        "gain": 2.0,
+        "gain": 1.0,
         "isLooping": 1,
         "isRelativeToListener": 1,
-        "listeners": [
-            7
-        ],
         "maxDistance": "infinity",
         "maxGain": 1.0,
         "minGain": 0.0,

@@ -11,14 +11,14 @@
 //TODO documentation
 struct AudioSource : public Component
 {
-    inline AudioSource() = default;
+    AudioSource() = default;
     virtual ~AudioSource() = default;
 
-    /// READONLY: Names (ids) corresponding to listeners vector 
-    std::unordered_map<AudioListener*, ALuint> names = {};
+    /// READONLY: Name (id) of the source in OpenAL
+    ALuint name;
 
-    /// READONLY: Collection of currently kept buffers queue on the device
-    std::vector<ALuint> currentQueue = {};
+    /// @brief Audio clip only to be set in scene file
+    std::string audioClip;
 
     /**
      * @brief Dirty flag indicating which Source's attributes must be updated on device level
@@ -43,12 +43,10 @@ struct AudioSource : public Component
      * 1 << 16 flag: secOffset
      * 1 << 17 flag: sampleOffset
      * 1 << 18 flag: byteOffset
-     * 1 << 19 flag: clips (buffers queued)
-     * 1 << 20 flag: listeners (contexts and source names)
      * 
      * @returns Value of dirty flag
      */
-    inline ALuint getDirty() { return dirty; }
+    ALuint getDirty() { return dirty; }
 
     /**
      * @brief Dirty flag indicating which Source's attributes must be updated on device level
@@ -73,40 +71,10 @@ struct AudioSource : public Component
      * 1 << 16 flag: secOffset
      * 1 << 17 flag: sampleOffset
      * 1 << 18 flag: byteOffset
-     * 1 << 19 flag: clips (buffers queued)
-     * 1 << 20 flag: listeners (contexts and source names)
      * 
      * @returns Reference to dirty flag
      */
-    inline ALuint& getDirtyModifiable() { return dirty; }
-
-    /**
-     * @brief Audio Listeners pointers it belongs to
-     * 
-     * @returns Value of vector of listeners pointers
-     */
-    inline std::vector<AudioListener*>& getListeners() { return listeners; }
-
-    /**
-     * @brief Audio Listeners pointers it belongs to
-     * 
-     * @returns Reference to vector of listeners pointers
-     */
-    inline std::vector<AudioListener*>& getListenersModifiable() { dirty |= (1 << 20); return listeners; }
-
-    /**
-     * @brief Paths to AudioClips queued to play for the source
-     * 
-     * @returns Value of vector of paths to audio clips
-     */
-    inline std::vector<std::string>& getClips() { return clips; }
-
-    /**
-     * @brief Paths to AudioClips queued to play for the source
-     * 
-     * @returns Reference to vector of paths to audio clips
-     */
-    inline std::vector<std::string>& getClipsModifiable() { dirty |= (1 << 19); return clips; }
+    ALuint& getDirtyModifiable() { return dirty; }
 
     /**
      * @brief Source's Position vector
@@ -114,7 +82,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of position vector
      */
-    inline glm::vec3 getPosition() { return position; }
+    glm::vec3 getPosition() { return position; }
     
     /**
      * @brief Source's Position vector
@@ -122,7 +90,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to position vector
      */
-    inline glm::vec3& getPositionModifiable() { dirty |= (1 << 0); return position; }
+    glm::vec3& getPositionModifiable() { dirty |= (1 << 0); return position; }
 
     /**
      * @brief Source's velocity vector
@@ -130,7 +98,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of velocity vector
      */
-    inline glm::vec3 getVelocity() { return velocity; }
+    glm::vec3 getVelocity() { return velocity; }
     
     /**
      * @brief Source's velocity vector
@@ -138,7 +106,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to velocity vector
      */
-    inline glm::vec3& getVelocityModifiable() { dirty |= (1 << 1); return velocity; }
+    glm::vec3& getVelocityModifiable() { dirty |= (1 << 1); return velocity; }
 
     /**
      * @brief Source's gain value
@@ -146,7 +114,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of gain
      */
-    inline ALfloat getGain() { return gain; }
+    ALfloat getGain() { return gain; }
 
     /**
      * @brief Source's gain value
@@ -154,7 +122,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to gain
      */
-    inline ALfloat& getGainModifiable() { dirty |= (1 << 2); return gain; }
+    ALfloat& getGainModifiable() { dirty |= (1 << 2); return gain; }
     
     /**
      * @brief Is source considered Relative to Listener
@@ -164,7 +132,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of isRelativeToListener
      */
-    inline ALboolean getIsRelative() { return isRelativeToListener; }
+    ALboolean getIsRelative() { return isRelativeToListener; }
     
     /**
      * @brief Is source considered Relative To Listener
@@ -174,7 +142,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to isRelativeToListener
      */
-    inline ALboolean& getIsRelativeModifiable() { dirty |= (1 << 3); return isRelativeToListener; }
+    ALboolean& getIsRelativeModifiable() { dirty |= (1 << 3); return isRelativeToListener; }
 
     /**
      * @brief Is source looping value 
@@ -184,7 +152,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of isLooping
      */
-    inline ALboolean getIsLooping() { return isLooping; }
+    ALboolean getIsLooping() { return isLooping; }
     
     /**
      * @brief Is source looping value 
@@ -194,7 +162,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to isLooping
      */
-    inline ALboolean& getIsLoopingModifiable() { dirty |= (1 << 4); return isLooping;}
+    ALboolean& getIsLoopingModifiable() { dirty |= (1 << 4); return isLooping;}
 
     /**
      * @brief WRITEONLY: Name (id) of the current buffer, unique in the device 
@@ -203,7 +171,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of name (id) of currently set buffer
      */
-    inline ALuint getCurrentBuffer() { return currentBuffer; }
+    ALuint getCurrentBuffer() { return currentBuffer; }
 
     /**
      * @brief WRITEONLY: Name (id) of the current buffer, unique in the device 
@@ -212,7 +180,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to name (id) of currently played buffer
      */
-    inline ALuint& getCurrentBufferModifiable() { dirty |= (1 << 5); return currentBuffer; }
+    ALuint& getCurrentBufferModifiable() { dirty |= (1 << 5); return currentBuffer; }
     
     /**
      * @brief Minimal AL_GAIN guaranteed for this source 
@@ -224,7 +192,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of minGain
      */
-    inline ALfloat getMinGain() { return minGain; }
+    ALfloat getMinGain() { return minGain; }
 
     /**
      * @brief Minimal AL_GAIN guaranteed for this source 
@@ -236,7 +204,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to minGain
      */
-    inline ALfloat& getMinGainModifiable() { dirty |= (1 << 6); return minGain; }
+    ALfloat& getMinGainModifiable() { dirty |= (1 << 6); return minGain; }
     
     /**
      * @brief Set the Source Max Gain 
@@ -249,7 +217,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of maxGain
      */
-    inline ALfloat getMaxGain() { return maxGain; }
+    ALfloat getMaxGain() { return maxGain; }
 
     /**
      * @brief Set the Source Max Gain 
@@ -262,7 +230,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to maxGain
      */
-    inline ALfloat& getMaxGainModifiable() { dirty |= (1 << 7); return maxGain; }
+    ALfloat& getMaxGainModifiable() { dirty |= (1 << 7); return maxGain; }
     
     /**
      * @brief Set the Source Reference Distance 
@@ -272,7 +240,7 @@ struct AudioSource : public Component
      * 
      * @return Value of reference distance
      */
-    inline ALfloat getReferenceDistance() { return referenceDistance; }
+    ALfloat getReferenceDistance() { return referenceDistance; }
     
     /**
      * @brief Set the Source Reference Distance 
@@ -282,7 +250,7 @@ struct AudioSource : public Component
      * 
      * @return Reference to reference distance
      */
-    inline ALfloat& getReferenceDistanceModifiable() { dirty |= (1 << 8); return referenceDistance; }
+    ALfloat& getReferenceDistanceModifiable() { dirty |= (1 << 8); return referenceDistance; }
 
     /**
      * @brief Source's rolloff factor value 
@@ -294,7 +262,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of rolloffFactor
      */
-    inline ALfloat getRolloffFactor() { return rolloffFactor; }
+    ALfloat getRolloffFactor() { return rolloffFactor; }
 
     /**
      * @brief Source's rolloff factor value 
@@ -306,7 +274,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to rolloffFactor
      */
-    inline ALfloat& getRolloffFactorModifiable() { dirty |= (1 << 9); return rolloffFactor; }
+    ALfloat& getRolloffFactorModifiable() { dirty |= (1 << 9); return rolloffFactor; }
     
     /**
      * @brief Source's max distance value 
@@ -318,7 +286,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of maxDistance
      */
-    inline ALfloat getMaxDistance() { return maxDistance; }
+    ALfloat getMaxDistance() { return maxDistance; }
 
     /**
      * @brief Source's max distance value 
@@ -330,7 +298,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to maxDistance
      */
-    inline ALfloat& getMaxDistanceModifiable() { dirty |= (1 << 10); return maxDistance; }
+    ALfloat& getMaxDistanceModifiable() { dirty |= (1 << 10); return maxDistance; }
     
     /**
      * @brief Source's pitch value 
@@ -344,7 +312,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of the pitch
      */
-    inline ALfloat getPitch() { return pitch; }
+    ALfloat getPitch() { return pitch; }
 
     /**
      * @brief Source's pitch value 
@@ -358,7 +326,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to the pitch
      */
-    inline ALfloat& getPitchModifiable() { dirty |= (1 << 11); return pitch; }
+    ALfloat& getPitchModifiable() { dirty |= (1 << 11); return pitch; }
     
     /**
      * @brief Source's direction vector
@@ -370,7 +338,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of direction vector
      */
-    inline glm::vec3 getDirection() { return direction; }
+    glm::vec3 getDirection() { return direction; }
 
     /**
      * @brief Source's direction vector
@@ -382,7 +350,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to direction vector
      */
-    inline glm::vec3& getDirectionModifiable() { dirty |= (1 << 12); return direction; }
+    glm::vec3& getDirectionModifiable() { dirty |= (1 << 12); return direction; }
     
     /**
      * @brief Source's cone inner angle value 
@@ -392,7 +360,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of cone inner angle
      */
-    inline ALfloat getConeInnerAngle() { return coneInnerAngle; }
+    ALfloat getConeInnerAngle() { return coneInnerAngle; }
 
     /**
      * @brief Source's cone inner angle value 
@@ -402,7 +370,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to cone inner angle
      */
-    inline ALfloat& getConeInnerAngleModifiable() { dirty |= (1 << 13); return coneInnerAngle; }
+    ALfloat& getConeInnerAngleModifiable() { dirty |= (1 << 13); return coneInnerAngle; }
     
     /**
      * @brief Source cone outer angle value
@@ -413,7 +381,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of cone outer angle
      */
-    inline ALfloat getConeOuterAngle() { return coneOuterAngle; }
+    ALfloat getConeOuterAngle() { return coneOuterAngle; }
 
     /**
      * @brief Source cone outer angle value
@@ -424,7 +392,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to cone outer angle
      */
-    inline ALfloat& getConeOuterAngleModifiable() { dirty |= (1 << 14); return coneOuterAngle; }
+    ALfloat& getConeOuterAngleModifiable() { dirty |= (1 << 14); return coneOuterAngle; }
     
     /**
      * @brief Cone outer gain factor value 
@@ -434,7 +402,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of cone outer gain
      */
-    inline ALfloat getConeOuterGain() { return coneOuterGain; }
+    ALfloat getConeOuterGain() { return coneOuterGain; }
     
     /**
      * @brief Cone outer gain factor value 
@@ -444,7 +412,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to cone outer gain
      */
-    inline ALfloat& getConeOuterGainModifiable() { dirty |= (1 << 15); return coneOuterGain; }
+    ALfloat& getConeOuterGainModifiable() { dirty |= (1 << 15); return coneOuterGain; }
 
     /**
      * @brief WRITEONLY: Source's seconds offset value 
@@ -459,7 +427,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of seconds offset that was set
      */
-    inline ALfloat getSecOffset() { return secOffset; }
+    ALfloat getSecOffset() { return secOffset; }
 
     /**
      * @brief WRITEONLY: Source's seconds offset value 
@@ -474,7 +442,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to seconds offset to set
      */
-    inline ALfloat& getSecOffsetModifiable() { dirty |= (1 << 16); return secOffset; }
+    ALfloat& getSecOffsetModifiable() { dirty |= (1 << 16); return secOffset; }
     
     /**
      * @brief WRITEONLY: Source's sample offset value 
@@ -488,7 +456,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of sample offset that was set
      */
-    inline ALfloat getSampleOffset() { return sampleOffset; }
+    ALfloat getSampleOffset() { return sampleOffset; }
 
     /**
      * @brief WRITEONLY: Source's sample offset value 
@@ -502,7 +470,7 @@ struct AudioSource : public Component
      * 
      * @returns Reference to sample offset to set
      */
-    inline ALfloat& getSampleOffsetModifiable() { dirty |= (1 << 17); return sampleOffset; }
+    ALfloat& getSampleOffsetModifiable() { dirty |= (1 << 17); return sampleOffset; }
     
     /**
      * @brief WRITEONLY: Source's byte offset value 
@@ -516,7 +484,7 @@ struct AudioSource : public Component
      * 
      * @returns Value of byte offset that was set
      */
-    inline ALfloat getByteOffset() { return byteOffset; }
+    ALfloat getByteOffset() { return byteOffset; }
 
     /**
      * @brief WRITEONLY: Source's byte offset value 
@@ -530,17 +498,12 @@ struct AudioSource : public Component
      * 
      * @returns Reference to byte offset to set
      */
-    inline ALfloat& getByteOffsetModifiable() { dirty |= (1 << 18); return byteOffset; }
+    ALfloat& getByteOffsetModifiable() { dirty |= (1 << 18); return byteOffset; }
 
     bool autoPlay = false;
 
     private:
-
-        ALuint dirty = (1 << 20);
-
-        std::vector<AudioListener*> listeners = {};
-
-        std::vector<std::string> clips = {};
+        ALuint dirty = 0;
 
         glm::vec3 position = {0.0f, 0.0f, 0.0f};
 
