@@ -393,10 +393,9 @@
 objectModule.newEntity(2, "sampleSound");
     {
         auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/shingeki.wav");
+        so3->audioClip = "Resources/Audios/shingeki.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 2.0f;
+        so3->getGainModifiable() = 1.0f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 

@@ -14,122 +14,118 @@
 
 void AudioModule::receiveMessage(Message msg)
 {
-    // try
-    // {
-    //     switch (msg.getEvent())
-    //     {
-    //     case Event::AUDIO_SOURCE_INIT:
-    //         sources.push_back(msg.getValue<AudioSource*>());
-    //     break;
-    //     case Event::AUDIO_LISTENER_INIT:
-    //     {
-    //         auto audioListenerPtr = msg.getValue<AudioListener*>();
-    //         audioListenerInitHandler(audioListenerPtr);
-    //     }
-    //         break;
+    try
+    {
+        switch (msg.getEvent())
+        {
+            case Event::AUDIO_LISTENER_INIT:
+            {
+                auto audioListenerPtr = msg.getValue<AudioListener*>();
+                audioListenerInitHandler(audioListenerPtr);
+            }
+            break;
 
-    //     case Event::AUDIO_LISTENER_UPDATE:
-    //     {
-    //         auto audioListenerPtr = msg.getValue<AudioListener*>();
-    //         audioListenerUpdateHandler(audioListenerPtr);
-    //     }
-    //         break;
+            case Event::AUDIO_LISTENER_UPDATE:
+            {
+                auto audioListenerPtr = msg.getValue<AudioListener*>();
+                audioListenerUpdateHandler(audioListenerPtr);
+            }
+            break;
 
-    //     case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
-    //     {
-    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourceUpdateListenersHandler(audioSourcePtr);
-    //     }
-    //         break;
+            case Event::AUDIO_SOURCE_INIT:
+            {
+                auto audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceInitHandler(audioSourcePtr);
+            }
+            break;
 
-    //     case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
-    //     {
-    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourceUpdateAttributesHandler(audioSourcePtr);
-    //     }
-    //         break;
+            case Event::AUDIO_SOURCE_UPDATE:
+            {
+                auto audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceUpdateHandler(audioSourcePtr);
+            }
+            break;
 
-    //     case Event::RECEIVE_AUDIO_DATA:
-    //     {
-    //         auto audioFile = msg.getValue<AudioFile*>();
-    //         receiveAudioDataHandler(audioFile);
-    //     }
-    //         break;
+            case Event::AUDIO_SOURCE_PLAY:
+            {
+                AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourcePlayHandler(audioSourcePtr);
+            }
+            break;
 
-    //     case Event::AUDIO_SOURCE_PLAY:
-    //     {
-    //         AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourcePlayHandler(audioSourcePtr);
-    //     }
-    //         break;
+            case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+            {
+                AudioSource* audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceStopHandler(audioSourcePtr);
+                audioSourceRewindHandler(audioSourcePtr);
+                audioSourcePlayHandler(audioSourcePtr);
+            }
+            break;
 
-    //     case Event::AUDIO_SOURCE_STOP:
-    //     {
-    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourceStopHandler(audioSourcePtr);
-    //     }
-    //         break;
+            case Event::AUDIO_SOURCE_STOP:
+            {
+                auto audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceStopHandler(audioSourcePtr);
+            }
+            break;
 
-    //     case Event::AUDIO_SOURCE_PAUSE:
-    //     {
-    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourcePauseHandler(audioSourcePtr);
-    //     }
-    //         break;
-        
-    //     case Event::AUDIO_SOURCE_REWIND:
-    //     {
-    //         auto audioSourcePtr = msg.getValue<AudioSource*>();
-    //         audioSourceRewindHandler(audioSourcePtr);
-    //     }
-    //         break;
-    //     case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
-    //         paused = !paused;
-    //         if(paused)
-    //         {
-    //             for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-    //             {
-    //                 audioSourcePauseHandler(*iter);
-    //             }
-    //         }
-    //         else
-    //         {
-    //             for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-    //             {
-    //                 audioSourcePlayHandler(*iter);
-    //             }
-    //         }
-    //     break;
-    //     }
-
-    //     if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
-    //     {
-    //         alcPushCurrentContextChangesToDevice();
+            case Event::AUDIO_SOURCE_PAUSE:
+            {
+                auto audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourcePauseHandler(audioSourcePtr);
+            }
+            break;
             
-    //         for(auto iter = playingSources.begin(); iter != playingSources.end(); ++iter)
-    //         {
-    //             if((*iter)->names.size() > 0 && !(*iter)->getIsLooping())
-    //             {
-    //                 ALint state;
-    //                 alGetSourcei((*iter)->names.begin()->second, AL_SOURCE_STATE, &state);
-    //                 if(state == AL_STOPPED)
-    //                 {
-    //                     playingSources.erase(iter);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // catch(AudioContextLevelException e)
-    // {
-    //     std::cerr << e.what();
-    // }
-    // catch(AudioDeviceLevelException e)
-    // {
-    //     std::cerr << e.what();
-    // }
-    // catch(const std::exception& e)
-    // {}
+            case Event::AUDIO_SOURCE_REWIND:
+            {
+                auto audioSourcePtr = msg.getValue<AudioSource*>();
+                audioSourceRewindHandler(audioSourcePtr);
+            }
+            break;
+            
+            case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
+            {
+                paused = !paused;
+                if(paused)
+                {
+                    for(auto it = playingSources.begin(); it != playingSources.end(); it++)
+                    {
+                        audioSourcePauseHandler(*it);
+                    }
+                }
+                else
+                {
+                    for(auto it = playingSources.begin(); it != playingSources.end(); it++)
+                    {
+                        audioSourcePlayHandler(*it);
+                    }
+                }
+            }
+            break;
+
+            case Event::RECEIVE_AUDIO_DATA:
+            {
+                auto audioFile = msg.getValue<AudioFile*>();
+                receiveAudioDataHandler(audioFile);
+            }
+            break;
+        }
+
+        if(msg.getEvent() >= Event::AUDIO_FIRST && msg.getEvent() <= Event::AUDIO_LAST)
+        {
+            alcPushCurrentContextChangesToDevice();
+        }
+    }
+    catch(AudioContextLevelException e)
+    {
+        std::cerr << e.what();
+    }
+    catch(AudioDeviceLevelException e)
+    {
+        std::cerr << e.what();
+    }
+    catch(const std::exception& e)
+    {}
 }
 
 void AudioModule::init()
@@ -151,50 +147,56 @@ void AudioModule::init()
     {}
 }
 
-void AudioModule::unloadScene()
+void AudioModule::sceneInit()
 {
     try
-    {
-        for(auto src : sources)
-        {
-            for(auto name : src->names)
-            {
-                alcMakeContextCurrent(name.first->context);
-                alSourcePlay(name.second);
-                alSourceStop(name.second);
-                alSourcei(name.second, AL_LOOPING, 0);
-                ALuint* buffers = new ALuint;
-                alSourceUnqueueBuffers(name.second, 1, buffers);
-                alCheckErrors();
-                alSourcei(name.second, AL_BUFFER, 0);
-                alCheckErrors();
-                alDeleteSources(1, &name.second);
-                alCheckErrors();
-                delete buffers;
-                alcPushCurrentContextChangesToDevice();
-            }
-            for(auto clip : src->getClips())
-            {
-                auto iter = clips.find(clip);
-                if(iter != clips.end())
-                {
-                    alDeleteBuffers(1, &iter->second);
-                    alCheckErrors();
-                }
-            }
-        }
-        // Release and destroy the context
-        auto releaseContextStatus = alcMakeContextCurrent(nullptr);
-        if(releaseContextStatus == ALC_FALSE)
+    {        
+        listener->context = alcCreateContext(device, nullptr);
+        if(listener->context == nullptr)
         {
             alcCheckErrors();
+        }
+        alcMakeContextCurrent(listener->context);
+        alcCheckErrors();
+        alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+
+        //Create all needed buffers for AudioSources
+        for(auto it = audioBuffers.begin(); it != audioBuffers.end(); it++)
+        {
+            alGenBuffers(1, &it->second);
+            alCheckErrors();
+            GetCore().getMessageBus().sendMessage( Message(Event::QUERY_AUDIO_DATA, &(it->first)) );
         }
 
-        for(auto it = contexts.begin(); it != contexts.end(); it++)
+        // Send QUERY_AUDIO_DATA
+        GetCore().getMessageBus().notify();
+        // Receive RECEIVE_AUDIO_DATA
+        GetCore().getMessageBus().notify();
+
+        alcPushCurrentContextChangesToDevice();
+
+        for(auto source : sources)
         {
-            alcDestroyContext(*it);
-            alcCheckErrors();
+            alGenSources(1, &source->name);
+            alCheckErrors();
+
+            ALuint* buffer = &( audioBuffers.find(source->audioClip)->second );
+            alSourceQueueBuffers(source->name, 1, buffer);
+            alCheckErrors();
+
+            audioSourceUpdateHandler(source);
+
+            if(source->autoPlay)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, source) );
+            }
         }
+
+        alcPushCurrentContextChangesToDevice();
+    }
+    catch(AudioContextLevelException& e)
+    {
+        std::cerr << e.what();
     }
     catch(AudioDeviceLevelException& e)
     {
@@ -202,18 +204,66 @@ void AudioModule::unloadScene()
     }
     catch(const std::exception& e)
     {}
-    contexts.clear();
-    clips.clear();
-    sources.clear();
-    queueCounters.clear();
-    playingSources.clear();
+}
+
+void AudioModule::sceneUnload()
+{
+    try
+    {
+        for(auto src : sources)
+        {
+            alSourcePlay(src->name);
+            alSourceStop(src->name);
+            setSourceIsLooping(src->name, false);
+            
+            ALuint buffers;
+            alSourceUnqueueBuffers(src->name, 1, &buffers);
+            alCheckErrors();
+            
+            alSourcei(src->name, AL_BUFFER, 0);
+            alCheckErrors();
+            
+            alDeleteSources(1, &src->name);
+            alCheckErrors();
+
+            alcPushCurrentContextChangesToDevice();
+        }
+        sources.clear();
+        playingSources.clear();
+
+        for(auto buffer : audioBuffers)
+        {
+            alDeleteBuffers(1, &buffer.second);
+            alCheckErrors();
+        }
+        audioBuffers.clear();
+
+        auto releaseContextStatus = alcMakeContextCurrent(nullptr);
+        if(releaseContextStatus == ALC_FALSE)
+        {
+            alcCheckErrors();
+        }
+        alcDestroyContext(listener->context);
+        alcCheckErrors();
+        listener = nullptr;
+    }
+    catch(AudioContextLevelException& e)
+    {
+        std::cerr << e.what();
+    }
+    catch(AudioDeviceLevelException& e)
+    {
+        std::cerr << e.what();
+    }
+    catch(const std::exception& e)
+    {}
 }
 
 void AudioModule::cleanup()
 {
     try
     {
-        unloadScene();
+        sceneUnload();
 
         // Disconnect from connected device
         auto closeDeviceStatus = alcCloseDevice(device);
@@ -232,22 +282,19 @@ void AudioModule::cleanup()
 
 void AudioModule::alcPushCurrentContextChangesToDevice()
 {
-    if(currentListener)
-    {
-        alcProcessCurrentContext();
-        alcSuspendCurrentContext();
-    }
+    alcProcessCurrentContext();
+    alcSuspendCurrentContext();
 }
 
 void AudioModule::alcProcessCurrentContext()
 {
-    alcProcessContext(currentListener->context);
+    alcProcessContext(listener->context);
     alcCheckErrors();
 }
 
 void AudioModule::alcSuspendCurrentContext()
 {
-    alcSuspendContext(currentListener->context);
+    alcSuspendContext(listener->context);
     alcCheckErrors();
 }
 
@@ -332,37 +379,17 @@ void AudioModule::alcCheckErrorsImpl(ALCdevice* device, const std::string& filen
 
 void AudioModule::audioListenerInitHandler(AudioListener* audioListenerPtr)
 {
-    /*
-    To create list of context's attributes you must prepare an array of pair<int, int>
-    Each pair shall consist of valid attribute id as a key and its value.
-
-    ALC_FREQUENCY; - Frequency for mixing output buffer in units of Hz
-    ALC_REFRESH; - Refresh intervals in units of Hz
-    ALC_SYNC; - Flag indicating a synchronous context
-    ALC_MONO_SOURCES; - A hint indicating how many sources should be capable of supporting mono data
-    ALC_STEREO_SOURCES; - A hint indicating how many sources should be capable of supporting stereo data 
-    */
-    auto contextAttrList = nullptr;
-    
-    // Create context for selected device with attributes
-    audioListenerPtr->context = alcCreateContext(device, contextAttrList);
-    if(audioListenerPtr->context == nullptr)
+    if(listener != nullptr)
     {
-        alcCheckErrors();
+        std::cout << "WARNING: Only one AudioListener for a scene is valid! Ignoring duplicate..." << std::endl;
+        return;
     }
 
-    contexts.push_back(audioListenerPtr->context);
-
-    if(audioListenerPtr->getIsCurrent())
-    {
-        audioListenerSetAsCurrentHelper(audioListenerPtr);
-    }
+    listener = audioListenerPtr;
 }
 
 void AudioModule::audioListenerUpdateHandler(AudioListener* audioListenerPtr)
 {
-    alcProcessCurrentContext();
-
     if(audioListenerPtr->getDirty() & (1 << 0))
     {
         setListenerPosition(audioListenerPtr->getPosition());
@@ -386,342 +413,174 @@ void AudioModule::audioListenerUpdateHandler(AudioListener* audioListenerPtr)
         setListenerOrientation(audioListenerPtr->getAt(), audioListenerPtr->getUp());
         audioListenerPtr->getDirtyModifiable() &= ~(1 << 3);
     }
-
-    if(audioListenerPtr->getDirty() & (1 << 4))
-    {
-        alcPushCurrentContextChangesToDevice();
-
-        if(audioListenerPtr->getIsCurrent())
-        {
-            audioListenerSetAsCurrentHelper(audioListenerPtr);
-        }
-        else
-        {
-            auto releseContextStatus = alcMakeContextCurrent(nullptr);
-            if(releseContextStatus == ALC_FALSE)
-            {
-                alcCheckErrors();
-            }
-
-            currentListener->getIsCurrentModifiable() = false;
-            currentListener = nullptr;
-        }
-
-        audioListenerPtr->getDirtyModifiable() &= ~(1 << 4);
-    }
-
-    alcSuspendCurrentContext();
 }
 
-void AudioModule::audioSourceUpdateListenersHandler(AudioSource* audioSourcePtr)
+void AudioModule::audioSourceInitHandler(AudioSource* audioSourcePtr)
 {
-    auto tmpCurrent = currentListener;
-    
-    // Generte names for all AudioListeners that requires that
-    for(auto it = audioSourcePtr->getListeners().begin(); it != audioSourcePtr->getListeners().end(); it++)
+    auto buffer = audioBuffers.find(audioSourcePtr->audioClip);
+    if(buffer == audioBuffers.end())
     {
-        auto name = audioSourcePtr->names.find(*it);
-        if(name == audioSourcePtr->names.end())
-        {
-            audioListenerSetAsCurrentHelper(*it);
-            ALuint newName;
-            alGenSources(1, &newName);
-            
-            audioSourcePtr->names.insert( std::pair<AudioListener*, ALuint>(*it, newName) );
-            alcPushCurrentContextChangesToDevice();
-        }
+        audioBuffers.insert( std::pair(audioSourcePtr->audioClip, 0) );
     }
 
-    // Erase pairs of listeners and names which are no longer needed
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
-    {
-        auto listener = std::find(audioSourcePtr->getListeners().begin(), audioSourcePtr->getListeners().end(), it->first);
-        if(listener == audioSourcePtr->getListeners().end())
-        {
-            audioListenerSetAsCurrentHelper(it->first);
-            alDeleteSources(1, &(it->second));
-            alCheckErrors();
-            audioSourcePtr->names.erase(it);
-            alcPushCurrentContextChangesToDevice();
-        }
-    }
-
-    audioSourcePtr->getClipsModifiable();
-    audioSourcePtr->getDirtyModifiable() &= ~(1 << 20);
-    
-    if(tmpCurrent)
-    {
-        audioListenerSetAsCurrentHelper(tmpCurrent);
-    }
+    sources.push_back(audioSourcePtr);
 }
 
-void AudioModule::audioSourceUpdateAttributesHandler(AudioSource* audioSourcePtr)
+void AudioModule::audioSourceUpdateHandler(AudioSource* audioSourcePtr)
 {
-    if(audioSourcePtr->getDirty() & (1 << 19))
+    if(audioSourcePtr->getDirty() & (1 << 0))
     {
-        audioSourceUpdateBuffersHelper(audioSourcePtr);
-    }
-    
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
-    {
-        if(audioSourcePtr->getDirty() & (1 << 0))
-        {
-            setSourcePosition(it->second, audioSourcePtr->getPosition());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 1))
-        {
-            setSourceVelocity(it->second, audioSourcePtr->getVelocity());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 2))
-        {
-            setSourceGain(it->second, audioSourcePtr->getGain());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 3))
-        {
-            setSourceIsRelative(it->second, audioSourcePtr->getIsRelative());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 4))
-        {
-            setSourceIsLooping(it->second, audioSourcePtr->getIsLooping());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 5))
-        {
-            setSourceCurrentBuffer(it->second, audioSourcePtr->getCurrentBuffer());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 6))
-        {
-            setSourceMinGain(it->second, audioSourcePtr->getMinGain());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 7))
-        {
-            setSourceMaxGain(it->second, audioSourcePtr->getMaxGain());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 8))
-        {
-            setSourceReferenceDistance(it->second, audioSourcePtr->getReferenceDistance());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 9))
-        {
-            setSourceRolloffFactor(it->second, audioSourcePtr->getRolloffFactor());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 10))
-        {
-            setSourceMaxDistance(it->second, audioSourcePtr->getMaxDistance());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 11))
-        {
-            setSourcePitch(it->second, audioSourcePtr->getPitch());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 12))
-        {
-            setSourceDirection(it->second, audioSourcePtr->getDirection());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 13))
-        {
-            setSourceConeInnerAngle(it->second, audioSourcePtr->getConeInnerAngle());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 14))
-        {
-            setSourceConeOuterAngle(it->second, audioSourcePtr->getConeOuterAngle());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 15))
-        {
-            setSourceConeOuterGain(it->second, audioSourcePtr->getConeOuterGain());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 16))
-        {
-            setSourceSecOffset(it->second, audioSourcePtr->getSecOffset());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 17))
-        {
-            setSourceSampleOffset(it->second, audioSourcePtr->getSampleOffset());
-        }
-
-        if(audioSourcePtr->getDirty() & (1 << 18))
-        {
-            setSourceByteOffset(it->second, audioSourcePtr->getByteOffset());
-        }
-
-        // (1 << 19) stands for updating buffers queues
-
-        // (1 << 20) stands for AUDIO_SOURCE_UPDATE_LISTENERS event trigger
+        setSourcePosition(audioSourcePtr->name, audioSourcePtr->getPosition());
     }
 
-    audioSourcePtr->getDirtyModifiable() &= ~(0b001111111111111111111);
-}
-
-void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
-{
-    auto clip = clips.find(audioFilePtr->getFilePath());
-    if(clip == clips.end())
+    if(audioSourcePtr->getDirty() & (1 << 1))
     {
-        return;
+        setSourceVelocity(audioSourcePtr->name, audioSourcePtr->getVelocity());
     }
 
-    auto counter = queueCounters.find(clip->second);
-    if(counter == queueCounters.end() || counter->second == 0)
+    if(audioSourcePtr->getDirty() & (1 << 2))
     {
-        loadAudioFileDataToBuffer(clip->second, audioFilePtr->getChannelsCount(), audioFilePtr->getSampleRate(), audioFilePtr->getBitsPerSample(), &audioFilePtr->data, audioFilePtr->getSize());
+        setSourceGain(audioSourcePtr->name, audioSourcePtr->getGain());
     }
-    else
+
+    if(audioSourcePtr->getDirty() & (1 << 3))
     {
-        std::stringstream message;
-        message << "Buffer " << clip->second << " is still queued. It cannot be filled with new data.\n";
-        throw AudioDeviceLevelException(message.str());
+        setSourceIsRelative(audioSourcePtr->name, audioSourcePtr->getIsRelative());
     }
+
+    if(audioSourcePtr->getDirty() & (1 << 4))
+    {
+        setSourceIsLooping(audioSourcePtr->name, audioSourcePtr->getIsLooping());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 5))
+    {
+        setSourceCurrentBuffer(audioSourcePtr->name, audioSourcePtr->getCurrentBuffer());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 6))
+    {
+        setSourceMinGain(audioSourcePtr->name, audioSourcePtr->getMinGain());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 7))
+    {
+        setSourceMaxGain(audioSourcePtr->name, audioSourcePtr->getMaxGain());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 8))
+    {
+        setSourceReferenceDistance(audioSourcePtr->name, audioSourcePtr->getReferenceDistance());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 9))
+    {
+        setSourceRolloffFactor(audioSourcePtr->name, audioSourcePtr->getRolloffFactor());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 10))
+    {
+        setSourceMaxDistance(audioSourcePtr->name, audioSourcePtr->getMaxDistance());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 11))
+    {
+        setSourcePitch(audioSourcePtr->name, audioSourcePtr->getPitch());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 12))
+    {
+        setSourceDirection(audioSourcePtr->name, audioSourcePtr->getDirection());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 13))
+    {
+        setSourceConeInnerAngle(audioSourcePtr->name, audioSourcePtr->getConeInnerAngle());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 14))
+    {
+        setSourceConeOuterAngle(audioSourcePtr->name, audioSourcePtr->getConeOuterAngle());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 15))
+    {
+        setSourceConeOuterGain(audioSourcePtr->name, audioSourcePtr->getConeOuterGain());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 16))
+    {
+        setSourceSecOffset(audioSourcePtr->name, audioSourcePtr->getSecOffset());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 17))
+    {
+        setSourceSampleOffset(audioSourcePtr->name, audioSourcePtr->getSampleOffset());
+    }
+
+    if(audioSourcePtr->getDirty() & (1 << 18))
+    {
+        setSourceByteOffset(audioSourcePtr->name, audioSourcePtr->getByteOffset());
+    }
+
+    audioSourcePtr->getDirtyModifiable() = 0;
 }
 
 void AudioModule::audioSourcePlayHandler(AudioSource* audioSourcePtr)   
 {
-    if(audioSourcePtr->getDirty() & (1 << 19))
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr) );
-        return;
-    }
     if(std::find(playingSources.begin(), playingSources.end(), audioSourcePtr) == playingSources.end())
     {
         playingSources.push_back(audioSourcePtr);
     }
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
-    {
-        alSourcePlay(it->second);
-        alCheckErrors();
-    }
+    
+    alSourcePlay(audioSourcePtr->name);
+    alCheckErrors();
 }
 
 void AudioModule::audioSourceStopHandler(AudioSource* audioSourcePtr)
 {
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
+    alSourceStop(audioSourcePtr->name);
+    alCheckErrors();
+    
+    auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
+    if(it ==playingSources.end())
     {
-        alSourceStop(it->second);
-        alCheckErrors();
+        return;
     }
+
+    playingSources.erase(it);
 }
 
 void AudioModule::audioSourcePauseHandler(AudioSource* audioSourcePtr)
 {
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
+    alSourcePause(audioSourcePtr->name);
+    alCheckErrors();
+
+    auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
+    if(it ==playingSources.end())
     {
-        alSourcePause(it->second);
-        alCheckErrors();
+        return;
     }
+
+    playingSources.erase(it);
 }
 
 void AudioModule::audioSourceRewindHandler(AudioSource* audioSourcePtr)
 {
-    for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
-    {
-        alSourceRewind(it->second);
-        alCheckErrors();
-    }
+    alSourceRewind(audioSourcePtr->name);
+    alCheckErrors();
 }
 
-#pragma endregion
-
-#pragma region Event helpers
-
-void AudioModule::audioListenerSetAsCurrentHelper(AudioListener* audioListenerPtr)
+void AudioModule::receiveAudioDataHandler(AudioFile* audioFilePtr)
 {
-    if(currentListener != audioListenerPtr)
+    auto buffer = audioBuffers.find(audioFilePtr->getFilePath());
+    if(buffer == audioBuffers.end())
     {
-        auto switchContextStatus = alcMakeContextCurrent(audioListenerPtr->context);
-        if(switchContextStatus == ALC_FALSE)
-        {
-            alcCheckErrors();
-        }
-        
-        if(currentListener)
-        {
-            currentListener->getIsCurrentModifiable() = false;
-            currentListener->getDirtyModifiable() &= ~(1 << 4);
-        }
-
-        currentListener = audioListenerPtr;
-    }
-}
-
-void AudioModule::audioSourceUpdateBuffersHelper(AudioSource* audioSourcePtr)
-{
-    ALboolean buffersReady = true;
-    std::vector<ALuint> buffers = {};
-    
-    for(auto it = audioSourcePtr->getClips().begin(); it != audioSourcePtr->getClips().end() && buffersReady; it++)
-    {
-        auto buffer = clips.find(*it);
-        if(buffer == clips.end())
-        {
-            ALuint name;
-            alGenBuffers(1, &name);
-            alCheckErrors();
-
-            clips.insert(std::pair(*it, name));
-            GetCore().getMessageBus().sendMessage( Message( Event::QUERY_AUDIO_DATA, it->c_str() ) );
-        
-            buffersReady = false;
-        }
-        else
-        {
-            buffers.push_back(buffer->second);
-        }
+        std::cout << "WARNING: Unknown audio data received! File: " << audioFilePtr->getFilePath() << std::endl;
+        return;
     }
 
-    if(buffersReady)
-    {
-        for(auto it = audioSourcePtr->names.begin(); it != audioSourcePtr->names.end(); it++)
-        {
-            // Uncomment if Rewind is not automatic
-            //audioSourceRewindHandler(audioSourcePtr);
-            alSourceUnqueueBuffers(it->second, audioSourcePtr->currentQueue.size(), audioSourcePtr->currentQueue.data());
-            alCheckErrors();
-            alSourceQueueBuffers(it->second, buffers.size(), buffers.data());
-            alCheckErrors();
-        }
-
-        for(auto it = audioSourcePtr->currentQueue.begin(); it != audioSourcePtr->currentQueue.end(); it++)
-        {
-            auto counter = queueCounters.find(*it);
-            counter->second--;
-        }
-
-        audioSourcePtr->currentQueue.clear();
-
-        for(auto it = buffers.begin(); it != buffers.end(); it++)
-        {
-            auto counter = queueCounters.find(*it);
-            if(counter != queueCounters.end())
-            {
-                counter->second++;
-            }
-            else
-            {
-                queueCounters.insert(std::pair(*it, 1));
-            }
-        }
-
-        audioSourcePtr->currentQueue = buffers;
-        audioSourcePtr->getDirtyModifiable() &= ~(1 << 19);
-        if(audioSourcePtr->autoPlay)
-        {
-            GetCore().messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PLAY, audioSourcePtr));
-        }
-    }
+    loadAudioFileDataToBuffer(buffer->second, audioFilePtr->getChannelsCount(), audioFilePtr->getSampleRate(), audioFilePtr->getBitsPerSample(), &audioFilePtr->data, audioFilePtr->getSize());
 }
 
 #pragma endregion
@@ -733,34 +592,34 @@ void AudioModule::loadAudioFileDataToBuffer(ALuint bufferId, ALubyte channels, A
     ALenum format;
     switch(channels)
     {
-    case 1: // MONO
-    {
-        switch(bitsPerSample)
+        case 1: // MONO
         {
-        case 8:
-            format = AL_FORMAT_MONO8;
-            break;
-        
-        case 16:
-            format = AL_FORMAT_MONO16;
-            break;
+            switch(bitsPerSample)
+            {
+            case 8:
+                format = AL_FORMAT_MONO8;
+                break;
+            
+            case 16:
+                format = AL_FORMAT_MONO16;
+                break;
+            }
         }
-    }
         break;
 
-    case 2: // STEREO
-    {
-        switch(bitsPerSample)
+        case 2: // STEREO
         {
-        case 8:
-            format = AL_FORMAT_STEREO8;
-            break;
-        
-        case 16:
-            format = AL_FORMAT_STEREO16;
-            break;
+            switch(bitsPerSample)
+            {
+            case 8:
+                format = AL_FORMAT_STEREO8;
+                break;
+            
+            case 16:
+                format = AL_FORMAT_STEREO16;
+                break;
+            }
         }
-    }
         break;
     }
 

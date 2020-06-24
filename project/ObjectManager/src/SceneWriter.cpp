@@ -390,19 +390,12 @@ void SceneWriter::saveAudioListener(AudioListener* componentPtr)
     (*json)[name]["up"]["x"] = componentPtr->getUp().x;
     (*json)[name]["up"]["y"] = componentPtr->getUp().y;
     (*json)[name]["up"]["z"] = componentPtr->getUp().z;
-    (*json)[name]["isCurrent"] = componentPtr->getIsCurrent();
 }
 
 void SceneWriter::saveAudioSource(AudioSource* componentPtr)
 {
     (*json)[name]["type"] = "AudioSource";
-    childrenID.clear();
-    for(int j = 0; j < componentPtr->getListenersModifiable().size(); ++j)
-    {
-        childrenID.push_back(componentPtr->getListenersModifiable().at(j)->serializationID);
-    }
-    (*json)[name]["listeners"] = childrenID;
-    (*json)[name]["clips"] = componentPtr->getClips();
+    (*json)[name]["audioClip"] = componentPtr->audioClip;
     (*json)[name]["isRelativeToListener"] = componentPtr->getIsRelative();
     (*json)[name]["isLooping"] = componentPtr->getIsLooping();
     (*json)[name]["minGain"] = componentPtr->getMinGain();

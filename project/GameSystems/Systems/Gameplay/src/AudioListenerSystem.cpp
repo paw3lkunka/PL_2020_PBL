@@ -28,10 +28,7 @@ bool AudioListenerSystem::assertEntity(Entity* entity)
 }
 void AudioListenerSystem::start()
 {
-    if(audioListener->context == nullptr)
-    {
-        GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_LISTENER_INIT, audioListener) );
-    }
+    GetCore().getMessageBus().sendMessage( Message(Event::AUDIO_LISTENER_INIT, audioListener) );
 }
 
 void AudioListenerSystem::frameUpdate()

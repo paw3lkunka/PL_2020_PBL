@@ -168,7 +168,7 @@ int Core::init()
         // ? -u
         
         {
-
+            
         }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
@@ -188,9 +188,6 @@ int Core::init()
         //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
         //gameSystemsModule.addSystem(&paddleIkSystem);
     // TODO </make this function>
-
-    //TODO uncomment when ready
-    //audioModule.init();
 
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
@@ -238,7 +235,9 @@ int Core::init()
 
 #pragma endregion
 
+    audioModule.init();
     cargoButtonSystem.init();
+
     // Everything is ok.
     return 0;
 }
@@ -259,7 +258,12 @@ int Core::mainLoop()
 
     // ! ----- START SYSTEM FUNCTION -----
 
-    gameSystemsModule.run(System::START);
+    // gameSystemsModule.run(System::START);
+    // messageBus.notify();
+    // audioModule.sceneInit();
+    // TODO: Is this working every time? It should indeed
+    sceneInit();
+    
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -324,8 +328,8 @@ void Core::sceneUnload()
 {
     inputModule.clearFlags();
     physicModule.cleanup();
-    //TODO uncomment when ready
-    //audioModule.unloadScene();
+    
+    audioModule.sceneUnload();
     // ! removing all associations for scene root node
     sceneModule.unloadScene();
     // ! removing all root nodes from UI
@@ -339,19 +343,22 @@ void Core::sceneInit()
     physicModule.init();
     // ! Finding main camera
     CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
+    
     // ! some setup
     sceneModule.updateTransforms();
     uiModule.updateRectTransforms();
     editorModule.setup();
-    //audioModule.init();
+
     // ! cargo storage system initialize - must be before system start and notify!
     auto e = objectModule.getEntityPtrByName("AllWeightText");
-    if(e != nullptr)
+    if (e != nullptr)
     {
-        cargoStorageSystem.initTexts(
-                e->getComponentPtr<TextRenderer>(), 
-                objectModule.getEntityPtrByName("AllIncomeText")->getComponentPtr<TextRenderer>(),
-                objectModule.getEntityPtrByName("group1")->getComponentPtr<UiSortingGroup>());
+        cargoStorageSystem.initTexts
+        (
+            e->getComponentPtr<TextRenderer>(), 
+            objectModule.getEntityPtrByName("AllIncomeText")->getComponentPtr<TextRenderer>(),
+            objectModule.getEntityPtrByName("group1")->getComponentPtr<UiSortingGroup>()
+        );
     }
     else
     {
@@ -361,6 +368,8 @@ void Core::sceneInit()
     // ! ----- START SYSTEM FUNCTION -----
     gameSystemsModule.run(System::START);
     messageBus.notify();
+
+    audioModule.sceneInit();
     
     detectionBarSystem.init("DetectionProgressBar");
     gamePlayModule.init("Health_Bar", 30.0f);
@@ -435,11 +444,11 @@ MessageBus& Core::getMessageBus()
 
 void Core::cleanup()
 {
-    //audioModule.cleanup();
     editorModule.onExit();
 
     physicModule.cleanup();
     objectModule.cleanup();
+    audioModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
