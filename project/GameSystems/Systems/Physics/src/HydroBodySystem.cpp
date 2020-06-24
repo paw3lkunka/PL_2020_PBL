@@ -146,6 +146,7 @@ void HydroBodySystem::fixedUpdate()
             {
                 impulse.force *= -1.0f;
             }
+            impulse.force *= triangle.area;
             impulse.force *= hydroAccelerator->handlingMultiplier;
 
             impulse.point = triangle.center;

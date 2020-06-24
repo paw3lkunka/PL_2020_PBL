@@ -42,18 +42,21 @@ AssetReader::AssetReader(ObjectModule* objModule) : objectModulePtr(objModule)
 
 #pragma region Loaders
 
-bool AssetReader::loadAudioClip(std::string path)
+AudioFile* AssetReader::loadAudioClip(std::string path)
 {
     AudioFile audioData;
     if(audioData.load(path))
     {
         audioClips.insert( std::pair(path, audioData) );
-        
-        std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
-
-        return iter != audioClips.end();
     }
-    return false;
+
+    std::unordered_map<std::string, AudioFile>::iterator iter = audioClips.find(path);
+    if(iter == audioClips.end())
+    {
+        return nullptr;
+    }
+
+    return &iter->second;
 }
 
 bool AssetReader::loadTexture(std::string path)

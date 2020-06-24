@@ -1,4 +1,3 @@
-objectModule.newAudioClip("Resources/Audios/river.wav");
 objectModule.newEntity(4, "Camera");
 {
     auto c = objectModule.newEmptyComponentForLastEntity<Camera>();
@@ -15,7 +14,6 @@ objectModule.newEntity(4, "Camera");
         t->setParent(&sceneModule.rootNode);
 
     auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
-        li->getIsCurrentModifiable() = true;
         li->getGainModifiable() = 1.0f;
         li->getVelocityModifiable();
         li->getPositionModifiable();
@@ -28,12 +26,13 @@ objectModule.newEntity(2, "RiverFlow");
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
         t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
         t->setParent(&sceneModule.rootNode);
+    
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        so3->getListenersModifiable().push_back(objectModule.getEntityPtrByName("Camera")->getComponentPtr<AudioListener>());
-        so3->getClipsModifiable().push_back("Resources/Audios/river.wav");
+        so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 2.0f;
+        so3->getGainModifiable() = 1.0f;
         so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 }
 
     auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
@@ -143,6 +142,13 @@ objectModule.newEntity(2, "RiverFlow");
     objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
     uiModule.rootNodes.push_back(buttonsRoot);
 
+    // auto buttonsSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+    //     buttonsSound->audioClip = "Resources/Audios/test.wav";
+    //     buttonsSound->getIsRelativeModifiable() = true;
+    //     buttonsSound->getGainModifiable() = 1.0f;
+    //     buttonsSound->getIsLoopingModifiable() = false;
+    //     buttonsSound->autoPlay = false;
+
     objectModule.newEntity(3, "Start_Button");
     {
         auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
@@ -163,6 +169,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = highlightedColor;
             butt->onClickColor = onClickColor;
             butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::introScene));
+            // butt->onClickEvents.push_back( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound) );
 
         objectModule.newEntity(2, "Start_Button_Text");
         {
@@ -198,6 +205,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = highlightedColor;
             butt->onClickColor = onClickColor;
             butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+            // butt->onClickEvents.push_back( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound) );
 
         objectModule.newEntity(2, "Options_Button_Text");
         {
@@ -233,6 +241,7 @@ objectModule.newEntity(2, "RiverFlow");
             butt->highlightedColor = highlightedColor;
             butt->onClickColor = onClickColor;
             butt->onClickEvents.push_back(Message(Event::AUDIO_SOURCE_STOP, objectModule.getEntityPtrByName("RiverFlow")->getComponentPtr<AudioSource>()));
+            // butt->onClickEvents.push_back( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound) );
             butt->onClickEvents.push_back(Message(Event::EXIT_GAME));
 
         objectModule.newEntity(2, "Exit_Button_Text");

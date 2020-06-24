@@ -623,22 +623,7 @@ void SceneReader::readAudioSource(std::string name)
     tempVec.y = j->at(name).at("direction").at("y");
     tempVec.z = j->at(name).at("direction").at("z");
 
-    std::vector<std::string> clips;
-
-    j->at(name).at("clips").get_to(clips);
-    for(int i = 0; i < clips.size(); ++i)
-    {
-        aSource->getClipsModifiable().push_back(clips[i]);
-        objModulePtr->newAudioClip(clips[i].c_str());
-    }
-
-    std::vector<int> listeners;
-    j->at(name).at("listeners").get_to(listeners);
-
-    for(int i = 0; i < listeners.size(); ++i)
-    {
-        aSource->getListenersModifiable().push_back(dynamic_cast<AudioListener*>(objModulePtr->objectContainer.getComponentFromSerializationID(listeners[i])));
-    }
+    aSource->audioClip = j->at(name).at("audioClip");
 
     assignToEntity(name, aSource);
 }
@@ -659,7 +644,6 @@ void SceneReader::readAudioListener(std::string name)
     tempVec.z = j->at(name).at("up").at("z");
     audioListener->getUpModifiable() = tempVec;
 
-    audioListener->getIsCurrentModifiable() = j->at(name).at("isCurrent").get<int>();
     audioListener->getGainModifiable() = j->at(name).at("gain").get<float>();
 
     assignToEntity(name, audioListener);
@@ -1365,7 +1349,7 @@ void SceneReader::readCargo(std::string fileName)
     }
     file.close();
 
-    Transform* cargoStorage = objModulePtr->getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>();
+    Transform* cargoStorage = objModulePtr->getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>();
     for(int i = 0; true; ++i)
     {
         try

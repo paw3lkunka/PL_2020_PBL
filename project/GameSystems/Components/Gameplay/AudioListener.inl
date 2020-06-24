@@ -10,7 +10,7 @@
 //TODO documentation
 struct AudioListener : public Component
 {
-    inline AudioListener() = default;
+    AudioListener() = default;
     virtual ~AudioListener() = default;
 
     /**
@@ -28,11 +28,10 @@ struct AudioListener : public Component
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
      * 1 << 3 flag: orientation ("at" and "up" vectors)
-     * 1 << 4 flag: isCurrent (currently processed context)
      * 
      * @returns Value of dirty flag
      */
-    inline ALubyte getDirty() { return dirty; }
+    ALubyte getDirty() { return dirty; }
 
     /**
      * @brief WRITE: Dirty flag indicating which Listener's attributes must be updated on device level
@@ -42,11 +41,10 @@ struct AudioListener : public Component
      * 1 << 1 flag: velocity
      * 1 << 2 flag: gain
      * 1 << 3 flag: orientation ("at" and "up" vectors)
-     * 1 << 4 flag: isCurrent (currently processed context)
      * 
      * @returns Reference to dirty flag
      */
-    inline ALubyte& getDirtyModifiable() { return dirty; }
+    ALubyte& getDirtyModifiable() { return dirty; }
 
     /**
      * @brief READ: Listener's Position vector in world space
@@ -54,7 +52,7 @@ struct AudioListener : public Component
      * 
      * @returns Value of position vector
      */
-    inline glm::vec3 getPosition() { return position; }
+    glm::vec3 getPosition() { return position; }
 
     /**
      * @brief WRITE: Listener's Position vector in world space
@@ -62,7 +60,7 @@ struct AudioListener : public Component
      * 
      * @returns Reference to position vector
      */
-    inline glm::vec3& getPositionModifiable() { dirty |= (1 << 0); return position; }
+    glm::vec3& getPositionModifiable() { dirty |= (1 << 0); return position; }
 
     /**
      * @brief READ: Listener's Velocity vector
@@ -70,7 +68,7 @@ struct AudioListener : public Component
      * 
      * @returns Value of velocity vector
      */
-    inline glm::vec3 getVelocity() { return velocity; }
+    glm::vec3 getVelocity() { return velocity; }
     
     /**
      * @brief WRITE: Listener's Velocity vector
@@ -78,7 +76,7 @@ struct AudioListener : public Component
      * 
      * @returns Reference to velocity vector
      */
-    inline glm::vec3& getVelocityModifiable() { dirty |= (1 << 1); return velocity; }
+    glm::vec3& getVelocityModifiable() { dirty |= (1 << 1); return velocity; }
 
     /**
      * @brief READ: Listener's Gain value
@@ -86,7 +84,7 @@ struct AudioListener : public Component
      * 
      * @returns Value of gain value
      */
-    inline ALfloat getGain() { return gain; }
+    ALfloat getGain() { return gain; }
 
     /**
      * @brief WRITE: Listener's Gain value
@@ -94,7 +92,7 @@ struct AudioListener : public Component
      * 
      * @returns Reference to gain value
      */
-    inline ALfloat& getGainModifiable() { dirty |= (1 << 2); return gain; }
+    ALfloat& getGainModifiable() { dirty |= (1 << 2); return gain; }
 
     /**
      * @brief READ: Listener's Orientation "at" vector
@@ -108,7 +106,7 @@ struct AudioListener : public Component
      * 
      * @returns Value of at vector
      */
-    inline glm::vec3 getAt() { return at; }
+    glm::vec3 getAt() { return at; }
 
     /**
      * @brief WRITE: Listener's Orientation "at" vector
@@ -122,7 +120,7 @@ struct AudioListener : public Component
      * 
      * @returns Reference to at vector
      */
-    inline glm::vec3& getAtModifiable() { dirty |= (1 << 3); return at; }
+    glm::vec3& getAtModifiable() { dirty |= (1 << 3); return at; }
 
     /**
      * @brief READ: Listener's Orientation "up" vector
@@ -136,7 +134,7 @@ struct AudioListener : public Component
      * 
      * @returns Value of up vector
      */
-    inline glm::vec3 getUp() { return up; }
+    glm::vec3 getUp() { return up; }
 
     /**
      * @brief WRITE: Listener's Orientation "up" vector
@@ -150,29 +148,7 @@ struct AudioListener : public Component
      * 
      * @returns Reference to up vector
      */
-    inline glm::vec3& getUpModifiable() { dirty |= (1 << 3); return up; }
-
-    /**
-     * @brief READ: Flag saying if AudioListener's context is currently processed one.
-     * 
-     * Set it to TRUE if you want to switch currently processed context.
-     * 
-     * If it is currently processed and you set it to FALSE, none context will be processed.
-     * 
-     * @returns Value of isCurrent flag
-     */
-    inline ALboolean getIsCurrent() { return isCurrent; }
-
-    /**
-     * @brief WRITE: Flag saying if AudioListener's context is currently processed one.
-     * 
-     * Set it to TRUE if you want to switch currently processed context.
-     * 
-     * If it is currently processed and you set it to FALSE, none context will be processed.
-     * 
-     * @returns Reference to isCurrent flag
-     */
-    inline ALboolean& getIsCurrentModifiable() { dirty |= (1 << 4); return isCurrent; }
+    glm::vec3& getUpModifiable() { dirty |= (1 << 3); return up; }
 
     private:
 
@@ -186,8 +162,6 @@ struct AudioListener : public Component
         
         glm::vec3 at  = {0.0f, 0.0f, -1.0f};
         glm::vec3 up = {0.0f, 1.0f, 0.0f};
-        
-        ALboolean isCurrent = false;
 };
 
 #endif /* !AUDIOLISTENER_HPP_ */

@@ -3,6 +3,7 @@
 
 #include <json.hpp>
 #include <string>
+#include <vector>
 
 class AssetReader;
 class ObjectModule;

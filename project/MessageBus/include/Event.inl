@@ -55,12 +55,12 @@ enum class Event : unsigned int
     AUDIO_LISTENER_UPDATE,
     // Audio source initialization, saving source to global list of sources
     AUDIO_SOURCE_INIT,
-    // Audio Source, update listeners, generating sources for contexts on device, DATA: AudioSource* .
-    AUDIO_SOURCE_UPDATE_LISTENERS,
     // Audio Source, update attributes on device level, DATA: AudioSource* containing dirty flags and new attributes' values.
-    AUDIO_SOURCE_UPDATE_ATTRIBUTES,
+    AUDIO_SOURCE_UPDATE,
     // Audio Source, play Source's buffer queue starting where offset is, DATA: AudioSource* .
     AUDIO_SOURCE_PLAY,
+    // Audio Source, play one shot with Source's buffer, DATA: AudioSource* .
+    AUDIO_SOURCE_PLAY_ONE_SHOT,
     // Audio Source, stop playing, stop Source's offset where it is in buffer queued, DATA: AudioSource* .
     AUDIO_SOURCE_STOP,
     // Audio Source, pause Source's offset where it is in buffer queue, DATA: AudioSource* .
@@ -107,7 +107,7 @@ enum class Event : unsigned int
     // Texture data to send to renderer module. DATA: TextureData* {int width, height, nrComponents, unsigned char* data}
     RECEIVE_TEXTURE_DATA,
 
-    // Query FROM Audio Module to Resource Module. DATA: const char* filepath;
+    // Query FROM Audio Module to Resource Module. DATA: std::string* filepath;
     QUERY_AUDIO_DATA,
     // Audio data to send to Audio module. DATA: AudioFile* data;
     RECEIVE_AUDIO_DATA,

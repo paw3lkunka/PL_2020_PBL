@@ -184,25 +184,28 @@ void ConsoleModule::receiveMessage(Message msg)
     case Event::WINDOW_RESIZED:
         std::cout << "console here: WINDOW_RESIZED. Width: " << msg.getValue<glm::ivec2>().x << " Height: " << msg.getValue<glm::ivec2>().y << '\n';
         break;
-    case Event::AUDIO_SOURCE_INIT:
-        std::cout << "console here: AUDIO_SOURCE_INIT\n";
-        break;
-    case Event::AUDIO_LISTENER_INIT:
-        std::cout << "console here: AUDIO_LISTENER_INIT\n";
-        break;
 
     case Event::AUDIO_LISTENER_UPDATE:
         break;
 
-    case Event::AUDIO_SOURCE_UPDATE_LISTENERS:
+    case Event::AUDIO_LISTENER_INIT:
+        std::cout << "console here: AUDIO_LISTENER_INIT\n";
         break;
 
-    case Event::AUDIO_SOURCE_UPDATE_ATTRIBUTES:
-        //std::cout << "console here: AUDIO_SOURCE_UPDATE_ATTRIBUTES\n";
+    case Event::AUDIO_SOURCE_INIT:
+        std::cout << "console here: AUDIO_SOURCE_INIT\n";
+        break;
+
+    case Event::AUDIO_SOURCE_UPDATE:
+        //std::cout << "console here: AUDIO_SOURCE_UPDATE\n";
         break;
 
     case Event::AUDIO_SOURCE_PLAY:
         std::cout << "console here: AUDIO_SOURCE_PLAY\n";
+        break;
+
+    case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+        std::cout << "console here: AUDIO_SOURCE_PLAY_ONE_SHOT\n";
         break;
 
     case Event::AUDIO_SOURCE_STOP:
@@ -214,6 +217,7 @@ void ConsoleModule::receiveMessage(Message msg)
 
     case Event::AUDIO_SOURCE_REWIND:
         break;
+        
     case Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING:
         break;
 

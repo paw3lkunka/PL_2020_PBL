@@ -363,37 +363,83 @@ objectModule.newEntity(4, "Camera");
         t->setParent(&sceneModule.rootNode);
 
     auto li = objectModule.newEmptyComponentForLastEntity<AudioListener>();
-        li->getIsCurrentModifiable() = true;
         li->getGainModifiable() = 1.0f;
         li->getVelocityModifiable();
         li->getPositionModifiable();
         li->getAtModifiable();
         li->getUpModifiable();
+
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/shingeki.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 0.01f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
 }
 
+// objectModule.newEntity(2, "TestAudioSource1");
+// {
+//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+//         t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
+//         t->setParent(&sceneModule.rootNode);
+
+//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+//         soMusic->audioClip = "Resources/Audios/test.wav";
+//         soMusic->getIsRelativeModifiable() = true;
+//         soMusic->getGainModifiable() = 1.0f;
+//         soMusic->getIsLoopingModifiable() = true;
+//         soMusic->autoPlay = true;
+// }
+
+// objectModule.newEntity(2, "TestAudioSource2");
+// {
+//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+//         t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
+//         t->setParent(&sceneModule.rootNode);
+
+//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+//         soMusic->audioClip = "Resources/Audios/test.wav";
+//         soMusic->getIsRelativeModifiable() = true;
+//         soMusic->getGainModifiable() = 1.0f;
+//         soMusic->getIsLoopingModifiable() = true;
+//         soMusic->autoPlay = true;
+// }
+
 {
-    objectModule.newModel("Resources/Models/Kayak_low_poly.FBX");
+    objectModule.newModel("Resources/Models/Kayak_final/Final_physics_meshes.FBX");
+
+    Entity* attachLeft = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_left");
+    Entity* attachRight = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_right");
+    {
+        auto mrl = attachLeft->getComponentPtr<MeshRenderer>();
+            mrl->shouldRender = false;
+        auto mrr = attachRight->getComponentPtr<MeshRenderer>();
+            mrr->shouldRender = false;
+    }
+
     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
     {
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-            t->setParent(objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak")->getComponentPtr<Transform>());
-            //(objectModule.getEntityPtrByName("Player")->getComponentPtr<Transform>());
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 180.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.25f, 1.0f);
+            t->setParent(objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>());
+            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 0.0f, 180.0f));
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.3f);
     }
 
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
-    auto kayakPtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+    auto kayakPtr = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak");
+    Transform* kayakTransform = nullptr;
+    Transform* paddleTransform = nullptr;
     kayakMat->setVec4("color", glm::vec4(0.152f, 0.866f, 0.772f, 1.0f));
     {
         auto mr = kayakPtr->getComponentPtr<MeshRenderer>();
-            mr->material = kayakMat;
+            //mr->material = kayakMat;
+            mr->shouldRender = false;
 
-        auto t = kayakPtr->getComponentPtr<Transform>();
-            t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
-            t->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
-            t->setParent(&sceneModule.rootNode);
+        kayakTransform = kayakPtr->getComponentPtr<Transform>();
+            kayakTransform->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
+            kayakTransform->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
+            kayakTransform->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
+            kayakTransform->setParent(&sceneModule.rootNode);
 
         // KAYAK MAN
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
@@ -419,17 +465,18 @@ objectModule.newEntity(4, "Camera");
 
         Material* paddleMat = objectModule.newMaterial(unlitColor, "paddleMat", RenderType::Opaque);
         paddleMat->setVec4("color", glm::vec4(0.670f, 0.427f, 0.109f, 1.0f));
-        auto paddlePtr = objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Paddle");
+        auto paddlePtr = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_paddle");
         {
             auto mr = paddlePtr->getComponentPtr<MeshRenderer>();
-                mr->material = paddleMat;
+                //mr->material = paddleMat;
+                mr->shouldRender = false;
 
-            auto t = paddlePtr->getComponentPtr<Transform>();
-                t->setParent(paddleIndirect->getComponentPtr<Transform>());
+            paddleTransform = paddlePtr->getComponentPtr<Transform>();
+                paddleTransform->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(-0.3f, 0.6f, -0.6f);
-                paddle->maxFrontRot = -45.0f;
+                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.3f);
+                paddle->maxFrontRot = 45.0f;
                 paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
 
@@ -453,6 +500,45 @@ objectModule.newEntity(4, "Camera");
             cameraPtr->addComponent(tpCameraPtr);
             cameraPtr->addComponent(fpCameraPtr);
             cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
+    }
+
+    // ! NJU KAJAK
+    {
+        // * MATERIALS
+        auto kayakDiffuse = objectModule.newTexture("Resources/Models/Kayak_final/Kayak_and_paddle_textured_albedo.tga", texCreateInfo);
+        auto kayakNormal = objectModule.newTexture("Resources/Models/Kayak_final/Kayak_and_paddle_textured_normal.tga", texCreateInfo);
+        auto kayakOccRouMet = objectModule.newTexture("Resources/Models/Kayak_final/Kayak_and_paddle_textured_occRouMet.tga", texCreateInfo);
+
+        Material* kayakTextured = objectModule.newMaterial(standardPbrShader, "kayakTextured", RenderType::Opaque);
+        kayakTextured->setTexture("diffuse", kayakDiffuse);
+        kayakTextured->setTexture("normal", kayakNormal);
+        kayakTextured->setTexture("occRouMet", kayakOccRouMet);
+
+        objectModule.newModel("Resources/Models/Kayak_final/Final_kayak_and_paddle.FBX");
+        Entity* testKayak = objectModule.getEntityPtrByName("Final_kayak_and_paddle.FBX/Kayak_fixed_collapsed");
+        {
+            auto mr = testKayak->getComponentPtr<MeshRenderer>();
+                mr->material = kayakTextured;
+
+            auto t = testKayak->getComponentPtr<Transform>();
+                t->setParent(kayakTransform);
+        }
+
+        Entity* testPaddle = objectModule.getEntityPtrByName("Final_kayak_and_paddle.FBX/Paddle_collapsed");
+        {
+            auto mr = testPaddle->getComponentPtr<MeshRenderer>();
+                mr->material = kayakTextured;
+
+            auto t = testPaddle->getComponentPtr<Transform>();
+                t->setParent(paddleTransform);
+        }
+    }
+
+    // ! NJU POSTAC
+    {
+        objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
+
+        Entity* testKayak = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Kayak_fixed_collapsed");
     }
 }
 
