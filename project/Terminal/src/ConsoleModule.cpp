@@ -204,6 +204,10 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "console here: AUDIO_SOURCE_PLAY\n";
         break;
 
+    case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+        std::cout << "console here: AUDIO_SOURCE_PLAY_ONE_SHOT\n";
+        break;
+
     case Event::AUDIO_SOURCE_STOP:
         std::cout << "console here: AUDIO_SOURCE_STOP\n";
         break;

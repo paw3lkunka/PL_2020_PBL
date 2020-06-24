@@ -541,14 +541,28 @@ void AudioModule::audioSourceStopHandler(AudioSource* audioSourcePtr)
 {
     alSourceStop(audioSourcePtr->name);
     alCheckErrors();
-    playingSources.erase( std::find( playingSources.begin(), playingSources.end(), audioSourcePtr ) );
+    
+    auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
+    if(it ==playingSources.end())
+    {
+        return;
+    }
+
+    playingSources.erase(it);
 }
 
 void AudioModule::audioSourcePauseHandler(AudioSource* audioSourcePtr)
 {
     alSourcePause(audioSourcePtr->name);
     alCheckErrors();
-    playingSources.erase( std::find( playingSources.begin(), playingSources.end(), audioSourcePtr ) );
+
+    auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
+    if(it ==playingSources.end())
+    {
+        return;
+    }
+
+    playingSources.erase(it);
 }
 
 void AudioModule::audioSourceRewindHandler(AudioSource* audioSourcePtr)
