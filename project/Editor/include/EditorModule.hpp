@@ -61,7 +61,7 @@ private:
 
     //HACK: Maybe other solution?
     ///@brief list of sorting types, according to enum class (the same order as in enum class)
-    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0RectTransform\0";
+    const char* sortingTypesList = "All\0Transform\0Transform without bones\0Paddle\0Bones\0Rigidbodies\0Kayak\0Enemy\0RectTransform\0HydroCurrent\0";
     ///@brief index of current sorting type
     int enumValue;
 
@@ -94,6 +94,11 @@ private:
     void drawToggleButton(ToggleButton* toggleButtonPtr);
     void drawProgressBar(ProgressBar* progressBarPtr);
     void drawCargo(Cargo* cargo);
+
+    void drawFirstPersonCamera(FirstPersonCamera* camera);
+    void drawThirdPersonCamera(ThirdPersonCamera* camera);
+    void drawHydroAccelerator(HydroAccelerator* accelerator);
+    void drawHydroCurrent(HydroCurrent* current);
 
     // ! Helper functions
     /**

@@ -125,7 +125,7 @@ void HydroBodySystem::fixedUpdate()
         glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
         Transform* kayakTran = rb->entityPtr->getComponentPtr<Transform>();
         glm::vec3 accelerationDirection = glm::normalize( static_cast<glm::vec3>( -kayakTran->getModelMatrix()[1] ) );
-        accelerationDirection *= hydroAccelerator->acceleratorionMultiplier;
+        accelerationDirection *= hydroAccelerator->acceleratorion;
         accelerationDirection.y = 0.0f;
 
         for(HydroTriangle triangle : hullTriangles.underwater)
@@ -147,7 +147,7 @@ void HydroBodySystem::fixedUpdate()
                 impulse.force *= -1.0f;
             }
             impulse.force *= triangle.area;
-            impulse.force *= hydroAccelerator->handlingMultiplier;
+            impulse.force *= hydroAccelerator->handling;
 
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;

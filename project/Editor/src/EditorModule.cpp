@@ -228,6 +228,38 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(FirstPersonCamera* temp = entityPtr->getComponentPtr<FirstPersonCamera>())
+    {
+        if(ImGui::CollapsingHeader("FirstPersonCamera"))
+        {
+            drawFirstPersonCamera(temp);
+        }
+    }
+
+    if(ThirdPersonCamera* temp = entityPtr->getComponentPtr<ThirdPersonCamera>())
+    {
+        if(ImGui::CollapsingHeader("ThirdPersonCamera"))
+        {
+            drawThirdPersonCamera(temp);
+        }
+    }
+    
+    if(HydroAccelerator* temp = entityPtr->getComponentPtr<HydroAccelerator>())
+    {
+        if(ImGui::CollapsingHeader("HydroAccelerator"))
+        {
+            drawHydroAccelerator(temp);
+        }
+    }
+
+    if(HydroCurrent* temp = entityPtr->getComponentPtr<HydroCurrent>())
+    {
+        if(ImGui::CollapsingHeader("HydroCurrent"))
+        {
+            drawHydroCurrent(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -428,6 +460,52 @@ void EditorModule::drawCargo(Cargo* cargo)
     ImGui::Text(("Income: " + std::to_string(cargo->income)).c_str());
 }
 
+void EditorModule::drawFirstPersonCamera(FirstPersonCamera* camera)
+{
+    ImGui::DragFloat3("Head offset: ", (float*)&camera->headOffset, 0.01f, -3.0f, 3.0f, "%.2f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Minimal pitch: ", &camera->minPitch, 1.0f, -180.0f, 180.0f, "%.1f");
+    ImGui::DragFloat("Maximal pitch: ", &camera->maxPitch, 1.0f, camera->minPitch, 180.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Minimal yaw: ", &camera->minYaw, 1.0f, -180.0f, 180.0f, "%.1f");
+    ImGui::DragFloat("Maximal yaw: ", &camera->maxYaw, 1.0f, camera->minYaw, 180.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Rotation sensitivity: ", &camera->rotationSensitivity, 0.1f, 0.0f, 20.0f, "%.1f");
+    ImGui::DragFloat("Rotation lerp: ", &camera->rotationLerp, 0.01f, 0.0f, 1.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Movement lerp: ", &camera->moveLerp, 0.01f, 0.0f, 1.0f, "%.1f");
+}
+
+void EditorModule::drawThirdPersonCamera(ThirdPersonCamera* camera)
+{
+    ImGui::DragFloat3("Head offset: ", (float*)&camera->playerOffset, 0.01f, -3.0f, 3.0f, "%.2f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Minimal distance: ", &camera->minDistance, 0.1f, 0.0f, 10.0f, "%.1f");
+    ImGui::DragFloat("Maximal distance: ", &camera->maxDistance, 0.1f, camera->minDistance, 100.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Minimal pitch: ", &camera->minPitch, 1.0f, -180.0f, 180.0f, "%.1f");
+    ImGui::DragFloat("Maximal pitch: ", &camera->maxPitch, 1.0f, camera->minPitch, 180.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Move lerp: ", &camera->moveLerp, 0.01f, 0.0f, 1.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Zoom sensitivity: ", &camera->zoomSensitivity, 0.1f, 0.0f, 20.0f, "%.1f");
+    ImGui::DragFloat("Zoom lerp: ", &camera->zoomLerp, 0.01f, 0.0f, 1.0f, "%.1f");
+    ImGui::Spacing();
+    ImGui::DragFloat("Rotation sensitivity: ", &camera->rotationSensitivity, 0.1f, 0.0f, 20.0f, "%.1f");
+    ImGui::DragFloat("Rotation lerp: ", &camera->rotationLerp, 0.01f, 0.0f, 1.0f, "%.1f");
+}
+
+void EditorModule::drawHydroAccelerator(HydroAccelerator* accelerator)
+{
+    ImGui::DragFloat("Handling: ", &accelerator->handling, 0.01f, 0.0f, 100.0f, "%.2f");
+    ImGui::DragFloat("Acceleration: ", &accelerator->acceleratorion, 0.01f, 0.0f, 100.0f, "%.2f");
+}
+
+void EditorModule::drawHydroCurrent(HydroCurrent* current)
+{
+    ImGui::DragFloat3("Current velocity: ", (float*)&current->velocity, 0.01f, -10.0f, 10.0f, "%.2f");
+}
+
 void EditorModule::drawText(TextRenderer* textRenderer)
 {
     static std::string textBuf = textRenderer->mesh.text;
@@ -495,7 +573,6 @@ void EditorModule::sortEntities(SortingType sortingType)
                     continue;
                 }
             break;
-            break;
             case SortingType::KAYAK:
                 if(temp->getComponentPtr<Kayak>() == nullptr)
                 {
@@ -510,6 +587,13 @@ void EditorModule::sortEntities(SortingType sortingType)
             break;
             case SortingType::RECT_TRANSFORM:
                 if(temp->getComponentPtr<RectTransform>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+
+            case SortingType::HYDRO_CURRENT:
+                if(temp->getComponentPtr<HydroCurrent>() == nullptr)
                 {
                     continue;
                 }
