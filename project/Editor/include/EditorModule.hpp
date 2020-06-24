@@ -75,6 +75,7 @@ private:
     Font* fontPtr;
     Shader* textShader;
     int lastEntitySize;
+    bool lastGamePauseState = false;
 
     // ! Component drawing functions
     void drawTransform(Transform* transformPtr);

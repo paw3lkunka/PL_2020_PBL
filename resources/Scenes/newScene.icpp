@@ -317,23 +317,23 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
-TextureCreateInfo i = {};
-i.minFilter = GL_LINEAR;
-i.magFilter = GL_LINEAR;
-i.wrapMode= GL_CLAMP_TO_EDGE;
-i.generateMipmaps = false;
-CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
-                                                        "Resources/Textures/skybox_02/nx.hdr", 
-                                                        "Resources/Textures/skybox_02/px.hdr",
-                                                        "Resources/Textures/skybox_02/pz.hdr",
-                                                        "Resources/Textures/skybox_02/py.hdr",
-                                                        "Resources/Textures/skybox_02/ny.hdr");
+// TextureCreateInfo i = {};
+// i.minFilter = GL_LINEAR;
+// i.magFilter = GL_LINEAR;
+// i.wrapMode= GL_CLAMP_TO_EDGE;
+// i.generateMipmaps = false;
+// CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+//                                                         "Resources/Textures/skybox_02/nx.hdr", 
+//                                                         "Resources/Textures/skybox_02/px.hdr",
+//                                                         "Resources/Textures/skybox_02/pz.hdr",
+//                                                         "Resources/Textures/skybox_02/py.hdr",
+//                                                         "Resources/Textures/skybox_02/ny.hdr");
 
-Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+// Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-rendererModule.setSkybox(hdrSkyboxMat);
+// Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+// hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+// rendererModule.setSkybox(hdrSkyboxMat);
 
 objectModule.newEntity(2, "directionalLight");
 {
@@ -456,7 +456,7 @@ objectModule.newEntity(4, "Camera");
     }
 }
 
-TerrainUtils::loadAllTerrainChunks();
+//TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();

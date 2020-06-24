@@ -14,7 +14,9 @@
 #include "ModelsPaths.inl"
 #include "TerrainUtils.hpp"
 
-#include "glm/gtx/string_cast.hpp"
+#include <glm/gtx/string_cast.hpp>
+#include <sstream>
+#include <iomanip>
 
 Core* Core::instance = nullptr;
 int Core::windowWidth = INIT_WINDOW_WIDTH;
@@ -54,6 +56,13 @@ glm::quat eulerToQuaternion(glm::vec3 eulerAngles)
     glm::quat quatFinal = glm::quat(temp);
 
     return quatFinal;
+}
+
+std::string getFloatWithPrecision(float value, int precision)
+{
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(precision) << value;
+    return ss.str();
 }
 
 int Core::init()
