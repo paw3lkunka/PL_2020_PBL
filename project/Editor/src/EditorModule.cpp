@@ -260,6 +260,22 @@ void EditorModule::drawEditor()
         }
     }
 
+    if(AudioListener* temp = entityPtr->getComponentPtr<AudioListener>())
+    {
+        if(ImGui::CollapsingHeader("AudioListener"))
+        {
+            drawAudioListener(temp);
+        }
+    }
+
+    if(AudioSource* temp = entityPtr->getComponentPtr<AudioSource>())
+    {
+        if(ImGui::CollapsingHeader("AudioSource"))
+        {
+            drawAudioSource(temp);
+        }
+    }
+
     ImGui::NewLine();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
@@ -504,6 +520,16 @@ void EditorModule::drawHydroAccelerator(HydroAccelerator* accelerator)
 void EditorModule::drawHydroCurrent(HydroCurrent* current)
 {
     ImGui::DragFloat3("Current velocity: ", (float*)&current->velocity, 0.01f, -10.0f, 10.0f, "%.2f");
+}
+
+void EditorModule::drawAudioListener(AudioListener* listener)
+{
+    ImGui::DragFloat("Gain: ", &listener->getGainModifiable(), 0.01f, 0.0f, 5.0f, "%.2f");
+}
+
+void EditorModule::drawAudioSource(AudioSource* source)
+{
+    ImGui::DragFloat("Gain: ", &source->getGainModifiable(), 0.01f, 0.0f, 5.0f, "%.2f");
 }
 
 void EditorModule::drawText(TextRenderer* textRenderer)

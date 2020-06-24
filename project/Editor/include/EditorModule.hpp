@@ -99,6 +99,8 @@ private:
     void drawThirdPersonCamera(ThirdPersonCamera* camera);
     void drawHydroAccelerator(HydroAccelerator* accelerator);
     void drawHydroCurrent(HydroCurrent* current);
+    void drawAudioListener(AudioListener* listener);
+    void drawAudioSource(AudioSource* source);
 
     // ! Helper functions
     /**
