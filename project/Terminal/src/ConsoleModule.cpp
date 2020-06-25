@@ -149,7 +149,7 @@ void ConsoleModule::receiveMessage(Message msg)
         break;
 
     case Event::QUERY_AUDIO_DATA:
-        std::cout << "console here: QUERY_AUDIO_DATA. Path: " << msg.getValue<const char*>() << std::endl;
+        std::cout << "console here: QUERY_AUDIO_DATA. Path: " << *msg.getValue<std::string*>() << std::endl;
         break;
     
     case Event::RECEIVE_AUDIO_DATA:

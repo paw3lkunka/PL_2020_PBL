@@ -89,6 +89,11 @@ void EditorModule::drawEditor()
         {
             sortEntities(SortingType(enumValue));
         }
+        if(lastGamePauseState != GetCore().isGamePaused())
+        {
+            lastGamePauseState = GetCore().isGamePaused();
+            sortEntities(SortingType(enumValue));
+        }
     ImGui::EndChild();
 
     ImGui::Text(("Entity: " + std::string(entityPtr->getName())).c_str());

@@ -72,6 +72,15 @@ void ErrorLog(const char* log);
  * @return glm::quat quaternion representatoin of angle
  */
 glm::quat eulerToQuaternion(glm::vec3 eulerAngles);
+
+/**
+ * @brief Get the Float as string With Precision given as parameter
+ * 
+ * @param value of float
+ * @param precision of number
+ * @return float with precision as string
+ */
+std::string getFloatWithPrecision(float value, int precision);
 #pragma endregion
 
 /**

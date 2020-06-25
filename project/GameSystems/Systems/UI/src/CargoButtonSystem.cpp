@@ -6,10 +6,6 @@
 #include "Core.hpp"
 #include "Texture.hpp"
 
-#include <sstream>
-#include <iomanip>
-#include <ios>
-
 void CargoButtonSystem::init()
 {
     TextureCreateInfo info = {};
@@ -61,12 +57,6 @@ void CargoButtonSystem::start()
             render->material = stampMaterial;
     }
 
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << cargo->income;
-    cargoButtonPtr->incomeText->mesh.text = ss.str() + "$";
-    ss.str("");
-
-    ss << std::fixed << std::setprecision(2) << cargo->weight;
-    cargoButtonPtr->weightText->mesh.text = ss.str() + "kg";
-    ss.str("");
+    cargoButtonPtr->incomeText->mesh.text = getFloatWithPrecision(cargo->income, 2) + "$";
+    cargoButtonPtr->weightText->mesh.text = getFloatWithPrecision(cargo->weight, 2) + "kg";
 }
