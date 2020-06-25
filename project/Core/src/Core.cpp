@@ -176,17 +176,17 @@ int Core::init()
 
     // TODO <make this function>
     // ! IK system initialize
-        BoneAttachData leftData;
-        leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-        leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
+        // BoneAttachData leftData;
+        // leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
+        // leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
 
-        BoneAttachData rightData;
-        rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-        rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
+        // BoneAttachData rightData;
+        // rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
+        // rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
 
-        Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
+        // Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
         //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-        //gameSystemsModule.addSystem(&paddleIkSystem);
+        gameSystemsModule.addSystem(&paddleIkSystem);
     // TODO </make this function>
 
     // ! Finding main camera

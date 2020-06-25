@@ -647,10 +647,35 @@ objectModule.newEntity(4, "Camera");
                 mr->material = topMat;
                 mr->mesh->frustumCulling = false;
         }
+
+        // ! ----- IK -----
+        {
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
+            Entity* eAtt = attachLeft;
+            bp1->touchPoint = eAtt->getComponentPtr<Transform>();
+            bp1->chainLength = 1;
+            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
+            bp1->iterations = 1;
+            bp1->delta = 0.001f;
+            e->addComponent(bp1);
+        }
+
+        {
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
+            Entity* eAtt = attachRight;
+            bp1->touchPoint = eAtt->getComponentPtr<Transform>();
+            bp1->chainLength = 1;
+            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
+            bp1->iterations = 1;
+            bp1->delta = 0.001f;
+            e->addComponent(bp1);
+        }
     }
 }
 
-TerrainUtils::loadAllTerrainChunks();
+//TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
