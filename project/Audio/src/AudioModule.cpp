@@ -556,13 +556,13 @@ void AudioModule::audioSourcePauseHandler(AudioSource* audioSourcePtr)
     alSourcePause(audioSourcePtr->name);
     alCheckErrors();
 
-    auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
-    if(it ==playingSources.end())
-    {
-        return;
-    }
+    // auto it = std::find( playingSources.begin(), playingSources.end(), audioSourcePtr );
+    // if(it ==playingSources.end())
+    // {
+    //     return;
+    // }
 
-    playingSources.erase(it);
+    // playingSources.erase(it);
 }
 
 void AudioModule::audioSourceRewindHandler(AudioSource* audioSourcePtr)

@@ -317,23 +317,23 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
-TextureCreateInfo i = {};
-i.minFilter = GL_LINEAR;
-i.magFilter = GL_LINEAR;
-i.wrapMode= GL_CLAMP_TO_EDGE;
-i.generateMipmaps = false;
-CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
-                                                        "Resources/Textures/skybox_02/nx.hdr", 
-                                                        "Resources/Textures/skybox_02/px.hdr",
-                                                        "Resources/Textures/skybox_02/pz.hdr",
-                                                        "Resources/Textures/skybox_02/py.hdr",
-                                                        "Resources/Textures/skybox_02/ny.hdr");
+// TextureCreateInfo i = {};
+// i.minFilter = GL_LINEAR;
+// i.magFilter = GL_LINEAR;
+// i.wrapMode= GL_CLAMP_TO_EDGE;
+// i.generateMipmaps = false;
+// CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+//                                                         "Resources/Textures/skybox_02/nx.hdr", 
+//                                                         "Resources/Textures/skybox_02/px.hdr",
+//                                                         "Resources/Textures/skybox_02/pz.hdr",
+//                                                         "Resources/Textures/skybox_02/py.hdr",
+//                                                         "Resources/Textures/skybox_02/ny.hdr");
 
-Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+// Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-rendererModule.setSkybox(hdrSkyboxMat);
+// Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+// hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+// rendererModule.setSkybox(hdrSkyboxMat);
 
 objectModule.newEntity(2, "directionalLight");
 {
@@ -377,33 +377,33 @@ objectModule.newEntity(4, "Camera");
         soMusic->autoPlay = true;
 }
 
-// objectModule.newEntity(2, "TestAudioSource1");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
+objectModule.newEntity(2, "TestAudioSource1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
 
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 1.0f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
 
-// objectModule.newEntity(2, "TestAudioSource2");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
+objectModule.newEntity(2, "TestAudioSource2");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
 
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 1.0f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
 
 {
     objectModule.newModel("Resources/Models/Kayak_final/Final_physics_meshes.FBX");

@@ -8,6 +8,8 @@
 class Entity;
 class Shader;
 struct ProgressBar;
+class Font;
+class Material;
 
 class GamePlayModule : public IModule
 {
@@ -29,8 +31,23 @@ private:
     Entity* loadingScreenEntity = nullptr;
     Entity* pauseScreenEntity = nullptr;
     Entity* youDiedScreenEntity = nullptr;
+    Entity* summaryScreenEntity = nullptr;
 
-    Shader* uiStandard;
+    ///@brief array of entity pointers - used for summary- 9 cargos with 2 texts
+    Entity* goodCargoEntities[18] = {nullptr};
+    Entity* badCargoEntities[18] = {nullptr};
+    Entity* totalSumEntity = nullptr;
+
+    Shader* uiStandard = nullptr;
+    Shader* textShader = nullptr;
+
+    Material* textBlackMaterial = nullptr;
+    Material* textMatGreen = nullptr;
+    Material* textMatRed = nullptr;
+
+    Font* courier = nullptr;
+    Font* josefin = nullptr;
+    Font* courierBold = nullptr;
 
     TextureCreateInfo info = {};
 
@@ -39,11 +56,22 @@ private:
     void initLoadingScreen(ObjectModule& om);
     void initPauseScreen(ObjectModule& om);
     void initYouDieScreen(ObjectModule& om);
+    void initSummaryScreen(ObjectModule& om);
 
     ///@brief show pause screen
     void pauseGame();
     ///@brief show you died screen
     void youDied();
+    ///@brief summarize game
+    void summarize();
+
+    /**
+     * @brief show/ hide ui screen method
+     * 
+     * @param screenEntity entity to show
+     * @param shown should screen be shown flag
+     */
+    void useScreen(Entity* screenEntity, bool shown);
 
     /**
      * @brief Called, when kayak hit obsticles.
