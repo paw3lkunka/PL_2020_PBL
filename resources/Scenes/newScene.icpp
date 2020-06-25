@@ -377,33 +377,33 @@ objectModule.newEntity(4, "Camera");
         soMusic->autoPlay = true;
 }
 
-// objectModule.newEntity(2, "TestAudioSource1");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
+objectModule.newEntity(2, "TestAudioSource1");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
 
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 1.0f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
 
-// objectModule.newEntity(2, "TestAudioSource2");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
+objectModule.newEntity(2, "TestAudioSource2");
+{
+    auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
+        t->setParent(&sceneModule.rootNode);
 
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
+    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        soMusic->audioClip = "Resources/Audios/test.wav";
+        soMusic->getIsRelativeModifiable() = true;
+        soMusic->getGainModifiable() = 1.0f;
+        soMusic->getIsLoopingModifiable() = true;
+        soMusic->autoPlay = true;
+}
 
 {
     objectModule.newModel("Resources/Models/Kayak_final/Final_physics_meshes.FBX");
@@ -542,7 +542,7 @@ objectModule.newEntity(4, "Camera");
     }
 }
 
-//TerrainUtils::loadAllTerrainChunks();
+TerrainUtils::loadAllTerrainChunks();
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
