@@ -383,7 +383,7 @@ void GamePlayModule::initYouDieScreen(ObjectModule& om)
 
 void GamePlayModule::initSummaryScreen(ObjectModule& om)
 {
-    summaryScreenEntity = new Entity(1500, 2, "summary");
+    summaryScreenEntity = new Entity(-100, 2, "summary");
     auto tex = om.newTexture("Resources/Sprites/summary.png", info);
     courierBold = GetCore().objectModule.newFont("Resources/Fonts/CourierNew-Bold.ttf", 128, "CourierNew-Bold");
     auto rect = new RectTransform();
@@ -400,6 +400,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
     textBlackMaterial = om.newMaterial(textShader, "textBlackMat", RenderType::Transparent);
     textBlackMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
 
+    //Buttons
     {
         auto rect_border = om.newTexture("Resources/Sprites/rect_border.png", info);
         glm::vec4 baseColor = {0.733f, 0.066f, 0.066f, 1.0f};
@@ -502,7 +503,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
     for(int i = 0; i < 9; ++i) //making text entities
     {
         {
-            goodCargoEntities[2 * i] = new Entity(1501 + (2 * i), 2, "CargoGoodName" + std::to_string(i));
+            goodCargoEntities[2 * i] = new Entity(-101 - (2 * i), 2, "CargoGoodName" + std::to_string(i));
             auto rect = new RectTransform();
             rect->setParent(summaryScreenEntity->getComponentPtr<RectTransform>());
             rect->getLocalPositionModifiable() = {-520, -160 + (-20 * i)};
@@ -518,7 +519,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
         }
 
         {
-            goodCargoEntities[2 * i + 1] = new Entity(1502 + (2 * i), 2, "CargoGoodCost" + std::to_string(i));
+            goodCargoEntities[2 * i + 1] = new Entity(-102 - (2 * i), 2, "CargoGoodCost" + std::to_string(i));
             auto rect = new RectTransform();
             rect->setParent(summaryScreenEntity->getComponentPtr<RectTransform>());
             rect->getLocalPositionModifiable() = {-125, -160 + (-20 * i)};
@@ -534,7 +535,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
         }
 
         {
-            badCargoEntities[2 * i] = new Entity(1601 + (2 * i), 2, "CargoBadName" + std::to_string(i));
+            badCargoEntities[2 * i] = new Entity(-120 - (2 * i), 2, "CargoBadName" + std::to_string(i));
             auto rect = new RectTransform();
             rect->setParent(summaryScreenEntity->getComponentPtr<RectTransform>());
             rect->getLocalPositionModifiable() = {-520, -375 + (-20 * i)};
@@ -550,7 +551,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
         }
 
         {
-            badCargoEntities[2 * i + 1] = new Entity(1602 + (2 * i), 2, "CargoBadCost" + std::to_string(i));
+            badCargoEntities[2 * i + 1] = new Entity(-121 - (2 * i), 2, "CargoBadCost" + std::to_string(i));
             auto rect = new RectTransform();
             rect->setParent(summaryScreenEntity->getComponentPtr<RectTransform>());
             rect->getLocalPositionModifiable() = {-125, -375 + (-20 * i)};
@@ -567,7 +568,7 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
     }
 
     {
-        totalSumEntity = new Entity(1701, 2, "TotalText");
+        totalSumEntity = new Entity(-150, 2, "TotalText");
         auto rect = new RectTransform();
         rect->setParent(summaryScreenEntity->getComponentPtr<RectTransform>());
         rect->getLocalPositionModifiable() = {-125, -570};
@@ -598,7 +599,7 @@ void GamePlayModule::summarize()
     if(GetCore().gamePaused)
     {
         // ? setup all texts
-        auto storageEntity = GetCore().objectModule.getEntityPtrByName("Kayak_low_poly.FBX/Kayak");
+        auto storageEntity = GetCore().objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak");
         CargoStorage* cargoStorage = storageEntity->getComponentPtr<CargoStorage>();
         if((storageEntity != nullptr) && (cargoStorage != nullptr))
         {

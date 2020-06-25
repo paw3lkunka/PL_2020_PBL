@@ -258,12 +258,7 @@ int Core::mainLoop()
     double lag = FIXED_TIME_STEP;
 
     // * ===== Game loop ===================================================
-
-    sceneModule.updateTransforms();
-    uiModule.updateRectTransforms();
     editorModule.setup();
-    detectionBarSystem.init("DetectionProgressBar");
-    gamePlayModule.init("Health_Bar", 30.0f);
 
     // ! ----- START SYSTEM FUNCTION -----
 
@@ -456,8 +451,8 @@ void Core::cleanup()
     editorModule.onExit();
 
     physicModule.cleanup();
-    objectModule.cleanup();
     audioModule.cleanup();
+    objectModule.cleanup();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
