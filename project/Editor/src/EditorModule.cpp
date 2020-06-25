@@ -519,7 +519,7 @@ void EditorModule::drawThirdPersonCamera(ThirdPersonCamera* camera)
 void EditorModule::drawHydroAccelerator(HydroAccelerator* accelerator)
 {
     ImGui::DragFloat("Handling: ", &accelerator->handling, 0.01f, 0.0f, 100.0f, "%.2f");
-    ImGui::DragFloat("Acceleration: ", &accelerator->acceleratorion, 0.01f, 0.0f, 100.0f, "%.2f");
+    ImGui::DragFloat("Acceleration: ", &accelerator->acceleration, 0.01f, 0.0f, 100.0f, "%.2f");
 }
 
 void EditorModule::drawHydroCurrent(HydroCurrent* current)

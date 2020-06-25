@@ -15,4 +15,4 @@ if [[ $_cpp1 -ne $_cpp2 ]]; then
     ./config.sh
 fi
 cd build
-make -j 12 CXXFLAGS="-g3 -O0"
+make -j 12 CXXFLAGS="-g3 -static"

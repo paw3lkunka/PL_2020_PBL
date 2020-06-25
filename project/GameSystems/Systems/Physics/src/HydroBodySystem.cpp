@@ -125,7 +125,7 @@ void HydroBodySystem::fixedUpdate()
         glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
         Transform* kayakTran = rb->entityPtr->getComponentPtr<Transform>();
         glm::vec3 accelerationDirection = glm::normalize( static_cast<glm::vec3>( -kayakTran->getModelMatrix()[1] ) );
-        accelerationDirection *= hydroAccelerator->acceleratorion;
+        accelerationDirection *= hydroAccelerator->acceleration;
         accelerationDirection.y = 0.0f;
 
         for(HydroTriangle triangle : hullTriangles.underwater)
