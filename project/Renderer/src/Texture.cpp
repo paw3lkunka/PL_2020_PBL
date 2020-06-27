@@ -20,7 +20,7 @@ void Texture::init()
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, info.format, info.width, info.height, 0, info.format, info.type, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, info.internalFormat, info.width, info.height, 0, info.format, info.type, data);
     if (info.generateMipmaps)
     {
         glGenerateMipmap(GL_TEXTURE_2D);

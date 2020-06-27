@@ -101,6 +101,7 @@ Texture* ObjectMaker::newTexture(const char* filePath, TextureCreateInfo createI
         createInfo.width = texData->width;
         createInfo.height = texData->height;
         createInfo.format = texData->nrComponents == 1 ? GL_RED : texData->nrComponents == 3 ? GL_RGB : GL_RGBA;
+        createInfo.internalFormat = texData->nrComponents == 1 ? GL_R8 : texData->nrComponents == 3 ? GL_RGB8 : GL_RGBA8;
         objContainer->textures.push_back(new Texture(texData->data, createInfo, filePath));
         return objContainer->textures[objContainer->textures.size() - 1];
     }
@@ -124,6 +125,7 @@ Cubemap* ObjectMaker::newCubemap(TextureCreateInfo createInfo, const char* front
         createInfo.width = frontData.width;
         createInfo.height = frontData.height;
         createInfo.format = frontData.nrComponents == 1 ? GL_RED : frontData.nrComponents == 3 ? GL_RGB : GL_RGBA;
+        createInfo.internalFormat = frontData.nrComponents == 1 ? GL_R8 : frontData.nrComponents == 3 ? GL_RGB8 : GL_RGBA8;
         TextureData leftData = objModPtr->assetReader.textures[leftPath];
         TextureData rightData = objModPtr->assetReader.textures[rightPath];
         TextureData backData = objModPtr->assetReader.textures[backPath];
@@ -166,6 +168,7 @@ CubemapHdr* ObjectMaker::newHdrCubemap(TextureCreateInfo createInfo,
         createInfo.width = frontData.width;
         createInfo.height = frontData.height;
         createInfo.format = frontData.nrComponents == 1 ? GL_RED : frontData.nrComponents == 3 ? GL_RGB : GL_RGBA;
+        createInfo.internalFormat = frontData.nrComponents == 1 ? GL_R16F : frontData.nrComponents == 3 ? GL_RGB16F : GL_RGBA16F;
         TextureHdrData leftData = objModPtr->assetReader.texturesHdr[leftPath];
         TextureHdrData rightData = objModPtr->assetReader.texturesHdr[rightPath];
         TextureHdrData backData = objModPtr->assetReader.texturesHdr[backPath];

@@ -15,7 +15,7 @@ struct TextureCreateInfo
 {
     bool generateMipmaps;
     int width, height;
-    GLenum format, wrapMode, minFilter, magFilter;
+    GLenum format, internalFormat, wrapMode, minFilter, magFilter;
     GLenum type = GL_UNSIGNED_BYTE;
 };
 

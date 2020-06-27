@@ -286,6 +286,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     TextureCreateInfo depthCreateInfo = {};
     depthCreateInfo.format = GL_DEPTH_COMPONENT;
+    depthCreateInfo.internalFormat = GL_DEPTH_COMPONENT24;
     depthCreateInfo.generateMipmaps = false;
     depthCreateInfo.height = SHADOW_HEIGHT;
     depthCreateInfo.width = SHADOW_WIDTH;
