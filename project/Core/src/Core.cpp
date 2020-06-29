@@ -183,26 +183,6 @@ int Core::init()
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
 
-    // TODO <make this function>
-    // ! IK system initialize
-        // BoneAttachData leftData;
-        // leftData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_left");
-        // leftData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_left");
-
-        // BoneAttachData rightData;
-        // rightData.attachEntityPtr = objectModule.getEntityPtrByName("Paddle_attach_right");
-        // rightData.boneEntity = objectModule.getEntityPtrByName("kajak_wjoslo_plastus.FBX/End_right");
-
-        // Entity* skelly = objectModule.getEntityPtrByName("Spine_skeleton");
-        //paddleIkSystem.init(leftData, rightData, skelly->getComponentPtr<Skeleton>());
-        gameSystemsModule.addSystem(&paddleIkSystem);
-    // TODO </make this function>
-
-    // ! Finding main camera
-    CameraSystem::setAsMain(objectModule.getEntityPtrByName("Camera"));
-
-    gameSystemsModule.entities = objectModule.getEntitiesVector();
-
     gamePlayModule.initScreens();
 
     uiModule.init();
@@ -214,6 +194,7 @@ int Core::init()
 
     gameSystemsModule.addSystem(&hideoutSystem);
     gameSystemsModule.addSystem(&rendererSystem);
+    gameSystemsModule.addSystem(&paddleIkSystem);
 
     gameSystemsModule.addSystem(&freeCameraControlSystem);
     gameSystemsModule.addSystem(&firstPersonCameraControlSystem);
@@ -258,14 +239,8 @@ int Core::mainLoop()
     double lag = FIXED_TIME_STEP;
 
     // * ===== Game loop ===================================================
-    editorModule.setup();
 
     // ! ----- START SYSTEM FUNCTION -----
-
-    // gameSystemsModule.run(System::START);
-    // messageBus.notify();
-    // audioModule.sceneInit();
-    // TODO: Is this working every time? It should indeed
     sceneInit();
     
     //Main loop
@@ -370,6 +345,7 @@ void Core::sceneInit()
     }
 
     // ! ----- START SYSTEM FUNCTION -----
+    gameSystemsModule.entities = objectModule.getEntitiesVector();
     gameSystemsModule.run(System::START);
     messageBus.notify();
 

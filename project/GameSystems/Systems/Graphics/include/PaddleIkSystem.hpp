@@ -51,10 +51,10 @@ struct IKChain
     ///@brief length of chain (as a sum of bones Lengths)
     float completeBonesLength;
     ///@brief position of root Bone
-    glm::vec3 rootPos;
+    Transform* rootTrans;
 
     IKChain() = default;
-    IKChain(IKBone** b, int cL, float cBL, glm::vec3 rP) : bones(b), chainLength(cL), completeBonesLength(cBL), rootPos(rP) {}
+    IKChain(IKBone** b, int cL, float cBL, Transform* rT) : bones(b), chainLength(cL), completeBonesLength(cBL), rootTrans(rT) {}
 };
 
 class PaddleIkSystem : public System
@@ -81,7 +81,7 @@ public:
      * called in Process() only when AssertEntity() returned true
      * should use class variables to access components
      */
-    virtual void fixedUpdate() {};
+    virtual void fixedUpdate() {}
 
     /**
      * @brief Contain logic of the system runned once per frame
@@ -99,6 +99,7 @@ protected:
 private:
 
     void resolveIK();
+    void solve(Transform* endEffector, glm::vec4 target, size_t numIterations, float threshold, int numParents);
 
     Transform* endBonePtr;
     IKBonePoint* bonePointPtr;
