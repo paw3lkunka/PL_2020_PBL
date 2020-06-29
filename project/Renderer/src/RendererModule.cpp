@@ -300,6 +300,12 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Depth map framebuffer not complete!\n";
+    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
@@ -368,6 +374,11 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i+1]);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i+1], 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            std::cerr << "Bloom blur framebuffer " << i << " not complete!\n";
+        }
     }
 
     // * ===== Gbuffer framebuffer =====
@@ -469,6 +480,11 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
     ssaoMap = new Texture(ssaoColorBufferBlur);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "SSAO framebuffer not complete!\n";
+    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -1223,14 +1239,20 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     {
         irradianceShader.setMat4("view", captureViews[i]);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrID, 0);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            std::cerr << "Cubemap convolution framebuffer not complete!\nIteration number: " << i << "\n";
+        }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawCube();
     }
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
+    glDeleteRenderbuffers(1, &captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glDeleteFramebuffers(1, &captureFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glViewport(0, 0, Core::windowWidth, Core::windowHeight);
 }
 
 void RendererModule::drawCube()
