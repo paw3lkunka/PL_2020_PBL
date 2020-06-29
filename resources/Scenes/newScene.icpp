@@ -319,6 +319,7 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
+<<<<<<< HEAD
 // TextureCreateInfo i = {};
 // i.minFilter = GL_LINEAR;
 // i.magFilter = GL_LINEAR;
@@ -337,6 +338,8 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
 // hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
 // rendererModule.setSkybox(hdrSkyboxMat);
 
+=======
+>>>>>>> fa9829a1d97df6e52c599b8bb085432ecc992df4
 objectModule.newEntity(2, "directionalLight");
 {
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -370,13 +373,6 @@ objectModule.newEntity(4, "Camera");
         li->getPositionModifiable();
         li->getAtModifiable();
         li->getUpModifiable();
-
-    auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-        soMusic->audioClip = "Resources/Audios/shingeki.wav";
-        soMusic->getIsRelativeModifiable() = true;
-        soMusic->getGainModifiable() = 0.01f;
-        soMusic->getIsLoopingModifiable() = true;
-        soMusic->autoPlay = true;
 }
 
 // objectModule.newEntity(2, "TestAudioSource1");
@@ -446,7 +442,7 @@ objectModule.newEntity(4, "Camera");
         // KAYAK MAN
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
             kayakRigidbody->drag = 0.2f;
-            kayakRigidbody->angularDrag = 0.25f;
+            kayakRigidbody->angularDrag = 0.35f;
             kayakRigidbody->mass = 120.0f;
             kayakRigidbody->ignoreGravity = false;
             kayakPtr->addComponent(kayakRigidbody);
@@ -485,6 +481,8 @@ objectModule.newEntity(4, "Camera");
             // PADDLE MAN
             auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
                 paddleHydroAccelerator->rigidbody = kayakRigidbody;
+                paddleHydroAccelerator->handling = 30;
+                paddleHydroAccelerator->acceleration = 0.5f;
                 paddlePtr->addComponent(paddleHydroAccelerator);
 
             auto paddleHydroBody = objectModule.newEmptyComponent<HydroBody>();
@@ -536,143 +534,111 @@ objectModule.newEntity(4, "Camera");
         }
     }
 
-    // ! NJU POSTAC
-    {
-        objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
+    // // ! NJU POSTAC
+    // {
+    //     objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
 
-        Entity* hips = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:Hips(bone)");
-        {
-            auto t = hips->getComponentPtr<Transform>();
-                t->getLocalScaleModifiable() = {0.01f, 0.01f, 0.01f};
-                t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 180.0f, 0.0f});
-                t->getLocalPositionModifiable() = {0.0f, -0.45f, 0.0f};
-                t->setParent(kayakTransform);
-        }
+    //     Entity* hips = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:Hips(bone)");
+    //     {
+    //         auto t = hips->getComponentPtr<Transform>();
+    //             t->getLocalScaleModifiable() = {0.01f, 0.01f, 0.01f};
+    //             t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 180.0f, 0.0f});
+    //             t->getLocalPositionModifiable() = {0.0f, -0.45f, 0.0f};
+    //             t->setParent(kayakTransform);
+    //     }
 
-        auto bodyAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_BaseColor.png", texCreateInfo);
-        auto bodyNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_Normal.png", texCreateInfo);
-        auto bodyOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_OccRouMet.png", texCreateInfo);
+    //     auto bodyAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_BaseColor.png", texCreateInfo);
+    //     auto bodyNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_Normal.png", texCreateInfo);
+    //     auto bodyOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_OccRouMet.png", texCreateInfo);
 
-        Material* bodyMat = objectModule.newMaterial(standardSkinned, "bodyMat", RenderType::Opaque);
-        bodyMat->setTexture("diffuse", bodyAlbedo);
-        bodyMat->setTexture("normal", bodyNormal);
-        bodyMat->setTexture("occRouMet", bodyOccRouMet);
+    //     Material* bodyMat = objectModule.newMaterial(standardSkinned, "bodyMat", RenderType::Opaque);
+    //     bodyMat->setTexture("diffuse", bodyAlbedo);
+    //     bodyMat->setTexture("normal", bodyNormal);
+    //     bodyMat->setTexture("occRouMet", bodyOccRouMet);
 
-        Entity* body = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Body");
-        {
-            auto mr = body->getComponentPtr<MeshRenderer>();
-                mr->material = bodyMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* body = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Body");
+    //     {
+    //         auto mr = body->getComponentPtr<MeshRenderer>();
+    //             mr->material = bodyMat;
+    //     }
 
-        Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
-        {
-            auto mr = eyes->getComponentPtr<MeshRenderer>();
-                mr->material = bodyMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
+    //     {
+    //         auto mr = eyes->getComponentPtr<MeshRenderer>();
+    //             mr->material = bodyMat;
+    //     }
 
-        Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
-        eyelashesMat->setTexture("diffuse", bodyAlbedo);
-        eyelashesMat->setTexture("normal", bodyNormal);
-        eyelashesMat->setTexture("occRouMet", bodyOccRouMet);
+    //     Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
+    //     eyelashesMat->setTexture("diffuse", bodyAlbedo);
+    //     eyelashesMat->setTexture("normal", bodyNormal);
+    //     eyelashesMat->setTexture("occRouMet", bodyOccRouMet);
 
-        Entity* eyelashes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyelashes");
-        {
-            auto mr = eyelashes->getComponentPtr<MeshRenderer>();
-                mr->material = eyelashesMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* eyelashes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyelashes");
+    //     {
+    //         auto mr = eyelashes->getComponentPtr<MeshRenderer>();
+    //             mr->material = eyelashesMat;
+    //     }
 
-        auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
-        auto gloveNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_Normal.png", texCreateInfo);
-        auto gloveOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_OccRouMet.png", texCreateInfo);
+    //     auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
+    //     auto gloveNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_Normal.png", texCreateInfo);
+    //     auto gloveOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_OccRouMet.png", texCreateInfo);
 
-        Material* gloveMat = objectModule.newMaterial(standardSkinned, "gloveMat", RenderType::Opaque);
-        gloveMat->setTexture("diffuse", gloveAlbedo);
-        gloveMat->setTexture("normal", gloveNormal);
-        gloveMat->setTexture("occRouMet", gloveOccRouMet);
+    //     Material* gloveMat = objectModule.newMaterial(standardSkinned, "gloveMat", RenderType::Opaque);
+    //     gloveMat->setTexture("diffuse", gloveAlbedo);
+    //     gloveMat->setTexture("normal", gloveNormal);
+    //     gloveMat->setTexture("occRouMet", gloveOccRouMet);
 
-        Entity* gloves = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Gloves");
-        {
-            auto mr = gloves->getComponentPtr<MeshRenderer>();
-                mr->material = gloveMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* gloves = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Gloves");
+    //     {
+    //         auto mr = gloves->getComponentPtr<MeshRenderer>();
+    //             mr->material = gloveMat;
+    //     }
 
-        auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
-        auto hatNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_Normal.png", texCreateInfo);
-        auto hatOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_OccRouMet.png", texCreateInfo);
+    //     auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
+    //     auto hatNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_Normal.png", texCreateInfo);
+    //     auto hatOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_OccRouMet.png", texCreateInfo);
 
-        Material* hatMat = objectModule.newMaterial(standardSkinned, "hatMat", RenderType::Opaque);
-        hatMat->setTexture("diffuse", hatAlbedo);
-        hatMat->setTexture("normal", hatNormal);
-        hatMat->setTexture("occRouMet", hatOccRouMet);
+    //     Material* hatMat = objectModule.newMaterial(standardSkinned, "hatMat", RenderType::Opaque);
+    //     hatMat->setTexture("diffuse", hatAlbedo);
+    //     hatMat->setTexture("normal", hatNormal);
+    //     hatMat->setTexture("occRouMet", hatOccRouMet);
 
-        Entity* hats = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Hats");
-        {
-            auto mr = hats->getComponentPtr<MeshRenderer>();
-                mr->material = hatMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* hats = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Hats");
+    //     {
+    //         auto mr = hats->getComponentPtr<MeshRenderer>();
+    //             mr->material = hatMat;
+    //     }
 
-        auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
-        auto maskNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_Normal.png", texCreateInfo);
-        auto maskOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_OccRouMet.png", texCreateInfo);
+    //     auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
+    //     auto maskNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_Normal.png", texCreateInfo);
+    //     auto maskOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_OccRouMet.png", texCreateInfo);
 
-        Material* maskMat = objectModule.newMaterial(standardSkinned, "maskMat", RenderType::Opaque);
-        maskMat->setTexture("diffuse", maskAlbedo);
-        maskMat->setTexture("normal", maskNormal);
-        maskMat->setTexture("occRouMet", maskOccRouMet);
+    //     Material* maskMat = objectModule.newMaterial(standardSkinned, "maskMat", RenderType::Opaque);
+    //     maskMat->setTexture("diffuse", maskAlbedo);
+    //     maskMat->setTexture("normal", maskNormal);
+    //     maskMat->setTexture("occRouMet", maskOccRouMet);
 
-        Entity* masks = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Masks");
-        {
-            auto mr = masks->getComponentPtr<MeshRenderer>();
-                mr->material = maskMat;
-                mr->mesh->frustumCulling = false;
-        }
+    //     Entity* masks = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Masks");
+    //     {
+    //         auto mr = masks->getComponentPtr<MeshRenderer>();
+    //             mr->material = maskMat;
+    //     }
 
-        auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
-        auto topNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_Normal.png", texCreateInfo);
-        auto topOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_OccRouMet.png", texCreateInfo);
+    //     auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
+    //     auto topNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_Normal.png", texCreateInfo);
+    //     auto topOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_OccRouMet.png", texCreateInfo);
 
-        Material* topMat = objectModule.newMaterial(standardSkinned, "topMat", RenderType::Opaque);
-        topMat->setTexture("diffuse", topAlbedo);
-        topMat->setTexture("normal", topNormal);
-        topMat->setTexture("occRouMet", topOccRouMet);
+    //     Material* topMat = objectModule.newMaterial(standardSkinned, "topMat", RenderType::Opaque);
+    //     topMat->setTexture("diffuse", topAlbedo);
+    //     topMat->setTexture("normal", topNormal);
+    //     topMat->setTexture("occRouMet", topOccRouMet);
 
-        Entity* tops = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Tops");
-        {
-            auto mr = tops->getComponentPtr<MeshRenderer>();
-                mr->material = topMat;
-                mr->mesh->frustumCulling = false;
-        }
-
-        // ! ----- IK -----
-        {
-            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
-            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
-            Entity* eAtt = attachLeft;
-            bp1->touchPoint = eAtt->getComponentPtr<Transform>();
-            bp1->chainLength = 1;
-            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
-            bp1->iterations = 1;
-            bp1->delta = 0.001f;
-            e->addComponent(bp1);
-        }
-
-        {
-            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
-            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
-            Entity* eAtt = attachRight;
-            bp1->touchPoint = eAtt->getComponentPtr<Transform>();
-            bp1->chainLength = 1;
-            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
-            bp1->iterations = 1;
-            bp1->delta = 0.001f;
-            e->addComponent(bp1);
-        }
-    }
+    //     Entity* tops = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Tops");
+    //     {
+    //         auto mr = tops->getComponentPtr<MeshRenderer>();
+    //             mr->material = topMat;
+    //     }
+    // }
 }
 
 //TerrainUtils::loadAllTerrainChunks();
@@ -689,13 +655,13 @@ TerrainUtils::importColliders();
     textMaterial->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
     auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
     auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/UiFading.vert", "Resources/Shaders/UiFading/UiFading.frag");
-    TextureCreateInfo info = {};
-    info.format = GL_RGBA;
-    info.generateMipmaps = false;
-    info.magFilter = GL_LINEAR;
-    info.minFilter = GL_LINEAR;
-    info.wrapMode = GL_CLAMP_TO_EDGE;
-    auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", info);
+    TextureCreateInfo uiInfo = {};
+    uiInfo.format = GL_RGBA;
+    uiInfo.generateMipmaps = false;
+    uiInfo.magFilter = GL_LINEAR;
+    uiInfo.minFilter = GL_LINEAR;
+    uiInfo.wrapMode = GL_CLAMP_TO_EDGE;
+    auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadeless.png", uiInfo);
 
     // Detection rate
     {
@@ -838,3 +804,21 @@ TerrainUtils::importColliders();
         }
     }
 }
+
+TextureCreateInfo i = {};
+i.minFilter = GL_LINEAR;
+i.magFilter = GL_LINEAR;
+i.wrapMode= GL_CLAMP_TO_EDGE;
+i.generateMipmaps = false;
+CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                        "Resources/Textures/skybox_02/nx.hdr", 
+                                                        "Resources/Textures/skybox_02/px.hdr",
+                                                        "Resources/Textures/skybox_02/pz.hdr",
+                                                        "Resources/Textures/skybox_02/py.hdr",
+                                                        "Resources/Textures/skybox_02/ny.hdr");
+
+Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+rendererModule.setSkybox(hdrSkyboxMat);

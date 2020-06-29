@@ -484,6 +484,61 @@ void TerrainUtils::importColliders()
     {
         std::cout << "Unable to read colliders!!!!\n";
     }
+
+    std::fstream flowInfo;
+    flowInfo.open("Resources/currentFlow.txt", std::ios::in);
+    if (flowInfo.is_open())
+    {
+        //GetCore().objectModule.newModel("Resources/Models/Box.FBX", false, false);
+        std::string line;
+        glm::vec3 position;
+        glm::quat rotation;
+        glm::vec3 halfSize;
+        glm::vec3 direction;
+        float speed;
+        size_t index = 0;
+        int i = 0;
+
+        while(std::getline(flowInfo, line))
+        {
+            index = line.find_first_of('$');
+            if (index != std::string::npos)
+            {
+                std::getline(flowInfo, line);
+                position = stringToVec3(line);
+                position.x = -position.x;
+                std::getline(flowInfo, line);
+                rotation = stringToQuat(line);
+                std::getline(flowInfo, line);
+                halfSize = stringToVec3(line);
+                std::getline(flowInfo, line);
+                direction = stringToVec3(line);
+                std::getline(flowInfo, line);
+                speed = std::stof(line);
+
+                Entity* colliderEntity = GetCore().objectModule.newEntity(4, "Flow" + std::to_string(i++));
+
+                auto t = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
+                    t->getLocalPositionModifiable() = position;
+                    t->getLocalRotationModifiable() = rotation;
+                    t->getLocalScaleModifiable() = halfSize * 2.0f;
+                    t->setParent(collidersRoot);
+                // auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
+                //     mr->mesh = GetCore().objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
+                auto col = GetCore().objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+                    col->halfSize = halfSize;
+                    col->isTrigger = true;
+                auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+                    rb->type = rp3d::BodyType::STATIC;
+                auto flow = GetCore().objectModule.newEmptyComponentForLastEntity<HydroCurrent>();
+                    flow->velocity = direction * speed * 25.0f;
+            }
+        }
+    }
+    else
+    {
+        std::cout << "Unable to read colliders!!!!\n";
+    }
 }
 
 glm::vec3 TerrainUtils::stringToVec3(std::string line)

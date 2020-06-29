@@ -14,9 +14,6 @@
  */
 struct Rigidbody : public Component
 {
-    friend class PhysicSystem;
-    friend class PhysicModule;
-
     Rigidbody() = default;
     virtual ~Rigidbody() = default;
 
@@ -61,8 +58,6 @@ struct Rigidbody : public Component
      * @param transformPtr transform with values to apply.
      */
     void updateReactTransform(Transform* transformPtr);
-    
-private:
 
     ///@brief Pointer to reactphysics3d object
     reactphysics3d::RigidBody* reactRB;

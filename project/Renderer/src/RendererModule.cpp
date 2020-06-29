@@ -286,6 +286,7 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
     TextureCreateInfo depthCreateInfo = {};
     depthCreateInfo.format = GL_DEPTH_COMPONENT;
+    depthCreateInfo.internalFormat = GL_DEPTH_COMPONENT24;
     depthCreateInfo.generateMipmaps = false;
     depthCreateInfo.height = SHADOW_HEIGHT;
     depthCreateInfo.width = SHADOW_WIDTH;
@@ -1208,7 +1209,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
 
-    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
+    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution, nullptr, false);
     irradianceShader.use();
     irradianceShader.setInt("environmentMap", 0);
     irradianceShader.setMat4("projection", captureProjection);
@@ -1229,6 +1230,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glViewport(0, 0, Core::windowWidth, Core::windowHeight);
 }
 
 void RendererModule::drawCube()

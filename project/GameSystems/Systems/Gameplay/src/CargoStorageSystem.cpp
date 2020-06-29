@@ -5,8 +5,6 @@
 #include "Cargo.inl"
 
 #include <algorithm>
-#include <sstream>
-#include <iomanip>
 
 void CargoStorageSystem::receiveMessage(Message msg)
 {
@@ -83,15 +81,8 @@ void CargoStorageSystem::receiveMessage(Message msg)
 
             if((weightText != nullptr) && (incomeText != nullptr))
             {
-                std::stringstream ss;
-                ss << std::fixed << std::setprecision(2) << cargoStoragePtr->weightSum;
-                weightText->mesh.text = ss.str() + "kg";
-                ss.str("");
-
-                ss << std::fixed << std::setprecision(2) << cargoStoragePtr->incomeSum;
-                incomeText->mesh.text = ss.str() + "$";
-                ss.str("");
-                
+                weightText->mesh.text = getFloatWithPrecision(cargoStoragePtr->weightSum, 2) + "kg";
+                incomeText->mesh.text = getFloatWithPrecision(cargoStoragePtr->incomeSum, 2) + "$";
             }
 
             if(warningGroup != nullptr)

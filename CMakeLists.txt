@@ -3,7 +3,6 @@ cmake_minimum_required( VERSION 3.17 )
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/components.sh)
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/systems.sh)
 execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/countcpp.sh -s)
@@ -116,6 +115,9 @@ set(ASSIMP_BUILD_M3D_IMPORTER OFF CACHE BOOL "" FORCE)
 set(BUILD_DOCS OFF CACHE BOOL "" FORCE) #Assimp
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 
 add_subdirectory(libs/glad/)
 add_subdirectory(libs/glfw/)
