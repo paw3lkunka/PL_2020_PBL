@@ -557,12 +557,14 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = body->getComponentPtr<MeshRenderer>();
                 mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
         }
 
         Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
         {
             auto mr = eyes->getComponentPtr<MeshRenderer>();
                 mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
         }
 
         Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
@@ -574,6 +576,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = eyelashes->getComponentPtr<MeshRenderer>();
                 mr->material = eyelashesMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
@@ -589,6 +592,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = gloves->getComponentPtr<MeshRenderer>();
                 mr->material = gloveMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
@@ -604,6 +608,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = hats->getComponentPtr<MeshRenderer>();
                 mr->material = hatMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
@@ -619,6 +624,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = masks->getComponentPtr<MeshRenderer>();
                 mr->material = maskMat;
+                mr->mesh->frustumCulling = false;
         }
 
         auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
@@ -634,6 +640,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto mr = tops->getComponentPtr<MeshRenderer>();
                 mr->material = topMat;
+                mr->mesh->frustumCulling = false;
         }
 
         // ! ----- IK -----
@@ -641,9 +648,9 @@ objectModule.newEntity(4, "Camera");
             IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
             bp1->touchPoint = attachRight->getComponentPtr<Transform>();
-            bp1->chainLength = 3;
+            bp1->chainLength = 2;
             bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
-            bp1->iterations = 10;
+            bp1->iterations = 2;
             bp1->delta = 0.001f;
             e->addComponent(bp1);
         }
@@ -652,9 +659,9 @@ objectModule.newEntity(4, "Camera");
             IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
             bp1->touchPoint = attachLeft->getComponentPtr<Transform>();
-            bp1->chainLength = 3;
+            bp1->chainLength = 2;
             bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
-            bp1->iterations = 10;
+            bp1->iterations = 2;
             bp1->delta = 0.001f;
             e->addComponent(bp1);
         }
