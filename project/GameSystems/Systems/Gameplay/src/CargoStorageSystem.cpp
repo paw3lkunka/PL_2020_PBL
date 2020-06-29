@@ -6,6 +6,34 @@
 
 #include <algorithm>
 
+void CargoStorageSystem::addCargo(Cargo* cargoPtr)
+{
+    cargoStoragePtr->cargosStored.push_back(cargoPtr);
+    cargoStoragePtr->weightSum += cargoPtr->weight;
+    cargoStoragePtr->incomeSum += cargoPtr->income;
+
+    if(auto rb = cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>())
+    {
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoPtr->weight;
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+    }
+}
+
+void CargoStorageSystem::removeCargo(std::list<Cargo*>::iterator cargoIter)
+{
+    Cargo* cargoPtr = *cargoIter;
+
+    cargoStoragePtr->weightSum -= cargoPtr->weight;
+    cargoStoragePtr->incomeSum -= cargoPtr->income;
+    cargoStoragePtr->cargosStored.erase(cargoIter);
+
+    if(auto rb = cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>())
+    {
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass -= cargoPtr->weight;
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+    }
+}
+
 void CargoStorageSystem::receiveMessage(Message msg)
 {
     if(cargoStoragePtr != nullptr)
@@ -23,14 +51,7 @@ void CargoStorageSystem::receiveMessage(Message msg)
                 }
                 else
                 {
-                    cargoStoragePtr->cargosStored.push_back(editedCargo);
-                    cargoStoragePtr->weightSum += editedCargo->weight;
-                    cargoStoragePtr->incomeSum += editedCargo->income;
-                    if(cargoStoragePtr->cargosStoredSize == cargoStoragePtr->cargosStored.size())
-                    {
-                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoStoragePtr->weightSum;
-                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
-                    }
+                    addCargo(editedCargo);
                 }
             }
             break;
@@ -40,23 +61,13 @@ void CargoStorageSystem::receiveMessage(Message msg)
                 std::list<Cargo*>::iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), editedCargo);
                 if(iter != cargoStoragePtr->cargosStored.end())
                 {
-                    cargoStoragePtr->cargosStored.erase(iter);
-                    cargoStoragePtr->weightSum -= editedCargo->weight;
-                    cargoStoragePtr->incomeSum -= editedCargo->income;
+                    removeCargo(iter);
                 }
                 else
                 {
                     std::cerr << "Cargo don't exist!" << std::endl;
                 }
             }
-            break;
-
-            case Event::COLLISION_ENTER:
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
             break;
         }
         if(msg.getEvent() >= Event::CARGO_FIRST && msg.getEvent() <= Event::CARGO_LAST)

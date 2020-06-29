@@ -64,6 +64,9 @@ public:
 
 protected:
 private:
+    void addCargo(Cargo* cargoPtr);
+    void removeCargo(std::list<Cargo*>::iterator cargoIter);
+
     CargoStorage* cargoStoragePtr = nullptr;
     TextRenderer* weightText = nullptr;
     TextRenderer* incomeText = nullptr;

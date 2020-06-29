@@ -384,7 +384,6 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
-    //TODO check after physic backend change
     bool changed = false, mass = false;
 
     changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);

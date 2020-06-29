@@ -645,12 +645,16 @@ void GamePlayModule::summarize()
 void GamePlayModule::rocksHit()
 {
     auto kayak = Kayak::get();
-    float velocity = glm::length(kayak->entityPtr->getComponentPtr<Rigidbody>()->velocity);
-    float base = velocity - kayak->hitDamageTreshold;
 
-    if (base > 0)
+    auto* rigidbody = kayak->entityPtr->getComponentPtr<Rigidbody>();
+
+    float speed = glm::length(rigidbody->velocity);
+
+    float baseDamage = speed - kayak->hitDamageTreshold;
+
+    if (baseDamage > 0)
     {
-        kayak->hp -= kayak->hitDamagefactor * base;
+        kayak->hp -= kayak->hitDamagefactor * baseDamage;
         kayak->hp = std::max(kayak->hp, 0.0f);
 
         if (healthbarPtr)
@@ -662,6 +666,15 @@ void GamePlayModule::rocksHit()
         {
             GetCore().messageBus.sendMessage(Message(Event::HP_0));
         }
+    }
+
+    if (speed > kayak->hitLostCargoTreshold && GetCore().randomFloat01L() < kayak->chanceToLostPackage)
+    {
+        auto storage = kayak->entityPtr->getComponentPtr<CargoStorage>();
+
+        int index = GetCore().randomInt(storage->cargosStored.size() - 1);
+        Cargo* cargo = storage->cargosStored[index];
+        GetCore().messageBus.sendMessage(Message(Event::REMOVE_CARGO, cargo))
     }
 }
 
