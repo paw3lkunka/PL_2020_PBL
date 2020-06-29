@@ -564,6 +564,6 @@ auto rect_shadeless = objectModule.newTexture("Resources/Sprites/rect_2_1_shadel
                 collider->radius = 15.0f;
             
             auto hydroCurrent = objectModule.newEmptyComponentForLastEntity<HydroCurrent>();
-                hydroCurrent->velocity = { 1.0f, 0.0f, 1.0f };
+                //hydroCurrent->velocity = { 1.0f, 0.0f, 1.0f };
         }
     }
