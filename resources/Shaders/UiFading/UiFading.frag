@@ -11,7 +11,7 @@ uniform float fadingPercentage;
 void main()
 {
     float alpha = 1.0;
-    if(uv.x > fadingPercentage)
+    if((uv.x < (0.5 - fadingPercentage / 2.0)) || (uv.x > (0.5 + fadingPercentage / 2.0)))
     {
         alpha = 0.0;
     }

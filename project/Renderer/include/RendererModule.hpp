@@ -157,7 +157,7 @@ private:
     Shader* internalShaderError;
     Material* internalErrorMat;
     // TODO: Move this to light properties
-    static constexpr int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
+    static constexpr int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 
     // * Normal render packets collection
     std::vector<NormalPacket> normalPackets;
