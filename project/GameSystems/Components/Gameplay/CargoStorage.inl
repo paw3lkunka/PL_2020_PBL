@@ -2,7 +2,7 @@
 #define CARGOSTORAGE_INL_
 
 #include "Component.hpp"
-#include <list>
+#include <vector>
 
 struct Cargo;
 
@@ -14,11 +14,9 @@ public:
     ~CargoStorage() = default;
 
 //TODO: documentation
-    std::list<Cargo*> cargosStored;
+    std::vector<Cargo*> cargosStored;
 //TODO: documentation
-    std::list<Cargo*> cargosLost;
-//TODO: documentation
-    int cargosStoredSize;
+    std::vector<Cargo*> cargosLost;
 
 //TODO: documentation
     float weightLimit = 70.0f;

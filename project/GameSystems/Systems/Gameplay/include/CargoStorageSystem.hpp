@@ -4,16 +4,18 @@
 #include "System.hpp"
 #include "IMsgReceiver.inl"
 #include <iterator>
-#include <list>
+#include <vector>
 
 struct CargoStorage;
 struct Cargo;
 struct TextRenderer;
 struct UiSortingGroup;
 
+
 class CargoStorageSystem : public System, public IMsgReceiver
 {
 public:
+    typedef std::vector<Cargo*>::iterator Iterator;
     CargoStorageSystem() = default;
     ~CargoStorageSystem() = default;
 
@@ -65,7 +67,9 @@ public:
 protected:
 private:
     void addCargo(Cargo* cargoPtr);
-    void removeCargo(std::list<Cargo*>::iterator cargoIter);
+    void removeCargo(Iterator cargoIter);
+    void LooseCargo(Iterator cargoIter);
+    void updateButtonsState(Cargo* cargoPtr);
 
     CargoStorage* cargoStoragePtr = nullptr;
     TextRenderer* weightText = nullptr;

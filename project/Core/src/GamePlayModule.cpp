@@ -670,11 +670,7 @@ void GamePlayModule::rocksHit()
 
     if (speed > kayak->hitLostCargoTreshold && GetCore().randomFloat01L() < kayak->chanceToLostPackage)
     {
-        auto storage = kayak->entityPtr->getComponentPtr<CargoStorage>();
-
-        int index = GetCore().randomInt(storage->cargosStored.size() - 1);
-        Cargo* cargo = storage->cargosStored[index];
-        GetCore().messageBus.sendMessage(Message(Event::REMOVE_CARGO, cargo))
+        GetCore().messageBus.sendMessage(Message(Event::CARGO_LOST));
     }
 }
 
