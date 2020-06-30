@@ -644,22 +644,34 @@ objectModule.newEntity(4, "Camera");
         }
 
         // ! ----- IK -----
+        Entity* larm = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftArm(bone)");
         {
-            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            auto t = larm->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(68.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(40.0f) , glm::vec3(0.0f, 0.0f, 1.0f));
+        }
+        {
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
             bp1->touchPoint = attachRight->getComponentPtr<Transform>();
-            bp1->chainLength = 2;
+            bp1->chainLength = 1;
             bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
             bp1->iterations = 2;
             bp1->delta = 0.001f;
             e->addComponent(bp1);
         }
 
+        Entity* rarm = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightArm(bone)");
         {
-            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            auto t = rarm->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(68.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(40.0f) , glm::vec3(0.0f, 0.0f, 1.0f));
+        }
+        {
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
             bp1->touchPoint = attachLeft->getComponentPtr<Transform>();
-            bp1->chainLength = 2;
+            bp1->chainLength = 1;
             bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
             bp1->iterations = 2;
             bp1->delta = 0.001f;

@@ -23,13 +23,13 @@ void PaddleIkSystem::start()
 
 void PaddleIkSystem::frameUpdate()
 {
-    resolveIK();
-    // solve(endBonePtr, 
-    //     glm::vec4(positionInWorld(bonePointPtr->touchPoint), 1.0f),//getModelMatrix()[3],
-    //     bonePointPtr->iterations,
-    //     bonePointPtr->delta,
-    //     bonePointPtr->chainLength
-    //     );
+    // resolveIK();
+    solve(endBonePtr, 
+        glm::vec4(positionInWorld(bonePointPtr->touchPoint), 1.0f),//getModelMatrix()[3],
+        bonePointPtr->iterations,
+        bonePointPtr->delta,
+        bonePointPtr->chainLength
+        );
 }
 
 void PaddleIkSystem::init()
@@ -161,7 +161,12 @@ void PaddleIkSystem::resolveIK()
         IKBone* cBone = chain.bones[i];
         cBone->boneTrans->getLocalPositionModifiable() = positionInLocal(cBone->boneTrans, cBone->startPos);
         auto direction = glm::normalize(cBone->startPos - cBone->endPos);
-        cBone->rotation = cBone->startRot * glm::quatLookAt(direction, {0, 1, 0});
+        //cBone->rotation = glm::quatLookAt(direction, {0, 1, 0});
+        float angle = glm::dot(direction, glm::vec3(1.0f, 0.0f, 0.0f) * cBone->boneTrans->getWorldRotation());
+        glm::vec3 axis = glm::cross(direction, glm::vec3(1.0f, 0.0f, 0.0f) *  cBone->boneTrans->getWorldRotation());
+        std::cout << "ANGLE: " << angle << '\n';
+        std::cout << "AXIS: " << glm::to_string(axis) << '\n';
+        cBone->rotation = glm::angleAxis(glm::acos(angle), axis);
         cBone->boneTrans->getLocalRotationModifiable() = rotationInLocal(cBone->boneTrans, cBone->rotation);
         GetCore().sceneModule.process(*cBone->boneTrans, true);
     }
@@ -215,8 +220,8 @@ void PaddleIkSystem::solve(Transform* endEffector, glm::vec4 target, size_t numI
 			break;
 		if ((rotAxis != glm::vec3()) && rotAxis == rotAxis)
 		{
-            //glm::mat4 rotMat = glm::mat4(1.0f);
-			glm::quat rotation = glm::angleAxis(angle * 0.5f, rotAxis);//glm::rotate(rotMat, angle, rotAxis); // This needs to be in model space, rather than world space.
+            glm::mat4 rotMat = glm::mat4(1.0f);
+			glm::quat rotation = glm::rotate(rotMat, angle, rotAxis); // This needs to be in model space, rather than world space. //glm::angleAxis(angle/* * 0.5f*/, rotAxis);//
 			//std::cout << "Angle axis: " << angle << ", " << glm::to_string(rotAxis) << '\n';
             //assert(rotMat == rotMat);
             // std::cout << "Rotation: " << glm::to_string(glm::quat_cast(rotMat)) << '\n';
@@ -227,6 +232,7 @@ void PaddleIkSystem::solve(Transform* endEffector, glm::vec4 target, size_t numI
 //		If it is the base node then the new current bone is the last bone in the chain
 //		Else the new current bone is the previous one in the chain
 		//Update the heurestic
+        GetCore().sceneModule.process(*curr, true);
 		endPos = glm::vec4(positionInWorld(endEffector), 1.0f);
 		if (currCountTreeUp > numParents)
 		{
@@ -261,6 +267,7 @@ glm::quat PaddleIkSystem::rotationInWorld(Transform* current)
 glm::quat PaddleIkSystem::rotationInLocal(Transform* current, glm::quat rot)
 {
     return rot * glm::inverse(current->getParent()->getWorldRotation());
+    //return glm::toQuat(current->getParentMatrix() * glm::toMat4(rot));
 }
 
 glm::quat PaddleIkSystem::rotateVectors(glm::vec3 from, glm::vec3 to)
