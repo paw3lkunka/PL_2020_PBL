@@ -741,8 +741,7 @@ void RendererModule::render()
         while(!opaqueQueue.empty())
         {
             // HACK: Only one of the materials should be double sided
-            std::string matName = std::string(opaqueQueue.front()->material->getName());
-            bool doubleSided = matName == "Conifer Leaves BODT" || matName == "Grass_rushes";
+            bool doubleSided = opaqueQueue.front()->material->getShaderPtr()->shaderName == "standardPbrCutout";
             if (doubleSided)
             {
                 glDisable(GL_CULL_FACE);
