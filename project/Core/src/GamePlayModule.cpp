@@ -23,6 +23,20 @@ void GamePlayModule::receiveMessage(Message msg)
                 }
             }
         break;
+        
+        case Event::TRIGGER_ENTER:
+        {
+            auto data = msg.getValue<TriggerData>();
+
+            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
+             && data.triggerBody->entityPtr->getComponentPtr<Finish>())
+            {
+                togglePauseState();
+                summarize();
+            }
+
+        }
+        break;
 
         case Event::PLAYER_ATTACKED:
             if (msg.getValue<AttackData>().success)
@@ -43,22 +57,19 @@ void GamePlayModule::receiveMessage(Message msg)
         break;
 
         case Event::PAUSE_GAME:
-            Core::instance->gamePaused = !Core::instance->gamePaused;
-            Core::instance->messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING));
-            pauseGame();
+            togglePauseState();
+            pauseScreen();
         break;
 
         case Event::HP_0:
-            Core::instance->gamePaused = !Core::instance->gamePaused;
-            Core::instance->messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING));
+            togglePauseState();
             youDied();
         break;
         
         case Event::LOAD_SCENE:
             if(Core::instance->gamePaused)
             {
-                Core::instance->gamePaused = !Core::instance->gamePaused;
-                Core::instance->messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING));
+                togglePauseState();
             }
             reloadScene(msg.getValue<const char*>());
         break;
@@ -584,7 +595,13 @@ void GamePlayModule::initSummaryScreen(ObjectModule& om)
     }
 }
 
-void GamePlayModule::pauseGame()
+void GamePlayModule::togglePauseState()
+{
+    Core::instance->gamePaused = !Core::instance->gamePaused;
+    Core::instance->messageBus.sendMessage(Message(Event::AUDIO_SOURCE_PAUSE_ALL_PLAYING));
+}
+
+void GamePlayModule::pauseScreen()
 {
     useScreen(pauseScreenEntity, GetCore().gamePaused);
 }   
