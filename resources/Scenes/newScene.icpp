@@ -624,7 +624,6 @@ if (GetCore().loadTerrain)
 {
     TerrainUtils::loadAllTerrainChunks();
 }
-
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
