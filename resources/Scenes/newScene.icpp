@@ -420,7 +420,7 @@ objectModule.newEntity(4, "Camera");
 
         // KAYAK MAN
         auto kayakRigidbody = objectModule.newEmptyComponent<Rigidbody>();
-            kayakRigidbody->drag = 0.2f;
+            kayakRigidbody->drag = 0.1f;
             kayakRigidbody->angularDrag = 0.35f;
             kayakRigidbody->mass = 120.0f;
             kayakRigidbody->ignoreGravity = false;
@@ -620,7 +620,10 @@ objectModule.newEntity(4, "Camera");
     // }
 }
 
-TerrainUtils::loadAllTerrainChunks();
+if (GetCore().loadTerrain)
+{
+    TerrainUtils::loadAllTerrainChunks();
+}
 TerrainUtils::createMaterialsForModels();
 TerrainUtils::loadExportedUnityModels();
 TerrainUtils::importColliders();
@@ -782,6 +785,21 @@ TerrainUtils::importColliders();
                 shootTrail->addComponent(st);
         }
     }
+}
+
+//END TRIGGER
+{
+    objectModule.newEntity(3, "Finish");
+    auto* t = objectModule.newEmptyComponentForLastEntity<Transform>();
+        t->setParent(&sceneModule.rootNode);
+        t->getLocalPositionModifiable() = {-64.0f, 0.0f, 320.0f};
+        t->getLocalRotationModifiable() = glm::angleAxis(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    auto* f = objectModule.newEmptyComponentForLastEntity<Finish>();
+    auto* rb = objectModule.newEmptyComponentForLastEntity<Rigidbody>();
+        rb->type = rp3d::BodyType::STATIC;
+    auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
+        bc->halfSize = glm::vec3(3.0f, 4.5f, 22.5f);
+        bc->isTrigger = true;
 }
 
 TextureCreateInfo i = {};

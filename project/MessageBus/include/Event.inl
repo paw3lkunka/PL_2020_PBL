@@ -155,6 +155,8 @@ enum class Event : unsigned int
     PLAYER_ESCAPED,
     // Kayak was hitten by enemy, Data: AttackData { Enemy* pointer to enemy, vec3 direction, bool success}.
     PLAYER_ATTACKED,
+    /// Cargo was lost, DATA: none.
+    CARGO_LOST,
     // Kayak's hp drops to 0. Data: none.
     HP_0,
 #pragma endregion
@@ -177,10 +179,10 @@ enum class Event : unsigned int
     COLLISIONS_LAST = TRIGGER_EXIT,
     UI_FIRST = LOAD_SCENE,
     UI_LAST = PAUSE_GAME,
-    GAMEPLAY_FIRST = PLAYER_DETECTED,
-    GAMEPLAY_LAST = HP_0,
     CARGO_FIRST = ADD_CARGO,
     CARGO_LAST = REMOVE_CARGO,
+    GAMEPLAY_FIRST = PLAYER_DETECTED,
+    GAMEPLAY_LAST = HP_0,
 #pragma endregion
 
 };

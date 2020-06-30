@@ -16,33 +16,26 @@ void CargoStorageSystem::receiveMessage(Message msg)
             case Event::ADD_CARGO:
             {
                 editedCargo = msg.getValue<Cargo*>();
-                std::list<Cargo*>::iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), editedCargo);
+                Iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), editedCargo);
                 if(iter != cargoStoragePtr->cargosStored.end())
                 {
                     std::cerr << "Cargo already exists!" << std::endl;
                 }
                 else
                 {
-                    cargoStoragePtr->cargosStored.push_back(editedCargo);
-                    cargoStoragePtr->weightSum += editedCargo->weight;
-                    cargoStoragePtr->incomeSum += editedCargo->income;
-                    if(cargoStoragePtr->cargosStoredSize == cargoStoragePtr->cargosStored.size())
-                    {
-                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoStoragePtr->weightSum;
-                        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
-                    }
+                    addCargo(editedCargo);
+                    updateButtonsState(editedCargo);
                 }
             }
             break;
             case Event::REMOVE_CARGO:
             {
                 editedCargo = msg.getValue<Cargo*>();
-                std::list<Cargo*>::iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), editedCargo);
+                Iterator iter = std::find(cargoStoragePtr->cargosStored.begin(), cargoStoragePtr->cargosStored.end(), editedCargo);
                 if(iter != cargoStoragePtr->cargosStored.end())
                 {
-                    cargoStoragePtr->cargosStored.erase(iter);
-                    cargoStoragePtr->weightSum -= editedCargo->weight;
-                    cargoStoragePtr->incomeSum -= editedCargo->income;
+                    removeCargo(iter);
+                    updateButtonsState(editedCargo);
                 }
                 else
                 {
@@ -50,50 +43,12 @@ void CargoStorageSystem::receiveMessage(Message msg)
                 }
             }
             break;
-
-            case Event::COLLISION_ENTER:
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-                //TODO: ANDRZEJ ZRUP TÓ ŻECZY
-            break;
-        }
-        if(msg.getEvent() >= Event::CARGO_FIRST && msg.getEvent() <= Event::CARGO_LAST)
-        {
-            // Cargo has not transform - select cargo scene
-            if(editedCargo->entityPtr->getComponentPtr<CargoButton>() != nullptr) 
+            case Event::CARGO_LOST:
             {
-                auto e = GetCore().objectModule.getEntityPtrByName("Play_Button");
-                if(e != nullptr)
+                if (int size = cargoStoragePtr->cargosStored.size())
                 {
-                    if(cargoStoragePtr->cargosStored.size() < 1)
-                    {
-                        e->getComponentPtr<Button>()->isActive = false;
-                    }
-                    else
-                    {
-                        e->getComponentPtr<Button>()->isActive = true;
-                    }
-                    
-                }
-            }
-
-            if((weightText != nullptr) && (incomeText != nullptr))
-            {
-                weightText->mesh.text = getFloatWithPrecision(cargoStoragePtr->weightSum, 2) + "kg";
-                incomeText->mesh.text = getFloatWithPrecision(cargoStoragePtr->incomeSum, 2) + "$";
-            }
-
-            if(warningGroup != nullptr)
-            {
-                if(cargoStoragePtr->weightSum > cargoStoragePtr->weightLimit)
-                {
-                    warningGroup->groupTransparency = 0.9f;
-                }
-                else
-                {
-                    warningGroup->groupTransparency = 0.0f;
+                    Iterator iter = cargoStoragePtr->cargosStored.begin() + GetCore().randomInt(size - 1);
+                    LooseCargo(iter);
                 }
             }
         }
@@ -114,4 +69,81 @@ void CargoStorageSystem::initTexts(TextRenderer* weightText, TextRenderer* incom
     this->weightText = weightText;
     this->incomeText = incomeText;
     this->warningGroup = warningGroup;
+}
+
+void CargoStorageSystem::addCargo(Cargo* cargoPtr)
+{
+    cargoStoragePtr->cargosStored.push_back(cargoPtr);
+    cargoStoragePtr->weightSum += cargoPtr->weight;
+    cargoStoragePtr->incomeSum += cargoPtr->income;
+
+    if(auto rb = cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>())
+    {
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass += cargoPtr->weight;
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+    }
+}
+
+void CargoStorageSystem::removeCargo(Iterator cargoIter)
+{
+    Cargo* cargoPtr = *cargoIter;
+
+    cargoStoragePtr->weightSum -= cargoPtr->weight;
+    cargoStoragePtr->incomeSum -= cargoPtr->income;
+    cargoStoragePtr->cargosStored.erase(cargoIter);
+
+    if(auto rb = cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>())
+    {
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass -= cargoPtr->weight;
+        cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->updateReactRB(cargoStoragePtr->entityPtr->getComponentPtr<Rigidbody>()->mass);
+    }
+}
+
+void CargoStorageSystem::LooseCargo(Iterator cargoIter)
+{
+    Cargo* cargoPtr = *cargoIter;
+
+    cargoStoragePtr->weightSum -= cargoPtr->weight;
+    cargoStoragePtr->incomeSum -= cargoPtr->income;
+
+    cargoStoragePtr->cargosLost.push_back(cargoPtr);
+    cargoStoragePtr->cargosStored.erase(cargoIter);
+}
+
+void CargoStorageSystem::updateButtonsState(Cargo* cargoPtr)
+{
+    if(cargoPtr->entityPtr->getComponentPtr<CargoButton>() != nullptr) 
+    {
+        auto e = GetCore().objectModule.getEntityPtrByName("Play_Button");
+        if(e != nullptr)
+        {
+            if(cargoStoragePtr->cargosStored.size() < 1)
+            {
+                e->getComponentPtr<Button>()->isActive = false;
+            }
+            else
+            {
+                e->getComponentPtr<Button>()->isActive = true;
+            }
+
+        }
+    }
+
+    if((weightText != nullptr) && (incomeText != nullptr))
+    {
+        weightText->mesh.text = getFloatWithPrecision(cargoStoragePtr->weightSum, 2) + "kg";
+        incomeText->mesh.text = getFloatWithPrecision(cargoStoragePtr->incomeSum, 2) + "$";
+    }
+
+    if(warningGroup != nullptr)
+    {
+        if(cargoStoragePtr->weightSum > cargoStoragePtr->weightLimit)
+        {
+            warningGroup->groupTransparency = 0.9f;
+        }
+        else
+        {
+            warningGroup->groupTransparency = 0.0f;
+        }
+    }
 }
