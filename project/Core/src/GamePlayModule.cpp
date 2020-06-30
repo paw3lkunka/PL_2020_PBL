@@ -85,6 +85,12 @@ void GamePlayModule::init(const char* hpBarName, float bulletDamage)
     }
 
     this->bulletDamage = bulletDamage;
+    
+    for (size_t i = 0; i < 18; i++)
+    {
+        goodCargoEntities[i]->getComponentPtr<TextRenderer>()->mesh.text = "";
+        badCargoEntities[i]->getComponentPtr<TextRenderer>()->mesh.text = "";
+    }
 }
 
 void GamePlayModule::initScreens()
@@ -117,7 +123,7 @@ void GamePlayModule::reloadScene(std::string name)
     // ! clear message bus, for omitting messages between scenes
     GetCore().messageBus.clearBuffers();
     GetCore().objectModule.unloadSceneAndLoadNew(name);
-    GetCore().sceneInit();
+    GetCore().sceneInit();   
 }
 
 void GamePlayModule::initLoadingScreen(ObjectModule& om)
