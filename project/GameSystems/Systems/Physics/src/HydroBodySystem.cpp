@@ -102,7 +102,7 @@ void HydroBodySystem::fixedUpdate()
     if(hydroAccelerator == nullptr)
     {
         rb = rigidbody;
-        velocity = rigidbody->velocity;
+        velocity = rigidbody->velocity;// - currentVelocity;
         float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
         
 
@@ -113,6 +113,7 @@ void HydroBodySystem::fixedUpdate()
             impulse.force += HydroPhysics::buoyancyForce(triangle);
             impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity, viscousCoefficient);
             impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
+            impulse.force += currentVelocity;
 
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
@@ -122,7 +123,6 @@ void HydroBodySystem::fixedUpdate()
 
         glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
         Impulse impulse;
-        impulse.force = currentVelocity;
         impulse.point = centerPos;
         impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
         rb->impulses.push_back(impulse);
@@ -150,7 +150,7 @@ void HydroBodySystem::fixedUpdate()
                 centerPos
             );
 
-            impulse.force = velocity;
+            impulse.force = velocity;// - currentVelocity;
             impulse.force.y = 0.0f;
             if(hydroAccelerator->velocity.y > 0.0f)
             {

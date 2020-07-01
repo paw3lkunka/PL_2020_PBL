@@ -181,7 +181,8 @@ void TerrainUtils::loadExportedUnityModels()
                 Entity* existingModel = GetCore().objectModule.getEntityPtrByName(modelName.c_str());
                 if (existingModel == nullptr)
                 {
-                    existingModel = GetCore().objectModule.getEntityPtrByName((modelName + "/mesh0").c_str());
+                    modelName += "/mesh0";
+                    existingModel = GetCore().objectModule.getEntityPtrByName(modelName.c_str());
                     if (existingModel == nullptr)
                     {
                         std::cerr << "Requested model not found, aborting.\n";
@@ -220,6 +221,12 @@ void TerrainUtils::loadExportedUnityModels()
                         auto mr = GetCore().objectModule.newEmptyComponentForLastEntity<MeshRenderer>();
                             mr->mesh = existingModel->getComponentPtr<MeshRenderer>()->mesh;
                             mr->material = existingModel->getComponentPtr<MeshRenderer>()->material;
+
+                        // auto t = existingModel->getComponentPtr<Transform>();
+                        //     t->getLocalPositionModifiable() = position;
+                        //     t->getLocalRotationModifiable() = rotation;
+                        //     t->getLocalScaleModifiable() = scale;
+                        
                         currentSubmeshes.push_back(mr);
                     }
                 }
@@ -286,6 +293,7 @@ void TerrainUtils::createMaterialsForModels()
     tci_clamp.wrapMode = GL_CLAMP_TO_EDGE;
 
     auto emptyOccRouMet = GetCore().objectModule.newTexture("Resources/Textures/occroumet.png", tci);
+    auto emptyNormal = GetCore().objectModule.newTexture("Resources/Textures/bump.png", tci);
 
     auto albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Conifer Bark Array BODT-albedo.png", tci);
     auto normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Conifer Bark Array BODT-normal.png", tci);
@@ -382,6 +390,79 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("normal", normal);
     material->setTexture("occRouMet", emptyOccRouMet);
     material->setFloat("cutoff", 0.25f);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Flags_textured_albedo.tga", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Flags_textured_normal.tga", tci);
+    occRouMet = GetCore().objectModule.newTexture("Resources/Textures/Unity/Flags_textured_occRouMet.tga", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "Flag_mat", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/ScotsPineTrunk.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "scotspinetypea-pinetrunk", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    material = GetCore().objectModule.newMaterial(pbr, "scotspinetypeb-pinetrunk", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/ScotsPinebranches.tga", tci);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "scotspinetypea-pine needles", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.5f);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "scotspinetypeb-pine needles", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.5f);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/AlderBark.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "alder-alderbark", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/AlderBranches.tga", tci);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "alderbranches", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.5f);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/WillowBark.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "willowbark", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/WillowBranches.tga", tci);
+
+    material = GetCore().objectModule.newMaterial(pbrCutout, "willowbranches", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+    material->setFloat("cutoff", 0.5f);
+
+    // albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/KV1_main.png", tci);
+
+    // material = GetCore().objectModule.newMaterial(pbr, "New Material", RenderType::Opaque, false);
+    // material->setTexture("diffuse", albedo);
+    // material->setTexture("normal", emptyNormal);
+    // material->setTexture("occRouMet", emptyOccRouMet);
+
 }
 
 void TerrainUtils::importColliders()
@@ -514,6 +595,7 @@ void TerrainUtils::importColliders()
                 halfSize = stringToVec3(line);
                 std::getline(flowInfo, line);
                 direction = stringToVec3(line);
+                direction.x = -direction.x;
                 std::getline(flowInfo, line);
                 speed = std::stof(line);
 
@@ -539,7 +621,7 @@ void TerrainUtils::importColliders()
                 // direction = glm::xyz(finalDir);
 
                 auto flow = GetCore().objectModule.newEmptyComponentForLastEntity<HydroCurrent>();
-                    flow->velocity = direction * speed * 250.0f;
+                    flow->velocity = direction * speed * 25.0f;
             }
         }
     }

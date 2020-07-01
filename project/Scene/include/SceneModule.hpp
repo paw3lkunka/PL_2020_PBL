@@ -32,8 +32,14 @@ public:
      */
     void unloadScene();
 
-private:
+    /**
+     * @brief Process tree of transforms
+     * 
+     * @param transform root transform
+     * @param dirty should process?
+     */
     void process(Transform& transform, bool dirty);        
+private:
     Transform preRootNode;
 };
 

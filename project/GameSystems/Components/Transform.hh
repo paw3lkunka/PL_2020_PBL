@@ -108,7 +108,7 @@ struct Transform : public Component
      * @brief Get pointer to Parent.
      * @return Transform& 
      */
-    inline const Transform* getParent() { return parent; }
+    inline Transform* getParent() { return parent; }
 
     /**
      * @brief Signalize, if local parameters was changed.

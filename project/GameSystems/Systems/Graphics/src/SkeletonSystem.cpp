@@ -30,18 +30,20 @@ void SkeletonSystem::frameUpdate()
 void SkeletonSystem::processHierarchy(Entity* boneEntity)
 {
     Transform* boneTransform = boneEntity->getComponentPtr<Transform>();
-
-    boneTransforms[boneEntity->getComponentPtr<Bone>()->boneID] = skeleton->globalInverseTransform * boneTransform->getModelMatrix() * boneEntity->getComponentPtr<Bone>()->offsetMatrix;
-
-    if(skeleton->animation != nullptr)
+    if(Bone* tmp = boneEntity->getComponentPtr<Bone>())
     {
-        boneTransform->getLocalPositionModifiable() = skeleton->animation->getPositionLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
-        boneTransform->getLocalRotationModifiable() = skeleton->animation->getRotationLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
-        boneTransform->getLocalScaleModifiable() = skeleton->animation->getScaleLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
-    }
+        boneTransforms[tmp->boneID] = skeleton->globalInverseTransform * boneTransform->getModelMatrix() * tmp->offsetMatrix;
 
-    for(auto child : boneEntity->getComponentPtr<Transform>()->children)
-    {
-        processHierarchy(child->entityPtr);
+        if(skeleton->animation != nullptr)
+        {
+            boneTransform->getLocalPositionModifiable() = skeleton->animation->getPositionLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
+            boneTransform->getLocalRotationModifiable() = skeleton->animation->getRotationLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
+            boneTransform->getLocalScaleModifiable() = skeleton->animation->getScaleLerp(boneEntity->getComponentPtr<Bone>()->boneID, animationTime);
+        }
+
+        for(auto child : boneEntity->getComponentPtr<Transform>()->children)
+        {
+            processHierarchy(child->entityPtr);
+        }
     }
 }

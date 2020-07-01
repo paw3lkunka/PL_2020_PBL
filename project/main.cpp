@@ -32,6 +32,10 @@ int main( int argc, char * argv[] )
         {
             core.debugOpengl = true;
         }
+        else if( std::strcmp(argv[i], "-n") == 0 || std::strcmp(argv[i], "--no-terrain") == 0 )
+        {
+            core.loadTerrain = false;
+        }
         else
         {
             std::cerr << "ERROR - unknown parameter: " << argv[i] << std::endl;

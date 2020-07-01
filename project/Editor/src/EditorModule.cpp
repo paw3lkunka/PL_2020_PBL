@@ -310,7 +310,7 @@ void EditorModule::drawTransform(Transform* transformPtr)
     //* transform variables
     static glm::vec3 localRotation(0.0f);
 
-    //localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
+    localRotation = glm::degrees(glm::eulerAngles(transformPtr->getLocalRotation()));// * 180.0f / glm::pi<float>();
 
     ImGui::Text("Local transform:");
     updateReactT |= ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");
@@ -384,7 +384,6 @@ void EditorModule::drawLight(Light* lightPtr)
 
 void EditorModule::drawRigidbody(Rigidbody* rBodyPtr)
 {
-    //TODO check after physic backend change
     bool changed = false, mass = false;
 
     changed |= ImGui::Checkbox("Ignore Gravity", &rBodyPtr->ignoreGravity);
@@ -423,6 +422,8 @@ void EditorModule::drawKayak(Kayak* kayakPtr)
     ImGui::DragFloat("Health points", &kayakPtr->hp);
     ImGui::DragFloat("Damage factor", &kayakPtr->hitDamagefactor);
     ImGui::DragFloat("Damage treshold", &kayakPtr->hitDamageTreshold);
+    ImGui::DragFloat("Loose cargo treshold", &kayakPtr->hitLostCargoTreshold);
+    ImGui::DragFloat("Loose cargo chance", &kayakPtr->chanceToLostPackage);
 
     ImGui::Text(kayakPtr->isDetected ? "Detected (%i enemies)." : "Not detected.", kayakPtr->isDetected);
     ImGui::Text(kayakPtr->isHidden ? "Hidden (%i hideouts)." : "Visible.", kayakPtr->isHidden);
@@ -622,9 +623,14 @@ void EditorModule::sortEntities(SortingType sortingType)
                     continue;
                 }
             break;
-
             case SortingType::HYDRO_CURRENT:
                 if(temp->getComponentPtr<HydroCurrent>() == nullptr)
+                {
+                    continue;
+                }
+            break;
+            case SortingType::FINISH:
+                if(temp->getComponentPtr<Finish>() == nullptr)
                 {
                     continue;
                 }
