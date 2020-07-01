@@ -68,38 +68,68 @@ void PaddleIkSystem::init()
         // Transform* t = GetCore().objectModule.newEmptyComponentForLastEntity<Transform>();
         // t->setParent(const_cast<Transform*>(current->getParent()));
         // t->getLocalRotationModifiable() = eulerToQuaternion({0, 90, 0});
-        // t->getLocalScaleModifiable() = {1.0f, 1.0f, bones[i]->length};
+        // t->getLocalScaleModifiable() = {10.0f, 10.0f, bones[i]->length * 250.0f};
         
         current = const_cast<Transform*>(current->getParent());
     }
     chainMappings[bonePtr->entityPtr->serializationID] = IKChain(bones, arraysLength, completeLength, current);
 }
 
-void PaddleIkSystem::resolveIK()
+void PaddleIkSystem::resolveIKv2()
 {
-    //std::cout << "Entity: " << Name(bonePtr) << std::endl;
+    // ? +++++ Get IK Chain object from  +++++
     IKChain chain = chainMappings.at(bonePtr->entityPtr->serializationID);
     Transform* target = bonePointPtr->touchPoint;
     glm::vec3 targetPos = positionInWorld(target);
+    
+    // ? +++++ Get root bone from chain by chain length +++++
+    Transform* root = endBonePtr;
+    for (size_t i = 0; i < chain.chainLength; i++)
+    {
+        root = root->getParent();
+        if (root == nullptr)
+        {
+            std::cerr << "Chain length is too big!\n";
+            return;
+        }
+    }
+
+    // ! ----- Solving FABRIK IK -----
+
+
+}
+
+void PaddleIkSystem::resolveIK()
+{
+    IKChain chain = chainMappings.at(bonePtr->entityPtr->serializationID);
+    Transform* target = bonePointPtr->touchPoint;
+    glm::vec3 targetPos = positionInWorld(target);
+    // ? +++++ Sum of length of all the bones used to determine if target is in range +++++
+    float lengthSum = 0.0f;
+    float startToGoalLength = glm::length(targetPos - positionInWorld(chain.rootTrans));
 
     //* Set position and rotation
     for(int i = 0; i < chain.chainLength; ++i)
     {
         chain.bones[i]->endPos = positionInWorld( chain.bones[i]->tipBoneTrans);
         chain.bones[i]->startPos = positionInWorld( chain.bones[i]->boneTrans );
-        chain.bones[i]->rotation = rotationInWorld( chain.bones[i]->boneTrans );
+        glm::vec3 boneVector = chain.bones[i]->endPos - chain.bones[i]->startPos;
+        chain.bones[i]->length = glm::length(boneVector);
+        lengthSum += chain.bones[i]->length;
+        chain.bones[i]->dir = glm::normalize(boneVector);
+        chain.bones[i]->rotation = rotationInWorld(chain.bones[i]->boneTrans);
     }
 
-    union 
-    {
-        glm::vec3 shit3;
-        glm::vec4 shit4;
-    }sh;
+    std::cout << "Chain length: " << lengthSum << "\n";
+    std::cout << "Start to goal length: " << startToGoalLength << "\n";
+
+    // ? +++++ Check if target is in range +++++
+    // if (lengthSum)
 
     for(int i = 0; i < chain.chainLength; ++i)
     {
         IKBone* cBone = chain.bones[i];
-        cBone->endPos = glm::mix(cBone->startPos, cBone->endPos + cBone->dir, bonePointPtr->snapBackStrength);
+        cBone->endPos = glm::mix(cBone->startPos, cBone->endPos /*+ cBone->dir*/, bonePointPtr->snapBackStrength);
         if(i < chain.chainLength - 1)
         {
             chain.bones[i + 1]->startPos = cBone->endPos;
@@ -160,13 +190,15 @@ void PaddleIkSystem::resolveIK()
     {
         IKBone* cBone = chain.bones[i];
         cBone->boneTrans->getLocalPositionModifiable() = positionInLocal(cBone->boneTrans, cBone->startPos);
-        auto direction = glm::normalize(cBone->startPos - cBone->endPos);
+        glm::vec3 direction = glm::normalize(cBone->endPos - cBone->startPos);
         //cBone->rotation = glm::quatLookAt(direction, {0, 1, 0});
-        float angle = glm::dot(direction, glm::vec3(1.0f, 0.0f, 0.0f) * cBone->boneTrans->getWorldRotation());
-        glm::vec3 axis = glm::cross(direction, glm::vec3(1.0f, 0.0f, 0.0f) *  cBone->boneTrans->getWorldRotation());
-        std::cout << "ANGLE: " << angle << '\n';
-        std::cout << "AXIS: " << glm::to_string(axis) << '\n';
-        cBone->rotation = glm::angleAxis(glm::acos(angle), axis);
+
+        cBone->rotation = rotateVectors(cBone->dir, direction);
+        // float angle = glm::dot(direction, glm::vec3(1.0f, 0.0f, 0.0f) * cBone->boneTrans->getWorldRotation());
+        // glm::vec3 axis = glm::cross(direction, glm::vec3(1.0f, 0.0f, 0.0f) * cBone->boneTrans->getWorldRotation());
+        // std::cout << "ANGLE: " << angle << '\n';
+        // std::cout << "AXIS: " << glm::to_string(axis) << '\n';
+        //cBone->rotation = glm::angleAxis(glm::acos(angle), axis);
         cBone->boneTrans->getLocalRotationModifiable() = rotationInLocal(cBone->boneTrans, cBone->rotation);
         GetCore().sceneModule.process(*cBone->boneTrans, true);
     }
@@ -191,6 +223,7 @@ void PaddleIkSystem::solve(Transform* endEffector, glm::vec4 target, size_t numI
 	int currCountTreeUp = 0;
 	while (currentIterations < numIterations && dist > threshold)
 	{
+        Bone* currentBone = curr->entityPtr->getComponentPtr<Bone>();
 //		Take current bone
 //		Build vector V1 from bone pivot to effector
         //endPos = glm::vec4(endEffector->getWorldPosition(), 1.0f);
@@ -227,6 +260,9 @@ void PaddleIkSystem::solve(Transform* endEffector, glm::vec4 target, size_t numI
             // std::cout << "Rotation: " << glm::to_string(glm::quat_cast(rotMat)) << '\n';
             // std::cout << "Euler: " << glm::to_string(glm::eulerAngles(glm::quat_cast(rotMat))) << '\n';
             curr->getLocalRotationModifiable() *= rotation;
+            glm::vec3 eulerLimited = glm::eulerAngles(curr->getLocalRotation());
+            eulerLimited = glm::clamp(eulerLimited, glm::radians(currentBone->minConstraints), glm::radians(currentBone->maxConstraints));
+            curr->getLocalRotationModifiable() = glm::quat(eulerLimited);
 			//curr->getLocalRotationModifiable() *= glm::toQuat(glm::lookAt(curr->getWorldPosition(), glm::vec3(target), {0.0f, 1.0f, 0.0f}));//rotation;// glm::quat_cast(rotMat);
 		}
 //		If it is the base node then the new current bone is the last bone in the chain
@@ -248,6 +284,25 @@ void PaddleIkSystem::solve(Transform* endEffector, glm::vec4 target, size_t numI
 	}
 }
 
+// glm::vec3 PaddleIkSystem::getPositionRootSpace(Transform* current, Transform* root)
+// {
+//     return glm::inverse(root->getWorldRotation()) * (positionInWorld(current) - positionInWorld(root));
+// }
+
+// void PaddleIkSystem::setPositionRootSpace(Transform* current, glm::vec3 position, Transform* root)
+// {
+//     //current->getLocalPositionModifiable() = positionInLocal(root->getWorldRotation() * position + positionInWorld(root));
+// }
+
+// glm::quat PaddleIkSystem::getRotationRootSpace(Transform* current, Transform* root)
+// {
+//     return glm::inverse(current->getWorldRotation()) * root->getWorldRotation();
+// }
+
+// void PaddleIkSystem::setRotationRootSpace(Transform* current, glm::quat rotation, Transform* root)
+// {
+//     current->getLocalRotationModifiable() = root->getWorldRotation() * rotation;
+// }
 
 glm::vec3 PaddleIkSystem::positionInWorld(Transform* trans)
 {

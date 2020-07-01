@@ -9,7 +9,7 @@ struct FirstPersonCamera : public Component
     virtual ~FirstPersonCamera() = default;
 
     Transform* player;
-    glm::vec3 headOffset = { 0.0f, 1.25f, 0.0f};
+    glm::vec3 headOffset = { 0.0f, -0.22f, 0.67f};
 
     float rotationSensitivity = 1.0f;
 
@@ -19,7 +19,7 @@ struct FirstPersonCamera : public Component
     float minYaw = -200.0f;
     float maxYaw = 20.0f;
 
-    float moveLerp = 0.1f;
+    float moveLerp = 0.75f;
     float rotationLerp = 0.1f;
 };
 

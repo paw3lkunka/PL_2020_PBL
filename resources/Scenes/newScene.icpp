@@ -319,23 +319,23 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
-// TextureCreateInfo i = {};
-// i.minFilter = GL_LINEAR;
-// i.magFilter = GL_LINEAR;
-// i.wrapMode= GL_CLAMP_TO_EDGE;
-// i.generateMipmaps = false;
-// CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
-//                                                         "Resources/Textures/skybox_02/nx.hdr", 
-//                                                         "Resources/Textures/skybox_02/px.hdr",
-//                                                         "Resources/Textures/skybox_02/pz.hdr",
-//                                                         "Resources/Textures/skybox_02/py.hdr",
-//                                                         "Resources/Textures/skybox_02/ny.hdr");
+TextureCreateInfo i = {};
+i.minFilter = GL_LINEAR;
+i.magFilter = GL_LINEAR;
+i.wrapMode= GL_CLAMP_TO_EDGE;
+i.generateMipmaps = false;
+CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+                                                        "Resources/Textures/skybox_02/nx.hdr", 
+                                                        "Resources/Textures/skybox_02/px.hdr",
+                                                        "Resources/Textures/skybox_02/pz.hdr",
+                                                        "Resources/Textures/skybox_02/py.hdr",
+                                                        "Resources/Textures/skybox_02/ny.hdr");
 
-// Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-// Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-// hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-// rendererModule.setSkybox(hdrSkyboxMat);
+Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+rendererModule.setSkybox(hdrSkyboxMat);
 
 objectModule.newEntity(2, "directionalLight");
 {
@@ -359,6 +359,7 @@ objectModule.newEntity(4, "Camera");
         frustum.fieldOfView = 80.0f;
         frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
         c->getProjectionModeModifiable() = CameraProjection::Perspective;
+        c->exposure = 1.5f;
 
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
         t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -406,10 +407,15 @@ objectModule.newEntity(4, "Camera");
     Entity* attachLeft = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_left");
     Entity* attachRight = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_right");
     {
+        auto tl = attachLeft->getComponentPtr<Transform>();
+            tl->getLocalPositionModifiable() = {tl->getLocalPosition().x, 0.08f, tl->getLocalPosition().z};
+        auto tr = attachRight->getComponentPtr<Transform>();
+            tr->getLocalPositionModifiable() = {tr->getLocalPosition().x, 0.08f, tr->getLocalPosition().z};
+
         auto mrl = attachLeft->getComponentPtr<MeshRenderer>();
-            //mrl->shouldRender = false;
+            mrl->shouldRender = false;
         auto mrr = attachRight->getComponentPtr<MeshRenderer>();
-            //mrr->shouldRender = false;
+            mrr->shouldRender = false;
     }
 
     Entity* paddleIndirect = objectModule.newEntity(1, "PaddleIndirect");
@@ -417,7 +423,7 @@ objectModule.newEntity(4, "Camera");
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>());
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 0.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.3f);
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, -0.1f, 0.3f);
     }
 
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
@@ -431,8 +437,8 @@ objectModule.newEntity(4, "Camera");
             mr->shouldRender = false;
 
         kayakTransform = kayakPtr->getComponentPtr<Transform>();
-            kayakTransform->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
-            kayakTransform->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
+            kayakTransform->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90.0f, 70.0f, -180.0f));
+            kayakTransform->getLocalPositionModifiable() = glm::vec3(31.0f, 0.0f, -1.0f);
             kayakTransform->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
             kayakTransform->setParent(&sceneModule.rootNode);
 
@@ -470,7 +476,7 @@ objectModule.newEntity(4, "Camera");
                 paddleTransform->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.3f);
+                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.15f);
                 paddle->maxFrontRot = 45.0f;
                 paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
@@ -488,10 +494,13 @@ objectModule.newEntity(4, "Camera");
 
         auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
             tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            // tpCameraPtr->minDistance = 2.0f;
+            // tpCameraPtr->maxDistance = 8.0f;
             //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
 
         auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
             fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            // fpCameraPtr->headOffset.y = 0.7f;
 
         auto cameraPtr = objectModule.getEntityPtrByName("Camera");
             cameraPtr->addComponent(tpCameraPtr);
@@ -539,7 +548,7 @@ objectModule.newEntity(4, "Camera");
         {
             auto t = hips->getComponentPtr<Transform>();
                 t->getLocalScaleModifiable() = {0.01f, 0.01f, 0.01f};
-                t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 180.0f, 0.0f});
+                t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 0.0f, 180.0f});
                 t->getLocalPositionModifiable() = {0.0f, -0.45f, 0.0f};
                 t->setParent(kayakTransform);
         }
@@ -644,11 +653,36 @@ objectModule.newEntity(4, "Camera");
         }
 
         // ! ----- IK -----
-        Entity* larm = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftArm(bone)");
         {
-            auto t = larm->getComponentPtr<Transform>();
-                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(68.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
-                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(40.0f) , glm::vec3(0.0f, 0.0f, 1.0f));
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({61, -36, 29});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {40.0f, -80.0f, 10.0f};
+                b->maxConstraints = {60.0f, 30.0f, 30.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftForeArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({-25, 35, 55});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {-40.0f, 30.0f, 25.0f};
+                b->maxConstraints = {-5.0f, 60.0f, 130.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({-5, 26, 12});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHandIndex1(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({63, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHandIndex2(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({78, 0, 0});
         }
         {
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
@@ -661,11 +695,36 @@ objectModule.newEntity(4, "Camera");
             e->addComponent(bp1);
         }
 
-        Entity* rarm = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightArm(bone)");
         {
-            auto t = rarm->getComponentPtr<Transform>();
-                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(68.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
-                t->getLocalRotationModifiable() *= glm::angleAxis(glm::radians(40.0f) , glm::vec3(0.0f, 0.0f, 1.0f));
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({83, 47, 0});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {70.0f, -40.0f, -10.0f};
+                b->maxConstraints = {80.0f, 80.0f, 40.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightForeArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({0, -35, -75});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {-15.0f, -30.0f, -130.0f};
+                b->maxConstraints = {15.0f, -10.0f, -27.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({0, -50, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHandIndex1(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({72, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHandIndex2(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({72, 0, 0});
         }
         {
             Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");

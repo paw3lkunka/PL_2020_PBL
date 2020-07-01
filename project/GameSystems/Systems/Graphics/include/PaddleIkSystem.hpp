@@ -7,8 +7,8 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "IKBonePoint.inl"
 struct Transform;
-struct IKBonePoint;
 struct Bone;
 
 /**
@@ -99,6 +99,7 @@ protected:
 private:
 
     void resolveIK();
+    void resolveIKv2();
     void solve(Transform* endEffector, glm::vec4 target, size_t numIterations, float threshold, int numParents);
 
     Transform* endBonePtr;
@@ -106,6 +107,11 @@ private:
     Bone* bonePtr;
 
     std::map<unsigned int, IKChain> chainMappings;
+
+    // glm::vec3 getPositionRootSpace(Transform* current, Transform* root);
+    // void setPositionRootSpace(Transform* current, glm::vec3 position, Transform* root);
+    // glm::quat getRotationRootSpace(Transform* current, Transform* root);
+    // void setRotationRootSpace(Transform* current, glm::quat rotation, Transform* root);
 
     glm::vec3 positionInWorld(Transform* trans);
     glm::vec3 positionInLocal(Transform* trans, glm::vec3 pos);
