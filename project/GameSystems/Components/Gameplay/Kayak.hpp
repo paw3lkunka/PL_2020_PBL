@@ -23,6 +23,16 @@ struct Kayak : public Component
     int isDetected = 0;
 
     /**
+     * @brief Chance [0,1] to to lost package if kayak will hit rocks. 
+     */
+    float chanceToLostPackage = 0.3f;
+
+    /**
+     * @brief If kayak hit rocks with higher velocity, it is a change to lost package.
+     */
+    float hitLostCargoTreshold = 2.0f;
+
+    /**
      * @brief Maximum safe speed of kayak. If kayak hit rocks with higher velocity, damages will be applied.
      */
     float hitDamageTreshold = 1.0f;

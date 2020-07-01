@@ -119,6 +119,11 @@ class Core
         bool debugOpengl = false;
 
         /**
+         * @brief Define, if terrain chunks should be loadaed
+         */
+        bool loadTerrain = true;
+
+        /**
          * @brief Path to scene file.
          */
         std::string sceneFilePath = "Resources/Scenes/mainMenuScene.json";

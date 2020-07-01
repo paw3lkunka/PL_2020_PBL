@@ -15,6 +15,7 @@
 #include "TerrainUtils.hpp"
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <sstream>
 #include <iomanip>
 
