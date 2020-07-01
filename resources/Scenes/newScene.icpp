@@ -656,7 +656,7 @@ TerrainUtils::importColliders();
         objectModule.newEntity(2, "Detection_Rate_text");
         {
             auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                crt->getLocalPositionModifiable() = {-58.0f, 57.0f};
+                crt->getLocalPositionModifiable() = {-68.0f, 57.0f};
                 crt->getSizeModifiable() = {0.2f, 0.2f};
                 crt->setParent(buttonsRoot);
             auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
@@ -702,7 +702,7 @@ TerrainUtils::importColliders();
         objectModule.newEntity(2, "Health_Bar_text");
         {
             auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                crt->getLocalPositionModifiable() = {-37.0f, 59.0f};
+                crt->getLocalPositionModifiable() = {-43.0f, 59.0f};
                 crt->getSizeModifiable() = {0.2f, 0.2f};
                 crt->setParent(buttonsRoot);
             auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
