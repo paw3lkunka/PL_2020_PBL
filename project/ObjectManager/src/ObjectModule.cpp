@@ -19,6 +19,7 @@
 #include <assimp/anim.h>
 
 // !TEMP SHIT
+#include "IKBonePoint.inl"
 #include "ScenesPaths.hpp"
 #include "TerrainUtils.hpp"
 #include "Components.inc"
