@@ -28,6 +28,7 @@ class HideoutSystem : public System, public IMsgReceiver
     protected:
     private:
         Hideout* hideoutPtr;
+        AudioSource* audioSource;
         std::vector<Message> messages;
 };
 

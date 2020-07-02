@@ -487,6 +487,8 @@ objectModule.newEntity(4, "Camera");
             cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
     }
 
+
+
     // ! NJU KAJAK
     {
         // * MATERIALS
@@ -867,6 +869,14 @@ TerrainUtils::importColliders();
                 ea->handicap = 5;
                 ea->successChance = 0.1f;
                 enemy->addComponent(ea);
+
+            auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+                so->audioClip = "Resources/Audios/gameplay_enemy_idle.wav";
+                so->getIsRelativeModifiable() = false;
+                so->getGainModifiable() = 1.0f;
+                so->getIsLoopingModifiable() = true;
+                so->autoPlay = true;
+                enemy->addComponent(so);
         }
         // shoot trail
         objectModule.newModel("Resources/Models/BoneBox.FBX");
@@ -874,7 +884,7 @@ TerrainUtils::importColliders();
         auto* shootTrail = objectModule.getEntityPtrByName("BoneBox.FBX/Box001");
         {
             auto* t = shootTrail->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {NAN, NAN, NAN};
+                t->getLocalPositionModifiable() = {1000000000.0f, 1000000000.0f, 1000000000.0f};
                 t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
                 //t->setParent(enemy->getComponentPtr<Transform>());
                 t->setParent(&sceneModule.rootNode);
@@ -882,6 +892,13 @@ TerrainUtils::importColliders();
                 mr->material = objectModule.getMaterialPtrByName("KULA");
             auto* st = objectModule.newEmptyComponent<Shoot>();
                 shootTrail->addComponent(st);
+            auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+                so->audioClip = "Resources/Audios/menu_buttonClick.wav";
+                so->getIsRelativeModifiable() = false;
+                so->getGainModifiable() = 1.0f;
+                so->getIsLoopingModifiable() = false;
+                so->autoPlay = false;
+                shootTrail->addComponent(so);
         }
     }
 }
@@ -899,4 +916,24 @@ TerrainUtils::importColliders();
     auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
         bc->halfSize = glm::vec3(3.0f, 4.5f, 22.5f);
         bc->isTrigger = true;
+}
+
+objectModule.newEntity(1, "HP_0_SOUND")
+{
+    auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_gameOver.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "DETECTION_SOUND")
+{
+    auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_enemy_detection.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = true;
+        so->autoPlay = true;
 }

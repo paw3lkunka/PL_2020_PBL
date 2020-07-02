@@ -19,6 +19,19 @@ void GamePlayModule::receiveMessage(Message msg)
                 valid |= data.body2->entityPtr == Kayak::get()->entityPtr;
                 if (valid)
                 {
+                    AudioSource* sound;
+                    if(data.body1->entityPtr == Kayak::get()->entityPtr)
+                    {
+                        sound = data.body2->entityPtr->getComponentPtr<AudioSource>();
+                    }
+                    else
+                    {
+                        sound = data.body2->entityPtr->getComponentPtr<AudioSource>();
+                    }
+
+                    sound->getGainModifiable() = glm::length( Kayak::get()->entityPtr->getComponentPtr<Rigidbody>()->velocity ) / 25.0f;
+                    GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, sound) );
+
                     rocksHit();
                 }
             }
@@ -35,6 +48,23 @@ void GamePlayModule::receiveMessage(Message msg)
                 summarize();
             }
 
+            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
+             && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
+            {
+                auto hideoutSo = data.triggerBody->entityPtr->getComponentPtr<AudioSource>();
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, hideoutSo) );
+            }
+        }
+        break;
+
+        case Event::TRIGGER_EXIT
+        {
+            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
+             && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
+            {
+                auto hideoutSo = data.triggerBody->entityPtr->getComponentPtr<AudioSource>();
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_STOP, hideoutSo) );
+            }
         }
         break;
 
@@ -62,8 +92,22 @@ void GamePlayModule::receiveMessage(Message msg)
         break;
 
         case Event::HP_0:
+        {
+            auto sound = GetCore().objectModule.getEntityPtrByName("HP_0_SOUND")->getComponentPtr<AudioSource>();
+            if(sound)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, sound) );
+            }
+
+            auto detectionSound = GetCore().objectModule.getEntityPtrByName("DETECTION_SOUND")->getComponentPtr<AudioSource>();
+            if(detectionSound)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_STOP, detectionSound) );
+            }
+            
             togglePauseState();
             youDied();
+        }
         break;
         
         case Event::LOAD_SCENE:
