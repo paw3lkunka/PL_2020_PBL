@@ -12,9 +12,9 @@ struct ThirdPersonCamera : public Component
     Transform* player;
     glm::vec3 playerOffset = { 0.0f, 0.75f, 0.0f };
 
-    float distance = 6.0f;
-    float minDistance = 3.0f;
-    float maxDistance = 10.0f;
+    float distance = 3.0f;
+    float minDistance = 2.0f;
+    float maxDistance = 8.0f;
 
     float angleAroundPlayer = 0.0f;
 

@@ -39,7 +39,7 @@ class HydroBodySystem : public System, public IMsgReceiver
         Rigidbody* rigidbody;
         MeshRenderer* meshRenderer;
 
-        void recalculateCurrentForBody(HydroBody* body);
+        glm::vec3 calculateCurrentForBody(HydroBody* body);
 };
 
 #endif // _HYDROBODYSYSTEM_HPP

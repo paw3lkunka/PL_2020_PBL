@@ -300,6 +300,12 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, directionalDepth->getId(), 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "Depth map framebuffer not complete!\n";
+    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
@@ -368,6 +374,11 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
 
         glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i+1]);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurBuffers[i+1], 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            std::cerr << "Bloom blur framebuffer " << i << " not complete!\n";
+        }
     }
 
     // * ===== Gbuffer framebuffer =====
@@ -469,6 +480,11 @@ void RendererModule::initialize(GLFWwindow* window, RendererModuleCreateInfo cre
     
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
     ssaoMap = new Texture(ssaoColorBufferBlur);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        std::cerr << "SSAO framebuffer not complete!\n";
+    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -602,7 +618,7 @@ void RendererModule::render()
         for(auto& packet : normalPackets)
         {
             //drawBounds(packet.mesh->bounds, *internalErrorMat, packet.modelMatrix, VP);
-            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            if (!packet.mesh->frustumCulling || objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 switch(packet.material->getRenderType())
                 {
@@ -619,7 +635,7 @@ void RendererModule::render()
         // * ===== Terrain packets =====
         for(auto& packet : terrainPackets)
         {
-            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            if (!packet.mesh->frustumCulling || objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 terrainQueue.push_back(&packet);
             }
@@ -633,7 +649,7 @@ void RendererModule::render()
             for(auto matrix : packet.second.instanceMatrices)
             {
                 //drawBounds(packet.second.mesh->bounds, *internalErrorMat, *matrix, VP);
-                if (objectInFrustum(packet.second.mesh->bounds, *matrix))
+                if (!packet.second.mesh->frustumCulling || objectInFrustum(packet.second.mesh->bounds, *matrix))
                 {
                     packet.second.instanceOccluded[i] = false;
                     wholePacketOccluded = false;
@@ -725,8 +741,7 @@ void RendererModule::render()
         while(!opaqueQueue.empty())
         {
             // HACK: Only one of the materials should be double sided
-            std::string matName = std::string(opaqueQueue.front()->material->getName());
-            bool doubleSided = matName == "Conifer Leaves BODT" || matName == "Grass_rushes";
+            bool doubleSided = opaqueQueue.front()->material->getShaderPtr()->shaderName == "standardPbrCutout";
             if (doubleSided)
             {
                 glDisable(GL_CULL_FACE);
@@ -1209,7 +1224,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, dimensions, dimensions);
 
-    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution);
+    Shader irradianceShader("", BuiltInShaders::simpleCubemapVertex, BuiltInShaders::cubemapConvolution, nullptr, false);
     irradianceShader.use();
     irradianceShader.setInt("environmentMap", 0);
     irradianceShader.setMat4("projection", captureProjection);
@@ -1223,12 +1238,19 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     {
         irradianceShader.setMat4("view", captureViews[i]);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irrID, 0);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            std::cerr << "Cubemap convolution framebuffer not complete!\nIteration number: " << i << "\n";
+        }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         drawCube();
     }
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
+    glDeleteRenderbuffers(1, &captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glDeleteFramebuffers(1, &captureFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

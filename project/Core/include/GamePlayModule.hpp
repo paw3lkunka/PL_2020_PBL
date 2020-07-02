@@ -58,8 +58,10 @@ private:
     void initYouDieScreen(ObjectModule& om);
     void initSummaryScreen(ObjectModule& om);
 
+    ///@brief toggle pause mode
+    void togglePauseState();
     ///@brief show pause screen
-    void pauseGame();
+    void pauseScreen();
     ///@brief show you died screen
     void youDied();
     ///@brief summarize game

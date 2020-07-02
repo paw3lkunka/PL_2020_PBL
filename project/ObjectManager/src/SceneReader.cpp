@@ -1382,7 +1382,6 @@ void SceneReader::readCargo(std::string fileName)
                 transform->setParent(&GetCore().sceneModule.rootNode);
             }
             cargoEntity->addComponent(transform);
-            cargoStorage->entityPtr->getComponentPtr<CargoStorage>()->cargosStoredSize = i + 1;
             std::cout << "Read Cargo\n";
         }
         catch(nlohmann::detail::out_of_range)

@@ -24,6 +24,7 @@ struct HydroAccelerator : public Component
 
     float handling = 10.0f;
     float acceleration = 1.0f;
+    float drifting = 10000.0f;
 };
 
 #endif // _HYDROACCELERATOR_INL

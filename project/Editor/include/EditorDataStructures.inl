@@ -16,6 +16,7 @@ enum class SortingType : unsigned int
     ENEMY,
     RECT_TRANSFORM,
     HYDRO_CURRENT,
+    FINISH,
 };
 
 #endif /* !EDITORDATASTRUCTURES_INL_ */

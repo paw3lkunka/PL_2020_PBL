@@ -283,6 +283,10 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "REMOVE_CARGO" << std::endl;
     break;
 
+    case Event::CARGO_LOST:
+        std::cout << "Cargo was lost" << std::endl;
+    break;
+
     case Event::EXIT_GAME:
         std::cout << "EXIT" << std::endl;
     break;
