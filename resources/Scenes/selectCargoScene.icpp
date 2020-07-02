@@ -19,6 +19,13 @@ objectModule.newEntity(4, "Camera");
         li->getPositionModifiable();
         li->getAtModifiable();
         li->getUpModifiable();
+
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->audioClip = "Resources/Audios/mainTheme.wav";
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.75f;
+        so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 }
 
 objectModule.newEntity(2, "RiverFlow");
@@ -29,7 +36,7 @@ objectModule.newEntity(2, "RiverFlow");
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.3f;
+        so3->getGainModifiable() = 0.1f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 }
@@ -150,6 +157,22 @@ auto redTextMaterial = objectModule.newMaterial(textShader, "TedTextMaterial", R
     }
 }
 
+objectModule.newEntity(1, "OnSelectSound");
+auto onSelectSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+    onSelectSound->audioClip = "Resources/Audios/selectCargo_onSelect.wav";
+    onSelectSound->getIsRelativeModifiable() = true;
+    onSelectSound->getGainModifiable() = 1.0f;
+    onSelectSound->getIsLoopingModifiable() = false;
+    onSelectSound->autoPlay = false;
+
+objectModule.newEntity(1, "OnDeselectSound");
+auto onDeselectSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+    onDeselectSound->audioClip = "Resources/Audios/selectCargo_onDeselect.wav";
+    onDeselectSound->getIsRelativeModifiable() = true;
+    onDeselectSound->getGainModifiable() = 10000.0f;
+    onDeselectSound->getIsLoopingModifiable() = false;
+    onDeselectSound->autoPlay = false;
+
 auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transparent);
     bgBlack->setVec4("color", {0.0f, 0.0f, 0.0f, 0.8f});
     bgBlack->setTexture("sprite", cargo_button_i);
@@ -160,13 +183,6 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
             t->setParent(&sceneModule.rootNode);
-
-        auto buttonsSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-            buttonsSound->audioClip = "Resources/Audios/test.wav";
-            buttonsSound->getIsRelativeModifiable() = true;
-            buttonsSound->getGainModifiable() = 1.6f;
-            buttonsSound->getIsLoopingModifiable() = false;
-            buttonsSound->autoPlay = false;
 
         {   //cargo button 1
             objectModule.newEntity(4, "CargoButton1");
@@ -180,13 +196,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor; 
             {
@@ -263,13 +279,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -346,13 +362,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -429,13 +445,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -512,13 +528,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -595,13 +611,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -678,13 +694,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -761,13 +777,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {
@@ -844,13 +860,13 @@ auto bgBlack = objectModule.newMaterial(uiShader, "BgBlack", RenderType::Transpa
                 tb->highlightedColorOn = highlightedColorOn;
                 tb->onClickColorOn = onClickColorOn;
 
-                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onActivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onSelectSound));
 
                 tb->baseColorOff = baseColorOff;
                 tb->highlightedColorOff= highlightedColorOff;
                 tb->onClickColorOff = onClickColorOff;
 
-                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound));
+                tb->onDeactivateEvents.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, onDeselectSound));
 
                 tb->inactiveColor = inactiveColor;
             {

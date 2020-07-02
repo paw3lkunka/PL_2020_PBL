@@ -367,6 +367,12 @@
         "incomeText": 72,
         "isActive": true,
         "nameText": 67,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -378,6 +384,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 55,
         "type": "CargoButton",
@@ -548,6 +560,12 @@
         "incomeText": 97,
         "isActive": true,
         "nameText": 92,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -559,6 +577,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 80,
         "type": "CargoButton",
@@ -729,6 +753,12 @@
         "incomeText": 122,
         "isActive": true,
         "nameText": 117,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -740,6 +770,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 105,
         "type": "CargoButton",
@@ -910,6 +946,12 @@
         "incomeText": 147,
         "isActive": true,
         "nameText": 142,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -921,6 +963,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 130,
         "type": "CargoButton",
@@ -1091,6 +1139,12 @@
         "incomeText": 172,
         "isActive": true,
         "nameText": 167,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -1102,6 +1156,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 155,
         "type": "CargoButton",
@@ -1272,6 +1332,12 @@
         "incomeText": 197,
         "isActive": true,
         "nameText": 192,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -1283,6 +1349,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 180,
         "type": "CargoButton",
@@ -1453,6 +1525,12 @@
         "incomeText": 222,
         "isActive": true,
         "nameText": 217,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -1464,6 +1542,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 205,
         "type": "CargoButton",
@@ -1634,6 +1718,12 @@
         "incomeText": 247,
         "isActive": true,
         "nameText": 242,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -1645,6 +1735,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 230,
         "type": "CargoButton",
@@ -1815,6 +1911,12 @@
         "incomeText": 272,
         "isActive": true,
         "nameText": 267,
+        "onActivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
+        },
         "onClickColorOff": {
             "a": 0.800000011920929,
             "b": 0.5009999871253967,
@@ -1826,6 +1928,12 @@
             "b": 0.05400000140070915,
             "g": 0.3840000033378601,
             "r": 0.11699999868869781
+        },
+        "onDeactivateEvents": {
+            "e0": {
+                "audioSource": 52,
+                "event": 22
+            }
         },
         "serializationID": 255,
         "type": "CargoButton",
