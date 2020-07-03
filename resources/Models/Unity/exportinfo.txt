@@ -2644,3 +2644,28 @@ $path:Resources/Models/Unity/Rock_01_LOD1.obj
 0.8500265 0 -0.5267399 0
 0.9999999 1 0.9999999
 %mat:M_Rock_01
+$path:Resources/Models/Unity/GuardTower.obj
+247.1 113.68 287.87
+-0.03749831 0 -0.9992967 0
+183.0401 183.04 183.0401
+%mat:clwood
+$path:Resources/Models/Unity/Body.obj
+252.9176 113.6405 319.85
+-0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
+183.0401 183.04 183.0401
+%mat:GuardBodyAndEyes
+$path:Resources/Models/Unity/Eyelashes.obj
+252.9176 113.6405 319.85
+-0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
+183.0401 183.04 183.0401
+%mat:GuardEyelashes
+$path:Resources/Models/Unity/Eyes.obj
+252.9176 113.6405 319.85
+-0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
+183.0401 183.04 183.0401
+%mat:GuardBodyAndEyes
+$path:Resources/Models/Unity/Tops.obj
+252.9176 113.6405 319.85
+-0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
+183.0401 183.04 183.0401
+%mat:GuardTops

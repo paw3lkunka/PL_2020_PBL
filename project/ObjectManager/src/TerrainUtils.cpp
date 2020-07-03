@@ -456,13 +456,63 @@ void TerrainUtils::createMaterialsForModels()
     material->setTexture("occRouMet", emptyOccRouMet);
     material->setFloat("cutoff", 0.5f);
 
-    // albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/KV1_main.png", tci);
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/KV1_main.png", tci);
 
-    // material = GetCore().objectModule.newMaterial(pbr, "New Material", RenderType::Opaque, false);
-    // material->setTexture("diffuse", albedo);
-    // material->setTexture("normal", emptyNormal);
-    // material->setTexture("occRouMet", emptyOccRouMet);
+    material = GetCore().objectModule.newMaterial(pbr, "New Material", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
 
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Body_BaseColor.png", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Body_Normal.png", tci);
+    occRouMet = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Body_OccRouMet.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "GuardBodyAndEyes", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    material = GetCore().objectModule.newMaterial(pbr, "GuardEyelashes", RenderType::Transparent, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Top_BaseColor.png", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Top_Normal.png", tci);
+    occRouMet = GetCore().objectModule.newTexture("Resources/Textures/Unity/Guard_Top_OccRouMet.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "GuardTops", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/clwood.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "clwood", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/Metal010_2K_Color.png", tci);
+    normal = GetCore().objectModule.newTexture("Resources/Textures/Unity/Metal010_2K_Normal.png", tci);
+    occRouMet = GetCore().objectModule.newTexture("Resources/Textures/Unity/Metal010_2K_OccRouMet.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "19 - Default", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    material = GetCore().objectModule.newMaterial(pbr, "Metal_ChromeFast", RenderType::Opaque, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", normal);
+    material->setTexture("occRouMet", occRouMet);
+
+    albedo = GetCore().objectModule.newTexture("Resources/Textures/Unity/shoot_trail.png", tci);
+
+    material = GetCore().objectModule.newMaterial(pbr, "shoot_trail", RenderType::Transparent, false);
+    material->setTexture("diffuse", albedo);
+    material->setTexture("normal", emptyNormal);
+    material->setTexture("occRouMet", emptyOccRouMet);
 }
 
 void TerrainUtils::importColliders()
