@@ -502,6 +502,8 @@ struct AudioSource : public Component
 
     bool autoPlay = false;
 
+    bool continuePlaying = false;
+
     private:
         ALuint dirty = 0;
 

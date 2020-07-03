@@ -131,6 +131,12 @@ class AudioModule : public IModule
          */
         std::unordered_map<std::string, ALuint> audioBuffers = {};
 
+        /**
+         * @brief Map of clips that shall be continued in next scene
+         * 
+         */
+        std::unordered_map<std::string, ALfloat> continuePlaying = {};
+
         /// @brief Push all accepted changes to device at once
         void alcPushCurrentContextChangesToDevice();
 

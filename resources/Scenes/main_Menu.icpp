@@ -33,6 +33,7 @@ objectModule.newEntity(2, "RiverFlow");
         so3->getGainModifiable() = 0.75f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
+        so3->continuePlaying = true;
 }
 
     auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");

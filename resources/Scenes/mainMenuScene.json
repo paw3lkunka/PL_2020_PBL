@@ -87,6 +87,7 @@
         "coneInnerAngle": 360.0,
         "coneOuterAngle": 360.0,
         "coneOuterGain": 0.0,
+        "continuePlaying": true,
         "direction": {
             "x": 0.0,
             "y": 0.0,
@@ -257,6 +258,7 @@
         "coneInnerAngle": 360.0,
         "coneOuterAngle": 360.0,
         "coneOuterGain": 0.0,
+        "continuePlaying": false,
         "direction": {
             "x": 0.0,
             "y": 0.0,

@@ -188,6 +188,12 @@ void AudioModule::sceneInit()
 
             if(source->autoPlay)
             {
+                auto offset = continuePlaying.find(source->audioClip);
+                if(offset != continuePlaying.end())
+                {
+                    source->getSampleOffsetModifiable() = offset->second;
+                    continuePlaying.erase(offset);
+                }
                 GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY, source) );
             }
         }
@@ -213,6 +219,11 @@ void AudioModule::sceneUnload()
         for(auto src : sources)
         {
             alSourcePlay(src->name);
+            alSourcePause(src->name);
+            if(src->continuePlaying)
+            {
+                continuePlaying.insert( std::pair(src->audioClip, getSourceSampleOffset(src->name)) );
+            }
             alSourceStop(src->name);
             setSourceIsLooping(src->name, false);
             

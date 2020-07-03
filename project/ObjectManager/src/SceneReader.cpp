@@ -624,6 +624,7 @@ void SceneReader::readAudioSource(std::string name)
     tempVec.z = j->at(name).at("direction").at("z");
 
     aSource->audioClip = j->at(name).at("audioClip");
+    aSource->continuePlaying = j->at(name).at("continuePlaying").get<bool>();
 
     assignToEntity(name, aSource);
 }

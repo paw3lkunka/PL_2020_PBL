@@ -396,6 +396,7 @@ void SceneWriter::saveAudioSource(AudioSource* componentPtr)
 {
     (*json)[name]["type"] = "AudioSource";
     (*json)[name]["audioClip"] = componentPtr->audioClip;
+    (*json)[name]["continuePlaying"] = componentPtr->continuePlaying;
     (*json)[name]["isRelativeToListener"] = componentPtr->getIsRelative();
     (*json)[name]["isLooping"] = componentPtr->getIsLooping();
     (*json)[name]["minGain"] = componentPtr->getMinGain();

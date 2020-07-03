@@ -1,6 +1,6 @@
 {
     "Amounts": {
-        "components": 28,
+        "components": 30,
         "cubemaps": 0,
         "cubemapsHdr": 0,
         "entities": 13,
@@ -60,6 +60,31 @@
         }
     },
     "component003": {
+        "audioClip": "Resources/Audios/mainTheme.wav",
+        "autoPlay": true,
+        "coneInnerAngle": 360.0,
+        "coneOuterAngle": 360.0,
+        "coneOuterGain": 0.0,
+        "continuePlaying": true,
+        "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "entity id": 0,
+        "gain": 0.75,
+        "isLooping": 1,
+        "isRelativeToListener": 1,
+        "maxDistance": "infinity",
+        "maxGain": 1.0,
+        "minGain": 0.0,
+        "pitch": 1.0,
+        "referenceDistance": 1.0,
+        "rolloffFactor": 1.0,
+        "serializationID": 12,
+        "type": "AudioSource"
+    },
+    "component004": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
@@ -74,16 +99,16 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 17,
+        "serializationID": 18,
         "type": "RectTransform"
     },
-    "component004": {
+    "component005": {
         "entity id": 1,
         "material": "UiBg",
-        "serializationID": 18,
+        "serializationID": 19,
         "type": "UiRenderer"
     },
-    "component005": {
+    "component006": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -98,18 +123,18 @@
             "y": 0.800000011920929
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 23,
+        "serializationID": 24,
         "type": "RectTransform"
     },
-    "component006": {
+    "component007": {
         "entity id": 2,
         "font": "JosefinSans-Regular",
         "material": "TextMaterial",
-        "serializationID": 24,
+        "serializationID": 25,
         "text": "Intro",
         "type": "TextRenderer"
     },
-    "component007": {
+    "component008": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -124,18 +149,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 27,
+        "serializationID": 28,
         "type": "RectTransform"
     },
-    "component008": {
+    "component009": {
         "entity id": 3,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 28,
+        "serializationID": 29,
         "text": "Trying to make ends meet, you decide to take part",
         "type": "TextRenderer"
     },
-    "component009": {
+    "component010": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -150,18 +175,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 31,
+        "serializationID": 32,
         "type": "RectTransform"
     },
-    "component010": {
+    "component011": {
         "entity id": 4,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 32,
+        "serializationID": 33,
         "text": "in the lucrative river smuggling job. On a war-torn border,",
         "type": "TextRenderer"
     },
-    "component011": {
+    "component012": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -176,18 +201,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 35,
+        "serializationID": 36,
         "type": "RectTransform"
     },
-    "component012": {
+    "component013": {
         "entity id": 5,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 36,
+        "serializationID": 37,
         "text": "cargo transferring is more profitable than selling gold,",
         "type": "TextRenderer"
     },
-    "component013": {
+    "component014": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -202,18 +227,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 39,
+        "serializationID": 40,
         "type": "RectTransform"
     },
-    "component014": {
+    "component015": {
         "entity id": 6,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 40,
+        "serializationID": 41,
         "text": "but the risk is proportionally huge. You observe how",
         "type": "TextRenderer"
     },
-    "component015": {
+    "component016": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -228,18 +253,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 43,
+        "serializationID": 44,
         "type": "RectTransform"
     },
-    "component016": {
+    "component017": {
         "entity id": 7,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 44,
+        "serializationID": 45,
         "text": "the conflict between two countries unfolds,",
         "type": "TextRenderer"
     },
-    "component017": {
+    "component018": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -254,18 +279,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 47,
+        "serializationID": 48,
         "type": "RectTransform"
     },
-    "component018": {
+    "component019": {
         "entity id": 8,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 48,
+        "serializationID": 49,
         "text": "and on certain occasions interfere with it.",
         "type": "TextRenderer"
     },
-    "component019": {
+    "component020": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -280,18 +305,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 51,
+        "serializationID": 52,
         "type": "RectTransform"
     },
-    "component020": {
+    "component021": {
         "entity id": 9,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 52,
+        "serializationID": 53,
         "text": "The outcome of the war may be more dependent on your actions",
         "type": "TextRenderer"
     },
-    "component021": {
+    "component022": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -306,18 +331,18 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 55,
+        "serializationID": 56,
         "type": "RectTransform"
     },
-    "component022": {
+    "component023": {
         "entity id": 10,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 56,
+        "serializationID": 57,
         "text": "than you first come to believe.",
         "type": "TextRenderer"
     },
-    "component023": {
+    "component024": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
@@ -332,16 +357,41 @@
             "y": 100.0
         },
         "rotation": -0.3839724361896515,
-        "serializationID": 59,
+        "serializationID": 60,
         "type": "RectTransform"
     },
-    "component024": {
+    "component025": {
         "entity id": 11,
         "material": "optionsMat",
-        "serializationID": 60,
+        "serializationID": 61,
         "type": "UiRenderer"
     },
-    "component025": {
+    "component026": {
+        "audioClip": "Resources/Audios/menu_buttonClick.wav",
+        "autoPlay": false,
+        "coneInnerAngle": 360.0,
+        "coneOuterAngle": 360.0,
+        "coneOuterGain": 0.0,
+        "continuePlaying": false,
+        "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "entity id": 11,
+        "gain": 1.0,
+        "isLooping": 0,
+        "isRelativeToListener": 1,
+        "maxDistance": "infinity",
+        "maxGain": 1.0,
+        "minGain": 0.0,
+        "pitch": 1.0,
+        "referenceDistance": 1.0,
+        "rolloffFactor": 1.0,
+        "serializationID": 65,
+        "type": "AudioSource"
+    },
+    "component027": {
         "baseColor": {
             "a": 1.0,
             "b": 0.06599999964237213,
@@ -372,12 +422,16 @@
             "e0": {
                 "event": 48,
                 "scene": "Resources/Scenes/selectCargoScene.json"
+            },
+            "e1": {
+                "audioSource": 65,
+                "event": 22
             }
         },
-        "serializationID": 64,
+        "serializationID": 66,
         "type": "Button"
     },
-    "component026": {
+    "component028": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
@@ -387,20 +441,20 @@
             "x": -108.0,
             "y": -15.0
         },
-        "parent": 59,
+        "parent": 60,
         "rectSize": {
             "x": 0.3499999940395355,
             "y": 0.3499999940395355
         },
         "rotation": 0.0,
-        "serializationID": 66,
+        "serializationID": 68,
         "type": "RectTransform"
     },
-    "component027": {
+    "component029": {
         "entity id": 12,
         "font": "CourierNew",
         "material": "Stamp",
-        "serializationID": 67,
+        "serializationID": 69,
         "text": "CONTINUE",
         "type": "TextRenderer"
     },
@@ -408,7 +462,8 @@
         "components": [
             9,
             10,
-            11
+            11,
+            12
         ],
         "id": 0,
         "name": "Camera",
@@ -416,112 +471,113 @@
     },
     "entity001": {
         "components": [
-            17,
-            18
+            18,
+            19
         ],
         "id": 1,
         "name": "Background",
-        "serializationID": 16
+        "serializationID": 17
     },
     "entity002": {
         "components": [
-            23,
-            24
+            24,
+            25
         ],
         "id": 2,
         "name": "Title",
-        "serializationID": 22
+        "serializationID": 23
     },
     "entity003": {
         "components": [
-            27,
-            28
+            28,
+            29
         ],
         "id": 3,
         "name": "Text",
-        "serializationID": 26
+        "serializationID": 27
     },
     "entity004": {
         "components": [
-            31,
-            32
+            32,
+            33
         ],
         "id": 4,
         "name": "Text_2",
-        "serializationID": 30
+        "serializationID": 31
     },
     "entity005": {
         "components": [
-            35,
-            36
+            36,
+            37
         ],
         "id": 5,
         "name": "Text_3",
-        "serializationID": 34
+        "serializationID": 35
     },
     "entity006": {
         "components": [
-            39,
-            40
+            40,
+            41
         ],
         "id": 6,
         "name": "Text_4",
-        "serializationID": 38
+        "serializationID": 39
     },
     "entity007": {
         "components": [
-            43,
-            44
+            44,
+            45
         ],
         "id": 7,
         "name": "Text_5",
-        "serializationID": 42
+        "serializationID": 43
     },
     "entity008": {
         "components": [
-            47,
-            48
+            48,
+            49
         ],
         "id": 8,
         "name": "Text_6",
-        "serializationID": 46
+        "serializationID": 47
     },
     "entity009": {
         "components": [
-            51,
-            52
+            52,
+            53
         ],
         "id": 9,
         "name": "Text_7",
-        "serializationID": 50
+        "serializationID": 51
     },
     "entity010": {
         "components": [
-            55,
-            56
+            56,
+            57
         ],
         "id": 10,
         "name": "Text_8",
-        "serializationID": 54
+        "serializationID": 55
     },
     "entity011": {
         "components": [
-            59,
             60,
-            64
+            61,
+            65,
+            66
         ],
         "id": 11,
         "name": "Continue_Button",
-        "serializationID": 58
+        "serializationID": 59
     },
     "entity012": {
         "components": [
-            66,
-            67
+            68,
+            69
         ],
         "id": 12,
         "name": "Continue_Button_Text",
-        "serializationID": 65
+        "serializationID": 67
     },
     "font000": {
         "fontName": "JosefinSans-Regular",
@@ -582,7 +638,7 @@
         },
         "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 15,
+        "serializationID": 16,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -643,7 +699,7 @@
         },
         "name": "UiBg",
         "renderingType": 0,
-        "serializationID": 21,
+        "serializationID": 22,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/paper.png"
@@ -706,7 +762,7 @@
         },
         "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 63,
+        "serializationID": 64,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/rect_border.png"
@@ -769,7 +825,7 @@
         },
         "name": "Stamp",
         "renderingType": 1,
-        "serializationID": 69,
+        "serializationID": 71,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -803,7 +859,7 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/rect_16_9.png",
-        "serializationID": 12
+        "serializationID": 13
     },
     "texture001": {
         "creationInfo": {
@@ -813,7 +869,7 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/rect_border.png",
-        "serializationID": 13
+        "serializationID": 14
     },
     "texture002": {
         "creationInfo": {
@@ -823,6 +879,6 @@
             "wrapMode": 33071
         },
         "filePath": "Resources/Sprites/paper.png",
-        "serializationID": 14
+        "serializationID": 15
     }
 }
