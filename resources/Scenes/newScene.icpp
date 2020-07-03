@@ -319,10 +319,6 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
-Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-rendererModule.setSkybox(hdrSkyboxMat);
-
 objectModule.newEntity(2, "directionalLight");
 {
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
