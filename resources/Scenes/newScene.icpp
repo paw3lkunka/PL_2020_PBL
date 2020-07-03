@@ -375,7 +375,7 @@ objectModule.newEntity(4, "Camera");
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.25f;
+        so3->getGainModifiable() = 0.01f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 }
@@ -873,7 +873,7 @@ TerrainUtils::importColliders();
             auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
                 so->audioClip = "Resources/Audios/gameplay_enemy_idle.wav";
                 so->getIsRelativeModifiable() = false;
-                so->getGainModifiable() = 10.0f;
+                so->getGainModifiable() = 2.0f;
                 so->getIsLoopingModifiable() = true;
                 so->autoPlay = true;
                 enemy->addComponent(so);
@@ -884,7 +884,7 @@ TerrainUtils::importColliders();
         auto* shootTrail = objectModule.getEntityPtrByName("BoneBox.FBX/Box001");
         {
             auto* t = shootTrail->getComponentPtr<Transform>();
-                t->getLocalPositionModifiable() = {1000000000.0f, 1000000000.0f, 1000000000.0f};
+                t->getLocalPositionModifiable() = {NAN, NAN, NAN};
                 t->getLocalScaleModifiable() = {0.03f, 0.03f, 1000.0f};
                 //t->setParent(enemy->getComponentPtr<Transform>());
                 t->setParent(&sceneModule.rootNode);
@@ -933,7 +933,37 @@ objectModule.newEntity(1, "DETECTION_SOUND");
     auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so->audioClip = "Resources/Audios/gameplay_enemy_detection.wav";
         so->getIsRelativeModifiable() = true;
-        so->getGainModifiable() = 1.0f;
+        so->getGainModifiable() = 0.0f;
         so->getIsLoopingModifiable() = true;
         so->autoPlay = true;
+}
+
+objectModule.newEntity(1, "HIT_SOUND");
+{
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_hit.wav";
+        so->getIsRelativeModifiable() = false;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "BUSH_SOUND");
+{
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_bushes.wav";
+        so->getIsRelativeModifiable() = false;
+        so->getGainModifiable() = 0.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "DROP_SOUND");
+{   
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_drop.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
 }

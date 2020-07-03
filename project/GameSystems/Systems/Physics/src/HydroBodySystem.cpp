@@ -63,32 +63,29 @@ void HydroBodySystem::receiveMessage(Message msg)
                 HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
                 if(body != nullptr && current != nullptr)
                 {
-                    // body->currents.push_back(current);
-                    body->targetCurrentVelocity = current->velocity;
+                    body->currents.push_back(current);
                 }
             }
             break;
 
-        // case Event::TRIGGER_EXIT:
-        //     {
-        //         TriggerData data = msg.getValue<TriggerData>();
-        //         HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
-        //         HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
-        //         if(body != nullptr && current != nullptr)
-        //         {
-        //             // body->currents.remove(current);
-        //             body->targetCurrentVelocity = current->velocity;
-        //         }
-        //     }
-        //     break;
+        case Event::TRIGGER_EXIT:
+            {
+                TriggerData data = msg.getValue<TriggerData>();
+                HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
+                HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
+                if(body != nullptr && current != nullptr)
+                {
+                    body->currents.remove(current);
+                }
+            }
+            break;
     }
 }
 
 void HydroBodySystem::fixedUpdate()
 {
     glm::vec3& currentVelocity = hydroBody->currentVelocity;
-    // glm::vec3 targetCurrentVelocity = calculateCurrentForBody(hydroBody);
-    glm::vec3 targetCurrentVelocity = hydroBody->targetCurrentVelocity;
+    glm::vec3 targetCurrentVelocity = calculateCurrentForBody(hydroBody);
     currentVelocity.x = std::lerp(currentVelocity.x, targetCurrentVelocity.x, hydroBody->currentVelocityLerp);
     currentVelocity.y = std::lerp(currentVelocity.y, targetCurrentVelocity.y, hydroBody->currentVelocityLerp);
     currentVelocity.z = std::lerp(currentVelocity.z, targetCurrentVelocity.z, hydroBody->currentVelocityLerp);
@@ -204,18 +201,18 @@ void HydroBodySystem::fixedUpdate()
     // }
 }
 
-// glm::vec3 HydroBodySystem::calculateCurrentForBody(HydroBody* body)
-// {
-//     glm::vec3 newCurrentVelocity(0.0f);
+glm::vec3 HydroBodySystem::calculateCurrentForBody(HydroBody* body)
+{
+    glm::vec3 newCurrentVelocity(0.0f);
 
-//     if(body->currents.size())
-//     {
-//         for(HydroCurrent* current : body->currents)
-//         {
-//             newCurrentVelocity += current->velocity;
-//         }
-//         newCurrentVelocity /= body->currents.size();
-//     }
+    if(body->currents.size())
+    {
+        for(HydroCurrent* current : body->currents)
+        {
+            newCurrentVelocity += current->velocity;
+        }
+        newCurrentVelocity /= body->currents.size();
+    }
 
-//     return newCurrentVelocity;
-// }
+    return newCurrentVelocity;
+}

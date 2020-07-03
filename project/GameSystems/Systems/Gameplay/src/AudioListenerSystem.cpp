@@ -36,7 +36,7 @@ void AudioListenerSystem::frameUpdate()
     if(transform)
     {
         auto position = glm::xyz(transform->getModelMatrix()[3]);
-        if(audioListener->getPosition() != position)
+        if(!glm::isnan(position).b && audioListener->getPosition() != position)
         {
             audioListener->getPositionModifiable() = position;
         }

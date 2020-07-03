@@ -13,8 +13,8 @@ struct HydroBody : public Component
 
     glm::vec3 currentVelocity = glm::vec3(0.0f);
 
-    // std::list<HydroCurrent*> currents;
-    glm::vec3 targetCurrentVelocity = glm::vec3(0.0f);
+    std::list<HydroCurrent*> currents;
+    //glm::vec3 targetCurrentVelocity = glm::vec3(0.0f);
     float currentVelocityLerp = 0.1f;
 };
 

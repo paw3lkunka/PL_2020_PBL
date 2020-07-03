@@ -509,12 +509,6 @@ void TerrainUtils::importColliders()
                 //     mr->mesh = GetCore().objectModule.getMeshCustomPtrByPath("Resources/Models/Box.FBX/Box001");
                 auto col = GetCore().objectModule.newEmptyComponentForLastEntity<BoxCollider>();
                     col->halfSize = halfSize;
-                auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
-                    so->audioClip = "Resources/Audios/gameplay_hit.wav";
-                    so->getIsRelativeModifiable() = false;
-                    so->getGainModifiable() = 1.0f;
-                    so->getIsLoopingModifiable() = false;
-                    so->autoPlay = false;
                 auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
                     rb->type = rp3d::BodyType::STATIC;
             }
@@ -562,12 +556,6 @@ void TerrainUtils::importColliders()
                 auto col = GetCore().objectModule.newEmptyComponentForLastEntity<BoxCollider>();
                     col->halfSize = halfSize;
                     col->isTrigger = true;
-                auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
-                    so->audioClip = "Resources/Audios/gameplay_bushes.wav";
-                    so->getIsRelativeModifiable() = false;
-                    so->getGainModifiable() = 1.0f;
-                    so->getIsLoopingModifiable() = false;
-                    so->autoPlay = false;
                 auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
                     rb->type = rp3d::BodyType::STATIC;
                 auto hs = GetCore().objectModule.newEmptyComponentForLastEntity<Hideout>();

@@ -35,7 +35,7 @@ void AudioSourceSystem::frameUpdate()
     if(transform)
     {
         auto position = glm::xyz(transform->getModelMatrix()[3]);
-        if(audioSource->getPosition() != position)
+        if(!glm::isnan(position).b && audioSource->getPosition() != position)
         {
             audioSource->getPositionModifiable() = position;
         }

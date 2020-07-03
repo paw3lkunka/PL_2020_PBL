@@ -46,8 +46,6 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
         if ( distance < enemyPtr->sightDistance && glm::dot(forward, toKayak) < enemyPtr->sightAngle)
         {
             enemyPtr->detectionCounter += enemyPtr->detectionPositiveStep;
-            auto detectionSound = GetCore().objectModule.getEntityPtrByName("DETECTION_SOUND")->getComponentPtr<AudioSource>();
-            detectionSound->getGainModifiable() = enemyPtr->detectionCounter / enemyPtr->detectionCounterMaxValue;
 
             animation(toKayak);
 
@@ -72,6 +70,9 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
         {
             enemyPtr->detectionCounter -= enemyPtr->detectionNegativeStep;
         }
+
+        auto detectionSound = GetCore().objectModule.getEntityPtrByName("DETECTION_SOUND")->getComponentPtr<AudioSource>();
+        detectionSound->getGainModifiable() = 0.1f * static_cast<float>(enemyPtr->detectionCounter) / static_cast<float>(enemyPtr->detectionCounterMaxValue);
     }
     
     if (enemyPtr->detectionCounter <= 0 && enemyPtr->notified == true)
@@ -118,7 +119,6 @@ void EnemySystem::attack(glm::vec3 dir)
                 {
                     data.success = false;
                 }
-                
 
             auto* shootT = Shoot::get().entityPtr->getComponentPtr<Transform>();
                 shootT->setParent(enemyTransformPtr);

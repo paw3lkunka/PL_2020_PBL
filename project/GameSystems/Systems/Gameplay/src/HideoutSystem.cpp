@@ -7,7 +7,6 @@
 
 bool HideoutSystem::assertEntity(Entity* entity)
 {
-    audioSource = entity->getComponentPtr<AudioSource>();
     return Kayak::get() && (hideoutPtr = entity->getComponentPtr<Hideout>());
 }
 
@@ -44,11 +43,4 @@ void HideoutSystem::fixedUpdate()
             }
         }
     }
-
-    if(audioSource)
-    {
-        auto kayakRb = Kayak::get()->entityPtr->getComponentPtr<Rigidbody>();
-        audioSource->getGainModifiable() = glm::length(kayakRb->velocity) / 25.0f;
-    }
-
 }
