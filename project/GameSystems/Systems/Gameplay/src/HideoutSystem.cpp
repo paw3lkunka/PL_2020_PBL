@@ -39,6 +39,14 @@ void HideoutSystem::fixedUpdate()
                 break;
             case Event::TRIGGER_EXIT:
                 Kayak::get()->isHidden--;
+                if(!Kayak::get()->isHidden)
+                {
+                    auto sound = GetCore().objectModule.getEntityPtrByName("BUSH_SOUND")->getComponentPtr<AudioSource>();
+                    if(sound)
+                    {
+                        GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_STOP, sound) );
+                    }
+                }
                 break;
             }
         }

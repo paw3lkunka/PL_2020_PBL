@@ -78,25 +78,6 @@ void GamePlayModule::receiveMessage(Message msg)
         }
         break;
 
-        case Event::TRIGGER_EXIT:
-        {
-            auto data = msg.getValue<TriggerData>();
-
-            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
-             && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
-            {
-                if(!Kayak::get()->isHidden)
-                {
-                    auto sound = GetCore().objectModule.getEntityPtrByName("BUSH_SOUND")->getComponentPtr<AudioSource>();
-                    if(sound)
-                    {
-                        GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_STOP, sound) );
-                    }
-                }
-            }
-        }
-        break;
-
         case Event::PLAYER_ATTACKED:
             if (msg.getValue<AttackData>().success)
             {
