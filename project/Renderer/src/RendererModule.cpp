@@ -1244,7 +1244,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawCube();
+        //drawCube();
     }
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);

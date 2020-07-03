@@ -255,6 +255,14 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "PLAYER_DETECTED by: " << Name(EnemyPtr) << std::endl;
     }
         break;
+
+    case Event::PLAYER_DETECTION_START:
+        std::cout << "PLAYER_DETECTION_START\n";
+        break;
+
+    case Event::PLAYER_DETECTION_STOP:
+        std::cout << "PLAYER_DETECTION_STOP\n";
+        break;
         
     case Event::PLAYER_ESCAPED:
     {
@@ -267,7 +275,7 @@ void ConsoleModule::receiveMessage(Message msg)
     {
         auto data = msg.getValue<AttackData>();
         std::cout << "PLAYER_ATTACKED by: " << Name(data.enemyPtr)
-                << (data.success ? ",   " : ", un") << "successfull, "
+                << (data.success ? ",   " : ", un") << "successful, "
                 << std::endl;// "direction: " << glm::to_string(data.direction) << std::endl;
     }
         break;

@@ -8,7 +8,7 @@
         "materials": 4,
         "meshes": 0,
         "shaders": 2,
-        "textures": 3
+        "textures": 2
     },
     "component000": {
         "camControl": 1,
@@ -74,13 +74,13 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 17,
+        "serializationID": 16,
         "type": "RectTransform"
     },
     "component004": {
         "entity id": 1,
         "material": "UiBg",
-        "serializationID": 18,
+        "serializationID": 17,
         "type": "UiRenderer"
     },
     "component005": {
@@ -98,14 +98,14 @@
             "y": 0.800000011920929
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 23,
+        "serializationID": 22,
         "type": "RectTransform"
     },
     "component006": {
         "entity id": 2,
         "font": "JosefinSans-Regular",
         "material": "TextMaterial",
-        "serializationID": 24,
+        "serializationID": 23,
         "text": "Intro",
         "type": "TextRenderer"
     },
@@ -124,14 +124,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 27,
+        "serializationID": 26,
         "type": "RectTransform"
     },
     "component008": {
         "entity id": 3,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 28,
+        "serializationID": 27,
         "text": "Trying to make ends meet, you decide to take part",
         "type": "TextRenderer"
     },
@@ -150,14 +150,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 31,
+        "serializationID": 30,
         "type": "RectTransform"
     },
     "component010": {
         "entity id": 4,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 32,
+        "serializationID": 31,
         "text": "in the lucrative river smuggling job. On a war-torn border,",
         "type": "TextRenderer"
     },
@@ -176,14 +176,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 35,
+        "serializationID": 34,
         "type": "RectTransform"
     },
     "component012": {
         "entity id": 5,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 36,
+        "serializationID": 35,
         "text": "cargo transferring is more profitable than selling gold,",
         "type": "TextRenderer"
     },
@@ -202,14 +202,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 39,
+        "serializationID": 38,
         "type": "RectTransform"
     },
     "component014": {
         "entity id": 6,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 40,
+        "serializationID": 39,
         "text": "but the risk is proportionally huge. You observe how",
         "type": "TextRenderer"
     },
@@ -228,14 +228,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 43,
+        "serializationID": 42,
         "type": "RectTransform"
     },
     "component016": {
         "entity id": 7,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 44,
+        "serializationID": 43,
         "text": "the conflict between two countries unfolds,",
         "type": "TextRenderer"
     },
@@ -254,14 +254,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 47,
+        "serializationID": 46,
         "type": "RectTransform"
     },
     "component018": {
         "entity id": 8,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 48,
+        "serializationID": 47,
         "text": "and on certain occasions interfere with it.",
         "type": "TextRenderer"
     },
@@ -280,14 +280,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 51,
+        "serializationID": 50,
         "type": "RectTransform"
     },
     "component020": {
         "entity id": 9,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 52,
+        "serializationID": 51,
         "text": "The outcome of the war may be more dependent on your actions",
         "type": "TextRenderer"
     },
@@ -306,14 +306,14 @@
             "y": 0.25
         },
         "rotation": 0.02617993950843811,
-        "serializationID": 55,
+        "serializationID": 54,
         "type": "RectTransform"
     },
     "component022": {
         "entity id": 10,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 56,
+        "serializationID": 55,
         "text": "than you first come to believe.",
         "type": "TextRenderer"
     },
@@ -332,13 +332,13 @@
             "y": 100.0
         },
         "rotation": -0.3839724361896515,
-        "serializationID": 59,
+        "serializationID": 58,
         "type": "RectTransform"
     },
     "component024": {
         "entity id": 11,
         "material": "optionsMat",
-        "serializationID": 60,
+        "serializationID": 59,
         "type": "UiRenderer"
     },
     "component025": {
@@ -374,7 +374,7 @@
                 "scene": "Resources/Scenes/selectCargoScene.json"
             }
         },
-        "serializationID": 64,
+        "serializationID": 63,
         "type": "Button"
     },
     "component026": {
@@ -387,20 +387,20 @@
             "x": -108.0,
             "y": -15.0
         },
-        "parent": 59,
+        "parent": 58,
         "rectSize": {
             "x": 0.3499999940395355,
             "y": 0.3499999940395355
         },
         "rotation": 0.0,
-        "serializationID": 66,
+        "serializationID": 65,
         "type": "RectTransform"
     },
     "component027": {
         "entity id": 12,
         "font": "CourierNew",
         "material": "Stamp",
-        "serializationID": 67,
+        "serializationID": 66,
         "text": "CONTINUE",
         "type": "TextRenderer"
     },
@@ -416,112 +416,112 @@
     },
     "entity001": {
         "components": [
-            17,
-            18
+            16,
+            17
         ],
         "id": 1,
         "name": "Background",
-        "serializationID": 16
+        "serializationID": 15
     },
     "entity002": {
         "components": [
-            23,
-            24
+            22,
+            23
         ],
         "id": 2,
         "name": "Title",
-        "serializationID": 22
+        "serializationID": 21
     },
     "entity003": {
         "components": [
-            27,
-            28
+            26,
+            27
         ],
         "id": 3,
         "name": "Text",
-        "serializationID": 26
+        "serializationID": 25
     },
     "entity004": {
         "components": [
-            31,
-            32
+            30,
+            31
         ],
         "id": 4,
         "name": "Text_2",
-        "serializationID": 30
+        "serializationID": 29
     },
     "entity005": {
         "components": [
-            35,
-            36
+            34,
+            35
         ],
         "id": 5,
         "name": "Text_3",
-        "serializationID": 34
+        "serializationID": 33
     },
     "entity006": {
         "components": [
-            39,
-            40
+            38,
+            39
         ],
         "id": 6,
         "name": "Text_4",
-        "serializationID": 38
+        "serializationID": 37
     },
     "entity007": {
         "components": [
-            43,
-            44
+            42,
+            43
         ],
         "id": 7,
         "name": "Text_5",
-        "serializationID": 42
+        "serializationID": 41
     },
     "entity008": {
         "components": [
-            47,
-            48
+            46,
+            47
         ],
         "id": 8,
         "name": "Text_6",
-        "serializationID": 46
+        "serializationID": 45
     },
     "entity009": {
         "components": [
-            51,
-            52
+            50,
+            51
         ],
         "id": 9,
         "name": "Text_7",
-        "serializationID": 50
+        "serializationID": 49
     },
     "entity010": {
         "components": [
-            55,
-            56
+            54,
+            55
         ],
         "id": 10,
         "name": "Text_8",
-        "serializationID": 54
+        "serializationID": 53
     },
     "entity011": {
         "components": [
+            58,
             59,
-            60,
-            64
+            63
         ],
         "id": 11,
         "name": "Continue_Button",
-        "serializationID": 58
+        "serializationID": 57
     },
     "entity012": {
         "components": [
-            66,
-            67
+            65,
+            66
         ],
         "id": 12,
         "name": "Continue_Button_Text",
-        "serializationID": 65
+        "serializationID": 64
     },
     "font000": {
         "fontName": "JosefinSans-Regular",
@@ -582,7 +582,7 @@
         },
         "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 15,
+        "serializationID": 14,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -643,7 +643,7 @@
         },
         "name": "UiBg",
         "renderingType": 0,
-        "serializationID": 21,
+        "serializationID": 20,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/paper.png"
@@ -706,7 +706,7 @@
         },
         "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 63,
+        "serializationID": 62,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/rect_border.png"
@@ -769,7 +769,7 @@
         },
         "name": "Stamp",
         "renderingType": 1,
-        "serializationID": 69,
+        "serializationID": 68,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -802,7 +802,7 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/rect_16_9.png",
+        "filePath": "Resources/Sprites/rect_border.png",
         "serializationID": 12
     },
     "texture001": {
@@ -812,17 +812,7 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/rect_border.png",
-        "serializationID": 13
-    },
-    "texture002": {
-        "creationInfo": {
-            "generateMipmaps": false,
-            "magFilter": 9729,
-            "minFilter": 9729,
-            "wrapMode": 33071
-        },
         "filePath": "Resources/Sprites/paper.png",
-        "serializationID": 14
+        "serializationID": 13
     }
 }

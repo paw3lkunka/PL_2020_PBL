@@ -1,14 +1,14 @@
 {
     "Amounts": {
-        "components": 130,
+        "components": 131,
         "cubemaps": 0,
         "cubemapsHdr": 0,
-        "entities": 60,
+        "entities": 61,
         "fonts": 2,
         "materials": 25,
         "meshes": 0,
         "shaders": 2,
-        "textures": 6
+        "textures": 4
     },
     "component000": {
         "camControl": 1,
@@ -60,6 +60,30 @@
         }
     },
     "component003": {
+        "audioClip": "Resources/Audios/mainTheme.wav",
+        "autoPlay": true,
+        "coneInnerAngle": 360.0,
+        "coneOuterAngle": 360.0,
+        "coneOuterGain": 0.0,
+        "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "entity id": 0,
+        "gain": 0.75,
+        "isLooping": 1,
+        "isRelativeToListener": 1,
+        "maxDistance": "infinity",
+        "maxGain": 1.0,
+        "minGain": 0.0,
+        "pitch": 1.0,
+        "referenceDistance": 1.0,
+        "rolloffFactor": 1.0,
+        "serializationID": 8,
+        "type": "AudioSource"
+    },
+    "component004": {
         "entity id": 1,
         "localPosition": {
             "x": 0.0,
@@ -77,11 +101,11 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 9,
+        "serializationID": 10,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component004": {
+    "component005": {
         "audioClip": "Resources/Audios/river.wav",
         "autoPlay": true,
         "coneInnerAngle": 360.0,
@@ -93,7 +117,7 @@
             "z": 0.0
         },
         "entity id": 1,
-        "gain": 0.30000001192092896,
+        "gain": 0.10000000149011612,
         "isLooping": 1,
         "isRelativeToListener": 1,
         "maxDistance": "infinity",
@@ -102,10 +126,10 @@
         "pitch": 1.0,
         "referenceDistance": 1.0,
         "rolloffFactor": 1.0,
-        "serializationID": 10,
+        "serializationID": 11,
         "type": "AudioSource"
     },
-    "component005": {
+    "component006": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
@@ -120,16 +144,16 @@
             "y": 1080.0
         },
         "rotation": 0.0,
-        "serializationID": 24,
+        "serializationID": 23,
         "type": "RectTransform"
     },
-    "component006": {
+    "component007": {
         "entity id": 2,
         "material": "UiBg",
-        "serializationID": 25,
+        "serializationID": 24,
         "type": "UiRenderer"
     },
-    "component007": {
+    "component008": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -144,18 +168,18 @@
             "y": 0.3499999940395355
         },
         "rotation": 0.0,
-        "serializationID": 30,
+        "serializationID": 29,
         "type": "RectTransform"
     },
-    "component008": {
+    "component009": {
         "entity id": 3,
         "font": "JosefinSans-Regular",
         "material": "TextMaterial",
-        "serializationID": 31,
+        "serializationID": 30,
         "text": "Select Cargo:",
         "type": "TextRenderer"
     },
-    "component009": {
+    "component010": {
         "anchor": {
             "x": 0.5,
             "y": 1.0
@@ -170,18 +194,18 @@
             "y": 0.20000000298023224
         },
         "rotation": 0.0,
-        "serializationID": 34,
+        "serializationID": 33,
         "type": "RectTransform"
     },
-    "component010": {
+    "component011": {
         "entity id": 4,
         "font": "JosefinSans-Regular",
         "material": "TedTextMaterial",
-        "serializationID": 35,
+        "serializationID": 34,
         "text": "You need to add at least one cargo:",
         "type": "TextRenderer"
     },
-    "component011": {
+    "component012": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
@@ -196,16 +220,16 @@
             "y": 100.0
         },
         "rotation": -0.0872664600610733,
-        "serializationID": 38,
+        "serializationID": 37,
         "type": "RectTransform"
     },
-    "component012": {
+    "component013": {
         "entity id": 5,
         "material": "optionsMat",
-        "serializationID": 39,
+        "serializationID": 38,
         "type": "UiRenderer"
     },
-    "component013": {
+    "component014": {
         "baseColor": {
             "a": 1.0,
             "b": 0.06599999964237213,
@@ -238,10 +262,10 @@
                 "scene": "Resources/Scenes/gameScene.json"
             }
         },
-        "serializationID": 43,
+        "serializationID": 42,
         "type": "Button"
     },
-    "component014": {
+    "component015": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
@@ -251,25 +275,73 @@
             "x": -61.0,
             "y": -15.0
         },
-        "parent": 38,
+        "parent": 37,
         "rectSize": {
             "x": 0.4000000059604645,
             "y": 0.4000000059604645
         },
         "rotation": 0.0,
-        "serializationID": 45,
+        "serializationID": 44,
         "type": "RectTransform"
     },
-    "component015": {
+    "component016": {
         "entity id": 6,
         "font": "CourierNew",
         "material": "Stamp",
-        "serializationID": 46,
+        "serializationID": 45,
         "text": "PLAY",
         "type": "TextRenderer"
     },
-    "component016": {
+    "component017": {
+        "audioClip": "Resources/Audios/selectCargo_onSelect.wav",
+        "autoPlay": false,
+        "coneInnerAngle": 360.0,
+        "coneOuterAngle": 360.0,
+        "coneOuterGain": 0.0,
+        "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
         "entity id": 7,
+        "gain": 1.0,
+        "isLooping": 0,
+        "isRelativeToListener": 1,
+        "maxDistance": "infinity",
+        "maxGain": 1.0,
+        "minGain": 0.0,
+        "pitch": 1.0,
+        "referenceDistance": 1.0,
+        "rolloffFactor": 1.0,
+        "serializationID": 49,
+        "type": "AudioSource"
+    },
+    "component018": {
+        "audioClip": "Resources/Audios/selectCargo_onDeselect.wav",
+        "autoPlay": false,
+        "coneInnerAngle": 360.0,
+        "coneOuterAngle": 360.0,
+        "coneOuterGain": 0.0,
+        "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "entity id": 8,
+        "gain": 10000.0,
+        "isLooping": 0,
+        "isRelativeToListener": 1,
+        "maxDistance": "infinity",
+        "maxGain": 1.0,
+        "minGain": 0.0,
+        "pitch": 1.0,
+        "referenceDistance": 1.0,
+        "rolloffFactor": 1.0,
+        "serializationID": 51,
+        "type": "AudioSource"
+    },
+    "component019": {
+        "entity id": 9,
         "localPosition": {
             "x": -5.0,
             "y": 0.0,
@@ -286,40 +358,16 @@
             "y": 1.0,
             "z": 1.0
         },
-        "serializationID": 51,
+        "serializationID": 54,
         "transform parentID": 0,
         "type": "Transform"
     },
-    "component017": {
-        "audioClip": "Resources/Audios/test.wav",
-        "autoPlay": false,
-        "coneInnerAngle": 360.0,
-        "coneOuterAngle": 360.0,
-        "coneOuterGain": 0.0,
-        "direction": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "entity id": 7,
-        "gain": 1.600000023841858,
-        "isLooping": 0,
-        "isRelativeToListener": 1,
-        "maxDistance": "infinity",
-        "maxGain": 1.0,
-        "minGain": 0.0,
-        "pitch": 1.0,
-        "referenceDistance": 1.0,
-        "rolloffFactor": 1.0,
-        "serializationID": 52,
-        "type": "AudioSource"
-    },
-    "component018": {
+    "component020": {
         "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 8,
+        "entity id": 10,
         "localPosition": {
             "x": -350.0,
             "y": 240.0
@@ -329,10 +377,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 54,
+        "serializationID": 56,
         "type": "RectTransform"
     },
-    "component019": {
+    "component021": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -345,7 +393,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 8,
+        "entity id": 10,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -364,12 +412,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 72,
+        "incomeText": 74,
         "isActive": true,
-        "nameText": 67,
+        "nameText": 69,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -387,43 +435,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 55,
+        "serializationID": 57,
         "type": "CargoButton",
-        "weightText": 76
-    },
-    "component020": {
-        "entity id": 8,
-        "material": "Toggle_1",
-        "serializationID": 56,
-        "type": "UiRenderer"
-    },
-    "component021": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 9,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 54,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 61,
-        "type": "RectTransform"
+        "weightText": 78
     },
     "component022": {
-        "entity id": 9,
-        "material": "BgBlack",
-        "serializationID": 62,
+        "entity id": 10,
+        "material": "Toggle_1",
+        "serializationID": 58,
         "type": "UiRenderer"
     },
     "component023": {
@@ -431,53 +454,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 10,
+        "entity id": 11,
         "localPosition": {
-            "x": -135.0,
-            "y": 31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 54,
+        "parent": 56,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 66,
+        "serializationID": 63,
         "type": "RectTransform"
     },
     "component024": {
-        "entity id": 10,
-        "font": "CourierNew",
-        "material": "Cargo1NameMat",
-        "serializationID": 67,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 11,
+        "material": "BgBlack",
+        "serializationID": 64,
+        "type": "UiRenderer"
     },
     "component025": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 11,
+        "entity id": 12,
         "localPosition": {
-            "x": -9.0,
-            "y": -0.0
+            "x": -135.0,
+            "y": 31.0
         },
-        "parent": 54,
+        "parent": 56,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 71,
+        "serializationID": 68,
         "type": "RectTransform"
     },
     "component026": {
-        "entity id": 11,
+        "entity id": 12,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 72,
-        "text": "Income",
+        "material": "Cargo1NameMat",
+        "serializationID": 69,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component027": {
@@ -485,34 +506,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 12,
+        "entity id": 13,
         "localPosition": {
-            "x": -4.0,
-            "y": -38.0
+            "x": -9.0,
+            "y": -0.0
         },
-        "parent": 54,
+        "parent": 56,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 75,
+        "serializationID": 73,
         "type": "RectTransform"
     },
     "component028": {
-        "entity id": 12,
+        "entity id": 13,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 76,
-        "text": "Weight",
+        "serializationID": 74,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component029": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 14,
+        "localPosition": {
+            "x": -4.0,
+            "y": -38.0
+        },
+        "parent": 56,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 77,
+        "type": "RectTransform"
+    },
+    "component030": {
+        "entity id": 14,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 78,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component031": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 13,
+        "entity id": 15,
         "localPosition": {
             "x": 0.0,
             "y": 240.0
@@ -522,10 +570,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 79,
+        "serializationID": 81,
         "type": "RectTransform"
     },
-    "component030": {
+    "component032": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -538,7 +586,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 13,
+        "entity id": 15,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -557,12 +605,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 97,
+        "incomeText": 99,
         "isActive": true,
-        "nameText": 92,
+        "nameText": 94,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -580,43 +628,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 80,
+        "serializationID": 82,
         "type": "CargoButton",
-        "weightText": 101
-    },
-    "component031": {
-        "entity id": 13,
-        "material": "Toggle_2",
-        "serializationID": 81,
-        "type": "UiRenderer"
-    },
-    "component032": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 14,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 79,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 86,
-        "type": "RectTransform"
+        "weightText": 103
     },
     "component033": {
-        "entity id": 14,
-        "material": "BgBlack",
-        "serializationID": 87,
+        "entity id": 15,
+        "material": "Toggle_2",
+        "serializationID": 83,
         "type": "UiRenderer"
     },
     "component034": {
@@ -624,53 +647,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 15,
+        "entity id": 16,
         "localPosition": {
-            "x": -133.0,
-            "y": 29.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 79,
+        "parent": 81,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 91,
+        "serializationID": 88,
         "type": "RectTransform"
     },
     "component035": {
-        "entity id": 15,
-        "font": "CourierNew",
-        "material": "Cargo2NameMat",
-        "serializationID": 92,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 16,
+        "material": "BgBlack",
+        "serializationID": 89,
+        "type": "UiRenderer"
     },
     "component036": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 16,
+        "entity id": 17,
         "localPosition": {
-            "x": -10.0,
-            "y": -3.0
+            "x": -133.0,
+            "y": 29.0
         },
-        "parent": 79,
+        "parent": 81,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 96,
+        "serializationID": 93,
         "type": "RectTransform"
     },
     "component037": {
-        "entity id": 16,
+        "entity id": 17,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 97,
-        "text": "Income",
+        "material": "Cargo2NameMat",
+        "serializationID": 94,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component038": {
@@ -678,34 +699,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 17,
+        "entity id": 18,
         "localPosition": {
-            "x": -5.0,
-            "y": -40.0
+            "x": -10.0,
+            "y": -3.0
         },
-        "parent": 79,
+        "parent": 81,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 100,
+        "serializationID": 98,
         "type": "RectTransform"
     },
     "component039": {
-        "entity id": 17,
+        "entity id": 18,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 101,
-        "text": "Weight",
+        "serializationID": 99,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component040": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 19,
+        "localPosition": {
+            "x": -5.0,
+            "y": -40.0
+        },
+        "parent": 81,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 102,
+        "type": "RectTransform"
+    },
+    "component041": {
+        "entity id": 19,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 103,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component042": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 18,
+        "entity id": 20,
         "localPosition": {
             "x": 350.0,
             "y": 240.0
@@ -715,10 +763,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 104,
+        "serializationID": 106,
         "type": "RectTransform"
     },
-    "component041": {
+    "component043": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -731,7 +779,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 18,
+        "entity id": 20,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -750,12 +798,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 122,
+        "incomeText": 124,
         "isActive": true,
-        "nameText": 117,
+        "nameText": 119,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -773,43 +821,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 105,
+        "serializationID": 107,
         "type": "CargoButton",
-        "weightText": 126
-    },
-    "component042": {
-        "entity id": 18,
-        "material": "Toggle_3",
-        "serializationID": 106,
-        "type": "UiRenderer"
-    },
-    "component043": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 19,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 104,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 111,
-        "type": "RectTransform"
+        "weightText": 128
     },
     "component044": {
-        "entity id": 19,
-        "material": "BgBlack",
-        "serializationID": 112,
+        "entity id": 20,
+        "material": "Toggle_3",
+        "serializationID": 108,
         "type": "UiRenderer"
     },
     "component045": {
@@ -817,53 +840,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 20,
+        "entity id": 21,
         "localPosition": {
-            "x": -132.0,
-            "y": 31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 104,
+        "parent": 106,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 116,
+        "serializationID": 113,
         "type": "RectTransform"
     },
     "component046": {
-        "entity id": 20,
-        "font": "CourierNew",
-        "material": "Cargo3NameMat",
-        "serializationID": 117,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 21,
+        "material": "BgBlack",
+        "serializationID": 114,
+        "type": "UiRenderer"
     },
     "component047": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 21,
+        "entity id": 22,
         "localPosition": {
-            "x": -7.0,
-            "y": 1.0
+            "x": -132.0,
+            "y": 31.0
         },
-        "parent": 104,
+        "parent": 106,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 121,
+        "serializationID": 118,
         "type": "RectTransform"
     },
     "component048": {
-        "entity id": 21,
+        "entity id": 22,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 122,
-        "text": "Income",
+        "material": "Cargo3NameMat",
+        "serializationID": 119,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component049": {
@@ -871,34 +892,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 22,
+        "entity id": 23,
         "localPosition": {
-            "x": -1.0,
-            "y": -37.0
+            "x": -7.0,
+            "y": 1.0
         },
-        "parent": 104,
+        "parent": 106,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 125,
+        "serializationID": 123,
         "type": "RectTransform"
     },
     "component050": {
-        "entity id": 22,
+        "entity id": 23,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 126,
-        "text": "Weight",
+        "serializationID": 124,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component051": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 24,
+        "localPosition": {
+            "x": -1.0,
+            "y": -37.0
+        },
+        "parent": 106,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 127,
+        "type": "RectTransform"
+    },
+    "component052": {
+        "entity id": 24,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 128,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component053": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 23,
+        "entity id": 25,
         "localPosition": {
             "x": -350.0,
             "y": 40.0
@@ -908,10 +956,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 129,
+        "serializationID": 131,
         "type": "RectTransform"
     },
-    "component052": {
+    "component054": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -924,7 +972,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 23,
+        "entity id": 25,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -943,12 +991,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 147,
+        "incomeText": 149,
         "isActive": true,
-        "nameText": 142,
+        "nameText": 144,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -966,43 +1014,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 130,
+        "serializationID": 132,
         "type": "CargoButton",
-        "weightText": 151
-    },
-    "component053": {
-        "entity id": 23,
-        "material": "Toggle_4",
-        "serializationID": 131,
-        "type": "UiRenderer"
-    },
-    "component054": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 24,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 129,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 136,
-        "type": "RectTransform"
+        "weightText": 153
     },
     "component055": {
-        "entity id": 24,
-        "material": "BgBlack",
-        "serializationID": 137,
+        "entity id": 25,
+        "material": "Toggle_4",
+        "serializationID": 133,
         "type": "UiRenderer"
     },
     "component056": {
@@ -1010,53 +1033,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 25,
+        "entity id": 26,
         "localPosition": {
-            "x": -133.0,
-            "y": 33.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 129,
+        "parent": 131,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 141,
+        "serializationID": 138,
         "type": "RectTransform"
     },
     "component057": {
-        "entity id": 25,
-        "font": "CourierNew",
-        "material": "Cargo4NameMat",
-        "serializationID": 142,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 26,
+        "material": "BgBlack",
+        "serializationID": 139,
+        "type": "UiRenderer"
     },
     "component058": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 26,
+        "entity id": 27,
         "localPosition": {
-            "x": -6.0,
-            "y": 3.0
+            "x": -133.0,
+            "y": 33.0
         },
-        "parent": 129,
+        "parent": 131,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 146,
+        "serializationID": 143,
         "type": "RectTransform"
     },
     "component059": {
-        "entity id": 26,
+        "entity id": 27,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 147,
-        "text": "Income",
+        "material": "Cargo4NameMat",
+        "serializationID": 144,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component060": {
@@ -1064,34 +1085,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 27,
+        "entity id": 28,
         "localPosition": {
-            "x": -7.0,
-            "y": -35.0
+            "x": -6.0,
+            "y": 3.0
         },
-        "parent": 129,
+        "parent": 131,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 150,
+        "serializationID": 148,
         "type": "RectTransform"
     },
     "component061": {
-        "entity id": 27,
+        "entity id": 28,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 151,
-        "text": "Weight",
+        "serializationID": 149,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component062": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 29,
+        "localPosition": {
+            "x": -7.0,
+            "y": -35.0
+        },
+        "parent": 131,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 152,
+        "type": "RectTransform"
+    },
+    "component063": {
+        "entity id": 29,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 153,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component064": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 28,
+        "entity id": 30,
         "localPosition": {
             "x": 0.0,
             "y": 40.0
@@ -1101,10 +1149,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 154,
+        "serializationID": 156,
         "type": "RectTransform"
     },
-    "component063": {
+    "component065": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -1117,7 +1165,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 28,
+        "entity id": 30,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -1136,12 +1184,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 172,
+        "incomeText": 174,
         "isActive": true,
-        "nameText": 167,
+        "nameText": 169,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -1159,43 +1207,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 155,
+        "serializationID": 157,
         "type": "CargoButton",
-        "weightText": 176
-    },
-    "component064": {
-        "entity id": 28,
-        "material": "Toggle_5",
-        "serializationID": 156,
-        "type": "UiRenderer"
-    },
-    "component065": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 29,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 154,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 161,
-        "type": "RectTransform"
+        "weightText": 178
     },
     "component066": {
-        "entity id": 29,
-        "material": "BgBlack",
-        "serializationID": 162,
+        "entity id": 30,
+        "material": "Toggle_5",
+        "serializationID": 158,
         "type": "UiRenderer"
     },
     "component067": {
@@ -1203,53 +1226,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 30,
+        "entity id": 31,
         "localPosition": {
-            "x": -124.0,
-            "y": 33.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 154,
+        "parent": 156,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 166,
+        "serializationID": 163,
         "type": "RectTransform"
     },
     "component068": {
-        "entity id": 30,
-        "font": "CourierNew",
-        "material": "Cargo5NameMat",
-        "serializationID": 167,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 31,
+        "material": "BgBlack",
+        "serializationID": 164,
+        "type": "UiRenderer"
     },
     "component069": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 31,
+        "entity id": 32,
         "localPosition": {
-            "x": -8.0,
-            "y": 0.0
+            "x": -124.0,
+            "y": 33.0
         },
-        "parent": 154,
+        "parent": 156,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 171,
+        "serializationID": 168,
         "type": "RectTransform"
     },
     "component070": {
-        "entity id": 31,
+        "entity id": 32,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 172,
-        "text": "Income",
+        "material": "Cargo5NameMat",
+        "serializationID": 169,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component071": {
@@ -1257,34 +1278,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 32,
+        "entity id": 33,
         "localPosition": {
-            "x": -2.0,
-            "y": -37.0
+            "x": -8.0,
+            "y": 0.0
         },
-        "parent": 154,
+        "parent": 156,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 175,
+        "serializationID": 173,
         "type": "RectTransform"
     },
     "component072": {
-        "entity id": 32,
+        "entity id": 33,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 176,
-        "text": "Weight",
+        "serializationID": 174,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component073": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 34,
+        "localPosition": {
+            "x": -2.0,
+            "y": -37.0
+        },
+        "parent": 156,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 177,
+        "type": "RectTransform"
+    },
+    "component074": {
+        "entity id": 34,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 178,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component075": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 33,
+        "entity id": 35,
         "localPosition": {
             "x": 350.0,
             "y": 40.0
@@ -1294,10 +1342,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 179,
+        "serializationID": 181,
         "type": "RectTransform"
     },
-    "component074": {
+    "component076": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -1310,7 +1358,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 33,
+        "entity id": 35,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -1329,12 +1377,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 197,
+        "incomeText": 199,
         "isActive": true,
-        "nameText": 192,
+        "nameText": 194,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -1352,43 +1400,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 180,
+        "serializationID": 182,
         "type": "CargoButton",
-        "weightText": 201
-    },
-    "component075": {
-        "entity id": 33,
-        "material": "Toggle_6",
-        "serializationID": 181,
-        "type": "UiRenderer"
-    },
-    "component076": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 34,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 179,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 186,
-        "type": "RectTransform"
+        "weightText": 203
     },
     "component077": {
-        "entity id": 34,
-        "material": "BgBlack",
-        "serializationID": 187,
+        "entity id": 35,
+        "material": "Toggle_6",
+        "serializationID": 183,
         "type": "UiRenderer"
     },
     "component078": {
@@ -1396,53 +1419,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 35,
+        "entity id": 36,
         "localPosition": {
-            "x": -135.0,
-            "y": 34.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 179,
+        "parent": 181,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 191,
+        "serializationID": 188,
         "type": "RectTransform"
     },
     "component079": {
-        "entity id": 35,
-        "font": "CourierNew",
-        "material": "Cargo6NameMat",
-        "serializationID": 192,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 36,
+        "material": "BgBlack",
+        "serializationID": 189,
+        "type": "UiRenderer"
     },
     "component080": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 36,
+        "entity id": 37,
         "localPosition": {
-            "x": -3.0,
-            "y": 0.0
+            "x": -135.0,
+            "y": 34.0
         },
-        "parent": 179,
+        "parent": 181,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 196,
+        "serializationID": 193,
         "type": "RectTransform"
     },
     "component081": {
-        "entity id": 36,
+        "entity id": 37,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 197,
-        "text": "Income",
+        "material": "Cargo6NameMat",
+        "serializationID": 194,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component082": {
@@ -1450,34 +1471,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 37,
+        "entity id": 38,
         "localPosition": {
-            "x": 2.0,
-            "y": -35.0
+            "x": -3.0,
+            "y": 0.0
         },
-        "parent": 179,
+        "parent": 181,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 200,
+        "serializationID": 198,
         "type": "RectTransform"
     },
     "component083": {
-        "entity id": 37,
+        "entity id": 38,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 201,
-        "text": "Weight",
+        "serializationID": 199,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component084": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 39,
+        "localPosition": {
+            "x": 2.0,
+            "y": -35.0
+        },
+        "parent": 181,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 202,
+        "type": "RectTransform"
+    },
+    "component085": {
+        "entity id": 39,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 203,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component086": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 38,
+        "entity id": 40,
         "localPosition": {
             "x": -350.0,
             "y": -160.0
@@ -1487,10 +1535,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 204,
+        "serializationID": 206,
         "type": "RectTransform"
     },
-    "component085": {
+    "component087": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -1503,7 +1551,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 38,
+        "entity id": 40,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -1522,12 +1570,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 222,
+        "incomeText": 224,
         "isActive": true,
-        "nameText": 217,
+        "nameText": 219,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -1545,43 +1593,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 205,
+        "serializationID": 207,
         "type": "CargoButton",
-        "weightText": 226
-    },
-    "component086": {
-        "entity id": 38,
-        "material": "Toggle_7",
-        "serializationID": 206,
-        "type": "UiRenderer"
-    },
-    "component087": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 39,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 204,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 211,
-        "type": "RectTransform"
+        "weightText": 228
     },
     "component088": {
-        "entity id": 39,
-        "material": "BgBlack",
-        "serializationID": 212,
+        "entity id": 40,
+        "material": "Toggle_7",
+        "serializationID": 208,
         "type": "UiRenderer"
     },
     "component089": {
@@ -1589,53 +1612,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 40,
+        "entity id": 41,
         "localPosition": {
-            "x": -120.0,
-            "y": 38.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 204,
+        "parent": 206,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 216,
+        "serializationID": 213,
         "type": "RectTransform"
     },
     "component090": {
-        "entity id": 40,
-        "font": "CourierNew",
-        "material": "Cargo7NameMat",
-        "serializationID": 217,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 41,
+        "material": "BgBlack",
+        "serializationID": 214,
+        "type": "UiRenderer"
     },
     "component091": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 41,
+        "entity id": 42,
         "localPosition": {
-            "x": 5.0,
-            "y": -3.0
+            "x": -120.0,
+            "y": 38.0
         },
-        "parent": 204,
+        "parent": 206,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 221,
+        "serializationID": 218,
         "type": "RectTransform"
     },
     "component092": {
-        "entity id": 41,
+        "entity id": 42,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 222,
-        "text": "Income",
+        "material": "Cargo7NameMat",
+        "serializationID": 219,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component093": {
@@ -1643,34 +1664,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 42,
+        "entity id": 43,
         "localPosition": {
-            "x": -1.0,
-            "y": -39.0
+            "x": 5.0,
+            "y": -3.0
         },
-        "parent": 204,
+        "parent": 206,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 225,
+        "serializationID": 223,
         "type": "RectTransform"
     },
     "component094": {
-        "entity id": 42,
+        "entity id": 43,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 226,
-        "text": "Weight",
+        "serializationID": 224,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component095": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 44,
+        "localPosition": {
+            "x": -1.0,
+            "y": -39.0
+        },
+        "parent": 206,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 227,
+        "type": "RectTransform"
+    },
+    "component096": {
+        "entity id": 44,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 228,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component097": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 43,
+        "entity id": 45,
         "localPosition": {
             "x": 0.0,
             "y": -160.0
@@ -1680,10 +1728,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 229,
+        "serializationID": 231,
         "type": "RectTransform"
     },
-    "component096": {
+    "component098": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -1696,7 +1744,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 43,
+        "entity id": 45,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -1715,12 +1763,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 247,
+        "incomeText": 249,
         "isActive": true,
-        "nameText": 242,
+        "nameText": 244,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -1738,43 +1786,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 230,
+        "serializationID": 232,
         "type": "CargoButton",
-        "weightText": 251
-    },
-    "component097": {
-        "entity id": 43,
-        "material": "Toggle_8",
-        "serializationID": 231,
-        "type": "UiRenderer"
-    },
-    "component098": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 44,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 229,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 236,
-        "type": "RectTransform"
+        "weightText": 253
     },
     "component099": {
-        "entity id": 44,
-        "material": "BgBlack",
-        "serializationID": 237,
+        "entity id": 45,
+        "material": "Toggle_8",
+        "serializationID": 233,
         "type": "UiRenderer"
     },
     "component100": {
@@ -1782,53 +1805,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 45,
+        "entity id": 46,
         "localPosition": {
-            "x": -132.0,
-            "y": 38.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 229,
+        "parent": 231,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 241,
+        "serializationID": 238,
         "type": "RectTransform"
     },
     "component101": {
-        "entity id": 45,
-        "font": "CourierNew",
-        "material": "Cargo8NameMat",
-        "serializationID": 242,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 46,
+        "material": "BgBlack",
+        "serializationID": 239,
+        "type": "UiRenderer"
     },
     "component102": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 46,
+        "entity id": 47,
         "localPosition": {
-            "x": -11.0,
-            "y": 5.0
+            "x": -132.0,
+            "y": 38.0
         },
-        "parent": 229,
+        "parent": 231,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 246,
+        "serializationID": 243,
         "type": "RectTransform"
     },
     "component103": {
-        "entity id": 46,
+        "entity id": 47,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 247,
-        "text": "Income",
+        "material": "Cargo8NameMat",
+        "serializationID": 244,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component104": {
@@ -1836,34 +1857,61 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 47,
+        "entity id": 48,
         "localPosition": {
-            "x": -12.0,
-            "y": -37.0
+            "x": -11.0,
+            "y": 5.0
         },
-        "parent": 229,
+        "parent": 231,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 250,
+        "serializationID": 248,
         "type": "RectTransform"
     },
     "component105": {
-        "entity id": 47,
+        "entity id": 48,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 251,
-        "text": "Weight",
+        "serializationID": 249,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component106": {
         "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 49,
+        "localPosition": {
+            "x": -12.0,
+            "y": -37.0
+        },
+        "parent": 231,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 252,
+        "type": "RectTransform"
+    },
+    "component107": {
+        "entity id": 49,
+        "font": "CourierNew",
+        "material": "TextMaterial",
+        "serializationID": 253,
+        "text": "Weight",
+        "type": "TextRenderer"
+    },
+    "component108": {
+        "anchor": {
             "x": 0.5,
             "y": 0.5
         },
-        "entity id": 48,
+        "entity id": 50,
         "localPosition": {
             "x": 350.0,
             "y": -160.0
@@ -1873,10 +1921,10 @@
             "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 254,
+        "serializationID": 256,
         "type": "RectTransform"
     },
-    "component107": {
+    "component109": {
         "baseColorOff": {
             "a": 0.800000011920929,
             "b": 0.0,
@@ -1889,7 +1937,7 @@
             "g": 0.6740000247955322,
             "r": 0.19599999487400055
         },
-        "entity id": 48,
+        "entity id": 50,
         "highlightedColorOff": {
             "a": 0.800000011920929,
             "b": 0.36000001430511475,
@@ -1908,12 +1956,12 @@
             "g": 0.0,
             "r": 0.0
         },
-        "incomeText": 272,
+        "incomeText": 274,
         "isActive": true,
-        "nameText": 267,
+        "nameText": 269,
         "onActivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 49,
                 "event": 22
             }
         },
@@ -1931,43 +1979,18 @@
         },
         "onDeactivateEvents": {
             "e0": {
-                "audioSource": 52,
+                "audioSource": 51,
                 "event": 22
             }
         },
-        "serializationID": 255,
+        "serializationID": 257,
         "type": "CargoButton",
-        "weightText": 276
-    },
-    "component108": {
-        "entity id": 48,
-        "material": "Toggle_9",
-        "serializationID": 256,
-        "type": "UiRenderer"
-    },
-    "component109": {
-        "anchor": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "entity id": 49,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "parent": 254,
-        "rectSize": {
-            "x": 300.0,
-            "y": 150.0
-        },
-        "rotation": 0.0,
-        "serializationID": 261,
-        "type": "RectTransform"
+        "weightText": 278
     },
     "component110": {
-        "entity id": 49,
-        "material": "BgBlack",
-        "serializationID": 262,
+        "entity id": 50,
+        "material": "Toggle_9",
+        "serializationID": 258,
         "type": "UiRenderer"
     },
     "component111": {
@@ -1975,53 +1998,51 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 50,
+        "entity id": 51,
         "localPosition": {
-            "x": -130.0,
-            "y": 30.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 254,
+        "parent": 256,
         "rectSize": {
-            "x": 0.25,
-            "y": 0.25
+            "x": 300.0,
+            "y": 150.0
         },
         "rotation": 0.0,
-        "serializationID": 266,
+        "serializationID": 263,
         "type": "RectTransform"
     },
     "component112": {
-        "entity id": 50,
-        "font": "CourierNew",
-        "material": "Cargo9NameMat",
-        "serializationID": 267,
-        "text": "Name",
-        "type": "TextRenderer"
+        "entity id": 51,
+        "material": "BgBlack",
+        "serializationID": 264,
+        "type": "UiRenderer"
     },
     "component113": {
         "anchor": {
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 51,
+        "entity id": 52,
         "localPosition": {
-            "x": 0.0,
-            "y": 0.0
+            "x": -130.0,
+            "y": 30.0
         },
-        "parent": 254,
+        "parent": 256,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 271,
+        "serializationID": 268,
         "type": "RectTransform"
     },
     "component114": {
-        "entity id": 51,
+        "entity id": 52,
         "font": "CourierNew",
-        "material": "TextMaterial",
-        "serializationID": 272,
-        "text": "Income",
+        "material": "Cargo9NameMat",
+        "serializationID": 269,
+        "text": "Name",
         "type": "TextRenderer"
     },
     "component115": {
@@ -2029,47 +2050,74 @@
             "x": 0.0,
             "y": 0.0
         },
-        "entity id": 52,
+        "entity id": 53,
         "localPosition": {
-            "x": 5.0,
-            "y": -31.0
+            "x": 0.0,
+            "y": 0.0
         },
-        "parent": 254,
+        "parent": 256,
         "rectSize": {
             "x": 0.25,
             "y": 0.25
         },
         "rotation": 0.0,
-        "serializationID": 275,
+        "serializationID": 273,
         "type": "RectTransform"
     },
     "component116": {
-        "entity id": 52,
+        "entity id": 53,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 276,
-        "text": "Weight",
+        "serializationID": 274,
+        "text": "Income",
         "type": "TextRenderer"
     },
     "component117": {
-        "entity id": 53,
-        "serializationID": 279,
-        "type": "CargoStorage"
+        "anchor": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "entity id": 54,
+        "localPosition": {
+            "x": 5.0,
+            "y": -31.0
+        },
+        "parent": 256,
+        "rectSize": {
+            "x": 0.25,
+            "y": 0.25
+        },
+        "rotation": 0.0,
+        "serializationID": 277,
+        "type": "RectTransform"
     },
     "component118": {
         "entity id": 54,
-        "font": "JosefinSans-Regular",
+        "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 281,
-        "text": "Total weight:",
+        "serializationID": 278,
+        "text": "Weight",
         "type": "TextRenderer"
     },
     "component119": {
+        "entity id": 55,
+        "serializationID": 281,
+        "type": "CargoStorage"
+    },
+    "component120": {
+        "entity id": 56,
+        "font": "JosefinSans-Regular",
+        "material": "TextMaterial",
+        "serializationID": 283,
+        "text": "Total weight:",
+        "type": "TextRenderer"
+    },
+    "component121": {
         "anchor": {
             "x": 0.0,
             "y": 0.5
         },
-        "entity id": 54,
+        "entity id": 56,
         "localPosition": {
             "x": 45.0,
             "y": 145.0
@@ -2079,23 +2127,23 @@
             "y": 0.30000001192092896
         },
         "rotation": 0.0,
-        "serializationID": 283,
+        "serializationID": 285,
         "type": "RectTransform"
     },
-    "component120": {
-        "entity id": 55,
+    "component122": {
+        "entity id": 57,
         "font": "CourierNew",
         "material": "TextMaterial",
-        "serializationID": 285,
+        "serializationID": 287,
         "text": "0.00kg",
         "type": "TextRenderer"
     },
-    "component121": {
+    "component123": {
         "anchor": {
             "x": 0.0,
             "y": 0.5
         },
-        "entity id": 55,
+        "entity id": 57,
         "localPosition": {
             "x": 55.0,
             "y": 98.0
@@ -2105,74 +2153,55 @@
             "y": 0.30000001192092896
         },
         "rotation": 0.0,
-        "serializationID": 287,
-        "type": "RectTransform"
-    },
-    "component122": {
-        "anchor": {
-            "x": 0.5,
-            "y": 0.0
-        },
-        "entity id": 56,
-        "localPosition": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "rectSize": {
-            "x": 0.0,
-            "y": 0.0
-        },
-        "rotation": 0.0,
         "serializationID": 289,
         "type": "RectTransform"
     },
-    "component123": {
-        "entity id": 56,
-        "groupTransparency": 0.0,
-        "serializationID": 290,
-        "type": "UiSortingGroup"
-    },
     "component124": {
-        "entity id": 57,
+        "entity id": 58,
         "font": "CourierNew",
         "material": "RedText",
-        "serializationID": 293,
+        "serializationID": 292,
         "text": "Kayak is overweighted. You can take more, but for your own risk!",
         "type": "TextRenderer"
     },
     "component125": {
         "anchor": {
-            "x": 0.0,
+            "x": 0.5,
             "y": 0.5
         },
-        "entity id": 57,
+        "entity id": 58,
         "localPosition": {
-            "x": -502.0,
-            "y": 30.0
+            "x": -490.0,
+            "y": -390.0
         },
-        "parent": 289,
         "rectSize": {
             "x": 0.20000000298023224,
             "y": 0.20000000298023224
         },
         "rotation": 0.0,
-        "serializationID": 295,
+        "serializationID": 294,
         "type": "RectTransform"
     },
     "component126": {
         "entity id": 58,
+        "groupTransparency": 0.0,
+        "serializationID": 295,
+        "type": "UiSortingGroup"
+    },
+    "component127": {
+        "entity id": 59,
         "font": "JosefinSans-Regular",
         "material": "TextMaterial",
         "serializationID": 297,
         "text": "Total income:",
         "type": "TextRenderer"
     },
-    "component127": {
+    "component128": {
         "anchor": {
             "x": 0.0,
             "y": 0.5
         },
-        "entity id": 58,
+        "entity id": 59,
         "localPosition": {
             "x": 45.0,
             "y": -55.0
@@ -2185,20 +2214,20 @@
         "serializationID": 299,
         "type": "RectTransform"
     },
-    "component128": {
-        "entity id": 59,
+    "component129": {
+        "entity id": 60,
         "font": "CourierNew",
         "material": "TextMaterial",
         "serializationID": 301,
         "text": "0.00$",
         "type": "TextRenderer"
     },
-    "component129": {
+    "component130": {
         "anchor": {
             "x": 0.0,
             "y": 0.5
         },
-        "entity id": 59,
+        "entity id": 60,
         "localPosition": {
             "x": 55.0,
             "y": -98.0
@@ -2215,7 +2244,8 @@
         "components": [
             5,
             6,
-            7
+            7,
+            8
         ],
         "id": 0,
         "name": "Camera",
@@ -2223,541 +2253,548 @@
     },
     "entity001": {
         "components": [
-            9,
-            10
+            10,
+            11
         ],
         "id": 1,
         "name": "RiverFlow",
-        "serializationID": 8
+        "serializationID": 9
     },
     "entity002": {
         "components": [
-            24,
-            25
+            23,
+            24
         ],
         "id": 2,
         "name": "Ui_Menu_Background",
-        "serializationID": 23
+        "serializationID": 22
     },
     "entity003": {
         "components": [
-            30,
-            31
+            29,
+            30
         ],
         "id": 3,
         "name": "SelectCargoText",
-        "serializationID": 29
+        "serializationID": 28
     },
     "entity004": {
         "components": [
-            34,
-            35
+            33,
+            34
         ],
         "id": 4,
         "name": "AdditionalInfoText",
-        "serializationID": 33
+        "serializationID": 32
     },
     "entity005": {
         "components": [
+            37,
             38,
-            39,
-            43
+            42
         ],
         "id": 5,
         "name": "Play_Button",
-        "serializationID": 37
+        "serializationID": 36
     },
     "entity006": {
         "components": [
-            45,
-            46
+            44,
+            45
         ],
         "id": 6,
         "name": "Play_Button_Text",
-        "serializationID": 44
+        "serializationID": 43
     },
     "entity007": {
         "components": [
-            51,
-            52
+            49
         ],
         "id": 7,
-        "name": "TestAudioSource2",
-        "serializationID": 50
+        "name": "OnSelectSound",
+        "serializationID": 48
     },
     "entity008": {
         "components": [
-            54,
-            55,
-            56
+            51
         ],
         "id": 8,
-        "name": "CargoButton1",
-        "serializationID": 53
+        "name": "OnDeselectSound",
+        "serializationID": 50
     },
     "entity009": {
         "components": [
-            61,
-            62
+            54
         ],
         "id": 9,
-        "name": "CargoButton1Inside",
-        "serializationID": 60
+        "name": "TestAudioSource2",
+        "serializationID": 53
     },
     "entity010": {
         "components": [
-            66,
-            67
+            56,
+            57,
+            58
         ],
         "id": 10,
-        "name": "Cargo1Name",
-        "serializationID": 65
+        "name": "CargoButton1",
+        "serializationID": 55
     },
     "entity011": {
         "components": [
-            71,
-            72
+            63,
+            64
         ],
         "id": 11,
-        "name": "Cargo1Income",
-        "serializationID": 70
+        "name": "CargoButton1Inside",
+        "serializationID": 62
     },
     "entity012": {
         "components": [
-            75,
-            76
+            68,
+            69
         ],
         "id": 12,
-        "name": "Cargo1Weight",
-        "serializationID": 74
+        "name": "Cargo1Name",
+        "serializationID": 67
     },
     "entity013": {
         "components": [
-            79,
-            80,
-            81
+            73,
+            74
         ],
         "id": 13,
-        "name": "CargoButton2",
-        "serializationID": 78
+        "name": "Cargo1Income",
+        "serializationID": 72
     },
     "entity014": {
         "components": [
-            86,
-            87
+            77,
+            78
         ],
         "id": 14,
-        "name": "CargoButton2Inside",
-        "serializationID": 85
+        "name": "Cargo1Weight",
+        "serializationID": 76
     },
     "entity015": {
         "components": [
-            91,
-            92
+            81,
+            82,
+            83
         ],
         "id": 15,
-        "name": "Cargo2Name",
-        "serializationID": 90
+        "name": "CargoButton2",
+        "serializationID": 80
     },
     "entity016": {
         "components": [
-            96,
-            97
+            88,
+            89
         ],
         "id": 16,
-        "name": "Cargo2Income",
-        "serializationID": 95
+        "name": "CargoButton2Inside",
+        "serializationID": 87
     },
     "entity017": {
         "components": [
-            100,
-            101
+            93,
+            94
         ],
         "id": 17,
-        "name": "Cargo2Weight",
-        "serializationID": 99
+        "name": "Cargo2Name",
+        "serializationID": 92
     },
     "entity018": {
         "components": [
-            104,
-            105,
-            106
+            98,
+            99
         ],
         "id": 18,
-        "name": "CargoButton3",
-        "serializationID": 103
+        "name": "Cargo2Income",
+        "serializationID": 97
     },
     "entity019": {
         "components": [
-            111,
-            112
+            102,
+            103
         ],
         "id": 19,
-        "name": "CargoButton3Inside",
-        "serializationID": 110
+        "name": "Cargo2Weight",
+        "serializationID": 101
     },
     "entity020": {
         "components": [
-            116,
-            117
+            106,
+            107,
+            108
         ],
         "id": 20,
-        "name": "Cargo3Name",
-        "serializationID": 115
+        "name": "CargoButton3",
+        "serializationID": 105
     },
     "entity021": {
         "components": [
-            121,
-            122
+            113,
+            114
         ],
         "id": 21,
-        "name": "Cargo3Income",
-        "serializationID": 120
+        "name": "CargoButton3Inside",
+        "serializationID": 112
     },
     "entity022": {
         "components": [
-            125,
-            126
+            118,
+            119
         ],
         "id": 22,
-        "name": "Cargo3Weight",
-        "serializationID": 124
+        "name": "Cargo3Name",
+        "serializationID": 117
     },
     "entity023": {
         "components": [
-            129,
-            130,
-            131
+            123,
+            124
         ],
         "id": 23,
-        "name": "CargoButton4",
-        "serializationID": 128
+        "name": "Cargo3Income",
+        "serializationID": 122
     },
     "entity024": {
         "components": [
-            136,
-            137
+            127,
+            128
         ],
         "id": 24,
-        "name": "CargoButton4Inside",
-        "serializationID": 135
+        "name": "Cargo3Weight",
+        "serializationID": 126
     },
     "entity025": {
         "components": [
-            141,
-            142
+            131,
+            132,
+            133
         ],
         "id": 25,
-        "name": "Cargo4Name",
-        "serializationID": 140
+        "name": "CargoButton4",
+        "serializationID": 130
     },
     "entity026": {
         "components": [
-            146,
-            147
+            138,
+            139
         ],
         "id": 26,
-        "name": "Cargo4Income",
-        "serializationID": 145
+        "name": "CargoButton4Inside",
+        "serializationID": 137
     },
     "entity027": {
         "components": [
-            150,
-            151
+            143,
+            144
         ],
         "id": 27,
-        "name": "Cargo4Weight",
-        "serializationID": 149
+        "name": "Cargo4Name",
+        "serializationID": 142
     },
     "entity028": {
         "components": [
-            154,
-            155,
-            156
+            148,
+            149
         ],
         "id": 28,
-        "name": "CargoButton5",
-        "serializationID": 153
+        "name": "Cargo4Income",
+        "serializationID": 147
     },
     "entity029": {
         "components": [
-            161,
-            162
+            152,
+            153
         ],
         "id": 29,
-        "name": "CargoButton5Inside",
-        "serializationID": 160
+        "name": "Cargo4Weight",
+        "serializationID": 151
     },
     "entity030": {
         "components": [
-            166,
-            167
+            156,
+            157,
+            158
         ],
         "id": 30,
-        "name": "Cargo5Name",
-        "serializationID": 165
+        "name": "CargoButton5",
+        "serializationID": 155
     },
     "entity031": {
         "components": [
-            171,
-            172
+            163,
+            164
         ],
         "id": 31,
-        "name": "Cargo5Income",
-        "serializationID": 170
+        "name": "CargoButton5Inside",
+        "serializationID": 162
     },
     "entity032": {
         "components": [
-            175,
-            176
+            168,
+            169
         ],
         "id": 32,
-        "name": "Cargo5Weight",
-        "serializationID": 174
+        "name": "Cargo5Name",
+        "serializationID": 167
     },
     "entity033": {
         "components": [
-            179,
-            180,
-            181
+            173,
+            174
         ],
         "id": 33,
-        "name": "CargoButton6",
-        "serializationID": 178
+        "name": "Cargo5Income",
+        "serializationID": 172
     },
     "entity034": {
         "components": [
-            186,
-            187
+            177,
+            178
         ],
         "id": 34,
-        "name": "CargoButton6Inside",
-        "serializationID": 185
+        "name": "Cargo5Weight",
+        "serializationID": 176
     },
     "entity035": {
         "components": [
-            191,
-            192
+            181,
+            182,
+            183
         ],
         "id": 35,
-        "name": "Cargo6Name",
-        "serializationID": 190
+        "name": "CargoButton6",
+        "serializationID": 180
     },
     "entity036": {
         "components": [
-            196,
-            197
+            188,
+            189
         ],
         "id": 36,
-        "name": "Cargo6Income",
-        "serializationID": 195
+        "name": "CargoButton6Inside",
+        "serializationID": 187
     },
     "entity037": {
         "components": [
-            200,
-            201
+            193,
+            194
         ],
         "id": 37,
-        "name": "Cargo6Weight",
-        "serializationID": 199
+        "name": "Cargo6Name",
+        "serializationID": 192
     },
     "entity038": {
         "components": [
-            204,
-            205,
-            206
+            198,
+            199
         ],
         "id": 38,
-        "name": "CargoButton7",
-        "serializationID": 203
+        "name": "Cargo6Income",
+        "serializationID": 197
     },
     "entity039": {
         "components": [
-            211,
-            212
+            202,
+            203
         ],
         "id": 39,
-        "name": "CargoButton7Inside",
-        "serializationID": 210
+        "name": "Cargo6Weight",
+        "serializationID": 201
     },
     "entity040": {
         "components": [
-            216,
-            217
+            206,
+            207,
+            208
         ],
         "id": 40,
-        "name": "Cargo7Name",
-        "serializationID": 215
+        "name": "CargoButton7",
+        "serializationID": 205
     },
     "entity041": {
         "components": [
-            221,
-            222
+            213,
+            214
         ],
         "id": 41,
-        "name": "Cargo7Income",
-        "serializationID": 220
+        "name": "CargoButton7Inside",
+        "serializationID": 212
     },
     "entity042": {
         "components": [
-            225,
-            226
+            218,
+            219
         ],
         "id": 42,
-        "name": "Cargo7Weight",
-        "serializationID": 224
+        "name": "Cargo7Name",
+        "serializationID": 217
     },
     "entity043": {
         "components": [
-            229,
-            230,
-            231
+            223,
+            224
         ],
         "id": 43,
-        "name": "CargoButton8",
-        "serializationID": 228
+        "name": "Cargo7Income",
+        "serializationID": 222
     },
     "entity044": {
         "components": [
-            236,
-            237
+            227,
+            228
         ],
         "id": 44,
-        "name": "CargoButton8Inside",
-        "serializationID": 235
+        "name": "Cargo7Weight",
+        "serializationID": 226
     },
     "entity045": {
         "components": [
-            241,
-            242
+            231,
+            232,
+            233
         ],
         "id": 45,
-        "name": "Cargo8Name",
-        "serializationID": 240
+        "name": "CargoButton8",
+        "serializationID": 230
     },
     "entity046": {
         "components": [
-            246,
-            247
+            238,
+            239
         ],
         "id": 46,
-        "name": "Cargo8Income",
-        "serializationID": 245
+        "name": "CargoButton8Inside",
+        "serializationID": 237
     },
     "entity047": {
         "components": [
-            250,
-            251
+            243,
+            244
         ],
         "id": 47,
-        "name": "Cargo8Weight",
-        "serializationID": 249
+        "name": "Cargo8Name",
+        "serializationID": 242
     },
     "entity048": {
         "components": [
-            254,
-            255,
-            256
+            248,
+            249
         ],
         "id": 48,
-        "name": "CargoButton9",
-        "serializationID": 253
+        "name": "Cargo8Income",
+        "serializationID": 247
     },
     "entity049": {
         "components": [
-            261,
-            262
+            252,
+            253
         ],
         "id": 49,
-        "name": "CargoButton9Inside",
-        "serializationID": 260
+        "name": "Cargo8Weight",
+        "serializationID": 251
     },
     "entity050": {
         "components": [
-            266,
-            267
+            256,
+            257,
+            258
         ],
         "id": 50,
-        "name": "Cargo9Name",
-        "serializationID": 265
+        "name": "CargoButton9",
+        "serializationID": 255
     },
     "entity051": {
         "components": [
-            271,
-            272
+            263,
+            264
         ],
         "id": 51,
-        "name": "Cargo9Income",
-        "serializationID": 270
+        "name": "CargoButton9Inside",
+        "serializationID": 262
     },
     "entity052": {
         "components": [
-            275,
-            276
+            268,
+            269
         ],
         "id": 52,
-        "name": "Cargo9Weight",
-        "serializationID": 274
+        "name": "Cargo9Name",
+        "serializationID": 267
     },
     "entity053": {
         "components": [
-            279
+            273,
+            274
         ],
         "id": 53,
-        "name": "CargoStorage",
-        "serializationID": 278
+        "name": "Cargo9Income",
+        "serializationID": 272
     },
     "entity054": {
         "components": [
-            281,
-            283
+            277,
+            278
         ],
         "id": 54,
-        "name": "WeightSumText",
-        "serializationID": 280
+        "name": "Cargo9Weight",
+        "serializationID": 276
     },
     "entity055": {
         "components": [
-            285,
-            287
+            281
         ],
         "id": 55,
-        "name": "AllWeightText",
-        "serializationID": 284
+        "name": "CargoStorage",
+        "serializationID": 280
     },
     "entity056": {
         "components": [
-            289,
-            290
+            283,
+            285
         ],
         "id": 56,
-        "name": "group1",
-        "serializationID": 288
+        "name": "WeightSumText",
+        "serializationID": 282
     },
     "entity057": {
         "components": [
-            293,
-            295
+            287,
+            289
         ],
         "id": 57,
-        "name": "OverweightedText",
-        "serializationID": 292
+        "name": "AllWeightText",
+        "serializationID": 286
     },
     "entity058": {
+        "components": [
+            292,
+            294,
+            295
+        ],
+        "id": 58,
+        "name": "group1",
+        "serializationID": 290
+    },
+    "entity059": {
         "components": [
             297,
             299
         ],
-        "id": 58,
+        "id": 59,
         "name": "IncomeSumText",
         "serializationID": 296
     },
-    "entity059": {
+    "entity060": {
         "components": [
             301,
             303
         ],
-        "id": 59,
+        "id": 60,
         "name": "AllIncomeText",
         "serializationID": 300
     },
@@ -2765,13 +2802,13 @@
         "fontName": "JosefinSans-Regular",
         "fontPath": "Resources/Fonts/JosefinSans-Regular.ttf",
         "fontSize": 128,
-        "serializationID": 12
+        "serializationID": 13
     },
     "font001": {
         "fontName": "CourierNew",
         "fontPath": "Resources/Fonts/CourierNew.ttf",
         "fontSize": 128,
-        "serializationID": 13
+        "serializationID": 14
     },
     "material000": {
         "cubemaps": {},
@@ -2820,7 +2857,7 @@
         },
         "name": "TextMaterial",
         "renderingType": 1,
-        "serializationID": 21,
+        "serializationID": 20,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2881,7 +2918,7 @@
         },
         "name": "TedTextMaterial",
         "renderingType": 1,
-        "serializationID": 22,
+        "serializationID": 21,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -2942,7 +2979,7 @@
         },
         "name": "UiBg",
         "renderingType": 0,
-        "serializationID": 28,
+        "serializationID": 27,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/paper.png"
@@ -3005,7 +3042,7 @@
         },
         "name": "optionsMat",
         "renderingType": 1,
-        "serializationID": 42,
+        "serializationID": 41,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/rect_border.png"
@@ -3068,7 +3105,7 @@
         },
         "name": "Stamp",
         "renderingType": 1,
-        "serializationID": 48,
+        "serializationID": 47,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3129,7 +3166,7 @@
         },
         "name": "BgBlack",
         "renderingType": 1,
-        "serializationID": 49,
+        "serializationID": 52,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_inside.png"
@@ -3192,7 +3229,7 @@
         },
         "name": "Toggle_1",
         "renderingType": 1,
-        "serializationID": 59,
+        "serializationID": 61,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3255,7 +3292,7 @@
         },
         "name": "Cargo1NameMat",
         "renderingType": 1,
-        "serializationID": 69,
+        "serializationID": 71,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3316,7 +3353,7 @@
         },
         "name": "Toggle_2",
         "renderingType": 1,
-        "serializationID": 84,
+        "serializationID": 86,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3379,7 +3416,7 @@
         },
         "name": "Cargo2NameMat",
         "renderingType": 1,
-        "serializationID": 94,
+        "serializationID": 96,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3440,7 +3477,7 @@
         },
         "name": "Toggle_3",
         "renderingType": 1,
-        "serializationID": 109,
+        "serializationID": 111,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3503,7 +3540,7 @@
         },
         "name": "Cargo3NameMat",
         "renderingType": 1,
-        "serializationID": 119,
+        "serializationID": 121,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3564,7 +3601,7 @@
         },
         "name": "Toggle_4",
         "renderingType": 1,
-        "serializationID": 134,
+        "serializationID": 136,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3627,7 +3664,7 @@
         },
         "name": "Cargo4NameMat",
         "renderingType": 1,
-        "serializationID": 144,
+        "serializationID": 146,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3688,7 +3725,7 @@
         },
         "name": "Toggle_5",
         "renderingType": 1,
-        "serializationID": 159,
+        "serializationID": 161,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3751,7 +3788,7 @@
         },
         "name": "Cargo5NameMat",
         "renderingType": 1,
-        "serializationID": 169,
+        "serializationID": 171,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3812,7 +3849,7 @@
         },
         "name": "Toggle_6",
         "renderingType": 1,
-        "serializationID": 184,
+        "serializationID": 186,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3875,7 +3912,7 @@
         },
         "name": "Cargo6NameMat",
         "renderingType": 1,
-        "serializationID": 194,
+        "serializationID": 196,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -3936,7 +3973,7 @@
         },
         "name": "Toggle_7",
         "renderingType": 1,
-        "serializationID": 209,
+        "serializationID": 211,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -3999,7 +4036,7 @@
         },
         "name": "Cargo7NameMat",
         "renderingType": 1,
-        "serializationID": 219,
+        "serializationID": 221,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4060,7 +4097,7 @@
         },
         "name": "Toggle_8",
         "renderingType": 1,
-        "serializationID": 234,
+        "serializationID": 236,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -4123,7 +4160,7 @@
         },
         "name": "Cargo8NameMat",
         "renderingType": 1,
-        "serializationID": 244,
+        "serializationID": 246,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4184,7 +4221,7 @@
         },
         "name": "Toggle_9",
         "renderingType": 1,
-        "serializationID": 259,
+        "serializationID": 261,
         "shaderName": "UiStandard",
         "textures": {
             "sprite": "Resources/Sprites/cargo_button_border.png"
@@ -4247,7 +4284,7 @@
         },
         "name": "Cargo9NameMat",
         "renderingType": 1,
-        "serializationID": 269,
+        "serializationID": 271,
         "shaderName": "TextStandard",
         "textures": {},
         "vec2s": {},
@@ -4324,13 +4361,13 @@
     },
     "shader000": {
         "fragmentShaderPath": "Resources/Shaders/UiStandard/UiStandard.frag",
-        "serializationID": 11,
+        "serializationID": 12,
         "shaderName": "UiStandard",
         "vertexShaderPath": "Resources/Shaders/UiStandard/UiStandard.vert"
     },
     "shader001": {
         "fragmentShaderPath": "Resources/Shaders/TextStandard/TextStandard.frag",
-        "serializationID": 14,
+        "serializationID": 15,
         "shaderName": "TextStandard",
         "vertexShaderPath": "Resources/Shaders/TextStandard/TextStandard.vert"
     },
@@ -4341,8 +4378,8 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/rect_2_1.png",
-        "serializationID": 15
+        "filePath": "Resources/Sprites/cargo_button_border.png",
+        "serializationID": 16
     },
     "texture001": {
         "creationInfo": {
@@ -4351,8 +4388,8 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/rect_16_9.png",
-        "serializationID": 16
+        "filePath": "Resources/Sprites/cargo_button_inside.png",
+        "serializationID": 17
     },
     "texture002": {
         "creationInfo": {
@@ -4361,8 +4398,8 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/cargo_button_border.png",
-        "serializationID": 17
+        "filePath": "Resources/Sprites/paper.png",
+        "serializationID": 18
     },
     "texture003": {
         "creationInfo": {
@@ -4371,27 +4408,7 @@
             "minFilter": 9729,
             "wrapMode": 33071
         },
-        "filePath": "Resources/Sprites/cargo_button_inside.png",
-        "serializationID": 18
-    },
-    "texture004": {
-        "creationInfo": {
-            "generateMipmaps": false,
-            "magFilter": 9729,
-            "minFilter": 9729,
-            "wrapMode": 33071
-        },
-        "filePath": "Resources/Sprites/paper.png",
-        "serializationID": 19
-    },
-    "texture005": {
-        "creationInfo": {
-            "generateMipmaps": false,
-            "magFilter": 9729,
-            "minFilter": 9729,
-            "wrapMode": 33071
-        },
         "filePath": "Resources/Sprites/rect_border.png",
-        "serializationID": 20
+        "serializationID": 19
     }
 }

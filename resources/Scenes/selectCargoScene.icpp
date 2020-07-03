@@ -52,8 +52,6 @@ auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStanda
 auto josefin = objectModule.newFont("Resources/Fonts/JosefinSans-Regular.ttf", 128, "JosefinSans-Regular");
 auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
 auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
-auto rect_2_1 = objectModule.newTexture("Resources/Sprites/rect_2_1.png", info);
-auto rect_16_9 = objectModule.newTexture("Resources/Sprites/rect_16_9.png", info);
 auto cargo_button_b = objectModule.newTexture("Resources/Sprites/cargo_button_border.png", info);
 auto cargo_button_i = objectModule.newTexture("Resources/Sprites/cargo_button_inside.png", info);
 auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
@@ -968,32 +966,23 @@ auto weight = objectModule.newEntity(2, "AllWeightText");
         rect->getSizeModifiable() = {0.3f, 0.3f};
 }
 
-auto group = objectModule.newEntity(2, "group1");
-{
-    auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-        uiModule.rootNodes.push_back(rect);
-        rect->getAnchorModifiable() = {0.5f, 0.0f};
-    auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
-        group->groupTransparency = 0.0f;
-}
-
+auto group1 = objectModule.newEntity(2, "group1");
 {
     auto redtext = objectModule.newMaterial(textShader, "RedText", RenderType::Transparent);
         redtext->setVec4("color", {0.717f, 0.082f, 0.082f, 1.0f});
-    objectModule.newEntity(2, "OverweightedText");
-    {
-        auto tr = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+    auto tr = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
         tr->material = redtext;
         tr->mesh.font = courier;
         tr->mesh.text = "Kayak is overweighted. You can take more, but for your own risk!";
 
-        auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            rect->setParent(group->getComponentPtr<RectTransform>());
-            rect->getAnchorModifiable() = {0.0f, 0.5f};
-            rect->getLocalPositionModifiable() = {-502, 30};
-            rect->getSizeModifiable() = {0.2f, 0.2f};
-    }
+    auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        uiModule.rootNodes.push_back(rect);
+        rect->getAnchorModifiable() = {0.5f, 0.5f};
+        rect->getLocalPositionModifiable() = {-490, -390};
+        rect->getSizeModifiable() = {0.2f, 0.2f};
 
+    auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        group->groupTransparency = 0.0f;
 }
 
 objectModule.newEntity(2, "IncomeSumText");
@@ -1024,4 +1013,4 @@ auto income = objectModule.newEntity(2, "AllIncomeText");
         rect->getSizeModifiable() = {0.3f, 0.3f};
 }
 
-Core::cargoStorageSystem.initTexts(weight->getComponentPtr<TextRenderer>(), income->getComponentPtr<TextRenderer>(), group->getComponentPtr<UiSortingGroup>());
+Core::cargoStorageSystem.initTexts(weight->getComponentPtr<TextRenderer>(), income->getComponentPtr<TextRenderer>(), group1->getComponentPtr<UiSortingGroup>());
