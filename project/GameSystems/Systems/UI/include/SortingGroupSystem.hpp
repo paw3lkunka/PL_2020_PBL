@@ -26,7 +26,7 @@ public:
         /**
          * @brief Initializes processed entities, runs before first update
          */
-        virtual void start() {}
+        virtual void start();
 
         /**
          * @brief Contain logic of the system called in fixed time steps

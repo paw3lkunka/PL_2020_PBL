@@ -155,6 +155,10 @@ enum class Event : unsigned int
     PLAYER_ESCAPED,
     // Kayak was hitten by enemy, Data: AttackData { Enemy* pointer to enemy, vec3 direction, bool success}.
     PLAYER_ATTACKED,
+    // Enemy starts detecting Kayak, DATA: none
+    PLAYER_DETECTION_START,
+    // Enemy is not detecting Kayak anymore, DATA: None
+    PLAYER_DETECTION_STOP,
     /// Cargo was lost, DATA: none.
     CARGO_LOST,
     // Kayak's hp drops to 0. Data: none.

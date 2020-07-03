@@ -45,6 +45,10 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
 
         if ( distance < enemyPtr->sightDistance && glm::dot(forward, toKayak) < enemyPtr->sightAngle)
         {
+            if( enemyPtr->detectionCounter <= 0)
+            {
+                GetCore().messageBus.sendMessage(Message(Event::PLAYER_DETECTION_START));
+            }
             enemyPtr->detectionCounter += enemyPtr->detectionPositiveStep;
 
             animation(toKayak);
@@ -68,15 +72,23 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
         }
         else
         {
-            enemyPtr->detectionCounter -= enemyPtr->detectionNegativeStep;
+            if(enemyPtr->detectionCounter > 0)
+            {
+                enemyPtr->detectionCounter -= enemyPtr->detectionNegativeStep;
+            }
+            else if( enemyPtr->detectionCounter <= -1)
+            {
+                GetCore().messageBus.sendMessage(Message(Event::PLAYER_DETECTION_STOP));
+                enemyPtr->detectionCounter = 0;
+            }
         }
     }
     
     if (enemyPtr->detectionCounter <= 0 && enemyPtr->notified == true)
     {
-        GetCore().messageBus.sendMessage(Message(Event::PLAYER_ESCAPED, enemyPtr));
         enemyPtr->notified = false;
         kayakPtr->isDetected--;
+        GetCore().messageBus.sendMessage(Message(Event::PLAYER_ESCAPED, enemyPtr));
     }
     enemyPtr->detectionCounter = std::clamp(enemyPtr->detectionCounter, 0, enemyPtr->detectionCounterMaxValue);
 }

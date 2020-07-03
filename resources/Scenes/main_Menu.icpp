@@ -30,7 +30,7 @@ objectModule.newEntity(2, "RiverFlow");
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 1.0f;
+        so3->getGainModifiable() = 0.2f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 }
@@ -139,7 +139,8 @@ objectModule.newEntity(2, "RiverFlow");
 {
     objectModule.newEntity(2, "Menu_Buttons");
     auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-    objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+    auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        group->groupTransparency = 0.8f;
     uiModule.rootNodes.push_back(buttonsRoot);
 
     // auto buttonsSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();

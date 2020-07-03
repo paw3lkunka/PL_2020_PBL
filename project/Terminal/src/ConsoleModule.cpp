@@ -255,6 +255,14 @@ void ConsoleModule::receiveMessage(Message msg)
         std::cout << "PLAYER_DETECTED by: " << Name(EnemyPtr) << std::endl;
     }
         break;
+
+    case Event::PLAYER_DETECTION_START:
+        std::cout << "PLAYER_DETECTION_START\n";
+        break;
+
+    case Event::PLAYER_DETECTION_STOP:
+        std::cout << "PLAYER_DETECTION_STOP\n";
+        break;
         
     case Event::PLAYER_ESCAPED:
     {

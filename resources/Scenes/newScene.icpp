@@ -634,8 +634,14 @@ TerrainUtils::importColliders();
     auto uiShader = objectModule.newShader("UiStandard", "Resources/Shaders/UiStandard/UiStandard.vert", "Resources/Shaders/UiStandard/UiStandard.frag");
     auto textShader = objectModule.newShader("TextStandard", "Resources/Shaders/TextStandard/TextStandard.vert", "Resources/Shaders/TextStandard/TextStandard.frag");
     auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);
+    auto textMaterial2 = objectModule.newMaterial(textShader, "TextMaterial2", RenderType::Transparent);
+    auto textMaterial3 = objectModule.newMaterial(textShader, "TextMaterial3", RenderType::Transparent);
+    
     textMaterial->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+    textMaterial2->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
+    textMaterial3->setVec4("color", {0.941f, 0.043f, 0.0f, 1.0f});
     auto courier = objectModule.newFont("Resources/Fonts/CourierNew.ttf", 128, "CourierNew");
+    auto courier_bold = objectModule.newFont("Resources/Fonts/CourierNew-Bold.ttf", 128, "CourierNew-Bold");
     auto uiFading = objectModule.newShader("UiFading", "Resources/Shaders/UiFading/UiFading.vert", "Resources/Shaders/UiFading/UiFading.frag");
     TextureCreateInfo uiInfo = {};
     uiInfo.format = GL_RGBA;
@@ -651,20 +657,23 @@ TerrainUtils::importColliders();
     // Detection rate
     {
         objectModule.newEntity(2, "Detection_Rate_Group");
-        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 0.0f);
-            buttonsRoot->getLocalPositionModifiable() = {0.0f, 71.0f};
-        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
-        uiModule.rootNodes.push_back(buttonsRoot);
+        auto detectionGroup = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        {
+            detectionGroup->getAnchorModifiable() = glm::vec2(0.5f, 0.0f);
+            detectionGroup->getLocalPositionModifiable() = {0.0f, 54.0f};
+            uiModule.rootNodes.push_back(detectionGroup);
+            auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+            group->groupTransparency = 0.0f;
+        }
         objectModule.newEntity(2, "Detection_Rate_text");
         {
             auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
                 crt->getLocalPositionModifiable() = {-68.0f, 57.0f};
                 crt->getSizeModifiable() = {0.2f, 0.2f};
-                crt->setParent(buttonsRoot);
+                crt->setParent(detectionGroup);
             auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
                 cui->material = textMaterial;
-                cui->mesh.font = courier;
+                cui->mesh.font = courier_bold;
                 cui->mesh.text = "Detection";
         }
         objectModule.newEntity(3, "DetectionProgressBar");
@@ -672,7 +681,7 @@ TerrainUtils::importColliders();
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
                 rt->getLocalPositionModifiable() = {0.0f, 35.0f};
                 rt->getSizeModifiable() = {241, 17};
-                rt->setParent(buttonsRoot);
+                rt->setParent(detectionGroup);
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                 auto mat = objectModule.newMaterial(uiFading, "Progress", RenderType::Transparent);
                 mat->setTexture("sprite", capsule_1);
@@ -685,7 +694,7 @@ TerrainUtils::importColliders();
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
                 rt->getLocalPositionModifiable() = {0.0f, 35.0f};
                 rt->getSizeModifiable() = {250, 25};
-                rt->setParent(buttonsRoot);
+                rt->setParent(detectionGroup);
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                 auto mat = objectModule.newMaterial(uiShader, "Border_Mat_1", RenderType::Transparent);
                 mat->setTexture("sprite", capsule_border_1);
@@ -697,28 +706,31 @@ TerrainUtils::importColliders();
     // Health
     {
         objectModule.newEntity(2, "Health_Bar_Group");
-        auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-            buttonsRoot->getAnchorModifiable() = glm::vec2(0.5f, 0.0f);
-            buttonsRoot->getLocalPositionModifiable() = {0.0f, 0.0f};
-        objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
-        uiModule.rootNodes.push_back(buttonsRoot);
+        auto healthGroup = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        {
+            healthGroup->getAnchorModifiable() = glm::vec2(0.5f, 0.0f);
+            healthGroup->getLocalPositionModifiable() = {0.0f, 0.0f};
+            auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+            group->groupTransparency = 0.8f;
+            uiModule.rootNodes.push_back(healthGroup);
+        }
         objectModule.newEntity(2, "Health_Bar_text");
         {
             auto crt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                crt->getLocalPositionModifiable() = {-43.0f, 59.0f};
+                crt->getLocalPositionModifiable() = {-43.0f, 13.0f};
                 crt->getSizeModifiable() = {0.2f, 0.2f};
-                crt->setParent(buttonsRoot);
+                crt->setParent(healthGroup);
             auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
-                cui->material = textMaterial;
-                cui->mesh.font = courier;
+                cui->material = textMaterial2;
+                cui->mesh.font = courier_bold;
                 cui->mesh.text = "Health";
         }
         objectModule.newEntity(3, "Health_Bar");
         {
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getLocalPositionModifiable() = {0.0f, 50.0f};
                 rt->getSizeModifiable() = {370, 23};
-                rt->setParent(buttonsRoot);
+                rt->setParent(healthGroup);
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                 auto mat = objectModule.newMaterial(uiFading, "Progress2", RenderType::Transparent);
                 mat->setTexture("sprite", capsule_2);
@@ -729,14 +741,117 @@ TerrainUtils::importColliders();
         objectModule.newEntity(2, "Health_Bar_Border");
         {
             auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-                rt->getLocalPositionModifiable() = {0.0f, 35.0f};
+                rt->getLocalPositionModifiable() = {0.0f, 50.0f};
                 rt->getSizeModifiable() = {380, 30};
-                rt->setParent(buttonsRoot);
+                rt->setParent(healthGroup);
             auto ui = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
                 auto mat = objectModule.newMaterial(uiShader, "Border_Mat_2", RenderType::Transparent);
                 mat->setTexture("sprite", capsule_border_2);
                 mat->setVec4("color", {1.0f, 1.0f, 1.0f, 1.0f});
                 ui->material = mat;
+        }
+    }
+
+    // LOST CARGO
+    {
+        objectModule.newEntity(3, "Cargo_Lost_Group");
+        auto cargoLost = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+        {
+            cargoLost->getAnchorModifiable() = glm::vec2(0.5f, 0.0f);
+            cargoLost->getLocalPositionModifiable() = {-165.0f, 140.0f};
+            cargoLost->getSizeModifiable() = {0.3f, 0.3f};
+            auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+                group->disappearanceTime = 5.0f;
+                group->disappearanceFactor = 0.1f;
+                group->groupTransparency = 0.0f;
+            uiModule.rootNodes.push_back(cargoLost);
+            auto cui = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                cui->material = textMaterial3;
+                cui->mesh.font = courier_bold;
+                cui->mesh.text = "Cargo was Lost!";
+        }
+    }
+
+    //TUTORIAL
+    {
+        auto basic = objectModule.newTexture("Resources/Sprites/tutorial/pad_basic.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_down.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_down_left.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_down_right.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_down.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_left.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_right.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_up.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_up_left.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/pad_up_right.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/arrow_down_up.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/arrow_left_down.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/arrow_right_down.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/arrow_up_left.png", uiInfo);
+        objectModule.newTexture("Resources/Sprites/tutorial/arrow_up_right.png", uiInfo);
+
+        auto tutBase = objectModule.newEntity(4, "Tutorial");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                uiModule.rootNodes.push_back(rt);
+                rt->getSizeModifiable() = {350, 275};
+                rt->getAnchorModifiable() = {1.0f, 0.0f};
+                rt->getLocalPositionModifiable() = {-180, 142.0f};
+            
+            auto tex = objectModule.newTexture("Resources/Sprites/tutorial/tutorial_bg.png", uiInfo);
+            auto uir = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                uir->material = objectModule.newMaterial(objectModule.getShaderPtrByName("UiStandard"), "tutorialBg", RenderType::Transparent);
+                uir->material->setVec4("color", {1.0f, 1.0f, 1.0f, 0.8f});
+                uir->material->setTexture("sprite", tex);
+            
+            auto tut = objectModule.newEmptyComponentForLastEntity<Tutorial>();
+            tut->timeOfBoard = 0.5f;
+
+            auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+                group->groupTransparency = 0.7f;
+        }
+
+        objectModule.newEntity(2, "Tutorial_pad");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->setParent(tutBase->getComponentPtr<RectTransform>());
+                rt->getSizeModifiable() = {250, 180};
+                rt->getAnchorModifiable() = {0.0f, 0.0f};
+                rt->getLocalPositionModifiable() = {0.0f, -10.0f};
+            
+            auto uir = objectModule.newEmptyComponentForLastEntity<UiRenderer>();
+                uir->material = objectModule.newMaterial(objectModule.getShaderPtrByName("UiStandard"), "tutorial_pad", RenderType::Transparent);
+                uir->material->setVec4("color", {1.0f, 1.0f, 1.0f, 0.8f});
+                uir->material->setTexture("sprite", basic);
+        }
+
+        objectModule.newEntity(2, "Tutorial_text");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->setParent(tutBase->getComponentPtr<RectTransform>());
+                rt->getSizeModifiable() = {0.18f, 0.18f};
+                rt->getAnchorModifiable() = {0.0f, 0.0f};
+                rt->getLocalPositionModifiable() = {-160.0f, 100.0f};
+            
+            auto tr = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                tr->material = objectModule.newMaterial(textShader, "tutorial_text", RenderType::Transparent);
+                tr->material->setVec4("color", {0.0f, 0.0f, 0.0f, 1.0f});
+                tr->mesh.font = courier;
+                tr->mesh.text = "How to paddle the kayak";
+        }
+
+        objectModule.newEntity(2, "Tutorial_text_2");
+        {
+            auto rt = objectModule.newEmptyComponentForLastEntity<RectTransform>();
+                rt->setParent(tutBase->getComponentPtr<RectTransform>());
+                rt->getSizeModifiable() = {0.15, 0.15};
+                rt->getAnchorModifiable() = {0.0f, 0.0f};
+                rt->getLocalPositionModifiable() = {-108.0f, -120.0f};
+            
+            auto tr = objectModule.newEmptyComponentForLastEntity<TextRenderer>();
+                tr->material = objectModule.newMaterial(textShader, "tutorial_text", RenderType::Transparent);
+                tr->mesh.font = courier;
+                tr->mesh.text = "(Press L1 to close)";
         }
     }
 }
@@ -805,20 +920,22 @@ TerrainUtils::importColliders();
         bc->isTrigger = true;
 }
 
-TextureCreateInfo i = {};
-i.minFilter = GL_LINEAR;
-i.magFilter = GL_LINEAR;
-i.wrapMode= GL_CLAMP_TO_EDGE;
-i.generateMipmaps = false;
-CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
-                                                        "Resources/Textures/skybox_02/nx.hdr", 
-                                                        "Resources/Textures/skybox_02/px.hdr",
-                                                        "Resources/Textures/skybox_02/pz.hdr",
-                                                        "Resources/Textures/skybox_02/py.hdr",
-                                                        "Resources/Textures/skybox_02/ny.hdr");
 
-Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
 
-Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
-hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
-rendererModule.setSkybox(hdrSkyboxMat);
+// TextureCreateInfo i = {};
+// i.minFilter = GL_LINEAR;
+// i.magFilter = GL_LINEAR;
+// i.wrapMode= GL_CLAMP_TO_EDGE;
+// i.generateMipmaps = false;
+// CubemapHdr* hdrCubemap = objectModule.newHdrCubemap(i,  "Resources/Textures/skybox_02/nz.hdr", 
+//                                                         "Resources/Textures/skybox_02/nx.hdr", 
+//                                                         "Resources/Textures/skybox_02/px.hdr",
+//                                                         "Resources/Textures/skybox_02/pz.hdr",
+//                                                         "Resources/Textures/skybox_02/py.hdr",
+//                                                         "Resources/Textures/skybox_02/ny.hdr");
+
+// Shader* skyboxShader = objectModule.newShader("skyboxShader", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.vert", "Resources/Shaders/SkyboxCubemap/SkyboxCubemap.frag");
+
+// Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+// hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+// rendererModule.setSkybox(hdrSkyboxMat);

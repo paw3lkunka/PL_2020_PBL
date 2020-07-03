@@ -176,10 +176,6 @@ int Core::init()
     {
         // ! Manual extension of scene
         // ? -u
-        
-        {
-            
-        }
 
         objectModule.saveScene("../resources/Scenes/savedScene.json");
     }
@@ -242,6 +238,7 @@ int Core::init()
     gameSystemsModule.addSystem(&cargoButtonSystem);
     gameSystemsModule.addSystem(&detectionBarSystem);
     gameSystemsModule.addSystem(&progressBarSystem);
+    gameSystemsModule.addSystem(&tutorialControllerSystem);
 
 #pragma endregion
 
@@ -555,3 +552,4 @@ CargoButtonSystem Core::cargoButtonSystem;
 DetectionBarSystem Core::detectionBarSystem;
 ProgressBarSystem Core::progressBarSystem;
 CargoSystem Core::cargoSystem;
+TutorialControllerSystem Core::tutorialControllerSystem;

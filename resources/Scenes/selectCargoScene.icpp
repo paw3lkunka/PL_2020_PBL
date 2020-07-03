@@ -971,8 +971,8 @@ auto group = objectModule.newEntity(2, "group1");
 
         auto rect = objectModule.newEmptyComponentForLastEntity<RectTransform>();
             rect->setParent(group->getComponentPtr<RectTransform>());
-            rect->getAnchorModifiable() = {0.0f, 0.5f};
-            rect->getLocalPositionModifiable() = {-502, 30};
+            rect->getAnchorModifiable() = {0.5f, 0.5f};
+            rect->getLocalPositionModifiable() = {502, 30};
             rect->getSizeModifiable() = {0.2f, 0.2f};
     }
 

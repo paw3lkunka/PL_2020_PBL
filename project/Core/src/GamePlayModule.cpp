@@ -3,6 +3,8 @@
 #include "Core.hpp"
 #include "ScenesPaths.hpp"
 #include "EnemyDataStructures.inl"
+#include "GamepadDataStructures.inl"
+#include "Kayak.hpp"
 
 #include "ECS.inc"
 
@@ -45,6 +47,27 @@ void GamePlayModule::receiveMessage(Message msg)
             }
         break;
 
+        case Event::PLAYER_DETECTION_START:
+        {
+            auto ent = GetCore().objectModule.getEntityPtrByName("Detection_Rate_Group");
+            if(ent != nullptr)
+            {
+                ent->getComponentPtr<UiSortingGroup>()->groupTransparency = 0.8f;
+            }
+        }
+        break;
+
+        case Event::PLAYER_DETECTION_STOP:
+        case Event::PLAYER_ESCAPED:
+        {
+            auto ent = GetCore().objectModule.getEntityPtrByName("Detection_Rate_Group");
+            if(ent != nullptr && Kayak::get()->isDetected == 0)
+            {
+                ent->getComponentPtr<UiSortingGroup>()->groupTransparency = 0.0f;
+            }
+        }
+        break;
+
         case Event::EXIT_GAME:
             Core::instance->close();
         break;
@@ -54,6 +77,40 @@ void GamePlayModule::receiveMessage(Message msg)
             {
                 Core::instance->messageBus.sendMessage(Message(Event::PAUSE_GAME));
             }
+        break;
+
+        case Event::GAMEPAD_BUTTON_PRESSED:
+        {
+            auto data = msg.getValue<GamepadButtonData>();
+            switch(data.buttonId)
+            {
+                case GLFW_GAMEPAD_BUTTON_LEFT_BUMPER:
+                {
+                    auto ent = GetCore().objectModule.getEntityPtrByName("Tutorial");
+                    if(ent != nullptr)
+                    {
+                        if(showTutorial)
+                        {
+                            tutorialComponent = ent->detachComponent<Tutorial>();
+                            ent->getComponentPtr<UiSortingGroup>()->groupTransparency = 0.0f;
+                            showTutorial = false;
+                        }
+                        else
+                        {
+                            ent->addComponent(tutorialComponent);
+                            tutorialComponent = nullptr;
+                            ent->getComponentPtr<UiSortingGroup>()->groupTransparency = 0.7f;
+                            showTutorial = true;
+                        }
+                        
+                    }
+                }
+                break;
+                case GLFW_GAMEPAD_BUTTON_START:
+                    Core::instance->messageBus.sendMessage(Message(Event::PAUSE_GAME));
+                break;
+            }
+        }
         break;
 
         case Event::PAUSE_GAME:
@@ -72,6 +129,10 @@ void GamePlayModule::receiveMessage(Message msg)
                 togglePauseState();
             }
             reloadScene(msg.getValue<const char*>());
+        break;
+
+        case Event::CARGO_LOST:
+            GetCore().objectModule.getEntityPtrByName("Cargo_Lost_Group")->getComponentPtr<UiSortingGroup>()->groupTransparency = 0.8f;
         break;
     }
 }
