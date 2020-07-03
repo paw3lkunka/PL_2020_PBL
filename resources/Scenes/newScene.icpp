@@ -844,7 +844,7 @@ TerrainUtils::importColliders();
             cargoLost->getLocalPositionModifiable() = {-165.0f, 140.0f};
             cargoLost->getSizeModifiable() = {0.3f, 0.3f};
             auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
-                group->disappearanceTime = 5.0f;
+                group->disappearanceTime = 3.0f;
                 group->disappearanceFactor = 0.1f;
                 group->groupTransparency = 0.0f;
             uiModule.rootNodes.push_back(cargoLost);
