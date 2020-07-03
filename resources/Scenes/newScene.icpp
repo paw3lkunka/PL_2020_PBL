@@ -375,7 +375,7 @@ objectModule.newEntity(4, "Camera");
     auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so3->audioClip = "Resources/Audios/river.wav";
         so3->getIsRelativeModifiable() = true;
-        so3->getGainModifiable() = 0.75f;
+        so3->getGainModifiable() = 0.25f;
         so3->getIsLoopingModifiable() = true;
         so3->autoPlay = true;
 }
@@ -873,7 +873,7 @@ TerrainUtils::importColliders();
             auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
                 so->audioClip = "Resources/Audios/gameplay_enemy_idle.wav";
                 so->getIsRelativeModifiable() = false;
-                so->getGainModifiable() = 1.0f;
+                so->getGainModifiable() = 10.0f;
                 so->getIsLoopingModifiable() = true;
                 so->autoPlay = true;
                 enemy->addComponent(so);
@@ -918,7 +918,7 @@ TerrainUtils::importColliders();
         bc->isTrigger = true;
 }
 
-objectModule.newEntity(1, "HP_0_SOUND")
+objectModule.newEntity(1, "HP_0_SOUND");
 {
     auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so->audioClip = "Resources/Audios/gameplay_gameOver.wav";
@@ -928,7 +928,7 @@ objectModule.newEntity(1, "HP_0_SOUND")
         so->autoPlay = false;
 }
 
-objectModule.newEntity(1, "DETECTION_SOUND")
+objectModule.newEntity(1, "DETECTION_SOUND");
 {
     auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
         so->audioClip = "Resources/Audios/gameplay_enemy_detection.wav";

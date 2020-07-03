@@ -57,8 +57,10 @@ void GamePlayModule::receiveMessage(Message msg)
         }
         break;
 
-        case Event::TRIGGER_EXIT
+        case Event::TRIGGER_EXIT:
         {
+            auto data = msg.getValue<TriggerData>();
+
             if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
              && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
             {
