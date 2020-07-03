@@ -222,6 +222,7 @@ void AudioModule::sceneUnload()
             alSourcePause(src->name);
             if(src->continuePlaying)
             {
+                // FIXME: Audio offsets are always 0 :(
                 continuePlaying.insert( std::pair(src->audioClip, getSourceSampleOffset(src->name)) );
             }
             alSourceStop(src->name);

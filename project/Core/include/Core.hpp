@@ -369,6 +369,7 @@ class Core
         static DetectionBarSystem detectionBarSystem;
         static ProgressBarSystem progressBarSystem;
         static CargoSystem cargoSystem;
+        static TutorialControllerSystem tutorialControllerSystem;
 
 #pragma endregion
 

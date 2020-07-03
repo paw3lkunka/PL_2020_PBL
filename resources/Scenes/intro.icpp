@@ -43,7 +43,6 @@ TextureCreateInfo info = {};
     info.minFilter = GL_LINEAR;
     info.wrapMode = GL_CLAMP_TO_EDGE;
 
-auto rect_16_9 = objectModule.newTexture("Resources/Sprites/rect_16_9.png", info);
 auto rect_border = objectModule.newTexture("Resources/Sprites/rect_border.png", info);
 auto paperTex = objectModule.newTexture("Resources/Sprites/paper.png", info);
 auto textMaterial = objectModule.newMaterial(textShader, "TextMaterial", RenderType::Transparent);

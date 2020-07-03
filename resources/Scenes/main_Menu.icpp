@@ -140,7 +140,8 @@ objectModule.newEntity(2, "RiverFlow");
 {
     objectModule.newEntity(2, "Menu_Buttons");
     auto buttonsRoot = objectModule.newEmptyComponentForLastEntity<RectTransform>();
-    objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+    auto group = objectModule.newEmptyComponentForLastEntity<UiSortingGroup>();
+        group->groupTransparency = 0.8f;
     uiModule.rootNodes.push_back(buttonsRoot);
 
     auto buttonsSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();

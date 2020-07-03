@@ -10,6 +10,7 @@ class Shader;
 struct ProgressBar;
 class Font;
 class Material;
+struct Tutorial;
 
 class GamePlayModule : public IModule
 {
@@ -48,6 +49,9 @@ private:
     Font* courier = nullptr;
     Font* josefin = nullptr;
     Font* courierBold = nullptr;
+
+    Tutorial* tutorialComponent = nullptr;
+    bool showTutorial = true;
 
     TextureCreateInfo info = {};
 
