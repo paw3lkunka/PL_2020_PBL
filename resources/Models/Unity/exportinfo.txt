@@ -688,12 +688,6 @@ $path:Resources/Models/Unity/Conifer Tall LOD1.obj
 1 1 1
 %mat:Conifer Leaves BODT
 %mat:Conifer Bark Array BODT
-$path:Resources/Models/Unity/Conifer Bare LOD1.obj
-243.05 114.0266 284.74
-1 0 0 0
-1 1 1
-%mat:Conifer Leaves BODT
-%mat:Conifer Bark Array BODT
 $path:Resources/Models/Unity/Conifer Tall LOD1.obj
 273.4387 100 162.3533
 1 0 0 0
@@ -744,6 +738,12 @@ $path:Resources/Models/Unity/Conifer Small LOD1.obj
 %mat:Conifer Bark Simple BODT
 $path:Resources/Models/Unity/Conifer Bare LOD1.obj
 260.647 118.4354 202.4736
+1 0 0 0
+1 1 1
+%mat:Conifer Leaves BODT
+%mat:Conifer Bark Array BODT
+$path:Resources/Models/Unity/Conifer Bare LOD1.obj
+243.05 114.0266 284.74
 1 0 0 0
 1 1 1
 %mat:Conifer Leaves BODT
@@ -858,6 +858,56 @@ $path:Resources/Models/Unity/Rock_04_LOD1.obj
 -0.3624305 0 -0.9320108 0
 9.33345 9.333449 9.33345
 %mat:M_Rock_04
+$path:Resources/Models/Unity/Rock_02_LOD1.obj
+153.9882 99.81 194.245
+-0.7581956 0.6520272 0 0
+1 1 1
+%mat:M_Rock_02
+$path:Resources/Models/Unity/Rock_01_LOD1.obj
+216.43 98.94 169.41
+-0.9853266 0 -0.1706797 0
+1 1 1
+%mat:M_Rock_01
+$path:Resources/Models/Unity/Rock_06_LOD1.obj
+149.7271 99.66 193.2
+0.7071069 0 0 0.7071066
+0.9999999 0.9999999 1
+%mat:M_Rock_06
+$path:Resources/Models/Unity/Rock_05_LOD1.obj
+214.4154 100.1 171.1151
+1 0 0 0
+1 1 1
+%mat:M_Rock_05
+$path:Resources/Models/Unity/Rock_04_LOD1.obj
+163.98 99.59 182.77
+0.7714683 -0.1011485 0.5973986 -0.1942179
+1 1 1
+%mat:M_Rock_04
+$path:Resources/Models/Unity/Rock_04_LOD1.obj
+131.82 99.44 165.155
+1 0 0 0
+1 1 1
+%mat:M_Rock_04
+$path:Resources/Models/Unity/Rock_04_LOD1.obj
+182.45 98.63 192.07
+2.936521E-06 0 0 1
+1 1 1
+%mat:M_Rock_04
+$path:Resources/Models/Unity/Rock_06_LOD1.obj
+206.85 99.38 181.65
+-0.7350497 0.6780132 0 0
+1 0.9999999 0.9999999
+%mat:M_Rock_06
+$path:Resources/Models/Unity/Rock_02_LOD1.obj
+186.54 99.28 192.76
+-2.602259E-06 -0.4443201 1.290632E-06 0.8958681
+1 1 1
+%mat:M_Rock_02
+$path:Resources/Models/Unity/Rock_01_LOD1.obj
+133.11 99.28 161.14
+0.8500265 0 -0.5267399 0
+0.9999999 1 0.9999999
+%mat:M_Rock_01
 $path:Resources/Models/Unity/Plane002.obj
 221.9536 97.69001 165.6223
 0.08929451 5.948408E-07 -0.9960052 2.497571E-08
@@ -2566,12 +2616,7 @@ $path:Resources/Models/Unity/Plane002.obj
 $path:Resources/Models/Unity/Pole_horiz.obj
 241.26 107.41 206.33
 -0.7071068 0.7071068 0 0
-11.04417 11.04417 11.04417
-%mat:Flag_mat
-$path:Resources/Models/Unity/Pole_vert.obj
-121.56 100.033 114.25
--0.09229616 0.09229616 0.7010574 0.7010574
-4.487299 4.487297 4.487297
+4.568974 4.568975 4.568975
 %mat:Flag_mat
 $path:Resources/Models/Unity/bridge.obj
 102.29 96.54 373.27
@@ -2584,88 +2629,43 @@ $path:Resources/Models/Unity/LOD01_kv19.obj
 -0.2234794 0.2210722 -0.5962234 -0.7387161
 0.09975804 0.09975803 0.09975802
 %mat:New Material
-$path:Resources/Models/Unity/Flag.obj
-122.33 104.2213 114.4563
+$path:Resources/Models/Unity/Pole_vert.obj
+121.56 100.033 114.25
 -0.09229616 0.09229616 0.7010574 0.7010574
-4.487299 4.487297 4.487297
+1.743809 1.743809 1.743809
 %mat:Flag_mat
 $path:Resources/Models/Unity/Cloth.obj
 240.6521 106.1172 206.3749
 -0.7071068 0.7071068 0 0
-11.04417 11.04417 11.04417
+4.632036 4.632038 4.632038
 %mat:Flag_mat
-$path:Resources/Models/Unity/Rock_02_LOD1.obj
-153.9882 99.81 194.245
--0.7581956 0.6520272 0 0
-1 1 1
-%mat:M_Rock_02
-$path:Resources/Models/Unity/Rock_01_LOD1.obj
-216.43 98.94 169.41
--0.9853266 0 -0.1706797 0
-1 1 1
-%mat:M_Rock_01
-$path:Resources/Models/Unity/Rock_06_LOD1.obj
-149.7271 99.66 193.2
-0.7071069 0 0 0.7071066
-0.9999999 0.9999999 1
-%mat:M_Rock_06
-$path:Resources/Models/Unity/Rock_05_LOD1.obj
-214.4154 100.1 171.1151
-1 0 0 0
-1 1 1
-%mat:M_Rock_05
-$path:Resources/Models/Unity/Rock_04_LOD1.obj
-163.98 99.59 182.77
-0.7714683 -0.1011485 0.5973986 -0.1942179
-1 1 1
-%mat:M_Rock_04
-$path:Resources/Models/Unity/Rock_04_LOD1.obj
-131.82 99.44 165.155
-1 0 0 0
-1 1 1
-%mat:M_Rock_04
-$path:Resources/Models/Unity/Rock_04_LOD1.obj
-182.45 98.63 192.07
-2.936521E-06 0 0 1
-1 1 1
-%mat:M_Rock_04
-$path:Resources/Models/Unity/Rock_06_LOD1.obj
-206.85 99.38 181.65
--0.7350497 0.6780132 0 0
-1 0.9999999 0.9999999
-%mat:M_Rock_06
-$path:Resources/Models/Unity/Rock_02_LOD1.obj
-186.54 99.28 192.76
--2.602259E-06 -0.4443201 1.290632E-06 0.8958681
-1 1 1
-%mat:M_Rock_02
-$path:Resources/Models/Unity/Rock_01_LOD1.obj
-133.11 99.28 161.14
-0.8500265 0 -0.5267399 0
-0.9999999 1 0.9999999
-%mat:M_Rock_01
+$path:Resources/Models/Unity/Flag.obj
+122.33 104.2213 114.4563
+-0.09229616 0.09229616 0.7010574 0.7010574
+2.718676 2.718674 2.718674
+%mat:Flag_mat
 $path:Resources/Models/Unity/GuardTower.obj
 247.1 113.68 287.87
--0.03749831 0 -0.9992967 0
-183.0401 183.04 183.0401
+3.090862E-08 -3.090862E-08 0.7071068 0.7071068
+183.0401 183.04 183.04
 %mat:clwood
-$path:Resources/Models/Unity/Body.obj
-252.9176 113.6405 319.85
--0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
-183.0401 183.04 183.0401
-%mat:GuardBodyAndEyes
 $path:Resources/Models/Unity/Eyelashes.obj
-252.9176 113.6405 319.85
--0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
-183.0401 183.04 183.0401
+246.9518 125.4928 287.7329
+-1.111364E-08 -0.03749841 0.9992967 -1.461854E-06
+183.0402 183.04 183.0401
 %mat:GuardEyelashes
-$path:Resources/Models/Unity/Eyes.obj
-252.9176 113.6405 319.85
--0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
-183.0401 183.04 183.0401
-%mat:GuardBodyAndEyes
 $path:Resources/Models/Unity/Tops.obj
-252.9176 113.6405 319.85
--0.03749831 -3.054626E-09 -0.9992967 8.140307E-08
-183.0401 183.04 183.0401
+247.0078 124.5974 287.953
+-1.111364E-08 -0.03749841 0.9992967 -1.461854E-06
+183.0402 183.04 183.0401
 %mat:GuardTops
+$path:Resources/Models/Unity/Body.obj
+247.046 123.8624 287.87
+4.368064E-08 -0.03749841 0.9992967 -1.639108E-09
+183.0401 183.04 183.04
+%mat:GuardBodyAndEyes
+$path:Resources/Models/Unity/Eyes.obj
+246.9512 125.5009 287.7681
+-1.111364E-08 -0.03749841 0.9992967 -1.461854E-06
+183.0402 183.04 183.0401
+%mat:GuardBodyAndEyes
