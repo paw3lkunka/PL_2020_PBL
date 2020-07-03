@@ -63,33 +63,35 @@ void HydroBodySystem::receiveMessage(Message msg)
                 HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
                 if(body != nullptr && current != nullptr)
                 {
-                    body->currents.push_back(current);
-                    recalculateCurrentForBody(body);
+                    // body->currents.push_back(current);
+                    body->targetCurrentVelocity = current->velocity;
                 }
             }
             break;
 
-        case Event::TRIGGER_EXIT:
-            {
-                TriggerData data = msg.getValue<TriggerData>();
-                HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
-                HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
-                if(body != nullptr && current != nullptr)
-                {
-                    body->currents.remove(current);
-                    recalculateCurrentForBody(body);
-                }
-            }
-            break;
+        // case Event::TRIGGER_EXIT:
+        //     {
+        //         TriggerData data = msg.getValue<TriggerData>();
+        //         HydroBody* body = data.causeBody->entityPtr->getComponentPtr<HydroBody>();
+        //         HydroCurrent* current = data.triggerBody->entityPtr->getComponentPtr<HydroCurrent>();
+        //         if(body != nullptr && current != nullptr)
+        //         {
+        //             // body->currents.remove(current);
+        //             body->targetCurrentVelocity = current->velocity;
+        //         }
+        //     }
+        //     break;
     }
 }
 
 void HydroBodySystem::fixedUpdate()
 {
     glm::vec3& currentVelocity = hydroBody->currentVelocity;
-    currentVelocity.x = std::lerp(currentVelocity.x, hydroBody->targetCurrentVelocity.x, hydroBody->currentVelocityLerp);
-    currentVelocity.y = std::lerp(currentVelocity.y, hydroBody->targetCurrentVelocity.y, hydroBody->currentVelocityLerp);
-    currentVelocity.z = std::lerp(currentVelocity.z, hydroBody->targetCurrentVelocity.z, hydroBody->currentVelocityLerp);
+    // glm::vec3 targetCurrentVelocity = calculateCurrentForBody(hydroBody);
+    glm::vec3 targetCurrentVelocity = hydroBody->targetCurrentVelocity;
+    currentVelocity.x = std::lerp(currentVelocity.x, targetCurrentVelocity.x, hydroBody->currentVelocityLerp);
+    currentVelocity.y = std::lerp(currentVelocity.y, targetCurrentVelocity.y, hydroBody->currentVelocityLerp);
+    currentVelocity.z = std::lerp(currentVelocity.z, targetCurrentVelocity.z, hydroBody->currentVelocityLerp);
     
     Rigidbody* rb;
     glm::vec3 velocity;
@@ -102,6 +104,7 @@ void HydroBodySystem::fixedUpdate()
         rb = rigidbody;
         velocity = rigidbody->velocity;// - currentVelocity;
         float viscousCoefficient = HydroPhysics::viscousResistanceCoefficient( glm::length(velocity) );
+        
 
         for(HydroTriangle triangle : hullTriangles.underwater)
         {
@@ -110,12 +113,19 @@ void HydroBodySystem::fixedUpdate()
             impulse.force += HydroPhysics::buoyancyForce(triangle);
             impulse.force += HydroPhysics::viciousResistanceForce(triangle, velocity, viscousCoefficient);
             impulse.force += HydroPhysics::pressureDragForce(triangle, velocity);
-            
+            impulse.force += currentVelocity;
+
             impulse.point = triangle.center;
             impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
-
+        
             rb->impulses.push_back(impulse);
         }
+
+        glm::vec3 centerPos = static_cast<glm::vec3>(transform->getModelMatrix()[3]);
+        Impulse impulse;
+        impulse.point = centerPos;
+        impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
+        rb->impulses.push_back(impulse);
 
         velocity = rb->velocity;
     }
@@ -166,6 +176,21 @@ void HydroBodySystem::fixedUpdate()
 
         velocity = hydroAccelerator->velocity;
     }
+    // else
+    // {
+    //     rb = hydroAccelerator->rigidbody;
+
+    //     for(HydroTriangle triangle : hullTriangles.underwater)
+    //     {
+    //         Impulse impulse;
+        
+    //         impulse.force = -currentVelocity * hydroAccelerator->drifting;
+    //         impulse.point = triangle.center;
+    //         impulse.type = Impulse::Type::WORLD_SPACE_FORCE;
+
+    //         rb->impulses.push_back(impulse);
+    //     }
+    // }
 
     // FIXME: This for is causing segfault in rp3d physics for some reason
     // for(HydroTriangle triangle : hullTriangles.abovewater)
@@ -179,15 +204,18 @@ void HydroBodySystem::fixedUpdate()
     // }
 }
 
-void HydroBodySystem::recalculateCurrentForBody(HydroBody* body)
-{
-    glm::vec3 newCurrentVelocity(0.0f);
+// glm::vec3 HydroBodySystem::calculateCurrentForBody(HydroBody* body)
+// {
+//     glm::vec3 newCurrentVelocity(0.0f);
 
-    for(HydroCurrent* current : body->currents)
-    {
-        newCurrentVelocity += current->velocity;
-    }
-    newCurrentVelocity /= body->currents.size();
+//     if(body->currents.size())
+//     {
+//         for(HydroCurrent* current : body->currents)
+//         {
+//             newCurrentVelocity += current->velocity;
+//         }
+//         newCurrentVelocity /= body->currents.size();
+//     }
 
-    body->targetCurrentVelocity = newCurrentVelocity;
-}
+//     return newCurrentVelocity;
+// }

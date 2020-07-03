@@ -310,7 +310,7 @@ void EditorModule::drawTransform(Transform* transformPtr)
     //* transform variables
     static glm::vec3 localRotation(0.0f);
 
-    //localRotation = glm::eulerAngles(transformPtr->getLocalRotation()) * 180.0f / glm::pi<float>();
+    localRotation = glm::degrees(glm::eulerAngles(transformPtr->getLocalRotation()));// * 180.0f / glm::pi<float>();
 
     ImGui::Text("Local transform:");
     updateReactT |= ImGui::DragFloat3("Position: ", (float*)&transformPtr->getLocalPositionModifiable(), 0.5f, -1000.0f, 1000.0f, "%.2f");

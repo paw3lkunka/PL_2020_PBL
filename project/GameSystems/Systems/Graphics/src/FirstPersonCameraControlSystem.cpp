@@ -141,7 +141,7 @@ void FirstPersonCameraControlSystem::fixedUpdate()
     yaw = glm::clamp(yaw, fpCamera->minYaw, fpCamera-> maxYaw);
     pitch = glm::clamp(pitch, fpCamera->minPitch, fpCamera->maxPitch);
 
-    glm::vec3 targetPosition = static_cast<glm::vec3>( fpCamera->player->getModelMatrix()[3] ) + fpCamera->headOffset;
+    glm::vec3 targetPosition = static_cast<glm::vec3>( glm::translate(fpCamera->player->getModelMatrix(), fpCamera->headOffset)[3] );
     glm::vec3& currentPosition = transform->getLocalPositionModifiable();
     currentPosition.x = std::lerp(currentPosition.x, targetPosition.x, fpCamera->moveLerp);
     currentPosition.y = std::lerp(currentPosition.y, targetPosition.y, fpCamera->moveLerp);

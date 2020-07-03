@@ -618,7 +618,7 @@ void RendererModule::render()
         for(auto& packet : normalPackets)
         {
             //drawBounds(packet.mesh->bounds, *internalErrorMat, packet.modelMatrix, VP);
-            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            if (!packet.mesh->frustumCulling || objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 switch(packet.material->getRenderType())
                 {
@@ -635,7 +635,7 @@ void RendererModule::render()
         // * ===== Terrain packets =====
         for(auto& packet : terrainPackets)
         {
-            if (objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
+            if (!packet.mesh->frustumCulling || objectInFrustum(packet.mesh->bounds, packet.modelMatrix))
             {
                 terrainQueue.push_back(&packet);
             }
@@ -649,7 +649,7 @@ void RendererModule::render()
             for(auto matrix : packet.second.instanceMatrices)
             {
                 //drawBounds(packet.second.mesh->bounds, *internalErrorMat, *matrix, VP);
-                if (objectInFrustum(packet.second.mesh->bounds, *matrix))
+                if (!packet.second.mesh->frustumCulling || objectInFrustum(packet.second.mesh->bounds, *matrix))
                 {
                     packet.second.instanceOccluded[i] = false;
                     wholePacketOccluded = false;

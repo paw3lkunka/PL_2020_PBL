@@ -319,6 +319,10 @@ objectModule.newEntity(2, "WaterPlane_3_0_3");
         mr->mesh = objectModule.getMeshCustomPtrByPath("Resources/Models/Plane.obj/Plane");
 }
 
+Material* hdrSkyboxMat = objectModule.newMaterial(skyboxShader, "skyboxHdrMat", RenderType::Opaque);
+hdrSkyboxMat->setTexture("cubemap", hdrCubemap);
+rendererModule.setSkybox(hdrSkyboxMat);
+
 objectModule.newEntity(2, "directionalLight");
 {
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
@@ -341,6 +345,7 @@ objectModule.newEntity(4, "Camera");
         frustum.fieldOfView = 80.0f;
         frustum.aspectRatio = (float)GetCore().windowWidth / (float)GetCore().windowHeight;
         c->getProjectionModeModifiable() = CameraProjection::Perspective;
+        c->exposure = 1.5f;
 
     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
         t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -388,6 +393,11 @@ objectModule.newEntity(4, "Camera");
     Entity* attachLeft = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_left");
     Entity* attachRight = objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Paddle_attach_right");
     {
+        auto tl = attachLeft->getComponentPtr<Transform>();
+            tl->getLocalPositionModifiable() = {tl->getLocalPosition().x, 0.08f, tl->getLocalPosition().z};
+        auto tr = attachRight->getComponentPtr<Transform>();
+            tr->getLocalPositionModifiable() = {tr->getLocalPosition().x, 0.08f, tr->getLocalPosition().z};
+
         auto mrl = attachLeft->getComponentPtr<MeshRenderer>();
             mrl->shouldRender = false;
         auto mrr = attachRight->getComponentPtr<MeshRenderer>();
@@ -399,7 +409,7 @@ objectModule.newEntity(4, "Camera");
         auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
             t->setParent(objectModule.getEntityPtrByName("Final_physics_meshes.FBX/Physics_kayak")->getComponentPtr<Transform>());
             t->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(0.0f, 0.0f, 180.0f));
-            t->getLocalPositionModifiable() = glm::vec3(0.0f, 0.0f, 0.3f);
+            t->getLocalPositionModifiable() = glm::vec3(0.0f, -0.1f, 0.3f);
     }
 
     Material* kayakMat = objectModule.newMaterial(unlitColor, "kayakMat", RenderType::Opaque);
@@ -413,8 +423,8 @@ objectModule.newEntity(4, "Camera");
             mr->shouldRender = false;
 
         kayakTransform = kayakPtr->getComponentPtr<Transform>();
-            kayakTransform->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(-90.0f, 0.0f, 180.0f));
-            kayakTransform->getLocalPositionModifiable() = glm::vec3(0.0f, 0, 7.0f);
+            kayakTransform->getLocalRotationModifiable() = eulerToQuaternion(glm::vec3(90.0f, 70.0f, -180.0f));
+            kayakTransform->getLocalPositionModifiable() = glm::vec3(31.0f, 0.0f, -1.0f);
             kayakTransform->getLocalScaleModifiable() = glm::vec3(1.0f, 1.0f, 1.0f);
             kayakTransform->setParent(&sceneModule.rootNode);
 
@@ -452,7 +462,7 @@ objectModule.newEntity(4, "Camera");
                 paddleTransform->setParent(paddleIndirect->getComponentPtr<Transform>());
 
             auto paddle = objectModule.newEmptyComponent<Paddle>();
-                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.3f);
+                paddle->maxPos = glm::vec3(0.0f, 0.0f, -0.15f);
                 paddle->maxFrontRot = 45.0f;
                 paddle->maxSideRot = 25.0f;
                 paddlePtr->addComponent(paddle);
@@ -460,7 +470,7 @@ objectModule.newEntity(4, "Camera");
             // PADDLE MAN
             auto paddleHydroAccelerator = objectModule.newEmptyComponent<HydroAccelerator>();
                 paddleHydroAccelerator->rigidbody = kayakRigidbody;
-                paddleHydroAccelerator->handling = 30;
+                paddleHydroAccelerator->handling = 80;
                 paddleHydroAccelerator->acceleration = 0.5f;
                 paddlePtr->addComponent(paddleHydroAccelerator);
 
@@ -470,10 +480,13 @@ objectModule.newEntity(4, "Camera");
 
         auto tpCameraPtr = objectModule.newEmptyComponent<ThirdPersonCamera>();
             tpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            // tpCameraPtr->minDistance = 2.0f;
+            // tpCameraPtr->maxDistance = 8.0f;
             //tpCameraPtr->playerRigidbody = kayakPtr->getComponentPtr<Rigidbody>();
 
         auto fpCameraPtr = objectModule.newEmptyComponent<FirstPersonCamera>();
             fpCameraPtr->player = kayakPtr->getComponentPtr<Transform>();
+            // fpCameraPtr->headOffset.y = 0.7f;
 
         auto cameraPtr = objectModule.getEntityPtrByName("Camera");
             cameraPtr->addComponent(tpCameraPtr);
@@ -513,111 +526,204 @@ objectModule.newEntity(4, "Camera");
         }
     }
 
-    // // ! NJU POSTAC
-    // {
-    //     objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
+    // ! NJU POSTAC
+    {
+        objectModule.newModel("Resources/Models/Character_final/Final_character_rigged.FBX");
 
-    //     Entity* hips = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:Hips(bone)");
-    //     {
-    //         auto t = hips->getComponentPtr<Transform>();
-    //             t->getLocalScaleModifiable() = {0.01f, 0.01f, 0.01f};
-    //             t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 180.0f, 0.0f});
-    //             t->getLocalPositionModifiable() = {0.0f, -0.45f, 0.0f};
-    //             t->setParent(kayakTransform);
-    //     }
+        Entity* hips = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:Hips(bone)");
+        {
+            auto t = hips->getComponentPtr<Transform>();
+                t->getLocalScaleModifiable() = {0.01f, 0.01f, 0.01f};
+                t->getLocalRotationModifiable() = eulerToQuaternion({90.0f, 0.0f, 180.0f});
+                t->getLocalPositionModifiable() = {0.0f, -0.45f, 0.0f};
+                t->setParent(kayakTransform);
+        }
 
-    //     auto bodyAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_BaseColor.png", texCreateInfo);
-    //     auto bodyNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_Normal.png", texCreateInfo);
-    //     auto bodyOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_OccRouMet.png", texCreateInfo);
+        auto bodyAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_BaseColor.png", texCreateInfo);
+        auto bodyNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_Normal.png", texCreateInfo);
+        auto bodyOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Body_OccRouMet.png", texCreateInfo);
 
-    //     Material* bodyMat = objectModule.newMaterial(standardSkinned, "bodyMat", RenderType::Opaque);
-    //     bodyMat->setTexture("diffuse", bodyAlbedo);
-    //     bodyMat->setTexture("normal", bodyNormal);
-    //     bodyMat->setTexture("occRouMet", bodyOccRouMet);
+        Material* bodyMat = objectModule.newMaterial(standardSkinned, "bodyMat", RenderType::Opaque);
+        bodyMat->setTexture("diffuse", bodyAlbedo);
+        bodyMat->setTexture("normal", bodyNormal);
+        bodyMat->setTexture("occRouMet", bodyOccRouMet);
 
-    //     Entity* body = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Body");
-    //     {
-    //         auto mr = body->getComponentPtr<MeshRenderer>();
-    //             mr->material = bodyMat;
-    //     }
+        Entity* body = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Body");
+        {
+            auto mr = body->getComponentPtr<MeshRenderer>();
+                mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
-    //     {
-    //         auto mr = eyes->getComponentPtr<MeshRenderer>();
-    //             mr->material = bodyMat;
-    //     }
+        Entity* eyes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyes");
+        {
+            auto mr = eyes->getComponentPtr<MeshRenderer>();
+                mr->material = bodyMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
-    //     eyelashesMat->setTexture("diffuse", bodyAlbedo);
-    //     eyelashesMat->setTexture("normal", bodyNormal);
-    //     eyelashesMat->setTexture("occRouMet", bodyOccRouMet);
+        Material* eyelashesMat = objectModule.newMaterial(standardSkinned, "eyelashesMat", RenderType::Transparent);
+        eyelashesMat->setTexture("diffuse", bodyAlbedo);
+        eyelashesMat->setTexture("normal", bodyNormal);
+        eyelashesMat->setTexture("occRouMet", bodyOccRouMet);
 
-    //     Entity* eyelashes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyelashes");
-    //     {
-    //         auto mr = eyelashes->getComponentPtr<MeshRenderer>();
-    //             mr->material = eyelashesMat;
-    //     }
+        Entity* eyelashes = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Eyelashes");
+        {
+            auto mr = eyelashes->getComponentPtr<MeshRenderer>();
+                mr->material = eyelashesMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
-    //     auto gloveNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_Normal.png", texCreateInfo);
-    //     auto gloveOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_OccRouMet.png", texCreateInfo);
+        auto gloveAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_BaseColor.png", texCreateInfo);
+        auto gloveNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_Normal.png", texCreateInfo);
+        auto gloveOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Glove_OccRouMet.png", texCreateInfo);
 
-    //     Material* gloveMat = objectModule.newMaterial(standardSkinned, "gloveMat", RenderType::Opaque);
-    //     gloveMat->setTexture("diffuse", gloveAlbedo);
-    //     gloveMat->setTexture("normal", gloveNormal);
-    //     gloveMat->setTexture("occRouMet", gloveOccRouMet);
+        Material* gloveMat = objectModule.newMaterial(standardSkinned, "gloveMat", RenderType::Opaque);
+        gloveMat->setTexture("diffuse", gloveAlbedo);
+        gloveMat->setTexture("normal", gloveNormal);
+        gloveMat->setTexture("occRouMet", gloveOccRouMet);
 
-    //     Entity* gloves = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Gloves");
-    //     {
-    //         auto mr = gloves->getComponentPtr<MeshRenderer>();
-    //             mr->material = gloveMat;
-    //     }
+        Entity* gloves = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Gloves");
+        {
+            auto mr = gloves->getComponentPtr<MeshRenderer>();
+                mr->material = gloveMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
-    //     auto hatNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_Normal.png", texCreateInfo);
-    //     auto hatOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_OccRouMet.png", texCreateInfo);
+        auto hatAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_BaseColor.png", texCreateInfo);
+        auto hatNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_Normal.png", texCreateInfo);
+        auto hatOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Hat_OccRouMet.png", texCreateInfo);
 
-    //     Material* hatMat = objectModule.newMaterial(standardSkinned, "hatMat", RenderType::Opaque);
-    //     hatMat->setTexture("diffuse", hatAlbedo);
-    //     hatMat->setTexture("normal", hatNormal);
-    //     hatMat->setTexture("occRouMet", hatOccRouMet);
+        Material* hatMat = objectModule.newMaterial(standardSkinned, "hatMat", RenderType::Opaque);
+        hatMat->setTexture("diffuse", hatAlbedo);
+        hatMat->setTexture("normal", hatNormal);
+        hatMat->setTexture("occRouMet", hatOccRouMet);
 
-    //     Entity* hats = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Hats");
-    //     {
-    //         auto mr = hats->getComponentPtr<MeshRenderer>();
-    //             mr->material = hatMat;
-    //     }
+        Entity* hats = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Hats");
+        {
+            auto mr = hats->getComponentPtr<MeshRenderer>();
+                mr->material = hatMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
-    //     auto maskNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_Normal.png", texCreateInfo);
-    //     auto maskOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_OccRouMet.png", texCreateInfo);
+        auto maskAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_BaseColor.png", texCreateInfo);
+        auto maskNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_Normal.png", texCreateInfo);
+        auto maskOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Mask_OccRouMet.png", texCreateInfo);
 
-    //     Material* maskMat = objectModule.newMaterial(standardSkinned, "maskMat", RenderType::Opaque);
-    //     maskMat->setTexture("diffuse", maskAlbedo);
-    //     maskMat->setTexture("normal", maskNormal);
-    //     maskMat->setTexture("occRouMet", maskOccRouMet);
+        Material* maskMat = objectModule.newMaterial(standardSkinned, "maskMat", RenderType::Opaque);
+        maskMat->setTexture("diffuse", maskAlbedo);
+        maskMat->setTexture("normal", maskNormal);
+        maskMat->setTexture("occRouMet", maskOccRouMet);
 
-    //     Entity* masks = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Masks");
-    //     {
-    //         auto mr = masks->getComponentPtr<MeshRenderer>();
-    //             mr->material = maskMat;
-    //     }
+        Entity* masks = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Masks");
+        {
+            auto mr = masks->getComponentPtr<MeshRenderer>();
+                mr->material = maskMat;
+                mr->mesh->frustumCulling = false;
+        }
 
-    //     auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
-    //     auto topNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_Normal.png", texCreateInfo);
-    //     auto topOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_OccRouMet.png", texCreateInfo);
+        auto topAlbedo = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_BaseColor.png", texCreateInfo);
+        auto topNormal = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_Normal.png", texCreateInfo);
+        auto topOccRouMet = objectModule.newTexture("Resources/Models/Character_final/Kajakarz_Top_OccRouMet.png", texCreateInfo);
 
-    //     Material* topMat = objectModule.newMaterial(standardSkinned, "topMat", RenderType::Opaque);
-    //     topMat->setTexture("diffuse", topAlbedo);
-    //     topMat->setTexture("normal", topNormal);
-    //     topMat->setTexture("occRouMet", topOccRouMet);
+        Material* topMat = objectModule.newMaterial(standardSkinned, "topMat", RenderType::Opaque);
+        topMat->setTexture("diffuse", topAlbedo);
+        topMat->setTexture("normal", topNormal);
+        topMat->setTexture("occRouMet", topOccRouMet);
 
-    //     Entity* tops = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Tops");
-    //     {
-    //         auto mr = tops->getComponentPtr<MeshRenderer>();
-    //             mr->material = topMat;
-    //     }
-    // }
+        Entity* tops = objectModule.getEntityPtrByName("Final_character_rigged.FBX/Tops");
+        {
+            auto mr = tops->getComponentPtr<MeshRenderer>();
+                mr->material = topMat;
+                mr->mesh->frustumCulling = false;
+        }
+
+        // ! ----- IK -----
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({61, -36, 29});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {40.0f, -80.0f, 10.0f};
+                b->maxConstraints = {60.0f, 30.0f, 30.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftForeArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({-25, 35, 55});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {-40.0f, 30.0f, 25.0f};
+                b->maxConstraints = {-5.0f, 60.0f, 130.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({-5, 26, 12});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHandIndex1(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({63, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHandIndex2(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({78, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:LeftHand(bone)");
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            bp1->touchPoint = attachRight->getComponentPtr<Transform>();
+            bp1->chainLength = 1;
+            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
+            bp1->iterations = 2;
+            bp1->delta = 0.001f;
+            e->addComponent(bp1);
+        }
+
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({83, 47, 0});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {70.0f, -40.0f, -10.0f};
+                b->maxConstraints = {80.0f, 80.0f, 40.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightForeArm(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({0, -35, -75});
+            auto b = e->getComponentPtr<Bone>();
+                b->minConstraints = {-15.0f, -30.0f, -130.0f};
+                b->maxConstraints = {15.0f, -10.0f, -27.0f};
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({0, -50, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHandIndex1(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({72, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHandIndex2(bone)");
+            auto t = e->getComponentPtr<Transform>();
+                t->getLocalRotationModifiable() = eulerToQuaternion({72, 0, 0});
+        }
+        {
+            Entity* e = objectModule.getEntityPtrByName("Final_character_rigged.FBX/mixamorig:RightHand(bone)");
+            IKBonePoint* bp1 = objectModule.newEmptyComponent<IKBonePoint>();
+            bp1->touchPoint = attachLeft->getComponentPtr<Transform>();
+            bp1->chainLength = 1;
+            bp1->skeletonPtr = objectModule.getEntityPtrByName("mixamorig:Hips_skeleton")->getComponentPtr<Skeleton>();
+            bp1->iterations = 2;
+            bp1->delta = 0.001f;
+            e->addComponent(bp1);
+        }
+
+    }
 }
 
 if (GetCore().loadTerrain)
@@ -919,8 +1025,6 @@ TerrainUtils::importColliders();
         bc->halfSize = glm::vec3(3.0f, 4.5f, 22.5f);
         bc->isTrigger = true;
 }
-
-
 
 // TextureCreateInfo i = {};
 // i.minFilter = GL_LINEAR;

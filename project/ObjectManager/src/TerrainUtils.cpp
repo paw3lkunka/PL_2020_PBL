@@ -5,6 +5,7 @@
 #include <map>
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/vec_swizzle.hpp>
 
 void TerrainUtils::loadAllTerrainChunks()
 {
@@ -612,8 +613,15 @@ void TerrainUtils::importColliders()
                     col->isTrigger = true;
                 auto rb = GetCore().objectModule.newEmptyComponentForLastEntity<Rigidbody>();
                     rb->type = rp3d::BodyType::STATIC;
+
+                // glm::vec4 finalDir = glm::vec4(direction, 1.0f);
+                // glm::mat4 additionalRot(1.0f);
+                // additionalRot = glm::rotate( additionalRot, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f) );
+                // finalDir = additionalRot * finalDir;
+                // direction = glm::xyz(finalDir);
+
                 auto flow = GetCore().objectModule.newEmptyComponentForLastEntity<HydroCurrent>();
-                    flow->velocity = direction * speed * 5.0f;
+                    flow->velocity = direction * speed * 25.0f;
             }
         }
     }

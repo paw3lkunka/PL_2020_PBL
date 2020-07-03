@@ -24,6 +24,10 @@ struct Bone : public Component
     /// @brief Bone name used to identify bone in the node hierarchy
     std::string boneName;
 
+    /// @brief How much in the local space the bone is allowed to move
+    glm::vec3 minConstraints = {-360.0f, -360.0f, -360.0f};
+    glm::vec3 maxConstraints = { 360.0f,  360.0f,  360.0f};
+
     /**
      * @brief Matrix used to transform node from model space to bone space
      * Used for offsetting bone to aid in animations and sets the bind pose
