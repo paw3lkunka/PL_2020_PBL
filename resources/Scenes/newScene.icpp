@@ -353,35 +353,14 @@ objectModule.newEntity(4, "Camera");
         li->getPositionModifiable();
         li->getAtModifiable();
         li->getUpModifiable();
+
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->audioClip = "Resources/Audios/river.wav";
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.01f;
+        so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 }
-
-// objectModule.newEntity(2, "TestAudioSource1");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
-
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
-
-// objectModule.newEntity(2, "TestAudioSource2");
-// {
-//     auto t = objectModule.newEmptyComponentForLastEntity<Transform>();
-//         t->getLocalPositionModifiable() = glm::vec3(-5.0f, 0.0f, 0.0f);
-//         t->setParent(&sceneModule.rootNode);
-
-//     auto soMusic = objectModule.newEmptyComponentForLastEntity<AudioSource>();
-//         soMusic->audioClip = "Resources/Audios/test.wav";
-//         soMusic->getIsRelativeModifiable() = true;
-//         soMusic->getGainModifiable() = 1.0f;
-//         soMusic->getIsLoopingModifiable() = true;
-//         soMusic->autoPlay = true;
-// }
 
 {
     objectModule.newModel("Resources/Models/Kayak_final/Final_physics_meshes.FBX");
@@ -489,6 +468,8 @@ objectModule.newEntity(4, "Camera");
             cameraPtr->addComponent(fpCameraPtr);
             cameraPtr->getComponentPtr<Camera>()->control = CameraControl::ThirdPerson;
     }
+
+
 
     // ! NJU KAJAK
     {
@@ -988,6 +969,14 @@ TerrainUtils::importColliders();
                 ea->handicap = 5;
                 ea->successChance = 0.1f;
                 enemy->addComponent(ea);
+
+            auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+                so->audioClip = "Resources/Audios/gameplay_enemy_idle.wav";
+                so->getIsRelativeModifiable() = false;
+                so->getGainModifiable() = 2.0f;
+                so->getIsLoopingModifiable() = true;
+                so->autoPlay = true;
+                enemy->addComponent(so);
         }
         // shoot trail
         objectModule.newModel("Resources/Models/BoneBox.FBX");
@@ -1003,6 +992,13 @@ TerrainUtils::importColliders();
                 mr->material = objectModule.getMaterialPtrByName("KULA");
             auto* st = objectModule.newEmptyComponent<Shoot>();
                 shootTrail->addComponent(st);
+            auto* so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+                so->audioClip = "Resources/Audios/menu_buttonClick.wav";
+                so->getIsRelativeModifiable() = false;
+                so->getGainModifiable() = 1.0f;
+                so->getIsLoopingModifiable() = false;
+                so->autoPlay = false;
+                shootTrail->addComponent(so);
         }
     }
 }
@@ -1020,6 +1016,56 @@ TerrainUtils::importColliders();
     auto* bc = objectModule.newEmptyComponentForLastEntity<BoxCollider>();
         bc->halfSize = glm::vec3(3.0f, 4.5f, 22.5f);
         bc->isTrigger = true;
+}
+
+objectModule.newEntity(1, "HP_0_SOUND");
+{
+    auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_gameOver.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "DETECTION_SOUND");
+{
+    auto so = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_enemy_detection.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 0.0f;
+        so->getIsLoopingModifiable() = true;
+        so->autoPlay = true;
+}
+
+objectModule.newEntity(1, "HIT_SOUND");
+{
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_hit.wav";
+        so->getIsRelativeModifiable() = false;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "BUSH_SOUND");
+{
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_bushes.wav";
+        so->getIsRelativeModifiable() = false;
+        so->getGainModifiable() = 0.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
+}
+
+objectModule.newEntity(1, "DROP_SOUND");
+{   
+    auto so = GetCore().objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so->audioClip = "Resources/Audios/gameplay_drop.wav";
+        so->getIsRelativeModifiable() = true;
+        so->getGainModifiable() = 1.0f;
+        so->getIsLoopingModifiable() = false;
+        so->autoPlay = false;
 }
 
 // TextureCreateInfo i = {};

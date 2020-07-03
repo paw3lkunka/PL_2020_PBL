@@ -1,4 +1,7 @@
 #include "GamePlayModule.hpp"
+
+#include <glm/gtx/vec_swizzle.hpp>
+
 #include "Message.inl"
 #include "Core.hpp"
 #include "ScenesPaths.hpp"
@@ -17,10 +20,24 @@ void GamePlayModule::receiveMessage(Message msg)
             {
                 auto data = msg.getValue<CollisionData>();
                 bool valid = false;
-                valid |= data.body1->entityPtr == Kayak::get()->entityPtr;
-                valid |= data.body2->entityPtr == Kayak::get()->entityPtr;
+                
+                glm::vec3 hitPos(0.0f);
+                if(valid |= data.body1->entityPtr == Kayak::get()->entityPtr)
+                {
+                    hitPos = glm::xyz( data.body2->entityPtr->getComponentPtr<Transform>()->getModelMatrix()[3] );
+                }
+                else if(valid |= data.body2->entityPtr == Kayak::get()->entityPtr)
+                {
+                    hitPos = glm::xyz( data.body1->entityPtr->getComponentPtr<Transform>()->getModelMatrix()[3] );
+                }
+                
                 if (valid)
                 {
+                    AudioSource* sound = GetCore().objectModule.getEntityPtrByName("HIT_SOUND")->getComponentPtr<AudioSource>();
+                    sound->getPositionModifiable() = hitPos;
+                    sound->getGainModifiable() = glm::length( Kayak::get()->entityPtr->getComponentPtr<Rigidbody>()->velocity ) / 25.0f;
+                    GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, sound) );
+
                     rocksHit();
                 }
             }
@@ -37,6 +54,46 @@ void GamePlayModule::receiveMessage(Message msg)
                 summarize();
             }
 
+            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
+             && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
+            {
+                auto sound = GetCore().objectModule.getEntityPtrByName("BUSH_SOUND")->getComponentPtr<AudioSource>();
+                if(sound)
+                {
+                    auto hideoutPos = data.triggerBody->entityPtr->getComponentPtr<Transform>();
+                    if(hideoutPos)
+                    {
+                        sound->getPositionModifiable() = glm::vec3( hideoutPos->getLocalPosition() );
+                    }
+                    
+                    auto triggerVel = data.causeBody->entityPtr->getComponentPtr<Rigidbody>();
+                    if(triggerVel)
+                    {
+                        sound->getGainModifiable() = glm::length(triggerVel->velocity) / 25.0f;
+                    }
+
+                    GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, sound) );
+                }
+            }
+        }
+        break;
+
+        case Event::TRIGGER_EXIT:
+        {
+            auto data = msg.getValue<TriggerData>();
+
+            if (data.causeBody->entityPtr->getComponentPtr<Kayak>()
+             && data.triggerBody->entityPtr->getComponentPtr<Hideout>())
+            {
+                if(!Kayak::get()->isHidden)
+                {
+                    auto sound = GetCore().objectModule.getEntityPtrByName("BUSH_SOUND")->getComponentPtr<AudioSource>();
+                    if(sound)
+                    {
+                        GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_STOP, sound) );
+                    }
+                }
+            }
         }
         break;
 
@@ -119,8 +176,22 @@ void GamePlayModule::receiveMessage(Message msg)
         break;
 
         case Event::HP_0:
+        {
+            auto sound = GetCore().objectModule.getEntityPtrByName("HP_0_SOUND")->getComponentPtr<AudioSource>();
+            if(sound)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, sound) );
+            }
+
+            auto detectionSound = GetCore().objectModule.getEntityPtrByName("DETECTION_SOUND")->getComponentPtr<AudioSource>();
+            if(detectionSound)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, detectionSound) );
+            }
+            
             togglePauseState();
             youDied();
+        }
         break;
         
         case Event::LOAD_SCENE:

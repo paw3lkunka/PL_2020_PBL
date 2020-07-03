@@ -26,6 +26,13 @@ objectModule.newEntity(4, "Camera");
         li->getPositionModifiable();
         li->getAtModifiable();
         li->getUpModifiable();
+
+    auto so3 = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        so3->audioClip = "Resources/Audios/mainTheme.wav";
+        so3->getIsRelativeModifiable() = true;
+        so3->getGainModifiable() = 0.75f;
+        so3->getIsLoopingModifiable() = true;
+        so3->autoPlay = true;
 }
 
 TextureCreateInfo info = {};
@@ -207,6 +214,13 @@ objectModule.newEntity(3, "Continue_Button");
         buttMaterial->setTexture("sprite", rect_border);
         buttMaterial->setVec4("color", {1.0f, 0.0f, 1.0f, 0.5f});
         ui->material = buttMaterial;
+
+    auto buttonsSound = objectModule.newEmptyComponentForLastEntity<AudioSource>();
+        buttonsSound->audioClip = "Resources/Audios/menu_buttonClick.wav";
+        buttonsSound->getIsRelativeModifiable() = true;
+        buttonsSound->getGainModifiable() = 1.0f;
+        buttonsSound->getIsLoopingModifiable() = false;
+        buttonsSound->autoPlay = false;
     
     auto butt = objectModule.newEmptyComponentForLastEntity<Button>();
         butt->baseColor = {0.733f, 0.066f, 0.066f, 1.0f};
@@ -214,6 +228,7 @@ objectModule.newEntity(3, "Continue_Button");
         butt->inactiveColor = {0.733f, 0.066f, 0.066f, 1.0f};
         butt->onClickColor = {0.654f, 0.066f, 0.066f, 1.0f};
         butt->onClickEvents.push_back(Message(Event::LOAD_SCENE, Scenes::selectCargoScene));
+        butt->onClickEvents.push_back( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, buttonsSound) );
 
     objectModule.newEntity(2, "Continue_Button_Text");
     {

@@ -9,6 +9,7 @@
 class Hideout;
 class Kayak;
 class TriggerData;
+class AudioSource;
 
 /**
  * @brief Detects if kayak is hidden. 

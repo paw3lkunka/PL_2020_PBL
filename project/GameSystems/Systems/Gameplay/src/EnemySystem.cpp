@@ -82,6 +82,9 @@ void EnemySystem::detection(Kayak* kayakPtr, glm::vec3 enemyPos, glm::vec3 kayak
                 enemyPtr->detectionCounter = 0;
             }
         }
+
+        auto detectionSound = GetCore().objectModule.getEntityPtrByName("DETECTION_SOUND")->getComponentPtr<AudioSource>();
+        detectionSound->getGainModifiable() = 0.1f * static_cast<float>(enemyPtr->detectionCounter) / static_cast<float>(enemyPtr->detectionCounterMaxValue);
     }
     
     if (enemyPtr->detectionCounter <= 0 && enemyPtr->notified == true)
@@ -128,7 +131,6 @@ void EnemySystem::attack(glm::vec3 dir)
                 {
                     data.success = false;
                 }
-                
 
             auto* shootT = Shoot::get().entityPtr->getComponentPtr<Transform>();
                 shootT->setParent(enemyTransformPtr);
@@ -140,6 +142,12 @@ void EnemySystem::attack(glm::vec3 dir)
                 );
 
             GetCore().messageBus.sendMessage(Message(Event::PLAYER_ATTACKED, data));
+
+            auto shootSound = Shoot::get().entityPtr->getComponentPtr<AudioSource>();
+            if(shootSound)
+            {
+                GetCore().messageBus.sendMessage( Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, shootSound) );
+            }
         }
     }
 }

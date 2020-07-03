@@ -1309,6 +1309,14 @@ void SceneReader::readEvent(std::string name, std::string containerName, std::ve
             }
             break;
 
+            case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+            {
+                unsigned int id = j->at(name).at(containerName).at(msgName).at("audioSource").get<unsigned int>();
+                AudioSource* source = dynamic_cast<AudioSource*>(objModulePtr->objectContainer.getComponentFromSerializationID(id));
+                messages.push_back(Message(Event::AUDIO_SOURCE_PLAY_ONE_SHOT, source));
+            }
+            break;
+
             case Event::LOAD_SCENE:
             {
                 std::string scene = j->at(name).at(containerName).at(msgName).at("scene").get<std::string>();

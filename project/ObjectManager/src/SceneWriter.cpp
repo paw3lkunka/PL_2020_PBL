@@ -999,6 +999,10 @@ void SceneWriter::saveMessage(std::string msgName, Message msg, std::string type
             event = (int)Event::AUDIO_SOURCE_STOP;
             (*json)[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
         break;
+        case Event::AUDIO_SOURCE_PLAY_ONE_SHOT:
+            event = (int)Event::AUDIO_SOURCE_PLAY_ONE_SHOT;
+            (*json)[name][typeName.c_str()][msgName.c_str()]["audioSource"] = msg.getValue<AudioSource*>()->serializationID;
+        break;
         case Event::LOAD_SCENE:
             event = (int)Event::LOAD_SCENE;
             (*json)[name][typeName.c_str()][msgName.c_str()]["scene"] = msg.getValue<const char*>();
