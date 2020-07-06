@@ -181,6 +181,7 @@ void GamePlayModule::receiveMessage(Message msg)
                 togglePauseState();
             }
             reloadScene(msg.getValue<const char*>());
+            GetCore().resetFrameLagUNSAFE();
         break;
 
         case Event::CARGO_LOST:

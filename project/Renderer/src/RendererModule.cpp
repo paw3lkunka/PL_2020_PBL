@@ -1248,7 +1248,7 @@ void RendererModule::generateCubemapConvolution(const Texture* cubemap, unsigned
     }
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
-    glDeleteRenderbuffers(1, &captureFBO);
+    glDeleteRenderbuffers(1, &captureRBO);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glDeleteFramebuffers(1, &captureFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

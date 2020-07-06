@@ -241,6 +241,8 @@ class Core
         Core() = default;
         ~Core() = default;
 
+        inline void resetFrameLagUNSAFE() { previousFrameStart = glfwGetTime(); }
+
         /**
          * @brief Initialize Core module, and make GetCore() working, also initialize all dependencies.
          * It is impossible to initialize instane, if other instane was already initialized, and wasn't disposed by cleanup function().
@@ -392,6 +394,7 @@ class Core
         bool gamePaused = false;
 
         double currentFrameStart;
+        double previousFrameStart;
         void sceneUnload();
         void sceneInit();
 };

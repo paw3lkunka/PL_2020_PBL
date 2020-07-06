@@ -123,7 +123,7 @@ int Core::init()
         }
     }
 
-    std::cout << "GPU: " << (const char*)glGetString(GL_VENDOR) << " " << (const char*)glGetString(GL_RENDERER) << std::endl;
+    std::cout << "GPU: " << (const char*)glGetString(GL_RENDERER) << std::endl;
 
     //Initializing Modules, and adding connecting to MB
     inputModule.initialize(window);
@@ -235,15 +235,13 @@ int Core::init()
 
 int Core::mainLoop()
 {
-    double previousFrameStart = glfwGetTime();
-    //HACK temporary solution, should be 0 n start
-    double lag = FIXED_TIME_STEP;
-
-    // * ===== Game loop ===================================================
+    previousFrameStart = glfwGetTime();
+    double lag = 0;
 
     // ! ----- START SYSTEM FUNCTION -----
     sceneInit();
     
+    // * ===== Game loop ===================================================
     //Main loop
     while (!glfwWindowShouldClose(window))
     {
