@@ -1317,5 +1317,5 @@ void RendererModule::setSkybox(Material* skyboxMaterial)
     }
     skyboxMaterial->setAsSkybox(true);
     this->skyboxMaterial = skyboxMaterial;
-    generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 32);
+    generateCubemapConvolution(skyboxMaterial->getTexturePtr("cubemap"), 8);
 }
